@@ -39,9 +39,9 @@ Supporting data files:
 To refresh the landing page data:
 
 ```bash
-python predict_full.py
-# or set a cron pointing at predict_full.py
-git add web/src/data/todaysPredictions.json predictions_<DATE>.csv
+python scripts/refresh_site_data.py
+# optional: python scripts/refresh_site_data.py --date 2025-11-15 --skip-standings
+git add web/src/data/todaysPredictions.json web/src/data/currentStandings.json
 git commit -m "Update predictions"
 git push
 ```
@@ -57,7 +57,7 @@ python scripts/fetch_current_standings.py
 
 ### Automated refresh (GitHub Actions)
 
-`.github/workflows/update-predictions.yml` runs every morning (11:00 UTC) and on manual dispatch. It installs the Python stack, runs `python predict_full.py`, commits `web/src/data/todaysPredictions.json`, and pushes back to `main` using the built-in `GITHUB_TOKEN`.
+`.github/workflows/update-predictions.yml` runs every morning (11:00 UTC) and on manual dispatch. It installs the Python stack, runs `python scripts/refresh_site_data.py`, commits the refreshed `todaysPredictions.json` + `currentStandings.json`, and pushes back to `main` using the built-in `GITHUB_TOKEN`.
 
 - If there are no JSON changes (e.g., NHL off day) the workflow skips the commit
 - Tweak the cron or add more steps if you introduce variant models or artifacts

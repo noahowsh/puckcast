@@ -1,4 +1,4 @@
-name: Nightly predictions sync
+name: Nightly data refresh
 
 on:
   schedule:
@@ -22,16 +22,17 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-      - name: Run prediction pipeline
-        run: python predict_full.py
-      - name: Commit updated JSON
+      - name: Run refresh pipeline
+        run: python scripts/refresh_site_data.py
+      - name: Commit updated JSON artifacts
         run: |
-          if git diff --quiet -- web/src/data/todaysPredictions.json; then
+          git status -sb
+          if git diff --quiet -- web/src/data/todaysPredictions.json web/src/data/currentStandings.json; then
             echo "No JSON changes, skipping commit"
           else
             git config user.name "puckcast-bot"
             git config user.email "bot@puckcast.ai"
-            git add web/src/data/todaysPredictions.json
-            git commit -m "chore: nightly prediction refresh [skip ci]"
+            git add web/src/data/todaysPredictions.json web/src/data/currentStandings.json
+            git commit -m "chore: nightly data refresh [skip ci]"
             git push
           fi
