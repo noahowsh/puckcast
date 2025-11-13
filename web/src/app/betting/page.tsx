@@ -47,6 +47,10 @@ export default function BettingPage() {
             Move the edge slider to see how win rate, ROI, and units respond. Stats are grounded in the archived 2023-24 backtest,
             while the slider thresholds mirror tonight&apos;s probabilities.
           </p>
+          <p className="rounded-3xl border border-white/10 bg-white/5 px-4 py-3 text-xs uppercase tracking-[0.35em] text-white/60">
+            Disclaimer: win rates, ROI, and units reflect even-money simulations from the archived 2023-24 model backtest. No live betting
+            lines or current market odds are shown.
+          </p>
         </header>
 
         <section className="rounded-[36px] border border-white/10 bg-white/5 p-8 shadow-2xl shadow-black/30">
