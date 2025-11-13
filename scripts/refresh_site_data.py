@@ -36,18 +36,26 @@ def refresh_metrics() -> None:
     run_step("Regenerate site metrics", cmd)
 
 
+def refresh_goalie_pulse(date_arg: str | None) -> None:
+    cmd = [PYTHON, str(REPO_ROOT / "scripts" / "refresh_goalie_pulse.py")]
+    if date_arg:
+        cmd.extend(["--date", date_arg])
+    run_step("Update goalie pulse", cmd)
+
+
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Refresh data bundles consumed by the web app.")
     parser.add_argument("--date", help="Predict games for YYYY-MM-DD (default: today)")
     parser.add_argument("--skip-predictions", action="store_true", help="Skip running predict_full.py")
     parser.add_argument("--skip-standings", action="store_true", help="Skip fetching NHL standings")
+    parser.add_argument("--skip-goalies", action="store_true", help="Skip refreshing goalie pulse data")
     parser.add_argument("--include-metrics", action="store_true", help="Regenerate modelInsights.json as well")
     return parser.parse_args()
 
 
 def main() -> None:
     args = parse_args()
-    if args.skip_predictions and args.skip_standings and not args.include_metrics:
+    if args.skip_predictions and args.skip_standings and args.skip_goalies and not args.include_metrics:
         raise SystemExit("Nothing to do. Enable at least one step.")
 
     if not args.skip_predictions:
@@ -55,6 +63,9 @@ def main() -> None:
 
     if not args.skip_standings:
         refresh_standings()
+
+    if not args.skip_goalies:
+        refresh_goalie_pulse(args.date)
 
     if args.include_metrics:
         refresh_metrics()

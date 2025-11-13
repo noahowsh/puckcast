@@ -1,58 +1,2047 @@
 {
-  "updatedAt": "2025-11-11T14:30:00Z",
-  "notes": "Rolling three-game GSAx + rebound control metrics recalculated after morning skate.",
-  "goalies": [
+  "updatedAt": "2025-11-13T22:22:54.573075+00:00",
+  "targetDate": "2025-11-13",
+  "notes": "Auto-generated November 13 using NHL Stats feeds.",
+  "tonight": {
+    "games": [
+      {
+        "gameId": "2025020269",
+        "matchup": "LAK @ TOR",
+        "startTimeEt": "7:00 PM ET",
+        "startTimeUtc": "2025-11-14T00:00:00+00:00",
+        "home": {
+          "playerId": 8476932,
+          "name": "Anthony Stolarz",
+          "team": "TOR",
+          "record": "6-5-1",
+          "seasonSavePct": 0.88385,
+          "seasonGaa": 3.50818,
+          "startLikelihood": 1.0,
+          "restDays": 2,
+          "lastStart": "2025-11-11",
+          "lastOpponent": "BOS",
+          "rollingSavePct": 0.8148148148148148,
+          "rollingShots": 54
+        },
+        "away": {
+          "playerId": 8475311,
+          "name": "Darcy Kuemper",
+          "team": "LAK",
+          "record": "6-3-3",
+          "seasonSavePct": 0.90822,
+          "seasonGaa": 2.39768,
+          "startLikelihood": 1.0,
+          "restDays": 2,
+          "lastStart": "2025-11-11",
+          "lastOpponent": "MTL",
+          "rollingSavePct": 0.9615384615384616,
+          "rollingShots": 78
+        }
+      },
+      {
+        "gameId": "2025020270",
+        "matchup": "DAL @ MTL",
+        "startTimeEt": "7:00 PM ET",
+        "startTimeUtc": "2025-11-14T00:00:00+00:00",
+        "home": {
+          "playerId": 8478470,
+          "name": "Sam Montembeault",
+          "team": "MTL",
+          "record": "4-4-1",
+          "seasonSavePct": 0.86147,
+          "seasonGaa": 3.52325,
+          "startLikelihood": 1.0,
+          "restDays": 2,
+          "lastStart": "2025-11-11",
+          "lastOpponent": "LAK",
+          "rollingSavePct": 0.8936170212765957,
+          "rollingShots": 94
+        },
+        "away": {
+          "playerId": 8479979,
+          "name": "Jake Oettinger",
+          "team": "DAL",
+          "record": "7-3-2",
+          "seasonSavePct": 0.89644,
+          "seasonGaa": 2.89355,
+          "startLikelihood": 1.0,
+          "restDays": 2,
+          "lastStart": "2025-11-11",
+          "lastOpponent": "OTT",
+          "rollingSavePct": 0.8378378378378378,
+          "rollingShots": 74
+        }
+      },
+      {
+        "gameId": "2025020271",
+        "matchup": "BOS @ OTT",
+        "startTimeEt": "7:00 PM ET",
+        "startTimeUtc": "2025-11-14T00:00:00+00:00",
+        "home": {
+          "playerId": 8476999,
+          "name": "Linus Ullmark",
+          "team": "OTT",
+          "record": "6-4-4",
+          "seasonSavePct": 0.87005,
+          "seasonGaa": 3.21191,
+          "startLikelihood": 1.0,
+          "restDays": 2,
+          "lastStart": "2025-11-11",
+          "lastOpponent": "DAL",
+          "rollingSavePct": 0.9,
+          "rollingShots": 80
+        },
+        "away": {
+          "playerId": 8480280,
+          "name": "Jeremy Swayman",
+          "team": "BOS",
+          "record": "7-4",
+          "seasonSavePct": 0.8997,
+          "seasonGaa": 3.08195,
+          "startLikelihood": 1.0,
+          "restDays": 2,
+          "lastStart": "2025-11-11",
+          "lastOpponent": "TOR",
+          "rollingSavePct": 0.9090909090909091,
+          "rollingShots": 99
+        }
+      },
+      {
+        "gameId": "2025020272",
+        "matchup": "ANA @ DET",
+        "startTimeEt": "7:00 PM ET",
+        "startTimeUtc": "2025-11-14T00:00:00+00:00",
+        "home": {
+          "playerId": 8476434,
+          "name": "John Gibson",
+          "team": "DET",
+          "record": "4-5",
+          "seasonSavePct": 0.88209,
+          "seasonGaa": 3.14624,
+          "startLikelihood": 1.0,
+          "restDays": 4,
+          "lastStart": "2025-11-09",
+          "lastOpponent": "CHI",
+          "rollingSavePct": 0.8928571428571429,
+          "rollingShots": 84
+        },
+        "away": {
+          "playerId": 8480843,
+          "name": "Lukas Dostal",
+          "team": "ANA",
+          "record": "8-4-1",
+          "seasonSavePct": 0.90813,
+          "seasonGaa": 2.69121,
+          "startLikelihood": 1.0,
+          "restDays": 2,
+          "lastStart": "2025-11-11",
+          "lastOpponent": "COL",
+          "rollingSavePct": 0.8941176470588236,
+          "rollingShots": 85
+        }
+      },
+      {
+        "gameId": "2025020273",
+        "matchup": "WSH @ FLA",
+        "startTimeEt": "7:00 PM ET",
+        "startTimeUtc": "2025-11-14T00:00:00+00:00",
+        "home": {
+          "playerId": 8475683,
+          "name": "Sergei Bobrovsky",
+          "team": "FLA",
+          "record": "8-4",
+          "seasonSavePct": 0.89261,
+          "seasonGaa": 2.67857,
+          "startLikelihood": 1.0,
+          "restDays": 3,
+          "lastStart": "2025-11-10",
+          "lastOpponent": "VGK",
+          "rollingSavePct": 0.8777777777777778,
+          "rollingShots": 90
+        },
+        "away": {
+          "playerId": 8480313,
+          "name": "Logan Thompson",
+          "team": "WSH",
+          "record": "7-4",
+          "seasonSavePct": 0.93461,
+          "seasonGaa": 1.55756,
+          "startLikelihood": 1.0,
+          "restDays": 2,
+          "lastStart": "2025-11-11",
+          "lastOpponent": "CAR",
+          "rollingSavePct": 0.9333333333333333,
+          "rollingShots": 75
+        }
+      },
+      {
+        "gameId": "2025020274",
+        "matchup": "EDM @ CBJ",
+        "startTimeEt": "7:30 PM ET",
+        "startTimeUtc": "2025-11-14T00:30:00+00:00",
+        "home": {
+          "playerId": 8482982,
+          "name": "Jet Greaves",
+          "team": "CBJ",
+          "record": "4-4-1",
+          "seasonSavePct": 0.90076,
+          "seasonGaa": 2.8863,
+          "startLikelihood": 1.0,
+          "restDays": 2,
+          "lastStart": "2025-11-11",
+          "lastOpponent": "SEA",
+          "rollingSavePct": 0.8611111111111112,
+          "rollingShots": 72
+        },
+        "away": {
+          "playerId": 8479973,
+          "name": "Stuart Skinner",
+          "team": "EDM",
+          "record": "6-4-3",
+          "seasonSavePct": 0.88853,
+          "seasonGaa": 2.75241,
+          "startLikelihood": 1.0,
+          "restDays": 1,
+          "lastStart": "2025-11-12",
+          "lastOpponent": "PHI",
+          "rollingSavePct": 0.8392857142857143,
+          "rollingShots": 56
+        }
+      },
+      {
+        "gameId": "2025020275",
+        "matchup": "BUF @ COL",
+        "startTimeEt": "9:00 PM ET",
+        "startTimeUtc": "2025-11-14T02:00:00+00:00",
+        "home": {
+          "playerId": 8475809,
+          "name": "Scott Wedgewood",
+          "team": "COL",
+          "record": "10-1-2",
+          "seasonSavePct": 0.91304,
+          "seasonGaa": 2.26225,
+          "startLikelihood": 1.0,
+          "restDays": 2,
+          "lastStart": "2025-11-11",
+          "lastOpponent": "ANA",
+          "rollingSavePct": 0.9523809523809523,
+          "rollingShots": 84
+        },
+        "away": {
+          "playerId": 8481551,
+          "name": "Colten Ellis",
+          "team": "BUF",
+          "record": "1-1",
+          "seasonSavePct": 0.91044,
+          "seasonGaa": 3.05775,
+          "startLikelihood": 1.0,
+          "restDays": 1,
+          "lastStart": "2025-11-12",
+          "lastOpponent": "UTA",
+          "rollingSavePct": 0.9104477611940298,
+          "rollingShots": 67
+        }
+      },
+      {
+        "gameId": "2025020276",
+        "matchup": "SJS @ CGY",
+        "startTimeEt": "9:00 PM ET",
+        "startTimeUtc": "2025-11-14T02:00:00+00:00",
+        "home": {
+          "playerId": 8481692,
+          "name": "Dustin Wolf",
+          "team": "CGY",
+          "record": "4-10-1",
+          "seasonSavePct": 0.89311,
+          "seasonGaa": 3.24486,
+          "startLikelihood": 1.0,
+          "restDays": 2,
+          "lastStart": "2025-11-11",
+          "lastOpponent": "STL",
+          "rollingSavePct": 0.9207920792079208,
+          "rollingShots": 101
+        },
+        "away": {
+          "playerId": 8482137,
+          "name": "Yaroslav Askarov",
+          "team": "SJS",
+          "record": "5-4-1",
+          "seasonSavePct": 0.89873,
+          "seasonGaa": 3.28921,
+          "startLikelihood": 1.0,
+          "restDays": 2,
+          "lastStart": "2025-11-11",
+          "lastOpponent": "MIN",
+          "rollingSavePct": 0.9693877551020408,
+          "rollingShots": 98
+        }
+      },
+      {
+        "gameId": "2025020277",
+        "matchup": "NYI @ VGK",
+        "startTimeEt": "10:00 PM ET",
+        "startTimeUtc": "2025-11-14T03:00:00+00:00",
+        "home": {
+          "playerId": 8482761,
+          "name": "Carl Lindbom",
+          "team": "VGK",
+          "record": "0-3-1",
+          "seasonSavePct": 0.86868,
+          "seasonGaa": 3.2872,
+          "startLikelihood": 1.0,
+          "restDays": 3,
+          "lastStart": "2025-11-10",
+          "lastOpponent": "FLA",
+          "rollingSavePct": 0.8450704225352113,
+          "rollingShots": 71
+        },
+        "away": {
+          "playerId": 8478009,
+          "name": "Ilya Sorokin",
+          "team": "NYI",
+          "record": "5-4-2",
+          "seasonSavePct": 0.89841,
+          "seasonGaa": 2.89913,
+          "startLikelihood": 1.0,
+          "restDays": 3,
+          "lastStart": "2025-11-10",
+          "lastOpponent": "NJD",
+          "rollingSavePct": 0.9473684210526315,
+          "rollingShots": 95
+        }
+      },
+      {
+        "gameId": "2025020278",
+        "matchup": "WPG @ SEA",
+        "startTimeEt": "10:00 PM ET",
+        "startTimeUtc": "2025-11-14T03:00:00+00:00",
+        "home": {
+          "playerId": 8478916,
+          "name": "Joey Daccord",
+          "team": "SEA",
+          "record": "6-2-3",
+          "seasonSavePct": 0.89966,
+          "seasonGaa": 2.82729,
+          "startLikelihood": 1.0,
+          "restDays": 8,
+          "lastStart": "2025-11-05",
+          "lastOpponent": "SJS",
+          "rollingSavePct": 0.8831168831168831,
+          "rollingShots": 77
+        },
+        "away": {
+          "playerId": 8476945,
+          "name": "Connor Hellebuyck",
+          "team": "WPG",
+          "record": "7-5",
+          "seasonSavePct": 0.92067,
+          "seasonGaa": 2.3547,
+          "startLikelihood": 1.0,
+          "restDays": 2,
+          "lastStart": "2025-11-11",
+          "lastOpponent": "VAN",
+          "rollingSavePct": 0.9186046511627907,
+          "rollingShots": 86
+        }
+      },
+      {
+        "gameId": "2025020281",
+        "matchup": "PIT @ NSH",
+        "startTimeEt": "2:00 PM ET",
+        "startTimeUtc": "2025-11-14T19:00:00+00:00",
+        "home": {
+          "playerId": 8477424,
+          "name": "Juuse Saros",
+          "team": "NSH",
+          "record": "5-6-3",
+          "seasonSavePct": 0.89195,
+          "seasonGaa": 3.10637,
+          "startLikelihood": 1.0,
+          "restDays": 3,
+          "lastStart": "2025-11-10",
+          "lastOpponent": "NYR",
+          "rollingSavePct": 0.8356164383561644,
+          "rollingShots": 73
+        },
+        "away": {
+          "playerId": 8483703,
+          "name": "Sergei Murashov",
+          "team": "PIT",
+          "record": "0-1",
+          "seasonSavePct": 0.88888,
+          "seasonGaa": 3.09455,
+          "startLikelihood": 1.0,
+          "restDays": 4,
+          "lastStart": "2025-11-09",
+          "lastOpponent": "LAK",
+          "rollingSavePct": 0.8888888888888888,
+          "rollingShots": 27
+        }
+      },
+      {
+        "gameId": "2025020279",
+        "matchup": "VAN @ CAR",
+        "startTimeEt": "7:00 PM ET",
+        "startTimeUtc": "2025-11-15T00:00:00+00:00",
+        "home": {
+          "playerId": 8475883,
+          "name": "Frederik Andersen",
+          "team": "CAR",
+          "record": "5-4",
+          "seasonSavePct": 0.89156,
+          "seasonGaa": 2.9974,
+          "startLikelihood": 1.0,
+          "restDays": 2,
+          "lastStart": "2025-11-11",
+          "lastOpponent": "WSH",
+          "rollingSavePct": 0.8904109589041096,
+          "rollingShots": 73
+        },
+        "away": {
+          "playerId": 8477967,
+          "name": "Thatcher Demko",
+          "team": "VAN",
+          "record": "5-4",
+          "seasonSavePct": 0.90298,
+          "seasonGaa": 2.80155,
+          "startLikelihood": 1.0,
+          "restDays": 2,
+          "lastStart": "2025-11-11",
+          "lastOpponent": "WPG",
+          "rollingSavePct": 0.828125,
+          "rollingShots": 64
+        }
+      },
+      {
+        "gameId": "2025020280",
+        "matchup": "PHI @ STL",
+        "startTimeEt": "8:00 PM ET",
+        "startTimeUtc": "2025-11-15T01:00:00+00:00",
+        "home": {
+          "playerId": 8476412,
+          "name": "Jordan Binnington",
+          "team": "STL",
+          "record": "4-5-2",
+          "seasonSavePct": 0.87265,
+          "seasonGaa": 3.2115,
+          "startLikelihood": 1.0,
+          "restDays": 2,
+          "lastStart": "2025-11-11",
+          "lastOpponent": "CGY",
+          "rollingSavePct": 0.9012345679012346,
+          "rollingShots": 81
+        },
+        "away": {
+          "playerId": 8478435,
+          "name": "Dan Vladar",
+          "team": "PHI",
+          "record": "6-3-1",
+          "seasonSavePct": 0.91891,
+          "seasonGaa": 2.15304,
+          "startLikelihood": 1.0,
+          "restDays": 1,
+          "lastStart": "2025-11-12",
+          "lastOpponent": "EDM",
+          "rollingSavePct": 0.9066666666666666,
+          "rollingShots": 75
+        }
+      },
+      {
+        "gameId": "2025020282",
+        "matchup": "NYI @ UTA",
+        "startTimeEt": "9:00 PM ET",
+        "startTimeUtc": "2025-11-15T02:00:00+00:00",
+        "home": {
+          "playerId": 8478872,
+          "name": "Karel Vejmelka",
+          "team": "UTA",
+          "record": "8-4",
+          "seasonSavePct": 0.88153,
+          "seasonGaa": 2.83733,
+          "startLikelihood": 1.0,
+          "restDays": 1,
+          "lastStart": "2025-11-12",
+          "lastOpponent": "BUF",
+          "rollingSavePct": 0.85,
+          "rollingShots": 60
+        },
+        "away": {
+          "playerId": 8478009,
+          "name": "Ilya Sorokin",
+          "team": "NYI",
+          "record": "5-4-2",
+          "seasonSavePct": 0.89841,
+          "seasonGaa": 2.89913,
+          "startLikelihood": 1.0,
+          "restDays": 3,
+          "lastStart": "2025-11-10",
+          "lastOpponent": "NJD",
+          "rollingSavePct": 0.9473684210526315,
+          "rollingShots": 95
+        }
+      },
+      {
+        "gameId": "2025020283",
+        "matchup": "TBL @ FLA",
+        "startTimeEt": "5:00 PM ET",
+        "startTimeUtc": "2025-11-15T22:00:00+00:00",
+        "home": {
+          "playerId": 8475683,
+          "name": "Sergei Bobrovsky",
+          "team": "FLA",
+          "record": "8-4",
+          "seasonSavePct": 0.89261,
+          "seasonGaa": 2.67857,
+          "startLikelihood": 1.0,
+          "restDays": 3,
+          "lastStart": "2025-11-10",
+          "lastOpponent": "VGK",
+          "rollingSavePct": 0.8777777777777778,
+          "rollingShots": 90
+        },
+        "away": {
+          "playerId": 8476883,
+          "name": "Andrei Vasilevskiy",
+          "team": "TBL",
+          "record": "5-5-2",
+          "seasonSavePct": 0.89556,
+          "seasonGaa": 2.91845,
+          "startLikelihood": 1.0,
+          "restDays": 1,
+          "lastStart": "2025-11-12",
+          "lastOpponent": "NYR",
+          "rollingSavePct": 0.8666666666666667,
+          "rollingShots": 75
+        }
+      },
+      {
+        "gameId": "2025020284",
+        "matchup": "ANA @ MIN",
+        "startTimeEt": "6:00 PM ET",
+        "startTimeUtc": "2025-11-15T23:00:00+00:00",
+        "home": {
+          "playerId": 8479406,
+          "name": "Filip Gustavsson",
+          "team": "MIN",
+          "record": "4-7-2",
+          "seasonSavePct": 0.89583,
+          "seasonGaa": 3.08582,
+          "startLikelihood": 1.0,
+          "restDays": 2,
+          "lastStart": "2025-11-11",
+          "lastOpponent": "SJS",
+          "rollingSavePct": 0.8987341772151899,
+          "rollingShots": 79
+        },
+        "away": {
+          "playerId": 8480843,
+          "name": "Lukas Dostal",
+          "team": "ANA",
+          "record": "8-4-1",
+          "seasonSavePct": 0.90813,
+          "seasonGaa": 2.69121,
+          "startLikelihood": 1.0,
+          "restDays": 2,
+          "lastStart": "2025-11-11",
+          "lastOpponent": "COL",
+          "rollingSavePct": 0.8941176470588236,
+          "rollingShots": 85
+        }
+      },
+      {
+        "gameId": "2025020285",
+        "matchup": "BOS @ MTL",
+        "startTimeEt": "7:00 PM ET",
+        "startTimeUtc": "2025-11-16T00:00:00+00:00",
+        "home": {
+          "playerId": 8478470,
+          "name": "Sam Montembeault",
+          "team": "MTL",
+          "record": "4-4-1",
+          "seasonSavePct": 0.86147,
+          "seasonGaa": 3.52325,
+          "startLikelihood": 1.0,
+          "restDays": 2,
+          "lastStart": "2025-11-11",
+          "lastOpponent": "LAK",
+          "rollingSavePct": 0.8936170212765957,
+          "rollingShots": 94
+        },
+        "away": {
+          "playerId": 8480280,
+          "name": "Jeremy Swayman",
+          "team": "BOS",
+          "record": "7-4",
+          "seasonSavePct": 0.8997,
+          "seasonGaa": 3.08195,
+          "startLikelihood": 1.0,
+          "restDays": 2,
+          "lastStart": "2025-11-11",
+          "lastOpponent": "TOR",
+          "rollingSavePct": 0.9090909090909091,
+          "rollingShots": 99
+        }
+      },
+      {
+        "gameId": "2025020286",
+        "matchup": "LAK @ OTT",
+        "startTimeEt": "7:00 PM ET",
+        "startTimeUtc": "2025-11-16T00:00:00+00:00",
+        "home": {
+          "playerId": 8476999,
+          "name": "Linus Ullmark",
+          "team": "OTT",
+          "record": "6-4-4",
+          "seasonSavePct": 0.87005,
+          "seasonGaa": 3.21191,
+          "startLikelihood": 1.0,
+          "restDays": 2,
+          "lastStart": "2025-11-11",
+          "lastOpponent": "DAL",
+          "rollingSavePct": 0.9,
+          "rollingShots": 80
+        },
+        "away": {
+          "playerId": 8475311,
+          "name": "Darcy Kuemper",
+          "team": "LAK",
+          "record": "6-3-3",
+          "seasonSavePct": 0.90822,
+          "seasonGaa": 2.39768,
+          "startLikelihood": 1.0,
+          "restDays": 2,
+          "lastStart": "2025-11-11",
+          "lastOpponent": "MTL",
+          "rollingSavePct": 0.9615384615384616,
+          "rollingShots": 78
+        }
+      },
+      {
+        "gameId": "2025020287",
+        "matchup": "BUF @ DET",
+        "startTimeEt": "7:00 PM ET",
+        "startTimeUtc": "2025-11-16T00:00:00+00:00",
+        "home": {
+          "playerId": 8476434,
+          "name": "John Gibson",
+          "team": "DET",
+          "record": "4-5",
+          "seasonSavePct": 0.88209,
+          "seasonGaa": 3.14624,
+          "startLikelihood": 1.0,
+          "restDays": 4,
+          "lastStart": "2025-11-09",
+          "lastOpponent": "CHI",
+          "rollingSavePct": 0.8928571428571429,
+          "rollingShots": 84
+        },
+        "away": {
+          "playerId": 8481551,
+          "name": "Colten Ellis",
+          "team": "BUF",
+          "record": "1-1",
+          "seasonSavePct": 0.91044,
+          "seasonGaa": 3.05775,
+          "startLikelihood": 1.0,
+          "restDays": 1,
+          "lastStart": "2025-11-12",
+          "lastOpponent": "UTA",
+          "rollingSavePct": 0.9104477611940298,
+          "rollingShots": 67
+        }
+      },
+      {
+        "gameId": "2025020288",
+        "matchup": "NJD @ WSH",
+        "startTimeEt": "7:00 PM ET",
+        "startTimeUtc": "2025-11-16T00:00:00+00:00",
+        "home": {
+          "playerId": 8480313,
+          "name": "Logan Thompson",
+          "team": "WSH",
+          "record": "7-4",
+          "seasonSavePct": 0.93461,
+          "seasonGaa": 1.55756,
+          "startLikelihood": 1.0,
+          "restDays": 2,
+          "lastStart": "2025-11-11",
+          "lastOpponent": "CAR",
+          "rollingSavePct": 0.9333333333333333,
+          "rollingShots": 75
+        },
+        "away": {
+          "playerId": 8474593,
+          "name": "Jacob Markstrom",
+          "team": "NJD",
+          "record": "5-2-1",
+          "seasonSavePct": 0.86956,
+          "seasonGaa": 3.67485,
+          "startLikelihood": 1.0,
+          "restDays": 1,
+          "lastStart": "2025-11-12",
+          "lastOpponent": "CHI",
+          "rollingSavePct": 0.8571428571428571,
+          "rollingShots": 63
+        }
+      },
+      {
+        "gameId": "2025020289",
+        "matchup": "EDM @ CAR",
+        "startTimeEt": "7:00 PM ET",
+        "startTimeUtc": "2025-11-16T00:00:00+00:00",
+        "home": {
+          "playerId": 8475883,
+          "name": "Frederik Andersen",
+          "team": "CAR",
+          "record": "5-4",
+          "seasonSavePct": 0.89156,
+          "seasonGaa": 2.9974,
+          "startLikelihood": 1.0,
+          "restDays": 2,
+          "lastStart": "2025-11-11",
+          "lastOpponent": "WSH",
+          "rollingSavePct": 0.8904109589041096,
+          "rollingShots": 73
+        },
+        "away": {
+          "playerId": 8479973,
+          "name": "Stuart Skinner",
+          "team": "EDM",
+          "record": "6-4-3",
+          "seasonSavePct": 0.88853,
+          "seasonGaa": 2.75241,
+          "startLikelihood": 1.0,
+          "restDays": 1,
+          "lastStart": "2025-11-12",
+          "lastOpponent": "PHI",
+          "rollingSavePct": 0.8392857142857143,
+          "rollingShots": 56
+        }
+      },
+      {
+        "gameId": "2025020290",
+        "matchup": "NYR @ CBJ",
+        "startTimeEt": "7:00 PM ET",
+        "startTimeUtc": "2025-11-16T00:00:00+00:00",
+        "home": {
+          "playerId": 8482982,
+          "name": "Jet Greaves",
+          "team": "CBJ",
+          "record": "4-4-1",
+          "seasonSavePct": 0.90076,
+          "seasonGaa": 2.8863,
+          "startLikelihood": 1.0,
+          "restDays": 2,
+          "lastStart": "2025-11-11",
+          "lastOpponent": "SEA",
+          "rollingSavePct": 0.8611111111111112,
+          "rollingShots": 72
+        },
+        "away": {
+          "playerId": 8478048,
+          "name": "Igor Shesterkin",
+          "team": "NYR",
+          "record": "6-6-2",
+          "seasonSavePct": 0.90932,
+          "seasonGaa": 2.49861,
+          "startLikelihood": 1.0,
+          "restDays": 1,
+          "lastStart": "2025-11-12",
+          "lastOpponent": "TBL",
+          "rollingSavePct": 0.8901098901098901,
+          "rollingShots": 91
+        }
+      },
+      {
+        "gameId": "2025020291",
+        "matchup": "TOR @ CHI",
+        "startTimeEt": "7:00 PM ET",
+        "startTimeUtc": "2025-11-16T00:00:00+00:00",
+        "home": {
+          "playerId": 8481519,
+          "name": "Spencer Knight",
+          "team": "CHI",
+          "record": "6-3-3",
+          "seasonSavePct": 0.92307,
+          "seasonGaa": 2.45862,
+          "startLikelihood": 1.0,
+          "restDays": 1,
+          "lastStart": "2025-11-12",
+          "lastOpponent": "NJD",
+          "rollingSavePct": 0.9478260869565217,
+          "rollingShots": 115
+        },
+        "away": {
+          "playerId": 8476932,
+          "name": "Anthony Stolarz",
+          "team": "TOR",
+          "record": "6-5-1",
+          "seasonSavePct": 0.88385,
+          "seasonGaa": 3.50818,
+          "startLikelihood": 1.0,
+          "restDays": 2,
+          "lastStart": "2025-11-11",
+          "lastOpponent": "BOS",
+          "rollingSavePct": 0.8148148148148148,
+          "rollingShots": 54
+        }
+      },
+      {
+        "gameId": "2025020292",
+        "matchup": "VGK @ STL",
+        "startTimeEt": "8:00 PM ET",
+        "startTimeUtc": "2025-11-16T01:00:00+00:00",
+        "home": {
+          "playerId": 8476412,
+          "name": "Jordan Binnington",
+          "team": "STL",
+          "record": "4-5-2",
+          "seasonSavePct": 0.87265,
+          "seasonGaa": 3.2115,
+          "startLikelihood": 1.0,
+          "restDays": 2,
+          "lastStart": "2025-11-11",
+          "lastOpponent": "CGY",
+          "rollingSavePct": 0.9012345679012346,
+          "rollingShots": 81
+        },
+        "away": {
+          "playerId": 8482761,
+          "name": "Carl Lindbom",
+          "team": "VGK",
+          "record": "0-3-1",
+          "seasonSavePct": 0.86868,
+          "seasonGaa": 3.2872,
+          "startLikelihood": 1.0,
+          "restDays": 3,
+          "lastStart": "2025-11-10",
+          "lastOpponent": "FLA",
+          "rollingSavePct": 0.8450704225352113,
+          "rollingShots": 71
+        }
+      },
+      {
+        "gameId": "2025020293",
+        "matchup": "PHI @ DAL",
+        "startTimeEt": "8:00 PM ET",
+        "startTimeUtc": "2025-11-16T01:00:00+00:00",
+        "home": {
+          "playerId": 8479979,
+          "name": "Jake Oettinger",
+          "team": "DAL",
+          "record": "7-3-2",
+          "seasonSavePct": 0.89644,
+          "seasonGaa": 2.89355,
+          "startLikelihood": 1.0,
+          "restDays": 2,
+          "lastStart": "2025-11-11",
+          "lastOpponent": "OTT",
+          "rollingSavePct": 0.8378378378378378,
+          "rollingShots": 74
+        },
+        "away": {
+          "playerId": 8478435,
+          "name": "Dan Vladar",
+          "team": "PHI",
+          "record": "6-3-1",
+          "seasonSavePct": 0.91891,
+          "seasonGaa": 2.15304,
+          "startLikelihood": 1.0,
+          "restDays": 1,
+          "lastStart": "2025-11-12",
+          "lastOpponent": "EDM",
+          "rollingSavePct": 0.9066666666666666,
+          "rollingShots": 75
+        }
+      },
+      {
+        "gameId": "2025020294",
+        "matchup": "WPG @ CGY",
+        "startTimeEt": "10:00 PM ET",
+        "startTimeUtc": "2025-11-16T03:00:00+00:00",
+        "home": {
+          "playerId": 8481692,
+          "name": "Dustin Wolf",
+          "team": "CGY",
+          "record": "4-10-1",
+          "seasonSavePct": 0.89311,
+          "seasonGaa": 3.24486,
+          "startLikelihood": 1.0,
+          "restDays": 2,
+          "lastStart": "2025-11-11",
+          "lastOpponent": "STL",
+          "rollingSavePct": 0.9207920792079208,
+          "rollingShots": 101
+        },
+        "away": {
+          "playerId": 8476945,
+          "name": "Connor Hellebuyck",
+          "team": "WPG",
+          "record": "7-5",
+          "seasonSavePct": 0.92067,
+          "seasonGaa": 2.3547,
+          "startLikelihood": 1.0,
+          "restDays": 2,
+          "lastStart": "2025-11-11",
+          "lastOpponent": "VAN",
+          "rollingSavePct": 0.9186046511627907,
+          "rollingShots": 86
+        }
+      },
+      {
+        "gameId": "2025020295",
+        "matchup": "SJS @ SEA",
+        "startTimeEt": "10:00 PM ET",
+        "startTimeUtc": "2025-11-16T03:00:00+00:00",
+        "home": {
+          "playerId": 8478916,
+          "name": "Joey Daccord",
+          "team": "SEA",
+          "record": "6-2-3",
+          "seasonSavePct": 0.89966,
+          "seasonGaa": 2.82729,
+          "startLikelihood": 1.0,
+          "restDays": 8,
+          "lastStart": "2025-11-05",
+          "lastOpponent": "SJS",
+          "rollingSavePct": 0.8831168831168831,
+          "rollingShots": 77
+        },
+        "away": {
+          "playerId": 8482137,
+          "name": "Yaroslav Askarov",
+          "team": "SJS",
+          "record": "5-4-1",
+          "seasonSavePct": 0.89873,
+          "seasonGaa": 3.28921,
+          "startLikelihood": 1.0,
+          "restDays": 2,
+          "lastStart": "2025-11-11",
+          "lastOpponent": "MIN",
+          "rollingSavePct": 0.9693877551020408,
+          "rollingShots": 98
+        }
+      },
+      {
+        "gameId": "2025020296",
+        "matchup": "NSH @ PIT",
+        "startTimeEt": "9:00 AM ET",
+        "startTimeUtc": "2025-11-16T14:00:00+00:00",
+        "home": {
+          "playerId": 8483703,
+          "name": "Sergei Murashov",
+          "team": "PIT",
+          "record": "0-1",
+          "seasonSavePct": 0.88888,
+          "seasonGaa": 3.09455,
+          "startLikelihood": 1.0,
+          "restDays": 4,
+          "lastStart": "2025-11-09",
+          "lastOpponent": "LAK",
+          "rollingSavePct": 0.8888888888888888,
+          "rollingShots": 27
+        },
+        "away": {
+          "playerId": 8477424,
+          "name": "Juuse Saros",
+          "team": "NSH",
+          "record": "5-6-3",
+          "seasonSavePct": 0.89195,
+          "seasonGaa": 3.10637,
+          "startLikelihood": 1.0,
+          "restDays": 3,
+          "lastStart": "2025-11-10",
+          "lastOpponent": "NYR",
+          "rollingSavePct": 0.8356164383561644,
+          "rollingShots": 73
+        }
+      },
+      {
+        "gameId": "2025020297",
+        "matchup": "VAN @ TBL",
+        "startTimeEt": "5:00 PM ET",
+        "startTimeUtc": "2025-11-16T22:00:00+00:00",
+        "home": {
+          "playerId": 8476883,
+          "name": "Andrei Vasilevskiy",
+          "team": "TBL",
+          "record": "5-5-2",
+          "seasonSavePct": 0.89556,
+          "seasonGaa": 2.91845,
+          "startLikelihood": 1.0,
+          "restDays": 1,
+          "lastStart": "2025-11-12",
+          "lastOpponent": "NYR",
+          "rollingSavePct": 0.8666666666666667,
+          "rollingShots": 75
+        },
+        "away": {
+          "playerId": 8477967,
+          "name": "Thatcher Demko",
+          "team": "VAN",
+          "record": "5-4",
+          "seasonSavePct": 0.90298,
+          "seasonGaa": 2.80155,
+          "startLikelihood": 1.0,
+          "restDays": 2,
+          "lastStart": "2025-11-11",
+          "lastOpponent": "WPG",
+          "rollingSavePct": 0.828125,
+          "rollingShots": 64
+        }
+      },
+      {
+        "gameId": "2025020298",
+        "matchup": "VGK @ MIN",
+        "startTimeEt": "6:00 PM ET",
+        "startTimeUtc": "2025-11-16T23:00:00+00:00",
+        "home": {
+          "playerId": 8479406,
+          "name": "Filip Gustavsson",
+          "team": "MIN",
+          "record": "4-7-2",
+          "seasonSavePct": 0.89583,
+          "seasonGaa": 3.08582,
+          "startLikelihood": 1.0,
+          "restDays": 2,
+          "lastStart": "2025-11-11",
+          "lastOpponent": "SJS",
+          "rollingSavePct": 0.8987341772151899,
+          "rollingShots": 79
+        },
+        "away": {
+          "playerId": 8482761,
+          "name": "Carl Lindbom",
+          "team": "VGK",
+          "record": "0-3-1",
+          "seasonSavePct": 0.86868,
+          "seasonGaa": 3.2872,
+          "startLikelihood": 1.0,
+          "restDays": 3,
+          "lastStart": "2025-11-10",
+          "lastOpponent": "FLA",
+          "rollingSavePct": 0.8450704225352113,
+          "rollingShots": 71
+        }
+      },
+      {
+        "gameId": "2025020299",
+        "matchup": "DET @ NYR",
+        "startTimeEt": "7:00 PM ET",
+        "startTimeUtc": "2025-11-17T00:00:00+00:00",
+        "home": {
+          "playerId": 8478048,
+          "name": "Igor Shesterkin",
+          "team": "NYR",
+          "record": "6-6-2",
+          "seasonSavePct": 0.90932,
+          "seasonGaa": 2.49861,
+          "startLikelihood": 1.0,
+          "restDays": 1,
+          "lastStart": "2025-11-12",
+          "lastOpponent": "TBL",
+          "rollingSavePct": 0.8901098901098901,
+          "rollingShots": 91
+        },
+        "away": {
+          "playerId": 8476434,
+          "name": "John Gibson",
+          "team": "DET",
+          "record": "4-5",
+          "seasonSavePct": 0.88209,
+          "seasonGaa": 3.14624,
+          "startLikelihood": 1.0,
+          "restDays": 4,
+          "lastStart": "2025-11-09",
+          "lastOpponent": "CHI",
+          "rollingSavePct": 0.8928571428571429,
+          "rollingShots": 84
+        }
+      },
+      {
+        "gameId": "2025020300",
+        "matchup": "NYI @ COL",
+        "startTimeEt": "9:00 PM ET",
+        "startTimeUtc": "2025-11-17T02:00:00+00:00",
+        "home": {
+          "playerId": 8475809,
+          "name": "Scott Wedgewood",
+          "team": "COL",
+          "record": "10-1-2",
+          "seasonSavePct": 0.91304,
+          "seasonGaa": 2.26225,
+          "startLikelihood": 1.0,
+          "restDays": 2,
+          "lastStart": "2025-11-11",
+          "lastOpponent": "ANA",
+          "rollingSavePct": 0.9523809523809523,
+          "rollingShots": 84
+        },
+        "away": {
+          "playerId": 8478009,
+          "name": "Ilya Sorokin",
+          "team": "NYI",
+          "record": "5-4-2",
+          "seasonSavePct": 0.89841,
+          "seasonGaa": 2.89913,
+          "startLikelihood": 1.0,
+          "restDays": 3,
+          "lastStart": "2025-11-10",
+          "lastOpponent": "NJD",
+          "rollingSavePct": 0.9473684210526315,
+          "rollingShots": 95
+        }
+      },
+      {
+        "gameId": "2025020301",
+        "matchup": "CAR @ BOS",
+        "startTimeEt": "7:00 PM ET",
+        "startTimeUtc": "2025-11-18T00:00:00+00:00",
+        "home": {
+          "playerId": 8480280,
+          "name": "Jeremy Swayman",
+          "team": "BOS",
+          "record": "7-4",
+          "seasonSavePct": 0.8997,
+          "seasonGaa": 3.08195,
+          "startLikelihood": 1.0,
+          "restDays": 2,
+          "lastStart": "2025-11-11",
+          "lastOpponent": "TOR",
+          "rollingSavePct": 0.9090909090909091,
+          "rollingShots": 99
+        },
+        "away": {
+          "playerId": 8475883,
+          "name": "Frederik Andersen",
+          "team": "CAR",
+          "record": "5-4",
+          "seasonSavePct": 0.89156,
+          "seasonGaa": 2.9974,
+          "startLikelihood": 1.0,
+          "restDays": 2,
+          "lastStart": "2025-11-11",
+          "lastOpponent": "WSH",
+          "rollingSavePct": 0.8904109589041096,
+          "rollingShots": 73
+        }
+      },
+      {
+        "gameId": "2025020302",
+        "matchup": "EDM @ BUF",
+        "startTimeEt": "7:00 PM ET",
+        "startTimeUtc": "2025-11-18T00:00:00+00:00",
+        "home": {
+          "playerId": 8481551,
+          "name": "Colten Ellis",
+          "team": "BUF",
+          "record": "1-1",
+          "seasonSavePct": 0.91044,
+          "seasonGaa": 3.05775,
+          "startLikelihood": 1.0,
+          "restDays": 1,
+          "lastStart": "2025-11-12",
+          "lastOpponent": "UTA",
+          "rollingSavePct": 0.9104477611940298,
+          "rollingShots": 67
+        },
+        "away": {
+          "playerId": 8479973,
+          "name": "Stuart Skinner",
+          "team": "EDM",
+          "record": "6-4-3",
+          "seasonSavePct": 0.88853,
+          "seasonGaa": 2.75241,
+          "startLikelihood": 1.0,
+          "restDays": 1,
+          "lastStart": "2025-11-12",
+          "lastOpponent": "PHI",
+          "rollingSavePct": 0.8392857142857143,
+          "rollingShots": 56
+        }
+      },
+      {
+        "gameId": "2025020303",
+        "matchup": "VAN @ FLA",
+        "startTimeEt": "7:00 PM ET",
+        "startTimeUtc": "2025-11-18T00:00:00+00:00",
+        "home": {
+          "playerId": 8475683,
+          "name": "Sergei Bobrovsky",
+          "team": "FLA",
+          "record": "8-4",
+          "seasonSavePct": 0.89261,
+          "seasonGaa": 2.67857,
+          "startLikelihood": 1.0,
+          "restDays": 3,
+          "lastStart": "2025-11-10",
+          "lastOpponent": "VGK",
+          "rollingSavePct": 0.8777777777777778,
+          "rollingShots": 90
+        },
+        "away": {
+          "playerId": 8477967,
+          "name": "Thatcher Demko",
+          "team": "VAN",
+          "record": "5-4",
+          "seasonSavePct": 0.90298,
+          "seasonGaa": 2.80155,
+          "startLikelihood": 1.0,
+          "restDays": 2,
+          "lastStart": "2025-11-11",
+          "lastOpponent": "WPG",
+          "rollingSavePct": 0.828125,
+          "rollingShots": 64
+        }
+      },
+      {
+        "gameId": "2025020304",
+        "matchup": "LAK @ WSH",
+        "startTimeEt": "7:00 PM ET",
+        "startTimeUtc": "2025-11-18T00:00:00+00:00",
+        "home": {
+          "playerId": 8480313,
+          "name": "Logan Thompson",
+          "team": "WSH",
+          "record": "7-4",
+          "seasonSavePct": 0.93461,
+          "seasonGaa": 1.55756,
+          "startLikelihood": 1.0,
+          "restDays": 2,
+          "lastStart": "2025-11-11",
+          "lastOpponent": "CAR",
+          "rollingSavePct": 0.9333333333333333,
+          "rollingShots": 75
+        },
+        "away": {
+          "playerId": 8475311,
+          "name": "Darcy Kuemper",
+          "team": "LAK",
+          "record": "6-3-3",
+          "seasonSavePct": 0.90822,
+          "seasonGaa": 2.39768,
+          "startLikelihood": 1.0,
+          "restDays": 2,
+          "lastStart": "2025-11-11",
+          "lastOpponent": "MTL",
+          "rollingSavePct": 0.9615384615384616,
+          "rollingShots": 78
+        }
+      },
+      {
+        "gameId": "2025020305",
+        "matchup": "MTL @ CBJ",
+        "startTimeEt": "7:30 PM ET",
+        "startTimeUtc": "2025-11-18T00:30:00+00:00",
+        "home": {
+          "playerId": 8482982,
+          "name": "Jet Greaves",
+          "team": "CBJ",
+          "record": "4-4-1",
+          "seasonSavePct": 0.90076,
+          "seasonGaa": 2.8863,
+          "startLikelihood": 1.0,
+          "restDays": 2,
+          "lastStart": "2025-11-11",
+          "lastOpponent": "SEA",
+          "rollingSavePct": 0.8611111111111112,
+          "rollingShots": 72
+        },
+        "away": {
+          "playerId": 8478470,
+          "name": "Sam Montembeault",
+          "team": "MTL",
+          "record": "4-4-1",
+          "seasonSavePct": 0.86147,
+          "seasonGaa": 3.52325,
+          "startLikelihood": 1.0,
+          "restDays": 2,
+          "lastStart": "2025-11-11",
+          "lastOpponent": "LAK",
+          "rollingSavePct": 0.8936170212765957,
+          "rollingShots": 94
+        }
+      },
+      {
+        "gameId": "2025020306",
+        "matchup": "UTA @ ANA",
+        "startTimeEt": "10:00 PM ET",
+        "startTimeUtc": "2025-11-18T03:00:00+00:00",
+        "home": {
+          "playerId": 8480843,
+          "name": "Lukas Dostal",
+          "team": "ANA",
+          "record": "8-4-1",
+          "seasonSavePct": 0.90813,
+          "seasonGaa": 2.69121,
+          "startLikelihood": 1.0,
+          "restDays": 2,
+          "lastStart": "2025-11-11",
+          "lastOpponent": "COL",
+          "rollingSavePct": 0.8941176470588236,
+          "rollingShots": 85
+        },
+        "away": {
+          "playerId": 8478872,
+          "name": "Karel Vejmelka",
+          "team": "UTA",
+          "record": "8-4",
+          "seasonSavePct": 0.88153,
+          "seasonGaa": 2.83733,
+          "startLikelihood": 1.0,
+          "restDays": 1,
+          "lastStart": "2025-11-12",
+          "lastOpponent": "BUF",
+          "rollingSavePct": 0.85,
+          "rollingShots": 60
+        }
+      },
+      {
+        "gameId": "2025020307",
+        "matchup": "STL @ TOR",
+        "startTimeEt": "7:00 PM ET",
+        "startTimeUtc": "2025-11-19T00:00:00+00:00",
+        "home": {
+          "playerId": 8476932,
+          "name": "Anthony Stolarz",
+          "team": "TOR",
+          "record": "6-5-1",
+          "seasonSavePct": 0.88385,
+          "seasonGaa": 3.50818,
+          "startLikelihood": 1.0,
+          "restDays": 2,
+          "lastStart": "2025-11-11",
+          "lastOpponent": "BOS",
+          "rollingSavePct": 0.8148148148148148,
+          "rollingShots": 54
+        },
+        "away": {
+          "playerId": 8476412,
+          "name": "Jordan Binnington",
+          "team": "STL",
+          "record": "4-5-2",
+          "seasonSavePct": 0.87265,
+          "seasonGaa": 3.2115,
+          "startLikelihood": 1.0,
+          "restDays": 2,
+          "lastStart": "2025-11-11",
+          "lastOpponent": "CGY",
+          "rollingSavePct": 0.9012345679012346,
+          "rollingShots": 81
+        }
+      },
+      {
+        "gameId": "2025020308",
+        "matchup": "SEA @ DET",
+        "startTimeEt": "7:00 PM ET",
+        "startTimeUtc": "2025-11-19T00:00:00+00:00",
+        "home": {
+          "playerId": 8476434,
+          "name": "John Gibson",
+          "team": "DET",
+          "record": "4-5",
+          "seasonSavePct": 0.88209,
+          "seasonGaa": 3.14624,
+          "startLikelihood": 1.0,
+          "restDays": 4,
+          "lastStart": "2025-11-09",
+          "lastOpponent": "CHI",
+          "rollingSavePct": 0.8928571428571429,
+          "rollingShots": 84
+        },
+        "away": {
+          "playerId": 8478916,
+          "name": "Joey Daccord",
+          "team": "SEA",
+          "record": "6-2-3",
+          "seasonSavePct": 0.89966,
+          "seasonGaa": 2.82729,
+          "startLikelihood": 1.0,
+          "restDays": 8,
+          "lastStart": "2025-11-05",
+          "lastOpponent": "SJS",
+          "rollingSavePct": 0.8831168831168831,
+          "rollingShots": 77
+        }
+      },
+      {
+        "gameId": "2025020309",
+        "matchup": "NJD @ TBL",
+        "startTimeEt": "7:00 PM ET",
+        "startTimeUtc": "2025-11-19T00:00:00+00:00",
+        "home": {
+          "playerId": 8476883,
+          "name": "Andrei Vasilevskiy",
+          "team": "TBL",
+          "record": "5-5-2",
+          "seasonSavePct": 0.89556,
+          "seasonGaa": 2.91845,
+          "startLikelihood": 1.0,
+          "restDays": 1,
+          "lastStart": "2025-11-12",
+          "lastOpponent": "NYR",
+          "rollingSavePct": 0.8666666666666667,
+          "rollingShots": 75
+        },
+        "away": {
+          "playerId": 8474593,
+          "name": "Jacob Markstrom",
+          "team": "NJD",
+          "record": "5-2-1",
+          "seasonSavePct": 0.86956,
+          "seasonGaa": 3.67485,
+          "startLikelihood": 1.0,
+          "restDays": 1,
+          "lastStart": "2025-11-12",
+          "lastOpponent": "CHI",
+          "rollingSavePct": 0.8571428571428571,
+          "rollingShots": 63
+        }
+      },
+      {
+        "gameId": "2025020310",
+        "matchup": "NYI @ DAL",
+        "startTimeEt": "8:00 PM ET",
+        "startTimeUtc": "2025-11-19T01:00:00+00:00",
+        "home": {
+          "playerId": 8479979,
+          "name": "Jake Oettinger",
+          "team": "DAL",
+          "record": "7-3-2",
+          "seasonSavePct": 0.89644,
+          "seasonGaa": 2.89355,
+          "startLikelihood": 1.0,
+          "restDays": 2,
+          "lastStart": "2025-11-11",
+          "lastOpponent": "OTT",
+          "rollingSavePct": 0.8378378378378378,
+          "rollingShots": 74
+        },
+        "away": {
+          "playerId": 8478009,
+          "name": "Ilya Sorokin",
+          "team": "NYI",
+          "record": "5-4-2",
+          "seasonSavePct": 0.89841,
+          "seasonGaa": 2.89913,
+          "startLikelihood": 1.0,
+          "restDays": 3,
+          "lastStart": "2025-11-10",
+          "lastOpponent": "NJD",
+          "rollingSavePct": 0.9473684210526315,
+          "rollingShots": 95
+        }
+      },
+      {
+        "gameId": "2025020311",
+        "matchup": "CBJ @ WPG",
+        "startTimeEt": "8:00 PM ET",
+        "startTimeUtc": "2025-11-19T01:00:00+00:00",
+        "home": {
+          "playerId": 8476945,
+          "name": "Connor Hellebuyck",
+          "team": "WPG",
+          "record": "7-5",
+          "seasonSavePct": 0.92067,
+          "seasonGaa": 2.3547,
+          "startLikelihood": 1.0,
+          "restDays": 2,
+          "lastStart": "2025-11-11",
+          "lastOpponent": "VAN",
+          "rollingSavePct": 0.9186046511627907,
+          "rollingShots": 86
+        },
+        "away": {
+          "playerId": 8482982,
+          "name": "Jet Greaves",
+          "team": "CBJ",
+          "record": "4-4-1",
+          "seasonSavePct": 0.90076,
+          "seasonGaa": 2.8863,
+          "startLikelihood": 1.0,
+          "restDays": 2,
+          "lastStart": "2025-11-11",
+          "lastOpponent": "SEA",
+          "rollingSavePct": 0.8611111111111112,
+          "rollingShots": 72
+        }
+      },
+      {
+        "gameId": "2025020312",
+        "matchup": "CGY @ CHI",
+        "startTimeEt": "8:30 PM ET",
+        "startTimeUtc": "2025-11-19T01:30:00+00:00",
+        "home": {
+          "playerId": 8481519,
+          "name": "Spencer Knight",
+          "team": "CHI",
+          "record": "6-3-3",
+          "seasonSavePct": 0.92307,
+          "seasonGaa": 2.45862,
+          "startLikelihood": 1.0,
+          "restDays": 1,
+          "lastStart": "2025-11-12",
+          "lastOpponent": "NJD",
+          "rollingSavePct": 0.9478260869565217,
+          "rollingShots": 115
+        },
+        "away": {
+          "playerId": 8481692,
+          "name": "Dustin Wolf",
+          "team": "CGY",
+          "record": "4-10-1",
+          "seasonSavePct": 0.89311,
+          "seasonGaa": 3.24486,
+          "startLikelihood": 1.0,
+          "restDays": 2,
+          "lastStart": "2025-11-11",
+          "lastOpponent": "STL",
+          "rollingSavePct": 0.9207920792079208,
+          "rollingShots": 101
+        }
+      },
+      {
+        "gameId": "2025020313",
+        "matchup": "NYR @ VGK",
+        "startTimeEt": "10:00 PM ET",
+        "startTimeUtc": "2025-11-19T03:00:00+00:00",
+        "home": {
+          "playerId": 8482761,
+          "name": "Carl Lindbom",
+          "team": "VGK",
+          "record": "0-3-1",
+          "seasonSavePct": 0.86868,
+          "seasonGaa": 3.2872,
+          "startLikelihood": 1.0,
+          "restDays": 3,
+          "lastStart": "2025-11-10",
+          "lastOpponent": "FLA",
+          "rollingSavePct": 0.8450704225352113,
+          "rollingShots": 71
+        },
+        "away": {
+          "playerId": 8478048,
+          "name": "Igor Shesterkin",
+          "team": "NYR",
+          "record": "6-6-2",
+          "seasonSavePct": 0.90932,
+          "seasonGaa": 2.49861,
+          "startLikelihood": 1.0,
+          "restDays": 1,
+          "lastStart": "2025-11-12",
+          "lastOpponent": "TBL",
+          "rollingSavePct": 0.8901098901098901,
+          "rollingShots": 91
+        }
+      },
+      {
+        "gameId": "2025020314",
+        "matchup": "UTA @ SJS",
+        "startTimeEt": "10:00 PM ET",
+        "startTimeUtc": "2025-11-19T03:00:00+00:00",
+        "home": {
+          "playerId": 8482137,
+          "name": "Yaroslav Askarov",
+          "team": "SJS",
+          "record": "5-4-1",
+          "seasonSavePct": 0.89873,
+          "seasonGaa": 3.28921,
+          "startLikelihood": 1.0,
+          "restDays": 2,
+          "lastStart": "2025-11-11",
+          "lastOpponent": "MIN",
+          "rollingSavePct": 0.9693877551020408,
+          "rollingShots": 98
+        },
+        "away": {
+          "playerId": 8478872,
+          "name": "Karel Vejmelka",
+          "team": "UTA",
+          "record": "8-4",
+          "seasonSavePct": 0.88153,
+          "seasonGaa": 2.83733,
+          "startLikelihood": 1.0,
+          "restDays": 1,
+          "lastStart": "2025-11-12",
+          "lastOpponent": "BUF",
+          "rollingSavePct": 0.85,
+          "rollingShots": 60
+        }
+      },
+      {
+        "gameId": "2025020315",
+        "matchup": "EDM @ WSH",
+        "startTimeEt": "7:00 PM ET",
+        "startTimeUtc": "2025-11-20T00:00:00+00:00",
+        "home": {
+          "playerId": 8480313,
+          "name": "Logan Thompson",
+          "team": "WSH",
+          "record": "7-4",
+          "seasonSavePct": 0.93461,
+          "seasonGaa": 1.55756,
+          "startLikelihood": 1.0,
+          "restDays": 2,
+          "lastStart": "2025-11-11",
+          "lastOpponent": "CAR",
+          "rollingSavePct": 0.9333333333333333,
+          "rollingShots": 75
+        },
+        "away": {
+          "playerId": 8479973,
+          "name": "Stuart Skinner",
+          "team": "EDM",
+          "record": "6-4-3",
+          "seasonSavePct": 0.88853,
+          "seasonGaa": 2.75241,
+          "startLikelihood": 1.0,
+          "restDays": 1,
+          "lastStart": "2025-11-12",
+          "lastOpponent": "PHI",
+          "rollingSavePct": 0.8392857142857143,
+          "rollingShots": 56
+        }
+      },
+      {
+        "gameId": "2025020316",
+        "matchup": "CGY @ BUF",
+        "startTimeEt": "7:30 PM ET",
+        "startTimeUtc": "2025-11-20T00:30:00+00:00",
+        "home": {
+          "playerId": 8481551,
+          "name": "Colten Ellis",
+          "team": "BUF",
+          "record": "1-1",
+          "seasonSavePct": 0.91044,
+          "seasonGaa": 3.05775,
+          "startLikelihood": 1.0,
+          "restDays": 1,
+          "lastStart": "2025-11-12",
+          "lastOpponent": "UTA",
+          "rollingSavePct": 0.9104477611940298,
+          "rollingShots": 67
+        },
+        "away": {
+          "playerId": 8481692,
+          "name": "Dustin Wolf",
+          "team": "CGY",
+          "record": "4-10-1",
+          "seasonSavePct": 0.89311,
+          "seasonGaa": 3.24486,
+          "startLikelihood": 1.0,
+          "restDays": 2,
+          "lastStart": "2025-11-11",
+          "lastOpponent": "STL",
+          "rollingSavePct": 0.9207920792079208,
+          "rollingShots": 101
+        }
+      },
+      {
+        "gameId": "2025020317",
+        "matchup": "CAR @ MIN",
+        "startTimeEt": "9:30 PM ET",
+        "startTimeUtc": "2025-11-20T02:30:00+00:00",
+        "home": {
+          "playerId": 8479406,
+          "name": "Filip Gustavsson",
+          "team": "MIN",
+          "record": "4-7-2",
+          "seasonSavePct": 0.89583,
+          "seasonGaa": 3.08582,
+          "startLikelihood": 1.0,
+          "restDays": 2,
+          "lastStart": "2025-11-11",
+          "lastOpponent": "SJS",
+          "rollingSavePct": 0.8987341772151899,
+          "rollingShots": 79
+        },
+        "away": {
+          "playerId": 8475883,
+          "name": "Frederik Andersen",
+          "team": "CAR",
+          "record": "5-4",
+          "seasonSavePct": 0.89156,
+          "seasonGaa": 2.9974,
+          "startLikelihood": 1.0,
+          "restDays": 2,
+          "lastStart": "2025-11-11",
+          "lastOpponent": "WSH",
+          "rollingSavePct": 0.8904109589041096,
+          "rollingShots": 73
+        }
+      },
+      {
+        "gameId": "2025020318",
+        "matchup": "BOS @ ANA",
+        "startTimeEt": "10:00 PM ET",
+        "startTimeUtc": "2025-11-20T03:00:00+00:00",
+        "home": {
+          "playerId": 8480843,
+          "name": "Lukas Dostal",
+          "team": "ANA",
+          "record": "8-4-1",
+          "seasonSavePct": 0.90813,
+          "seasonGaa": 2.69121,
+          "startLikelihood": 1.0,
+          "restDays": 2,
+          "lastStart": "2025-11-11",
+          "lastOpponent": "COL",
+          "rollingSavePct": 0.8941176470588236,
+          "rollingShots": 85
+        },
+        "away": {
+          "playerId": 8480280,
+          "name": "Jeremy Swayman",
+          "team": "BOS",
+          "record": "7-4",
+          "seasonSavePct": 0.8997,
+          "seasonGaa": 3.08195,
+          "startLikelihood": 1.0,
+          "restDays": 2,
+          "lastStart": "2025-11-11",
+          "lastOpponent": "TOR",
+          "rollingSavePct": 0.9090909090909091,
+          "rollingShots": 99
+        }
+      }
+    ]
+  },
+  "heatCheck": {
+    "surging": [
+      {
+        "name": "Yaroslav Askarov",
+        "team": "SJS",
+        "rollingSavePct": 0.9693877551020408,
+        "seasonSavePct": 0.89873,
+        "deltaSavePct": 0.07065775510204075,
+        "restDays": 2,
+        "lastOpponent": "MIN"
+      },
+      {
+        "name": "Joel Hofer",
+        "team": "STL",
+        "rollingSavePct": 0.92,
+        "seasonSavePct": 0.86458,
+        "deltaSavePct": 0.055420000000000025,
+        "restDays": 5,
+        "lastOpponent": "SEA"
+      },
+      {
+        "name": "Darcy Kuemper",
+        "team": "LAK",
+        "rollingSavePct": 0.9615384615384616,
+        "seasonSavePct": 0.90822,
+        "deltaSavePct": 0.05331846153846154,
+        "restDays": 2,
+        "lastOpponent": "MTL"
+      },
+      {
+        "name": "Ilya Sorokin",
+        "team": "NYI",
+        "rollingSavePct": 0.9473684210526315,
+        "seasonSavePct": 0.89841,
+        "deltaSavePct": 0.048958421052631484,
+        "restDays": 3,
+        "lastOpponent": "NJD"
+      }
+    ],
+    "cooling": [
+      {
+        "name": "Thatcher Demko",
+        "team": "VAN",
+        "rollingSavePct": 0.828125,
+        "seasonSavePct": 0.90298,
+        "deltaSavePct": -0.074855,
+        "restDays": 2,
+        "lastOpponent": "WPG"
+      },
+      {
+        "name": "Anthony Stolarz",
+        "team": "TOR",
+        "rollingSavePct": 0.8148148148148148,
+        "seasonSavePct": 0.88385,
+        "deltaSavePct": -0.06903518518518525,
+        "restDays": 2,
+        "lastOpponent": "BOS"
+      },
+      {
+        "name": "Jake Oettinger",
+        "team": "DAL",
+        "rollingSavePct": 0.8378378378378378,
+        "seasonSavePct": 0.89644,
+        "deltaSavePct": -0.058602162162162186,
+        "restDays": 2,
+        "lastOpponent": "OTT"
+      },
+      {
+        "name": "Juuse Saros",
+        "team": "NSH",
+        "rollingSavePct": 0.8356164383561644,
+        "seasonSavePct": 0.89195,
+        "deltaSavePct": -0.05633356164383563,
+        "restDays": 3,
+        "lastOpponent": "NYR"
+      }
+    ]
+  },
+  "restWatch": [
     {
-      "name": "Jeremy Swayman",
-      "team": "BOS",
-      "rollingGsa": 3.1,
-      "seasonGsa": 12.4,
-      "restDays": 2,
-      "startLikelihood": 0.85,
-      "trend": "surging",
-      "note": "Shutting down slot looks (0.78 xG saved per game) — massive home pillar.",
-      "strengths": ["Elite rebound control", "+0.31 rush save delta"],
-      "watchouts": ["Toronto PP east-west plays"],
-      "nextOpponent": "TOR"
+      "name": "Adin Hill",
+      "team": "VGK",
+      "restDays": 24,
+      "lastStart": "2025-10-20",
+      "startLikelihood": 1.0
     },
     {
+      "name": "Nico Daws",
+      "team": "NJD",
+      "restDays": 22,
+      "lastStart": "2025-10-22",
+      "startLikelihood": 1.0
+    },
+    {
+      "name": "Trent Miner",
+      "team": "COL",
+      "restDays": 18,
+      "lastStart": "2025-10-26",
+      "startLikelihood": 0.5
+    },
+    {
+      "name": "Cayden Primeau",
+      "team": "TOR",
+      "restDays": 15,
+      "lastStart": "2025-10-29",
+      "startLikelihood": 1.0
+    },
+    {
+      "name": "Aleksei Kolosov",
+      "team": "PHI",
+      "restDays": 11,
+      "lastStart": "2025-11-02",
+      "startLikelihood": 0.5
+    },
+    {
+      "name": "Tristan Jarry",
+      "team": "PIT",
+      "restDays": 10,
+      "lastStart": "2025-11-03",
+      "startLikelihood": 1.0
+    }
+  ],
+  "seasonLeaders": [
+    {
       "name": "Logan Thompson",
-      "team": "VGK",
-      "rollingGsa": 2.4,
-      "seasonGsa": 9.8,
-      "restDays": 1,
-      "startLikelihood": 0.9,
-      "trend": "steady",
-      "note": "Tracks east-west vs NYR top unit, limits rebounds to 1.2 per game last two weeks.",
-      "strengths": ["Glove heat", "PK anchor"],
-      "watchouts": ["Net-front deflections"],
-      "nextOpponent": "NYR"
+      "team": "WSH",
+      "savePct": 0.93461,
+      "gaa": 1.55756,
+      "games": 11,
+      "record": "7-4"
+    },
+    {
+      "name": "Spencer Knight",
+      "team": "CHI",
+      "savePct": 0.92307,
+      "gaa": 2.45862,
+      "games": 12,
+      "record": "6-3-3"
     },
     {
       "name": "Connor Hellebuyck",
       "team": "WPG",
-      "rollingGsa": 1.7,
-      "seasonGsa": 10.5,
-      "restDays": 3,
-      "startLikelihood": 0.7,
-      "trend": "fresh",
-      "note": "Jets controlling rebounds but travel + rest advantage makes him tonight's road equalizer.",
-      "strengths": ["First-shot save % 0.933", "Calm puck handling"],
-      "watchouts": ["High blocker"],
-      "nextOpponent": "VAN"
+      "savePct": 0.92067,
+      "gaa": 2.3547,
+      "games": 12,
+      "record": "7-5"
     },
     {
-      "name": "Cam Talbot",
+      "name": "Dan Vladar",
+      "team": "PHI",
+      "savePct": 0.91891,
+      "gaa": 2.15304,
+      "games": 10,
+      "record": "6-3-1"
+    }
+  ],
+  "goalies": [
+    {
+      "name": "Darcy Kuemper",
       "team": "LAK",
-      "rollingGsa": 0.6,
-      "seasonGsa": 4.2,
-      "restDays": 0,
-      "startLikelihood": 0.55,
-      "trend": "fatigue watch",
-      "note": "Second leg of a back-to-back; LA will lean on structure but Talbot's post-integration is slipping.",
-      "strengths": ["Reads seam passes"],
-      "watchouts": ["Glove high", "Backdoor tap-ins"],
+      "rollingGsa": 9.62,
+      "seasonGsa": 9.08,
+      "restDays": 2,
+      "startLikelihood": 1.0,
+      "trend": "surging",
+      "note": "Facing TOR \u00b7 rest 2d",
+      "strengths": [
+        "Record 6-3-3",
+        "Rolling SV% 96.2%"
+      ],
+      "watchouts": [
+        "Season GAA 2.40"
+      ],
       "nextOpponent": "TOR"
+    },
+    {
+      "name": "Anthony Stolarz",
+      "team": "TOR",
+      "rollingGsa": 8.15,
+      "seasonGsa": 8.84,
+      "restDays": 2,
+      "startLikelihood": 1.0,
+      "trend": "fatigue watch",
+      "note": "Facing LAK \u00b7 rest 2d",
+      "strengths": [
+        "Record 6-5-1",
+        "Rolling SV% 81.5%"
+      ],
+      "watchouts": [
+        "Season GAA 3.51"
+      ],
+      "nextOpponent": "LAK"
+    },
+    {
+      "name": "Jake Oettinger",
+      "team": "DAL",
+      "rollingGsa": 8.38,
+      "seasonGsa": 8.96,
+      "restDays": 2,
+      "startLikelihood": 1.0,
+      "trend": "fatigue watch",
+      "note": "Facing MTL \u00b7 rest 2d",
+      "strengths": [
+        "Record 7-3-2",
+        "Rolling SV% 83.8%"
+      ],
+      "watchouts": [
+        "Season GAA 2.89"
+      ],
+      "nextOpponent": "MTL"
+    },
+    {
+      "name": "Sam Montembeault",
+      "team": "MTL",
+      "rollingGsa": 8.94,
+      "seasonGsa": 8.61,
+      "restDays": 2,
+      "startLikelihood": 1.0,
+      "trend": "surging",
+      "note": "Facing DAL \u00b7 rest 2d",
+      "strengths": [
+        "Record 4-4-1",
+        "Rolling SV% 89.4%"
+      ],
+      "watchouts": [
+        "Season GAA 3.52"
+      ],
+      "nextOpponent": "DAL"
+    },
+    {
+      "name": "Jeremy Swayman",
+      "team": "BOS",
+      "rollingGsa": 9.09,
+      "seasonGsa": 9.0,
+      "restDays": 2,
+      "startLikelihood": 1.0,
+      "trend": "steady",
+      "note": "Facing OTT \u00b7 rest 2d",
+      "strengths": [
+        "Record 7-4",
+        "Rolling SV% 90.9%"
+      ],
+      "watchouts": [
+        "Season GAA 3.08"
+      ],
+      "nextOpponent": "OTT"
+    },
+    {
+      "name": "Linus Ullmark",
+      "team": "OTT",
+      "rollingGsa": 9.0,
+      "seasonGsa": 8.7,
+      "restDays": 2,
+      "startLikelihood": 1.0,
+      "trend": "surging",
+      "note": "Facing BOS \u00b7 rest 2d",
+      "strengths": [
+        "Record 6-4-4",
+        "Rolling SV% 90.0%"
+      ],
+      "watchouts": [
+        "Season GAA 3.21"
+      ],
+      "nextOpponent": "BOS"
+    },
+    {
+      "name": "Lukas Dostal",
+      "team": "ANA",
+      "rollingGsa": 8.94,
+      "seasonGsa": 9.08,
+      "restDays": 2,
+      "startLikelihood": 1.0,
+      "trend": "steady",
+      "note": "Facing DET \u00b7 rest 2d",
+      "strengths": [
+        "Record 8-4-1",
+        "Rolling SV% 89.4%"
+      ],
+      "watchouts": [
+        "Season GAA 2.69"
+      ],
+      "nextOpponent": "DET"
+    },
+    {
+      "name": "John Gibson",
+      "team": "DET",
+      "rollingGsa": 8.93,
+      "seasonGsa": 8.82,
+      "restDays": 4,
+      "startLikelihood": 1.0,
+      "trend": "steady",
+      "note": "Facing ANA \u00b7 rest 4d",
+      "strengths": [
+        "Record 4-5",
+        "Rolling SV% 89.3%"
+      ],
+      "watchouts": [
+        "Season GAA 3.15"
+      ],
+      "nextOpponent": "ANA"
+    },
+    {
+      "name": "Logan Thompson",
+      "team": "WSH",
+      "rollingGsa": 9.33,
+      "seasonGsa": 9.35,
+      "restDays": 2,
+      "startLikelihood": 1.0,
+      "trend": "steady",
+      "note": "Facing FLA \u00b7 rest 2d",
+      "strengths": [
+        "Record 7-4",
+        "Rolling SV% 93.3%"
+      ],
+      "watchouts": [
+        "Season GAA 1.56"
+      ],
+      "nextOpponent": "FLA"
+    },
+    {
+      "name": "Sergei Bobrovsky",
+      "team": "FLA",
+      "rollingGsa": 8.78,
+      "seasonGsa": 8.93,
+      "restDays": 3,
+      "startLikelihood": 1.0,
+      "trend": "steady",
+      "note": "Facing WSH \u00b7 rest 3d",
+      "strengths": [
+        "Record 8-4",
+        "Rolling SV% 87.8%"
+      ],
+      "watchouts": [
+        "Season GAA 2.68"
+      ],
+      "nextOpponent": "WSH"
     }
   ]
 }
