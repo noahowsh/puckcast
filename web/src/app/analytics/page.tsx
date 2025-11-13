@@ -149,22 +149,22 @@ function DistributionCard({ data }: { data: DistributionFinding[] }) {
 }
 
 function ConfidenceCard({ buckets }: { buckets: typeof confidenceBuckets }) {
+  const intensity = (accuracy: number) => Math.min(Math.max((accuracy - 0.5) * 3, 0), 1);
   return (
     <section className="rounded-[36px] border border-white/10 bg-gradient-to-br from-black/40 via-slate-900/60 to-slate-950 p-8 shadow-2xl shadow-black/40">
-      <p className="text-sm uppercase tracking-[0.4em] text-lime-300">Confidence buckets</p>
-      <div className="mt-4 space-y-4">
-        {buckets.map((bucket) => (
-          <div key={bucket.label}>
-            <div className="flex items-center justify-between text-xs uppercase tracking-[0.4em] text-white/60">
-              <span>{bucket.label}</span>
-              <span>{bucket.count.toLocaleString()} samples</span>
-            </div>
-            <div className="mt-2 h-2.5 w-full rounded-full bg-white/10">
-              <div className="h-full rounded-full bg-gradient-to-r from-lime-300 via-emerald-400 to-cyan-300" style={{ width: `${bucket.accuracy * 100}%` }} />
-            </div>
-            <p className="mt-1 text-sm text-white/80">{pct(bucket.accuracy)} accuracy</p>
-          </div>
-        ))}
+      <p className="text-sm uppercase tracking-[0.4em] text-lime-300">Confidence heat map</p>
+      <div className="mt-6 grid gap-4 md:grid-cols-2">
+        {buckets.map((bucket) => {
+          const strength = intensity(bucket.accuracy);
+          const background = `linear-gradient(135deg, rgba(190,242,100,${0.25 + strength * 0.5}), rgba(34,197,94,${0.2 + strength * 0.5}))`;
+          return (
+            <article key={bucket.label} className="rounded-3xl border border-white/10 p-4" style={{ background }}>
+              <p className="text-xs uppercase tracking-[0.4em] text-white/70">{bucket.label}</p>
+              <p className="mt-2 text-3xl font-semibold text-white">{pct(bucket.accuracy)}</p>
+              <p className="text-xs uppercase tracking-[0.4em] text-white/60">{bucket.count.toLocaleString()} samples</p>
+            </article>
+          );
+        })}
       </div>
     </section>
   );

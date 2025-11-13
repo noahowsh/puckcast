@@ -7,6 +7,9 @@ import type { BankrollPoint, ModelInsights, StrategySummary } from "@/types/insi
 const modelInsights = insightsData as ModelInsights;
 const strategies = modelInsights.strategies;
 const bankrollSeries = modelInsights.bankrollSeries;
+const sortedStrategies = [...strategies].sort((a, b) => b.units - a.units);
+const strategyLeaders = sortedStrategies.slice(0, 2);
+const strategyLaggards = sortedStrategies.slice(-2).reverse();
 
 const edgeOptions = [0, 5, 10, 15];
 
@@ -77,6 +80,40 @@ export default function BettingPage() {
             <SummaryCard label="Avg edge" value={`${(activeStrategy.avgEdge * 100).toFixed(1)} pts`} detail="mean |p-0.5|" />
           </div>
           <p className="mt-4 text-xs text-white/60">{activeStrategy.note}</p>
+        </section>
+
+        <section className="grid gap-6 lg:grid-cols-2">
+          <div className="rounded-[36px] border border-white/10 bg-white/5 p-8 shadow-2xl shadow-black/30">
+            <p className="text-sm uppercase tracking-[0.4em] text-lime-300">Weekly edge recap</p>
+            <p className="mt-2 text-sm text-white/70">Strategies adding the most units this season-to-date.</p>
+            <div className="mt-6 space-y-4">
+              {strategyLeaders.map((strategy) => (
+                <div key={strategy.name} className="rounded-3xl border border-white/10 bg-black/20 p-4">
+                  <p className="text-sm font-semibold text-white">{strategy.name}</p>
+                  <p className="text-xs uppercase tracking-[0.4em] text-white/50">{strategy.note}</p>
+                  <div className="mt-3 flex items-center justify-between text-white">
+                    <span className="text-2xl font-semibold">{strategy.units > 0 ? `+${strategy.units}` : strategy.units}u</span>
+                    <span className="text-sm text-lime-200">{pct(strategy.winRate)} hit rate</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className="rounded-[36px] border border-white/10 bg-white/5 p-8 shadow-2xl shadow-black/30">
+            <p className="text-sm uppercase tracking-[0.4em] text-white/60">Under construction</p>
+            <p className="mt-2 text-sm text-white/70">Strategies currently lagging provide context for variance.</p>
+            <div className="mt-6 space-y-4">
+              {strategyLaggards.map((strategy) => (
+                <div key={strategy.name} className="rounded-3xl border border-white/10 bg-black/10 p-4">
+                  <p className="text-sm font-semibold text-white">{strategy.name}</p>
+                  <div className="mt-3 flex items-center justify-between text-white">
+                    <span className="text-2xl font-semibold text-rose-200">{strategy.units > 0 ? `+${strategy.units}` : strategy.units}u</span>
+                    <span className="text-sm text-white/60">{strategy.bets.toLocaleString()} bets</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
         </section>
 
         <section className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
