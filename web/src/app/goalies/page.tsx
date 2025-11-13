@@ -4,6 +4,7 @@ import { GoalieTicker } from "@/components/GoalieTicker";
 
 const pulse = getGoaliePulse();
 const updatedAt = pulse.updatedAt ? new Date(pulse.updatedAt) : null;
+const GOALIE_SUMMARY_ENDPOINT = "https://api.nhle.com/stats/rest/en/goalie/summary?isAggregate=true&limit=-1&cayenneExp=seasonId=20252026";
 
 const trendColors: Record<string, string> = {
   surging: "text-lime-300",
@@ -14,7 +15,38 @@ const trendColors: Record<string, string> = {
 
 const formatPercent = (value: number) => `${(value * 100).toFixed(0)}%`;
 
-export default function GoaliePage() {
+type GoalieSeasonLeader = {
+  name: string;
+  gamesPlayed: number;
+  wins: number;
+  savePct: number;
+  gaa: number;
+};
+
+async function fetchGoalieSeasonLeaders(): Promise<GoalieSeasonLeader[]> {
+  try {
+    const res = await fetch(GOALIE_SUMMARY_ENDPOINT, { next: { revalidate: 3600 } });
+    if (!res.ok) return [];
+    const payload = (await res.json()) as { data: any[] };
+    return payload.data
+      .filter((entry) => entry.gamesPlayed >= 5 && typeof entry.savePct === "number")
+      .sort((a, b) => b.savePct - a.savePct)
+      .slice(0, 4)
+      .map((entry) => ({
+        name: entry.goalieFullName as string,
+        gamesPlayed: entry.gamesPlayed as number,
+        wins: entry.wins as number,
+        savePct: entry.savePct as number,
+        gaa: entry.goalsAgainstAverage as number,
+      }));
+  } catch (err) {
+    console.error("Failed to fetch goalie summary", err);
+    return [];
+  }
+}
+
+export default async function GoaliePage() {
+  const seasonLeaders = await fetchGoalieSeasonLeaders();
   return (
     <div className="relative overflow-hidden">
       <div className="relative mx-auto flex max-w-6xl flex-col gap-12 px-6 pb-16 pt-8 lg:px-12">
@@ -30,6 +62,22 @@ export default function GoaliePage() {
             </div>
           </div>
           <p className="rounded-3xl border border-white/10 bg-white/5 p-4 text-sm text-white/80">{pulse.notes}</p>
+          {seasonLeaders.length > 0 && (
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+              {seasonLeaders.map((leader) => (
+                <article key={leader.name} className="rounded-3xl border border-white/10 bg-black/20 p-4">
+                  <p className="text-xs uppercase tracking-[0.4em] text-white/60">Season leader</p>
+                  <p className="mt-1 text-lg font-semibold text-white">{leader.name}</p>
+                  <div className="mt-3 flex items-center justify-between text-sm text-white/80">
+                    <span>{leader.gamesPlayed} gp</span>
+                    <span>{leader.wins} wins</span>
+                  </div>
+                  <p className="mt-3 text-2xl font-semibold text-white">{formatPercent(leader.savePct)}</p>
+                  <p className="text-xs uppercase tracking-[0.4em] text-white/50">SV% · GAA {leader.gaa.toFixed(2)}</p>
+                </article>
+              ))}
+            </div>
+          )}
           <GoalieTicker initial={pulse} />
         </section>
 
