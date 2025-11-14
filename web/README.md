@@ -29,6 +29,7 @@ Supporting data files:
 - `src/data/goaliePulse.json` – goalie insights for `/goalies`
 - `src/data/modelInsights.json` – aggregated metrics used across `/`, `/betting`, `/performance`, `/leaderboards`, `/analytics`
 - `src/data/currentStandings.json` – snapshots from the NHL standings API used on `/leaderboards` and `/performance`
+- `data/moneypuck_all_games.csv.gz` – compressed MoneyPuck history (auto-inflated when `predict_full.py` runs)
 
 ## Wiring real data
 

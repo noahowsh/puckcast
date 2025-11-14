@@ -7,9 +7,13 @@ import argparse
 import subprocess
 import sys
 from pathlib import Path
+import gzip
+import shutil
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 PYTHON = sys.executable or "python3"
+MONEYPUCK_CSV = REPO_ROOT / "data" / "moneypuck_all_games.csv"
+MONEYPUCK_GZ = REPO_ROOT / "data" / "moneypuck_all_games.csv.gz"
 
 
 def run_step(name: str, command: list[str]) -> None:
@@ -20,6 +24,7 @@ def run_step(name: str, command: list[str]) -> None:
 
 
 def refresh_predictions(date_arg: str | None) -> None:
+    ensure_moneypuck_data()
     cmd = [PYTHON, str(REPO_ROOT / "predict_full.py")]
     if date_arg:
         cmd.append(date_arg)
@@ -41,6 +46,20 @@ def refresh_goalie_pulse(date_arg: str | None) -> None:
     if date_arg:
         cmd.extend(["--date", date_arg])
     run_step("Update goalie pulse", cmd)
+
+
+def ensure_moneypuck_data() -> None:
+    if MONEYPUCK_CSV.exists():
+        return
+    if MONEYPUCK_GZ.exists():
+        print("[info] Inflating moneypuck_all_games.csv from bundled gzip...")
+        MONEYPUCK_CSV.parent.mkdir(parents=True, exist_ok=True)
+        with gzip.open(MONEYPUCK_GZ, "rb") as src, MONEYPUCK_CSV.open("wb") as dst:
+            shutil.copyfileobj(src, dst)
+        return
+    raise SystemExit(
+        "Missing data/moneypuck_all_games.csv. Add the CSV or the compressed data/moneypuck_all_games.csv.gz to run predictions."
+    )
 
 
 def parse_args() -> argparse.Namespace:
