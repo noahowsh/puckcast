@@ -25,14 +25,29 @@ jobs:
       - name: Run refresh pipeline
         run: python scripts/refresh_site_data.py
       - name: Commit updated JSON artifacts
+        if: success()
         run: |
           git status -sb
-          if git diff --quiet -- web/src/data/todaysPredictions.json web/src/data/currentStandings.json; then
+          if git diff --quiet -- web/src/data/todaysPredictions.json web/src/data/currentStandings.json web/src/data/goaliePulse.json; then
             echo "No JSON changes, skipping commit"
           else
             git config user.name "puckcast-bot"
             git config user.email "bot@puckcast.ai"
-            git add web/src/data/todaysPredictions.json web/src/data/currentStandings.json
+            git add web/src/data/todaysPredictions.json web/src/data/currentStandings.json web/src/data/goaliePulse.json
             git commit -m "chore: nightly data refresh [skip ci]"
             git push
           fi
+      - name: Send failure alert
+        if: failure()
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 587
+          username: ${{ secrets.ALERT_EMAIL_USERNAME }}
+          password: ${{ secrets.ALERT_EMAIL_PASSWORD }}
+          subject: "[Puckcast] Nightly data refresh FAILED"
+          to: noahowsh@gmail.com
+          from: ${{ secrets.ALERT_EMAIL_USERNAME }}
+          body: |
+            The nightly refresh workflow failed on run ${{ github.run_id }}.
+            View logs: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}

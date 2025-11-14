@@ -14,6 +14,13 @@ const standingsMeta = standingsSnapshot as { generatedAt?: string };
 const predictionsPayload = getPredictionsPayload();
 const todaysPredictions = selectCurrentSlate(predictionsPayload.games);
 const goaliePulse = getGoaliePulse();
+const projectedStarterCount = goaliePulse.tonight.games.reduce((total, game) => {
+  return total + (game.home ? 1 : 0) + (game.away ? 1 : 0);
+}, 0);
+const goalieHighlight = goaliePulse.heatCheck.surging[0];
+const restHighlight = goaliePulse.restWatch[0];
+const renderLastStart = (value?: string | null) =>
+  value ? new Date(value).toLocaleDateString("en-US", { month: "short", day: "numeric" }) : "TBD";
 const teamSnapshots = buildTeamSnapshots();
 const snapshotByAbbrev = new Map(teamSnapshots.map((team) => [team.abbrev, team]));
 const liveStandings = getCurrentStandings();
@@ -219,8 +226,10 @@ const navPreviewCards = [
   {
     title: "Goalies",
     href: "/goalies",
-    summary: `${goaliePulse.goalies.length} goalies tracked`,
-    detail: goaliePulse.goalies[0] ? `${goaliePulse.goalies[0].name} trending ${goaliePulse.goalies[0].trend}` : "Start odds ticker",
+    summary: projectedStarterCount ? `${projectedStarterCount} projected starters` : "Daily start odds",
+    detail: goalieHighlight
+      ? `${goalieHighlight.name} rolling ${goalieHighlight.rollingSavePct ? (goalieHighlight.rollingSavePct * 100).toFixed(1) : (goalieHighlight.seasonSavePct * 100).toFixed(1)}%`
+      : "Auto-refresh 6 AM ET",
     tag: "Start odds",
   },
 ];
@@ -306,6 +315,45 @@ export default function Home() {
               </div>
             </div>
             <PredictionTicker initial={predictionsPayload} />
+            {(goalieHighlight || restHighlight) && (
+              <div className="mt-6 grid gap-4 lg:grid-cols-2">
+                {goalieHighlight && (
+                  <article className="rounded-3xl border border-white/10 bg-black/20 p-4 text-white">
+                    <p className="text-xs uppercase tracking-[0.4em] text-lime-300">Goalie heat check</p>
+                    <p className="mt-2 text-2xl font-semibold">{goalieHighlight.name}</p>
+                    <p className="text-sm text-white/70">{goalieHighlight.team} · last opp {goalieHighlight.lastOpponent ?? "TBD"}</p>
+                    <div className="mt-4 grid grid-cols-3 text-center text-sm">
+                      <div>
+                        <p className="text-xs uppercase tracking-[0.4em] text-white/50">Rolling</p>
+                        <p className="text-base">
+                          {goalieHighlight.rollingSavePct ? `${(goalieHighlight.rollingSavePct * 100).toFixed(1)}%` : "—"}
+                        </p>
+                      </div>
+                      <div>
+                        <p className="text-xs uppercase tracking-[0.4em] text-white/50">Season</p>
+                        <p className="text-base">{(goalieHighlight.seasonSavePct * 100).toFixed(1)}%</p>
+                      </div>
+                      <div>
+                        <p className="text-xs uppercase tracking-[0.4em] text-white/50">Δ SV%</p>
+                        <p className="text-base">
+                          {goalieHighlight.deltaSavePct != null ? `${(goalieHighlight.deltaSavePct * 100).toFixed(1)} pts` : "—"}
+                        </p>
+                      </div>
+                    </div>
+                  </article>
+                )}
+                {restHighlight && (
+                  <article className="rounded-3xl border border-white/10 bg-white/5 p-4 text-white">
+                    <p className="text-xs uppercase tracking-[0.4em] text-lime-300">Fresh crease alert</p>
+                    <p className="mt-2 text-2xl font-semibold">{restHighlight.name}</p>
+                    <p className="text-sm text-white/70">{restHighlight.team} · last start {renderLastStart(restHighlight.lastStart)}</p>
+                    <p className="mt-4 text-sm text-lime-200">
+                      {restHighlight.restDays != null ? `${restHighlight.restDays} days rest` : "Monitoring"}
+                    </p>
+                  </article>
+                )}
+              </div>
+            )}
           </section>
 
           <section className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">

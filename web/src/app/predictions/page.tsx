@@ -1,11 +1,18 @@
 import type { PredictionsPayload, Prediction } from "@/types/prediction";
-import { getPredictionsPayload, selectCurrentSlate } from "@/lib/data";
+import type { GoalieMatchup, GoaliePulse, GoalieStarter } from "@/types/goalie";
+import { getGoaliePulse, getPredictionsPayload, selectCurrentSlate } from "@/lib/data";
 import { PredictionTicker } from "@/components/PredictionTicker";
 import { getPredictionGrade, normalizeSummaryWithGrade } from "@/lib/prediction";
 
 const payload: PredictionsPayload = getPredictionsPayload();
 const todaysPredictions = selectCurrentSlate(payload.games);
 const updatedAt = payload.generatedAt ? new Date(payload.generatedAt) : null;
+const goaliePulse: GoaliePulse = getGoaliePulse();
+const goalieMatchups = new Map(goaliePulse.tonight.games.map((game) => [game.gameId, game]));
+const totalProjectedSlots = goaliePulse.tonight.games.length * 2;
+const confirmedStarters = goaliePulse.tonight.games.reduce((total, game) => {
+  return total + (game.home ? 1 : 0) + (game.away ? 1 : 0);
+}, 0);
 
 const formatTime = (iso?: string | null) => {
   if (!iso) return "TBD";
@@ -47,6 +54,17 @@ const topEdges = [...todaysPredictions]
 const upsetRadar = todaysPredictions
   .filter((game) => game.modelFavorite === "away" && game.awayWinProb >= 0.55)
   .slice(0, 3);
+const summaryCards = [
+  { label: "Avg model edge", value: `${(summary.avgEdge * 100).toFixed(1)} pts`, detail: "vs coin flip" },
+  { label: "A-grade plays", value: `${summary.aGrades}`, detail: ">60% confidence" },
+  { label: "B-tier edges", value: `${summary.bPlusEdges}`, detail: ">5% win delta" },
+  {
+    label: "Projected starters",
+    value: totalProjectedSlots ? `${confirmedStarters}/${totalProjectedSlots}` : "TBD",
+    detail: totalProjectedSlots ? "Synced 6 AM ET" : "Awaiting slate",
+  },
+  { label: "True toss-ups", value: `${summary.tossUps}`, detail: "<2% delta" },
+];
 
 export default function PredictionsPage() {
   return (
@@ -66,11 +84,10 @@ export default function PredictionsPage() {
               {updatedAt ? `Updated ${updatedAt.toLocaleString("en-US", { timeZone: "America/New_York" })}` : "Awaiting model run"}
             </div>
           </div>
-          <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            <SummaryCard label="Avg model edge" value={`${(summary.avgEdge * 100).toFixed(1)} pts`} detail="vs coin flip" />
-            <SummaryCard label="A-grade plays" value={`${summary.aGrades}`} detail={">60% confidence"} />
-            <SummaryCard label="B-tier edges" value={`${summary.bPlusEdges}`} detail={">5% win delta"} />
-            <SummaryCard label="True toss-ups" value={`${summary.tossUps}`} detail="<2% delta" />
+          <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+            {summaryCards.map((card) => (
+              <SummaryCard key={card.label} label={card.label} value={card.value} detail={card.detail} />
+            ))}
           </div>
           <div className="mt-6">
             <PredictionTicker initial={payload} />
@@ -152,6 +169,7 @@ export default function PredictionsPage() {
                       <th className="py-3 px-4 text-left">Edge</th>
                       <th className="py-3 px-4 text-left">Δ</th>
                       <th className="py-3 px-4 text-left">Confidence</th>
+                      <th className="py-3 px-4 text-left">Goalies</th>
                       <th className="py-3 px-4 text-left">Start</th>
                     </tr>
                   </thead>
@@ -159,19 +177,25 @@ export default function PredictionsPage() {
                     {todaysPredictions
                       .slice()
                       .sort((a, b) => (a.startTimeUtc ?? "").localeCompare(b.startTimeUtc ?? ""))
-                      .map((game) => (
-                        <tr key={game.id}>
-                          <td className="py-3 pr-4 font-medium text-white">
-                            {game.awayTeam.abbrev} @ {game.homeTeam.abbrev}
-                          </td>
-                          <td className="py-3 px-4">{numberFmt(game.homeWinProb)}</td>
-                          <td className="py-3 px-4">{numberFmt(game.awayWinProb)}</td>
-                          <td className="py-3 px-4">{(game.edge * 100).toFixed(1)} pts</td>
-                          <td className="py-3 px-4"><EdgeVisual value={game.edge} /></td>
-                          <td className="py-3 px-4">{getPredictionGrade(game.edge).label}</td>
-                          <td className="py-3 px-4">{game.startTimeEt ?? "TBD"}</td>
-                        </tr>
-                      ))}
+                      .map((game) => {
+                        const matchupKey = String(game.id ?? game.gameId ?? "");
+                        const matchup = goalieMatchups.get(matchupKey);
+                        const rowKey = game.id ?? `${game.awayTeam.abbrev}-${game.homeTeam.abbrev}-${game.startTimeUtc ?? ""}`;
+                        return (
+                          <tr key={rowKey}>
+                            <td className="py-3 pr-4 font-medium text-white">
+                              {game.awayTeam.abbrev} @ {game.homeTeam.abbrev}
+                            </td>
+                            <td className="py-3 px-4">{numberFmt(game.homeWinProb)}</td>
+                            <td className="py-3 px-4">{numberFmt(game.awayWinProb)}</td>
+                            <td className="py-3 px-4">{(game.edge * 100).toFixed(1)} pts</td>
+                            <td className="py-3 px-4"><EdgeVisual value={game.edge} /></td>
+                            <td className="py-3 px-4">{getPredictionGrade(game.edge).label}</td>
+                            <td className="py-3 px-4"><GoaliesCell matchup={matchup} /></td>
+                            <td className="py-3 px-4">{game.startTimeEt ?? "TBD"}</td>
+                          </tr>
+                        );
+                      })}
                   </tbody>
                 </table>
               </div>
@@ -198,13 +222,45 @@ function SummaryCard({ label, value, detail }: { label: string; value: string; d
 }
 
 function EdgeVisual({ value }: { value: number }) {
-  const pct = Math.min(Math.abs(value) * 200, 100);
+  const clamped = Math.min(Math.abs(value) / 0.2, 1);
+  const percentage = (clamped * 100).toFixed(0);
   return (
-    <div className="h-2 w-24 rounded-full bg-white/10">
-      <div
-        className={`h-full rounded-full ${value >= 0 ? "bg-gradient-to-r from-lime-300 to-emerald-400" : "bg-gradient-to-r from-rose-300 to-orange-400"}`}
-        style={{ width: `${pct}%` }}
-      />
+    <div className="flex items-center gap-2 text-xs text-white/70">
+      <div className="h-1.5 w-24 overflow-hidden rounded-full bg-white/10">
+        <div className="h-full rounded-full bg-gradient-to-r from-lime-300 via-emerald-400 to-cyan-300" style={{ width: `${percentage}%` }} />
+      </div>
+      <span>{percentage}%</span>
+    </div>
+  );
+}
+
+function GoaliesCell({ matchup }: { matchup: GoalieMatchup | undefined }) {
+  if (!matchup) {
+    return <span className="text-white/40">Pending</span>;
+  }
+
+  return (
+    <div className="space-y-1 text-xs text-white/70">
+      <StarterBadge label="Away" starter={matchup.away} />
+      <StarterBadge label="Home" starter={matchup.home} />
+    </div>
+  );
+}
+
+function StarterBadge({ label, starter }: { label: string; starter: GoalieStarter | null }) {
+  if (!starter) {
+    return (
+      <div className="flex items-center justify-between rounded-2xl border border-dashed border-white/15 bg-black/20 px-3 py-1">
+        <span className="text-white/40">{label}</span>
+        <span className="text-white/30">TBD</span>
+      </div>
+    );
+  }
+  return (
+    <div className="flex items-center justify-between rounded-2xl border border-white/10 bg-black/20 px-3 py-1">
+      <span className="text-white/60">{label}</span>
+      <span className="text-white">{starter.name}</span>
+      <span className="text-lime-200">{starter.startLikelihood != null ? `${Math.round(starter.startLikelihood * 100)}%` : "--"}</span>
     </div>
   );
 }
