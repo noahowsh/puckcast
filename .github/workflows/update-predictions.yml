@@ -11,6 +11,9 @@ permissions:
 jobs:
   refresh:
     runs-on: ubuntu-latest
+    env:
+      ALERT_EMAIL_USERNAME: ${{ secrets.ALERT_EMAIL_USERNAME }}
+      ALERT_EMAIL_PASSWORD: ${{ secrets.ALERT_EMAIL_PASSWORD }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -38,13 +41,13 @@ jobs:
             git push
           fi
       - name: Send failure alert
-        if: failure() && secrets.ALERT_EMAIL_USERNAME != '' && secrets.ALERT_EMAIL_PASSWORD != ''
+        if: failure() && env.ALERT_EMAIL_USERNAME != '' && env.ALERT_EMAIL_PASSWORD != ''
         uses: dawidd6/action-send-mail@v3
         with:
           server_address: smtp.gmail.com
           server_port: 587
-          username: ${{ secrets.ALERT_EMAIL_USERNAME }}
-          password: ${{ secrets.ALERT_EMAIL_PASSWORD }}
+          username: ${{ env.ALERT_EMAIL_USERNAME }}
+          password: ${{ env.ALERT_EMAIL_PASSWORD }}
           subject: "[Puckcast] Nightly data refresh FAILED"
           to: noahowsh@gmail.com
           from: ${{ secrets.ALERT_EMAIL_USERNAME }}
