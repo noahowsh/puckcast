@@ -38,7 +38,7 @@ jobs:
             git push
           fi
       - name: Send failure alert
-        if: failure()
+        if: failure() && secrets.ALERT_EMAIL_USERNAME != '' && secrets.ALERT_EMAIL_PASSWORD != ''
         uses: dawidd6/action-send-mail@v3
         with:
           server_address: smtp.gmail.com
