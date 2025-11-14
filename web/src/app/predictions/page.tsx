@@ -178,7 +178,7 @@ export default function PredictionsPage() {
                       .slice()
                       .sort((a, b) => (a.startTimeUtc ?? "").localeCompare(b.startTimeUtc ?? ""))
                       .map((game) => {
-                        const matchupKey = String(game.id ?? game.gameId ?? "");
+                        const matchupKey = String(game.id ?? "");
                         const matchup = goalieMatchups.get(matchupKey);
                         const rowKey = game.id ?? `${game.awayTeam.abbrev}-${game.homeTeam.abbrev}-${game.startTimeUtc ?? ""}`;
                         return (
