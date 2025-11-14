@@ -9,7 +9,7 @@ export async function GET() {
   const goalies = getGoaliePulse();
   const matchupMap = new Map<string, GoalieMatchup>(goalies.tonight.games.map((game) => [String(game.gameId), game]));
   const enrichedGames = payload.games.map((game) => {
-    const key = String(game.id ?? game.gameId ?? "");
+    const key = String(game.id ?? "");
     const matchup = matchupMap.get(key);
     if (!matchup) {
       return game;
