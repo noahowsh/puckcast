@@ -21,6 +21,7 @@ Tailwind CSS v4 is already wired up. Update `src/app/page.tsx` for layout change
 - `/leaderboards` – Power rankings, streak tracker, matchup receipts + conference tables
 - `/analytics` – Feature correlations + distribution notes
 - `/goalies` – Goalie pulse cards fed by `src/data/goaliePulse.json`
+- `/ops` – Lightweight status board (predictions, goalies, deploy metadata)
 
 Supporting data files:
 
@@ -59,6 +60,7 @@ python scripts/fetch_current_standings.py
 
 `.github/workflows/update-predictions.yml` runs every morning (11:00 UTC) and on manual dispatch. It installs the Python stack, runs `python scripts/refresh_site_data.py`, commits the refreshed `todaysPredictions.json`, `currentStandings.json`, and `goaliePulse.json`, and pushes back to `main` using the built-in `GITHUB_TOKEN`.
 
+- Set repository secrets `ALERT_EMAIL_USERNAME` (sender) and `ALERT_EMAIL_PASSWORD` (app password) so failure alerts can hit `noahowsh@gmail.com`
 - If there are no JSON changes (e.g., NHL off day) the workflow skips the commit
 - Tweak the cron or add more steps if you introduce variant models or artifacts
 
@@ -76,5 +78,6 @@ Every push to `main` will ship a new landing page automatically, while preview b
 
 - `GET /api/predictions` — returns the latest `todaysPredictions` payload with HTTP caching headers (public, 60s)
 - `GET /api/goalies` — returns goalie pulse metadata (public, 5 min)
+- `GET /api/status` — high-level health snapshot (public, 30s cache)
 
 Client widgets poll these endpoints every 60–120s for live-ish updates, but you can also consume them from partner properties.
