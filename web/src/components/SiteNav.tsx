@@ -11,6 +11,7 @@ const links = [
   { href: "/leaderboards", label: "Leaderboards" },
   { href: "/analytics", label: "Analytics" },
   { href: "/goalies", label: "Goalies" },
+  { href: "/ops", label: "Ops" },
 ];
 
 export function SiteNav() {
