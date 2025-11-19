@@ -20,6 +20,54 @@ def _lagged_rolling(group: pd.Series, window: int, min_periods: int = 1) -> pd.S
     return group.shift(1).rolling(window, min_periods=min_periods).mean()
 
 
+ALTITUDE_FEET_BY_TEAM: dict[int, float] = {
+    1: 30.0,    # NJD (Newark, NJ)
+    2: 10.0,    # NYI
+    3: 33.0,    # NYR
+    4: 39.0,    # PHI
+    5: 758.0,   # PIT
+    6: 141.0,   # BOS
+    7: 600.0,   # BUF
+    8: 21.0,    # MTL
+    9: 65.0,    # OTT
+    10: 76.0,   # TOR
+    12: 37.0,   # CAR
+    13: 15.0,   # FLA
+    14: 8.0,    # TBL
+    15: 52.0,   # WSH
+    16: 594.0,  # CHI
+    17: 594.0,  # DET
+    18: 597.0,  # NSH
+    19: 572.0,  # STL
+    20: 3585.0, # CGY
+    21: 5280.0, # COL
+    22: 2372.0, # EDM
+    23: 10.0,   # VAN
+    24: 50.0,   # ANA
+    25: 430.0,  # DAL
+    26: 305.0,  # LAK
+    28: 85.0,   # SJS
+    29: 764.0,  # CBJ
+    30: 840.0,  # MIN
+    52: 760.0,  # WPG
+    54: 2000.0, # VGK
+    55: 22.0,   # SEA
+    68: 4300.0, # UTA
+}
+
+HIGH_ALTITUDE_THRESHOLD = 2000.0
+
+
+def _lagged_streak(series: pd.Series) -> pd.Series:
+    """Count consecutive True values observed before the current game."""
+    streaks: list[int] = []
+    current = 0
+    for value in series.fillna(False):
+        streaks.append(current)
+        current = current + 1 if value else 0
+    return pd.Series(streaks, index=series.index)
+
+
 def engineer_team_features(logs: pd.DataFrame, rolling_windows: Iterable[int] = ROLL_WINDOWS) -> pd.DataFrame:
     """
     Create lagged features using ONLY information available BEFORE each game.
@@ -94,6 +142,20 @@ def engineer_team_features(logs: pd.DataFrame, rolling_windows: Iterable[int] = 
     # Rest metrics (TRULY PRE-GAME: based on schedule)
     logs["rest_days"] = group["gameDate"].diff().dt.days
     logs["is_b2b"] = logs["rest_days"].fillna(10).le(1).astype(int)
+
+    # Altitude signals
+    avg_altitude = np.mean(list(ALTITUDE_FEET_BY_TEAM.values()))
+    logs["team_altitude_ft"] = logs["teamId"].map(ALTITUDE_FEET_BY_TEAM).fillna(0.0)
+    logs["altitude_diff"] = logs["team_altitude_ft"] - avg_altitude
+    logs["is_high_altitude"] = (logs["team_altitude_ft"] >= HIGH_ALTITUDE_THRESHOLD).astype(int)
+
+    # Venue streaks derived from schedule (pre-game counts)
+    logs["is_home"] = logs["homeRoad"].eq("H")
+    logs["consecutive_home_prior"] = group["is_home"].transform(_lagged_streak)
+    logs["consecutive_away_prior"] = group["is_home"].transform(
+        lambda series: _lagged_streak(~series)
+    )
+    logs["travel_burden"] = logs["consecutive_away_prior"].clip(lower=0)
 
     # Rolling statistics (ALL LAGGED)
     roll_features: dict[str, pd.Series] = {}
@@ -205,6 +267,16 @@ def engineer_team_features(logs: pd.DataFrame, rolling_windows: Iterable[int] = 
         "games_last_3d",
         "games_last_6d",
     ]
+    feature_cols.extend(
+        [
+            "team_altitude_ft",
+            "altitude_diff",
+            "is_high_altitude",
+            "consecutive_home_prior",
+            "consecutive_away_prior",
+            "travel_burden",
+        ]
+    )
     
     # Add xGoals features if available
     if "season_xg_for_avg" in logs.columns:

@@ -92,6 +92,18 @@ def build_dataset(seasons: Iterable[str]) -> Dataset:
         "is_b2b_away",
         "elo_diff_pre",
         "elo_expectation_home",
+        "team_altitude_ft_home",
+        "team_altitude_ft_away",
+        "altitude_diff_home",
+        "altitude_diff_away",
+        "is_high_altitude_home",
+        "is_high_altitude_away",
+        "consecutive_home_prior_home",
+        "consecutive_home_prior_away",
+        "consecutive_away_prior_home",
+        "consecutive_away_prior_away",
+        "travel_burden_home",
+        "travel_burden_away",
     ]
     for feat in additional_features:
         if feat in games.columns:
