@@ -100,6 +100,12 @@ def engineer_team_features(logs: pd.DataFrame, rolling_windows: Iterable[int] = 
         "fenwickPercentage",
         "team_save_pct",
         "team_gsax_per_60",
+        "lineTopTrioSeconds",
+        "lineTopPairSeconds",
+        "lineForwardConcentration",
+        "lineDefenseConcentration",
+        "lineForwardContinuity",
+        "lineDefenseContinuity",
     ]
     for column in numeric_columns:
         if column in logs.columns:
@@ -148,6 +154,24 @@ def engineer_team_features(logs: pd.DataFrame, rolling_windows: Iterable[int] = 
     logs["team_altitude_ft"] = logs["teamId"].map(ALTITUDE_FEET_BY_TEAM).fillna(0.0)
     logs["altitude_diff"] = logs["team_altitude_ft"] - avg_altitude
     logs["is_high_altitude"] = (logs["team_altitude_ft"] >= HIGH_ALTITUDE_THRESHOLD).astype(int)
+
+    # Line chemistry signals
+    for line_col in [
+        "lineTopTrioSeconds",
+        "lineTopPairSeconds",
+        "lineForwardConcentration",
+        "lineDefenseConcentration",
+        "lineForwardContinuity",
+        "lineDefenseContinuity",
+    ]:
+        if line_col in logs.columns:
+            logs[line_col] = pd.to_numeric(logs[line_col], errors="coerce").fillna(0.0)
+        else:
+            logs[line_col] = 0.0
+    logs["line_top_trio_min"] = logs["lineTopTrioSeconds"] / 60.0
+    logs["line_top_pair_min"] = logs["lineTopPairSeconds"] / 60.0
+    logs["line_forward_balance"] = logs["lineForwardConcentration"] - logs["lineDefenseConcentration"]
+    logs["line_defense_balance"] = logs["lineDefenseConcentration"] - logs["lineForwardConcentration"]
 
     # Venue streaks derived from schedule (pre-game counts)
     logs["is_home"] = logs["homeRoad"].eq("H")
@@ -275,6 +299,20 @@ def engineer_team_features(logs: pd.DataFrame, rolling_windows: Iterable[int] = 
             "consecutive_home_prior",
             "consecutive_away_prior",
             "travel_burden",
+        ]
+    )
+    feature_cols.extend(
+        [
+            "lineTopTrioSeconds",
+            "lineTopPairSeconds",
+            "lineForwardConcentration",
+            "lineDefenseConcentration",
+            "lineForwardContinuity",
+            "lineDefenseContinuity",
+            "line_top_trio_min",
+            "line_top_pair_min",
+            "line_forward_balance",
+            "line_defense_balance",
         ]
     )
     

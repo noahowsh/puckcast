@@ -1,41 +1,6 @@
 {
-  "generatedAt": "2025-11-19T00:39:15.699942+00:00",
+  "generatedAt": "2025-11-19T01:06:44.529181+00:00",
   "games": [
-    {
-      "id": "2025020312",
-      "gameDate": "2025-11-18",
-      "startTimeEt": "8:30 PM ET",
-      "startTimeUtc": "2025-11-19T01:30:00+00:00",
-      "homeTeam": {
-        "name": "Blackhawks",
-        "abbrev": "CHI"
-      },
-      "awayTeam": {
-        "name": "Flames",
-        "abbrev": "CGY"
-      },
-      "homeWinProb": 0.6667,
-      "awayWinProb": 0.3333,
-      "confidenceScore": 0.333,
-      "confidenceGrade": "A-",
-      "edge": 0.167,
-      "summary": "Blackhawks project at 67% as the home lean \u2014 an A--tier edge worth 16.7 pts over a coin flip. CGY PK drag -72.9 pts vs opponent special teams.",
-      "modelFavorite": "home",
-      "venue": "United Center",
-      "season": "20252026",
-      "specialTeams": {
-        "home": {
-          "powerPlayPct": 25.0,
-          "opponentPenaltyKillPct": 77.3,
-          "diff": -52.3
-        },
-        "away": {
-          "powerPlayPct": 11.9,
-          "opponentPenaltyKillPct": 84.8,
-          "diff": -72.89999999999999
-        }
-      }
-    },
     {
       "id": "2025020313",
       "gameDate": "2025-11-18",
@@ -110,7 +75,7 @@
   "playerHubMeta": {
     "season": "20252026",
     "slateDate": "2025-11-18",
-    "lineCombosGeneratedAt": "2025-11-19T00:39:04.936737+00:00",
+    "lineCombosGeneratedAt": "2025-11-19T01:06:36.644542+00:00",
     "lineCombosSlateDate": "2025-11-17"
   }
 }
