@@ -10,6 +10,8 @@ from typing import Iterable, List
 
 import pandas as pd
 
+from .native_ingest import load_native_game_logs
+
 LOGGER = logging.getLogger(__name__)
 
 _PROJECT_ROOT = Path(__file__).resolve().parents[2]
@@ -201,11 +203,18 @@ def fetch_multi_season_logs(seasons: Iterable[str]) -> pd.DataFrame:
     Returns:
         Combined DataFrame with all requested seasons
     """
+    native = load_native_game_logs(seasons)
+    if not native.empty:
+        native["gameDate"] = pd.to_datetime(native["gameDate"])
+        LOGGER.info("Loaded %d native team-games across %d seasons (%s)",
+                    len(native), len(seasons), ", ".join(str(s) for s in seasons))
+        return native
+
     frames = [fetch_team_game_logs(SeasonConfig(season_id=str(season))) for season in seasons]
     combined = pd.concat(frames, ignore_index=True)
     combined["gameDate"] = pd.to_datetime(combined["gameDate"])
-    
-    LOGGER.info(f"Combined {len(combined)} team-games across {len(seasons)} seasons")
+
+    LOGGER.info(f"Falling back to MoneyPuck: combined {len(combined)} team-games across {len(seasons)} seasons")
     return combined
 
 
