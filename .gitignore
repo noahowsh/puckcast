@@ -70,7 +70,9 @@ data/*.pkl
 # Daily prediction exports
 predictions_*.csv
 
-# Debug and test scripts
+# Debug and test scripts (but allow tests/ directory)
 test_*.py
 *_test.py
 ablation_*.py
+!tests/test_*.py
+!tests/*_test.py
