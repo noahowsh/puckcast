@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from typing import Any, Callable, Dict, List, Optional, Sequence
+import logging
 
 import numpy as np
 import pandas as pd
@@ -10,6 +11,48 @@ import typer
 from rich.console import Console
 from sklearn.isotonic import IsotonicRegression
 from sklearn.metrics import accuracy_score
+
+# Configure logging to see progress from data loading modules
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s [%(levelname)s] %(name)s: %(message)s',
+    datefmt='%H:%M:%S'
+)
+
+
+def compute_season_weights(games: pd.DataFrame, seasons: List[str], decay_factor: float = 0.85) -> np.ndarray:
+    """
+    Compute sample weights based on season recency.
+
+    More recent seasons get higher weights to prioritize learning current patterns.
+
+    Args:
+        games: DataFrame with seasonId column
+        seasons: List of season IDs in chronological order
+        decay_factor: Weight multiplier for each season back (0.8 means older seasons get 80% weight)
+
+    Returns:
+        Array of sample weights aligned with games DataFrame
+    """
+    weights = np.ones(len(games))
+
+    # Sort seasons chronologically
+    sorted_seasons = sorted(seasons)
+
+    # Assign weights: most recent = 1.0, each older season gets decay_factor^n
+    season_to_weight = {}
+    for i, season in enumerate(reversed(sorted_seasons)):
+        # Most recent season (i=0) gets weight 1.0
+        # Next older (i=1) gets decay_factor^1
+        # Next older (i=2) gets decay_factor^2, etc.
+        season_to_weight[season] = decay_factor ** i
+
+    # Apply weights to each game
+    for season, weight in season_to_weight.items():
+        mask = games["seasonId"] == season
+        weights[mask] = weight
+
+    return weights
 
 from .model import (
     compute_metrics,
@@ -29,9 +72,10 @@ console = Console()
 
 
 def _resolve_seasons(train_seasons: List[str] | None, test_season: str | None) -> tuple[List[str], str]:
-    # Updated: Train on 2021-2024 (4 full seasons, skip 2020 COVID), validate on 2024-2025
-    default_train = ["20212022", "20222023", "20232024"]
-    default_test = "20242025"
+    # Updated: Train on 2021-2023 (2 full seasons), test on 2023-2024 (full season holdout)
+    # Using native NHL API data only (2017-2020 data unavailable via NHL API)
+    default_train = ["20212022", "20222023"]
+    default_test = "20232024"
     train = train_seasons or default_train
     test = test_season or default_test
     if test in train:
@@ -83,19 +127,25 @@ def compare_models(dataset: Dataset, train_ids: List[str], test_id: str) -> Dict
     if train_mask.sum() == 0 or test_mask.sum() == 0:
         raise ValueError("Insufficient games for the provided seasons.")
 
+    # Compute sample weights for training data (heavier weight on recent seasons)
+    sample_weights = compute_season_weights(games, train_ids, decay_factor=0.85)
+
     sorted_train = sorted(train_ids)
     core_mask: Optional[pd.Series] = None
     val_mask: Optional[pd.Series] = None
+    core_weights: Optional[np.ndarray] = None
     if len(sorted_train) >= 2:
         val_season = sorted_train[-1]
         core_seasons = sorted_train[:-1]
         core_mask = games["seasonId"].isin(core_seasons)
         val_mask = games["seasonId"] == val_season
+        # Compute weights for core training seasons
+        core_weights = compute_season_weights(games, core_seasons, decay_factor=0.85)
 
     candidates: List[Dict[str, Any]] = []
 
-    candidate_cs = [0.005, 0.01, 0.02, 0.03, 0.05, 0.1, 0.3, 0.5, 1.0]
-    best_c = tune_logreg_c(candidate_cs, features, target, games, train_ids)
+    candidate_cs = [0.001, 0.003, 0.005, 0.01, 0.02, 0.03, 0.05, 0.1, 0.2, 0.3, 0.5, 0.7, 1.0, 1.5]
+    best_c = tune_logreg_c(candidate_cs, features, target, games, train_ids, sample_weights=core_weights)
     log_result = evaluate_candidate(
         name="Logistic Regression",
         hyperparams={"C": best_c},
@@ -106,6 +156,8 @@ def compare_models(dataset: Dataset, train_ids: List[str], test_id: str) -> Dict
         test_mask=test_mask,
         core_mask=core_mask,
         val_mask=val_mask,
+        sample_weights=sample_weights,
+        core_weights=core_weights,
     )
     candidates.append(log_result)
 
@@ -115,7 +167,7 @@ def compare_models(dataset: Dataset, train_ids: List[str], test_id: str) -> Dict
         {"learning_rate": 0.08, "max_depth": 3, "max_leaf_nodes": 63, "min_samples_leaf": 30, "l2_regularization": 0.01},
         {"learning_rate": 0.1, "max_depth": 3, "max_leaf_nodes": 31, "min_samples_leaf": 35, "l2_regularization": 0.02},
     ]
-    best_gb_params = tune_histgb_params(gb_param_grid, features, target, games, train_ids)
+    best_gb_params = tune_histgb_params(gb_param_grid, features, target, games, train_ids, sample_weights=core_weights)
     gb_result = evaluate_candidate(
         name="HistGradientBoosting",
         hyperparams=best_gb_params,
@@ -126,6 +178,8 @@ def compare_models(dataset: Dataset, train_ids: List[str], test_id: str) -> Dict
         test_mask=test_mask,
         core_mask=core_mask,
         val_mask=val_mask,
+        sample_weights=sample_weights,
+        core_weights=core_weights,
     )
     candidates.append(gb_result)
 
@@ -153,6 +207,8 @@ def evaluate_candidate(
     test_mask: pd.Series,
     core_mask: Optional[pd.Series],
     val_mask: Optional[pd.Series],
+    sample_weights: Optional[np.ndarray] = None,
+    core_weights: Optional[np.ndarray] = None,
 ) -> Dict[str, Any]:
     """Fit, calibrate, and score a single model candidate."""
     calibrator: IsotonicRegression | None = None
@@ -163,7 +219,7 @@ def evaluate_candidate(
 
     if core_mask is not None and val_mask is not None and core_mask.sum() > 0 and val_mask.sum() > 0:
         val_model = model_factory()
-        val_model = fit_model(val_model, features, target, core_mask)
+        val_model = fit_model(val_model, features, target, core_mask, sample_weight=core_weights)
         val_probs = predict_probabilities(val_model, features, val_mask)
 
         base_acc = accuracy_score(target.loc[val_mask], (val_probs >= 0.5).astype(int))
@@ -191,7 +247,7 @@ def evaluate_candidate(
     decision_threshold = 0.5
 
     model = model_factory()
-    model = fit_model(model, features, target, train_mask)
+    model = fit_model(model, features, target, train_mask, sample_weight=sample_weights)
 
     train_probs_raw = predict_probabilities(model, features, train_mask)
     test_probs_raw = predict_probabilities(model, features, test_mask)

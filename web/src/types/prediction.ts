@@ -26,6 +26,24 @@ export type Prediction = {
     away: SpecialTeamsSplit | null;
   };
   dayOfInfo?: DayOfInfo;
+  projectedGoalies?: {
+    home: {
+      name: string;
+      team: string;
+      startLikelihood: number;
+      restDays: number;
+      record: string;
+    } | null;
+    away: {
+      name: string;
+      team: string;
+      startLikelihood: number;
+      restDays: number;
+      record: string;
+    } | null;
+    startTimeEt?: string;
+    startTimeUtc?: string;
+  };
 };
 
 export type PredictionsPayload = {

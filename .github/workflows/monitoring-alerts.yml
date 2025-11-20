@@ -1,0 +1,212 @@
+name: Monitoring & Alerts
+
+on:
+  workflow_run:
+    workflows: ["Daily Predictions Update"]
+    types:
+      - completed
+  schedule:
+    # Run health check every 6 hours
+    - cron: '0 */6 * * *'
+  workflow_dispatch:
+
+env:
+  PYTHON_VERSION: '3.11'
+
+jobs:
+  health-check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Check workflow status
+        id: workflow-check
+        run: |
+          # Check if daily predictions workflow succeeded
+          if [ "${{ github.event.workflow_run.conclusion }}" = "failure" ]; then
+            echo "status=failed" >> $GITHUB_OUTPUT
+            echo "message=Daily predictions workflow failed" >> $GITHUB_OUTPUT
+          else
+            echo "status=success" >> $GITHUB_OUTPUT
+            echo "message=Daily predictions workflow succeeded" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Check data freshness
+        id: data-check
+        run: |
+          python << 'EOF'
+          import json
+          import os
+          from datetime import datetime, timedelta, timezone
+          from pathlib import Path
+
+          data_dir = Path("web/src/data")
+          max_age_hours = 26  # Alert if predictions older than 26 hours
+
+          alerts = []
+
+          predictions_file = data_dir / "todaysPredictions.json"
+          if predictions_file.exists():
+              with open(predictions_file) as f:
+                  data = json.load(f)
+
+              timestamp_str = data.get("generatedAt")
+              if timestamp_str:
+                  timestamp = datetime.fromisoformat(timestamp_str.replace("Z", "+00:00"))
+                  age_hours = (datetime.now(timezone.utc) - timestamp).total_seconds() / 3600
+
+                  if age_hours > max_age_hours:
+                      alerts.append(f"⚠️ Predictions are {age_hours:.1f} hours old (stale)")
+                  else:
+                      print(f"✅ Predictions are fresh ({age_hours:.1f} hours old)")
+              else:
+                  alerts.append("⚠️ Predictions missing timestamp")
+          else:
+              alerts.append("❌ Predictions file not found")
+
+          if alerts:
+              print("\n".join(alerts))
+              with open(os.environ["GITHUB_OUTPUT"], "a") as f:
+                  f.write("status=stale\n")
+                  f.write(f"message={'|'.join(alerts)}\n")
+          else:
+              with open(os.environ["GITHUB_OUTPUT"], "a") as f:
+                  f.write("status=fresh\n")
+                  f.write("message=All data is fresh\n")
+          EOF
+
+      - name: Check model performance anomalies
+        id: performance-check
+        run: |
+          python << 'EOF'
+          import json
+          import os
+          from pathlib import Path
+
+          data_dir = Path("web/src/data")
+          predictions_file = data_dir / "todaysPredictions.json"
+
+          alerts = []
+
+          if predictions_file.exists():
+              with open(predictions_file) as f:
+                  data = json.load(f)
+
+              games = data.get("games", [])
+
+              if not games:
+                  alerts.append("⚠️ No games in predictions")
+              else:
+                  # Check for anomalies
+                  high_conf_count = sum(1 for g in games if g.get("confidenceGrade", "C")[0] in ["A", "B"])
+                  high_conf_pct = high_conf_count / len(games) * 100
+
+                  # Alert if too many or too few high confidence picks
+                  if high_conf_pct > 80:
+                      alerts.append(f"⚠️ Unusually high confidence: {high_conf_pct:.0f}% of games are A/B grade")
+                  elif high_conf_pct < 20:
+                      alerts.append(f"⚠️ Unusually low confidence: only {high_conf_pct:.0f}% of games are A/B grade")
+
+                  # Check for extreme probabilities
+                  extreme_probs = [g for g in games if g.get("homeWinProb", 0.5) > 0.9 or g.get("homeWinProb", 0.5) < 0.1]
+                  if len(extreme_probs) > len(games) * 0.3:
+                      alerts.append(f"⚠️ {len(extreme_probs)} games have extreme probabilities (>90% or <10%)")
+
+          if alerts:
+              print("\n".join(alerts))
+              with open(os.environ["GITHUB_OUTPUT"], "a") as f:
+                  f.write("status=anomaly\n")
+                  f.write(f"message={'|'.join(alerts)}\n")
+          else:
+              print("✅ No performance anomalies detected")
+              with open(os.environ["GITHUB_OUTPUT"], "a") as f:
+                  f.write("status=normal\n")
+                  f.write("message=Performance looks normal\n")
+          EOF
+
+      - name: Send Slack notification
+        if: steps.data-check.outputs.status == 'stale' || steps.performance-check.outputs.status == 'anomaly' || steps.workflow-check.outputs.status == 'failed'
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        run: |
+          if [ -z "$SLACK_WEBHOOK_URL" ]; then
+            echo "⚠️ Slack webhook not configured. Skipping notification."
+            exit 0
+          fi
+
+          # Build message
+          MESSAGE="🏒 *Puckcast Alert*\n"
+          MESSAGE+="• Workflow: ${{ steps.workflow-check.outputs.message }}\n"
+          MESSAGE+="• Data: ${{ steps.data-check.outputs.message }}\n"
+          MESSAGE+="• Performance: ${{ steps.performance-check.outputs.message }}"
+
+          curl -X POST "$SLACK_WEBHOOK_URL" \
+            -H 'Content-Type: application/json' \
+            -d "{\"text\":\"$MESSAGE\"}"
+
+          echo "📱 Sent Slack notification"
+
+      - name: Send Discord notification
+        if: steps.data-check.outputs.status == 'stale' || steps.performance-check.outputs.status == 'anomaly' || steps.workflow-check.outputs.status == 'failed'
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        run: |
+          if [ -z "$DISCORD_WEBHOOK_URL" ]; then
+            echo "⚠️ Discord webhook not configured. Skipping notification."
+            exit 0
+          fi
+
+          # Build embed message
+          MESSAGE="🏒 **Puckcast Alert**\\n"
+          MESSAGE+="• Workflow: ${{ steps.workflow-check.outputs.message }}\\n"
+          MESSAGE+="• Data: ${{ steps.data-check.outputs.message }}\\n"
+          MESSAGE+="• Performance: ${{ steps.performance-check.outputs.message }}"
+
+          curl -X POST "$DISCORD_WEBHOOK_URL" \
+            -H 'Content-Type: application/json' \
+            -d "{\"content\":\"$MESSAGE\"}"
+
+          echo "📱 Sent Discord notification"
+
+      - name: Create GitHub issue on failure
+        if: steps.workflow-check.outputs.status == 'failed'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const title = '🚨 Daily Predictions Workflow Failed';
+            const body = `## Alert Details
+
+            - **Workflow**: ${{ steps.workflow-check.outputs.message }}
+            - **Data Status**: ${{ steps.data-check.outputs.message }}
+            - **Performance**: ${{ steps.performance-check.outputs.message }}
+            - **Time**: ${new Date().toISOString()}
+
+            ## Action Required
+
+            Please investigate the workflow logs and fix any issues.
+
+            [View Workflow Run](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})
+            `;
+
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: title,
+              body: body,
+              labels: ['bug', 'automation', 'high-priority']
+            });
+
+      - name: Summary
+        run: |
+          echo "✅ Health check complete"
+          echo "📊 Status Summary:"
+          echo "  - Workflow: ${{ steps.workflow-check.outputs.status }}"
+          echo "  - Data: ${{ steps.data-check.outputs.status }}"
+          echo "  - Performance: ${{ steps.performance-check.outputs.status }}"

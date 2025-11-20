@@ -235,13 +235,13 @@ export default function Home() {
             <div className="grid gap-6 lg:grid-cols-[minmax(0,1.15fr)_minmax(320px,0.85fr)] lg:items-start">
               <div className="space-y-6">
                 <div className="space-y-4">
-                  <p className="text-sm uppercase tracking-[0.5em] text-lime-300">Daily NHL model</p>
+                  <p className="text-sm uppercase tracking-[0.5em] text-lime-300">AI-Powered NHL Predictions</p>
                   <h1 className="text-4xl font-semibold text-white sm:text-5xl">
-                    Predict the game before it’s <span className="bg-gradient-to-r from-lime-300 via-emerald-400 to-cyan-300 bg-clip-text text-transparent">played.</span>
+                    Know the outcome before <span className="bg-gradient-to-r from-lime-300 via-emerald-400 to-cyan-300 bg-clip-text text-transparent">puck drop.</span>
                   </h1>
                   <p className="text-base text-white/80">
-                    Puckcast.ai turns machine learning into clean, daily hockey insights — win probabilities, power rankings, and matchup breakdowns
-                    that feel alive.
+                    Machine learning meets hockey analytics. Daily win probabilities with A-C confidence grades, power rankings that actually matter,
+                    and transparent model insights — updated every morning at 10am ET with fresh goalie confirmations and injury reports.
                   </p>
                   <div className="flex flex-wrap gap-3">
                     <Link
@@ -263,9 +263,10 @@ export default function Home() {
                   </p>
                 </div>
                 <div className="rounded-[24px] border border-white/10 bg-white/5 p-4 text-white/80">
-                  <p className="text-xs uppercase tracking-[0.4em] text-white/50">Tonight’s pulse · Week of {weekStartDisplay}</p>
+                  <p className="text-xs uppercase tracking-[0.4em] text-white/50">Daily Predictions · Week of {weekStartDisplay}</p>
                   <p className="mt-1 text-sm">
-                    Win probabilities, goalie intel, and matchup blurbs refresh every morning for the 2025-26 season.
+                    Every game gets a win probability and confidence grade (A+ to C). A+ means ≥20 pts edge — near lock territory.
+                    C means coin flip. Predictions sync daily at 10am ET after goalie confirmations and injury reports drop.
                   </p>
                 </div>
                 <div className="grid gap-4 border-y border-white/10 py-6 text-white/80 sm:grid-cols-3">
@@ -366,10 +367,11 @@ export default function Home() {
           <section id="predictions" className="space-y-10">
             <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
               <div>
-                <p className="text-sm uppercase tracking-[0.4em] text-lime-300">Tonight&apos;s card</p>
-                <h2 className="text-3xl font-semibold text-white">Context-rich predictions for the nearest slate.</h2>
+                <p className="text-sm uppercase tracking-[0.4em] text-lime-300">Tonight&apos;s Predictions</p>
+                <h2 className="text-3xl font-semibold text-white">Every game graded A+ to C based on confidence.</h2>
               <p className="mt-2 max-w-2xl text-base text-white/75">
-                Each matchup card shares win percentage, edge over a coin flip, and the quick note captured during the latest run.
+                Win probabilities backed by 6 seasons of data, 200+ engineered features, and real-time goalie confirmations.
+                A+ games (≥20 pts edge) are model slam dunks. C games (&lt;2 pts edge) are true coin flips.
               </p>
             </div>
             <p className="text-sm text-white/60">

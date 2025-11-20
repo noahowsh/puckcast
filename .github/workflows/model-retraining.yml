@@ -1,0 +1,138 @@
+name: Model Retraining
+
+on:
+  schedule:
+    # Run weekly on Monday at 3:00 AM ET (7:00 AM UTC)
+    - cron: '0 7 * * 1'
+  workflow_dispatch:
+    inputs:
+      train_seasons:
+        description: 'Training seasons (space-separated, e.g., "20212022 20222023")'
+        required: false
+      test_season:
+        description: 'Test season (e.g., "20232024")'
+        required: false
+      auto_deploy:
+        description: 'Auto-deploy if model improves'
+        type: boolean
+        default: true
+      min_improvement:
+        description: 'Minimum accuracy improvement to deploy (e.g., 0.01 for 1%)'
+        default: '0.01'
+
+env:
+  PYTHON_VERSION: '3.11'
+
+jobs:
+  retrain-model:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run model retraining
+        id: retrain
+        run: |
+          CMD="python scripts/retrain_model.py"
+
+          # Add auto-deploy flag
+          if [ "${{ inputs.auto_deploy }}" = "true" ] || [ "${{ github.event_name }}" = "schedule" ]; then
+            CMD="$CMD --auto-deploy"
+          fi
+
+          # Add min improvement threshold
+          if [ -n "${{ inputs.min_improvement }}" ]; then
+            CMD="$CMD --min-improvement ${{ inputs.min_improvement }}"
+          fi
+
+          # Add train seasons if specified
+          if [ -n "${{ inputs.train_seasons }}" ]; then
+            CMD="$CMD --train-seasons ${{ inputs.train_seasons }}"
+          fi
+
+          # Add test season if specified
+          if [ -n "${{ inputs.test_season }}" ]; then
+            CMD="$CMD --test-season ${{ inputs.test_season }}"
+          fi
+
+          echo "Running: $CMD"
+          $CMD
+
+      - name: Check for model changes
+        id: git-check
+        run: |
+          # Check if model files or reports changed
+          git diff --quiet models/ reports/ data/archive/retraining_log.json web/src/data/modelInsights.json || echo "changes=true" >> $GITHUB_OUTPUT
+
+      - name: Commit and push model updates
+        if: steps.git-check.outputs.changes == 'true'
+        run: |
+          git config user.name "GitHub Actions Bot"
+          git config user.email "actions@github.com"
+          git add models/ reports/ data/archive/retraining_log.json web/src/data/modelInsights.json
+          git commit -m "chore: automated model retraining
+
+Retrained at: $(date -u +%Y-%m-%dT%H:%M:%SZ)
+Triggered by: ${{ github.event_name }}
+Auto-deployed: ${{ inputs.auto_deploy || 'true' }}"
+          git push
+
+      - name: Create deployment summary
+        if: steps.git-check.outputs.changes == 'true'
+        run: |
+          echo "## 🤖 Model Retraining Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Status:** Model updated and deployed" >> $GITHUB_STEP_SUMMARY
+          echo "**Timestamp:** $(date -u +%Y-%m-%dT%H:%M:%SZ)" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          if [ -f data/archive/retraining_log.json ]; then
+            echo "**Latest metrics:**" >> $GITHUB_STEP_SUMMARY
+            python << 'EOF'
+          import json
+          from pathlib import Path
+
+          log_file = Path("data/archive/retraining_log.json")
+          if log_file.exists():
+              with open(log_file) as f:
+                  log = json.load(f)
+
+              if log.get("retraining_events"):
+                  latest = log["retraining_events"][-1]
+                  new_metrics = latest.get("newMetrics", {})
+
+                  print(f"- Accuracy: {new_metrics.get('accuracy', 0):.2%}")
+                  print(f"- Reason: {latest.get('reason', 'N/A')}")
+          EOF
+          fi
+
+      - name: No deployment needed
+        if: steps.git-check.outputs.changes != 'true'
+        run: |
+          echo "## 🤖 Model Retraining Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Status:** No deployment - current model performs well" >> $GITHUB_STEP_SUMMARY
+          echo "**Timestamp:** $(date -u +%Y-%m-%dT%H:%M:%SZ)" >> $GITHUB_STEP_SUMMARY
+
+      - name: Summary
+        run: |
+          echo "✅ Model retraining workflow complete!"
+          if [ "${{ steps.git-check.outputs.changes }}" = "true" ]; then
+            echo "🚀 New model deployed"
+          else
+            echo "📊 Current model retained"
+          fi

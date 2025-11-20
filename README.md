@@ -1,428 +1,348 @@
-<div align="center">
-  <img src="assets/logo.png" alt="Puckcast.ai Logo" width="150"/>
-  
-  # Puckcast.ai
-  ### Data-Driven NHL Prediction Intelligence
-  
-  [![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/)
-  [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-  [![Status: Production](https://img.shields.io/badge/Status-Production-brightgreen.svg)]()
-</div>
+# 🏒 Puckcast - NHL Game Prediction System
+
+**Version:** 2.0
+**Accuracy:** 60.89% (vs 53.7% baseline)
+**Status:** Active Development
+
+Puckcast is a machine learning system that predicts NHL game outcomes using 204 engineered features including advanced metrics like Expected Goals (xG), goalie performance, schedule fatigue, and Elo ratings.
 
 ---
 
-A comprehensive machine learning system for predicting NHL game outcomes using professional-grade analytics data, advanced features, and rigorous validation.
-
-## 🏒 Overview
-
-**Puckcast.ai** implements an end-to-end pipeline that:
-- Leverages **MoneyPuck** data with expected goals (xG) and shot quality metrics
-- Engineers **141 features** capturing team strength, momentum, rest, goaltending, and matchups
-- Trains using **3,690 games** from 2021-2024 seasons
-- Provides an elite interactive dashboard with 7 analytical pages
-- Achieves **59.2% test accuracy**, beating baseline by 6.1 percentage points
-- **Future:** Evaluate model against betting markets for ROI analysis
-
-**Key Features:**
-- ✅ Professional-grade data from MoneyPuck (same source used by NHL analysts)
-- ✅ Sophisticated feature engineering (rolling stats, Elo ratings, rest metrics)
-- ✅ Proper temporal validation preventing data leakage
-- ✅ Model comparison with hyperparameter tuning
-- ✅ Comprehensive evaluation (accuracy, log loss, ROC-AUC, Brier score, calibration)
-- ✅ Interactive Streamlit dashboard
-- ✅ Production-ready modular codebase
-
-## 📊 Results
-
-**Puckcast.ai** achieves strong performance on the 2024-25 NHL season:
-- **Test Accuracy:** 59.2% (baseline: 53.1% from home advantage)
-- **ROC-AUC:** 0.624 (excellent discrimination)
-- **Log Loss:** 0.675 (well calibrated)
-- **Brier Score:** 0.241 (strong probability estimates)
-
-**Most Important Predictive Features:**
-1. **Back-to-back differential** (`is_b2b_diff`) - Fatigue impact
-2. **Rolling Corsi (10 games)** - Shot attempt dominance  
-3. **Elo rating differential** - Team strength
-4. **High-danger shot differential** - Shot quality
-5. **Goaltending save %** - Goalie performance
-
-**Model leverages:**
-- 141 engineered features
-- Rolling averages (3, 5, 10 game windows)
-- Advanced metrics (xG, Corsi, Fenwick, shot quality)
-- Goaltending quality (Save %, GSAx)
-- Rest and scheduling features
-
 ## 🚀 Quick Start
 
-### Prerequisites
-
-- Python 3.9 or higher
-- pip package manager
-- Internet connection (for fetching NHL data)
-
-### Installation
-
-1. **Clone the repository:**
+### Make Predictions
 ```bash
-git clone [your-repo-url]
-cd NHLpredictionmodel
+# Predict tonight's games
+python3 predict_tonight.py
+
+# View predictions in dashboard
+python3 dashboard.py
 ```
 
-2. **Create and activate virtual environment:**
+### Train Model
 ```bash
-python -m venv venv
+# Train with default settings (3 seasons)
+python3 -m src.nhl_prediction.train
 
-# On macOS/Linux:
-source venv/bin/activate
-
-# On Windows:
-venv\Scripts\activate
+# Results: Model accuracy, feature importance, performance metrics
 ```
 
-3. **Install dependencies:**
+### Run Analysis
 ```bash
-pip install -r requirements.txt
+# Feature importance analysis
+python3 analysis/feature_importance_analysis.py
+
+# Hyperparameter tuning
+python3 analysis/hyperparameter_tuning.py
 ```
 
-### Running the Project
+---
 
-#### Option 1: Interactive Dashboard (Recommended)
+## 📊 Current Performance
 
-Launch the Streamlit dashboard to explore predictions interactively:
+| Metric | Value |
+|--------|-------|
+| **Test Accuracy** | 60.89% |
+| **ROC-AUC** | 0.6421 |
+| **Log Loss** | 0.6594 |
+| **Baseline (Random)** | 50.0% |
+| **Baseline (Home Team)** | 53.7% |
+| **Edge over Random** | **+10.89pp** |
 
-```bash
-streamlit run streamlit_app.py
-```
+**Training Data:** 3 seasons (2021-2024), 3,690 games
+**Model:** Logistic Regression (C=0.001, decay=0.85)
+**Features:** 204 total → 50 recommended (top performers)
 
-Navigate to `http://localhost:8501` in your browser.
-
-**Dashboard Features:**
-- Configure training and test seasons
-- Compare multiple models side-by-side
-- View performance metrics (accuracy, ROC-AUC, log loss)
-- Explore individual game predictions with filters
-- Analyze feature importance
-- Download predictions as CSV
-
-#### Option 2: Command-Line Training
-
-Train models and view metrics in the terminal:
-
-```bash
-# Train on default seasons (2021-22, 2022-23) and test on 2023-24
-python -m nhl_prediction.train
-
-# Custom season configuration
-python -m nhl_prediction.train \
-    --train-seasons 20212022 \
-    --train-seasons 20222023 \
-    --test-season 20232024
-```
-
-Output includes:
-- Model selection and hyperparameter tuning results
-- Training and test metrics
-- Comparison of Logistic Regression vs Gradient Boosting
+---
 
 ## 📁 Project Structure
 
 ```
-NHLpredictionmodel/
-├── README.md                      # This file
-├── requirements.txt               # Python dependencies
-├── streamlit_app.py              # Interactive dashboard
+puckcast/
+├── README.md                          # ← You are here
+├── FEATURE_DICTIONARY.md              # Complete guide to all 204 features
+├── COMPREHENSIVE_AUDIT_V2.md          # Full system audit
+├── V2_OPTIMIZATION_RESULTS.md         # Latest optimization results
 │
-├── data/
-│   └── nhl_teams.csv             # NHL team reference data
+├── src/nhl_prediction/               # Core prediction engine
+│   ├── train.py                      # Model training
+│   ├── pipeline.py                   # Data pipeline, Elo ratings
+│   ├── features.py                   # Feature engineering (200+ features)
+│   ├── goalie_features.py            # Goalie performance tracking
+│   ├── native_ingest.py              # NHL API data ingestion, xG model
+│   ├── data_ingest.py                # Data loading and validation
+│   └── data_sources/                 # NHL API clients
 │
-├── docs/
-│   ├── taxonomy.md               # Data schema and feature definitions
-│   ├── usage.md                  # Detailed usage instructions
-│   └── group_report_2.md         # Comprehensive project report
+├── analysis/                         # Analysis scripts and results
+│   ├── feature_importance_analysis.py
+│   ├── hyperparameter_tuning.py
+│   ├── feature_importance_rankings.csv    # All features ranked
+│   ├── feature_pruning_results.csv        # Feature selection results
+│   └── hyperparameter_tuning_results.csv  # 60 configurations tested
 │
-├── reports/                       # Generated outputs
-│   ├── calibration_curve.png     # Probability calibration plot
-│   ├── confusion_matrix.png      # Classification confusion matrix
-│   ├── roc_curve.png             # ROC curve with AUC
-│   ├── model_comparison.png      # Model performance comparison
-│   ├── feature_importance.csv    # Ranked feature coefficients
-│   └── predictions_20232024.csv  # Test set predictions
+├── web/                             # Streamlit dashboard
+│   ├── dashboard.py                 # Main UI
+│   └── src/data/                    # Daily data feeds
 │
-└── src/nhl_prediction/           # Core package
-    ├── __init__.py               # Package initialization
-    ├── data_ingest.py           # MoneyPuck data loading
-    ├── features.py              # Feature engineering logic
-    ├── pipeline.py              # Dataset construction and Elo ratings
-    ├── model.py                 # Model creation and utilities
-    ├── train.py                 # Training CLI and model comparison
-    └── report.py                # Visualization generation
+├── data/                            # Model data
+│   ├── xg_model.pkl                 # Expected goals model
+│   └── cache/                       # NHL API cache
+│
+├── temp_outputs/                    # Temporary files
+│   ├── *.log                        # Training logs
+│   └── test scripts                 # Development scripts
+│
+└── docs/                            # Documentation
+    ├── archive_v1/                  # Historical documentation
+    ├── data_sources_and_api_plan.md
+    └── group_report_2.md
 ```
-
-## 🧪 How It Works
-
-### 1. Data Ingestion (`data_ingest.py`)
-
-Loads team game logs from MoneyPuck's comprehensive database:
-```python
-from nhl_prediction.data_ingest import fetch_multi_season_logs
-
-# Fetch data for multiple seasons
-logs = fetch_multi_season_logs(['20212022', '20222023', '20232024'])
-```
-
-**Data Sources:**
-- **MoneyPuck** (`data/moneypuck_all_games.csv`) - Game-by-game team statistics including:
-  - Expected goals (xG) for shot quality analysis
-  - High/medium/low danger shot breakdowns
-  - Corsi & Fenwick possession metrics
-  - Advanced analytics unavailable in official NHL feeds
-- Static team metadata from `data/nhl_teams.csv`
-
-MoneyPuck provides superior data quality compared to official APIs, including shot quality and expected goals metrics used by professional analysts.
-
-### 2. Feature Engineering (`features.py`)
-
-Creates 129 features per game, including:
-
-**Team Strength (Season-to-Date):**
-- Win percentage, goal differential, shot margin
-- Points, points percentage, points per game
-
-**Recent Form (Rolling Windows over 3, 5, 10 games):**
-- Win percentage, goal differential
-- Power-play %, penalty-kill %, faceoff win %
-- Shots for/against per game
-
-**Momentum Indicators:**
-- Difference between recent form and season averages
-- Captures hot/cold streaks
-
-**Rest & Scheduling:**
-- Days since previous game
-- Back-to-back game indicators
-- Schedule congestion (games in last 3/6 days)
-- Categorical rest buckets
-
-**Elo Rating System:**
-- Season-specific Elo ratings (reset each season)
-- Margin-adjusted updates
-- Home ice advantage (+30 Elo points)
-
-**Matchup-Specific:**
-- Special teams matchups (home PP% vs away PK%)
-- Team identity (one-hot encoded)
-
-**Differential Features:**
-- Home minus away for most metrics
-- Directly captures relative advantage
-
-All features are **lagged** - computed using only information available before each game to prevent data leakage.
-
-### 3. Model Training (`model.py`, `train.py`)
-
-**Models Evaluated:**
-1. **Logistic Regression** (baseline)
-   - Linear model with L2 regularization
-   - Interpretable coefficients
-   - StandardScaler preprocessing
-
-2. **Histogram Gradient Boosting** (advanced)
-   - Non-linear ensemble model
-   - Can capture feature interactions
-   - Robust to feature scaling
-
-**Training Strategy:**
-- **Temporal split:** Train on 2021-22 + 2022-23, test on 2023-24
-- **Validation:** Hold out final training season (2022-23) for hyperparameter tuning
-- **Hyperparameter search:** Grid search on validation set
-- **Calibration:** Isotonic regression for probability calibration
-- **Threshold optimization:** Find optimal decision threshold beyond 0.5
-
-**Evaluation Metrics:**
-- Accuracy: Proportion of correct predictions
-- ROC-AUC: Area under ROC curve (discrimination ability)
-- Log Loss: Penalizes confident wrong predictions
-- Brier Score: Mean squared error of probabilities
-- Calibration: Do predicted probabilities match observed frequencies?
-
-### 4. Interactive Dashboard (`streamlit_app.py`)
-
-Provides a user-friendly interface for:
-- Configuring train/test season splits
-- Comparing model performance
-- Filtering predictions by team, date, correctness
-- Visualizing feature importance
-- Downloading results
-
-Built with Streamlit for rapid prototyping and easy deployment.
-
-## 📈 Example Usage
-
-### Python API
-
-```python
-from nhl_prediction.pipeline import build_dataset
-from nhl_prediction.train import compare_models
-
-# Build dataset for multiple seasons
-seasons = ['20212022', '20222023', '20232024']
-dataset = build_dataset(seasons)
-
-# Compare models
-train_seasons = ['20212022', '20222023']
-test_season = '20232024'
-results = compare_models(dataset, train_seasons, test_season)
-
-# Get best model and predictions
-best_model = results['best_result']['model']
-test_metrics = results['best_result']['test_metrics']
-
-print(f"Test Accuracy: {test_metrics['accuracy']:.3f}")
-print(f"Test ROC-AUC: {test_metrics['roc_auc']:.3f}")
-```
-
-### Analyzing Feature Importance
-
-```python
-from nhl_prediction.model import compute_feature_effects
-
-# Get feature importance (for Logistic Regression)
-importance = compute_feature_effects(model, feature_names)
-print(importance.head(10))
-```
-
-### Making Predictions
-
-```python
-from nhl_prediction.model import predict_probabilities
-
-# Predict on new games
-probs = predict_probabilities(model, features, mask)
-print(f"Home win probability: {probs[0]:.2%}")
-```
-
-## 🔬 Methodology Highlights
-
-### Preventing Data Leakage
-
-**Critical:** All features use only information available *before* each game.
-
-- Rolling statistics are **lagged by 1 game** (`.shift(1)`)
-- Season-to-date metrics computed using **cumulative sums up to (not including) current game**
-- Elo ratings updated **after** each game, pre-game ratings used as features
-
-### Temporal Validation
-
-Unlike random train/test splits, we use **chronological** splits:
-- Train: 2021-22, 2022-23 seasons (past)
-- Test: 2023-24 season (future)
-
-This reflects real-world deployment where we predict future games, not random historical ones.
-
-### Handling Class Imbalance
-
-Home teams win ~55% of games (mild imbalance):
-- Use probabilistic metrics (log loss, Brier score, ROC-AUC) not just accuracy
-- Optimize decision threshold on validation set
-- Consider both home and away predictions
-
-### Feature Engineering Rationale
-
-**Why these features?**
-- **Faceoffs:** Control puck possession → scoring chances
-- **Special teams:** PP/PK directly impact goals
-- **Rest:** Fatigue affects performance (especially back-to-backs)
-- **Momentum:** Recent form captures injuries, lineup changes, confidence
-- **Elo:** Aggregates overall team quality in single number
-- **Matchups:** Some teams match up better against others
-
-## 📊 Visualizations
-
-Generated visualizations in `reports/`:
-
-### ROC Curve
-Shows model's ability to discriminate between wins and losses across all decision thresholds.
-
-### Calibration Curve
-Compares predicted probabilities to observed frequencies. Well-calibrated models have points near the diagonal.
-
-### Confusion Matrix
-Breakdown of correct predictions (true positives/negatives) and errors (false positives/negatives).
-
-### Feature Importance
-Ranking of features by impact on predictions. Positive coefficients favor home team, negative favor away team.
-
-## 🛠️ Development
-
-### Running Tests
-
-```bash
-# (Add if you create tests)
-pytest tests/
-```
-
-### Code Style
-
-- Type hints throughout (`from __future__ import annotations`)
-- Docstrings for all public functions
-- PEP 8 formatting
-- Modular design (separation of concerns)
-
-### Adding New Features
-
-1. Add feature engineering logic to `features.py`
-2. Ensure features are lagged (no data leakage)
-3. Update feature list in `pipeline.py`
-4. Retrain models and check performance
-
-### Adding New Models
-
-1. Create model factory function in `model.py`
-2. Add to `compare_models()` in `train.py`
-3. Implement hyperparameter tuning if needed
-
-## 📚 Documentation
-
-- **`docs/taxonomy.md`** - Data schema, entity relationships, feature definitions
-- **`docs/usage.md`** - Detailed usage instructions
-- **`docs/group_report_2.md`** - Comprehensive project report with methodology, results, analysis
-
-## 🙏 Acknowledgments
-
-**Data Sources:**
-- **MoneyPuck** (`https://moneypuck.com/`) - Game-by-game team statistics with advanced metrics
-  - Expected goals (xG), shot quality, Corsi/Fenwick, and more
-  - Free, publicly available hockey analytics data
-  - Used by professional analysts and hockey researchers
-- NHL team metadata
-
-**Libraries:**
-- pandas, NumPy - Data manipulation
-- scikit-learn - Machine learning
-- Streamlit - Interactive dashboard
-- matplotlib, Altair - Visualization
-
-## 📝 Citation
-
-If you use this project, please cite:
-
-```
-[Your Name/Team Name]. (2025). NHL Game Prediction Model. 
-GitHub repository: [your-repo-url]
-```
-
-## 📧 Contact
-
-[Your Name/Team]
-[Your Email]
-
-## 📄 License
-
-[Add license if applicable - e.g., MIT, Apache 2.0]
 
 ---
 
-**Built with ❤️ and 🏒 by [Your Team Name]**
+## 🎯 Key Features
 
+### 1. Advanced Metrics
+- **Expected Goals (xG):** Custom model (94.8% accuracy) using shot location, type, rebounds
+- **High-Danger Shots:** Royal Road/slot tracking
+- **Goalie GSAx:** Goals Saved Above Expected
+
+### 2. Schedule Intelligence
+- Back-to-back detection
+- Rest day advantages
+- Travel burden tracking
+- Schedule density (games in 3/6 days)
+
+### 3. Team Strength
+- Elo ratings (margin-adjusted)
+- Rolling performance windows (3/5/10 games)
+- Season-to-date aggregates
+- Momentum indicators
+
+### 4. Goalie Tracking
+- Individual goalie stats (500 goalie-seasons)
+- Starting goalie likelihood
+- Recent form trends
+- Rest patterns
+
+### 5. Shot Quality
+- Shannon entropy for shot diversity
+- Shot type breakdown
+- Rebound detection and tracking
+- Danger zone analysis
+
+---
+
+## 📖 Documentation
+
+### Essential Reading
+
+| Document | Purpose | Audience |
+|----------|---------|----------|
+| **[FEATURE_DICTIONARY.md](FEATURE_DICTIONARY.md)** | Complete guide to all 204 features | Everyone |
+| **[COMPREHENSIVE_AUDIT_V2.md](COMPREHENSIVE_AUDIT_V2.md)** | Full system audit, inventory | Developers |
+| **[V2_OPTIMIZATION_RESULTS.md](V2_OPTIMIZATION_RESULTS.md)** | Latest optimization results | Data Scientists |
+
+### Feature Documentation
+
+**[FEATURE_DICTIONARY.md](FEATURE_DICTIONARY.md)** includes:
+- All 204 features ranked by importance
+- Detailed calculations and formulas
+- Feature categories and groups
+- Top 50 recommended features
+- Zero-importance features to remove
+- Best practices for feature engineering
+
+### Analysis Results
+
+**[V2_OPTIMIZATION_RESULTS.md](V2_OPTIMIZATION_RESULTS.md)** includes:
+- Feature importance analysis
+- Hyperparameter tuning (60 configurations)
+- Top 50 features provide +0.81pp gain
+- Optimal settings: C=1.0, decay=1.0
+
+---
+
+## 🧠 Model Architecture
+
+### Pipeline Flow
+```
+NHL API Data
+    ↓
+Native Ingestion (play-by-play parsing)
+    ↓
+xG Model (shot quality prediction)
+    ↓
+Feature Engineering (204 features)
+    ↓
+Elo Calculations
+    ↓
+Goalie Features
+    ↓
+Game Dataframe (home vs away differentials)
+    ↓
+Train/Test Split (chronological)
+    ↓
+Logistic Regression + HistGradientBoosting
+    ↓
+Predictions
+```
+
+### Key Components
+
+**Data Sources:**
+- NHL Gamecenter API (play-by-play)
+- GoaliePulse (goalie stats)
+- Custom xG model
+
+**Models:**
+1. **xG Model:** Gradient Boosting (94.8% accuracy, 23K shots)
+2. **Game Prediction:** Logistic Regression (60.89% accuracy)
+
+**Feature Engineering:**
+- 204 total features
+- 17 categories
+- Differentials (home - away)
+- Rolling windows (3/5/10 games)
+- Season aggregates
+- Elo ratings
+
+---
+
+## 📊 Feature Importance (Top 10)
+
+| Rank | Feature | Importance | Category |
+|------|---------|------------|----------|
+| 1 | rolling_high_danger_shots_3_diff | 0.0317 | Shot Quality |
+| 2 | games_played_prior_away | 0.0266 | Season Progress |
+| 3 | games_played_prior_home | 0.0265 | Season Progress |
+| 4 | is_b2b_diff | 0.0263 | Schedule/Rest |
+| 5 | goalie_rolling_gsa_diff | 0.0258 | Goalie Performance |
+| 6 | shotsFor_roll_10_diff | 0.0165 | Shot Volume |
+| 7 | rest_away_one_day | 0.0163 | Schedule/Rest |
+| 8 | games_last_3d_diff | 0.0162 | Schedule/Rest |
+| 9 | season_shot_margin_diff | 0.0160 | Shot Volume |
+| 10 | rolling_goal_diff_10_diff | 0.0157 | Goal Differential |
+
+**Key Insight:** Schedule/Rest features dominate (6 of top 20)
+
+See [FEATURE_DICTIONARY.md](FEATURE_DICTIONARY.md) for complete rankings.
+
+---
+
+## 🚀 Roadmap to V2.0 Launch
+
+### Current Status: 60.89% Accuracy
+
+**Phase 1: Completed ✅**
+- [x] Feature importance analysis
+- [x] Hyperparameter optimization
+- [x] Top 50 feature identification
+- [x] Baseline restoration
+
+**Phase 2: In Progress 🔄**
+- [ ] Implement top 50 features
+- [ ] Expand to 6 seasons (2018-2024)
+- [ ] Target: 62-64% accuracy
+
+**Phase 3: Planned ⏳**
+- [ ] Real-time goalie confirmations
+- [ ] Injury impact weighting
+- [ ] Betting odds integration
+- [ ] Target: 65-66% accuracy
+
+**Phase 4: Launch 🎯**
+- [ ] Deploy to Vercel
+- [ ] Public API
+- [ ] Stripe payments
+- [ ] Target: 65-68% accuracy
+
+---
+
+## 🔧 Development
+
+### Setup
+```bash
+# Install dependencies
+pip install -r requirements.txt
+
+# Verify installation
+python3 -c "from src.nhl_prediction.pipeline import build_dataset; print('✓ Setup OK')"
+```
+
+### Run Tests
+```bash
+# Feature importance
+python3 analysis/feature_importance_analysis.py
+
+# Hyperparameter tuning
+python3 analysis/hyperparameter_tuning.py
+```
+
+### Data Pipeline
+```bash
+# Fetch and cache data
+python3 -m src.nhl_prediction.train
+
+# Cached data stored in: data/cache/
+```
+
+---
+
+## 📈 Performance Tracking
+
+### Model Versions
+
+| Version | Accuracy | Date | Key Changes |
+|---------|----------|------|-------------|
+| 1.0 | 53.0% | Oct 2025 | Initial MoneyPuck data |
+| 1.5 | 57.5% | Nov 2025 | Native NHL API, xG model |
+| 1.8 | 59.2% | Nov 2025 | Goalie features, penalties |
+| 1.9 | 60.89% | Nov 2025 | Optimized features, rebound detection |
+| **2.0** | **60.89%** | **Nov 2025** | **Baseline restoration** ← Current |
+
+**Target for Public Launch:** 65-68%
+
+---
+
+## 💡 Key Learnings
+
+### What Works ✅
+1. **Schedule/Rest features** - Most important category
+2. **Shot quality > quantity** - High-danger shots #1 feature
+3. **Goalie performance** - GSAx highly predictive
+4. **Short-term form** - 3-game windows beat 10-game
+5. **Less is more** - 50 features beat 204!
+
+### What Doesn't Work ❌
+1. **Line combinations** - Zero importance
+2. **Too many rolling windows** - Redundant signal
+3. **Special teams rolling** - Changes too slowly
+4. **H2H with 3 seasons** - Insufficient data
+5. **Travel distance** - Signal too weak
+
+---
+
+## 📞 Support
+
+**Issues:** GitHub Issues (when public)
+**Documentation:** See `/docs` folder
+**Analysis:** See `/analysis` folder
+
+---
+
+## 📄 License
+
+MIT License - See LICENSE file
+
+---
+
+## 🙏 Acknowledgments
+
+- **NHL Gamecenter API** - Play-by-play data
+- **GoaliePulse** - Goalie statistics
+- **MoneyPuck** - Initial xG model inspiration
+
+---
+
+**Ready to predict some hockey? Run `python3 predict_tonight.py` to get started!** 🏒

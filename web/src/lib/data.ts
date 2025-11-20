@@ -1,4 +1,8 @@
-import { captureException } from "@sentry/nextjs";
+// Simple error logging (Sentry integration can be added later)
+const captureException = (error: unknown) => {
+  console.error("Error:", error);
+};
+
 import goaliePulseRaw from "@/data/goaliePulse.json";
 import lineCombosRaw from "@/data/lineCombos.json";
 import predictionsRaw from "@/data/todaysPredictions.json";

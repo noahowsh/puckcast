@@ -52,7 +52,7 @@ function enhanceGame(
   startingGoalies: StartingGoaliesPayload,
   playerInjuries: PlayerInjuriesPayload,
 ) {
-  const match = matchupMap.get(String(game.id ?? game.gameId ?? ""));
+  const match = matchupMap.get(String(game.id ?? ""));
   const enriched: Prediction = match
     ? {
         ...game,

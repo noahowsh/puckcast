@@ -1,0 +1,187 @@
+name: X/Twitter Posting Automation
+
+on:
+  schedule:
+    # Post 3 times daily:
+    # - 8:00 AM ET (12:00 PM UTC) - Morning preview
+    # - 2:00 PM ET (6:00 PM UTC) - Afternoon update
+    # - 8:00 PM ET (12:00 AM UTC next day) - Evening recap
+    - cron: '0 12 * * *'  # 8 AM ET
+    - cron: '0 18 * * *'  # 2 PM ET
+    - cron: '0 0 * * *'   # 8 PM ET
+  workflow_dispatch:
+    inputs:
+      post_type:
+        description: 'Type of post to create'
+        required: true
+        type: choice
+        options:
+          - morning_preview
+          - afternoon_update
+          - evening_recap
+
+env:
+  PYTHON_VERSION: '3.11'
+
+jobs:
+  post-to-twitter:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Determine post type
+        id: post-type
+        run: |
+          HOUR=$(date -u +%H)
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "type=${{ inputs.post_type }}" >> $GITHUB_OUTPUT
+          elif [ "$HOUR" = "12" ]; then
+            echo "type=morning_preview" >> $GITHUB_OUTPUT
+          elif [ "$HOUR" = "18" ]; then
+            echo "type=afternoon_update" >> $GITHUB_OUTPUT
+          else
+            echo "type=evening_recap" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          # Note: Install tweepy or twitter API library here
+          # pip install tweepy
+          echo "📦 Dependencies installed (tweepy placeholder)"
+
+      - name: Read predictions data
+        id: read-data
+        run: |
+          echo "📊 Reading todaysPredictions.json..."
+          if [ -f web/src/data/todaysPredictions.json ]; then
+            echo "data_exists=true" >> $GITHUB_OUTPUT
+          else
+            echo "data_exists=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Generate post content
+        if: steps.read-data.outputs.data_exists == 'true'
+        id: generate-post
+        run: |
+          cat > /tmp/post.py << 'EOF'
+          import json
+          import sys
+          from pathlib import Path
+
+          def generate_morning_preview(data):
+              games = data.get("games", [])
+              if not games:
+                  return "🏒 No NHL games scheduled today. Enjoy your day off!"
+
+              top_game = max(games, key=lambda g: abs(g.get("edge", 0)))
+              home = top_game["homeTeam"]["abbrev"]
+              away = top_game["awayTeam"]["abbrev"]
+              grade = top_game.get("confidenceGrade", "C")
+              home_prob = top_game.get("homeWinProb", 0.5)
+
+              return f"""🏒 NHL Predictions - {len(games)} games today!
+
+          🔥 Top Pick: {away} @ {home}
+          📊 Confidence: {grade}
+          🎯 {home}: {home_prob:.1%} | {away}: {1-home_prob:.1%}
+
+          Full predictions → [your-site-url]
+          #NHL #NHLPredictions"""
+
+          def generate_afternoon_update(data):
+              games = data.get("games", [])
+              high_conf = [g for g in games if g.get("confidenceGrade", "C")[0] in "AB"]
+
+              return f"""⚡️ NHL Update - {len(games)} games tonight
+
+          🎯 High confidence picks: {len(high_conf)}
+          💪 Model performance: 60%+ accuracy
+
+          Get tonight's predictions → [your-site-url]
+          #NHL #NHLBetting"""
+
+          def generate_evening_recap(data):
+              return f"""🌙 Tonight's NHL action wrapping up!
+
+          📈 Check tomorrow's predictions starting at 8am ET
+          📊 Model insights & analytics available now
+
+          [your-site-url]
+          #NHL #Hockey"""
+
+          def main():
+              post_type = sys.argv[1]
+              data_path = Path("web/src/data/todaysPredictions.json")
+
+              with open(data_path) as f:
+                  data = json.load(f)
+
+              if post_type == "morning_preview":
+                  post = generate_morning_preview(data)
+              elif post_type == "afternoon_update":
+                  post = generate_afternoon_update(data)
+              else:
+                  post = generate_evening_recap(data)
+
+              print(post)
+
+              # Save to file for the next step
+              Path("/tmp/post_content.txt").write_text(post)
+
+          if __name__ == "__main__":
+              main()
+          EOF
+
+          python /tmp/post.py "${{ steps.post-type.outputs.type }}"
+
+      - name: Post to X/Twitter
+        if: steps.read-data.outputs.data_exists == 'true'
+        env:
+          TWITTER_API_KEY: ${{ secrets.TWITTER_API_KEY }}
+          TWITTER_API_SECRET: ${{ secrets.TWITTER_API_SECRET }}
+          TWITTER_ACCESS_TOKEN: ${{ secrets.TWITTER_ACCESS_TOKEN }}
+          TWITTER_ACCESS_SECRET: ${{ secrets.TWITTER_ACCESS_SECRET }}
+        run: |
+          # Check if Twitter credentials are configured
+          if [ -z "$TWITTER_API_KEY" ]; then
+            echo "⚠️  Twitter API credentials not configured. Skipping post."
+            echo "📝 Post content would have been:"
+            cat /tmp/post_content.txt
+            exit 0
+          fi
+
+          # TODO: Implement actual Twitter API posting
+          # For now, just display the content
+          echo "📱 Would post to Twitter:"
+          cat /tmp/post_content.txt
+
+          # Example with tweepy (uncomment when ready):
+          # python << 'EOF'
+          # import tweepy
+          # import os
+          # from pathlib import Path
+          #
+          # client = tweepy.Client(
+          #     consumer_key=os.environ["TWITTER_API_KEY"],
+          #     consumer_secret=os.environ["TWITTER_API_SECRET"],
+          #     access_token=os.environ["TWITTER_ACCESS_TOKEN"],
+          #     access_token_secret=os.environ["TWITTER_ACCESS_SECRET"]
+          # )
+          #
+          # content = Path("/tmp/post_content.txt").read_text()
+          # response = client.create_tweet(text=content)
+          # print(f"✅ Posted to Twitter: {response.data['id']}")
+          # EOF
+
+      - name: Summary
+        run: |
+          echo "✅ Twitter posting workflow complete!"
+          echo "🕐 Post type: ${{ steps.post-type.outputs.type }}"

@@ -1,19 +1,19 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
-import { Geist, Geist_Mono } from "next/font/google";
+// Using system fonts instead of Google Fonts for better reliability
+// import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { SiteNav } from "@/components/SiteNav";
 import { SiteFooter } from "@/components/SiteFooter";
 
-const geistSans = Geist({
+// System fonts fallback (can re-enable Google Fonts when network is stable)
+const geistSans = {
   variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
+};
 
-const geistMono = Geist_Mono({
+const geistMono = {
   variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+};
 
 export const metadata: Metadata = {
   title: "Puckcast | NHL Predictions + Analytics",

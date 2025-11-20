@@ -1,0 +1,139 @@
+name: Data Validation
+
+on:
+  pull_request:
+    paths:
+      - 'web/src/data/*.json'
+  push:
+    branches:
+      - main
+    paths:
+      - 'web/src/data/*.json'
+  workflow_dispatch:
+
+env:
+  PYTHON_VERSION: '3.11'
+
+jobs:
+  validate-data:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Install validation dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install jsonschema
+
+      - name: Validate JSON syntax
+        run: |
+          echo "🔍 Validating JSON syntax..."
+          for file in web/src/data/*.json; do
+            if [ -f "$file" ]; then
+              echo "Checking $file..."
+              python -m json.tool "$file" > /dev/null || {
+                echo "❌ Invalid JSON in $file"
+                exit 1
+              }
+              echo "✅ $file is valid JSON"
+            fi
+          done
+
+      - name: Run schema validation
+        run: |
+          python scripts/validate_data_schemas.py
+
+      - name: Check data freshness
+        run: |
+          python << 'EOF'
+          import json
+          from datetime import datetime, timedelta, timezone
+          from pathlib import Path
+
+          data_dir = Path("web/src/data")
+          max_age_hours = 48  # Alert if data older than 48 hours
+
+          for json_file in data_dir.glob("*.json"):
+              with open(json_file) as f:
+                  data = json.load(f)
+
+              # Check for generatedAt or updatedAt timestamp
+              timestamp_str = data.get("generatedAt") or data.get("updatedAt")
+
+              if timestamp_str:
+                  timestamp = datetime.fromisoformat(timestamp_str.replace("Z", "+00:00"))
+                  age_hours = (datetime.now(timezone.utc) - timestamp).total_seconds() / 3600
+
+                  if age_hours > max_age_hours:
+                      print(f"⚠️  {json_file.name} is {age_hours:.1f} hours old")
+                  else:
+                      print(f"✅ {json_file.name} is {age_hours:.1f} hours old (fresh)")
+              else:
+                  print(f"ℹ️  {json_file.name} has no timestamp")
+          EOF
+
+      - name: Validate predictions quality
+        run: |
+          python << 'EOF'
+          import json
+          from pathlib import Path
+
+          predictions_file = Path("web/src/data/todaysPredictions.json")
+
+          if predictions_file.exists():
+              with open(predictions_file) as f:
+                  data = json.load(f)
+
+              games = data.get("games", [])
+              print(f"📊 Found {len(games)} games")
+
+              # Check for anomalies
+              issues = []
+
+              for i, game in enumerate(games):
+                  game_id = game.get("id", f"game_{i}")
+
+                  # Check probabilities sum to ~1
+                  home_prob = game.get("homeWinProb", 0)
+                  away_prob = game.get("awayWinProb", 0)
+                  total_prob = home_prob + away_prob
+
+                  if abs(total_prob - 1.0) > 0.01:
+                      issues.append(f"Game {game_id}: probabilities sum to {total_prob:.3f}")
+
+                  # Check probabilities in valid range
+                  if not (0 <= home_prob <= 1) or not (0 <= away_prob <= 1):
+                      issues.append(f"Game {game_id}: probability out of range")
+
+                  # Check confidence grade matches edge
+                  edge = abs(game.get("edge", 0))
+                  grade = game.get("confidenceGrade", "")
+
+                  # Validate grade assignment
+                  if edge >= 0.20 and grade != "A+":
+                      issues.append(f"Game {game_id}: edge {edge:.2f} should be A+ not {grade}")
+                  elif edge < 0.02 and grade != "C":
+                      issues.append(f"Game {game_id}: edge {edge:.2f} should be C not {grade}")
+
+              if issues:
+                  print("⚠️  Data quality issues found:")
+                  for issue in issues:
+                      print(f"  - {issue}")
+                  exit(1)
+              else:
+                  print("✅ All predictions passed quality checks")
+          else:
+              print("ℹ️  No predictions file to validate")
+          EOF
+
+      - name: Summary
+        if: always()
+        run: |
+          echo "✅ Data validation complete!"

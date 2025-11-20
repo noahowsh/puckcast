@@ -11,6 +11,7 @@ from typing import Iterable, List
 import pandas as pd
 
 from .native_ingest import load_native_game_logs
+from .goalie_features import enhance_with_goalie_features
 
 LOGGER = logging.getLogger(__name__)
 
@@ -196,10 +197,10 @@ def _standardize_moneypuck_columns(df: pd.DataFrame) -> pd.DataFrame:
 def fetch_multi_season_logs(seasons: Iterable[str]) -> pd.DataFrame:
     """
     Fetch and concatenate game logs for multiple seasons from MoneyPuck data.
-    
+
     Args:
         seasons: List of season IDs (e.g., ["20212022", "20222023", "20232024"])
-    
+
     Returns:
         Combined DataFrame with all requested seasons
     """
@@ -208,6 +209,8 @@ def fetch_multi_season_logs(seasons: Iterable[str]) -> pd.DataFrame:
         native["gameDate"] = pd.to_datetime(native["gameDate"])
         LOGGER.info("Loaded %d native team-games across %d seasons (%s)",
                     len(native), len(seasons), ", ".join(str(s) for s in seasons))
+        # Add individual starting goalie features
+        native = enhance_with_goalie_features(native)
         return native
 
     frames = [fetch_team_game_logs(SeasonConfig(season_id=str(season))) for season in seasons]
@@ -215,6 +218,10 @@ def fetch_multi_season_logs(seasons: Iterable[str]) -> pd.DataFrame:
     combined["gameDate"] = pd.to_datetime(combined["gameDate"])
 
     LOGGER.info(f"Falling back to MoneyPuck: combined {len(combined)} team-games across {len(seasons)} seasons")
+
+    # Add individual starting goalie features
+    combined = enhance_with_goalie_features(combined)
+
     return combined
 
 
