@@ -10,6 +10,8 @@ from typing import Iterable, Sequence
 import numpy as np
 import pandas as pd
 
+from .travel_features import add_travel_features
+
 ROLL_WINDOWS: Sequence[int] = (3, 5, 10)
 GOALIE_PULSE_PATH = Path(__file__).resolve().parents[2] / "web" / "src" / "data" / "goaliePulse.json"
 STARTING_GOALIE_PATH = Path(__file__).resolve().parents[2] / "web" / "src" / "data" / "startingGoalies.json"
@@ -133,19 +135,98 @@ def _load_player_injuries() -> dict[str, int]:
     return {team: len(info.get("injuries") or []) for team, info in teams.items()}
 
 
+def _add_h2h_features(logs: pd.DataFrame, lookback: int = 10) -> pd.DataFrame:
+    """
+    Add head-to-head matchup history features.
+
+    For each game, computes stats from the last N games between the two teams.
+    Only uses games that occurred BEFORE the current game (no future leakage).
+
+    Features:
+    - h2h_win_pct: Win percentage in last N games vs this opponent
+    - h2h_goal_diff: Average goal differential in last N games vs this opponent
+    - h2h_games_played: Number of games played vs this opponent in history
+    """
+    logs = logs.copy()
+
+    # Initialize H2H features
+    logs["h2h_win_pct"] = 0.5  # Neutral prior (50%)
+    logs["h2h_goal_diff"] = 0.0
+    logs["h2h_games_played"] = 0
+
+    # Sort by date to ensure chronological processing
+    logs = logs.sort_values(["season", "gameDate"]).reset_index(drop=True)
+
+    # For each game, look back at history between these two teams
+    for idx in logs.index:
+        team_id = logs.loc[idx, "teamId"]
+        opponent_abbrev = logs.loc[idx, "opponentTeamAbbrev"]
+        current_date = logs.loc[idx, "gameDate"]
+        current_season = logs.loc[idx, "season"]
+
+        # Find all previous games between these two teams
+        # (either team vs opponent or opponent vs team)
+        team_abbrev = logs.loc[idx, "teamAbbrev"]
+
+        # Previous games where current team played current opponent
+        prev_games = logs[
+            (logs.index < idx) &  # Only previous games
+            (
+                ((logs["teamAbbrev"] == team_abbrev) & (logs["opponentTeamAbbrev"] == opponent_abbrev)) |
+                ((logs["opponentTeamAbbrev"] == team_abbrev) & (logs["teamAbbrev"] == opponent_abbrev))
+            )
+        ]
+
+        if len(prev_games) > 0:
+            # Take last N games
+            recent_h2h = prev_games.tail(lookback)
+
+            # For each game, determine if current team won
+            h2h_wins = 0
+            h2h_goal_diffs = []
+
+            for _, game in recent_h2h.iterrows():
+                game_team = game["teamAbbrev"]
+                game_opponent = game["opponentTeamAbbrev"]
+
+                # Check if this game has current team as the "team" or "opponent"
+                if game_team == team_abbrev:
+                    # Current team is the "team" in this record
+                    if game["win"] == 1:
+                        h2h_wins += 1
+                    h2h_goal_diffs.append(game["goal_diff"])
+                else:
+                    # Current team is the "opponent" in this record
+                    # So flip the win/loss and goal diff
+                    if game["win"] == 0:  # Opponent won = current team won
+                        h2h_wins += 1
+                    h2h_goal_diffs.append(-game["goal_diff"])  # Flip goal diff
+
+            # Calculate H2H stats
+            games_count = len(recent_h2h)
+            logs.loc[idx, "h2h_win_pct"] = h2h_wins / games_count if games_count > 0 else 0.5
+            logs.loc[idx, "h2h_goal_diff"] = sum(h2h_goal_diffs) / games_count if h2h_goal_diffs else 0.0
+            logs.loc[idx, "h2h_games_played"] = games_count
+
+    return logs
+
+
 def engineer_team_features(logs: pd.DataFrame, rolling_windows: Iterable[int] = ROLL_WINDOWS) -> pd.DataFrame:
     """
     Create lagged features using ONLY information available BEFORE each game.
-    
+
     **CRITICAL FOR LIVE PREDICTION:**
     - All features use .shift(1) to exclude current game
     - No future information leaks into features
     - Early-season games get zeros/NaNs (expected - no history)
-    
+
     For predicting upcoming games, this ensures we only use data that would
     actually be known before puck drop.
     """
     logs = logs.copy()
+
+    # Add travel distance and timezone features
+    logs = add_travel_features(logs)
 
     # Ensure numeric types
     numeric_columns = [
@@ -184,6 +265,8 @@ def engineer_team_features(logs: pd.DataFrame, rolling_windows: Iterable[int] = 
         "penaltiesDrawn",
         "penaltyMinutes",
         "penaltyDifferential",
+        # Shot diversity
+        "shotTypeDiversity",
         "powerPlayPct",
         "penaltyKillPct",
         "powerPlayNetPct",
@@ -336,6 +419,9 @@ def engineer_team_features(logs: pd.DataFrame, rolling_windows: Iterable[int] = 
         lambda series: _lagged_streak(~series.astype(bool))
     )
 
+    # Head-to-head matchup history (pre-game only)
+    logs = _add_h2h_features(logs)
+
     # Rolling statistics (ALL LAGGED)
     roll_features: dict[str, pd.Series] = {}
     
@@ -407,6 +493,12 @@ def engineer_team_features(logs: pd.DataFrame, rolling_windows: Iterable[int] = 
             )
         if "penaltyMinutes" in logs.columns:
             roll_features[f"rolling_penalty_minutes_{window}"] = group["penaltyMinutes"].transform(
+                lambda s, w=window: _lagged_rolling(s, w)
+            )
+
+        # Shot diversity rolling (NEW)
+        if "shotTypeDiversity" in logs.columns:
+            roll_features[f"rolling_shot_diversity_{window}"] = group["shotTypeDiversity"].transform(
                 lambda s, w=window: _lagged_rolling(s, w)
             )
 
@@ -495,11 +587,18 @@ def engineer_team_features(logs: pd.DataFrame, rolling_windows: Iterable[int] = 
             "team_altitude_ft",
             "altitude_diff",
             "is_high_altitude",
+            "travel_distance",
+            "timezone_change",
+            "is_west_to_east",
+            "is_east_to_west",
             "consecutive_home_prior",
             "consecutive_away_prior",
             "travel_burden",
             "consecutive_wins_prior",
             "consecutive_losses_prior",
+            "h2h_win_pct",
+            "h2h_goal_diff",
+            "h2h_games_played",
         ]
     )
     feature_cols.extend(
@@ -593,6 +692,10 @@ def engineer_team_features(logs: pd.DataFrame, rolling_windows: Iterable[int] = 
             feature_cols.append(f"rolling_penalty_diff_{window}")
         if f"rolling_penalty_minutes_{window}" in logs.columns:
             feature_cols.append(f"rolling_penalty_minutes_{window}")
+
+        # Shot diversity rolling
+        if f"rolling_shot_diversity_{window}" in logs.columns:
+            feature_cols.append(f"rolling_shot_diversity_{window}")
 
         # Goaltending rolling
         if f"rolling_save_pct_{window}" in logs.columns:
