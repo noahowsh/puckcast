@@ -190,17 +190,24 @@ def _build_xg_training_data(game_ids: List[str], client: GamecenterClient) -> pd
                 features = _extract_shot_features(play, home_defending)
 
                 # Detect rebounds (shot within 3 seconds by same team)
-                current_time = play.get("timeInPeriod", 0)
+                current_time_str = play.get("timeInPeriod", "00:00")
                 current_team = play.get("details", {}).get("eventOwnerTeamId")
                 is_rebound = 0
 
+                # Convert MM:SS to seconds
+                try:
+                    mins, secs = current_time_str.split(":")
+                    current_time_sec = int(mins) * 60 + int(secs)
+                except:
+                    current_time_sec = 0
+
                 if last_shot_time is not None and last_shot_team == current_team:
-                    time_diff = current_time - last_shot_time
+                    time_diff = current_time_sec - last_shot_time
                     if 0 < time_diff <= 3:  # Rebound if within 3 seconds
                         is_rebound = 1
 
                 # Update last shot tracking
-                last_shot_time = current_time
+                last_shot_time = current_time_sec
                 last_shot_team = current_team
 
                 # Label: 1 if goal, 0 if not
@@ -418,11 +425,18 @@ def _process_game_plays(game_id: str, pbp: Dict[str, Any], xg_model: ExpectedGoa
             stats[opponent_team]["shotsAgainstPerGame"] += 1
 
             # Detect rebounds (shot within 3 seconds by same team)
-            current_time = play.get("timeInPeriod", 0)
+            current_time_str = play.get("timeInPeriod", "00:00")
             is_rebound = False
 
+            # Convert MM:SS to seconds
+            try:
+                mins, secs = current_time_str.split(":")
+                current_time_sec = int(mins) * 60 + int(secs)
+            except:
+                current_time_sec = 0
+
             if last_shot_time is not None and last_shot_team == acting_team:
-                time_diff = current_time - last_shot_time
+                time_diff = current_time_sec - last_shot_time
                 if 0 < time_diff <= 3:
                     is_rebound = True
                     stats[acting_team]["reboundsFor"] += 1
@@ -432,7 +446,7 @@ def _process_game_plays(game_id: str, pbp: Dict[str, Any], xg_model: ExpectedGoa
                         stats[opponent_team]["reboundGoalsAgainst"] += 1
 
             # Update last shot tracking
-            last_shot_time = current_time
+            last_shot_time = current_time_sec
             last_shot_team = acting_team
 
             # Compute xG
