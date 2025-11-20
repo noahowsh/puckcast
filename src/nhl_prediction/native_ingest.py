@@ -18,6 +18,8 @@ from .data_sources.gamecenter import GamecenterClient
 LOGGER = logging.getLogger(__name__)
 _PROJECT_ROOT = Path(__file__).resolve().parents[2]
 XG_MODEL_PATH = _PROJECT_ROOT / "data" / "xg_model.pkl"
+CACHE_DIR = _PROJECT_ROOT / "data" / "cache"
+CACHE_DIR.mkdir(exist_ok=True)
 
 
 # ============================================================================
@@ -476,6 +478,27 @@ def _save_xg_model(model: HistGradientBoostingClassifier) -> None:
     LOGGER.info(f"Saved xG model to {XG_MODEL_PATH}")
 
 
+def _get_season_cache_path(season_id: str) -> Path:
+    """Get path to cached season data file."""
+    return CACHE_DIR / f"native_logs_{season_id}.parquet"
+
+
+def _load_cached_season(season_id: str) -> pd.DataFrame | None:
+    """Load cached season data if it exists."""
+    cache_path = _get_season_cache_path(season_id)
+    if cache_path.exists():
+        LOGGER.info(f"Loading cached data for season {season_id}")
+        return pd.read_parquet(cache_path)
+    return None
+
+
+def _save_season_cache(season_id: str, df: pd.DataFrame) -> None:
+    """Save season data to cache."""
+    cache_path = _get_season_cache_path(season_id)
+    df.to_parquet(cache_path, index=False)
+    LOGGER.info(f"Cached {len(df)} team-games for season {season_id}")
+
+
 def load_native_game_logs(seasons: List[str]) -> pd.DataFrame:
     """
     Load game logs from native NHL API data for multiple seasons.
@@ -486,6 +509,8 @@ def load_native_game_logs(seasons: List[str]) -> pd.DataFrame:
     3. Computing Corsi/Fenwick/high-danger metrics
     4. Aggregating to team-game level
 
+    Uses caching to avoid re-fetching data from NHL API on subsequent runs.
+
     Args:
         seasons: List of season IDs (e.g., ["20212022", "20222023"])
 
@@ -493,6 +518,25 @@ def load_native_game_logs(seasons: List[str]) -> pd.DataFrame:
         DataFrame with team-game logs matching MoneyPuck schema
     """
     LOGGER.info(f"Loading native game logs for seasons: {seasons}")
+
+    # Try to load cached data for each season
+    season_dataframes = []
+    seasons_to_fetch = []
+
+    for season_id in seasons:
+        cached_df = _load_cached_season(season_id)
+        if cached_df is not None:
+            season_dataframes.append(cached_df)
+        else:
+            seasons_to_fetch.append(season_id)
+
+    # If all seasons are cached, combine and return
+    if not seasons_to_fetch:
+        LOGGER.info("All seasons loaded from cache!")
+        return pd.concat(season_dataframes, ignore_index=True) if season_dataframes else pd.DataFrame()
+
+    # Otherwise, fetch missing seasons from NHL API
+    LOGGER.info(f"Fetching {len(seasons_to_fetch)} seasons from NHL API: {seasons_to_fetch}")
 
     # Use slower rate limiting to avoid 503 errors
     client = GamecenterClient(rate_limit_seconds=1.0)
@@ -523,11 +567,11 @@ def load_native_game_logs(seasons: List[str]) -> pd.DataFrame:
 
         xg_model = ExpectedGoalsModel(sklearn_model)
 
-    # Process requested seasons
-    all_team_games = []
-
-    for season_id in seasons:
+    # Process requested seasons that need to be fetched
+    for season_id in seasons_to_fetch:
         LOGGER.info(f"Processing season {season_id}...")
+
+        season_team_games = []
 
         game_ids = _fetch_games_for_season(season_id, client)
         consecutive_errors = 0
@@ -557,7 +601,7 @@ def load_native_game_logs(seasons: List[str]) -> pd.DataFrame:
                 # Add both team stats to list
                 for team_id, team_stats in game_stats.items():
                     team_stats["seasonId"] = season_id
-                    all_team_games.append(team_stats)
+                    season_team_games.append(team_stats)
 
             except Exception as e:
                 consecutive_errors += 1
@@ -569,22 +613,31 @@ def load_native_game_logs(seasons: List[str]) -> pd.DataFrame:
 
                 # Stop if we hit too many consecutive errors (likely end of season or API issues)
                 if consecutive_errors >= max_consecutive_errors:
-                    LOGGER.info(f"Stopped after {consecutive_errors} consecutive errors. Processed {len(all_team_games)} team-games.")
+                    LOGGER.info(f"Stopped after {consecutive_errors} consecutive errors. Processed {len(season_team_games)} team-games.")
                     break
 
-    # Convert to DataFrame
-    df = pd.DataFrame(all_team_games)
+        # Convert season data to DataFrame
+        season_df = pd.DataFrame(season_team_games)
 
-    if df.empty:
+        if not season_df.empty:
+            # Compute goaltending metrics for this season
+            season_df = _compute_goaltending_metrics(season_df)
+
+            # Cache this season for future runs
+            _save_season_cache(season_id, season_df)
+
+            # Add to list of all seasons
+            season_dataframes.append(season_df)
+
+    # Combine all seasons (cached + newly fetched)
+    if not season_dataframes:
         LOGGER.warning("No games found - returning empty DataFrame")
-        return df
+        return pd.DataFrame()
 
-    # Compute goaltending metrics
-    df = _compute_goaltending_metrics(df)
+    combined_df = pd.concat(season_dataframes, ignore_index=True)
+    LOGGER.info(f"Loaded {len(combined_df)} team-games total from native NHL API")
 
-    LOGGER.info(f"Loaded {len(df)} team-games from native NHL API")
-
-    return df
+    return combined_df
 
 
 def _compute_goaltending_metrics(df: pd.DataFrame) -> pd.DataFrame:

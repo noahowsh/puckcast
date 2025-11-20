@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from typing import Any, Callable, Dict, List, Optional, Sequence
+import logging
 
 import numpy as np
 import pandas as pd
@@ -10,6 +11,13 @@ import typer
 from rich.console import Console
 from sklearn.isotonic import IsotonicRegression
 from sklearn.metrics import accuracy_score
+
+# Configure logging to see progress from data loading modules
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s [%(levelname)s] %(name)s: %(message)s',
+    datefmt='%H:%M:%S'
+)
 
 
 def compute_season_weights(games: pd.DataFrame, seasons: List[str], decay_factor: float = 0.8) -> np.ndarray:
@@ -64,9 +72,9 @@ console = Console()
 
 
 def _resolve_seasons(train_seasons: List[str] | None, test_season: str | None) -> tuple[List[str], str]:
-    # Updated: Train on 2017-2023 (7 full seasons), test on 2023-2024 (full season holdout)
-    # This gives us more historical data while using recent season for validation
-    default_train = ["20172018", "20182019", "20192020", "20202021", "20212022", "20222023"]
+    # Updated: Train on 2021-2023 (2 full seasons), test on 2023-2024 (full season holdout)
+    # Using native NHL API data only (2017-2020 data unavailable via NHL API)
+    default_train = ["20212022", "20222023"]
     default_test = "20232024"
     train = train_seasons or default_train
     test = test_season or default_test
