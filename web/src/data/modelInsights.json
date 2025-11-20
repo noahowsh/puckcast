@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2025-11-11T21:03:53.331357+00:00",
+  "generatedAt": "2025-11-20T19:51:12.096804+00:00",
   "overall": {
     "games": 1230,
     "accuracy": 0.5682926829268292,
@@ -891,8 +891,8 @@
   "distributionFindings": [
     {
       "metric": "Rolling goal differential (5 games)",
-      "correctMean": -0.04301382927992368,
-      "incorrectMean": -0.04745762711864407
+      "correctMean": -0.043013829279923685,
+      "incorrectMean": -0.04745762711864406
     },
     {
       "metric": "Rolling win% (5 games)",
