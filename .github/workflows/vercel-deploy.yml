@@ -17,6 +17,8 @@ env:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    # Only run if Vercel token is configured
+    if: ${{ secrets.VERCEL_TOKEN != '' }}
 
     steps:
       - name: Checkout repository
