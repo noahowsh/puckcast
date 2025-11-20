@@ -64,6 +64,7 @@ data/moneypuck_*.parquet
 data/raw/
 data/processed/
 data/cache/
+data/*.pkl
 
 # Daily prediction exports
 predictions_*.csv
