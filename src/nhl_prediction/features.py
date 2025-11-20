@@ -168,6 +168,12 @@ def engineer_team_features(logs: pd.DataFrame, rolling_windows: Iterable[int] = 
         "goalieShotsFaced",
         "goalieGoalsAllowed",
         "goalieXgAllowed",
+        # Individual starting goalie features
+        "goalie_save_pct",
+        "goalie_gsax_per_60",
+        "goalie_games_played",
+        "goalie_xgoals_faced",
+        "goalie_goals_allowed",
         "powerPlayPct",
         "penaltyKillPct",
         "powerPlayNetPct",
