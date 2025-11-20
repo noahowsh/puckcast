@@ -24,9 +24,18 @@ def create_baseline_model(C: float = 1.0, random_state: int | None = 42) -> Pipe
     )
 
 
-def fit_model(model: Pipeline, features: pd.DataFrame, target: pd.Series, mask: pd.Series) -> Pipeline:
-    """Fit the provided model on masked rows."""
-    model.fit(features.loc[mask], target.loc[mask])
+def fit_model(
+    model: Pipeline,
+    features: pd.DataFrame,
+    target: pd.Series,
+    mask: pd.Series,
+    sample_weight: np.ndarray | None = None,
+) -> Pipeline:
+    """Fit the provided model on masked rows with optional sample weights."""
+    if sample_weight is not None:
+        model.fit(features.loc[mask], target.loc[mask], clf__sample_weight=sample_weight[mask])
+    else:
+        model.fit(features.loc[mask], target.loc[mask])
     return model
 
 
@@ -102,6 +111,7 @@ def tune_logreg_c(
     target: pd.Series,
     games: pd.DataFrame,
     train_seasons: Sequence[str],
+    sample_weights: np.ndarray | None = None,
 ) -> float:
     """Select regularisation strength using the final training season as validation."""
     if len(train_seasons) < 2:
@@ -122,7 +132,7 @@ def tune_logreg_c(
 
     for c in candidate_cs:
         model = create_baseline_model(C=c)
-        model = fit_model(model, features, target, core_mask)
+        model = fit_model(model, features, target, core_mask, sample_weight=sample_weights)
         probs = predict_probabilities(model, features, val_mask)
         loss = log_loss(target.loc[val_mask], probs)
         if loss < best_loss:
@@ -138,6 +148,7 @@ def tune_histgb_params(
     target: pd.Series,
     games: pd.DataFrame,
     train_seasons: Sequence[str],
+    sample_weights: np.ndarray | None = None,
 ) -> Dict[str, Any]:
     """Select gradient boosting hyperparameters using final training season as validation."""
     if not param_grid:
@@ -161,7 +172,7 @@ def tune_histgb_params(
     for candidate in param_grid:
         params = dict(candidate)
         model = create_histgb_model(params=params)
-        model = fit_model(model, features, target, core_mask)
+        model = fit_model(model, features, target, core_mask, sample_weight=sample_weights)
         probs = predict_probabilities(model, features, val_mask)
         loss = log_loss(target.loc[val_mask], probs)
         if loss < best_loss:
