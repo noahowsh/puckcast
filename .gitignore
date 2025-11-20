@@ -48,6 +48,7 @@ Thumbs.db
 # Temporary files
 *.tmp
 *.temp
+*.log
 
 # Node/Next.js artifacts
 node_modules/
