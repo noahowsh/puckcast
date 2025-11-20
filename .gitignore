@@ -69,3 +69,8 @@ data/*.pkl
 
 # Daily prediction exports
 predictions_*.csv
+
+# Debug and test scripts
+test_*.py
+*_test.py
+ablation_*.py
