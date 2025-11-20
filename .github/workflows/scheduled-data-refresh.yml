@@ -1,0 +1,181 @@
+name: Scheduled Data Refresh (Granular)
+
+# This workflow provides more granular control over data refresh schedules
+# Different data types update at different frequencies based on their volatility
+
+on:
+  schedule:
+    # Predictions: Every 6 hours during game days (6am, 12pm, 6pm, 12am ET / UTC+4)
+    - cron: '0 10,16,22,4 * * *'  # 6am, 12pm, 6pm, 12am ET (approximate)
+
+    # Standings: Once daily at midnight ET
+    - cron: '0 5 * * *'  # 12am ET
+
+    # Goalie pulse: Twice daily (morning and evening)
+    - cron: '0 13 * * *'  # 9am ET - morning update
+    - cron: '0 23 * * *'  # 7pm ET - evening update
+
+    # Model insights: Weekly on Monday morning
+    - cron: '0 14 * * 1'  # 10am ET on Mondays
+
+  workflow_dispatch:
+    inputs:
+      data_type:
+        description: 'Which data to refresh'
+        required: true
+        type: choice
+        options:
+          - all
+          - predictions
+          - standings
+          - goalie_pulse
+          - model_insights
+
+env:
+  PYTHON_VERSION: '3.11'
+
+jobs:
+  determine-refresh:
+    runs-on: ubuntu-latest
+    outputs:
+      refresh_predictions: ${{ steps.check.outputs.predictions }}
+      refresh_standings: ${{ steps.check.outputs.standings }}
+      refresh_goalie_pulse: ${{ steps.check.outputs.goalie_pulse }}
+      refresh_model_insights: ${{ steps.check.outputs.insights }}
+
+    steps:
+      - name: Determine what to refresh
+        id: check
+        run: |
+          # Default: nothing
+          echo "predictions=false" >> $GITHUB_OUTPUT
+          echo "standings=false" >> $GITHUB_OUTPUT
+          echo "goalie_pulse=false" >> $GITHUB_OUTPUT
+          echo "insights=false" >> $GITHUB_OUTPUT
+
+          # Manual dispatch
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            DATA_TYPE="${{ inputs.data_type }}"
+
+            if [ "$DATA_TYPE" = "all" ] || [ "$DATA_TYPE" = "predictions" ]; then
+              echo "predictions=true" >> $GITHUB_OUTPUT
+            fi
+            if [ "$DATA_TYPE" = "all" ] || [ "$DATA_TYPE" = "standings" ]; then
+              echo "standings=true" >> $GITHUB_OUTPUT
+            fi
+            if [ "$DATA_TYPE" = "all" ] || [ "$DATA_TYPE" = "goalie_pulse" ]; then
+              echo "goalie_pulse=true" >> $GITHUB_OUTPUT
+            fi
+            if [ "$DATA_TYPE" = "all" ] || [ "$DATA_TYPE" = "model_insights" ]; then
+              echo "insights=true" >> $GITHUB_OUTPUT
+            fi
+          else
+            # Scheduled: determine based on time
+            HOUR=$(date -u +%H)
+            DAY=$(date -u +%u)  # 1=Monday, 7=Sunday
+
+            # Predictions: 4x daily at specific hours
+            if [ "$HOUR" = "10" ] || [ "$HOUR" = "16" ] || [ "$HOUR" = "22" ] || [ "$HOUR" = "04" ]; then
+              echo "predictions=true" >> $GITHUB_OUTPUT
+            fi
+
+            # Standings: daily at midnight (5 UTC)
+            if [ "$HOUR" = "05" ]; then
+              echo "standings=true" >> $GITHUB_OUTPUT
+            fi
+
+            # Goalie pulse: twice daily (13 and 23 UTC)
+            if [ "$HOUR" = "13" ] || [ "$HOUR" = "23" ]; then
+              echo "goalie_pulse=true" >> $GITHUB_OUTPUT
+            fi
+
+            # Model insights: Monday morning (14 UTC, day 1)
+            if [ "$HOUR" = "14" ] && [ "$DAY" = "1" ]; then
+              echo "insights=true" >> $GITHUB_OUTPUT
+            fi
+          fi
+
+  refresh-data:
+    needs: determine-refresh
+    runs-on: ubuntu-latest
+    if: |
+      needs.determine-refresh.outputs.refresh_predictions == 'true' ||
+      needs.determine-refresh.outputs.refresh_standings == 'true' ||
+      needs.determine-refresh.outputs.refresh_goalie_pulse == 'true' ||
+      needs.determine-refresh.outputs.refresh_model_insights == 'true'
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Refresh predictions
+        if: needs.determine-refresh.outputs.refresh_predictions == 'true'
+        run: |
+          echo "🏒 Refreshing predictions..."
+          python predict_full.py
+        continue-on-error: true
+
+      - name: Refresh standings
+        if: needs.determine-refresh.outputs.refresh_standings == 'true'
+        run: |
+          echo "📊 Refreshing standings..."
+          python scripts/fetch_current_standings.py
+        continue-on-error: true
+
+      - name: Refresh goalie pulse
+        if: needs.determine-refresh.outputs.refresh_goalie_pulse == 'true'
+        run: |
+          echo "🥅 Refreshing goalie pulse..."
+          python scripts/generate_goalie_pulse.py --date $(date +%Y-%m-%d)
+        continue-on-error: true
+
+      - name: Refresh model insights
+        if: needs.determine-refresh.outputs.refresh_model_insights == 'true'
+        run: |
+          echo "📈 Refreshing model insights..."
+          python scripts/generate_site_metrics.py
+        continue-on-error: true
+
+      - name: Check for changes
+        id: git-check
+        run: |
+          git diff --quiet web/src/data/*.json || echo "changes=true" >> $GITHUB_OUTPUT
+
+      - name: Commit and push changes
+        if: steps.git-check.outputs.changes == 'true'
+        run: |
+          git config user.name "GitHub Actions Bot"
+          git config user.email "actions@github.com"
+          git add web/src/data/*.json
+          git commit -m "chore: granular data refresh
+
+Refreshed:
+- Predictions: ${{ needs.determine-refresh.outputs.refresh_predictions }}
+- Standings: ${{ needs.determine-refresh.outputs.refresh_standings }}
+- Goalie Pulse: ${{ needs.determine-refresh.outputs.refresh_goalie_pulse }}
+- Model Insights: ${{ needs.determine-refresh.outputs.refresh_model_insights }}
+
+Timestamp: $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          git push
+
+      - name: Summary
+        run: |
+          echo "✅ Granular refresh complete!"
+          echo "📊 Refreshed components:"
+          echo "  - Predictions: ${{ needs.determine-refresh.outputs.refresh_predictions }}"
+          echo "  - Standings: ${{ needs.determine-refresh.outputs.refresh_standings }}"
+          echo "  - Goalie Pulse: ${{ needs.determine-refresh.outputs.refresh_goalie_pulse }}"
+          echo "  - Model Insights: ${{ needs.determine-refresh.outputs.refresh_model_insights }}"

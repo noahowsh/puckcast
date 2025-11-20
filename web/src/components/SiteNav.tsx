@@ -7,10 +7,11 @@ import { usePathname } from "next/navigation";
 const links = [
   { href: "/", label: "Overview" },
   { href: "/predictions", label: "Predictions" },
-  { href: "/betting", label: "Betting" },
-  { href: "/leaderboards", label: "Leaderboards" },
+  { href: "/leaderboards", label: "Power Rankings" },
+  { href: "/performance", label: "Performance" },
+  { href: "/methodology", label: "Methodology" },
   { href: "/analytics", label: "Analytics" },
-  { href: "/goalies", label: "Goalies" },
+  { href: "/about", label: "About" },
 ];
 
 export function SiteNav() {

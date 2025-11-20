@@ -1,0 +1,90 @@
+================================================================================
+WHERE WE ARE & WHERE WE'RE GOING
+================================================================================
+
+📍 CURRENT STATUS
+--------------------------------------------------------------------------------
+✅ Custom xG model (94.8% accuracy on shots)
+✅ 141 engineered features (all MoneyPuck metrics)
+✅ 6 seasons of training data (2017-2023)
+✅ Sample weighting (0.85 decay - recent seasons prioritized)
+✅ Testing on full 2023-24 season
+
+Expected Current Accuracy: ~59-60% (baseline ~53%)
+
+
+🎯 REALISTIC TARGETS
+--------------------------------------------------------------------------------
+Week 1  (Quick Wins):           61-62%  (+1-2%)  ← START HERE
+Week 2-3 (xG Improvements):     62-63%  (+0-1%)
+Week 4-6 (Roster Context):      64-66%  (+2-3%)
+Week 8-10 (Advanced Features):  65-68%  (+1-2%)
+Week 12+ (Ensemble):            66-70%  (+1-2%)
+
+
+🔥 QUICK WINS THIS WEEK
+--------------------------------------------------------------------------------
+1. Train baseline & measure        (5 min)     →  Know where we are
+2. Add starting goalie features     (3 hours)   →  +1-2% accuracy
+3. Add rebound detection to xG      (2 hours)   →  +0.5-1% accuracy  
+4. Tune sample weight decay         (30 min)    →  +0.3-0.8% accuracy
+
+TOTAL TIME: ~6 hours
+TOTAL GAIN: +2-4% accuracy
+TARGET: 61-63% by end of week
+
+
+💡 WHY THESE FEATURES MATTER
+--------------------------------------------------------------------------------
+Starting Goalies:  Goaltending = 30-40% of game outcome
+                   League-best goalie vs league-worst = 10-15% win probability
+
+Rebounds:          2-3x higher goal probability than normal shots
+                   Accounts for ~15% of goals scored
+
+Sample Weights:    Recent patterns more relevant
+                   2024 hockey ≠ 2017 hockey (rule changes, play style)
+
+
+📊 WHAT YOU ALREADY HAVE
+--------------------------------------------------------------------------------
+✅ data/feeds/starters.json    - Starting goalie data per game
+✅ data/feeds/injuries.json    - Player injury status
+✅ Play-by-play events         - Can detect rebounds
+✅ 336 cached games            - Ready for training
+
+Just need to CONNECT THE DOTS!
+
+
+🚀 NEXT STEPS
+--------------------------------------------------------------------------------
+Option A: Start with quick wins (recommended)
+  → python -m src.nhl_prediction.train  (get baseline)
+  → Add goalie features
+  → Add rebounds
+  → Tune decay factor
+  → Target: 61-63% by weekend
+
+Option B: Go deeper first
+  → Read ROADMAP_TO_EXCELLENCE.md
+  → Plan longer-term improvements
+  → Prioritize based on time/impact
+
+Option C: Keep building infrastructure
+  → Improve native ingestion
+  → Cache more play-by-play data
+  → Set up automated data pipeline
+
+
+💪 MY RECOMMENDATION
+--------------------------------------------------------------------------------
+Let's knock out the quick wins first!
+
+1. Train baseline NOW (5 min) - see where we are
+2. Add starting goalies TODAY (3 hours) - biggest impact
+3. Add rebounds TODAY (2 hours) - easy win
+
+By tonight: 61-63% accuracy (up from ~59%)
+By next week: 64-66% with injuries + advanced xG
+
+LET'S GO! 🏒🔥

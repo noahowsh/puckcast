@@ -1,0 +1,73 @@
+name: Fetch Game Results & Backtesting
+
+on:
+  schedule:
+    # Run at 4:00 AM ET (8:00 AM UTC) to catch previous day's games
+    - cron: '0 8 * * *'
+  workflow_dispatch:
+    inputs:
+      date:
+        description: 'Date to fetch results for (YYYY-MM-DD)'
+        required: false
+      days_back:
+        description: 'Number of days back to check'
+        required: false
+        default: '7'
+
+env:
+  PYTHON_VERSION: '3.11'
+
+jobs:
+  fetch-results:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Fetch game results
+        run: |
+          if [ -n "${{ inputs.date }}" ]; then
+            echo "🔍 Fetching results for ${{ inputs.date }}..."
+            python scripts/fetch_results.py --date "${{ inputs.date }}" --days-back ${{ inputs.days_back }}
+          else
+            echo "🔍 Fetching results for yesterday..."
+            python scripts/fetch_results.py --days-back ${{ inputs.days_back || 7 }}
+          fi
+
+      - name: Check for changes
+        id: git-check
+        run: |
+          git diff --quiet data/archive/ web/src/data/backtestingReport.json || echo "changes=true" >> $GITHUB_OUTPUT
+
+      - name: Commit and push changes
+        if: steps.git-check.outputs.changes == 'true'
+        run: |
+          git config user.name "GitHub Actions Bot"
+          git config user.email "actions@github.com"
+          git add data/archive/ web/src/data/backtestingReport.json
+          git commit -m "chore: update game results and backtesting report
+
+Fetched at: $(date -u +%Y-%m-%dT%H:%M:%SZ)
+Automated results collection"
+          git push
+
+      - name: Summary
+        run: |
+          echo "✅ Results fetch complete!"
+          if [ -f web/src/data/backtestingReport.json ]; then
+            echo "📊 Backtesting report updated"
+          fi
