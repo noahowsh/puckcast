@@ -171,6 +171,10 @@ def _build_xg_training_data(game_ids: List[str], client: GamecenterClient) -> pd
             plays = pbp.get("plays", [])
             home_defending = None
 
+            # Track previous shot for rebound detection
+            last_shot_time = None
+            last_shot_team = None
+
             for play in plays:
                 type_key = play.get("typeDescKey", "")
 
@@ -185,11 +189,26 @@ def _build_xg_training_data(game_ids: List[str], client: GamecenterClient) -> pd
                 # Extract features
                 features = _extract_shot_features(play, home_defending)
 
+                # Detect rebounds (shot within 3 seconds by same team)
+                current_time = play.get("timeInPeriod", 0)
+                current_team = play.get("details", {}).get("eventOwnerTeamId")
+                is_rebound = 0
+
+                if last_shot_time is not None and last_shot_team == current_team:
+                    time_diff = current_time - last_shot_time
+                    if 0 < time_diff <= 3:  # Rebound if within 3 seconds
+                        is_rebound = 1
+
+                # Update last shot tracking
+                last_shot_time = current_time
+                last_shot_team = current_team
+
                 # Label: 1 if goal, 0 if not
                 is_goal = 1 if type_key == "goal" else 0
 
                 shot_data = features.to_dict()
                 shot_data["is_goal"] = is_goal
+                shot_data["is_rebound"] = is_rebound
                 shot_data["game_id"] = game_id
 
                 all_shots.append(shot_data)
@@ -211,8 +230,8 @@ def _train_xg_model(training_data: pd.DataFrame) -> HistGradientBoostingClassifi
     # Encode shot types
     shot_type_dummies = pd.get_dummies(training_data["shot_type"], prefix="shot")
 
-    # Prepare features
-    feature_cols = ["distance", "angle", "is_even_strength", "is_power_play", "is_offensive_zone"]
+    # Prepare features (now includes rebound detection)
+    feature_cols = ["distance", "angle", "is_even_strength", "is_power_play", "is_offensive_zone", "is_rebound"]
     X = pd.concat([training_data[feature_cols], shot_type_dummies], axis=1)
     y = training_data["is_goal"]
 
@@ -318,6 +337,13 @@ def _process_game_plays(game_id: str, pbp: Dict[str, Any], xg_model: ExpectedGoa
             "highDangerShotsAgainst": 0,
             "highDangerxGoalsFor": 0.0,
             "highDangerxGoalsAgainst": 0.0,
+            "reboundsFor": 0,
+            "reboundsAgainst": 0,
+            "reboundGoalsFor": 0,
+            "reboundGoalsAgainst": 0,
+            "penaltiesTaken": 0,
+            "penaltiesDrawn": 0,
+            "penaltyMinutes": 0,
             "faceoffsWon": 0,
             "faceoffsLost": 0,
         },
@@ -345,12 +371,23 @@ def _process_game_plays(game_id: str, pbp: Dict[str, Any], xg_model: ExpectedGoa
             "highDangerShotsAgainst": 0,
             "highDangerxGoalsFor": 0.0,
             "highDangerxGoalsAgainst": 0.0,
+            "reboundsFor": 0,
+            "reboundsAgainst": 0,
+            "reboundGoalsFor": 0,
+            "reboundGoalsAgainst": 0,
+            "penaltiesTaken": 0,
+            "penaltiesDrawn": 0,
+            "penaltyMinutes": 0,
             "faceoffsWon": 0,
             "faceoffsLost": 0,
         },
     }
 
     home_defending = None
+
+    # Track last shot for rebound detection
+    last_shot_time = None
+    last_shot_team = None
 
     # Process each play
     for play in plays:
@@ -379,6 +416,24 @@ def _process_game_plays(game_id: str, pbp: Dict[str, Any], xg_model: ExpectedGoa
         if type_key in ["shot-on-goal", "goal"]:
             stats[acting_team]["shotsForPerGame"] += 1
             stats[opponent_team]["shotsAgainstPerGame"] += 1
+
+            # Detect rebounds (shot within 3 seconds by same team)
+            current_time = play.get("timeInPeriod", 0)
+            is_rebound = False
+
+            if last_shot_time is not None and last_shot_team == acting_team:
+                time_diff = current_time - last_shot_time
+                if 0 < time_diff <= 3:
+                    is_rebound = True
+                    stats[acting_team]["reboundsFor"] += 1
+                    stats[opponent_team]["reboundsAgainst"] += 1
+                    if type_key == "goal":
+                        stats[acting_team]["reboundGoalsFor"] += 1
+                        stats[opponent_team]["reboundGoalsAgainst"] += 1
+
+            # Update last shot tracking
+            last_shot_time = current_time
+            last_shot_team = acting_team
 
             # Compute xG
             features = _extract_shot_features(play, home_defending)
@@ -414,6 +469,16 @@ def _process_game_plays(game_id: str, pbp: Dict[str, Any], xg_model: ExpectedGoa
                 stats[winning_team]["faceoffsWon"] += 1
                 stats[losing_team]["faceoffsLost"] += 1
 
+        # === PENALTIES ===
+        if type_key == "penalty":
+            penalized_team = event_owner
+            drawn_by_team = opponent_team
+            penalty_minutes = details.get("duration", 2)  # Default to 2 min minor
+
+            stats[penalized_team]["penaltiesTaken"] += 1
+            stats[penalized_team]["penaltyMinutes"] += penalty_minutes
+            stats[drawn_by_team]["penaltiesDrawn"] += 1
+
     # Compute derived metrics
     for team_id in [home_team_id, away_team_id]:
         s = stats[team_id]
@@ -433,6 +498,9 @@ def _process_game_plays(game_id: str, pbp: Dict[str, Any], xg_model: ExpectedGoa
         # Faceoff win %
         total_faceoffs = s["faceoffsWon"] + s["faceoffsLost"]
         s["faceoffWinPct"] = (s["faceoffsWon"] / total_faceoffs * 100) if total_faceoffs > 0 else 50.0
+
+        # Penalty differential (positive = drew more penalties than took)
+        s["penaltyDifferential"] = s["penaltiesDrawn"] - s["penaltiesTaken"]
 
     return stats
 

@@ -20,7 +20,7 @@ logging.basicConfig(
 )
 
 
-def compute_season_weights(games: pd.DataFrame, seasons: List[str], decay_factor: float = 0.8) -> np.ndarray:
+def compute_season_weights(games: pd.DataFrame, seasons: List[str], decay_factor: float = 0.85) -> np.ndarray:
     """
     Compute sample weights based on season recency.
 
@@ -144,7 +144,7 @@ def compare_models(dataset: Dataset, train_ids: List[str], test_id: str) -> Dict
 
     candidates: List[Dict[str, Any]] = []
 
-    candidate_cs = [0.005, 0.01, 0.02, 0.03, 0.05, 0.1, 0.3, 0.5, 1.0]
+    candidate_cs = [0.001, 0.003, 0.005, 0.01, 0.02, 0.03, 0.05, 0.1, 0.2, 0.3, 0.5, 0.7, 1.0, 1.5]
     best_c = tune_logreg_c(candidate_cs, features, target, games, train_ids, sample_weights=core_weights)
     log_result = evaluate_candidate(
         name="Logistic Regression",

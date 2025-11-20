@@ -174,6 +174,16 @@ def engineer_team_features(logs: pd.DataFrame, rolling_windows: Iterable[int] = 
         "goalie_games_played",
         "goalie_xgoals_faced",
         "goalie_goals_allowed",
+        # Rebound features
+        "reboundsFor",
+        "reboundsAgainst",
+        "reboundGoalsFor",
+        "reboundGoalsAgainst",
+        # Penalty features
+        "penaltiesTaken",
+        "penaltiesDrawn",
+        "penaltyMinutes",
+        "penaltyDifferential",
         "powerPlayPct",
         "penaltyKillPct",
         "powerPlayNetPct",
@@ -320,6 +330,12 @@ def engineer_team_features(logs: pd.DataFrame, rolling_windows: Iterable[int] = 
     )
     logs["travel_burden"] = logs["consecutive_away_prior"].clip(lower=0)
 
+    # Win/loss streaks (pre-game)
+    logs["consecutive_wins_prior"] = group["win"].transform(_lagged_streak)
+    logs["consecutive_losses_prior"] = group["win"].transform(
+        lambda series: _lagged_streak(~series.astype(bool))
+    )
+
     # Rolling statistics (ALL LAGGED)
     roll_features: dict[str, pd.Series] = {}
     
@@ -371,6 +387,26 @@ def engineer_team_features(logs: pd.DataFrame, rolling_windows: Iterable[int] = 
         # High danger shots rolling (NEW)
         if "highDangerShotsFor" in logs.columns:
             roll_features[f"rolling_high_danger_shots_{window}"] = group["highDangerShotsFor"].transform(
+                lambda s, w=window: _lagged_rolling(s, w)
+            )
+
+        # Rebound stats rolling (NEW)
+        if "reboundsFor" in logs.columns:
+            roll_features[f"rolling_rebounds_for_{window}"] = group["reboundsFor"].transform(
+                lambda s, w=window: _lagged_rolling(s, w)
+            )
+        if "reboundGoalsFor" in logs.columns:
+            roll_features[f"rolling_rebound_goals_{window}"] = group["reboundGoalsFor"].transform(
+                lambda s, w=window: _lagged_rolling(s, w)
+            )
+
+        # Penalty stats rolling (NEW)
+        if "penaltyDifferential" in logs.columns:
+            roll_features[f"rolling_penalty_diff_{window}"] = group["penaltyDifferential"].transform(
+                lambda s, w=window: _lagged_rolling(s, w)
+            )
+        if "penaltyMinutes" in logs.columns:
+            roll_features[f"rolling_penalty_minutes_{window}"] = group["penaltyMinutes"].transform(
                 lambda s, w=window: _lagged_rolling(s, w)
             )
 
@@ -462,6 +498,8 @@ def engineer_team_features(logs: pd.DataFrame, rolling_windows: Iterable[int] = 
             "consecutive_home_prior",
             "consecutive_away_prior",
             "travel_burden",
+            "consecutive_wins_prior",
+            "consecutive_losses_prior",
         ]
     )
     feature_cols.extend(
@@ -543,7 +581,19 @@ def engineer_team_features(logs: pd.DataFrame, rolling_windows: Iterable[int] = 
         # High danger rolling
         if f"rolling_high_danger_shots_{window}" in logs.columns:
             feature_cols.append(f"rolling_high_danger_shots_{window}")
-        
+
+        # Rebound rolling
+        if f"rolling_rebounds_for_{window}" in logs.columns:
+            feature_cols.append(f"rolling_rebounds_for_{window}")
+        if f"rolling_rebound_goals_{window}" in logs.columns:
+            feature_cols.append(f"rolling_rebound_goals_{window}")
+
+        # Penalty rolling
+        if f"rolling_penalty_diff_{window}" in logs.columns:
+            feature_cols.append(f"rolling_penalty_diff_{window}")
+        if f"rolling_penalty_minutes_{window}" in logs.columns:
+            feature_cols.append(f"rolling_penalty_minutes_{window}")
+
         # Goaltending rolling
         if f"rolling_save_pct_{window}" in logs.columns:
             feature_cols.append(f"rolling_save_pct_{window}")
