@@ -10,8 +10,6 @@ from typing import Iterable, Sequence
 import numpy as np
 import pandas as pd
 
-from .travel_features import add_travel_features
-
 ROLL_WINDOWS: Sequence[int] = (3, 5, 10)
 GOALIE_PULSE_PATH = Path(__file__).resolve().parents[2] / "web" / "src" / "data" / "goaliePulse.json"
 STARTING_GOALIE_PATH = Path(__file__).resolve().parents[2] / "web" / "src" / "data" / "startingGoalies.json"
@@ -228,9 +226,6 @@ def engineer_team_features(logs: pd.DataFrame, rolling_windows: Iterable[int] = 
     """
     logs = logs.copy()
 
-    # Add travel distance and timezone features
-    logs = add_travel_features(logs)
-
     # Ensure numeric types
     numeric_columns = [
         "goalsFor",
@@ -268,8 +263,6 @@ def engineer_team_features(logs: pd.DataFrame, rolling_windows: Iterable[int] = 
         "penaltiesDrawn",
         "penaltyMinutes",
         "penaltyDifferential",
-        # Shot diversity
-        "shotTypeDiversity",
         "powerPlayPct",
         "penaltyKillPct",
         "powerPlayNetPct",
@@ -499,12 +492,6 @@ def engineer_team_features(logs: pd.DataFrame, rolling_windows: Iterable[int] = 
                 lambda s, w=window: _lagged_rolling(s, w)
             )
 
-        # Shot diversity rolling (NEW)
-        if "shotTypeDiversity" in logs.columns:
-            roll_features[f"rolling_shot_diversity_{window}"] = group["shotTypeDiversity"].transform(
-                lambda s, w=window: _lagged_rolling(s, w)
-            )
-
         # Goaltending rolling (NEW - Season aggregate gets rolling average for stability)
         if "team_save_pct" in logs.columns:
             roll_features[f"rolling_save_pct_{window}"] = group["team_save_pct"].transform(
@@ -590,18 +577,11 @@ def engineer_team_features(logs: pd.DataFrame, rolling_windows: Iterable[int] = 
             "team_altitude_ft",
             "altitude_diff",
             "is_high_altitude",
-            "travel_distance",
-            "timezone_change",
-            "is_west_to_east",
-            "is_east_to_west",
             "consecutive_home_prior",
             "consecutive_away_prior",
             "travel_burden",
             "consecutive_wins_prior",
             "consecutive_losses_prior",
-            "h2h_win_pct",
-            "h2h_goal_diff",
-            "h2h_games_played",
         ]
     )
     feature_cols.extend(
@@ -695,10 +675,6 @@ def engineer_team_features(logs: pd.DataFrame, rolling_windows: Iterable[int] = 
             feature_cols.append(f"rolling_penalty_diff_{window}")
         if f"rolling_penalty_minutes_{window}" in logs.columns:
             feature_cols.append(f"rolling_penalty_minutes_{window}")
-
-        # Shot diversity rolling
-        if f"rolling_shot_diversity_{window}" in logs.columns:
-            feature_cols.append(f"rolling_shot_diversity_{window}")
 
         # Goaltending rolling
         if f"rolling_save_pct_{window}" in logs.columns:

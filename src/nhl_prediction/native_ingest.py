@@ -40,29 +40,6 @@ def _calculate_shot_angle(x: float, y: float, goal_x: float = 89.0) -> float:
     return math.degrees(angle_rad)
 
 
-def _calculate_shot_diversity(shot_types: Dict[str, int]) -> float:
-    """
-    Calculate Shannon entropy for shot type diversity.
-
-    Higher values = more diverse shot selection (harder to defend).
-    Returns 0.0 if no shots or only one shot type.
-    """
-    if not shot_types:
-        return 0.0
-
-    total_shots = sum(shot_types.values())
-    if total_shots == 0:
-        return 0.0
-
-    entropy = 0.0
-    for count in shot_types.values():
-        if count > 0:
-            probability = count / total_shots
-            entropy -= probability * math.log2(probability)
-
-    return entropy
-
-
 def _is_high_danger_location(distance: float, angle: float) -> bool:
     """
     Classify shot as high-danger based on location.
@@ -376,7 +353,6 @@ def _process_game_plays(game_id: str, pbp: Dict[str, Any], xg_model: ExpectedGoa
             "penaltyMinutes": 0,
             "faceoffsWon": 0,
             "faceoffsLost": 0,
-            "shotTypeDiversity": 0.0,  # Shannon entropy of shot types
         },
         away_team_id: {
             "teamId": away_team_id,
@@ -411,14 +387,7 @@ def _process_game_plays(game_id: str, pbp: Dict[str, Any], xg_model: ExpectedGoa
             "penaltyMinutes": 0,
             "faceoffsWon": 0,
             "faceoffsLost": 0,
-            "shotTypeDiversity": 0.0,  # Shannon entropy of shot types
         },
-    }
-
-    # Track shot types for diversity calculation
-    shot_types = {
-        home_team_id: {},
-        away_team_id: {},
     }
 
     home_defending = None
@@ -487,11 +456,6 @@ def _process_game_plays(game_id: str, pbp: Dict[str, Any], xg_model: ExpectedGoa
             stats[acting_team]["xGoalsFor"] += xg
             stats[opponent_team]["xGoalsAgainst"] += xg
 
-            # Track shot types for diversity
-            shot_type = features.shot_type
-            if shot_type:
-                shot_types[acting_team][shot_type] = shot_types[acting_team].get(shot_type, 0) + 1
-
             # High-danger shots
             if _is_high_danger_location(features.distance, features.angle):
                 stats[acting_team]["highDangerShotsFor"] += 1
@@ -551,9 +515,6 @@ def _process_game_plays(game_id: str, pbp: Dict[str, Any], xg_model: ExpectedGoa
 
         # Penalty differential (positive = drew more penalties than took)
         s["penaltyDifferential"] = s["penaltiesDrawn"] - s["penaltiesTaken"]
-
-        # Shot type diversity (Shannon entropy)
-        s["shotTypeDiversity"] = _calculate_shot_diversity(shot_types[team_id])
 
     return stats
 
