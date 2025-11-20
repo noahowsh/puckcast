@@ -1,0 +1,2 @@
+train_seasons,test_season,hyperparameters,test_accuracy,test_roc_auc,test_log_loss,baseline_accuracy,edge_over_baseline,improvement_vs_old,correct_predictions,total_games,trained_at
+"['20182019', '20192020', '20202021', '20212022', '20222023', '20232024', '20242025']",20252026,"{'C': 1.0, 'decay': 1.0}",0.5377358490566038,0.5789075864263834,0.6888776635252891,0.5377358490566038,0.0,-0.02196415094339621,171,318,2025-11-20T20:00:17.909714

@@ -1,8 +1,35 @@
 @import "tailwindcss";
 
+/* ============================================
+   PUCKCAST PREMIUM - Gritty Hockey Aesthetic
+   ============================================ */
+
 :root {
+  /* Dark ice background */
   --background: #020617;
-  --foreground: #f8fafc;
+  --foreground: #f1f5f9;
+
+  /* Premium accent colors */
+  --ice-blue: #0ea5e9;
+  --ice-blue-dark: #0284c7;
+  --ice-cyan: #06b6d4;
+  --lightning-gold: #fbbf24;
+  --lightning-orange: #f59e0b;
+
+  /* Card & surface colors */
+  --card-bg: rgba(15, 23, 42, 0.6);
+  --card-border: rgba(14, 165, 233, 0.2);
+  --card-glow: rgba(14, 165, 233, 0.1);
+
+  /* Text colors */
+  --text-primary: #f1f5f9;
+  --text-secondary: #cbd5e1;
+  --text-muted: #64748b;
+
+  /* Status colors */
+  --success: #10b981;
+  --warning: #f59e0b;
+  --danger: #ef4444;
 }
 
 @theme inline {
@@ -10,19 +37,296 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-  --color-card: rgba(255, 255, 255, 0.04);
+  --color-card: var(--card-bg);
+}
+
+/* ============================================
+   GLOBAL STYLES
+   ============================================ */
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
   min-height: 100vh;
-  background: radial-gradient(circle at top, rgba(56, 189, 248, 0.15), transparent 45%),
-    radial-gradient(circle at 20% 20%, rgba(74, 222, 128, 0.12), transparent 40%),
-    #020617;
-  color: var(--foreground);
-  font-family: var(--font-geist-sans), "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  /* Gritty ice rink background with multiple gradients */
+  background:
+    radial-gradient(ellipse at top, rgba(14, 165, 233, 0.15), transparent 50%),
+    radial-gradient(ellipse at bottom left, rgba(6, 182, 212, 0.1), transparent 50%),
+    radial-gradient(circle at 80% 30%, rgba(59, 130, 246, 0.08), transparent 40%),
+    linear-gradient(180deg, #020617 0%, #0c1629 50%, #020617 100%);
+  background-attachment: fixed;
+  color: var(--text-primary);
+  font-family: var(--font-geist-sans), "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", sans-serif;
   line-height: 1.6;
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
-* {
-  box-sizing: border-box;
+/* ============================================
+   TYPOGRAPHY
+   ============================================ */
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  color: var(--text-primary);
+}
+
+h1 {
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-weight: 800;
+  background: linear-gradient(135deg, #f1f5f9 0%, #0ea5e9 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 40px rgba(14, 165, 233, 0.3);
+}
+
+h2 {
+  font-size: clamp(1.875rem, 4vw, 3rem);
+  background: linear-gradient(135deg, #f1f5f9 0%, #06b6d4 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+h3 {
+  font-size: clamp(1.5rem, 3vw, 2.25rem);
+}
+
+/* ============================================
+   PREMIUM COMPONENTS
+   ============================================ */
+
+/* Glass card effect */
+.glass-card {
+  background: linear-gradient(
+    135deg,
+    rgba(15, 23, 42, 0.8) 0%,
+    rgba(15, 23, 42, 0.6) 100%
+  );
+  backdrop-filter: blur(16px) saturate(180%);
+  border: 1px solid var(--card-border);
+  border-radius: 1rem;
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05),
+    0 0 0 1px rgba(14, 165, 233, 0.1);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.glass-card:hover {
+  border-color: var(--ice-blue);
+  box-shadow:
+    0 12px 48px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    0 0 0 1px var(--ice-blue),
+    0 0 32px rgba(14, 165, 233, 0.2);
+  transform: translateY(-2px);
+}
+
+/* Ice glow effect */
+.ice-glow {
+  position: relative;
+}
+
+.ice-glow::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: inherit;
+  padding: 2px;
+  background: linear-gradient(135deg, var(--ice-blue), var(--ice-cyan));
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0.6;
+  transition: opacity 0.3s ease;
+}
+
+.ice-glow:hover::before {
+  opacity: 1;
+}
+
+/* Neon text effect */
+.neon-text {
+  color: var(--ice-blue);
+  text-shadow:
+    0 0 10px rgba(14, 165, 233, 0.8),
+    0 0 20px rgba(14, 165, 233, 0.6),
+    0 0 30px rgba(14, 165, 233, 0.4);
+  animation: neon-flicker 3s ease-in-out infinite alternate;
+}
+
+@keyframes neon-flicker {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.95; }
+}
+
+/* Premium button styles */
+.btn-primary {
+  background: linear-gradient(135deg, var(--ice-blue) 0%, var(--ice-blue-dark) 100%);
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.75rem;
+  font-weight: 600;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow:
+    0 4px 12px rgba(14, 165, 233, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 8px 24px rgba(14, 165, 233, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+}
+
+/* Ice crack texture overlay (subtle) */
+.ice-texture {
+  position: relative;
+  overflow: hidden;
+}
+
+.ice-texture::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image:
+    linear-gradient(90deg, transparent 90%, rgba(14, 165, 233, 0.03) 90%),
+    linear-gradient(0deg, transparent 90%, rgba(14, 165, 233, 0.03) 90%);
+  background-size: 40px 40px;
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+/* ============================================
+   ANIMATIONS
+   ============================================ */
+
+@keyframes slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(14, 165, 233, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 40px rgba(14, 165, 233, 0.6);
+  }
+}
+
+.animate-slide-up {
+  animation: slide-up 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.animate-fade-in {
+  animation: fade-in 0.8s ease-in-out;
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+/* ============================================
+   SCROLLBAR STYLING
+   ============================================ */
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--background);
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, var(--ice-blue), var(--ice-cyan));
+  border-radius: 10px;
+  border: 2px solid var(--background);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, var(--ice-cyan), var(--ice-blue));
+}
+
+/* ============================================
+   MOBILE RESPONSIVE
+   ============================================ */
+
+@media (max-width: 768px) {
+  h1 {
+    font-size: 2.5rem;
+  }
+
+  h2 {
+    font-size: 2rem;
+  }
+
+  .glass-card {
+    border-radius: 0.75rem;
+  }
+
+  body {
+    font-size: 0.9375rem;
+  }
+}
+
+@media (max-width: 480px) {
+  h1 {
+    font-size: 2rem;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+  }
+}
+
+/* ============================================
+   SELECTION STYLING
+   ============================================ */
+
+::selection {
+  background: rgba(14, 165, 233, 0.3);
+  color: var(--text-primary);
+}
+
+::-moz-selection {
+  background: rgba(14, 165, 233, 0.3);
+  color: var(--text-primary);
 }

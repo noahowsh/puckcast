@@ -1,18 +1,57 @@
-<svg width="120" height="120" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Puckcast puck with orbiting rings">
+<svg width="120" height="120" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Puckcast - Hockey Analytics">
   <defs>
-    <radialGradient id="puck-core" cx="50%" cy="40%" r="60%">
-      <stop offset="0%" stop-color="#ecfccb" />
-      <stop offset="50%" stop-color="#86efac" />
-      <stop offset="100%" stop-color="#052927" />
+    <!-- Premium ice gradient -->
+    <radialGradient id="ice-core" cx="50%" cy="50%" r="60%">
+      <stop offset="0%" stop-color="#0ea5e9" stop-opacity="0.9"/>
+      <stop offset="50%" stop-color="#0284c7" stop-opacity="0.8"/>
+      <stop offset="100%" stop-color="#0c4a6e" stop-opacity="1"/>
     </radialGradient>
-    <linearGradient id="ring-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" stop-color="#bef264" />
-      <stop offset="100%" stop-color="#34d399" />
+
+    <!-- Lightning bolt gradient -->
+    <linearGradient id="bolt-glow" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#fbbf24"/>
+      <stop offset="50%" stop-color="#f59e0b"/>
+      <stop offset="100%" stop-color="#d97706"/>
     </linearGradient>
+
+    <!-- Ice texture -->
+    <pattern id="ice-pattern" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
+      <path d="M0 10 L20 10" stroke="#06b6d4" stroke-width="0.5" opacity="0.2"/>
+      <path d="M10 0 L10 20" stroke="#06b6d4" stroke-width="0.5" opacity="0.2"/>
+    </pattern>
+
+    <!-- Glow filter -->
+    <filter id="neon-glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="2" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
   </defs>
-  <rect width="120" height="120" rx="24" fill="#020b16" />
-  <circle cx="60" cy="60" r="30" fill="url(#puck-core)" stroke="#0f172a" stroke-width="3" />
-  <rect x="40" y="55" width="40" height="10" rx="5" fill="#03131f" opacity="0.7" />
-  <ellipse cx="60" cy="60" rx="50" ry="18" fill="none" stroke="url(#ring-gradient)" stroke-width="3" opacity="0.9" />
-  <ellipse cx="60" cy="60" rx="62" ry="24" fill="none" stroke="url(#ring-gradient)" stroke-width="2" stroke-dasharray="18 10" opacity="0.6" />
+
+  <!-- Dark background with texture -->
+  <rect width="120" height="120" rx="24" fill="#020617"/>
+  <rect width="120" height="120" rx="24" fill="url(#ice-pattern)" opacity="0.1"/>
+
+  <!-- Hockey puck base (3D effect) -->
+  <ellipse cx="60" cy="75" rx="45" ry="12" fill="#000000" opacity="0.3"/>
+  <ellipse cx="60" cy="60" rx="42" ry="14" fill="url(#ice-core)" stroke="#0ea5e9" stroke-width="2" filter="url(#neon-glow)"/>
+  <ellipse cx="60" cy="58" rx="42" ry="14" fill="#0c4a6e" stroke="#0284c7" stroke-width="2.5"/>
+
+  <!-- Ice texture on puck -->
+  <ellipse cx="60" cy="58" rx="40" ry="13" fill="none" stroke="#06b6d4" stroke-width="0.5" opacity="0.3" stroke-dasharray="4 4"/>
+  <ellipse cx="60" cy="58" rx="35" ry="11" fill="none" stroke="#0ea5e9" stroke-width="0.5" opacity="0.2" stroke-dasharray="3 3"/>
+
+  <!-- Lightning bolt (prediction power) -->
+  <g filter="url(#neon-glow)">
+    <path d="M 65 25 L 55 50 L 62 50 L 57 75 L 73 45 L 65 45 L 72 25 Z"
+          fill="url(#bolt-glow)"
+          stroke="#fbbf24"
+          stroke-width="1.5"
+          stroke-linejoin="round"/>
+  </g>
+
+  <!-- Highlight shine -->
+  <ellipse cx="45" cy="50" rx="12" ry="4" fill="white" opacity="0.25" transform="rotate(-20 45 50)"/>
+
+  <!-- Orbital ring (data tracking) -->
+  <ellipse cx="60" cy="60" rx="52" ry="18" fill="none" stroke="#06b6d4" stroke-width="1.5" opacity="0.4" stroke-dasharray="8 6"/>
 </svg>
