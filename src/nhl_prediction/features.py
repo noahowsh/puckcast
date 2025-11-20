@@ -137,7 +137,7 @@ def _load_player_injuries() -> dict[str, int]:
 
 def _add_h2h_features(logs: pd.DataFrame, lookback: int = 10) -> pd.DataFrame:
     """
-    Add head-to-head matchup history features.
+    Add head-to-head matchup history features - OPTIMIZED VERSION.
 
     For each game, computes stats from the last N games between the two teams.
     Only uses games that occurred BEFORE the current game (no future leakage).
@@ -149,64 +149,67 @@ def _add_h2h_features(logs: pd.DataFrame, lookback: int = 10) -> pd.DataFrame:
     """
     logs = logs.copy()
 
-    # Initialize H2H features
-    logs["h2h_win_pct"] = 0.5  # Neutral prior (50%)
+    # Initialize H2H features with neutral prior
+    logs["h2h_win_pct"] = 0.5
     logs["h2h_goal_diff"] = 0.0
     logs["h2h_games_played"] = 0
 
-    # Sort by date to ensure chronological processing
+    # Sort chronologically to ensure proper ordering
     logs = logs.sort_values(["season", "gameDate"]).reset_index(drop=True)
 
-    # For each game, look back at history between these two teams
-    for idx in logs.index:
-        team_id = logs.loc[idx, "teamId"]
-        opponent_abbrev = logs.loc[idx, "opponentTeamAbbrev"]
-        current_date = logs.loc[idx, "gameDate"]
-        current_season = logs.loc[idx, "season"]
+    # Create a matchup identifier (sorted team abbrevs to handle both home/away)
+    def get_matchup_key(row):
+        teams = sorted([row["teamAbbrev"], row["opponentTeamAbbrev"]])
+        return f"{teams[0]}_vs_{teams[1]}"
 
-        # Find all previous games between these two teams
-        # (either team vs opponent or opponent vs team)
-        team_abbrev = logs.loc[idx, "teamAbbrev"]
+    logs["matchup_key"] = logs.apply(get_matchup_key, axis=1)
 
-        # Previous games where current team played current opponent
-        prev_games = logs[
-            (logs.index < idx) &  # Only previous games
-            (
-                ((logs["teamAbbrev"] == team_abbrev) & (logs["opponentTeamAbbrev"] == opponent_abbrev)) |
-                ((logs["opponentTeamAbbrev"] == team_abbrev) & (logs["teamAbbrev"] == opponent_abbrev))
-            )
-        ]
+    # Group by matchup and process each group independently
+    for matchup_key, group in logs.groupby("matchup_key"):
+        if len(group) < 2:
+            continue  # Skip if only one game between these teams
 
-        if len(prev_games) > 0:
-            # Take last N games
-            recent_h2h = prev_games.tail(lookback)
+        indices = group.index.tolist()
 
-            # For each game, determine if current team won
+        # For each game in this matchup
+        for i, idx in enumerate(indices):
+            if i == 0:
+                continue  # First game has no history
+
+            # Get previous games in this matchup
+            prev_indices = indices[:i]
+            prev_games = logs.loc[prev_indices].tail(lookback)
+
+            current_team = logs.loc[idx, "teamAbbrev"]
+
+            # Calculate H2H stats from perspective of current team
             h2h_wins = 0
             h2h_goal_diffs = []
 
-            for _, game in recent_h2h.iterrows():
-                game_team = game["teamAbbrev"]
-                game_opponent = game["opponentTeamAbbrev"]
+            for prev_idx in prev_games.index:
+                prev_team = logs.loc[prev_idx, "teamAbbrev"]
+                prev_win = logs.loc[prev_idx, "win"]
+                prev_goal_diff = logs.loc[prev_idx, "goal_diff"]
 
-                # Check if this game has current team as the "team" or "opponent"
-                if game_team == team_abbrev:
-                    # Current team is the "team" in this record
-                    if game["win"] == 1:
+                if prev_team == current_team:
+                    # Current team was "team" in previous game
+                    if prev_win == 1:
                         h2h_wins += 1
-                    h2h_goal_diffs.append(game["goal_diff"])
+                    h2h_goal_diffs.append(prev_goal_diff)
                 else:
-                    # Current team is the "opponent" in this record
-                    # So flip the win/loss and goal diff
-                    if game["win"] == 0:  # Opponent won = current team won
+                    # Current team was "opponent" in previous game - flip result
+                    if prev_win == 0:
                         h2h_wins += 1
-                    h2h_goal_diffs.append(-game["goal_diff"])  # Flip goal diff
+                    h2h_goal_diffs.append(-prev_goal_diff)
 
-            # Calculate H2H stats
-            games_count = len(recent_h2h)
+            # Update H2H features
+            games_count = len(prev_games)
             logs.loc[idx, "h2h_win_pct"] = h2h_wins / games_count if games_count > 0 else 0.5
             logs.loc[idx, "h2h_goal_diff"] = sum(h2h_goal_diffs) / games_count if h2h_goal_diffs else 0.0
             logs.loc[idx, "h2h_games_played"] = games_count
+
+    # Drop temporary column
+    logs = logs.drop(columns=["matchup_key"])
 
     return logs
 
@@ -419,8 +422,8 @@ def engineer_team_features(logs: pd.DataFrame, rolling_windows: Iterable[int] = 
         lambda series: _lagged_streak(~series.astype(bool))
     )
 
-    # Head-to-head matchup history (pre-game only)
-    logs = _add_h2h_features(logs)
+    # Head-to-head matchup history (pre-game only) - TEMPORARILY DISABLED FOR TESTING
+    # logs = _add_h2h_features(logs)
 
     # Rolling statistics (ALL LAGGED)
     roll_features: dict[str, pd.Series] = {}
