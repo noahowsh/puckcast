@@ -494,7 +494,8 @@ def load_native_game_logs(seasons: List[str]) -> pd.DataFrame:
     """
     LOGGER.info(f"Loading native game logs for seasons: {seasons}")
 
-    client = GamecenterClient()
+    # Use slower rate limiting to avoid 503 errors
+    client = GamecenterClient(rate_limit_seconds=1.0)
 
     # Load or train xG model
     xg_model = _load_cached_xg_model()
@@ -529,6 +530,8 @@ def load_native_game_logs(seasons: List[str]) -> pd.DataFrame:
         LOGGER.info(f"Processing season {season_id}...")
 
         game_ids = _fetch_games_for_season(season_id, client)
+        consecutive_errors = 0
+        max_consecutive_errors = 10  # Stop after 10 consecutive failures
 
         for i, game_id in enumerate(game_ids):
             if i % 100 == 0:
@@ -539,7 +542,14 @@ def load_native_game_logs(seasons: List[str]) -> pd.DataFrame:
 
                 # Skip if game not played yet
                 if pbp.get("gameState") not in ["OFF", "FINAL"]:
+                    consecutive_errors += 1
+                    if consecutive_errors >= max_consecutive_errors:
+                        LOGGER.info(f"Reached unplayed games, processed {len(all_team_games)} team-games so far")
+                        break
                     continue
+
+                # Successfully processed game - reset error counter
+                consecutive_errors = 0
 
                 # Process game
                 game_stats = _process_game_plays(game_id, pbp, xg_model)
@@ -550,10 +560,17 @@ def load_native_game_logs(seasons: List[str]) -> pd.DataFrame:
                     all_team_games.append(team_stats)
 
             except Exception as e:
-                # Game doesn't exist or hasn't been played
-                if i < 50:  # Log errors for first 50 games
-                    LOGGER.debug(f"Skipping game {game_id}: {e}")
-                break  # Stop when we hit games that don't exist
+                consecutive_errors += 1
+                error_msg = str(e)
+
+                # Log first few errors for debugging
+                if i < 20:
+                    LOGGER.warning(f"Error processing game {game_id}: {error_msg[:100]}")
+
+                # Stop if we hit too many consecutive errors (likely end of season or API issues)
+                if consecutive_errors >= max_consecutive_errors:
+                    LOGGER.info(f"Stopped after {consecutive_errors} consecutive errors. Processed {len(all_team_games)} team-games.")
+                    break
 
     # Convert to DataFrame
     df = pd.DataFrame(all_team_games)
