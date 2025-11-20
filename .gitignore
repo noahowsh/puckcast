@@ -63,6 +63,7 @@ data/moneypuck_all_games.csv
 data/moneypuck_*.parquet
 data/raw/
 data/processed/
+data/cache/
 
 # Daily prediction exports
 predictions_*.csv
