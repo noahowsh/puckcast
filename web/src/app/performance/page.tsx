@@ -38,104 +38,119 @@ const edgeDistribution = bucketUpcomingGames(snapshots);
 
 export default function PerformancePage() {
   return (
-    <div className="relative overflow-hidden">
-      <div className="relative mx-auto flex max-w-6xl flex-col gap-12 px-6 pb-16 pt-8 lg:px-12">
-        <header className="space-y-3">
-          <p className="text-sm uppercase tracking-[0.4em] text-lime-300">Performance analytics</p>
-          <h1 className="text-4xl font-semibold text-white">Model diagnostics & insights.</h1>
-          <p className="max-w-3xl text-base text-white/75">
+    <div className="relative min-h-screen bg-slate-950">
+      {/* Subtle background gradient */}
+      <div className="pointer-events-none absolute inset-0">
+        <div className="absolute inset-0 bg-gradient-to-b from-sky-950/20 via-slate-950 to-slate-950" />
+      </div>
+
+      <div className="relative mx-auto max-w-7xl px-6 py-16 lg:px-8">
+        {/* Header */}
+        <section className="mb-20">
+          <div className="mb-2 inline-flex items-center gap-2 rounded-full border border-sky-500/20 bg-sky-500/5 px-3 py-1">
+            <span className="text-xs font-medium text-sky-400">Performance</span>
+          </div>
+          <h1 className="mb-4 text-4xl font-bold text-white lg:text-5xl">Model diagnostics</h1>
+          <p className="max-w-3xl text-lg text-slate-300">
             Track current season performance, upcoming slate breakdowns, and historical model analysis all in one place.
           </p>
-        </header>
+        </section>
 
         {/* Model Performance Overview */}
-        <section className="grid gap-6 md:grid-cols-4">
-          <div className="rounded-3xl border border-white/10 bg-gradient-to-br from-lime-300/10 to-emerald-400/10 p-5">
-            <p className="text-xs uppercase tracking-[0.5em] text-white/60">Test Accuracy</p>
-            <p className="mt-3 text-3xl font-semibold text-lime-300">{pct(overview.accuracy)}</p>
-            <p className="text-xs uppercase tracking-[0.4em] text-white/50">2023-24 holdout</p>
-          </div>
-          <div className="rounded-3xl border border-white/10 bg-black/20 p-5">
-            <p className="text-xs uppercase tracking-[0.5em] text-white/60">Baseline</p>
-            <p className="mt-3 text-3xl font-semibold text-white">{pct(overview.baseline)}</p>
-            <p className="text-xs uppercase tracking-[0.4em] text-white/50">Home win rate</p>
-          </div>
-          <div className="rounded-3xl border border-white/10 bg-black/20 p-5">
-            <p className="text-xs uppercase tracking-[0.5em] text-white/60">Edge</p>
-            <p className="mt-3 text-3xl font-semibold text-white">+{((overview.accuracy - overview.baseline) * 100).toFixed(1)}</p>
-            <p className="text-xs uppercase tracking-[0.4em] text-white/50">pts over baseline</p>
-          </div>
-          <div className="rounded-3xl border border-white/10 bg-black/20 p-5">
-            <p className="text-xs uppercase tracking-[0.5em] text-white/60">Games</p>
-            <p className="mt-3 text-3xl font-semibold text-white">{overview.games.toLocaleString()}</p>
-            <p className="text-xs uppercase tracking-[0.4em] text-white/50">validated</p>
+        <section className="mb-20">
+          <h2 className="mb-8 text-2xl font-bold text-white">Key Metrics</h2>
+          <div className="grid gap-6 md:grid-cols-4">
+            <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-6">
+              <p className="text-sm font-medium text-slate-400">Test Accuracy</p>
+              <p className="mt-2 text-3xl font-bold text-sky-400">{pct(overview.accuracy)}</p>
+              <p className="mt-1 text-sm text-slate-500">2023-24 holdout</p>
+            </div>
+            <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-6">
+              <p className="text-sm font-medium text-slate-400">Baseline</p>
+              <p className="mt-2 text-3xl font-bold text-white">{pct(overview.baseline)}</p>
+              <p className="mt-1 text-sm text-slate-500">Home win rate</p>
+            </div>
+            <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-6">
+              <p className="text-sm font-medium text-slate-400">Edge</p>
+              <p className="mt-2 text-3xl font-bold text-white">+{((overview.accuracy - overview.baseline) * 100).toFixed(1)}</p>
+              <p className="mt-1 text-sm text-slate-500">pts over baseline</p>
+            </div>
+            <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-6">
+              <p className="text-sm font-medium text-slate-400">Games</p>
+              <p className="mt-2 text-3xl font-bold text-white">{overview.games.toLocaleString()}</p>
+              <p className="mt-1 text-sm text-slate-500">validated</p>
+            </div>
           </div>
         </section>
 
         {/* Upcoming Slate Focus */}
-        <section className="rounded-[36px] border border-white/10 bg-white/5 p-8 shadow-2xl shadow-black/30">
-          <p className="text-sm uppercase tracking-[0.4em] text-lime-300">Today's Top Matchups</p>
-          <p className="mt-2 text-xs text-white/60">Teams with the highest model confidence</p>
-          <div className="mt-6 overflow-x-auto">
-            <table className="min-w-full divide-y divide-white/10 text-sm">
-              <thead className="text-white/60">
-                <tr>
-                  <th className="py-3 pr-4 text-left">Team</th>
-                  <th className="py-3 px-4 text-left">Record</th>
-                  <th className="py-3 px-4 text-left">Games listed</th>
-                  <th className="py-3 px-4 text-left">Avg win %</th>
-                  <th className="py-3 px-4 text-left">Avg edge</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-white/5 text-white/80">
-                {topTeams.map((team) => (
-                  <tr key={team.team}>
-                    <td className="py-3 pr-4 font-semibold text-white">{team.team}</td>
-                    <td className="py-3 px-4 text-white/70">{team.record ?? "—"}</td>
-                    <td className="py-3 px-4">{team.games}</td>
-                    <td className="py-3 px-4">{pct(team.avgProb)}</td>
-                    <td className="py-3 px-4">{(team.avgEdge * 100).toFixed(1)} pts</td>
+        <section className="mb-20">
+          <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-6">
+            <h2 className="mb-2 text-xl font-bold text-white">Today's Top Matchups</h2>
+            <p className="mb-6 text-sm text-slate-400">Teams with the highest model confidence</p>
+            <div className="overflow-x-auto">
+              <table className="min-w-full text-sm">
+                <thead className="border-b border-slate-800">
+                  <tr className="text-slate-400">
+                    <th className="py-3 pr-4 text-left font-medium">Team</th>
+                    <th className="py-3 px-4 text-left font-medium">Record</th>
+                    <th className="py-3 px-4 text-left font-medium">Games Listed</th>
+                    <th className="py-3 px-4 text-left font-medium">Avg Win %</th>
+                    <th className="py-3 px-4 text-left font-medium">Avg Edge</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody className="divide-y divide-slate-800/50">
+                  {topTeams.map((team) => (
+                    <tr key={team.team} className="text-slate-300">
+                      <td className="py-3 pr-4 font-semibold text-white">{team.team}</td>
+                      <td className="py-3 px-4">{team.record ?? "—"}</td>
+                      <td className="py-3 px-4">{team.games}</td>
+                      <td className="py-3 px-4">{pct(team.avgProb)}</td>
+                      <td className="py-3 px-4 text-sky-400">{(team.avgEdge * 100).toFixed(1)} pts</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
         </section>
 
         {/* Edge Distribution */}
-        <section className="rounded-[36px] border border-white/10 bg-white/5 p-8 shadow-2xl shadow-black/30">
-          <p className="text-sm uppercase tracking-[0.4em] text-lime-300">Edge distribution across upcoming games</p>
-          <div className="mt-6 space-y-4">
-            {edgeDistribution.buckets.map((bucket) => (
-              <div key={bucket.label}>
-                <div className="flex items-center justify-between text-xs uppercase tracking-[0.4em] text-white/60">
-                  <span>{bucket.label}</span>
-                  <span>{bucket.count} slots</span>
+        <section className="mb-20">
+          <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-6">
+            <h2 className="mb-6 text-xl font-bold text-white">Edge Distribution</h2>
+            <p className="mb-6 text-sm text-slate-400">Upcoming games by confidence level</p>
+            <div className="space-y-4">
+              {edgeDistribution.buckets.map((bucket) => (
+                <div key={bucket.label}>
+                  <div className="mb-2 flex items-center justify-between text-sm">
+                    <span className="font-medium text-slate-300">{bucket.label}</span>
+                    <span className="text-slate-400">{bucket.count} games</span>
+                  </div>
+                  <div className="h-3 w-full rounded-full bg-slate-800">
+                    <div
+                      className="h-full rounded-full bg-sky-500"
+                      style={{ width: edgeDistribution.total ? `${(bucket.count / edgeDistribution.total) * 100}%` : "0%" }}
+                    />
+                  </div>
                 </div>
-                <div className="mt-2 h-2.5 w-full rounded-full bg-white/10">
-                  <div
-                    className="h-full rounded-full bg-gradient-to-r from-lime-300 via-emerald-400 to-cyan-300"
-                    style={{ width: edgeDistribution.total ? `${(bucket.count / edgeDistribution.total) * 100}%` : "0%" }}
-                  />
-                </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </section>
 
         {/* Confidence Calibration */}
-        <section className="rounded-[36px] border border-white/10 bg-gradient-to-br from-black/40 via-slate-900/60 to-slate-950 p-8 shadow-2xl shadow-black/40">
-          <p className="text-sm uppercase tracking-[0.4em] text-lime-300">Confidence Calibration</p>
-          <p className="mt-2 text-xs text-white/60">Accuracy by prediction strength (2023-24 test set)</p>
-          <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <section className="mb-20">
+          <h2 className="mb-8 text-2xl font-bold text-white">Confidence Calibration</h2>
+          <p className="mb-6 text-sm text-slate-400">Accuracy by prediction strength (2023-24 test set)</p>
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {confidenceBuckets.map((bucket) => {
-              const strength = Math.min(Math.max((bucket.accuracy - 0.5) * 3, 0), 1);
-              const background = `linear-gradient(135deg, rgba(190,242,100,${0.25 + strength * 0.5}), rgba(34,197,94,${0.2 + strength * 0.5}))`;
+              const isStrong = bucket.accuracy > 0.6;
               return (
-                <div key={bucket.label} className="rounded-3xl border border-white/10 p-5" style={{ background }}>
-                  <p className="text-xs uppercase tracking-[0.4em] text-white/70">{bucket.label}</p>
-                  <p className="mt-2 text-3xl font-semibold text-white">{pct(bucket.accuracy)}</p>
-                  <p className="text-xs uppercase tracking-[0.4em] text-white/60">{bucket.count.toLocaleString()} games</p>
+                <div key={bucket.label} className={`rounded-xl border p-6 ${isStrong ? 'border-sky-500/30 bg-sky-500/5' : 'border-slate-800 bg-slate-900/50'}`}>
+                  <p className="text-sm font-medium text-slate-400">{bucket.label}</p>
+                  <p className="mt-2 text-3xl font-bold text-white">{pct(bucket.accuracy)}</p>
+                  <p className="mt-1 text-sm text-slate-500">{bucket.count.toLocaleString()} games</p>
                 </div>
               );
             })}
@@ -143,41 +158,43 @@ export default function PerformancePage() {
         </section>
 
         {/* Betting Strategies */}
-        <section className="rounded-[36px] border border-white/10 bg-white/5 p-8 shadow-2xl shadow-black/30">
-          <p className="text-sm uppercase tracking-[0.4em] text-lime-300">Strategy Performance</p>
-          <p className="mt-2 text-xs text-white/60">Historical betting strategy results (for reference only)</p>
-          <div className="mt-6 overflow-x-auto">
-            <table className="min-w-full divide-y divide-white/10 text-sm">
-              <thead className="text-white/60">
-                <tr>
-                  <th className="py-3 pr-4 text-left">Strategy</th>
-                  <th className="py-3 px-4 text-left">Win %</th>
-                  <th className="py-3 px-4 text-left">ROI / bet</th>
-                  <th className="py-3 px-4 text-left">Units</th>
-                  <th className="py-3 px-4 text-left">Bets</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-white/5 text-white/80">
-                {strategies.map((strategy) => (
-                  <tr key={strategy.name}>
-                    <td className="py-3 pr-4">
-                      <p className="font-semibold text-white">{strategy.name}</p>
-                      <p className="text-xs text-white/60">{strategy.note}</p>
-                    </td>
-                    <td className="py-3 px-4">{pct(strategy.winRate)}</td>
-                    <td className="py-3 px-4">{((strategy.units / strategy.bets) * 100).toFixed(1)}%</td>
-                    <td className="py-3 px-4 font-semibold text-lime-300">{strategy.units > 0 ? `+${strategy.units}` : strategy.units}u</td>
-                    <td className="py-3 px-4">{strategy.bets.toLocaleString()}</td>
+        <section className="mb-20">
+          <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-6">
+            <h2 className="mb-2 text-xl font-bold text-white">Strategy Performance</h2>
+            <p className="mb-6 text-sm text-slate-400">Historical betting strategy results (for reference only)</p>
+            <div className="overflow-x-auto">
+              <table className="min-w-full text-sm">
+                <thead className="border-b border-slate-800">
+                  <tr className="text-slate-400">
+                    <th className="py-3 pr-4 text-left font-medium">Strategy</th>
+                    <th className="py-3 px-4 text-left font-medium">Win %</th>
+                    <th className="py-3 px-4 text-left font-medium">ROI / Bet</th>
+                    <th className="py-3 px-4 text-left font-medium">Units</th>
+                    <th className="py-3 px-4 text-left font-medium">Bets</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-          <div className="mt-6 rounded-2xl border border-amber-200/30 bg-gradient-to-r from-amber-200/10 to-orange-200/10 p-5">
-            <p className="text-sm font-semibold text-amber-200">⚠️  Disclaimer</p>
-            <p className="mt-2 text-xs text-white/75">
-              These strategy results are shown for transparency and calibration analysis. We are not a betting service and do not recommend specific wagers. Always bet responsibly.
-            </p>
+                </thead>
+                <tbody className="divide-y divide-slate-800/50">
+                  {strategies.map((strategy) => (
+                    <tr key={strategy.name} className="text-slate-300">
+                      <td className="py-3 pr-4">
+                        <p className="font-semibold text-white">{strategy.name}</p>
+                        <p className="text-xs text-slate-500">{strategy.note}</p>
+                      </td>
+                      <td className="py-3 px-4">{pct(strategy.winRate)}</td>
+                      <td className="py-3 px-4">{((strategy.units / strategy.bets) * 100).toFixed(1)}%</td>
+                      <td className="py-3 px-4 font-semibold text-sky-400">{strategy.units > 0 ? `+${strategy.units}` : strategy.units}u</td>
+                      <td className="py-3 px-4">{strategy.bets.toLocaleString()}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <div className="mt-6 rounded-lg border border-sky-500/20 bg-sky-500/5 p-4">
+              <p className="mb-2 text-sm font-semibold text-sky-400">Disclaimer</p>
+              <p className="text-xs text-slate-300">
+                These strategy results are shown for transparency and calibration analysis. We are not a betting service and do not recommend specific wagers. Always bet responsibly.
+              </p>
+            </div>
           </div>
         </section>
       </div>

@@ -117,98 +117,117 @@ const formatGameDate = (iso?: string) => {
 
 export default function LeaderboardsPage() {
   return (
-    <div className="relative overflow-hidden">
-      <div className="relative mx-auto flex max-w-6xl flex-col gap-12 px-6 pb-16 pt-8 lg:px-12">
-        <header className="space-y-3">
-          <p className="text-sm uppercase tracking-[0.4em] text-lime-300">Leaderboards</p>
-          <h1 className="text-4xl font-semibold text-white">Power rankings for the 2025-26 grind.</h1>
-          <p className="max-w-3xl text-base text-white/75">
-            Scores lean on points, goal differential, tempo, and shot share. We lock a fresh table every Monday morning so the list represents the current week at a glance.
+    <div className="relative min-h-screen bg-slate-950">
+      {/* Subtle background gradient */}
+      <div className="pointer-events-none absolute inset-0">
+        <div className="absolute inset-0 bg-gradient-to-b from-sky-950/20 via-slate-950 to-slate-950" />
+      </div>
+
+      <div className="relative mx-auto max-w-7xl px-6 py-16 lg:px-8">
+        {/* Header */}
+        <section className="mb-20">
+          <div className="mb-2 inline-flex items-center gap-2 rounded-full border border-sky-500/20 bg-sky-500/5 px-3 py-1">
+            <span className="text-xs font-medium text-sky-400">Power Rankings</span>
+          </div>
+          <h1 className="mb-4 text-4xl font-bold text-white lg:text-5xl">Live power rankings</h1>
+          <p className="max-w-3xl text-lg text-slate-300">
+            Composite scores based on points, goal differential, tempo, and shot share. Updated every Monday to capture the current week's snapshot.
           </p>
-          <p className="text-xs uppercase tracking-[0.4em] text-white/50">Week of {leaderboardWeekLabel}</p>
-        </header>
+          <p className="mt-2 text-sm text-slate-500">Week of {leaderboardWeekLabel}</p>
+        </section>
 
-        <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {leaderboardHighlights.map((card) => (
-            <div key={card.label} className="rounded-3xl border border-white/10 bg-black/20 p-4">
-              <p className="text-xs uppercase tracking-[0.4em] text-white/50">{card.label}</p>
-              <p className="mt-3 text-2xl font-semibold text-white">{card.value}</p>
-              <p className="text-xs uppercase tracking-[0.4em] text-white/60">{card.detail}</p>
+        {/* Highlights */}
+        <section className="mb-20">
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            {leaderboardHighlights.map((card) => (
+              <div key={card.label} className="rounded-xl border border-slate-800 bg-slate-900/50 p-6">
+                <p className="text-sm font-medium text-slate-400">{card.label}</p>
+                <p className="mt-2 text-2xl font-bold text-white">{card.value}</p>
+                <p className="mt-1 text-sm text-slate-500">{card.detail}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Rankings Table */}
+        <section className="mb-20">
+          <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-6">
+            <div className="mb-4 flex items-center justify-between">
+              <h2 className="text-xl font-bold text-white">Full Rankings</h2>
+              <p className="text-sm text-slate-500">Week of {leaderboardWeekLabel}</p>
             </div>
-          ))}
-        </section>
-
-        <section className="rounded-[36px] border border-white/10 bg-white/5 p-8 shadow-2xl shadow-black/30">
-          <div className="flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
-            <p className="text-sm uppercase tracking-[0.4em] text-white/60">Power rankings</p>
-            <p className="text-xs uppercase tracking-[0.4em] text-white/40">Week of {leaderboardWeekLabel}</p>
-          </div>
-          <div className="mt-4 overflow-x-auto">
-            <table className="min-w-full divide-y divide-white/10 text-sm">
-              <thead className="text-white/60">
-                <tr>
-                  <th className="py-3 pr-4 text-left">Model rank</th>
-                  <th className="py-3 px-4 text-left">Team · standings</th>
-                  <th className="py-3 px-4 text-left">Record</th>
-                  <th className="py-3 px-4 text-left">Points</th>
-                  <th className="py-3 px-4 text-left">Goal diff</th>
-                  <th className="py-3 px-4 text-left">Power score</th>
-                  <th className="py-3 px-4 text-left">Movement</th>
-                  <th className="py-3 px-4 text-left">Model overlay</th>
-                  <th className="py-3 px-4 text-left">Next game</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-white/5 text-white/80">
-                {rankedRows.map((row) => (
-                  <tr key={row.team}>
-                    <td className="py-3 pr-4 font-semibold text-white">#{row.currentRank}</td>
-                    <td className="py-3 px-4 font-semibold text-white">
-                      <p>{row.team}</p>
-                      <p className="text-xs uppercase tracking-[0.4em] text-white/40">Standings #{row.standingsRank}</p>
-                    </td>
-                    <td className="py-3 px-4">{row.record}</td>
-                    <td className="py-3 px-4">{row.points}</td>
-                    <td className="py-3 px-4">
-                      {row.goalDifferential >= 0 ? "+" : ""}
-                      {row.goalDifferential}
-                    </td>
-                    <td className="py-3 px-4">
-                      <div className="text-white">
-                        <p className="font-semibold">{row.powerScore}</p>
-                        <p className="text-xs uppercase tracking-[0.4em] text-white/50">{pct(row.pointPctg)} pts pct</p>
-                      </div>
-                    </td>
-                    <td className="py-3 px-4 text-xs text-white/60">
-                      <Movement movement={row.movement} />
-                    </td>
-                    <td className="py-3 px-4">
-                      {row.overlay ? (
-                        <div className="text-xs uppercase tracking-[0.4em] text-white/50">
-                          {pct(row.overlay.avgProb)} win avg · {(row.overlay.avgEdge * 100).toFixed(1)} pts edge
-                        </div>
-                      ) : (
-                        <p className="text-xs uppercase tracking-[0.4em] text-white/40">No current slate data</p>
-                      )}
-                    </td>
-                    <td className="py-3 px-4">
-                      {row.nextGame ? (
-                        <div className="text-xs uppercase tracking-[0.4em] text-white/50">
-                          {row.nextGame.opponent} · {formatGameDate(row.nextGame.date)} · {row.nextGame.startTimeEt ?? "TBD"}
-                        </div>
-                      ) : (
-                        <p className="text-xs uppercase tracking-[0.4em] text-white/40">Idle on current slate</p>
-                      )}
-                    </td>
+            <div className="overflow-x-auto">
+              <table className="min-w-full text-sm">
+                <thead className="border-b border-slate-800">
+                  <tr className="text-slate-400">
+                    <th className="py-3 pr-4 text-left font-medium">Rank</th>
+                    <th className="py-3 px-4 text-left font-medium">Team</th>
+                    <th className="py-3 px-4 text-left font-medium">Record</th>
+                    <th className="py-3 px-4 text-left font-medium">Points</th>
+                    <th className="py-3 px-4 text-left font-medium">Goal Diff</th>
+                    <th className="py-3 px-4 text-left font-medium">Power Score</th>
+                    <th className="py-3 px-4 text-left font-medium">Movement</th>
+                    <th className="py-3 px-4 text-left font-medium">Model Win %</th>
+                    <th className="py-3 px-4 text-left font-medium">Next Game</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody className="divide-y divide-slate-800/50">
+                  {rankedRows.map((row) => (
+                    <tr key={row.team} className="text-slate-300">
+                      <td className="py-3 pr-4 font-semibold text-white">#{row.currentRank}</td>
+                      <td className="py-3 px-4">
+                        <p className="font-semibold text-white">{row.team}</p>
+                        <p className="text-xs text-slate-500">Standings #{row.standingsRank}</p>
+                      </td>
+                      <td className="py-3 px-4">{row.record}</td>
+                      <td className="py-3 px-4">{row.points}</td>
+                      <td className="py-3 px-4">
+                        <span className={row.goalDifferential >= 0 ? "text-sky-400" : "text-slate-400"}>
+                          {row.goalDifferential >= 0 ? "+" : ""}
+                          {row.goalDifferential}
+                        </span>
+                      </td>
+                      <td className="py-3 px-4">
+                        <p className="font-semibold text-white">{row.powerScore}</p>
+                        <p className="text-xs text-slate-500">{pct(row.pointPctg)} pts</p>
+                      </td>
+                      <td className="py-3 px-4">
+                        <Movement movement={row.movement} />
+                      </td>
+                      <td className="py-3 px-4">
+                        {row.overlay ? (
+                          <div className="text-xs text-slate-400">
+                            <p>{pct(row.overlay.avgProb)} win</p>
+                            <p className="text-slate-500">{(row.overlay.avgEdge * 100).toFixed(1)} pts edge</p>
+                          </div>
+                        ) : (
+                          <p className="text-xs text-slate-500">No data</p>
+                        )}
+                      </td>
+                      <td className="py-3 px-4">
+                        {row.nextGame ? (
+                          <div className="text-xs text-slate-400">
+                            <p>vs {row.nextGame.opponent}</p>
+                            <p className="text-slate-500">
+                              {formatGameDate(row.nextGame.date)} · {row.nextGame.startTimeEt ?? "TBD"}
+                            </p>
+                          </div>
+                        ) : (
+                          <p className="text-xs text-slate-500">Idle</p>
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
         </section>
 
-        <section className="rounded-[36px] border border-white/10 bg-white/5 p-8 shadow-2xl shadow-black/30">
-          <p className="text-sm uppercase tracking-[0.4em] text-lime-300">Upcoming schedule</p>
-          <div className="mt-6 space-y-6">
+        {/* Upcoming Schedule */}
+        <section className="mb-20">
+          <h2 className="mb-8 text-2xl font-bold text-white">Upcoming Schedule</h2>
+          <div className="space-y-6">
             {schedule.map((day) => (
               <DateGroup key={day.date} day={day} />
             ))}
@@ -221,16 +240,16 @@ export default function LeaderboardsPage() {
 
 function DateGroup({ day }: { day: MatchupSummary }) {
   return (
-    <div className="rounded-3xl border border-white/10 bg-black/20 p-4">
-      <p className="text-xs uppercase tracking-[0.4em] text-white/60">{day.date}</p>
-      <div className="mt-3 space-y-3">
+    <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-6">
+      <p className="mb-4 text-sm font-medium text-slate-400">{day.date}</p>
+      <div className="space-y-4">
         {day.games.map((game) => (
-          <article key={game.id} className="rounded-2xl border border-white/10 bg-white/5 p-3">
+          <article key={game.id} className="rounded-lg border border-slate-800/50 bg-slate-950/50 p-4">
             <p className="text-sm font-semibold text-white">{game.label}</p>
-            <p className="text-xs uppercase tracking-[0.4em] text-white/50">
-              {game.startTimeEt ?? "TBD"} · Favorite {game.favorite} · Edge {(game.edge * 100).toFixed(1)} pts
+            <p className="mt-1 text-xs text-slate-400">
+              {game.startTimeEt ?? "TBD"} · Favorite: {game.favorite} · Edge: {(game.edge * 100).toFixed(1)} pts
             </p>
-            <p className="mt-1 text-xs text-white/70">{game.summary}</p>
+            <p className="mt-2 text-xs text-slate-300">{game.summary}</p>
           </article>
         ))}
       </div>
@@ -241,24 +260,24 @@ function DateGroup({ day }: { day: MatchupSummary }) {
 function Movement({ movement }: { movement: number }) {
   if (movement > 0) {
     return (
-      <div className="space-y-1">
-        <span className="text-sm text-lime-300">▲ +{movement}</span>
-        <p className="text-[0.6rem] uppercase tracking-[0.4em] text-white/40">Power boost</p>
+      <div className="text-xs">
+        <p className="font-medium text-sky-400">▲ +{movement}</p>
+        <p className="text-slate-500">Boost</p>
       </div>
     );
   }
   if (movement < 0) {
     return (
-      <div className="space-y-1">
-        <span className="text-sm text-rose-300">▼ {Math.abs(movement)}</span>
-        <p className="text-[0.6rem] uppercase tracking-[0.4em] text-white/40">Power dip</p>
+      <div className="text-xs">
+        <p className="font-medium text-slate-400">▼ {Math.abs(movement)}</p>
+        <p className="text-slate-500">Dip</p>
       </div>
     );
   }
   return (
-    <div className="space-y-1">
-      <span className="text-sm text-white/70">●</span>
-      <p className="text-[0.6rem] uppercase tracking-[0.4em] text-white/40">In sync</p>
+    <div className="text-xs">
+      <p className="font-medium text-slate-400">—</p>
+      <p className="text-slate-500">Stable</p>
     </div>
   );
 }

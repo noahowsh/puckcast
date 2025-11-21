@@ -32,8 +32,8 @@ export function PredictionCard({ prediction }: { prediction: Prediction }) {
               </span>
               <span className={`
                 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider
-                ${grade.label === "A" ? "bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-lg shadow-amber-500/30" : ""}
-                ${grade.label === "B" ? "bg-gradient-to-r from-sky-500 to-cyan-500 text-white shadow-lg shadow-sky-500/30" : ""}
+                ${grade.label === "A" ? "bg-sky-500 text-white shadow-lg shadow-sky-500/30" : ""}
+                ${grade.label === "B" ? "bg-sky-500/70 text-white shadow-lg shadow-sky-500/20" : ""}
                 ${grade.label === "C" ? "bg-white/10 text-slate-300" : ""}
               `}>
                 Grade {grade.label}
@@ -65,14 +65,14 @@ export function PredictionCard({ prediction }: { prediction: Prediction }) {
                 +{edgePercent}%
               </p>
               <p className="text-xs uppercase tracking-wider mt-1">
-                <span className="text-amber-400">{favoriteTeam.abbrev}</span>
+                <span className="text-sky-400">{favoriteTeam.abbrev}</span>
                 <span className="text-slate-500 mx-1">·</span>
                 <span className="text-slate-400">{prediction.modelFavorite === "home" ? "Home" : "Road"}</span>
               </p>
             </div>
             {/* Pulse glow for high confidence */}
             {grade.label === "A" && (
-              <div className="absolute inset-0 bg-amber-500/20 rounded-xl blur-xl animate-pulse-glow"></div>
+              <div className="absolute inset-0 bg-sky-500/20 rounded-xl blur-xl animate-pulse-glow"></div>
             )}
           </div>
         </div>
@@ -201,8 +201,8 @@ function StatusChip({
   tone?: StatusTone;
 }) {
   const toneStyles: Record<StatusTone, string> = {
-    success: "border-emerald-500/50 bg-emerald-500/10 text-emerald-300 shadow-emerald-500/20",
-    warning: "border-amber-500/50 bg-amber-500/10 text-amber-300 shadow-amber-500/20",
+    success: "border-sky-500/50 bg-sky-500/10 text-sky-300 shadow-sky-500/20",
+    warning: "border-slate-600/50 bg-slate-800/30 text-slate-300 shadow-slate-500/20",
     info: "border-sky-500/50 bg-sky-500/10 text-sky-300 shadow-sky-500/20",
     neutral: "border-white/20 bg-white/5 text-slate-300",
   };
