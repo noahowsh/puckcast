@@ -314,13 +314,13 @@ export default function AboutPage() {
 
         {/* CTA */}
         <section className="mb-32">
-          <div className="rounded-xl border border-sky-500/20 bg-gradient-to-br from-sky-500/10 to-cyan-500/10 p-10 text-center">
-            <h2 className="text-3xl font-extrabold text-white">Stay Connected</h2>
-            <p className="mx-auto mt-3 max-w-2xl text-base text-slate-300">
+          <div className="rounded-2xl border border-sky-500/30 bg-gradient-to-br from-sky-500/10 to-cyan-500/10 p-16 text-center">
+            <h2 className="text-4xl font-extrabold text-white">Stay Connected</h2>
+            <p className="mx-auto mt-6 max-w-2xl text-xl text-slate-300">
               Follow @puckcastai on X for daily predictions, post-game results, performance updates,
               and behind-the-scenes insights into how we refine the model.
             </p>
-            <div className="mt-6 flex flex-wrap items-center justify-center gap-4">
+            <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
               <a
                 href="https://x.com/puckcastai"
                 target="_blank"

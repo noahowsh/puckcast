@@ -102,7 +102,7 @@ export default function PredictionsPage() {
 
         {/* Live Ticker */}
         <section className="mb-32">
-          <div className="overflow-hidden rounded-xl border border-slate-800 bg-slate-900/50">
+          <div className="overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/50">
             <PredictionTicker initial={payload} />
           </div>
         </section>
@@ -246,7 +246,7 @@ export default function PredictionsPage() {
             </section>
           </>
         ) : (
-          <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-12 text-center">
+          <div className="rounded-2xl border border-slate-800 bg-slate-900/50 p-12 text-center">
             <p className="text-slate-400">
               No predictions yet. The nightly sync will post the next slate soon.
             </p>
