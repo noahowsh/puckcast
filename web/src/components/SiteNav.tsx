@@ -10,8 +10,8 @@ const links = [
   { href: "/predictions", label: "Predictions", icon: "🎯" },
   { href: "/leaderboards", label: "Power Rankings", icon: "⚡" },
   { href: "/performance", label: "Performance", icon: "📊" },
-  { href: "/methodology", label: "Methodology", icon: "🔬" },
-  { href: "/analytics", label: "Analytics", icon: "📈" },
+  { href: "/goalies", label: "Goalies", icon: "🥅" },
+  { href: "/betting", label: "Betting", icon: "💰" },
   { href: "/about", label: "About", icon: "ℹ️" },
 ];
 
