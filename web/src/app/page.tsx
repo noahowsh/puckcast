@@ -225,7 +225,7 @@ export default function Home() {
             <p className="mt-2 text-lg text-slate-400">Top clubs by live power score</p>
           </div>
 
-          <div className="grid gap-6">
+          <div className="grid gap-8">
             {powerLeaders.map((team) => {
               const overlay = team.overlay;
               return (

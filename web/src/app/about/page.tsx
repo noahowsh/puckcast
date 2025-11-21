@@ -232,7 +232,7 @@ export default function AboutPage() {
           <div className="rounded-2xl border border-slate-800 bg-slate-900/50 p-8">
             <h2 className="mb-2 text-3xl font-extrabold text-white">Project Timeline</h2>
             <p className="mb-8 text-sm text-slate-400">How we got here</p>
-            <div className="space-y-6">
+            <div className="space-y-8">
               {timeline.map((milestone, idx) => (
                 <div key={milestone.date} className="flex gap-6">
                   <div className="flex flex-col items-center">

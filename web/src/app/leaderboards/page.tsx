@@ -227,7 +227,7 @@ export default function LeaderboardsPage() {
         {/* Upcoming Schedule */}
         <section className="mb-32">
           <h2 className="mb-10 text-3xl font-extrabold text-white">Upcoming Schedule</h2>
-          <div className="space-y-6">
+          <div className="space-y-8">
             {schedule.map((day) => (
               <DateGroup key={day.date} day={day} />
             ))}
