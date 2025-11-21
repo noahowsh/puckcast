@@ -41,7 +41,7 @@ export function GoalieTicker({ initial }: { initial: GoaliePulse }) {
           <div key={goalie.name} className="rounded-2xl border border-white/10 bg-black/30 p-3">
             <p className="text-[0.6rem] uppercase tracking-[0.4em] text-white/50">{goalie.team}</p>
             <p className="text-base text-white">{goalie.name}</p>
-            <p className="text-sm text-lime-200">{Math.round(goalie.startLikelihood * 100)}% start</p>
+            <p className="text-sm text-cyan-200">{Math.round(goalie.startLikelihood * 100)}% start</p>
             <div className="mt-1 h-1.5 w-full rounded-full bg-white/10">
               <div
                 className="h-full rounded-full bg-gradient-to-r from-sky-300 to-indigo-400"

@@ -54,7 +54,7 @@ export function PredictionTicker({ initial }: { initial: PredictionsPayload }) {
               <span className="font-semibold">
                 {game.awayTeam.abbrev} @ {game.homeTeam.abbrev}
               </span>
-              <span className="text-xs uppercase tracking-[0.4em] text-lime-200">
+              <span className="text-xs uppercase tracking-[0.4em] text-cyan-200">
                 {getPredictionGrade(game.edge).label}
               </span>
             </div>
@@ -79,7 +79,7 @@ function SparkBar({ value }: { value: number }) {
   return (
     <div className="h-1.5 w-full rounded-full bg-white/10">
       <div
-        className="h-full rounded-full bg-gradient-to-r from-lime-300 via-emerald-400 to-cyan-300"
+        className="h-full rounded-full bg-gradient-to-r from-cyan-300 via-sky-400 to-blue-300"
         style={{ width: `${pct}%` }}
       />
     </div>
