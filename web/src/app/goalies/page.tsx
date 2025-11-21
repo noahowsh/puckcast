@@ -118,7 +118,7 @@ function GoalieCardView({ goalie }: { goalie: GoalieCard }) {
         <div className="rounded-2xl border border-white/10 bg-white/5 p-3">
           <p className="text-xs uppercase tracking-[0.4em] text-white/60">Season GSAx</p>
           <p className="text-2xl font-semibold text-white">{goalie.seasonGsa.toFixed(1)}</p>
-          <p className="text-xs text-white/50">MoneyPuck baseline</p>
+          <p className="text-xs text-white/50">League average baseline</p>
         </div>
       </div>
       <p className="mt-5 text-base text-white/90">{goalie.note}</p>

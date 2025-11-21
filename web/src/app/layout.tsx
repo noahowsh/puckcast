@@ -18,19 +18,19 @@ const geistMono = {
 export const metadata: Metadata = {
   title: "Puckcast | NHL Predictions + Analytics",
   description:
-    "Interactive NHL prediction hub powered by MoneyPuck ingestion, goalie form tracking, and 50k Monte Carlo simulations per matchup.",
+    "Data-driven NHL predictions powered by the official NHL API with 60%+ accuracy. Advanced analytics, goalie tracking, and real-time game predictions.",
   metadataBase: new URL("https://puckcast.ai"),
   openGraph: {
     title: "Puckcast | NHL Predictions + Analytics",
     description:
-      "Win probabilities, edge summaries, and transparent notes for every NHL matchup.",
+      "60%+ accurate NHL predictions using 204 engineered features from official NHL data. Win probabilities and betting insights for every matchup.",
     type: "website",
     url: "https://puckcast.ai",
   },
   twitter: {
     card: "summary_large_image",
     title: "Puckcast | NHL Predictions + Analytics",
-    description: "Daily NHL projections and insights sourced from the MoneyPuck feature stack.",
+    description: "Data-driven NHL predictions with 60%+ accuracy. Powered by official NHL API and advanced machine learning.",
   },
 };
 

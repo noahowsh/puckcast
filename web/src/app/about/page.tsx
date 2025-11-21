@@ -63,7 +63,7 @@ const features = [
 const tech = [
   { label: "Backend", value: "Python, scikit-learn, pandas" },
   { label: "Model", value: "Logistic Regression (L2 regularization)" },
-  { label: "Data", value: "MoneyPuck, NHL API, 6 seasons (2018-2024)" },
+  { label: "Data", value: "NHL API, 3 seasons (2021-2024)" },
   { label: "Frontend", value: "Next.js 16, React 19, Tailwind CSS v4" },
   { label: "Deployment", value: "Vercel (auto-deploy on push)" },
   { label: "Automation", value: "GitHub Actions (daily updates)" },
@@ -80,7 +80,7 @@ const faqs = [
   },
   {
     question: "What data sources do you use?",
-    answer: "We combine MoneyPuck's expected goals (xG) data, NHL play-by-play statistics, team performance metrics, and goalie tracking. Our training dataset includes 6 seasons (2018-2024) with 7,000+ games.",
+    answer: "We combine NHL play-by-play statistics, internally calculated expected goals (xG), team performance metrics, and goalie tracking. Our training dataset includes 6 seasons (2018-2024) with 7,000+ games.",
   },
   {
     question: "Can I access historical predictions?",

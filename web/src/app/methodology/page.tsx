@@ -8,7 +8,7 @@ const pct = (value: number) => `${(value * 100).toFixed(1)}%`;
 const methodologySteps = [
   {
     title: "Data Collection",
-    description: "We aggregate game-level statistics from multiple sources including MoneyPuck (expected goals), NHL play-by-play data, and team performance metrics. Our dataset covers 6+ seasons (2018-2024) with over 7,000+ games.",
+    description: "We aggregate game-level statistics from the official NHL API including play-by-play data, shot locations, and team performance metrics. Our dataset covers 3 seasons (2021-2024) with 3,690+ training games.",
     icon: "📊",
   },
   {
