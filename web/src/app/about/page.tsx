@@ -164,160 +164,178 @@ export default function AboutPage() {
           </div>
         </section>
 
-        <section className="rounded-[36px] border border-white/10 bg-white/5 p-8 shadow-2xl shadow-black/30">
-          <h2 className="text-2xl font-semibold text-white">Our Principles</h2>
-          <div className="mt-8 grid gap-6 md:grid-cols-2">
-            {principles.map((principle) => (
-              <div key={principle.title} className="rounded-3xl border border-white/10 bg-black/20 p-6">
-                <div className="flex items-start gap-4">
-                  <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-lime-300/20 to-emerald-400/20 text-2xl">
-                    {principle.icon}
+        {/* Principles */}
+        <section className="mb-20">
+          <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-6">
+            <h2 className="mb-8 text-2xl font-bold text-white">Our Principles</h2>
+            <div className="grid gap-6 md:grid-cols-2">
+              {principles.map((principle) => (
+                <div key={principle.title} className="rounded-lg border border-slate-800/50 bg-slate-950/50 p-6">
+                  <div className="flex items-start gap-4">
+                    <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-lg bg-sky-500/10 text-2xl">
+                      {principle.icon}
+                    </div>
+                    <div>
+                      <h3 className="text-lg font-semibold text-white">{principle.title}</h3>
+                      <p className="mt-2 text-sm leading-relaxed text-slate-300">{principle.description}</p>
+                    </div>
                   </div>
-                  <div>
-                    <h3 className="text-lg font-semibold text-white">{principle.title}</h3>
-                    <p className="mt-2 text-sm leading-relaxed text-white/75">{principle.description}</p>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        <section className="rounded-[36px] border border-white/10 bg-gradient-to-br from-white/5 via-slate-900/40 to-slate-950 p-8 shadow-2xl shadow-black/30">
-          <h2 className="text-2xl font-semibold text-white">How It Works</h2>
-          <p className="mt-2 text-sm text-white/70">Our prediction process in 4 steps</p>
-          <div className="mt-8 grid gap-6 md:grid-cols-2">
-            {howItWorks.map((step, idx) => (
-              <div key={step.title} className="rounded-3xl border border-white/10 bg-black/20 p-6">
-                <div className="flex items-start gap-4">
-                  <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-lime-300/20 to-emerald-400/20 text-2xl">
-                    {step.icon}
-                  </div>
-                  <div className="flex-1">
-                    <h3 className="text-lg font-semibold text-white">{step.title}</h3>
-                    <p className="mt-2 text-sm leading-relaxed text-white/75">{step.description}</p>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <div className="mt-6 grid gap-4 sm:grid-cols-3">
-            {performanceHighlights.map((item) => (
-              <div key={item.metric} className="rounded-3xl border border-white/10 bg-black/30 p-5 text-center">
-                <p className="text-xs uppercase tracking-[0.5em] text-white/50">{item.metric}</p>
-                <p className="mt-3 text-3xl font-semibold text-lime-300">{item.value}</p>
-                <p className="mt-2 text-xs leading-relaxed text-white/60">{item.description}</p>
-              </div>
-            ))}
-          </div>
-
-          <div className="mt-6 rounded-2xl bg-gradient-to-r from-lime-300/20 to-emerald-400/20 p-4">
-            <p className="text-xs uppercase tracking-[0.4em] text-lime-200">Transparent Performance</p>
-            <p className="mt-2 text-sm text-white/85">
-              We track accuracy on real NHL games throughout the season. No cherry-picking, no hiding losses —
-              just honest performance metrics that update daily. See detailed breakdowns on our Performance page.
-            </p>
-          </div>
-        </section>
-
-        <section className="rounded-[36px] border border-white/10 bg-gradient-to-br from-white/5 via-slate-900/40 to-slate-950 p-8 shadow-2xl shadow-black/30">
-          <h2 className="text-2xl font-semibold text-white">Project Timeline</h2>
-          <p className="mt-2 text-sm text-white/70">How we got here</p>
-          <div className="mt-8 space-y-6">
-            {timeline.map((milestone, idx) => (
-              <div key={milestone.date} className="flex gap-6">
-                <div className="flex flex-col items-center">
-                  <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full border-2 border-lime-300 bg-black text-sm font-semibold text-lime-300">
-                    {idx + 1}
-                  </div>
-                  {idx < timeline.length - 1 && <div className="mt-2 h-full w-0.5 bg-white/10" />}
-                </div>
-                <div className="flex-1 pb-6">
-                  <p className="text-xs uppercase tracking-[0.4em] text-white/50">{milestone.date}</p>
-                  <h3 className="mt-1 text-lg font-semibold text-white">{milestone.title}</h3>
-                  <p className="mt-2 text-sm text-white/75">{milestone.description}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        <section className="grid gap-8 lg:grid-cols-2">
-          <div className="rounded-[36px] border border-white/10 bg-white/5 p-8 shadow-2xl shadow-black/30">
-            <h2 className="text-2xl font-semibold text-white">Technology Stack</h2>
-            <div className="mt-6 space-y-3">
-              {tech.map((item) => (
-                <div key={item.label} className="flex items-center justify-between rounded-2xl border border-white/10 bg-black/20 px-4 py-3">
-                  <span className="text-sm uppercase tracking-[0.3em] text-white/60">{item.label}</span>
-                  <span className="text-sm font-medium text-white">{item.value}</span>
                 </div>
               ))}
             </div>
-            <div className="mt-6 rounded-2xl bg-gradient-to-r from-lime-300/20 to-emerald-400/20 p-4">
-              <p className="text-xs uppercase tracking-[0.4em] text-lime-200">Built for Speed & Reliability</p>
-              <p className="mt-2 text-sm text-white/85">
-                Modern tech stack optimized for fast load times, daily automation, and seamless deployment.
-                Every push to main auto-deploys to production via Vercel.
+          </div>
+        </section>
+
+        {/* How It Works */}
+        <section className="mb-20">
+          <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-6">
+            <h2 className="mb-2 text-2xl font-bold text-white">How It Works</h2>
+            <p className="mb-8 text-sm text-slate-400">Our prediction process in 4 steps</p>
+            <div className="grid gap-6 md:grid-cols-2">
+              {howItWorks.map((step, idx) => (
+                <div key={step.title} className="rounded-lg border border-slate-800/50 bg-slate-950/50 p-6">
+                  <div className="flex items-start gap-4">
+                    <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-lg bg-sky-500/10 text-2xl">
+                      {step.icon}
+                    </div>
+                    <div className="flex-1">
+                      <h3 className="text-lg font-semibold text-white">{step.title}</h3>
+                      <p className="mt-2 text-sm leading-relaxed text-slate-300">{step.description}</p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="mt-6 grid gap-6 sm:grid-cols-3">
+              {performanceHighlights.map((item) => (
+                <div key={item.metric} className="rounded-lg border border-slate-800/50 bg-slate-950/50 p-6 text-center">
+                  <p className="text-sm font-medium text-slate-400">{item.metric}</p>
+                  <p className="mt-2 text-3xl font-bold text-sky-400">{item.value}</p>
+                  <p className="mt-1 text-xs text-slate-500">{item.description}</p>
+                </div>
+              ))}
+            </div>
+
+            <div className="mt-6 rounded-lg border border-sky-500/20 bg-sky-500/5 p-4">
+              <p className="mb-2 text-sm font-semibold text-sky-400">Transparent Performance</p>
+              <p className="text-xs text-slate-300">
+                We track accuracy on real NHL games throughout the season. No cherry-picking, no hiding losses —
+                just honest performance metrics that update daily. See detailed breakdowns on our Performance page.
               </p>
             </div>
           </div>
+        </section>
 
-          <div className="rounded-[36px] border border-white/10 bg-white/5 p-8 shadow-2xl shadow-black/30">
-            <h2 className="text-2xl font-semibold text-white">Limitations</h2>
-            <p className="mt-2 text-sm text-white/70">What we can't predict</p>
-            <div className="mt-6 space-y-4">
-              <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
-                <p className="text-sm font-semibold text-amber-200">Unpredictable Events</p>
-                <p className="mt-2 text-xs text-white/75">Injuries, referee decisions, and random bounces can change outcomes in ways no model can predict.</p>
+        {/* Timeline */}
+        <section className="mb-20">
+          <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-6">
+            <h2 className="mb-2 text-2xl font-bold text-white">Project Timeline</h2>
+            <p className="mb-8 text-sm text-slate-400">How we got here</p>
+            <div className="space-y-6">
+              {timeline.map((milestone, idx) => (
+                <div key={milestone.date} className="flex gap-6">
+                  <div className="flex flex-col items-center">
+                    <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full border-2 border-sky-500 bg-slate-950 text-sm font-semibold text-sky-400">
+                      {idx + 1}
+                    </div>
+                    {idx < timeline.length - 1 && <div className="mt-2 h-full w-0.5 bg-slate-800" />}
+                  </div>
+                  <div className="flex-1 pb-6">
+                    <p className="text-sm font-medium text-slate-500">{milestone.date}</p>
+                    <h3 className="mt-1 text-lg font-semibold text-white">{milestone.title}</h3>
+                    <p className="mt-2 text-sm text-slate-300">{milestone.description}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Tech & Limitations */}
+        <section className="mb-20">
+          <div className="grid gap-6 lg:grid-cols-2">
+            <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-6">
+              <h2 className="mb-6 text-2xl font-bold text-white">Technology Stack</h2>
+              <div className="space-y-3">
+                {tech.map((item) => (
+                  <div key={item.label} className="flex items-center justify-between rounded-lg border border-slate-800/50 bg-slate-950/50 px-4 py-3">
+                    <span className="text-sm font-medium text-slate-400">{item.label}</span>
+                    <span className="text-sm text-white">{item.value}</span>
+                  </div>
+                ))}
               </div>
-              <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
-                <p className="text-sm font-semibold text-amber-200">Last-Minute Changes</p>
-                <p className="mt-2 text-xs text-white/75">Scratches or goalie changes after our morning update can impact accuracy. We refresh daily but can't track real-time changes.</p>
+              <div className="mt-6 rounded-lg border border-sky-500/20 bg-sky-500/5 p-4">
+                <p className="mb-2 text-sm font-semibold text-sky-400">Built for Speed & Reliability</p>
+                <p className="text-xs text-slate-300">
+                  Modern tech stack optimized for fast load times, daily automation, and seamless deployment.
+                  Every push to main auto-deploys to production via Vercel.
+                </p>
               </div>
-              <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
-                <p className="text-sm font-semibold text-amber-200">Not a Betting Tool</p>
-                <p className="mt-2 text-xs text-white/75">Win probabilities are predictions, not betting advice. We don't incorporate odds or recommend wagers. Bet responsibly.</p>
+            </div>
+
+            <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-6">
+              <h2 className="mb-2 text-2xl font-bold text-white">Limitations</h2>
+              <p className="mb-6 text-sm text-slate-400">What we can't predict</p>
+              <div className="space-y-4">
+                <div className="rounded-lg border border-slate-800/50 bg-slate-950/50 p-4">
+                  <p className="text-sm font-semibold text-slate-300">Unpredictable Events</p>
+                  <p className="mt-2 text-xs text-slate-400">Injuries, referee decisions, and random bounces can change outcomes in ways no model can predict.</p>
+                </div>
+                <div className="rounded-lg border border-slate-800/50 bg-slate-950/50 p-4">
+                  <p className="text-sm font-semibold text-slate-300">Last-Minute Changes</p>
+                  <p className="mt-2 text-xs text-slate-400">Scratches or goalie changes after our morning update can impact accuracy. We refresh daily but can't track real-time changes.</p>
+                </div>
+                <div className="rounded-lg border border-slate-800/50 bg-slate-950/50 p-4">
+                  <p className="text-sm font-semibold text-slate-300">Not a Betting Tool</p>
+                  <p className="mt-2 text-xs text-slate-400">Win probabilities are predictions, not betting advice. We don't incorporate odds or recommend wagers. Bet responsibly.</p>
+                </div>
               </div>
             </div>
           </div>
         </section>
 
-        <section className="rounded-[36px] border border-white/10 bg-white/5 p-8 shadow-2xl shadow-black/30">
-          <h2 className="text-2xl font-semibold text-white">Frequently Asked Questions</h2>
-          <div className="mt-6 space-y-5">
-            {faqs.map((faq) => (
-              <details key={faq.question} className="group rounded-2xl border border-white/10 bg-black/20 p-5">
-                <summary className="cursor-pointer text-base font-semibold text-white group-open:text-lime-300">
-                  {faq.question}
-                </summary>
-                <p className="mt-3 text-sm leading-relaxed text-white/75">{faq.answer}</p>
-              </details>
-            ))}
+        {/* FAQs */}
+        <section className="mb-20">
+          <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-6">
+            <h2 className="mb-6 text-2xl font-bold text-white">Frequently Asked Questions</h2>
+            <div className="space-y-4">
+              {faqs.map((faq) => (
+                <details key={faq.question} className="group rounded-lg border border-slate-800/50 bg-slate-950/50 p-5">
+                  <summary className="cursor-pointer text-base font-semibold text-white group-open:text-sky-400">
+                    {faq.question}
+                  </summary>
+                  <p className="mt-3 text-sm leading-relaxed text-slate-300">{faq.answer}</p>
+                </details>
+              ))}
+            </div>
           </div>
         </section>
 
-        <section className="rounded-[36px] border border-lime-200/30 bg-gradient-to-br from-lime-200/20 via-emerald-200/20 to-transparent p-10 text-center shadow-lg shadow-emerald-500/20">
-          <h2 className="text-3xl font-semibold text-white">Stay Connected</h2>
-          <p className="mt-3 text-base text-white/80">
-            Follow @puckcastai on X for daily predictions, post-game results, performance updates,
-            and behind-the-scenes insights into how we refine the model.
-          </p>
-          <div className="mt-6 flex flex-wrap items-center justify-center gap-4">
-            <a
-              href="https://x.com/puckcastai"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="rounded-full bg-white px-8 py-3 text-sm font-semibold uppercase tracking-[0.4em] text-slate-900 shadow-lg transition hover:bg-white/90"
-            >
-              Follow @puckcastai
-            </a>
-            <Link
-              href="/performance"
-              className="rounded-full border border-white/20 px-8 py-3 text-sm font-semibold uppercase tracking-[0.4em] text-white/80 transition hover:text-white"
-            >
-              View Performance
-            </Link>
+        {/* CTA */}
+        <section className="mb-20">
+          <div className="rounded-xl border border-sky-500/20 bg-gradient-to-br from-sky-500/10 to-cyan-500/10 p-10 text-center">
+            <h2 className="text-3xl font-bold text-white">Stay Connected</h2>
+            <p className="mx-auto mt-3 max-w-2xl text-base text-slate-300">
+              Follow @puckcastai on X for daily predictions, post-game results, performance updates,
+              and behind-the-scenes insights into how we refine the model.
+            </p>
+            <div className="mt-6 flex flex-wrap items-center justify-center gap-4">
+              <a
+                href="https://x.com/puckcastai"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="rounded-lg bg-sky-500 px-8 py-3 font-semibold text-white shadow-lg shadow-sky-500/30 transition hover:bg-sky-400"
+              >
+                Follow @puckcastai
+              </a>
+              <Link
+                href="/performance"
+                className="rounded-lg border border-slate-700 bg-slate-900/50 px-8 py-3 font-semibold text-white transition hover:border-slate-600 hover:bg-slate-900"
+              >
+                View Performance
+              </Link>
+            </div>
           </div>
         </section>
       </div>
