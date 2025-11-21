@@ -47,13 +47,15 @@ export default function BettingPage() {
       <div className="relative mx-auto max-w-7xl px-6 py-16 lg:px-8">
         {/* Header */}
         <section className="mb-32">
-          <div className="mb-2 inline-flex items-center gap-2 rounded-full border border-sky-500/20 bg-sky-500/5 px-3 py-1">
-            <span className="text-xs font-medium text-sky-400">Betting Lab</span>
+          <div className="mx-auto max-w-4xl text-center">
+            <div className="mb-2 inline-flex items-center gap-2 rounded-full border border-sky-500/20 bg-sky-500/5 px-3 py-1">
+              <span className="text-xs font-medium text-sky-400">Betting Lab</span>
+            </div>
+            <h1 className="mb-8 text-6xl font-extrabold text-white lg:text-7xl">Interactive strategy sandbox</h1>
+            <p className="text-xl text-slate-300">
+              Adjust the edge slider to see how win rate, ROI, and units respond. Stats are based on the 2023-24 backtest archive.
+            </p>
           </div>
-          <h1 className="mb-8 text-6xl font-extrabold text-white lg:text-7xl">Interactive strategy sandbox</h1>
-          <p className="max-w-3xl text-xl text-slate-300">
-            Adjust the edge slider to see how win rate, ROI, and units respond. Stats are based on the 2023-24 backtest archive.
-          </p>
         </section>
 
         {/* Edge Slider */}

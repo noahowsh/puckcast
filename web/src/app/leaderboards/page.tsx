@@ -126,14 +126,16 @@ export default function LeaderboardsPage() {
       <div className="relative mx-auto max-w-7xl px-6 py-16 lg:px-8">
         {/* Header */}
         <section className="mb-32">
-          <div className="mb-2 inline-flex items-center gap-2 rounded-full border border-sky-500/20 bg-sky-500/5 px-3 py-1">
-            <span className="text-xs font-medium text-sky-400">Power Rankings</span>
+          <div className="mx-auto max-w-4xl text-center">
+            <div className="mb-2 inline-flex items-center gap-2 rounded-full border border-sky-500/20 bg-sky-500/5 px-3 py-1">
+              <span className="text-xs font-medium text-sky-400">Power Rankings</span>
+            </div>
+            <h1 className="mb-8 text-6xl font-extrabold text-white lg:text-7xl">Live power rankings</h1>
+            <p className="text-xl text-slate-300">
+              Composite scores based on points, goal differential, tempo, and shot share. Updated every Monday to capture the current week's snapshot.
+            </p>
+            <p className="mt-2 text-sm text-slate-500">Week of {leaderboardWeekLabel}</p>
           </div>
-          <h1 className="mb-8 text-6xl font-extrabold text-white lg:text-7xl">Live power rankings</h1>
-          <p className="max-w-3xl text-xl text-slate-300">
-            Composite scores based on points, goal differential, tempo, and shot share. Updated every Monday to capture the current week's snapshot.
-          </p>
-          <p className="mt-2 text-sm text-slate-500">Week of {leaderboardWeekLabel}</p>
         </section>
 
         {/* Highlights */}
@@ -226,7 +228,7 @@ export default function LeaderboardsPage() {
 
         {/* Upcoming Schedule */}
         <section className="mb-32">
-          <h2 className="mb-10 text-3xl font-extrabold text-white">Upcoming Schedule</h2>
+          <h2 className="mb-10 text-center text-3xl font-extrabold text-white">Upcoming Schedule</h2>
           <div className="space-y-8">
             {schedule.map((day) => (
               <DateGroup key={day.date} day={day} />

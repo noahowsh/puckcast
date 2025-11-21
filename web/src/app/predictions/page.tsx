@@ -54,24 +54,26 @@ export default function PredictionsPage() {
       <div className="relative mx-auto max-w-7xl px-6 py-16 lg:px-8">
         {/* Header */}
         <section className="mb-32">
-          <div className="mb-2 inline-flex items-center gap-2 rounded-full border border-sky-500/20 bg-sky-500/5 px-3 py-1">
-            <span className="text-xs font-medium text-sky-400">Slate Intelligence</span>
-          </div>
+          <div className="mx-auto max-w-4xl text-center">
+            <div className="mb-2 inline-flex items-center gap-2 rounded-full border border-sky-500/20 bg-sky-500/5 px-3 py-1">
+              <span className="text-xs font-medium text-sky-400">Slate Intelligence</span>
+            </div>
 
-          <h1 className="mb-8 text-6xl font-extrabold text-white lg:text-7xl">
-            Tonight's Predictions
-          </h1>
+            <h1 className="mb-8 text-6xl font-extrabold text-white lg:text-7xl">
+              Tonight's Predictions
+            </h1>
 
-          <p className="mb-10 max-w-3xl text-xl text-slate-300">
-            Full-game projections with lineup context, rolling form, and NHL API features.
-            Everything you need to scan the slate in seconds.
-          </p>
-
-          {updatedAt && (
-            <p className="text-sm text-slate-500">
-              Last updated {updatedAt.toLocaleString("en-US", { timeZone: "America/New_York" })} ET
+            <p className="mb-10 text-xl text-slate-300">
+              Full-game projections with lineup context, rolling form, and NHL API features.
+              Everything you need to scan the slate in seconds.
             </p>
-          )}
+
+            {updatedAt && (
+              <p className="text-sm text-slate-500">
+                Last updated {updatedAt.toLocaleString("en-US", { timeZone: "America/New_York" })} ET
+              </p>
+            )}
+          </div>
         </section>
 
         {/* Summary Stats */}
@@ -195,7 +197,7 @@ export default function PredictionsPage() {
 
             {/* Game-by-Game Table */}
             <section className="mb-32">
-              <div className="mb-10">
+              <div className="mb-10 text-center">
                 <h2 className="text-3xl font-extrabold text-white">Game-by-Game Sheet</h2>
                 <p className="mt-1 text-sm text-slate-400">
                   Sorted by start time — win %, edge, and confidence score
