@@ -133,17 +133,19 @@ export default function AboutPage() {
       <div className="relative mx-auto max-w-7xl px-6 py-16 lg:px-8">
         {/* Header */}
         <section className="mb-32">
-          <div className="mb-2 inline-flex items-center gap-2 rounded-full border border-sky-500/20 bg-sky-500/5 px-3 py-1">
-            <span className="text-xs font-medium text-sky-400">About Puckcast</span>
+          <div className="mx-auto max-w-4xl text-center">
+            <div className="mb-2 inline-flex items-center gap-2 rounded-full border border-sky-500/20 bg-sky-500/5 px-3 py-1">
+              <span className="text-xs font-medium text-sky-400">About Puckcast</span>
+            </div>
+            <h1 className="mb-8 text-6xl font-extrabold text-white lg:text-7xl">
+              Machine learning for hockey fans who love the numbers
+            </h1>
+            <p className="text-xl text-slate-300">
+              Puckcast is a passion project built by data enthusiasts who wanted to bring transparent,
+              accessible NHL predictions to the hockey community. We combine machine learning with
+              advanced statistics to predict game outcomes — and we share everything openly.
+            </p>
           </div>
-          <h1 className="mb-8 text-6xl font-extrabold text-white lg:text-7xl">
-            Machine learning for hockey fans who love the numbers
-          </h1>
-          <p className="max-w-3xl text-xl text-slate-300">
-            Puckcast is a passion project built by data enthusiasts who wanted to bring transparent,
-            accessible NHL predictions to the hockey community. We combine machine learning with
-            advanced statistics to predict game outcomes — and we share everything openly.
-          </p>
         </section>
 
         {/* Mission */}

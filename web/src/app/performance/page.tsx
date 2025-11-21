@@ -47,18 +47,20 @@ export default function PerformancePage() {
       <div className="relative mx-auto max-w-7xl px-6 py-16 lg:px-8">
         {/* Header */}
         <section className="mb-32">
-          <div className="mb-2 inline-flex items-center gap-2 rounded-full border border-sky-500/20 bg-sky-500/5 px-3 py-1">
-            <span className="text-xs font-medium text-sky-400">Performance</span>
+          <div className="mx-auto max-w-4xl text-center">
+            <div className="mb-2 inline-flex items-center gap-2 rounded-full border border-sky-500/20 bg-sky-500/5 px-3 py-1">
+              <span className="text-xs font-medium text-sky-400">Performance</span>
+            </div>
+            <h1 className="mb-8 text-6xl font-extrabold text-white lg:text-7xl">Model diagnostics</h1>
+            <p className="text-xl text-slate-300">
+              Track current season performance, upcoming slate breakdowns, and historical model analysis all in one place.
+            </p>
           </div>
-          <h1 className="mb-8 text-6xl font-extrabold text-white lg:text-7xl">Model diagnostics</h1>
-          <p className="max-w-3xl text-xl text-slate-300">
-            Track current season performance, upcoming slate breakdowns, and historical model analysis all in one place.
-          </p>
         </section>
 
         {/* Model Performance Overview */}
         <section className="mb-32">
-          <h2 className="mb-10 text-3xl font-extrabold text-white">Key Metrics</h2>
+          <h2 className="mb-10 text-center text-3xl font-extrabold text-white">Key Metrics</h2>
           <div className="grid gap-8 md:grid-cols-4">
             <div className="rounded-2xl border border-slate-800 bg-slate-900/50 p-8">
               <p className="text-sm font-medium text-slate-400">Test Accuracy</p>
@@ -141,8 +143,10 @@ export default function PerformancePage() {
 
         {/* Confidence Calibration */}
         <section className="mb-32">
-          <h2 className="mb-10 text-3xl font-extrabold text-white">Confidence Calibration</h2>
-          <p className="mb-8 text-sm text-slate-400">Accuracy by prediction strength (2023-24 test set)</p>
+          <div className="mb-10 text-center">
+            <h2 className="text-3xl font-extrabold text-white">Confidence Calibration</h2>
+            <p className="mt-2 text-sm text-slate-400">Accuracy by prediction strength (2023-24 test set)</p>
+          </div>
           <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
             {confidenceBuckets.map((bucket) => {
               const isStrong = bucket.accuracy > 0.6;

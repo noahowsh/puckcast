@@ -57,18 +57,20 @@ export default async function GoaliePage() {
       <div className="relative mx-auto max-w-7xl px-6 py-16 lg:px-8">
         {/* Header */}
         <section className="mb-32">
-          <div className="mb-2 inline-flex items-center gap-2 rounded-full border border-sky-500/20 bg-sky-500/5 px-3 py-1">
-            <span className="text-xs font-medium text-sky-400">Goalie Intelligence</span>
-          </div>
-          <h1 className="mb-8 text-6xl font-extrabold text-white lg:text-7xl">Goalie tracking & analysis</h1>
-          <p className="max-w-3xl text-xl text-slate-300">
-            Blending rolling GSAx, rest advantage, rebound control metrics, and start-likelihood signals from morning skate intel.
-          </p>
-          {updatedAt && (
-            <p className="mt-2 text-sm text-slate-500">
-              Updated {updatedAt.toLocaleString("en-US", { timeZone: "America/New_York" })} ET
+          <div className="mx-auto max-w-4xl text-center">
+            <div className="mb-2 inline-flex items-center gap-2 rounded-full border border-sky-500/20 bg-sky-500/5 px-3 py-1">
+              <span className="text-xs font-medium text-sky-400">Goalie Intelligence</span>
+            </div>
+            <h1 className="mb-8 text-6xl font-extrabold text-white lg:text-7xl">Goalie tracking & analysis</h1>
+            <p className="text-xl text-slate-300">
+              Blending rolling GSAx, rest advantage, rebound control metrics, and start-likelihood signals from morning skate intel.
             </p>
-          )}
+            {updatedAt && (
+              <p className="mt-2 text-sm text-slate-500">
+                Updated {updatedAt.toLocaleString("en-US", { timeZone: "America/New_York" })} ET
+              </p>
+            )}
+          </div>
         </section>
 
         {/* Notes */}
@@ -81,7 +83,7 @@ export default async function GoaliePage() {
         {/* Season Leaders */}
         {seasonLeaders.length > 0 && (
           <section className="mb-32">
-            <h2 className="mb-10 text-3xl font-extrabold text-white">Season Leaders</h2>
+            <h2 className="mb-10 text-center text-3xl font-extrabold text-white">Season Leaders</h2>
             <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
               {seasonLeaders.map((leader) => (
                 <article key={leader.name} className="rounded-2xl border border-slate-800 bg-slate-900/50 p-8">
@@ -106,7 +108,7 @@ export default async function GoaliePage() {
 
         {/* Goalie Cards */}
         <section className="mb-32">
-          <h2 className="mb-10 text-3xl font-extrabold text-white">Detailed Analysis</h2>
+          <h2 className="mb-10 text-center text-3xl font-extrabold text-white">Detailed Analysis</h2>
           <div className="grid gap-8 md:grid-cols-2">
             {pulse.goalies.map((goalie) => (
               <GoalieCardView key={goalie.name} goalie={goalie} />

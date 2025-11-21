@@ -77,7 +77,7 @@ export default function Home() {
       <div className="relative mx-auto max-w-7xl px-6 py-24 lg:px-8">
         {/* Hero Section */}
         <section className="mb-32">
-          <div className="max-w-4xl">
+          <div className="mx-auto max-w-4xl text-center">
             <div className="mb-8 inline-flex items-center gap-2 rounded-full border border-sky-500/30 bg-sky-500/10 px-5 py-2.5">
               <div className="h-2 w-2 animate-pulse rounded-full bg-sky-400" />
               <span className="text-sm font-semibold text-sky-400">AI-Powered NHL Predictions</span>
@@ -92,7 +92,7 @@ export default function Home() {
               power rankings that actually matter, and transparent model insights.
             </p>
 
-            <div className="flex flex-wrap gap-4">
+            <div className="flex flex-wrap justify-center gap-4">
               <Link
                 href="https://x.com/puckcastai"
                 target="_blank"
@@ -129,12 +129,12 @@ export default function Home() {
 
         {/* Live Edges */}
         <section className="mb-32">
-          <div className="mb-10">
+          <div className="mb-10 text-center">
             <h2 className="text-3xl font-extrabold text-white">Live Edges</h2>
             <p className="mt-2 text-lg text-slate-400">Auto-refresh prediction ticker</p>
           </div>
 
-          <div className="mb-6 flex flex-wrap gap-3">
+          <div className="mb-6 flex flex-wrap justify-center gap-3">
             {gradeLegend.map((g) => (
               <div key={g.label} className="rounded-lg border border-slate-800 bg-slate-900/50 px-4 py-2">
                 <span className="text-sm font-bold text-white">{g.label}</span>
@@ -150,7 +150,7 @@ export default function Home() {
 
         {/* Today's Predictions */}
         <section className="mb-32">
-          <div className="mb-10">
+          <div className="mb-10 text-center">
             <h2 className="text-3xl font-extrabold text-white">Tonight's Predictions</h2>
             <p className="mt-2 text-lg text-slate-400">
               {todaysPredictions.length} {todaysPredictions.length === 1 ? "game" : "games"} with confidence grades
@@ -172,7 +172,7 @@ export default function Home() {
 
         {/* Model Performance */}
         <section className="mb-32">
-          <div className="mb-10">
+          <div className="mb-10 text-center">
             <h2 className="text-3xl font-extrabold text-white">Model Health</h2>
             <p className="mt-2 text-lg text-slate-400">Season-long vitals at a glance</p>
           </div>
@@ -220,7 +220,7 @@ export default function Home() {
 
         {/* Top Teams */}
         <section className="mb-32">
-          <div className="mb-10">
+          <div className="mb-10 text-center">
             <h2 className="text-3xl font-extrabold text-white">Power Rankings</h2>
             <p className="mt-2 text-lg text-slate-400">Top clubs by live power score</p>
           </div>
