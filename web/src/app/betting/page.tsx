@@ -46,22 +46,22 @@ export default function BettingPage() {
 
       <div className="relative mx-auto max-w-7xl px-6 py-16 lg:px-8">
         {/* Header */}
-        <section className="mb-20">
+        <section className="mb-32">
           <div className="mb-2 inline-flex items-center gap-2 rounded-full border border-sky-500/20 bg-sky-500/5 px-3 py-1">
             <span className="text-xs font-medium text-sky-400">Betting Lab</span>
           </div>
-          <h1 className="mb-4 text-4xl font-bold text-white lg:text-5xl">Interactive strategy sandbox</h1>
-          <p className="max-w-3xl text-lg text-slate-300">
+          <h1 className="mb-8 text-6xl font-extrabold text-white lg:text-7xl">Interactive strategy sandbox</h1>
+          <p className="max-w-3xl text-xl text-slate-300">
             Adjust the edge slider to see how win rate, ROI, and units respond. Stats are based on the 2023-24 backtest archive.
           </p>
         </section>
 
         {/* Edge Slider */}
-        <section className="mb-20">
-          <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-6">
+        <section className="mb-32">
+          <div className="rounded-2xl border border-slate-800 bg-slate-900/50 p-8">
             <div className="mb-6 flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
               <div>
-                <h2 className="text-xl font-bold text-white">Edge Threshold</h2>
+                <h2 className="text-2xl font-extrabold text-white">Edge Threshold</h2>
                 <p className="mt-1 text-sm text-slate-400">Filter by minimum probability edge</p>
               </div>
               <p className="text-sm text-slate-500">0 pts = every prediction</p>
@@ -82,7 +82,7 @@ export default function BettingPage() {
                 ))}
               </div>
             </div>
-            <div className="mt-6 grid gap-6 md:grid-cols-4">
+            <div className="mt-6 grid gap-8 md:grid-cols-4">
               <SummaryCard label="Win rate" value={pct(activeStrategy.winRate)} detail={`${activeStrategy.bets.toLocaleString()} bets`} />
               <SummaryCard label="ROI / bet" value={`${roiPerBet}%`} detail="even-money assumption" />
               <SummaryCard label="Units" value={`${activeStrategy.units > 0 ? "+" : ""}${activeStrategy.units}u`} detail="wins - losses" />
@@ -93,10 +93,10 @@ export default function BettingPage() {
         </section>
 
         {/* Strategy Leaders */}
-        <section className="mb-20">
-          <div className="grid gap-6 lg:grid-cols-2">
-            <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-6">
-              <h2 className="mb-2 text-xl font-bold text-white">Top Performers</h2>
+        <section className="mb-32">
+          <div className="grid gap-8 lg:grid-cols-2">
+            <div className="rounded-2xl border border-slate-800 bg-slate-900/50 p-8">
+              <h2 className="mb-2 text-2xl font-extrabold text-white">Top Performers</h2>
               <p className="mb-6 text-sm text-slate-400">Strategies adding the most units this season</p>
               <div className="space-y-4">
                 {strategyLeaders.map((strategy) => (
@@ -111,8 +111,8 @@ export default function BettingPage() {
                 ))}
               </div>
             </div>
-            <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-6">
-              <h2 className="mb-2 text-xl font-bold text-white">Variance Context</h2>
+            <div className="rounded-2xl border border-slate-800 bg-slate-900/50 p-8">
+              <h2 className="mb-2 text-2xl font-extrabold text-white">Variance Context</h2>
               <p className="mb-6 text-sm text-slate-400">Strategies currently lagging</p>
               <div className="space-y-4">
                 {strategyLaggards.map((strategy) => (
@@ -130,16 +130,16 @@ export default function BettingPage() {
         </section>
 
         {/* Bankroll & Terms */}
-        <section className="mb-20">
-          <div className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
-            <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-6">
-              <h2 className="mb-2 text-xl font-bold text-white">Bankroll Curve</h2>
+        <section className="mb-32">
+          <div className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr]">
+            <div className="rounded-2xl border border-slate-800 bg-slate-900/50 p-8">
+              <h2 className="mb-2 text-2xl font-extrabold text-white">Bankroll Curve</h2>
               <p className="mb-6 text-sm text-slate-400">All-picks cumulative units</p>
               <Sparkline points={bankrollSeries} />
               <p className="mt-4 text-sm text-slate-400">+168 units from opening night through April 18 (even-money assumption)</p>
             </div>
-            <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-6">
-              <h2 className="mb-6 text-xl font-bold text-white">Term Guide</h2>
+            <div className="rounded-2xl border border-slate-800 bg-slate-900/50 p-8">
+              <h2 className="mb-6 text-2xl font-extrabold text-white">Term Guide</h2>
               <div className="space-y-4">
                 <Definition term="Edge">
                   Absolute difference between the model&apos;s win probability and a 50/50 coin flip. 10 pts = 60% vs 50%.
@@ -156,11 +156,11 @@ export default function BettingPage() {
         </section>
 
         {/* Strategy Table */}
-        <section className="mb-20">
-          <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-6">
+        <section className="mb-32">
+          <div className="rounded-2xl border border-slate-800 bg-slate-900/50 p-8">
             <div className="mb-6 flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
               <div>
-                <h2 className="text-xl font-bold text-white">Strategy Board</h2>
+                <h2 className="text-2xl font-extrabold text-white">Strategy Board</h2>
                 <p className="mt-1 text-sm text-slate-400">How each threshold performed in the 2023-24 season</p>
               </div>
               <p className="text-sm text-slate-500">Even-money assumption</p>

@@ -132,14 +132,14 @@ export default function AboutPage() {
 
       <div className="relative mx-auto max-w-7xl px-6 py-16 lg:px-8">
         {/* Header */}
-        <section className="mb-20">
+        <section className="mb-32">
           <div className="mb-2 inline-flex items-center gap-2 rounded-full border border-sky-500/20 bg-sky-500/5 px-3 py-1">
             <span className="text-xs font-medium text-sky-400">About Puckcast</span>
           </div>
-          <h1 className="mb-4 text-4xl font-bold text-white lg:text-5xl">
+          <h1 className="mb-8 text-6xl font-extrabold text-white lg:text-7xl">
             Machine learning for hockey fans who love the numbers
           </h1>
-          <p className="max-w-3xl text-lg text-slate-300">
+          <p className="max-w-3xl text-xl text-slate-300">
             Puckcast is a passion project built by data enthusiasts who wanted to bring transparent,
             accessible NHL predictions to the hockey community. We combine machine learning with
             advanced statistics to predict game outcomes — and we share everything openly.
@@ -147,9 +147,9 @@ export default function AboutPage() {
         </section>
 
         {/* Mission */}
-        <section className="mb-20">
-          <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-6">
-            <h2 className="mb-4 text-2xl font-bold text-white">Our Mission</h2>
+        <section className="mb-32">
+          <div className="rounded-2xl border border-slate-800 bg-slate-900/50 p-8">
+            <h2 className="mb-4 text-3xl font-extrabold text-white">Our Mission</h2>
             <p className="mb-4 max-w-3xl text-sm leading-relaxed text-slate-300">
               We believe hockey predictions should be transparent, data-driven, and accessible. Too many
               prediction models are black boxes that hide their methods and cherry-pick results. We're
@@ -165,12 +165,12 @@ export default function AboutPage() {
         </section>
 
         {/* Principles */}
-        <section className="mb-20">
-          <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-6">
-            <h2 className="mb-8 text-2xl font-bold text-white">Our Principles</h2>
-            <div className="grid gap-6 md:grid-cols-2">
+        <section className="mb-32">
+          <div className="rounded-2xl border border-slate-800 bg-slate-900/50 p-8">
+            <h2 className="mb-10 text-3xl font-extrabold text-white">Our Principles</h2>
+            <div className="grid gap-8 md:grid-cols-2">
               {principles.map((principle) => (
-                <div key={principle.title} className="rounded-lg border border-slate-800/50 bg-slate-950/50 p-6">
+                <div key={principle.title} className="rounded-lg border border-slate-800/50 bg-slate-950/50 p-8">
                   <div className="flex items-start gap-4">
                     <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-lg bg-sky-500/10 text-2xl">
                       {principle.icon}
@@ -187,13 +187,13 @@ export default function AboutPage() {
         </section>
 
         {/* How It Works */}
-        <section className="mb-20">
-          <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-6">
-            <h2 className="mb-2 text-2xl font-bold text-white">How It Works</h2>
+        <section className="mb-32">
+          <div className="rounded-2xl border border-slate-800 bg-slate-900/50 p-8">
+            <h2 className="mb-2 text-3xl font-extrabold text-white">How It Works</h2>
             <p className="mb-8 text-sm text-slate-400">Our prediction process in 4 steps</p>
-            <div className="grid gap-6 md:grid-cols-2">
+            <div className="grid gap-8 md:grid-cols-2">
               {howItWorks.map((step, idx) => (
-                <div key={step.title} className="rounded-lg border border-slate-800/50 bg-slate-950/50 p-6">
+                <div key={step.title} className="rounded-lg border border-slate-800/50 bg-slate-950/50 p-8">
                   <div className="flex items-start gap-4">
                     <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-lg bg-sky-500/10 text-2xl">
                       {step.icon}
@@ -207,7 +207,7 @@ export default function AboutPage() {
               ))}
             </div>
 
-            <div className="mt-6 grid gap-6 sm:grid-cols-3">
+            <div className="mt-6 grid gap-8 sm:grid-cols-3">
               {performanceHighlights.map((item) => (
                 <div key={item.metric} className="rounded-lg border border-slate-800/50 bg-slate-950/50 p-6 text-center">
                   <p className="text-sm font-medium text-slate-400">{item.metric}</p>
@@ -228,9 +228,9 @@ export default function AboutPage() {
         </section>
 
         {/* Timeline */}
-        <section className="mb-20">
-          <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-6">
-            <h2 className="mb-2 text-2xl font-bold text-white">Project Timeline</h2>
+        <section className="mb-32">
+          <div className="rounded-2xl border border-slate-800 bg-slate-900/50 p-8">
+            <h2 className="mb-2 text-3xl font-extrabold text-white">Project Timeline</h2>
             <p className="mb-8 text-sm text-slate-400">How we got here</p>
             <div className="space-y-6">
               {timeline.map((milestone, idx) => (
@@ -253,10 +253,10 @@ export default function AboutPage() {
         </section>
 
         {/* Tech & Limitations */}
-        <section className="mb-20">
-          <div className="grid gap-6 lg:grid-cols-2">
-            <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-6">
-              <h2 className="mb-6 text-2xl font-bold text-white">Technology Stack</h2>
+        <section className="mb-32">
+          <div className="grid gap-8 lg:grid-cols-2">
+            <div className="rounded-2xl border border-slate-800 bg-slate-900/50 p-8">
+              <h2 className="mb-6 text-3xl font-extrabold text-white">Technology Stack</h2>
               <div className="space-y-3">
                 {tech.map((item) => (
                   <div key={item.label} className="flex items-center justify-between rounded-lg border border-slate-800/50 bg-slate-950/50 px-4 py-3">
@@ -274,8 +274,8 @@ export default function AboutPage() {
               </div>
             </div>
 
-            <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-6">
-              <h2 className="mb-2 text-2xl font-bold text-white">Limitations</h2>
+            <div className="rounded-2xl border border-slate-800 bg-slate-900/50 p-8">
+              <h2 className="mb-2 text-3xl font-extrabold text-white">Limitations</h2>
               <p className="mb-6 text-sm text-slate-400">What we can't predict</p>
               <div className="space-y-4">
                 <div className="rounded-lg border border-slate-800/50 bg-slate-950/50 p-4">
@@ -296,9 +296,9 @@ export default function AboutPage() {
         </section>
 
         {/* FAQs */}
-        <section className="mb-20">
-          <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-6">
-            <h2 className="mb-6 text-2xl font-bold text-white">Frequently Asked Questions</h2>
+        <section className="mb-32">
+          <div className="rounded-2xl border border-slate-800 bg-slate-900/50 p-8">
+            <h2 className="mb-10 text-3xl font-extrabold text-white">Frequently Asked Questions</h2>
             <div className="space-y-4">
               {faqs.map((faq) => (
                 <details key={faq.question} className="group rounded-lg border border-slate-800/50 bg-slate-950/50 p-5">
@@ -313,7 +313,7 @@ export default function AboutPage() {
         </section>
 
         {/* CTA */}
-        <section className="mb-20">
+        <section className="mb-32">
           <div className="rounded-xl border border-sky-500/20 bg-gradient-to-br from-sky-500/10 to-cyan-500/10 p-10 text-center">
             <h2 className="text-3xl font-bold text-white">Stay Connected</h2>
             <p className="mx-auto mt-3 max-w-2xl text-base text-slate-300">

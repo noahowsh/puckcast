@@ -125,22 +125,22 @@ export default function LeaderboardsPage() {
 
       <div className="relative mx-auto max-w-7xl px-6 py-16 lg:px-8">
         {/* Header */}
-        <section className="mb-20">
+        <section className="mb-32">
           <div className="mb-2 inline-flex items-center gap-2 rounded-full border border-sky-500/20 bg-sky-500/5 px-3 py-1">
             <span className="text-xs font-medium text-sky-400">Power Rankings</span>
           </div>
-          <h1 className="mb-4 text-4xl font-bold text-white lg:text-5xl">Live power rankings</h1>
-          <p className="max-w-3xl text-lg text-slate-300">
+          <h1 className="mb-8 text-6xl font-extrabold text-white lg:text-7xl">Live power rankings</h1>
+          <p className="max-w-3xl text-xl text-slate-300">
             Composite scores based on points, goal differential, tempo, and shot share. Updated every Monday to capture the current week's snapshot.
           </p>
           <p className="mt-2 text-sm text-slate-500">Week of {leaderboardWeekLabel}</p>
         </section>
 
         {/* Highlights */}
-        <section className="mb-20">
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <section className="mb-32">
+          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
             {leaderboardHighlights.map((card) => (
-              <div key={card.label} className="rounded-xl border border-slate-800 bg-slate-900/50 p-6">
+              <div key={card.label} className="rounded-2xl border border-slate-800 bg-slate-900/50 p-8">
                 <p className="text-sm font-medium text-slate-400">{card.label}</p>
                 <p className="mt-2 text-2xl font-bold text-white">{card.value}</p>
                 <p className="mt-1 text-sm text-slate-500">{card.detail}</p>
@@ -150,10 +150,10 @@ export default function LeaderboardsPage() {
         </section>
 
         {/* Rankings Table */}
-        <section className="mb-20">
-          <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-6">
-            <div className="mb-4 flex items-center justify-between">
-              <h2 className="text-xl font-bold text-white">Full Rankings</h2>
+        <section className="mb-32">
+          <div className="rounded-2xl border border-slate-800 bg-slate-900/50 p-8">
+            <div className="mb-6 flex items-center justify-between">
+              <h2 className="text-2xl font-extrabold text-white">Full Rankings</h2>
               <p className="text-sm text-slate-500">Week of {leaderboardWeekLabel}</p>
             </div>
             <div className="overflow-x-auto">
@@ -225,8 +225,8 @@ export default function LeaderboardsPage() {
         </section>
 
         {/* Upcoming Schedule */}
-        <section className="mb-20">
-          <h2 className="mb-8 text-2xl font-bold text-white">Upcoming Schedule</h2>
+        <section className="mb-32">
+          <h2 className="mb-10 text-3xl font-extrabold text-white">Upcoming Schedule</h2>
           <div className="space-y-6">
             {schedule.map((day) => (
               <DateGroup key={day.date} day={day} />
@@ -240,7 +240,7 @@ export default function LeaderboardsPage() {
 
 function DateGroup({ day }: { day: MatchupSummary }) {
   return (
-    <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-6">
+    <div className="rounded-2xl border border-slate-800 bg-slate-900/50 p-8">
       <p className="mb-4 text-sm font-medium text-slate-400">{day.date}</p>
       <div className="space-y-4">
         {day.games.map((game) => (

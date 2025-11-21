@@ -46,36 +46,36 @@ export default function PerformancePage() {
 
       <div className="relative mx-auto max-w-7xl px-6 py-16 lg:px-8">
         {/* Header */}
-        <section className="mb-20">
+        <section className="mb-32">
           <div className="mb-2 inline-flex items-center gap-2 rounded-full border border-sky-500/20 bg-sky-500/5 px-3 py-1">
             <span className="text-xs font-medium text-sky-400">Performance</span>
           </div>
-          <h1 className="mb-4 text-4xl font-bold text-white lg:text-5xl">Model diagnostics</h1>
-          <p className="max-w-3xl text-lg text-slate-300">
+          <h1 className="mb-8 text-6xl font-extrabold text-white lg:text-7xl">Model diagnostics</h1>
+          <p className="max-w-3xl text-xl text-slate-300">
             Track current season performance, upcoming slate breakdowns, and historical model analysis all in one place.
           </p>
         </section>
 
         {/* Model Performance Overview */}
-        <section className="mb-20">
-          <h2 className="mb-8 text-2xl font-bold text-white">Key Metrics</h2>
-          <div className="grid gap-6 md:grid-cols-4">
-            <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-6">
+        <section className="mb-32">
+          <h2 className="mb-10 text-3xl font-extrabold text-white">Key Metrics</h2>
+          <div className="grid gap-8 md:grid-cols-4">
+            <div className="rounded-2xl border border-slate-800 bg-slate-900/50 p-8">
               <p className="text-sm font-medium text-slate-400">Test Accuracy</p>
               <p className="mt-2 text-3xl font-bold text-sky-400">{pct(overview.accuracy)}</p>
               <p className="mt-1 text-sm text-slate-500">2023-24 holdout</p>
             </div>
-            <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-6">
+            <div className="rounded-2xl border border-slate-800 bg-slate-900/50 p-8">
               <p className="text-sm font-medium text-slate-400">Baseline</p>
               <p className="mt-2 text-3xl font-bold text-white">{pct(overview.baseline)}</p>
               <p className="mt-1 text-sm text-slate-500">Home win rate</p>
             </div>
-            <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-6">
+            <div className="rounded-2xl border border-slate-800 bg-slate-900/50 p-8">
               <p className="text-sm font-medium text-slate-400">Edge</p>
               <p className="mt-2 text-3xl font-bold text-white">+{((overview.accuracy - overview.baseline) * 100).toFixed(1)}</p>
               <p className="mt-1 text-sm text-slate-500">pts over baseline</p>
             </div>
-            <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-6">
+            <div className="rounded-2xl border border-slate-800 bg-slate-900/50 p-8">
               <p className="text-sm font-medium text-slate-400">Games</p>
               <p className="mt-2 text-3xl font-bold text-white">{overview.games.toLocaleString()}</p>
               <p className="mt-1 text-sm text-slate-500">validated</p>
@@ -84,9 +84,9 @@ export default function PerformancePage() {
         </section>
 
         {/* Upcoming Slate Focus */}
-        <section className="mb-20">
-          <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-6">
-            <h2 className="mb-2 text-xl font-bold text-white">Today's Top Matchups</h2>
+        <section className="mb-32">
+          <div className="rounded-2xl border border-slate-800 bg-slate-900/50 p-8">
+            <h2 className="mb-2 text-2xl font-extrabold text-white">Today's Top Matchups</h2>
             <p className="mb-6 text-sm text-slate-400">Teams with the highest model confidence</p>
             <div className="overflow-x-auto">
               <table className="min-w-full text-sm">
@@ -116,9 +116,9 @@ export default function PerformancePage() {
         </section>
 
         {/* Edge Distribution */}
-        <section className="mb-20">
-          <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-6">
-            <h2 className="mb-6 text-xl font-bold text-white">Edge Distribution</h2>
+        <section className="mb-32">
+          <div className="rounded-2xl border border-slate-800 bg-slate-900/50 p-8">
+            <h2 className="mb-6 text-2xl font-extrabold text-white">Edge Distribution</h2>
             <p className="mb-6 text-sm text-slate-400">Upcoming games by confidence level</p>
             <div className="space-y-4">
               {edgeDistribution.buckets.map((bucket) => (
@@ -140,14 +140,14 @@ export default function PerformancePage() {
         </section>
 
         {/* Confidence Calibration */}
-        <section className="mb-20">
-          <h2 className="mb-8 text-2xl font-bold text-white">Confidence Calibration</h2>
+        <section className="mb-32">
+          <h2 className="mb-10 text-3xl font-extrabold text-white">Confidence Calibration</h2>
           <p className="mb-6 text-sm text-slate-400">Accuracy by prediction strength (2023-24 test set)</p>
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
             {confidenceBuckets.map((bucket) => {
               const isStrong = bucket.accuracy > 0.6;
               return (
-                <div key={bucket.label} className={`rounded-xl border p-6 ${isStrong ? 'border-sky-500/30 bg-sky-500/5' : 'border-slate-800 bg-slate-900/50'}`}>
+                <div key={bucket.label} className={`rounded-2xl border p-8 ${isStrong ? 'border-sky-500/30 bg-sky-500/5' : 'border-slate-800 bg-slate-900/50'}`}>
                   <p className="text-sm font-medium text-slate-400">{bucket.label}</p>
                   <p className="mt-2 text-3xl font-bold text-white">{pct(bucket.accuracy)}</p>
                   <p className="mt-1 text-sm text-slate-500">{bucket.count.toLocaleString()} games</p>
@@ -158,9 +158,9 @@ export default function PerformancePage() {
         </section>
 
         {/* Betting Strategies */}
-        <section className="mb-20">
-          <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-6">
-            <h2 className="mb-2 text-xl font-bold text-white">Strategy Performance</h2>
+        <section className="mb-32">
+          <div className="rounded-2xl border border-slate-800 bg-slate-900/50 p-8">
+            <h2 className="mb-2 text-2xl font-extrabold text-white">Strategy Performance</h2>
             <p className="mb-6 text-sm text-slate-400">Historical betting strategy results (for reference only)</p>
             <div className="overflow-x-auto">
               <table className="min-w-full text-sm">
