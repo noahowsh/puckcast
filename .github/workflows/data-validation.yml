@@ -69,6 +69,9 @@ jobs:
 
               if timestamp_str:
                   timestamp = datetime.fromisoformat(timestamp_str.replace("Z", "+00:00"))
+                  # Ensure timestamp is timezone-aware (assume UTC if naive)
+                  if timestamp.tzinfo is None:
+                      timestamp = timestamp.replace(tzinfo=timezone.utc)
                   age_hours = (datetime.now(timezone.utc) - timestamp).total_seconds() / 3600
 
                   if age_hours > max_age_hours:

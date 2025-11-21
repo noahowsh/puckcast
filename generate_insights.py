@@ -3,7 +3,7 @@
 
 import json
 import pandas as pd
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 
 # Read predictions
@@ -85,7 +85,7 @@ for label, min_val, max_val in bucket_defs:
 
 # Create insights structure
 insights = {
-    "generatedAt": datetime.now().isoformat(),
+    "generatedAt": datetime.now(timezone.utc).isoformat(),
     "overall": {
         "games": total_games,
         "accuracy": accuracy,
