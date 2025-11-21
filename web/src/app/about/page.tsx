@@ -149,8 +149,8 @@ export default function AboutPage() {
         {/* Mission */}
         <section className="mb-32">
           <div className="rounded-2xl border border-slate-800 bg-slate-900/50 p-8">
-            <h2 className="mb-4 text-3xl font-extrabold text-white">Our Mission</h2>
-            <p className="mb-4 max-w-3xl text-sm leading-relaxed text-slate-300">
+            <h2 className="mb-6 text-3xl font-extrabold text-white">Our Mission</h2>
+            <p className="mb-6 max-w-3xl text-sm leading-relaxed text-slate-300">
               We believe hockey predictions should be transparent, data-driven, and accessible. Too many
               prediction models are black boxes that hide their methods and cherry-pick results. We're
               different. We track real-time accuracy on current games and openly discuss what we get right and wrong.
@@ -189,7 +189,7 @@ export default function AboutPage() {
         {/* How It Works */}
         <section className="mb-32">
           <div className="rounded-2xl border border-slate-800 bg-slate-900/50 p-8">
-            <h2 className="mb-2 text-3xl font-extrabold text-white">How It Works</h2>
+            <h2 className="mb-4 text-3xl font-extrabold text-white">How It Works</h2>
             <p className="mb-8 text-sm text-slate-400">Our prediction process in 4 steps</p>
             <div className="grid gap-8 md:grid-cols-2">
               {howItWorks.map((step, idx) => (
@@ -230,7 +230,7 @@ export default function AboutPage() {
         {/* Timeline */}
         <section className="mb-32">
           <div className="rounded-2xl border border-slate-800 bg-slate-900/50 p-8">
-            <h2 className="mb-2 text-3xl font-extrabold text-white">Project Timeline</h2>
+            <h2 className="mb-4 text-3xl font-extrabold text-white">Project Timeline</h2>
             <p className="mb-8 text-sm text-slate-400">How we got here</p>
             <div className="space-y-8">
               {timeline.map((milestone, idx) => (
@@ -256,8 +256,8 @@ export default function AboutPage() {
         <section className="mb-32">
           <div className="grid gap-8 lg:grid-cols-2">
             <div className="rounded-2xl border border-slate-800 bg-slate-900/50 p-8">
-              <h2 className="mb-6 text-3xl font-extrabold text-white">Technology Stack</h2>
-              <div className="space-y-3">
+              <h2 className="mb-8 text-3xl font-extrabold text-white">Technology Stack</h2>
+              <div className="space-y-4">
                 {tech.map((item) => (
                   <div key={item.label} className="flex items-center justify-between rounded-lg border border-slate-800/50 bg-slate-950/50 px-4 py-3">
                     <span className="text-sm font-medium text-slate-400">{item.label}</span>
@@ -275,8 +275,8 @@ export default function AboutPage() {
             </div>
 
             <div className="rounded-2xl border border-slate-800 bg-slate-900/50 p-8">
-              <h2 className="mb-2 text-3xl font-extrabold text-white">Limitations</h2>
-              <p className="mb-6 text-sm text-slate-400">What we can't predict</p>
+              <h2 className="mb-4 text-3xl font-extrabold text-white">Limitations</h2>
+              <p className="mb-8 text-sm text-slate-400">What we can't predict</p>
               <div className="space-y-4">
                 <div className="rounded-lg border border-slate-800/50 bg-slate-950/50 p-4">
                   <p className="text-sm font-semibold text-slate-300">Unpredictable Events</p>

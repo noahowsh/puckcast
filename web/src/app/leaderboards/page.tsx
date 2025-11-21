@@ -241,7 +241,7 @@ export default function LeaderboardsPage() {
 function DateGroup({ day }: { day: MatchupSummary }) {
   return (
     <div className="rounded-2xl border border-slate-800 bg-slate-900/50 p-8">
-      <p className="mb-4 text-sm font-medium text-slate-400">{day.date}</p>
+      <p className="mb-6 text-sm font-medium text-slate-400">{day.date}</p>
       <div className="space-y-4">
         {day.games.map((game) => (
           <article key={game.id} className="rounded-lg border border-slate-800/50 bg-slate-950/50 p-4">

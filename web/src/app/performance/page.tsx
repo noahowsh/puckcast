@@ -86,8 +86,8 @@ export default function PerformancePage() {
         {/* Upcoming Slate Focus */}
         <section className="mb-32">
           <div className="rounded-2xl border border-slate-800 bg-slate-900/50 p-8">
-            <h2 className="mb-2 text-2xl font-extrabold text-white">Today's Top Matchups</h2>
-            <p className="mb-6 text-sm text-slate-400">Teams with the highest model confidence</p>
+            <h2 className="mb-4 text-2xl font-extrabold text-white">Today's Top Matchups</h2>
+            <p className="mb-8 text-sm text-slate-400">Teams with the highest model confidence</p>
             <div className="overflow-x-auto">
               <table className="min-w-full text-sm">
                 <thead className="border-b border-slate-800">
@@ -118,8 +118,8 @@ export default function PerformancePage() {
         {/* Edge Distribution */}
         <section className="mb-32">
           <div className="rounded-2xl border border-slate-800 bg-slate-900/50 p-8">
-            <h2 className="mb-6 text-2xl font-extrabold text-white">Edge Distribution</h2>
-            <p className="mb-6 text-sm text-slate-400">Upcoming games by confidence level</p>
+            <h2 className="mb-4 text-2xl font-extrabold text-white">Edge Distribution</h2>
+            <p className="mb-8 text-sm text-slate-400">Upcoming games by confidence level</p>
             <div className="space-y-4">
               {edgeDistribution.buckets.map((bucket) => (
                 <div key={bucket.label}>
@@ -142,7 +142,7 @@ export default function PerformancePage() {
         {/* Confidence Calibration */}
         <section className="mb-32">
           <h2 className="mb-10 text-3xl font-extrabold text-white">Confidence Calibration</h2>
-          <p className="mb-6 text-sm text-slate-400">Accuracy by prediction strength (2023-24 test set)</p>
+          <p className="mb-8 text-sm text-slate-400">Accuracy by prediction strength (2023-24 test set)</p>
           <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
             {confidenceBuckets.map((bucket) => {
               const isStrong = bucket.accuracy > 0.6;
@@ -160,8 +160,8 @@ export default function PerformancePage() {
         {/* Betting Strategies */}
         <section className="mb-32">
           <div className="rounded-2xl border border-slate-800 bg-slate-900/50 p-8">
-            <h2 className="mb-2 text-2xl font-extrabold text-white">Strategy Performance</h2>
-            <p className="mb-6 text-sm text-slate-400">Historical betting strategy results (for reference only)</p>
+            <h2 className="mb-4 text-2xl font-extrabold text-white">Strategy Performance</h2>
+            <p className="mb-8 text-sm text-slate-400">Historical betting strategy results (for reference only)</p>
             <div className="overflow-x-auto">
               <table className="min-w-full text-sm">
                 <thead className="border-b border-slate-800">

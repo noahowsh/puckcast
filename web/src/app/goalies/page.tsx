@@ -151,7 +151,7 @@ function GoalieCardView({ goalie }: { goalie: GoalieCard }) {
       <div className="mt-6 grid gap-4 md:grid-cols-2">
         <div>
           <p className="mb-2 text-sm font-medium text-slate-400">Strengths</p>
-          <ul className="space-y-2">
+          <ul className="space-y-3">
             {goalie.strengths.map((item) => (
               <li key={item} className="rounded-lg bg-sky-500/10 px-3 py-2 text-xs text-sky-400">{item}</li>
             ))}
@@ -159,7 +159,7 @@ function GoalieCardView({ goalie }: { goalie: GoalieCard }) {
         </div>
         <div>
           <p className="mb-2 text-sm font-medium text-slate-400">Watch-outs</p>
-          <ul className="space-y-2">
+          <ul className="space-y-3">
             {goalie.watchouts.map((item) => (
               <li key={item} className="rounded-lg bg-slate-800/50 px-3 py-2 text-xs text-slate-400">
                 {item}
