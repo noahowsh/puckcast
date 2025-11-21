@@ -315,7 +315,7 @@ export default function AboutPage() {
         {/* CTA */}
         <section className="mb-32">
           <div className="rounded-xl border border-sky-500/20 bg-gradient-to-br from-sky-500/10 to-cyan-500/10 p-10 text-center">
-            <h2 className="text-3xl font-bold text-white">Stay Connected</h2>
+            <h2 className="text-3xl font-extrabold text-white">Stay Connected</h2>
             <p className="mx-auto mt-3 max-w-2xl text-base text-slate-300">
               Follow @puckcastai on X for daily predictions, post-game results, performance updates,
               and behind-the-scenes insights into how we refine the model.
@@ -325,13 +325,13 @@ export default function AboutPage() {
                 href="https://x.com/puckcastai"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="rounded-lg bg-sky-500 px-8 py-3 font-semibold text-white shadow-lg shadow-sky-500/30 transition hover:bg-sky-400"
+                className="rounded-xl bg-sky-500 px-8 py-4 text-lg font-bold text-white shadow-xl shadow-sky-500/30 transition hover:bg-sky-400"
               >
                 Follow @puckcastai
               </a>
               <Link
                 href="/performance"
-                className="rounded-lg border border-slate-700 bg-slate-900/50 px-8 py-3 font-semibold text-white transition hover:border-slate-600 hover:bg-slate-900"
+                className="rounded-xl border-2 border-slate-700 bg-slate-900/50 px-8 py-4 text-lg font-bold text-white transition hover:border-slate-600 hover:bg-slate-900"
               >
                 View Performance
               </Link>
