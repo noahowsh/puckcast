@@ -58,7 +58,7 @@ export default function PredictionsPage() {
             <div>
               <h1 className="text-4xl font-semibold text-white">Full-game projections without opening a spreadsheet.</h1>
               <p className="mt-3 max-w-3xl text-base text-white/75">
-                Lineup context, rolling form, MoneyPuck-derived features—everything that powers the dashboard now lives in this tab so you can
+                Lineup context, rolling form, NHL API features—everything that powers the dashboard now lives in this tab so you can
                 scan the nearest slate in seconds.
               </p>
             </div>

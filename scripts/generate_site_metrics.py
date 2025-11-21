@@ -69,8 +69,8 @@ def main() -> None:
     return teams[code]
 
   for _, row in df.iterrows():
-    home = ensure_team(row["teamFullName_home"])
-    away = ensure_team(row["teamFullName_away"])
+    home = ensure_team(row["teamAbbrev_home"])
+    away = ensure_team(row["teamAbbrev_away"])
     home_win = int(row["home_win"])
     is_correct = int(row["correct"])
 
@@ -161,7 +161,7 @@ def main() -> None:
 
   matchup_stats: dict[tuple[str, str], dict[str, int]] = defaultdict(lambda: {"games": 0, "correct": 0})
   for _, row in df.iterrows():
-    key = tuple(sorted([row["teamFullName_home"], row["teamFullName_away"]]))
+    key = tuple(sorted([row["teamAbbrev_home"], row["teamAbbrev_away"]]))
     matchup_stats[key]["games"] += 1
     matchup_stats[key]["correct"] += int(row["correct"])
 
@@ -187,11 +187,13 @@ def main() -> None:
   for column, label in [
     ("rolling_goal_diff_5_diff", "Rolling goal differential (5 games)"),
     ("rolling_win_pct_5_diff", "Rolling win% (5 games)"),
-    ("special_teams_matchup", "Special teams matchup index"),
+    ("specialTeamEdge_diff", "Special teams edge differential"),
   ]:
     if column in df.columns:
+      correct_mask = df["correct"] == 1
+      incorrect_mask = df["correct"] == 0
       distribution_metrics.append(
-        {"metric": label, "correctMean": df.loc[df["correct"], column].mean(), "incorrectMean": df.loc[~df["correct"], column].mean()}
+        {"metric": label, "correctMean": float(df.loc[correct_mask, column].mean()), "incorrectMean": float(df.loc[incorrect_mask, column].mean())}
       )
 
   df_sorted = df.sort_values("gameDate")

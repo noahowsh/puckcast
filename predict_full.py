@@ -34,7 +34,7 @@ sys.path.insert(0, str(Path(__file__).parent / 'src'))
 from nhl_prediction.nhl_api import fetch_future_games, fetch_todays_games, fetch_schedule
 from nhl_prediction.pipeline import build_dataset
 from nhl_prediction.model import calibrate_threshold, create_baseline_model, fit_model, tune_logreg_c
-from nhl_prediction.player_hub.context import refresh_player_hub_context
+# from nhl_prediction.player_hub.context import refresh_player_hub_context  # Module not implemented yet
 
 # Suppress sklearn warnings
 warnings.filterwarnings('ignore', category=UserWarning)
@@ -501,12 +501,13 @@ def main():
 
         target_dt = datetime.strptime(date, "%Y-%m-%d") if date else datetime.now()
         player_hub_payload = None
-        try:
-            season_id = derive_season_id_from_date(target_dt)
-            player_hub_payload = refresh_player_hub_context(target_dt.date(), season_id)
-            print("🗂  Updated Player Hub context payload.")
-        except Exception as refresh_error:
-            print(f"⚠️  Failed to refresh Player Hub context: {refresh_error}")
+        # Player Hub module not implemented yet - skip context refresh
+        # try:
+        #     season_id = derive_season_id_from_date(target_dt)
+        #     player_hub_payload = refresh_player_hub_context(target_dt.date(), season_id)
+        #     print("🗂  Updated Player Hub context payload.")
+        # except Exception as refresh_error:
+        #     print(f"⚠️  Failed to refresh Player Hub context: {refresh_error}")
         export_predictions_json(
             predictions,
             generated_at=datetime.now(timezone.utc).isoformat(),

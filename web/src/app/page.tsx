@@ -92,7 +92,7 @@ const weekStartDisplay = shortDateFormatter.format(weekStartDate);
 const methodology = [
   {
     title: "Data ingestion",
-    detail: "MoneyPuck, NHL play-by-play, micro-stat partners, and our own goalie tracking feed join a unified warehouse.",
+    detail: "Official NHL API, play-by-play data, advanced goalie tracking, and 204 engineered features power our prediction engine.",
   },
   {
     title: "Feature engineering",

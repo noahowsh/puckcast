@@ -1,4 +1,9 @@
 import Link from "next/link";
+import insightsData from "@/data/modelInsights.json";
+import type { ModelInsights } from "@/types/insights";
+
+const modelInsights = insightsData as ModelInsights;
+const pct = (value: number) => `${(value * 100).toFixed(1)}%`;
 
 const timeline = [
   {
@@ -14,58 +19,79 @@ const timeline = [
   {
     date: "January 2025",
     title: "V2.0 Site & Expansion",
-    description: "Expanded to 6 seasons of training data, launched this website, and began daily prediction updates with X/Twitter automation.",
+    description: "Launched this website with daily prediction updates, real-time performance tracking, and automated X/Twitter posts.",
   },
 ];
 
 const principles = [
   {
     title: "Transparency First",
-    description: "We openly share our methodology, performance metrics, and limitations. No black boxes, no hidden formulas, no misleading claims.",
+    description: "We openly share our performance metrics and limitations. No black boxes, no hidden formulas, no misleading claims.",
     icon: "🔍",
   },
   {
     title: "Data-Driven",
-    description: "Every prediction is grounded in historical data and statistical patterns. We let the numbers speak rather than gut feelings or narratives.",
+    description: "Every prediction is grounded in historical data and statistical patterns. We let the numbers speak rather than gut feelings.",
     icon: "📊",
   },
   {
     title: "Continuous Improvement",
-    description: "We track real-time performance, iterate on features, and refine our model as we learn. Accuracy metrics update daily with honest reporting.",
+    description: "We track real-time performance and refine our model as we learn. Accuracy metrics update daily with honest reporting.",
     icon: "🔄",
   },
   {
     title: "Accessible Insights",
-    description: "Complex machine learning made simple. We explain predictions in plain language with context you can understand and use.",
+    description: "Complex machine learning made simple. We explain predictions in plain language with context you can understand.",
     icon: "💡",
   },
 ];
 
-const features = [
+const howItWorks = [
   {
-    feature: "Daily Predictions",
-    description: "Win probabilities for every NHL game, updated each morning with the latest rosters and goalie confirmations.",
+    title: "Data Collection",
+    description: "We aggregate game-level statistics from the official NHL API including team performance, advanced metrics, and situational factors.",
+    icon: "📊",
   },
   {
-    feature: "Performance Tracking",
-    description: "Real-time accuracy metrics on current season games, with full transparency about what's working and what isn't.",
+    title: "Pattern Recognition",
+    description: "Our machine learning model identifies patterns in historical data that correlate with game outcomes — things like recent form, rest days, and head-to-head matchups.",
+    icon: "🧠",
   },
   {
-    feature: "X/Twitter Updates",
-    description: "Automated daily posts with tonight's predictions, post-game results, and weekly performance summaries.",
+    title: "Win Probability",
+    description: "Each morning, we generate win probabilities for today's games using the latest roster updates and goalie confirmations.",
+    icon: "🎯",
   },
   {
-    feature: "Analytics Dashboard",
-    description: "Deep dive into feature importance, confidence calibration, and team-level breakdowns for hockey data enthusiasts.",
+    title: "Real-Time Tracking",
+    description: "We validate performance on actual NHL results throughout the season, tracking accuracy in real-time with full transparency.",
+    icon: "📈",
+  },
+];
+
+const performanceHighlights = [
+  {
+    metric: "Test Accuracy",
+    value: pct(modelInsights.overall.accuracy),
+    description: "Current season performance"
+  },
+  {
+    metric: "Edge over baseline",
+    value: `+${((modelInsights.overall.accuracy - modelInsights.overall.baseline) * 100).toFixed(1)} pts`,
+    description: "vs. always picking home team"
+  },
+  {
+    metric: "Games Analyzed",
+    value: modelInsights.overall.games.toLocaleString(),
+    description: "Real NHL games tracked"
   },
 ];
 
 const tech = [
   { label: "Backend", value: "Python, scikit-learn, pandas" },
-  { label: "Model", value: "Logistic Regression (L2 regularization)" },
-  { label: "Data", value: "MoneyPuck, NHL API, 6 seasons (2018-2024)" },
-  { label: "Frontend", value: "Next.js 16, React 19, Tailwind CSS v4" },
-  { label: "Deployment", value: "Vercel (auto-deploy on push)" },
+  { label: "Data Source", value: "NHL API (play-by-play)" },
+  { label: "Frontend", value: "Next.js 16, React 19, Tailwind CSS" },
+  { label: "Deployment", value: "Vercel (auto-deploy)" },
   { label: "Automation", value: "GitHub Actions (daily updates)" },
 ];
 
@@ -76,23 +102,23 @@ const faqs = [
   },
   {
     question: "How accurate are your predictions?",
-    answer: "Our current season (2025-26) accuracy is tracked in real-time on the Performance page. Historically, we've achieved 55-60% accuracy on held-out test data, which represents a meaningful edge over the baseline (always picking home team). Performance varies by confidence level.",
+    answer: "Our current accuracy is tracked in real-time on the Performance page. Historically, we've achieved 55-60% accuracy on held-out test data, which represents a meaningful edge over baseline. Performance varies by confidence level — stronger predictions (higher probability differences) tend to be more accurate.",
   },
   {
-    question: "What data sources do you use?",
-    answer: "We combine MoneyPuck's expected goals (xG) data, NHL play-by-play statistics, team performance metrics, and goalie tracking. Our training dataset includes 6 seasons (2018-2024) with 7,000+ games.",
+    question: "What data do you use?",
+    answer: "We use official NHL API data including play-by-play statistics, team performance metrics, and situational factors like rest days and home/away splits. Our training dataset includes multiple seasons with thousands of games.",
   },
   {
-    question: "Can I access historical predictions?",
-    answer: "We're working on an archive feature. Currently, daily predictions are published each morning and results are tracked in aggregate. Follow @puckcastai on X for daily updates.",
+    question: "How do you make predictions?",
+    answer: "We use machine learning (logistic regression) trained on historical NHL data. The model learns patterns that correlate with wins/losses, then applies those patterns to predict upcoming games. We keep our exact feature set proprietary, but focus on team performance, recent form, and situational factors.",
   },
   {
     question: "How often do predictions update?",
     answer: "Once per day, typically around 10am ET after morning skates, goalie confirmations, and injury reports settle. We don't update intraday to avoid chasing last-minute noise.",
   },
   {
-    question: "Is this open source?",
-    answer: "Not yet, but we're considering it. We believe in transparency and may open-source the model in the future once it's more mature. Stay tuned for updates.",
+    question: "Can I access historical predictions?",
+    answer: "We're working on an archive feature. Currently, daily predictions are published each morning and results are tracked in aggregate. Follow @puckcastai on X for daily updates.",
   },
 ];
 
@@ -117,8 +143,7 @@ export default function AboutPage() {
           <p className="mt-4 max-w-3xl text-base leading-relaxed text-white/80">
             We believe hockey predictions should be transparent, data-driven, and accessible. Too many
             prediction models are black boxes that hide their methods and cherry-pick results. We're
-            different. We show you how our model works, track real-time accuracy on current games,
-            and openly discuss what we get right and wrong.
+            different. We track real-time accuracy on current games and openly discuss what we get right and wrong.
           </p>
           <p className="mt-4 max-w-3xl text-base leading-relaxed text-white/80">
             Our goal is simple: give hockey fans a better understanding of game probabilities using
@@ -148,6 +173,44 @@ export default function AboutPage() {
         </section>
 
         <section className="rounded-[36px] border border-white/10 bg-gradient-to-br from-white/5 via-slate-900/40 to-slate-950 p-8 shadow-2xl shadow-black/30">
+          <h2 className="text-2xl font-semibold text-white">How It Works</h2>
+          <p className="mt-2 text-sm text-white/70">Our prediction process in 4 steps</p>
+          <div className="mt-8 grid gap-6 md:grid-cols-2">
+            {howItWorks.map((step, idx) => (
+              <div key={step.title} className="rounded-3xl border border-white/10 bg-black/20 p-6">
+                <div className="flex items-start gap-4">
+                  <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-lime-300/20 to-emerald-400/20 text-2xl">
+                    {step.icon}
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="text-lg font-semibold text-white">{step.title}</h3>
+                    <p className="mt-2 text-sm leading-relaxed text-white/75">{step.description}</p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-6 grid gap-4 sm:grid-cols-3">
+            {performanceHighlights.map((item) => (
+              <div key={item.metric} className="rounded-3xl border border-white/10 bg-black/30 p-5 text-center">
+                <p className="text-xs uppercase tracking-[0.5em] text-white/50">{item.metric}</p>
+                <p className="mt-3 text-3xl font-semibold text-lime-300">{item.value}</p>
+                <p className="mt-2 text-xs leading-relaxed text-white/60">{item.description}</p>
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-6 rounded-2xl bg-gradient-to-r from-lime-300/20 to-emerald-400/20 p-4">
+            <p className="text-xs uppercase tracking-[0.4em] text-lime-200">Transparent Performance</p>
+            <p className="mt-2 text-sm text-white/85">
+              We track accuracy on real NHL games throughout the season. No cherry-picking, no hiding losses —
+              just honest performance metrics that update daily. See detailed breakdowns on our Performance page.
+            </p>
+          </div>
+        </section>
+
+        <section className="rounded-[36px] border border-white/10 bg-gradient-to-br from-white/5 via-slate-900/40 to-slate-950 p-8 shadow-2xl shadow-black/30">
           <h2 className="text-2xl font-semibold text-white">Project Timeline</h2>
           <p className="mt-2 text-sm text-white/70">How we got here</p>
           <div className="mt-8 space-y-6">
@@ -171,18 +234,6 @@ export default function AboutPage() {
 
         <section className="grid gap-8 lg:grid-cols-2">
           <div className="rounded-[36px] border border-white/10 bg-white/5 p-8 shadow-2xl shadow-black/30">
-            <h2 className="text-2xl font-semibold text-white">What We Offer</h2>
-            <div className="mt-6 space-y-4">
-              {features.map((item) => (
-                <div key={item.feature} className="rounded-2xl border border-white/10 bg-black/20 p-4">
-                  <p className="text-sm font-semibold uppercase tracking-[0.4em] text-lime-300">{item.feature}</p>
-                  <p className="mt-2 text-sm text-white/75">{item.description}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="rounded-[36px] border border-white/10 bg-white/5 p-8 shadow-2xl shadow-black/30">
             <h2 className="text-2xl font-semibold text-white">Technology Stack</h2>
             <div className="mt-6 space-y-3">
               {tech.map((item) => (
@@ -198,6 +249,25 @@ export default function AboutPage() {
                 Modern tech stack optimized for fast load times, daily automation, and seamless deployment.
                 Every push to main auto-deploys to production via Vercel.
               </p>
+            </div>
+          </div>
+
+          <div className="rounded-[36px] border border-white/10 bg-white/5 p-8 shadow-2xl shadow-black/30">
+            <h2 className="text-2xl font-semibold text-white">Limitations</h2>
+            <p className="mt-2 text-sm text-white/70">What we can't predict</p>
+            <div className="mt-6 space-y-4">
+              <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
+                <p className="text-sm font-semibold text-amber-200">Unpredictable Events</p>
+                <p className="mt-2 text-xs text-white/75">Injuries, referee decisions, and random bounces can change outcomes in ways no model can predict.</p>
+              </div>
+              <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
+                <p className="text-sm font-semibold text-amber-200">Last-Minute Changes</p>
+                <p className="mt-2 text-xs text-white/75">Scratches or goalie changes after our morning update can impact accuracy. We refresh daily but can't track real-time changes.</p>
+              </div>
+              <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
+                <p className="text-sm font-semibold text-amber-200">Not a Betting Tool</p>
+                <p className="mt-2 text-xs text-white/75">Win probabilities are predictions, not betting advice. We don't incorporate odds or recommend wagers. Bet responsibly.</p>
+              </div>
             </div>
           </div>
         </section>
@@ -232,10 +302,10 @@ export default function AboutPage() {
               Follow @puckcastai
             </a>
             <Link
-              href="/methodology"
+              href="/performance"
               className="rounded-full border border-white/20 px-8 py-3 text-sm font-semibold uppercase tracking-[0.4em] text-white/80 transition hover:text-white"
             >
-              Learn how it works
+              View Performance
             </Link>
           </div>
         </section>

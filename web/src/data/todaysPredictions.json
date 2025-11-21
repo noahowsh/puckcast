@@ -1,151 +1,97 @@
 {
-  "generatedAt": "2025-11-19T13:19:06.063165+00:00",
+  "generatedAt": "2025-11-21T02:38:13.999924+00:00",
   "games": [
     {
-      "id": "2025020315",
-      "gameDate": "2025-11-19",
+      "id": "2025020331",
+      "gameDate": "2025-11-21",
       "startTimeEt": "7:00 PM ET",
-      "startTimeUtc": "2025-11-20T00:00:00+00:00",
-      "homeTeam": {
-        "name": "Capitals",
-        "abbrev": "WSH"
-      },
-      "awayTeam": {
-        "name": "Oilers",
-        "abbrev": "EDM"
-      },
-      "homeWinProb": 0.6168,
-      "awayWinProb": 0.3832,
-      "confidenceScore": 0.234,
-      "confidenceGrade": "B+",
-      "edge": 0.117,
-      "summary": "Capitals project at 62% as the home lean \u2014 a B+-tier edge worth 11.7 pts over a coin flip. WSH PK drag -67.5 pts vs opponent special teams.",
-      "modelFavorite": "home",
-      "venue": "Capital One Arena",
-      "season": "20252026",
-      "specialTeams": {
-        "home": {
-          "powerPlayPct": 14.0,
-          "opponentPenaltyKillPct": 81.5,
-          "diff": -67.5
-        },
-        "away": {
-          "powerPlayPct": 30.8,
-          "opponentPenaltyKillPct": 72.6,
-          "diff": -41.8
-        }
-      }
-    },
-    {
-      "id": "2025020316",
-      "gameDate": "2025-11-19",
-      "startTimeEt": "7:30 PM ET",
-      "startTimeUtc": "2025-11-20T00:30:00+00:00",
+      "startTimeUtc": "2025-11-22T00:00:00+00:00",
       "homeTeam": {
         "name": "Sabres",
         "abbrev": "BUF"
       },
       "awayTeam": {
-        "name": "Flames",
-        "abbrev": "CGY"
+        "name": "Blackhawks",
+        "abbrev": "CHI"
       },
-      "homeWinProb": 0.6168,
-      "awayWinProb": 0.3832,
-      "confidenceScore": 0.234,
+      "homeWinProb": 0.6164,
+      "awayWinProb": 0.3836,
+      "confidenceScore": 0.233,
       "confidenceGrade": "B+",
-      "edge": 0.117,
-      "summary": "Sabres project at 62% as the home lean \u2014 a B+-tier edge worth 11.7 pts over a coin flip. CGY PK drag -77.8 pts vs opponent special teams.",
+      "edge": 0.116,
+      "summary": "Sabres project at 62% as the home lean \u2014 a B+-tier edge worth 11.6 pts over a coin flip.",
       "modelFavorite": "home",
       "venue": "KeyBank Center",
-      "season": "20252026",
-      "specialTeams": {
-        "home": {
-          "powerPlayPct": 17.2,
-          "opponentPenaltyKillPct": 77.3,
-          "diff": -60.099999999999994
-        },
-        "away": {
-          "powerPlayPct": 11.9,
-          "opponentPenaltyKillPct": 89.7,
-          "diff": -77.8
-        }
-      }
+      "season": "20252026"
     },
     {
-      "id": "2025020317",
-      "gameDate": "2025-11-19",
-      "startTimeEt": "9:30 PM ET",
-      "startTimeUtc": "2025-11-20T02:30:00+00:00",
+      "id": "2025020332",
+      "gameDate": "2025-11-21",
+      "startTimeEt": "7:00 PM ET",
+      "startTimeUtc": "2025-11-22T00:00:00+00:00",
       "homeTeam": {
+        "name": "Penguins",
+        "abbrev": "PIT"
+      },
+      "awayTeam": {
         "name": "Wild",
         "abbrev": "MIN"
+      },
+      "homeWinProb": 0.5,
+      "awayWinProb": 0.5,
+      "confidenceScore": 0.0,
+      "confidenceGrade": "C",
+      "edge": 0.0,
+      "summary": "Penguins project at 50% as the home lean \u2014 a C-tier edge worth 0.0 pts over a coin flip.",
+      "modelFavorite": "home",
+      "venue": "PPG Paints Arena",
+      "season": "20252026"
+    },
+    {
+      "id": "2025020333",
+      "gameDate": "2025-11-21",
+      "startTimeEt": "8:00 PM ET",
+      "startTimeUtc": "2025-11-22T01:00:00+00:00",
+      "homeTeam": {
+        "name": "Jets",
+        "abbrev": "WPG"
       },
       "awayTeam": {
         "name": "Hurricanes",
         "abbrev": "CAR"
       },
-      "homeWinProb": 0.3226,
-      "awayWinProb": 0.6774,
-      "confidenceScore": 0.355,
-      "confidenceGrade": "A",
-      "edge": -0.177,
-      "summary": "Hurricanes project at 68% as the road lean \u2014 an A-tier edge worth 17.7 pts over a coin flip. CAR PK drag -58.7 pts vs opponent special teams.",
-      "modelFavorite": "away",
-      "venue": "Grand Casino Arena",
-      "season": "20252026",
-      "specialTeams": {
-        "home": {
-          "powerPlayPct": 26.0,
-          "opponentPenaltyKillPct": 79.0,
-          "diff": -53.0
-        },
-        "away": {
-          "powerPlayPct": 13.0,
-          "opponentPenaltyKillPct": 71.7,
-          "diff": -58.7
-        }
-      }
+      "homeWinProb": 0.6164,
+      "awayWinProb": 0.3836,
+      "confidenceScore": 0.233,
+      "confidenceGrade": "B+",
+      "edge": 0.116,
+      "summary": "Jets project at 62% as the home lean \u2014 a B+-tier edge worth 11.6 pts over a coin flip.",
+      "modelFavorite": "home",
+      "venue": "Canada Life Centre",
+      "season": "20252026"
     },
     {
-      "id": "2025020318",
-      "gameDate": "2025-11-19",
-      "startTimeEt": "10:00 PM ET",
-      "startTimeUtc": "2025-11-20T03:00:00+00:00",
+      "id": "2025020334",
+      "gameDate": "2025-11-21",
+      "startTimeEt": "10:30 PM ET",
+      "startTimeUtc": "2025-11-22T03:30:00+00:00",
       "homeTeam": {
-        "name": "Ducks",
-        "abbrev": "ANA"
+        "name": "Kings",
+        "abbrev": "LAK"
       },
       "awayTeam": {
         "name": "Bruins",
         "abbrev": "BOS"
       },
-      "homeWinProb": 0.4167,
-      "awayWinProb": 0.5833,
-      "confidenceScore": 0.167,
-      "confidenceGrade": "B",
-      "edge": -0.083,
-      "summary": "Bruins project at 58% as the road lean \u2014 a B-tier edge worth 8.3 pts over a coin flip. ANA PK drag -61.6 pts vs opponent special teams.",
+      "homeWinProb": 0.4636,
+      "awayWinProb": 0.5364,
+      "confidenceScore": 0.073,
+      "confidenceGrade": "C+",
+      "edge": -0.036,
+      "summary": "Bruins project at 54% as the road lean \u2014 a C+-tier edge worth 3.6 pts over a coin flip.",
       "modelFavorite": "away",
-      "venue": "Honda Center",
-      "season": "20252026",
-      "specialTeams": {
-        "home": {
-          "powerPlayPct": 20.9,
-          "opponentPenaltyKillPct": 82.5,
-          "diff": -61.6
-        },
-        "away": {
-          "powerPlayPct": 25.4,
-          "opponentPenaltyKillPct": 77.6,
-          "diff": -52.199999999999996
-        }
-      }
+      "venue": "Crypto.com Arena",
+      "season": "20252026"
     }
-  ],
-  "playerHubMeta": {
-    "season": "20252026",
-    "slateDate": "2025-11-19",
-    "lineCombosGeneratedAt": "2025-11-19T13:18:52.489275+00:00",
-    "lineCombosSlateDate": "2025-11-17"
-  }
+  ]
 }
