@@ -51,19 +51,24 @@ const upsetRadar = todaysPredictions
 export default function PredictionsPage() {
   return (
     <div className="relative min-h-screen bg-slate-950">
-      <div className="relative mx-auto max-w-7xl px-6 py-16 lg:px-8">
+      {/* Premium background gradient */}
+      <div className="pointer-events-none absolute inset-0">
+        <div className="absolute inset-0 bg-gradient-to-b from-slate-900/50 via-slate-950 to-slate-950" />
+      </div>
+
+      <div className="relative mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
         {/* Header */}
-        <section className="mb-32">
+        <section className="mb-24 lg:mb-32">
           <div className="mx-auto max-w-4xl text-center">
-            <div className="mb-2 inline-flex items-center gap-2 rounded-full border border-sky-500/20 bg-sky-500/5 px-3 py-1">
-              <span className="text-xs font-medium text-sky-400">Slate Intelligence</span>
+            <div className="mb-6 inline-flex items-center gap-2.5 rounded-full border border-sky-500/20 bg-sky-500/5 px-4 py-2">
+              <span className="text-xs font-semibold uppercase tracking-wider text-sky-400">Slate Intelligence</span>
             </div>
 
-            <h1 className="mb-8 text-6xl font-extrabold text-white lg:text-7xl">
+            <h1 className="mb-6 text-5xl font-bold tracking-tight text-white sm:text-6xl lg:text-7xl">
               Tonight's Predictions
             </h1>
 
-            <p className="mb-10 text-xl text-slate-300">
+            <p className="mx-auto mb-8 max-w-2xl text-lg leading-relaxed text-slate-300 sm:text-xl">
               Full-game projections with lineup context, rolling form, and NHL API features.
               Everything you need to scan the slate in seconds.
             </p>
@@ -77,8 +82,8 @@ export default function PredictionsPage() {
         </section>
 
         {/* Summary Stats */}
-        <section className="mb-32">
-          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+        <section className="mb-24 lg:mb-32">
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             <SummaryCard
               label="Avg Model Edge"
               value={`${(summary.avgEdge * 100).toFixed(1)} pts`}
@@ -103,8 +108,8 @@ export default function PredictionsPage() {
         </section>
 
         {/* Live Ticker */}
-        <section className="mb-32">
-          <div className="overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/50">
+        <section className="mb-24 lg:mb-32">
+          <div className="overflow-hidden rounded-xl border border-slate-800/50 bg-slate-900/30 shadow-xl shadow-black/20">
             <PredictionTicker initial={payload} />
           </div>
         </section>
@@ -112,22 +117,22 @@ export default function PredictionsPage() {
         {todaysPredictions.length > 0 ? (
           <>
             {/* High Confidence & Upsets */}
-            <section className="mb-32 grid gap-8 lg:grid-cols-2">
+            <section className="mb-24 grid gap-6 lg:mb-32 lg:grid-cols-2 lg:gap-8">
               {/* Top Edges */}
-              <div className="rounded-2xl border border-slate-800 bg-slate-900/50 p-8">
+              <div className="rounded-xl border border-slate-800/50 bg-slate-900/30 p-6 backdrop-blur-sm lg:p-8">
                 <div className="mb-6">
-                  <h2 className="text-2xl font-extrabold text-white">Largest Probability Gaps</h2>
+                  <h2 className="text-2xl font-bold text-white">Largest Probability Gaps</h2>
                   <p className="mt-1 text-sm text-slate-400">High-confidence set</p>
                 </div>
 
-                <div className="space-y-4">
+                <div className="space-y-3">
                   {topEdges.map((game) => {
                     const grade = getPredictionGrade(game.edge);
                     const summary = normalizeSummaryWithGrade(game.summary, grade.label);
                     return (
                       <div
                         key={game.id}
-                        className="rounded-lg border border-slate-700 bg-slate-800/50 p-4"
+                        className="rounded-lg border border-slate-700/50 bg-slate-800/30 p-4 backdrop-blur-sm"
                       >
                         <div className="flex items-baseline justify-between gap-2">
                           <p className="text-base font-semibold text-white">
@@ -153,13 +158,13 @@ export default function PredictionsPage() {
               </div>
 
               {/* Upset Radar */}
-              <div className="rounded-2xl border border-slate-800 bg-slate-900/50 p-8">
+              <div className="rounded-xl border border-slate-800/50 bg-slate-900/30 p-6 backdrop-blur-sm lg:p-8">
                 <div className="mb-6">
-                  <h2 className="text-2xl font-extrabold text-white">Upset Radar</h2>
+                  <h2 className="text-2xl font-bold text-white">Upset Radar</h2>
                   <p className="mt-1 text-sm text-slate-400">Road teams poised to win</p>
                 </div>
 
-                <div className="space-y-4">
+                <div className="space-y-3">
                   {upsetRadar.length ? (
                     upsetRadar.map((game) => {
                       const grade = getPredictionGrade(game.edge);
@@ -167,7 +172,7 @@ export default function PredictionsPage() {
                       return (
                         <div
                           key={game.id}
-                          className="rounded-lg border border-slate-700 bg-slate-800/50 p-4"
+                          className="rounded-lg border border-slate-700/50 bg-slate-800/30 p-4 backdrop-blur-sm"
                         >
                           <div className="flex items-center justify-between text-sm">
                             <span className="font-medium text-white">
@@ -185,7 +190,7 @@ export default function PredictionsPage() {
                       );
                     })
                   ) : (
-                    <div className="rounded-lg border border-slate-700 bg-slate-800/50 p-6 text-center">
+                    <div className="rounded-lg border border-slate-700/50 bg-slate-800/30 p-6 text-center backdrop-blur-sm">
                       <p className="text-sm text-slate-400">
                         No &gt;55% road favorites on the board right now.
                       </p>
@@ -196,15 +201,15 @@ export default function PredictionsPage() {
             </section>
 
             {/* Game-by-Game Table */}
-            <section className="mb-32">
-              <div className="mb-10 text-center">
-                <h2 className="text-3xl font-extrabold text-white">Game-by-Game Sheet</h2>
-                <p className="mt-1 text-sm text-slate-400">
+            <section className="mb-24 lg:mb-32">
+              <div className="mb-8 text-center lg:mb-10">
+                <h2 className="mb-3 text-3xl font-bold text-white lg:text-4xl">Game-by-Game Sheet</h2>
+                <p className="text-sm text-slate-400 lg:text-base">
                   Sorted by start time — win %, edge, and confidence score
                 </p>
               </div>
 
-              <div className="overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/50">
+              <div className="overflow-hidden rounded-xl border border-slate-800/50 bg-slate-900/30">
                 <div className="overflow-x-auto">
                   <table className="w-full">
                     <thead className="border-b border-slate-800 bg-slate-800/50">
@@ -248,8 +253,8 @@ export default function PredictionsPage() {
             </section>
           </>
         ) : (
-          <div className="rounded-2xl border border-slate-800 bg-slate-900/50 p-12 text-center">
-            <p className="text-slate-400">
+          <div className="rounded-xl border border-slate-800/50 bg-slate-900/30 p-12 text-center backdrop-blur-sm lg:p-16">
+            <p className="text-lg text-slate-400">
               No predictions yet. The nightly sync will post the next slate soon.
             </p>
           </div>
@@ -261,10 +266,10 @@ export default function PredictionsPage() {
 
 function SummaryCard({ label, value, detail }: { label: string; value: string; detail: string }) {
   return (
-    <div className="rounded-2xl border border-slate-800 bg-slate-900/50 p-8">
-      <p className="text-sm font-medium text-slate-400">{label}</p>
-      <p className="mt-2 text-3xl font-bold text-white">{value}</p>
-      <p className="mt-1 text-sm text-slate-500">{detail}</p>
+    <div className="rounded-xl border border-slate-800/50 bg-slate-900/30 p-6 backdrop-blur-sm">
+      <p className="text-xs font-semibold uppercase tracking-wider text-slate-400">{label}</p>
+      <p className="mt-3 text-2xl font-bold text-white lg:text-3xl">{value}</p>
+      <p className="mt-1.5 text-sm text-slate-500">{detail}</p>
     </div>
   );
 }
