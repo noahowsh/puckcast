@@ -1,9 +1,114 @@
 {
+  "generatedAt": "2025-11-21T01:49:18.875279",
   "overall": {
-    "accuracy": 0.5927,
     "games": 1230,
-    "confidence": 59.27
+    "accuracy": 0.5926829268292683,
+    "baseline": 0.5373983739837398,
+    "homeWinRate": 0.5373983739837398,
+    "brier": 0.2434,
+    "logLoss": 0.6761,
+    "avgEdge": 0.16138301572711372
   },
-  "by_team": {},
-  "generatedAt": "2025-11-21T01:35:10.946058"
+  "heroStats": [
+    {
+      "label": "Test accuracy",
+      "value": "59.3%",
+      "detail": "2023-24 holdout"
+    },
+    {
+      "label": "Log loss",
+      "value": "0.676",
+      "detail": "calibration"
+    },
+    {
+      "label": "Games tracked",
+      "value": "1,230",
+      "detail": "2023-24 season"
+    }
+  ],
+  "insights": [
+    {
+      "title": "Edge \u2265 10 pts",
+      "detail": "64.1% accuracy across 811 games"
+    },
+    {
+      "title": "Edge \u2265 15 pts",
+      "detail": "65.6% accuracy (n=616)"
+    },
+    {
+      "title": "Home baseline",
+      "detail": "Home teams won 53.7% of games; model adds 5.5 pts"
+    }
+  ],
+  "strategies": [
+    {
+      "name": "All predictions",
+      "bets": 1230,
+      "winRate": 0.5926829268292683,
+      "units": 227,
+      "note": "Use the higher probability team for every game",
+      "avgEdge": 0.16138301572711372
+    },
+    {
+      "name": "Edge \u2265 5 pts",
+      "bets": 1032,
+      "winRate": 0.6124031007751938,
+      "units": 232,
+      "note": "Skip games with <5 percentage point edge",
+      "avgEdge": 0.18775854497533292
+    },
+    {
+      "name": "Edge \u2265 10 pts",
+      "bets": 811,
+      "winRate": 0.6411837237977805,
+      "units": 229,
+      "note": "Focus on double-digit probability edges",
+      "avgEdge": 0.21806730719904077
+    },
+    {
+      "name": "Edge \u2265 15 pts",
+      "bets": 616,
+      "winRate": 0.6558441558441559,
+      "units": 192,
+      "note": "Only strongest probability splits",
+      "avgEdge": 0.24728422994945168
+    }
+  ],
+  "confidenceBuckets": [
+    {
+      "label": "0-5 pts",
+      "min": 0,
+      "max": 0.05,
+      "accuracy": 0.4898989898989899,
+      "count": 198
+    },
+    {
+      "label": "5-10 pts",
+      "min": 0.05,
+      "max": 0.1,
+      "accuracy": 0.5067873303167421,
+      "count": 221
+    },
+    {
+      "label": "10-15 pts",
+      "min": 0.1,
+      "max": 0.15,
+      "accuracy": 0.5948717948717949,
+      "count": 195
+    },
+    {
+      "label": "15-20 pts",
+      "min": 0.15,
+      "max": 0.2,
+      "accuracy": 0.5611111111111111,
+      "count": 180
+    },
+    {
+      "label": "20+ pts",
+      "min": 0.2,
+      "max": null,
+      "accuracy": 0.694954128440367,
+      "count": 436
+    }
+  ]
 }
