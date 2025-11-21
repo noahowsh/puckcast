@@ -124,33 +124,44 @@ const faqs = [
 
 export default function AboutPage() {
   return (
-    <div className="relative overflow-hidden">
-      <div className="relative mx-auto flex max-w-6xl flex-col gap-16 px-6 pb-16 pt-8 lg:px-12">
-        <header>
-          <p className="text-sm uppercase tracking-[0.4em] text-lime-300">About Puckcast</p>
-          <h1 className="mt-3 text-4xl font-semibold text-white sm:text-5xl">
-            Machine learning for hockey fans who love the numbers.
+    <div className="relative min-h-screen bg-slate-950">
+      {/* Subtle background gradient */}
+      <div className="pointer-events-none absolute inset-0">
+        <div className="absolute inset-0 bg-gradient-to-b from-sky-950/20 via-slate-950 to-slate-950" />
+      </div>
+
+      <div className="relative mx-auto max-w-7xl px-6 py-16 lg:px-8">
+        {/* Header */}
+        <section className="mb-20">
+          <div className="mb-2 inline-flex items-center gap-2 rounded-full border border-sky-500/20 bg-sky-500/5 px-3 py-1">
+            <span className="text-xs font-medium text-sky-400">About Puckcast</span>
+          </div>
+          <h1 className="mb-4 text-4xl font-bold text-white lg:text-5xl">
+            Machine learning for hockey fans who love the numbers
           </h1>
-          <p className="mt-4 max-w-3xl text-lg text-white/80">
+          <p className="max-w-3xl text-lg text-slate-300">
             Puckcast is a passion project built by data enthusiasts who wanted to bring transparent,
             accessible NHL predictions to the hockey community. We combine machine learning with
             advanced statistics to predict game outcomes — and we share everything openly.
           </p>
-        </header>
+        </section>
 
-        <section className="rounded-[36px] border border-white/10 bg-white/5 p-8 shadow-2xl shadow-black/30">
-          <h2 className="text-2xl font-semibold text-white">Our Mission</h2>
-          <p className="mt-4 max-w-3xl text-base leading-relaxed text-white/80">
-            We believe hockey predictions should be transparent, data-driven, and accessible. Too many
-            prediction models are black boxes that hide their methods and cherry-pick results. We're
-            different. We track real-time accuracy on current games and openly discuss what we get right and wrong.
-          </p>
-          <p className="mt-4 max-w-3xl text-base leading-relaxed text-white/80">
-            Our goal is simple: give hockey fans a better understanding of game probabilities using
-            historical data and statistical patterns. Whether you're casually following your team,
-            analyzing matchups, or just love the numbers, we want to make predictions you can trust
-            and understand.
-          </p>
+        {/* Mission */}
+        <section className="mb-20">
+          <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-6">
+            <h2 className="mb-4 text-2xl font-bold text-white">Our Mission</h2>
+            <p className="mb-4 max-w-3xl text-sm leading-relaxed text-slate-300">
+              We believe hockey predictions should be transparent, data-driven, and accessible. Too many
+              prediction models are black boxes that hide their methods and cherry-pick results. We're
+              different. We track real-time accuracy on current games and openly discuss what we get right and wrong.
+            </p>
+            <p className="max-w-3xl text-sm leading-relaxed text-slate-300">
+              Our goal is simple: give hockey fans a better understanding of game probabilities using
+              historical data and statistical patterns. Whether you're casually following your team,
+              analyzing matchups, or just love the numbers, we want to make predictions you can trust
+              and understand.
+            </p>
+          </div>
         </section>
 
         <section className="rounded-[36px] border border-white/10 bg-white/5 p-8 shadow-2xl shadow-black/30">
