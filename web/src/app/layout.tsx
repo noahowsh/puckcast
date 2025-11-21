@@ -5,6 +5,8 @@ import type { ReactNode } from "react";
 import "./globals.css";
 import { SiteNav } from "@/components/SiteNav";
 import { SiteFooter } from "@/components/SiteFooter";
+import { PageTransition } from "@/components/PageTransition";
+import { Analytics } from "@/components/Analytics";
 
 // System fonts fallback (can re-enable Google Fonts when network is stable)
 const geistSans = {
@@ -42,9 +44,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+        <Analytics />
         <div className="relative min-h-screen bg-slate-950 text-white">
           <SiteNav />
-        <div className="pt-24">{children}</div>
+          <PageTransition>
+            <div className="pt-24">{children}</div>
+          </PageTransition>
           <SiteFooter />
         </div>
       </body>
