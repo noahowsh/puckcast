@@ -1,161 +1,280 @@
+import type { PredictionsPayload, Prediction } from "@/types/prediction";
 import { getPredictionsPayload, selectCurrentSlate } from "@/lib/data";
+import { PredictionTicker } from "@/components/PredictionTicker";
+import { getPredictionGrade, normalizeSummaryWithGrade } from "@/lib/prediction";
 
-const predictions = getPredictionsPayload();
-const todaysGames = selectCurrentSlate(predictions.games);
+const payload: PredictionsPayload = getPredictionsPayload();
+const todaysPredictions = selectCurrentSlate(payload.games);
+const updatedAt = payload.generatedAt ? new Date(payload.generatedAt) : null;
 
-const formatTime = (timeStr: string | null) => {
-  if (!timeStr) return "TBD";
-  return timeStr;
+const formatTime = (iso?: string | null) => {
+  if (!iso) return "TBD";
+  return new Intl.DateTimeFormat("en-US", {
+    timeZone: "America/New_York",
+    hour: "numeric",
+    minute: "numeric",
+  }).format(new Date(iso));
 };
 
-const formatProb = (prob: number) => `${Math.round(prob * 100)}%`;
+const numberFmt = (num: number) => `${(num * 100).toFixed(1)}%`;
 
-const getGradeColor = (grade: string) => {
-  if (grade.startsWith("A")) return "text-emerald-400 bg-emerald-500/10 border-emerald-500/20";
-  if (grade.startsWith("B")) return "text-sky-400 bg-sky-500/10 border-sky-500/20";
-  return "text-slate-400 bg-slate-500/10 border-slate-500/20";
-};
+function summarize(predictions: Prediction[]) {
+  if (!predictions.length) {
+    return {
+      avgEdge: 0,
+      aGrades: 0,
+      tossUps: 0,
+      bPlusEdges: 0,
+    };
+  }
 
-const updatedTimestamp = predictions.generatedAt ? new Date(predictions.generatedAt) : null;
-const updatedDisplay = updatedTimestamp
-  ? new Intl.DateTimeFormat("en-US", {
-      timeZone: "America/New_York",
-      hour: "numeric",
-      minute: "numeric",
-      month: "short",
-      day: "numeric",
-    }).format(updatedTimestamp)
-  : null;
+  const edges = predictions.map((game) => Math.abs(game.edge));
+  const avgEdge = edges.reduce((acc, curr) => acc + curr, 0) / predictions.length;
+  const aGrades = predictions.filter((game) => getPredictionGrade(game.edge).label.startsWith("A")).length;
+  const tossUps = predictions.filter((game) => Math.abs(game.edge) < 0.02).length;
+  const bPlusEdges = predictions.filter((game) => {
+    const label = getPredictionGrade(game.edge).label;
+    return ["A+", "A", "A-", "B+", "B"].includes(label);
+  }).length;
+
+  return { avgEdge, aGrades, tossUps, bPlusEdges };
+}
+
+const summary = summarize(todaysPredictions);
+const topEdges = [...todaysPredictions]
+  .sort((a, b) => Math.abs(b.edge) - Math.abs(a.edge))
+  .slice(0, 4);
+const upsetRadar = todaysPredictions
+  .filter((game) => game.modelFavorite === "away" && game.awayWinProb >= 0.55)
+  .slice(0, 3);
 
 export default function PredictionsPage() {
-  // Sort games by edge (highest confidence first)
-  const sortedGames = [...todaysGames].sort((a, b) => b.edge - a.edge);
-
   return (
-    <div className="min-h-screen bg-slate-950 px-6 py-12">
-      <div className="mx-auto max-w-7xl">
+    <div className="relative min-h-screen bg-slate-950">
+      <div className="relative mx-auto max-w-7xl px-6 py-16 lg:px-8">
         {/* Header */}
-        <div className="mb-12">
-          <h1 className="mb-3 text-4xl font-bold text-white sm:text-5xl">Daily Predictions</h1>
-          <div className="flex flex-wrap items-center gap-4 text-lg text-slate-400">
-            <span>{sortedGames.length} games</span>
-            {updatedDisplay && (
-              <>
-                <span>•</span>
-                <span>Updated {updatedDisplay} ET</span>
-              </>
-            )}
+        <section className="mb-32">
+          <div className="mb-2 inline-flex items-center gap-2 rounded-full border border-sky-500/20 bg-sky-500/5 px-3 py-1">
+            <span className="text-xs font-medium text-sky-400">Slate Intelligence</span>
           </div>
-        </div>
 
-        {/* Grade Legend */}
-        <div className="mb-8 flex flex-wrap gap-3">
-          <div className="inline-flex items-center gap-2 rounded-lg border border-emerald-500/20 bg-emerald-500/10 px-3 py-1.5">
-            <span className="text-sm font-semibold text-emerald-400">A+/A/A-</span>
-            <span className="text-xs text-slate-500">High confidence (10+ pts edge)</span>
+          <h1 className="mb-8 text-6xl font-extrabold text-white lg:text-7xl">
+            Tonight's Predictions
+          </h1>
+
+          <p className="mb-10 max-w-3xl text-xl text-slate-300">
+            Full-game projections with lineup context, rolling form, and NHL API features.
+            Everything you need to scan the slate in seconds.
+          </p>
+
+          {updatedAt && (
+            <p className="text-sm text-slate-500">
+              Last updated {updatedAt.toLocaleString("en-US", { timeZone: "America/New_York" })} ET
+            </p>
+          )}
+        </section>
+
+        {/* Summary Stats */}
+        <section className="mb-32">
+          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+            <SummaryCard
+              label="Avg Model Edge"
+              value={`${(summary.avgEdge * 100).toFixed(1)} pts`}
+              detail="vs coin flip"
+            />
+            <SummaryCard
+              label="A-Grade Plays"
+              value={`${summary.aGrades}`}
+              detail=">60% confidence"
+            />
+            <SummaryCard
+              label="B-Tier Edges"
+              value={`${summary.bPlusEdges}`}
+              detail=">5% win delta"
+            />
+            <SummaryCard
+              label="True Toss-Ups"
+              value={`${summary.tossUps}`}
+              detail="<2% delta"
+            />
           </div>
-          <div className="inline-flex items-center gap-2 rounded-lg border border-sky-500/20 bg-sky-500/10 px-3 py-1.5">
-            <span className="text-sm font-semibold text-sky-400">B+/B/B-</span>
-            <span className="text-xs text-slate-500">Medium confidence (5-10 pts edge)</span>
+        </section>
+
+        {/* Live Ticker */}
+        <section className="mb-32">
+          <div className="overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/50">
+            <PredictionTicker initial={payload} />
           </div>
-          <div className="inline-flex items-center gap-2 rounded-lg border border-slate-500/20 bg-slate-500/10 px-3 py-1.5">
-            <span className="text-sm font-semibold text-slate-400">C+/C</span>
-            <span className="text-xs text-slate-500">Low confidence (&lt;5 pts edge)</span>
-          </div>
-        </div>
+        </section>
 
-        {/* Games List */}
-        {sortedGames.length > 0 ? (
-          <div className="space-y-4">
-            {sortedGames.map((game) => {
-              const favorite = game.modelFavorite === "home" ? game.homeTeam : game.awayTeam;
-              const underdog = game.modelFavorite === "home" ? game.awayTeam : game.homeTeam;
-              const favoriteProb = game.modelFavorite === "home" ? game.homeWinProb : game.awayWinProb;
-              const underdogProb = 1 - favoriteProb;
-
-              return (
-                <div
-                  key={game.id}
-                  className="overflow-hidden rounded-lg border border-slate-800/50 bg-slate-900/30 transition-all hover:border-slate-700 hover:bg-slate-900/50"
-                >
-                  <div className="p-6">
-                    {/* Game Header */}
-                    <div className="mb-4 flex flex-wrap items-center justify-between gap-4">
-                      <div className="flex items-center gap-3">
-                        <span className={`inline-flex items-center rounded-md border px-2.5 py-1 text-sm font-semibold ${getGradeColor(game.confidenceGrade)}`}>
-                          {game.confidenceGrade}
-                        </span>
-                        <span className="text-sm font-medium text-slate-500">{formatTime(game.startTimeEt)}</span>
-                        {game.venue && (
-                          <span className="hidden text-sm text-slate-600 sm:inline">• {game.venue}</span>
-                        )}
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <span className="text-xs font-medium uppercase tracking-wide text-slate-500">Edge</span>
-                        <span className="text-2xl font-bold text-white">+{Math.round(game.edge * 100)}</span>
-                      </div>
-                    </div>
-
-                    {/* Matchup */}
-                    <div className="grid gap-3 sm:grid-cols-2">
-                      {/* Favorite */}
-                      <div className="flex items-center justify-between rounded-lg border border-emerald-500/20 bg-emerald-500/5 p-4">
-                        <div>
-                          <div className="mb-1 text-xs font-medium uppercase tracking-wide text-emerald-400">
-                            Model Favorite
-                          </div>
-                          <div className="text-2xl font-bold text-white">{favorite.name}</div>
-                          <div className="mt-1 text-xs text-slate-500">{favorite.abbrev}</div>
-                        </div>
-                        <div className="text-right">
-                          <div className="text-3xl font-bold text-emerald-400">{formatProb(favoriteProb)}</div>
-                          <div className="mt-1 text-xs text-slate-500">win prob</div>
-                        </div>
-                      </div>
-
-                      {/* Underdog */}
-                      <div className="flex items-center justify-between rounded-lg border border-slate-700/50 bg-slate-800/30 p-4">
-                        <div>
-                          <div className="mb-1 text-xs font-medium uppercase tracking-wide text-slate-500">
-                            Underdog
-                          </div>
-                          <div className="text-2xl font-bold text-white">{underdog.name}</div>
-                          <div className="mt-1 text-xs text-slate-500">{underdog.abbrev}</div>
-                        </div>
-                        <div className="text-right">
-                          <div className="text-3xl font-bold text-slate-400">{formatProb(underdogProb)}</div>
-                          <div className="mt-1 text-xs text-slate-500">win prob</div>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Summary */}
-                    {game.summary && (
-                      <div className="mt-4 rounded-lg bg-slate-800/30 p-3">
-                        <p className="text-sm leading-relaxed text-slate-300">{game.summary}</p>
-                      </div>
-                    )}
-                  </div>
+        {todaysPredictions.length > 0 ? (
+          <>
+            {/* High Confidence & Upsets */}
+            <section className="mb-32 grid gap-8 lg:grid-cols-2">
+              {/* Top Edges */}
+              <div className="rounded-2xl border border-slate-800 bg-slate-900/50 p-8">
+                <div className="mb-6">
+                  <h2 className="text-2xl font-extrabold text-white">Largest Probability Gaps</h2>
+                  <p className="mt-1 text-sm text-slate-400">High-confidence set</p>
                 </div>
-              );
-            })}
-          </div>
+
+                <div className="space-y-4">
+                  {topEdges.map((game) => {
+                    const grade = getPredictionGrade(game.edge);
+                    const summary = normalizeSummaryWithGrade(game.summary, grade.label);
+                    return (
+                      <div
+                        key={game.id}
+                        className="rounded-lg border border-slate-700 bg-slate-800/50 p-4"
+                      >
+                        <div className="flex items-baseline justify-between gap-2">
+                          <p className="text-base font-semibold text-white">
+                            {game.awayTeam.abbrev} @ {game.homeTeam.abbrev}
+                          </p>
+                          <div className="flex items-center gap-2">
+                            <span className="rounded bg-sky-500/20 px-2 py-0.5 text-xs font-semibold text-sky-400">
+                              {grade.label}
+                            </span>
+                            <span className="text-sm text-slate-400">
+                              {(Math.abs(game.edge) * 100).toFixed(1)} pts
+                            </span>
+                          </div>
+                        </div>
+                        <p className="mt-1 text-xs text-slate-500">
+                          Starts {game.startTimeEt ?? "TBD"}
+                        </p>
+                        <p className="mt-3 text-sm leading-relaxed text-slate-300">{summary}</p>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Upset Radar */}
+              <div className="rounded-2xl border border-slate-800 bg-slate-900/50 p-8">
+                <div className="mb-6">
+                  <h2 className="text-2xl font-extrabold text-white">Upset Radar</h2>
+                  <p className="mt-1 text-sm text-slate-400">Road teams poised to win</p>
+                </div>
+
+                <div className="space-y-4">
+                  {upsetRadar.length ? (
+                    upsetRadar.map((game) => {
+                      const grade = getPredictionGrade(game.edge);
+                      const summary = normalizeSummaryWithGrade(game.summary, grade.label);
+                      return (
+                        <div
+                          key={game.id}
+                          className="rounded-lg border border-slate-700 bg-slate-800/50 p-4"
+                        >
+                          <div className="flex items-center justify-between text-sm">
+                            <span className="font-medium text-white">
+                              {game.awayTeam.name}
+                            </span>
+                            <span className="text-sky-400">
+                              {numberFmt(game.awayWinProb)}
+                            </span>
+                          </div>
+                          <p className="mt-1 text-xs text-slate-500">
+                            {formatTime(game.startTimeUtc)} ET
+                          </p>
+                          <p className="mt-3 text-sm leading-relaxed text-slate-300">{summary}</p>
+                        </div>
+                      );
+                    })
+                  ) : (
+                    <div className="rounded-lg border border-slate-700 bg-slate-800/50 p-6 text-center">
+                      <p className="text-sm text-slate-400">
+                        No &gt;55% road favorites on the board right now.
+                      </p>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </section>
+
+            {/* Game-by-Game Table */}
+            <section className="mb-32">
+              <div className="mb-10">
+                <h2 className="text-3xl font-extrabold text-white">Game-by-Game Sheet</h2>
+                <p className="mt-1 text-sm text-slate-400">
+                  Sorted by start time — win %, edge, and confidence score
+                </p>
+              </div>
+
+              <div className="overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/50">
+                <div className="overflow-x-auto">
+                  <table className="w-full">
+                    <thead className="border-b border-slate-800 bg-slate-800/50">
+                      <tr className="text-left text-sm text-slate-400">
+                        <th className="p-4 font-medium">Matchup</th>
+                        <th className="p-4 font-medium">Home %</th>
+                        <th className="p-4 font-medium">Road %</th>
+                        <th className="p-4 font-medium">Edge</th>
+                        <th className="p-4 font-medium">Visual</th>
+                        <th className="p-4 font-medium">Grade</th>
+                        <th className="p-4 font-medium">Start</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-800">
+                      {todaysPredictions
+                        .slice()
+                        .sort((a, b) => (a.startTimeUtc ?? "").localeCompare(b.startTimeUtc ?? ""))
+                        .map((game) => (
+                          <tr key={game.id} className="hover:bg-slate-800/30">
+                            <td className="p-4 font-medium text-white">
+                              {game.awayTeam.abbrev} @ {game.homeTeam.abbrev}
+                            </td>
+                            <td className="p-4 text-slate-300">{numberFmt(game.homeWinProb)}</td>
+                            <td className="p-4 text-slate-300">{numberFmt(game.awayWinProb)}</td>
+                            <td className="p-4 text-slate-300">{(game.edge * 100).toFixed(1)} pts</td>
+                            <td className="p-4">
+                              <EdgeVisual value={game.edge} />
+                            </td>
+                            <td className="p-4">
+                              <span className="rounded bg-sky-500/20 px-2 py-0.5 text-xs font-semibold text-sky-400">
+                                {getPredictionGrade(game.edge).label}
+                              </span>
+                            </td>
+                            <td className="p-4 text-sm text-slate-400">{game.startTimeEt ?? "TBD"}</td>
+                          </tr>
+                        ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </section>
+          </>
         ) : (
-          <div className="rounded-lg border border-slate-800/50 bg-slate-900/30 p-16 text-center">
-            <p className="text-xl text-slate-400">No games scheduled today. Check back tomorrow.</p>
+          <div className="rounded-2xl border border-slate-800 bg-slate-900/50 p-12 text-center">
+            <p className="text-slate-400">
+              No predictions yet. The nightly sync will post the next slate soon.
+            </p>
           </div>
         )}
-
-        {/* Footer Note */}
-        <div className="mt-12 rounded-lg border border-slate-800/50 bg-slate-900/20 p-6">
-          <h3 className="mb-2 text-sm font-semibold uppercase tracking-wide text-slate-400">About These Predictions</h3>
-          <p className="text-sm leading-relaxed text-slate-500">
-            Predictions are generated using a logistic regression model trained on the full 2023-24 NHL season.
-            Win probabilities represent the model's confidence based on current standings, rest days, and team performance metrics.
-            Confidence grades indicate the edge over a 50/50 baseline.
-          </p>
-        </div>
       </div>
+    </div>
+  );
+}
+
+function SummaryCard({ label, value, detail }: { label: string; value: string; detail: string }) {
+  return (
+    <div className="rounded-2xl border border-slate-800 bg-slate-900/50 p-8">
+      <p className="text-sm font-medium text-slate-400">{label}</p>
+      <p className="mt-2 text-3xl font-bold text-white">{value}</p>
+      <p className="mt-1 text-sm text-slate-500">{detail}</p>
+    </div>
+  );
+}
+
+function EdgeVisual({ value }: { value: number }) {
+  const pct = Math.min(Math.abs(value) * 200, 100);
+  return (
+    <div className="h-2 w-20 rounded-full bg-slate-800">
+      <div
+        className="h-full rounded-full bg-sky-500"
+        style={{ width: `${pct}%` }}
+      />
     </div>
   );
 }
