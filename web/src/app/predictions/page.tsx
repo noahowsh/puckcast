@@ -185,7 +185,7 @@ export default function PredictionsPage() {
                   ) : (
                     <div className="rounded-lg border border-slate-700 bg-slate-800/50 p-6 text-center">
                       <p className="text-sm text-slate-400">
-                        No >55% road favorites on the board right now.
+                        No &gt;55% road favorites on the board right now.
                       </p>
                     </div>
                   )}
