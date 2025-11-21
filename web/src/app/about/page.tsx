@@ -1,342 +1,317 @@
 import Link from "next/link";
-import insightsData from "@/data/modelInsights.json";
-import type { ModelInsights } from "@/types/insights";
-
-const modelInsights = insightsData as ModelInsights;
-const pct = (value: number) => `${(value * 100).toFixed(1)}%`;
-
-const timeline = [
-  {
-    date: "November 2024",
-    title: "Project Launch",
-    description: "Started building a machine learning model to predict NHL games using historical data and advanced statistics.",
-  },
-  {
-    date: "December 2024",
-    title: "V1.0 Model",
-    description: "Deployed first logistic regression model trained on 3 seasons of data, achieving ~57% accuracy on held-out test data.",
-  },
-  {
-    date: "January 2025",
-    title: "V2.0 Site & Expansion",
-    description: "Launched this website with daily prediction updates, real-time performance tracking, and automated X/Twitter posts.",
-  },
-];
-
-const principles = [
-  {
-    title: "Transparency First",
-    description: "We openly share our performance metrics and limitations. No black boxes, no hidden formulas, no misleading claims.",
-    icon: "🔍",
-  },
-  {
-    title: "Data-Driven",
-    description: "Every prediction is grounded in historical data and statistical patterns. We let the numbers speak rather than gut feelings.",
-    icon: "📊",
-  },
-  {
-    title: "Continuous Improvement",
-    description: "We track real-time performance and refine our model as we learn. Accuracy metrics update daily with honest reporting.",
-    icon: "🔄",
-  },
-  {
-    title: "Accessible Insights",
-    description: "Complex machine learning made simple. We explain predictions in plain language with context you can understand.",
-    icon: "💡",
-  },
-];
-
-const howItWorks = [
-  {
-    title: "Data Collection",
-    description: "We aggregate game-level statistics from the official NHL API including team performance, advanced metrics, and situational factors.",
-    icon: "📊",
-  },
-  {
-    title: "Pattern Recognition",
-    description: "Our machine learning model identifies patterns in historical data that correlate with game outcomes — things like recent form, rest days, and head-to-head matchups.",
-    icon: "🧠",
-  },
-  {
-    title: "Win Probability",
-    description: "Each morning, we generate win probabilities for today's games using the latest roster updates and goalie confirmations.",
-    icon: "🎯",
-  },
-  {
-    title: "Real-Time Tracking",
-    description: "We validate performance on actual NHL results throughout the season, tracking accuracy in real-time with full transparency.",
-    icon: "📈",
-  },
-];
-
-const performanceHighlights = [
-  {
-    metric: "Test Accuracy",
-    value: pct(modelInsights.overall.accuracy),
-    description: "Current season performance"
-  },
-  {
-    metric: "Edge over baseline",
-    value: `+${((modelInsights.overall.accuracy - modelInsights.overall.baseline) * 100).toFixed(1)} pts`,
-    description: "vs. always picking home team"
-  },
-  {
-    metric: "Games Analyzed",
-    value: modelInsights.overall.games.toLocaleString(),
-    description: "Real NHL games tracked"
-  },
-];
-
-const tech = [
-  { label: "Backend", value: "Python, scikit-learn, pandas" },
-  { label: "Data Source", value: "NHL API (play-by-play)" },
-  { label: "Frontend", value: "Next.js 16, React 19, Tailwind CSS" },
-  { label: "Deployment", value: "Vercel (auto-deploy)" },
-  { label: "Automation", value: "GitHub Actions (daily updates)" },
-];
-
-const faqs = [
-  {
-    question: "Is this a betting tool?",
-    answer: "No. We provide win probabilities based on historical data, but we're not a betting service. We don't offer betting advice, incorporate odds, or recommend wagers. Always bet responsibly if you choose to use our predictions as one input among many.",
-  },
-  {
-    question: "How accurate are your predictions?",
-    answer: "Our current accuracy is tracked in real-time on the Performance page. Historically, we've achieved 55-60% accuracy on held-out test data, which represents a meaningful edge over baseline. Performance varies by confidence level — stronger predictions (higher probability differences) tend to be more accurate.",
-  },
-  {
-    question: "What data do you use?",
-    answer: "We use official NHL API data including play-by-play statistics, team performance metrics, and situational factors like rest days and home/away splits. Our training dataset includes multiple seasons with thousands of games.",
-  },
-  {
-    question: "How do you make predictions?",
-    answer: "We use machine learning (logistic regression) trained on historical NHL data. The model learns patterns that correlate with wins/losses, then applies those patterns to predict upcoming games. We keep our exact feature set proprietary, but focus on team performance, recent form, and situational factors.",
-  },
-  {
-    question: "How often do predictions update?",
-    answer: "Once per day, typically around 10am ET after morning skates, goalie confirmations, and injury reports settle. We don't update intraday to avoid chasing last-minute noise.",
-  },
-  {
-    question: "Can I access historical predictions?",
-    answer: "We're working on an archive feature. Currently, daily predictions are published each morning and results are tracked in aggregate. Follow @puckcastai on X for daily updates.",
-  },
-];
+import { PageHeader } from "@/components/PageHeader";
 
 export default function AboutPage() {
   return (
-    <div className="relative min-h-screen bg-slate-950">
-      {/* Subtle background gradient */}
-      <div className="pointer-events-none absolute inset-0">
-        <div className="absolute inset-0 bg-gradient-to-b from-sky-950/20 via-slate-950 to-slate-950" />
-      </div>
-
-      <div className="relative mx-auto max-w-7xl px-6 py-16 lg:px-8">
-        {/* Header */}
-        <section className="mb-32">
-          <div className="mx-auto max-w-4xl text-center">
-            <div className="mb-2 inline-flex items-center gap-2 rounded-full border border-sky-500/20 bg-sky-500/5 px-3 py-1">
-              <span className="text-xs font-medium text-sky-400">About Puckcast</span>
-            </div>
-            <h1 className="mb-8 text-6xl font-extrabold text-white lg:text-7xl">
-              Machine learning for hockey fans who love the numbers
-            </h1>
-            <p className="text-xl text-slate-300">
-              Puckcast is a passion project built by data enthusiasts who wanted to bring transparent,
-              accessible NHL predictions to the hockey community. We combine machine learning with
-              advanced statistics to predict game outcomes — and we share everything openly.
-            </p>
-          </div>
-        </section>
+    <div className="min-h-screen">
+      <div className="container" style={{ paddingTop: '6rem' }}>
+        <PageHeader
+          title="About Puckcast"
+          description="Transparency, methodology, and the story behind our NHL prediction model."
+          icon={
+            <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          }
+        />
 
         {/* Mission */}
-        <section className="mb-32">
-          <div className="rounded-2xl border border-slate-800 bg-slate-900/50 p-8">
-            <h2 className="mb-6 text-3xl font-extrabold text-white">Our Mission</h2>
-            <p className="mb-6 max-w-3xl text-sm leading-relaxed text-slate-300">
-              We believe hockey predictions should be transparent, data-driven, and accessible. Too many
-              prediction models are black boxes that hide their methods and cherry-pick results. We're
-              different. We track real-time accuracy on current games and openly discuss what we get right and wrong.
-            </p>
-            <p className="max-w-3xl text-sm leading-relaxed text-slate-300">
-              Our goal is simple: give hockey fans a better understanding of game probabilities using
-              historical data and statistical patterns. Whether you're casually following your team,
-              analyzing matchups, or just love the numbers, we want to make predictions you can trust
-              and understand.
+        <section className="mb-12 max-w-4xl mx-auto">
+          <div className="card-elevated text-center">
+            <h2 className="text-3xl font-bold text-white mb-4">Our Mission</h2>
+            <p className="text-lg text-slate-300 leading-relaxed">
+              To bring transparency and data-driven insights to NHL analytics. We believe in open methodology,
+              honest accuracy reporting, and helping fans understand the game through the lens of machine learning.
             </p>
           </div>
         </section>
 
-        {/* Principles */}
-        <section className="mb-32">
-          <div className="rounded-2xl border border-slate-800 bg-slate-900/50 p-8">
-            <h2 className="mb-10 text-3xl font-extrabold text-white">Our Principles</h2>
-            <div className="grid gap-8 md:grid-cols-2">
-              {principles.map((principle) => (
-                <div key={principle.title} className="rounded-lg border border-slate-800/50 bg-slate-950/50 p-8">
-                  <div className="flex items-start gap-4">
-                    <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-lg bg-sky-500/10 text-2xl">
-                      {principle.icon}
-                    </div>
-                    <div>
-                      <h3 className="text-lg font-semibold text-white">{principle.title}</h3>
-                      <p className="mt-2 text-sm leading-relaxed text-slate-300">{principle.description}</p>
-                    </div>
-                  </div>
+        {/* Model Overview */}
+        <section className="mb-12">
+          <h2 className="text-2xl font-bold text-white mb-6">How The Model Works</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="card">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-10 h-10 rounded-lg bg-sky-500/20 flex items-center justify-center">
+                  <svg className="w-5 h-5 text-sky-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                  </svg>
                 </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* How It Works */}
-        <section className="mb-32">
-          <div className="rounded-2xl border border-slate-800 bg-slate-900/50 p-8">
-            <h2 className="mb-4 text-3xl font-extrabold text-white">How It Works</h2>
-            <p className="mb-8 text-sm text-slate-400">Our prediction process in 4 steps</p>
-            <div className="grid gap-8 md:grid-cols-2">
-              {howItWorks.map((step, idx) => (
-                <div key={step.title} className="rounded-lg border border-slate-800/50 bg-slate-950/50 p-8">
-                  <div className="flex items-start gap-4">
-                    <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-lg bg-sky-500/10 text-2xl">
-                      {step.icon}
-                    </div>
-                    <div className="flex-1">
-                      <h3 className="text-lg font-semibold text-white">{step.title}</h3>
-                      <p className="mt-2 text-sm leading-relaxed text-slate-300">{step.description}</p>
-                    </div>
-                  </div>
-                </div>
-              ))}
+                <h3 className="text-xl font-bold text-white">Data Collection</h3>
+              </div>
+              <p className="text-sm text-slate-300 leading-relaxed">
+                We pull data directly from the official NHL Stats API covering 3 seasons (2021-2024). This includes
+                play-by-play events, player stats, team metrics, and advanced analytics like expected goals (xG) and
+                Corsi numbers.
+              </p>
             </div>
 
-            <div className="mt-6 grid gap-8 sm:grid-cols-3">
-              {performanceHighlights.map((item) => (
-                <div key={item.metric} className="rounded-lg border border-slate-800/50 bg-slate-950/50 p-6 text-center">
-                  <p className="text-sm font-medium text-slate-400">{item.metric}</p>
-                  <p className="mt-2 text-3xl font-bold text-sky-400">{item.value}</p>
-                  <p className="mt-1 text-xs text-slate-500">{item.description}</p>
+            <div className="card">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-10 h-10 rounded-lg bg-cyan-500/20 flex items-center justify-center">
+                  <svg className="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                  </svg>
                 </div>
-              ))}
+                <h3 className="text-xl font-bold text-white">Feature Engineering</h3>
+              </div>
+              <p className="text-sm text-slate-300 leading-relaxed">
+                We engineer 204 features including: Elo ratings, rolling xG differentials, goalie GSAx (Goals Saved
+                Above Expected), rest days, home/away splits, power play efficiency, and schedule difficulty metrics.
+              </p>
             </div>
 
-            <div className="mt-6 rounded-lg border border-sky-500/20 bg-sky-500/5 p-4">
-              <p className="mb-2 text-sm font-semibold text-sky-400">Transparent Performance</p>
-              <p className="text-xs text-slate-300">
-                We track accuracy on real NHL games throughout the season. No cherry-picking, no hiding losses —
-                just honest performance metrics that update daily. See detailed breakdowns on our Performance page.
+            <div className="card">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-10 h-10 rounded-lg bg-green-500/20 flex items-center justify-center">
+                  <svg className="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z" />
+                  </svg>
+                </div>
+                <h3 className="text-xl font-bold text-white">Model Training</h3>
+              </div>
+              <p className="text-sm text-slate-300 leading-relaxed">
+                We use logistic regression (C=1.0) trained on 2,460 games from 2021-2023 seasons. The model is
+                intentionally kept simple and interpretable - no black box neural networks. You can understand
+                exactly what drives each prediction.
+              </p>
+            </div>
+
+            <div className="card">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-10 h-10 rounded-lg bg-amber-500/20 flex items-center justify-center">
+                  <svg className="w-5 h-5 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
+                <h3 className="text-xl font-bold text-white">Validation & Testing</h3>
+              </div>
+              <p className="text-sm text-slate-300 leading-relaxed">
+                We hold out the entire 2023-24 season (1,230 games) as a test set to measure real-world accuracy.
+                This strict separation ensures we're not overfitting. Result: 59.3% accuracy vs 53.7% baseline.
               </p>
             </div>
           </div>
         </section>
 
-        {/* Timeline */}
-        <section className="mb-32">
-          <div className="rounded-2xl border border-slate-800 bg-slate-900/50 p-8">
-            <h2 className="mb-4 text-3xl font-extrabold text-white">Project Timeline</h2>
-            <p className="mb-8 text-sm text-slate-400">How we got here</p>
-            <div className="space-y-8">
-              {timeline.map((milestone, idx) => (
-                <div key={milestone.date} className="flex gap-6">
-                  <div className="flex flex-col items-center">
-                    <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full border-2 border-sky-500 bg-slate-950 text-sm font-semibold text-sky-400">
-                      {idx + 1}
-                    </div>
-                    {idx < timeline.length - 1 && <div className="mt-2 h-full w-0.5 bg-slate-800" />}
-                  </div>
-                  <div className="flex-1 pb-6">
-                    <p className="text-sm font-medium text-slate-500">{milestone.date}</p>
-                    <h3 className="mt-1 text-lg font-semibold text-white">{milestone.title}</h3>
-                    <p className="mt-2 text-sm text-slate-300">{milestone.description}</p>
-                  </div>
-                </div>
-              ))}
+        {/* Key Features */}
+        <section className="mb-12">
+          <h2 className="text-2xl font-bold text-white mb-6">204 Features Explained</h2>
+          <div className="card">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div>
+                <h4 className="text-sm font-bold text-sky-400 uppercase mb-3">Team Metrics</h4>
+                <ul className="space-y-2 text-sm text-slate-300">
+                  <li>• Elo ratings (offensive & defensive)</li>
+                  <li>• xG for/against (rolling windows)</li>
+                  <li>• Power play & penalty kill %</li>
+                  <li>• Corsi & Fenwick differentials</li>
+                  <li>• Shots for/against per game</li>
+                  <li>• Faceoff win percentage</li>
+                </ul>
+              </div>
+              <div>
+                <h4 className="text-sm font-bold text-cyan-400 uppercase mb-3">Goalie Metrics</h4>
+                <ul className="space-y-2 text-sm text-slate-300">
+                  <li>• Goals Saved Above Expected (GSAx)</li>
+                  <li>• Save percentage (rolling)</li>
+                  <li>• High-danger save %</li>
+                  <li>• Games started in last 7 days</li>
+                  <li>• Rest day advantage</li>
+                  <li>• Home vs away splits</li>
+                </ul>
+              </div>
+              <div>
+                <h4 className="text-sm font-bold text-green-400 uppercase mb-3">Context Factors</h4>
+                <ul className="space-y-2 text-sm text-slate-300">
+                  <li>• Home ice advantage</li>
+                  <li>• Back-to-back games</li>
+                  <li>• Travel distance</li>
+                  <li>• Days since last game</li>
+                  <li>• Recent form (L5, L10)</li>
+                  <li>• Schedule strength</li>
+                </ul>
+              </div>
             </div>
           </div>
         </section>
 
-        {/* Tech & Limitations */}
-        <section className="mb-32">
-          <div className="grid gap-8 lg:grid-cols-2">
-            <div className="rounded-2xl border border-slate-800 bg-slate-900/50 p-8">
-              <h2 className="mb-8 text-3xl font-extrabold text-white">Technology Stack</h2>
-              <div className="space-y-4">
-                {tech.map((item) => (
-                  <div key={item.label} className="flex items-center justify-between rounded-lg border border-slate-800/50 bg-slate-950/50 px-4 py-3">
-                    <span className="text-sm font-medium text-slate-400">{item.label}</span>
-                    <span className="text-sm text-white">{item.value}</span>
-                  </div>
-                ))}
-              </div>
-              <div className="mt-6 rounded-lg border border-sky-500/20 bg-sky-500/5 p-4">
-                <p className="mb-2 text-sm font-semibold text-sky-400">Built for Speed & Reliability</p>
-                <p className="text-xs text-slate-300">
-                  Modern tech stack optimized for fast load times, daily automation, and seamless deployment.
-                  Every push to main auto-deploys to production via Vercel.
-                </p>
-              </div>
+        {/* Performance Highlights */}
+        <section className="mb-12">
+          <h2 className="text-2xl font-bold text-white mb-6">Performance Highlights</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="stat-card">
+              <div className="stat-label">Test Accuracy</div>
+              <div className="stat-value">59.3%</div>
+              <div className="text-sm text-slate-400 mt-2">vs 53.7% baseline</div>
+            </div>
+            <div className="stat-card">
+              <div className="stat-label">A+ Confidence</div>
+              <div className="stat-value">69.5%</div>
+              <div className="text-sm text-slate-400 mt-2">≥20pt edge games</div>
+            </div>
+            <div className="stat-card">
+              <div className="stat-label">Log Loss</div>
+              <div className="stat-value">0.676</div>
+              <div className="text-sm text-slate-400 mt-2">Calibration metric</div>
+            </div>
+            <div className="stat-card">
+              <div className="stat-label">Test Games</div>
+              <div className="stat-value">1,230</div>
+              <div className="text-sm text-slate-400 mt-2">2023-24 season</div>
+            </div>
+          </div>
+        </section>
+
+        {/* Tech Stack */}
+        <section className="mb-12">
+          <h2 className="text-2xl font-bold text-white mb-6">Tech Stack</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="card">
+              <h3 className="text-lg font-bold text-white mb-4">Machine Learning</h3>
+              <ul className="space-y-2 text-sm text-slate-300">
+                <li>• <strong>Python 3.11</strong> - Core language</li>
+                <li>• <strong>scikit-learn</strong> - Logistic regression model</li>
+                <li>• <strong>pandas & numpy</strong> - Data processing</li>
+                <li>• <strong>NHL Stats API</strong> - Official data source</li>
+              </ul>
             </div>
 
-            <div className="rounded-2xl border border-slate-800 bg-slate-900/50 p-8">
-              <h2 className="mb-4 text-3xl font-extrabold text-white">Limitations</h2>
-              <p className="mb-8 text-sm text-slate-400">What we can't predict</p>
-              <div className="space-y-4">
-                <div className="rounded-lg border border-slate-800/50 bg-slate-950/50 p-4">
-                  <p className="text-sm font-semibold text-slate-300">Unpredictable Events</p>
-                  <p className="mt-2 text-xs text-slate-400">Injuries, referee decisions, and random bounces can change outcomes in ways no model can predict.</p>
-                </div>
-                <div className="rounded-lg border border-slate-800/50 bg-slate-950/50 p-4">
-                  <p className="text-sm font-semibold text-slate-300">Last-Minute Changes</p>
-                  <p className="mt-2 text-xs text-slate-400">Scratches or goalie changes after our morning update can impact accuracy. We refresh daily but can't track real-time changes.</p>
-                </div>
-                <div className="rounded-lg border border-slate-800/50 bg-slate-950/50 p-4">
-                  <p className="text-sm font-semibold text-slate-300">Not a Betting Tool</p>
-                  <p className="mt-2 text-xs text-slate-400">Win probabilities are predictions, not betting advice. We don't incorporate odds or recommend wagers. Bet responsibly.</p>
-                </div>
-              </div>
+            <div className="card">
+              <h3 className="text-lg font-bold text-white mb-4">Frontend</h3>
+              <ul className="space-y-2 text-sm text-slate-300">
+                <li>• <strong>Next.js 16</strong> - React framework</li>
+                <li>• <strong>TypeScript</strong> - Type safety</li>
+                <li>• <strong>Tailwind CSS v4</strong> - Styling</li>
+                <li>• <strong>Vercel</strong> - Hosting & deployment</li>
+              </ul>
             </div>
+          </div>
+        </section>
+
+        {/* Limitations */}
+        <section className="mb-12">
+          <div className="card bg-amber-500/5 border-amber-500/20">
+            <h2 className="text-2xl font-bold text-white mb-4">Known Limitations</h2>
+            <p className="text-slate-300 mb-4 leading-relaxed">
+              We believe in radical transparency. Here's what our model can't do:
+            </p>
+            <ul className="space-y-2 text-sm text-slate-300">
+              <li>• <strong>Last-minute injuries:</strong> We can't predict surprise scratches announced 30 minutes before puck drop</li>
+              <li>• <strong>Intangibles:</strong> Rivalry games, playoff implications, and "must-win" scenarios aren't fully captured</li>
+              <li>• <strong>Lineup changes:</strong> Mid-game adjustments and line shuffles can't be predicted</li>
+              <li>• <strong>Randomness:</strong> Hockey has high variance - a 60% prediction will still lose 40% of the time</li>
+              <li>• <strong>Future uncertainty:</strong> Past performance doesn't guarantee future results</li>
+            </ul>
           </div>
         </section>
 
         {/* FAQs */}
-        <section className="mb-32">
-          <div className="rounded-2xl border border-slate-800 bg-slate-900/50 p-8">
-            <h2 className="mb-10 text-3xl font-extrabold text-white">Frequently Asked Questions</h2>
-            <div className="space-y-4">
-              {faqs.map((faq) => (
-                <details key={faq.question} className="group rounded-lg border border-slate-800/50 bg-slate-950/50 p-5">
-                  <summary className="cursor-pointer text-base font-semibold text-white group-open:text-sky-400">
-                    {faq.question}
-                  </summary>
-                  <p className="mt-3 text-sm leading-relaxed text-slate-300">{faq.answer}</p>
-                </details>
-              ))}
-            </div>
+        <section className="mb-12">
+          <h2 className="text-2xl font-bold text-white mb-6">Frequently Asked Questions</h2>
+          <div className="space-y-4">
+            <details className="card group">
+              <summary className="cursor-pointer font-semibold text-white list-none flex items-center justify-between">
+                <span>How often do you update predictions?</span>
+                <svg className="w-5 h-5 transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </summary>
+              <p className="mt-4 text-sm text-slate-300 leading-relaxed">
+                We generate fresh predictions daily at 11:00 AM UTC (6:00 AM ET) via automated GitHub Actions. The model
+                pulls the latest stats from the NHL API and recalculates all 204 features before making predictions.
+              </p>
+            </details>
+
+            <details className="card group">
+              <summary className="cursor-pointer font-semibold text-white list-none flex items-center justify-between">
+                <span>Do you sell picks or betting advice?</span>
+                <svg className="w-5 h-5 transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </summary>
+              <p className="mt-4 text-sm text-slate-300 leading-relaxed">
+                No. Puckcast is purely an analytics and educational platform. We don't sell picks, offer betting advice,
+                or take a cut of any wagers. Everything is free and transparent.
+              </p>
+            </details>
+
+            <details className="card group">
+              <summary className="cursor-pointer font-semibold text-white list-none flex items-center justify-between">
+                <span>Is the source code open source?</span>
+                <svg className="w-5 h-5 transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </summary>
+              <p className="mt-4 text-sm text-slate-300 leading-relaxed">
+                Yes! The entire codebase is available on{" "}
+                <a
+                  href="https://github.com/noahowsh/puckcast"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sky-400 hover:underline"
+                >
+                  GitHub
+                </a>
+                . You can inspect the model training code, feature engineering pipeline, and website frontend.
+              </p>
+            </details>
+
+            <details className="card group">
+              <summary className="cursor-pointer font-semibold text-white list-none flex items-center justify-between">
+                <span>Why logistic regression instead of neural networks?</span>
+                <svg className="w-5 h-5 transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </summary>
+              <p className="mt-4 text-sm text-slate-300 leading-relaxed">
+                Interpretability. With logistic regression, we can see exactly which features drive each prediction
+                (feature coefficients). Neural networks are black boxes. For sports prediction, understanding the "why"
+                is as important as the "what." Plus, logistic regression is less prone to overfitting on limited data.
+              </p>
+            </details>
           </div>
         </section>
 
-        {/* CTA */}
-        <section className="mb-32">
-          <div className="rounded-2xl border border-sky-500/30 bg-gradient-to-br from-sky-500/10 to-cyan-500/10 p-16 text-center">
-            <h2 className="text-4xl font-extrabold text-white">Stay Connected</h2>
-            <p className="mx-auto mt-6 max-w-2xl text-xl text-slate-300">
-              Follow @puckcastai on X for daily predictions, post-game results, performance updates,
-              and behind-the-scenes insights into how we refine the model.
+        {/* Contact */}
+        <section className="mb-12">
+          <div className="card-elevated bg-sky-500/5 border-sky-500/20 text-center max-w-2xl mx-auto">
+            <h2 className="text-2xl font-bold text-white mb-4">Get In Touch</h2>
+            <p className="text-slate-300 mb-6">
+              Questions, feedback, or just want to chat about hockey analytics? We'd love to hear from you.
             </p>
-            <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
+            <div className="flex flex-wrap items-center justify-center gap-4">
               <a
                 href="https://x.com/puckcastai"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="rounded-xl bg-sky-500 px-8 py-4 text-lg font-bold text-white shadow-xl shadow-sky-500/30 transition hover:bg-sky-400"
+                className="btn btn-primary"
               >
-                Follow @puckcastai
+                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                </svg>
+                Follow on X
               </a>
-              <Link
-                href="/performance"
-                className="rounded-xl border-2 border-slate-700 bg-slate-900/50 px-8 py-4 text-lg font-bold text-white transition hover:border-slate-600 hover:bg-slate-900"
+              <a
+                href="https://github.com/noahowsh/puckcast"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn btn-secondary"
               >
-                View Performance
-              </Link>
+                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                </svg>
+                View on GitHub
+              </a>
+              <a
+                href="mailto:team@puckcast.ai"
+                className="btn btn-ghost"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                </svg>
+                Email Us
+              </a>
             </div>
           </div>
         </section>

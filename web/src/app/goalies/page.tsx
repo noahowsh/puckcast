@@ -1,16 +1,19 @@
 import type { GoalieCard } from "@/types/goalie";
 import { getGoaliePulse } from "@/lib/data";
 import { GoalieTicker } from "@/components/GoalieTicker";
+import { PageHeader } from "@/components/PageHeader";
+import { StatCard } from "@/components/StatCard";
+import { TeamLogo } from "@/components/TeamLogo";
 
 const pulse = getGoaliePulse();
 const updatedAt = pulse.updatedAt ? new Date(pulse.updatedAt) : null;
 const GOALIE_SUMMARY_ENDPOINT = "https://api.nhle.com/stats/rest/en/goalie/summary?isAggregate=true&limit=-1&cayenneExp=seasonId=20252026";
 
-const trendColors: Record<string, string> = {
-  surging: "text-sky-400",
-  steady: "text-sky-400",
-  fresh: "text-sky-400",
-  "fatigue watch": "text-slate-400",
+const trendConfig: Record<string, { color: string; icon: string }> = {
+  surging: { color: "text-green-400", icon: "📈" },
+  steady: { color: "text-sky-400", icon: "➡️" },
+  fresh: { color: "text-cyan-400", icon: "✨" },
+  "fatigue watch": { color: "text-amber-400", icon: "⚠️" },
 };
 
 const formatPercent = (value: number) => `${(value * 100).toFixed(0)}%`;
@@ -47,69 +50,79 @@ async function fetchGoalieSeasonLeaders(): Promise<GoalieSeasonLeader[]> {
 
 export default async function GoaliePage() {
   const seasonLeaders = await fetchGoalieSeasonLeaders();
-  return (
-    <div className="relative min-h-screen bg-slate-950">
-      {/* Subtle background gradient */}
-      <div className="pointer-events-none absolute inset-0">
-        <div className="absolute inset-0 bg-gradient-to-b from-sky-950/20 via-slate-950 to-slate-950" />
-      </div>
+  const updatedDisplay = updatedAt
+    ? updatedAt.toLocaleString("en-US", { timeZone: "America/New_York" })
+    : null;
 
-      <div className="relative mx-auto max-w-7xl px-6 py-16 lg:px-8">
-        {/* Header */}
-        <section className="mb-32">
-          <div className="mx-auto max-w-4xl text-center">
-            <div className="mb-2 inline-flex items-center gap-2 rounded-full border border-sky-500/20 bg-sky-500/5 px-3 py-1">
-              <span className="text-xs font-medium text-sky-400">Goalie Intelligence</span>
-            </div>
-            <h1 className="mb-8 text-6xl font-extrabold text-white lg:text-7xl">Goalie tracking & analysis</h1>
-            <p className="text-xl text-slate-300">
-              Blending rolling GSAx, rest advantage, rebound control metrics, and start-likelihood signals from morning skate intel.
+  return (
+    <div className="min-h-screen">
+      <div className="container" style={{ paddingTop: '6rem' }}>
+        <PageHeader
+          title="Goalie Intelligence"
+          description="Rolling GSAx, rest advantage analysis, start-likelihood signals, and comprehensive goalie tracking for every NHL netminder."
+          icon={
+            <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+            </svg>
+          }
+        />
+
+        {updatedDisplay && (
+          <div className="mb-8 text-center">
+            <p className="text-sm text-slate-500">
+              Last updated {updatedDisplay} ET
             </p>
-            {updatedAt && (
-              <p className="mt-2 text-sm text-slate-500">
-                Updated {updatedAt.toLocaleString("en-US", { timeZone: "America/New_York" })} ET
-              </p>
-            )}
           </div>
-        </section>
+        )}
 
         {/* Notes */}
-        <section className="mb-32">
-          <div className="rounded-2xl border border-slate-800 bg-slate-900/50 p-8">
-            <p className="text-sm text-slate-300">{pulse.notes}</p>
-          </div>
-        </section>
+        {pulse.notes && (
+          <section className="mb-12">
+            <div className="card bg-sky-500/5 border-sky-500/20">
+              <p className="text-slate-300 leading-relaxed">{pulse.notes}</p>
+            </div>
+          </section>
+        )}
 
         {/* Season Leaders */}
         {seasonLeaders.length > 0 && (
-          <section className="mb-32">
-            <h2 className="mb-10 text-center text-3xl font-extrabold text-white">Season Leaders</h2>
-            <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
-              {seasonLeaders.map((leader) => (
-                <article key={leader.name} className="rounded-2xl border border-slate-800 bg-slate-900/50 p-8">
-                  <p className="text-sm font-medium text-slate-400">Top Save %</p>
-                  <p className="mt-2 text-lg font-semibold text-white">{leader.name}</p>
-                  <div className="mt-3 flex items-center gap-4 text-sm text-slate-400">
+          <section className="mb-12">
+            <h2 className="text-2xl font-bold text-white mb-6">Season Leaders</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 stagger-animation">
+              {seasonLeaders.map((leader, idx) => (
+                <div key={leader.name} className="stat-card">
+                  <div className="flex items-center justify-between mb-3">
+                    <div className="stat-label">Top Save %</div>
+                    <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-gradient-to-br from-sky-500/20 to-cyan-500/20 border border-sky-500/30">
+                      <span className="text-sm font-bold text-sky-400">#{idx + 1}</span>
+                    </div>
+                  </div>
+                  <div className="text-lg font-bold text-white mb-2">{leader.name}</div>
+                  <div className="flex items-center gap-3 text-sm text-slate-400 mb-4">
                     <span>{leader.gamesPlayed} GP</span>
+                    <span>•</span>
                     <span>{leader.wins} W</span>
                   </div>
-                  <p className="mt-4 text-2xl font-bold text-sky-400">{formatPercent(leader.savePct)}</p>
-                  <p className="mt-1 text-sm text-slate-500">SV% · GAA {leader.gaa.toFixed(2)}</p>
-                </article>
+                  <div className="stat-value text-3xl">{formatPercent(leader.savePct)}</div>
+                  <div className="text-sm text-slate-400 mt-2">GAA {leader.gaa.toFixed(2)}</div>
+                </div>
               ))}
             </div>
           </section>
         )}
 
         {/* Live Ticker */}
-        <section className="mb-32">
-          <GoalieTicker initial={pulse} />
+        <section className="mb-12">
+          <h3 className="text-xl font-bold text-white mb-4">Live Goalie Updates</h3>
+          <div className="card-elevated">
+            <GoalieTicker initial={pulse} />
+          </div>
         </section>
 
         {/* Goalie Cards */}
-        <section className="mb-32">
-          <h2 className="mb-10 text-center text-3xl font-extrabold text-white">Detailed Analysis</h2>
-          <div className="grid gap-8 md:grid-cols-2">
+        <section className="mb-12">
+          <h2 className="text-2xl font-bold text-white mb-6">Detailed Analysis</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {pulse.goalies.map((goalie) => (
               <GoalieCardView key={goalie.name} goalie={goalie} />
             ))}
@@ -122,55 +135,93 @@ export default async function GoaliePage() {
 
 function GoalieCardView({ goalie }: { goalie: GoalieCard }) {
   const startLikelihood = formatPercent(goalie.startLikelihood);
-  const trendColor = trendColors[goalie.trend] ?? "text-white";
+  const trendStyle = trendConfig[goalie.trend] || { color: "text-white", icon: "" };
+  const gsaxPositive = goalie.rollingGsa > 0;
+
   return (
-    <article className="rounded-2xl border border-slate-800 bg-slate-900/50 p-8">
-      <div className="flex items-start justify-between">
-        <div>
-          <p className="text-sm font-medium text-slate-400">{goalie.team}</p>
-          <h3 className="mt-1 text-2xl font-bold text-white">{goalie.name}</h3>
-          <p className={`mt-1 text-sm font-medium ${trendColor}`}>{goalie.trend}</p>
+    <article className="card">
+      <div className="flex items-start justify-between mb-6">
+        <div className="flex items-center gap-3">
+          <TeamLogo teamAbbrev={goalie.team} size="md" />
+          <div>
+            <h3 className="text-xl font-bold text-white">{goalie.name}</h3>
+            <div className="flex items-center gap-2 mt-1">
+              <span className="text-sm text-slate-400">{goalie.team}</span>
+              <span className="text-slate-600">•</span>
+              <span className={`text-sm font-semibold ${trendStyle.color}`}>
+                {trendStyle.icon} {goalie.trend}
+              </span>
+            </div>
+          </div>
         </div>
         <div className="text-right">
-          <p className="text-sm text-slate-400">Start Odds</p>
-          <p className="mt-1 text-2xl font-bold text-white">{startLikelihood}</p>
-          <p className="mt-1 text-xs text-slate-500">Rest +{goalie.restDays}d</p>
+          <div className="text-xs text-slate-400 uppercase font-semibold mb-1">Start Odds</div>
+          <div className="text-2xl font-bold text-white">{startLikelihood}</div>
+          <div className="text-xs text-slate-500 mt-1">Rest: +{goalie.restDays}d</div>
         </div>
       </div>
-      <div className="mt-6 grid grid-cols-2 gap-4">
-        <div className="rounded-lg border border-slate-800/50 bg-slate-950/50 p-4">
-          <p className="text-sm font-medium text-slate-400">Rolling GSAx</p>
-          <p className="mt-2 text-2xl font-bold text-white">{goalie.rollingGsa.toFixed(1)}</p>
-          <p className="mt-1 text-xs text-slate-500">Last 3 starts</p>
+
+      <div className="grid grid-cols-2 gap-4 mb-6">
+        <div className="card-flat">
+          <div className="stat-label mb-2">Rolling GSAx</div>
+          <div className={`stat-value text-2xl ${gsaxPositive ? "text-green-400" : "text-red-400"}`}>
+            {gsaxPositive ? "+" : ""}{goalie.rollingGsa.toFixed(1)}
+          </div>
+          <div className="text-xs text-slate-500 mt-1">Last 3 starts</div>
         </div>
-        <div className="rounded-lg border border-slate-800/50 bg-slate-950/50 p-4">
-          <p className="text-sm font-medium text-slate-400">Season GSAx</p>
-          <p className="mt-2 text-2xl font-bold text-white">{goalie.seasonGsa.toFixed(1)}</p>
-          <p className="mt-1 text-xs text-slate-500">League average</p>
+        <div className="card-flat">
+          <div className="stat-label mb-2">Season GSAx</div>
+          <div className="stat-value text-2xl">{goalie.seasonGsa > 0 ? "+" : ""}{goalie.seasonGsa.toFixed(1)}</div>
+          <div className="text-xs text-slate-500 mt-1">Full season</div>
         </div>
       </div>
-      <p className="mt-6 text-sm text-slate-300">{goalie.note}</p>
-      <div className="mt-6 grid gap-4 md:grid-cols-2">
+
+      <p className="text-sm text-slate-300 leading-relaxed mb-6">{goalie.note}</p>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
         <div>
-          <p className="mb-2 text-sm font-medium text-slate-400">Strengths</p>
-          <ul className="space-y-3">
+          <div className="text-sm font-semibold text-slate-400 mb-3">Strengths</div>
+          <ul className="space-y-2">
             {goalie.strengths.map((item) => (
-              <li key={item} className="rounded-lg bg-sky-500/10 px-3 py-2 text-xs text-sky-400">{item}</li>
+              <li
+                key={item}
+                className="flex items-start gap-2 rounded-lg bg-green-500/10 border border-green-500/20 px-3 py-2 text-xs text-green-400"
+              >
+                <svg className="w-3 h-3 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                </svg>
+                <span>{item}</span>
+              </li>
             ))}
           </ul>
         </div>
         <div>
-          <p className="mb-2 text-sm font-medium text-slate-400">Watch-outs</p>
-          <ul className="space-y-3">
+          <div className="text-sm font-semibold text-slate-400 mb-3">Watch-outs</div>
+          <ul className="space-y-2">
             {goalie.watchouts.map((item) => (
-              <li key={item} className="rounded-lg bg-slate-800/50 px-3 py-2 text-xs text-slate-400">
-                {item}
+              <li
+                key={item}
+                className="flex items-start gap-2 rounded-lg bg-slate-800/50 border border-slate-700 px-3 py-2 text-xs text-slate-400"
+              >
+                <svg className="w-3 h-3 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                </svg>
+                <span>{item}</span>
               </li>
             ))}
           </ul>
         </div>
       </div>
-      <p className="mt-6 text-xs text-slate-500">Next opponent: {goalie.nextOpponent}</p>
+
+      <div className="pt-4 border-t border-slate-800">
+        <div className="flex items-center justify-between text-sm">
+          <span className="text-slate-400">Next opponent</span>
+          <div className="flex items-center gap-2">
+            <span className="font-semibold text-white">{goalie.nextOpponent}</span>
+            <TeamLogo teamAbbrev={goalie.nextOpponent} size="xs" />
+          </div>
+        </div>
+      </div>
     </article>
   );
 }
