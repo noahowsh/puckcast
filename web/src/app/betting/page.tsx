@@ -96,8 +96,8 @@ export default function BettingPage() {
         <section className="mb-32">
           <div className="grid gap-8 lg:grid-cols-2">
             <div className="rounded-2xl border border-slate-800 bg-slate-900/50 p-8">
-              <h2 className="mb-2 text-2xl font-extrabold text-white">Top Performers</h2>
-              <p className="mb-6 text-sm text-slate-400">Strategies adding the most units this season</p>
+              <h2 className="mb-4 text-2xl font-extrabold text-white">Top Performers</h2>
+              <p className="mb-8 text-sm text-slate-400">Strategies adding the most units this season</p>
               <div className="space-y-4">
                 {strategyLeaders.map((strategy) => (
                   <div key={strategy.name} className="rounded-lg border border-slate-800/50 bg-slate-950/50 p-4">
@@ -112,8 +112,8 @@ export default function BettingPage() {
               </div>
             </div>
             <div className="rounded-2xl border border-slate-800 bg-slate-900/50 p-8">
-              <h2 className="mb-2 text-2xl font-extrabold text-white">Variance Context</h2>
-              <p className="mb-6 text-sm text-slate-400">Strategies currently lagging</p>
+              <h2 className="mb-4 text-2xl font-extrabold text-white">Variance Context</h2>
+              <p className="mb-8 text-sm text-slate-400">Strategies currently lagging</p>
               <div className="space-y-4">
                 {strategyLaggards.map((strategy) => (
                   <div key={strategy.name} className="rounded-lg border border-slate-800/50 bg-slate-950/50 p-4">
@@ -133,13 +133,13 @@ export default function BettingPage() {
         <section className="mb-32">
           <div className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr]">
             <div className="rounded-2xl border border-slate-800 bg-slate-900/50 p-8">
-              <h2 className="mb-2 text-2xl font-extrabold text-white">Bankroll Curve</h2>
-              <p className="mb-6 text-sm text-slate-400">All-picks cumulative units</p>
+              <h2 className="mb-4 text-2xl font-extrabold text-white">Bankroll Curve</h2>
+              <p className="mb-8 text-sm text-slate-400">All-picks cumulative units</p>
               <Sparkline points={bankrollSeries} />
               <p className="mt-4 text-sm text-slate-400">+168 units from opening night through April 18 (even-money assumption)</p>
             </div>
             <div className="rounded-2xl border border-slate-800 bg-slate-900/50 p-8">
-              <h2 className="mb-6 text-2xl font-extrabold text-white">Term Guide</h2>
+              <h2 className="mb-8 text-2xl font-extrabold text-white">Term Guide</h2>
               <div className="space-y-4">
                 <Definition term="Edge">
                   Absolute difference between the model&apos;s win probability and a 50/50 coin flip. 10 pts = 60% vs 50%.
