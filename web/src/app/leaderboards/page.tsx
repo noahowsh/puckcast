@@ -65,7 +65,7 @@ const pct = (value: number) => `${(value * 100).toFixed(1)}%`;
 export default function LeaderboardsPage() {
   return (
     <div className="min-h-screen">
-      <div className="container" style={{ paddingTop: '6rem' }}>
+      <div className="container" style={{ paddingTop: '8rem' }}>
         <PageHeader
           title="Power Rankings"
           description="Our model's team strength rankings vs. traditional standings. Based on goal differential, point percentage, and predictive win rates."
@@ -78,9 +78,9 @@ export default function LeaderboardsPage() {
 
         {/* Biggest Movers */}
         {(biggestMover || biggestSlider) && (
-          <section className="mb-12">
-            <h2 className="text-2xl font-bold text-white mb-6">Biggest Movers</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <section className="mb-16">
+            <h2 className="text-2xl font-bold text-white mb-8">Biggest Movers</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               {biggestMover && (
                 <div className="card bg-green-500/5 border-green-500/30">
                   <div className="flex items-center gap-3 mb-4">
@@ -143,8 +143,8 @@ export default function LeaderboardsPage() {
         )}
 
         {/* Full Rankings Table */}
-        <section className="mb-12">
-          <h2 className="text-2xl font-bold text-white mb-6">All 32 Teams</h2>
+        <section className="mb-16">
+          <h2 className="text-2xl font-bold text-white mb-8">All 32 Teams</h2>
           <div className="table-container">
             <table className="data-table">
               <thead>
@@ -222,7 +222,7 @@ export default function LeaderboardsPage() {
         </section>
 
         {/* Methodology Note */}
-        <section className="mb-12">
+        <section className="mb-16">
           <div className="card bg-slate-800/30">
             <h3 className="text-lg font-bold text-white mb-3">How Power Rankings Work</h3>
             <p className="text-sm text-slate-300 leading-relaxed mb-4">

@@ -67,7 +67,7 @@ export default function PredictionsPage() {
 
   return (
     <div className="min-h-screen">
-      <div className="container" style={{ paddingTop: '6rem' }}>
+      <div className="container" style={{ paddingTop: '8rem' }}>
         <PageHeader
           title="Tonight's Predictions"
           description={`Full-game projections with lineup context, rolling form, and NHL API features. ${todaysPredictions.length} games on the slate.`}
@@ -79,8 +79,8 @@ export default function PredictionsPage() {
         />
 
         {/* Summary Stats */}
-        <section className="mb-12">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 stagger-animation">
+        <section className="mb-16">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 stagger-animation">
             <StatCard
               label="Avg Edge"
               value={`${(summary.avgEdge * 100).toFixed(1)} pts`}
@@ -101,8 +101,8 @@ export default function PredictionsPage() {
         </section>
 
         {/* Live Ticker */}
-        <section className="mb-12">
-          <h3 className="text-xl font-bold text-white mb-4">Live Prediction Ticker</h3>
+        <section className="mb-16">
+          <h3 className="text-xl font-bold text-white mb-6">Live Prediction Ticker</h3>
           <div className="card-elevated">
             <PredictionTicker initial={payload} />
           </div>
@@ -111,12 +111,12 @@ export default function PredictionsPage() {
         {todaysPredictions.length > 0 ? (
           <>
             {/* Top Edges & Upsets */}
-            <section className="mb-12">
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <section className="mb-16">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 {/* Largest Edges */}
                 <div className="card">
-                  <h3 className="text-xl font-bold text-white mb-4">Largest Probability Gaps</h3>
-                  <div className="space-y-3">
+                  <h3 className="text-xl font-bold text-white mb-6">Largest Probability Gaps</h3>
+                  <div className="space-y-4">
                     {topEdges.map((game) => {
                       const grade = getPredictionGrade(game.edge);
                       return (
@@ -146,9 +146,9 @@ export default function PredictionsPage() {
 
                 {/* Upset Radar */}
                 <div className="card">
-                  <h3 className="text-xl font-bold text-white mb-4">Upset Radar</h3>
+                  <h3 className="text-xl font-bold text-white mb-6">Upset Radar</h3>
                   {upsetRadar.length > 0 ? (
-                    <div className="space-y-3">
+                    <div className="space-y-4">
                       {upsetRadar.map((game) => (
                         <div
                           key={game.id}
@@ -177,8 +177,8 @@ export default function PredictionsPage() {
             </section>
 
             {/* All Games */}
-            <section className="mb-12">
-              <div className="flex items-center justify-between mb-6">
+            <section className="mb-16">
+              <div className="flex items-center justify-between mb-8">
                 <h3 className="text-2xl font-bold text-white">All Games</h3>
                 <div className="flex items-center gap-2">
                   <span className="text-sm text-slate-400">Sort by:</span>
@@ -205,7 +205,7 @@ export default function PredictionsPage() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 {sortedGames.map((prediction) => (
                   <PredictionCard key={prediction.id} prediction={prediction} />
                 ))}
@@ -213,8 +213,8 @@ export default function PredictionsPage() {
             </section>
 
             {/* Game Table */}
-            <section className="mb-12">
-              <h3 className="text-2xl font-bold text-white mb-6">Game-by-Game Sheet</h3>
+            <section className="mb-16">
+              <h3 className="text-2xl font-bold text-white mb-8">Game-by-Game Sheet</h3>
               <div className="table-container">
                 <table className="data-table">
                   <thead>

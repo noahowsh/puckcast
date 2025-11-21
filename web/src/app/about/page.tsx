@@ -4,7 +4,7 @@ import { PageHeader } from "@/components/PageHeader";
 export default function AboutPage() {
   return (
     <div className="min-h-screen">
-      <div className="container" style={{ paddingTop: '6rem' }}>
+      <div className="container" style={{ paddingTop: '8rem' }}>
         <PageHeader
           title="About Puckcast"
           description="Transparency, methodology, and the story behind our NHL prediction model."
@@ -16,7 +16,7 @@ export default function AboutPage() {
         />
 
         {/* Mission */}
-        <section className="mb-12 max-w-4xl mx-auto">
+        <section className="mb-16 max-w-4xl mx-auto">
           <div className="card-elevated text-center">
             <h2 className="text-3xl font-bold text-white mb-4">Our Mission</h2>
             <p className="text-lg text-slate-300 leading-relaxed">
@@ -27,9 +27,9 @@ export default function AboutPage() {
         </section>
 
         {/* Model Overview */}
-        <section className="mb-12">
-          <h2 className="text-2xl font-bold text-white mb-6">How The Model Works</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <section className="mb-16">
+          <h2 className="text-2xl font-bold text-white mb-8">How The Model Works</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div className="card">
               <div className="flex items-center gap-3 mb-4">
                 <div className="w-10 h-10 rounded-lg bg-sky-500/20 flex items-center justify-center">
@@ -95,10 +95,10 @@ export default function AboutPage() {
         </section>
 
         {/* Key Features */}
-        <section className="mb-12">
-          <h2 className="text-2xl font-bold text-white mb-6">204 Features Explained</h2>
+        <section className="mb-16">
+          <h2 className="text-2xl font-bold text-white mb-8">204 Features Explained</h2>
           <div className="card">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               <div>
                 <h4 className="text-sm font-bold text-sky-400 uppercase mb-3">Team Metrics</h4>
                 <ul className="space-y-2 text-sm text-slate-300">
@@ -137,9 +137,9 @@ export default function AboutPage() {
         </section>
 
         {/* Performance Highlights */}
-        <section className="mb-12">
-          <h2 className="text-2xl font-bold text-white mb-6">Performance Highlights</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <section className="mb-16">
+          <h2 className="text-2xl font-bold text-white mb-8">Performance Highlights</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             <div className="stat-card">
               <div className="stat-label">Test Accuracy</div>
               <div className="stat-value">59.3%</div>
@@ -164,11 +164,11 @@ export default function AboutPage() {
         </section>
 
         {/* Tech Stack */}
-        <section className="mb-12">
-          <h2 className="text-2xl font-bold text-white mb-6">Tech Stack</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <section className="mb-16">
+          <h2 className="text-2xl font-bold text-white mb-8">Tech Stack</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div className="card">
-              <h3 className="text-lg font-bold text-white mb-4">Machine Learning</h3>
+              <h3 className="text-lg font-bold text-white mb-6">Machine Learning</h3>
               <ul className="space-y-2 text-sm text-slate-300">
                 <li>• <strong>Python 3.11</strong> - Core language</li>
                 <li>• <strong>scikit-learn</strong> - Logistic regression model</li>
@@ -178,7 +178,7 @@ export default function AboutPage() {
             </div>
 
             <div className="card">
-              <h3 className="text-lg font-bold text-white mb-4">Frontend</h3>
+              <h3 className="text-lg font-bold text-white mb-6">Frontend</h3>
               <ul className="space-y-2 text-sm text-slate-300">
                 <li>• <strong>Next.js 16</strong> - React framework</li>
                 <li>• <strong>TypeScript</strong> - Type safety</li>
@@ -190,7 +190,7 @@ export default function AboutPage() {
         </section>
 
         {/* Limitations */}
-        <section className="mb-12">
+        <section className="mb-16">
           <div className="card bg-amber-500/5 border-amber-500/20">
             <h2 className="text-2xl font-bold text-white mb-4">Known Limitations</h2>
             <p className="text-slate-300 mb-4 leading-relaxed">
@@ -207,8 +207,8 @@ export default function AboutPage() {
         </section>
 
         {/* FAQs */}
-        <section className="mb-12">
-          <h2 className="text-2xl font-bold text-white mb-6">Frequently Asked Questions</h2>
+        <section className="mb-16">
+          <h2 className="text-2xl font-bold text-white mb-8">Frequently Asked Questions</h2>
           <div className="space-y-4">
             <details className="card group">
               <summary className="cursor-pointer font-semibold text-white list-none flex items-center justify-between">
@@ -274,7 +274,7 @@ export default function AboutPage() {
         </section>
 
         {/* Contact */}
-        <section className="mb-12">
+        <section className="mb-16">
           <div className="card-elevated bg-sky-500/5 border-sky-500/20 text-center max-w-2xl mx-auto">
             <h2 className="text-2xl font-bold text-white mb-4">Get In Touch</h2>
             <p className="text-slate-300 mb-6">

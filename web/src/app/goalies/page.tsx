@@ -56,7 +56,7 @@ export default async function GoaliePage() {
 
   return (
     <div className="min-h-screen">
-      <div className="container" style={{ paddingTop: '6rem' }}>
+      <div className="container" style={{ paddingTop: '8rem' }}>
         <PageHeader
           title="Goalie Intelligence"
           description="Rolling GSAx, rest advantage analysis, start-likelihood signals, and comprehensive goalie tracking for every NHL netminder."
@@ -77,7 +77,7 @@ export default async function GoaliePage() {
 
         {/* Notes */}
         {pulse.notes && (
-          <section className="mb-12">
+          <section className="mb-16">
             <div className="card bg-sky-500/5 border-sky-500/20">
               <p className="text-slate-300 leading-relaxed">{pulse.notes}</p>
             </div>
@@ -86,9 +86,9 @@ export default async function GoaliePage() {
 
         {/* Season Leaders */}
         {seasonLeaders.length > 0 && (
-          <section className="mb-12">
-            <h2 className="text-2xl font-bold text-white mb-6">Season Leaders</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 stagger-animation">
+          <section className="mb-16">
+            <h2 className="text-2xl font-bold text-white mb-8">Season Leaders</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 stagger-animation">
               {seasonLeaders.map((leader, idx) => (
                 <div key={leader.name} className="stat-card">
                   <div className="flex items-center justify-between mb-3">
@@ -112,17 +112,17 @@ export default async function GoaliePage() {
         )}
 
         {/* Live Ticker */}
-        <section className="mb-12">
-          <h3 className="text-xl font-bold text-white mb-4">Live Goalie Updates</h3>
+        <section className="mb-16">
+          <h3 className="text-xl font-bold text-white mb-6">Live Goalie Updates</h3>
           <div className="card-elevated">
             <GoalieTicker initial={pulse} />
           </div>
         </section>
 
         {/* Goalie Cards */}
-        <section className="mb-12">
-          <h2 className="text-2xl font-bold text-white mb-6">Detailed Analysis</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <section className="mb-16">
+          <h2 className="text-2xl font-bold text-white mb-8">Detailed Analysis</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {pulse.goalies.map((goalie) => (
               <GoalieCardView key={goalie.name} goalie={goalie} />
             ))}

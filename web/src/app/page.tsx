@@ -55,23 +55,23 @@ export default function Home() {
     <div className="min-h-screen">
       <div className="container">
         {/* Hero Section */}
-        <section className="section animate-fade-in" style={{ paddingTop: '6rem' }}>
-          <div className="max-w-4xl mx-auto text-center">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-sky-500/10 border border-sky-500/20 mb-8">
+        <section className="section animate-fade-in" style={{ paddingTop: '8rem' }}>
+          <div className="max-w-5xl mx-auto text-center">
+            <div className="inline-flex items-center gap-3 px-5 py-2.5 rounded-full bg-sky-500/10 border border-sky-500/20 mb-12">
               <div className="w-2 h-2 rounded-full bg-sky-400 animate-pulse-subtle" />
-              <span className="text-sm font-semibold text-sky-400">AI-Powered NHL Predictions</span>
+              <span className="text-base font-semibold text-sky-400">AI-Powered NHL Predictions</span>
             </div>
 
-            <h1 className="text-gradient mb-6">
+            <h1 className="text-gradient mb-8">
               Know the outcome<br />before puck drop
             </h1>
 
-            <p className="text-xl text-slate-400 leading-relaxed mb-10 max-w-2xl mx-auto">
+            <p className="text-xl text-slate-400 leading-relaxed mb-12 max-w-3xl mx-auto">
               Machine learning meets hockey analytics. Daily win probabilities with confidence grades,
               power rankings that actually matter, and transparent model insights.
             </p>
 
-            <div className="flex flex-wrap items-center justify-center gap-4 mb-8">
+            <div className="flex flex-wrap items-center justify-center gap-6 mb-10">
               <Link href="/predictions" className="btn btn-primary btn-lg">
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
@@ -94,7 +94,7 @@ export default function Home() {
           </div>
 
           {/* Hero Stats */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-16 max-w-4xl mx-auto stagger-animation">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-24 max-w-5xl mx-auto stagger-animation">
             <StatCard
               label="Model Accuracy"
               value={pct(modelInsights.overall.accuracy)}
@@ -117,8 +117,8 @@ export default function Home() {
 
         {/* Live Ticker */}
         <section className="section">
-          <div className="mb-8">
-            <h2 className="text-gradient-cyan mb-2">Live Prediction Ticker</h2>
+          <div className="mb-12">
+            <h2 className="text-gradient-cyan mb-3">Live Prediction Ticker</h2>
             <p className="text-slate-400 text-lg">Auto-refresh edges for tonight's games</p>
           </div>
 
@@ -126,7 +126,7 @@ export default function Home() {
             <PredictionTicker initial={predictionsPayload} />
           </div>
 
-          <div className="flex flex-wrap gap-3 mt-6 animate-slide-up" style={{ animationDelay: '100ms' }}>
+          <div className="flex flex-wrap gap-4 mt-8 animate-slide-up" style={{ animationDelay: '100ms' }}>
             <div className="badge badge-confidence-s">
               <span className="font-bold">A+</span>
               <span className="text-xs">≥20pt edge</span>
@@ -148,9 +148,9 @@ export default function Home() {
 
         {/* Tonight's Games */}
         <section className="section">
-          <div className="flex items-end justify-between mb-8">
+          <div className="flex items-end justify-between mb-12">
             <div>
-              <h2 className="text-gradient-cyan mb-2">Tonight's Predictions</h2>
+              <h2 className="text-gradient-cyan mb-3">Tonight's Predictions</h2>
               <p className="text-slate-400 text-lg">
                 {todaysPredictions.length} {todaysPredictions.length === 1 ? "game" : "games"} with confidence grades
               </p>
@@ -164,7 +164,7 @@ export default function Home() {
           </div>
 
           {todaysPredictions.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 stagger-animation">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 stagger-animation">
               {todaysPredictions.slice(0, 4).map((prediction) => (
                 <PredictionCard key={prediction.id} prediction={prediction} />
               ))}
@@ -180,12 +180,12 @@ export default function Home() {
 
         {/* Model Performance */}
         <section className="section">
-          <div className="mb-8">
-            <h2 className="text-gradient-cyan mb-2">Model Performance</h2>
+          <div className="mb-12">
+            <h2 className="text-gradient-cyan mb-3">Model Performance</h2>
             <p className="text-slate-400 text-lg">Transparent metrics from 1,230 game holdout set</p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8 stagger-animation">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-12 stagger-animation">
             <StatCard
               label="Test Accuracy"
               value={pct(modelInsights.overall.accuracy)}
@@ -209,7 +209,7 @@ export default function Home() {
 
           {/* Bankroll Chart */}
           <div className="card-elevated animate-slide-up">
-            <div className="flex items-start justify-between mb-6">
+            <div className="flex items-start justify-between mb-8">
               <div>
                 <h3 className="text-xl font-bold text-white mb-1">Bankroll Growth</h3>
                 <p className="text-sm text-slate-400">Cumulative profit over {bankrollSeries.length} predictions</p>
@@ -222,7 +222,7 @@ export default function Home() {
             <BankrollChart points={bankrollSeries} />
           </div>
 
-          <div className="text-center mt-6">
+          <div className="text-center mt-8">
             <Link href="/performance" className="btn btn-secondary">
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
@@ -234,9 +234,9 @@ export default function Home() {
 
         {/* Power Rankings Preview */}
         <section className="section">
-          <div className="flex items-end justify-between mb-8">
+          <div className="flex items-end justify-between mb-12">
             <div>
-              <h2 className="text-gradient-cyan mb-2">Power Rankings</h2>
+              <h2 className="text-gradient-cyan mb-3">Power Rankings</h2>
               <p className="text-slate-400 text-lg">Top 5 teams by model strength</p>
             </div>
             <Link href="/leaderboards" className="btn btn-ghost">
@@ -247,7 +247,7 @@ export default function Home() {
             </Link>
           </div>
 
-          <div className="space-y-4 stagger-animation">
+          <div className="space-y-6 stagger-animation">
             {powerLeaders.map((team) => {
               const overlay = team.overlay;
               return (
