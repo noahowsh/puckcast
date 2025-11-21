@@ -45,7 +45,7 @@ export default function PerformancePage() {
 
   return (
     <div className="min-h-screen">
-      <div className="container" style={{ paddingTop: '6rem' }}>
+      <div className="container" style={{ paddingTop: '8rem' }}>
         <PageHeader
           title="Model Performance"
           description="Track model accuracy, confidence calibration, betting strategies, and comprehensive diagnostics from our 1,230 game holdout set."
@@ -57,9 +57,9 @@ export default function PerformancePage() {
         />
 
         {/* Key Metrics */}
-        <section className="mb-12">
-          <h2 className="text-2xl font-bold text-white mb-6">Key Metrics</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 stagger-animation">
+        <section className="mb-16">
+          <h2 className="text-2xl font-bold text-white mb-8">Key Metrics</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 stagger-animation">
             <StatCard
               label="Test Accuracy"
               value={pct(overview.accuracy)}
@@ -86,10 +86,10 @@ export default function PerformancePage() {
         </section>
 
         {/* Calibration Metrics */}
-        <section className="mb-12">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <section className="mb-16">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div className="card">
-              <h3 className="text-lg font-bold text-white mb-4">Calibration Metrics</h3>
+              <h3 className="text-lg font-bold text-white mb-6">Calibration Metrics</h3>
               <div className="space-y-4">
                 <div>
                   <div className="flex items-center justify-between mb-2">
@@ -115,7 +115,7 @@ export default function PerformancePage() {
             </div>
 
             <div className="card">
-              <h3 className="text-lg font-bold text-white mb-4">Win Rate Analysis</h3>
+              <h3 className="text-lg font-bold text-white mb-6">Win Rate Analysis</h3>
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-slate-400">Correct Predictions</span>
@@ -140,10 +140,10 @@ export default function PerformancePage() {
         </section>
 
         {/* Confidence Calibration */}
-        <section className="mb-12">
-          <h2 className="text-2xl font-bold text-white mb-6">Confidence Calibration</h2>
+        <section className="mb-16">
+          <h2 className="text-2xl font-bold text-white mb-8">Confidence Calibration</h2>
           <p className="text-slate-400 mb-6">Accuracy by prediction confidence (2023-24 holdout set)</p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 stagger-animation">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 stagger-animation">
             {confidenceBuckets.map((bucket) => {
               const isStrong = bucket.accuracy > 0.65;
               return (
@@ -169,7 +169,7 @@ export default function PerformancePage() {
         </section>
 
         {/* Edge Distribution */}
-        <section className="mb-12">
+        <section className="mb-16">
           <div className="card-elevated">
             <h2 className="text-2xl font-bold text-white mb-4">Edge Distribution</h2>
             <p className="text-slate-400 mb-8">Upcoming games by confidence level</p>
@@ -203,8 +203,8 @@ export default function PerformancePage() {
         </section>
 
         {/* Top Matchups */}
-        <section className="mb-12">
-          <h2 className="text-2xl font-bold text-white mb-6">Top Confidence Matchups</h2>
+        <section className="mb-16">
+          <h2 className="text-2xl font-bold text-white mb-8">Top Confidence Matchups</h2>
           <div className="table-container">
             <table className="data-table">
               <thead>
@@ -247,7 +247,7 @@ export default function PerformancePage() {
         </section>
 
         {/* Strategy Performance */}
-        <section className="mb-12">
+        <section className="mb-16">
           <div className="card-elevated">
             <div className="flex items-start justify-between mb-6">
               <div>

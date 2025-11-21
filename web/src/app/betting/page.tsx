@@ -38,7 +38,7 @@ export default function BettingPage() {
 
   return (
     <div className="min-h-screen">
-      <div className="container" style={{ paddingTop: '6rem' }}>
+      <div className="container" style={{ paddingTop: '8rem' }}>
         <PageHeader
           title="Betting Lab"
           description="Interactive strategy sandbox. Adjust the edge threshold to see historical win rate, ROI, and unit performance from our 1,230 game test set."
@@ -50,9 +50,9 @@ export default function BettingPage() {
         />
 
         {/* Interactive Edge Slider */}
-        <section className="mb-12">
+        <section className="mb-16">
           <div className="card-elevated max-w-4xl mx-auto">
-            <h2 className="text-2xl font-bold text-white mb-6">Edge Threshold Explorer</h2>
+            <h2 className="text-2xl font-bold text-white mb-8">Edge Threshold Explorer</h2>
             <p className="text-slate-400 mb-8">
               Slide to see how different edge thresholds perform historically
             </p>
@@ -80,7 +80,7 @@ export default function BettingPage() {
               </div>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
               <StatCard
                 label="Win Rate"
                 value={pct(activeStrategy.winRate)}
@@ -106,8 +106,8 @@ export default function BettingPage() {
         </section>
 
         {/* Strategy Comparison */}
-        <section className="mb-12">
-          <h2 className="text-2xl font-bold text-white mb-6">Strategy Comparison</h2>
+        <section className="mb-16">
+          <h2 className="text-2xl font-bold text-white mb-8">Strategy Comparison</h2>
           <div className="table-container">
             <table className="data-table">
               <thead>
@@ -154,10 +154,10 @@ export default function BettingPage() {
         </section>
 
         {/* Educational Content */}
-        <section className="mb-12">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <section className="mb-16">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div className="card">
-              <h3 className="text-xl font-bold text-white mb-4">Kelly Criterion</h3>
+              <h3 className="text-xl font-bold text-white mb-6">Kelly Criterion</h3>
               <p className="text-sm text-slate-300 leading-relaxed mb-4">
                 The Kelly Criterion suggests bet sizing proportional to your edge. Formula: f* = (bp - q) / b,
                 where p = win probability, q = 1-p, and b = odds (typically 1 for even money bets).
@@ -168,7 +168,7 @@ export default function BettingPage() {
             </div>
 
             <div className="card">
-              <h3 className="text-xl font-bold text-white mb-4">Bankroll Management</h3>
+              <h3 className="text-xl font-bold text-white mb-6">Bankroll Management</h3>
               <p className="text-sm text-slate-300 leading-relaxed mb-4">
                 Never bet more than you can afford to lose. Most experts recommend 1-5% of your bankroll per
                 bet, even with a perceived edge. Variance is real - protect your capital.
@@ -181,7 +181,7 @@ export default function BettingPage() {
         </section>
 
         {/* Disclaimer */}
-        <section className="mb-12">
+        <section className="mb-16">
           <div className="card-elevated bg-amber-500/5 border-amber-500/30">
             <div className="flex items-start gap-3">
               <svg className="w-6 h-6 text-amber-400 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
