@@ -56,12 +56,12 @@ export default async function GoaliePage() {
 
       <div className="relative mx-auto max-w-7xl px-6 py-16 lg:px-8">
         {/* Header */}
-        <section className="mb-20">
+        <section className="mb-32">
           <div className="mb-2 inline-flex items-center gap-2 rounded-full border border-sky-500/20 bg-sky-500/5 px-3 py-1">
             <span className="text-xs font-medium text-sky-400">Goalie Intelligence</span>
           </div>
-          <h1 className="mb-4 text-4xl font-bold text-white lg:text-5xl">Goalie tracking & analysis</h1>
-          <p className="max-w-3xl text-lg text-slate-300">
+          <h1 className="mb-8 text-6xl font-extrabold text-white lg:text-7xl">Goalie tracking & analysis</h1>
+          <p className="max-w-3xl text-xl text-slate-300">
             Blending rolling GSAx, rest advantage, rebound control metrics, and start-likelihood signals from morning skate intel.
           </p>
           {updatedAt && (
@@ -72,19 +72,19 @@ export default async function GoaliePage() {
         </section>
 
         {/* Notes */}
-        <section className="mb-20">
-          <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-6">
+        <section className="mb-32">
+          <div className="rounded-2xl border border-slate-800 bg-slate-900/50 p-8">
             <p className="text-sm text-slate-300">{pulse.notes}</p>
           </div>
         </section>
 
         {/* Season Leaders */}
         {seasonLeaders.length > 0 && (
-          <section className="mb-20">
-            <h2 className="mb-8 text-2xl font-bold text-white">Season Leaders</h2>
-            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          <section className="mb-32">
+            <h2 className="mb-10 text-3xl font-extrabold text-white">Season Leaders</h2>
+            <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
               {seasonLeaders.map((leader) => (
-                <article key={leader.name} className="rounded-xl border border-slate-800 bg-slate-900/50 p-6">
+                <article key={leader.name} className="rounded-2xl border border-slate-800 bg-slate-900/50 p-8">
                   <p className="text-sm font-medium text-slate-400">Top Save %</p>
                   <p className="mt-2 text-lg font-semibold text-white">{leader.name}</p>
                   <div className="mt-3 flex items-center gap-4 text-sm text-slate-400">
@@ -100,14 +100,14 @@ export default async function GoaliePage() {
         )}
 
         {/* Live Ticker */}
-        <section className="mb-20">
+        <section className="mb-32">
           <GoalieTicker initial={pulse} />
         </section>
 
         {/* Goalie Cards */}
-        <section className="mb-20">
-          <h2 className="mb-8 text-2xl font-bold text-white">Detailed Analysis</h2>
-          <div className="grid gap-6 md:grid-cols-2">
+        <section className="mb-32">
+          <h2 className="mb-10 text-3xl font-extrabold text-white">Detailed Analysis</h2>
+          <div className="grid gap-8 md:grid-cols-2">
             {pulse.goalies.map((goalie) => (
               <GoalieCardView key={goalie.name} goalie={goalie} />
             ))}
@@ -122,7 +122,7 @@ function GoalieCardView({ goalie }: { goalie: GoalieCard }) {
   const startLikelihood = formatPercent(goalie.startLikelihood);
   const trendColor = trendColors[goalie.trend] ?? "text-white";
   return (
-    <article className="rounded-xl border border-slate-800 bg-slate-900/50 p-6">
+    <article className="rounded-2xl border border-slate-800 bg-slate-900/50 p-8">
       <div className="flex items-start justify-between">
         <div>
           <p className="text-sm font-medium text-slate-400">{goalie.team}</p>

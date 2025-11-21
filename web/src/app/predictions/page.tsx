@@ -53,16 +53,16 @@ export default function PredictionsPage() {
     <div className="relative min-h-screen bg-slate-950">
       <div className="relative mx-auto max-w-7xl px-6 py-16 lg:px-8">
         {/* Header */}
-        <section className="mb-12">
+        <section className="mb-32">
           <div className="mb-2 inline-flex items-center gap-2 rounded-full border border-sky-500/20 bg-sky-500/5 px-3 py-1">
             <span className="text-xs font-medium text-sky-400">Slate Intelligence</span>
           </div>
 
-          <h1 className="mb-4 text-4xl font-bold text-white lg:text-5xl">
+          <h1 className="mb-8 text-6xl font-extrabold text-white lg:text-7xl">
             Tonight's Predictions
           </h1>
 
-          <p className="mb-6 max-w-3xl text-lg text-slate-300">
+          <p className="mb-10 max-w-3xl text-xl text-slate-300">
             Full-game projections with lineup context, rolling form, and NHL API features.
             Everything you need to scan the slate in seconds.
           </p>
@@ -75,8 +75,8 @@ export default function PredictionsPage() {
         </section>
 
         {/* Summary Stats */}
-        <section className="mb-12">
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <section className="mb-32">
+          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
             <SummaryCard
               label="Avg Model Edge"
               value={`${(summary.avgEdge * 100).toFixed(1)} pts`}
@@ -101,8 +101,8 @@ export default function PredictionsPage() {
         </section>
 
         {/* Live Ticker */}
-        <section className="mb-20">
-          <div className="overflow-hidden rounded-xl border border-slate-800 bg-slate-900/50">
+        <section className="mb-32">
+          <div className="overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/50">
             <PredictionTicker initial={payload} />
           </div>
         </section>
@@ -110,11 +110,11 @@ export default function PredictionsPage() {
         {todaysPredictions.length > 0 ? (
           <>
             {/* High Confidence & Upsets */}
-            <section className="mb-20 grid gap-6 lg:grid-cols-2">
+            <section className="mb-32 grid gap-8 lg:grid-cols-2">
               {/* Top Edges */}
-              <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-6">
+              <div className="rounded-2xl border border-slate-800 bg-slate-900/50 p-8">
                 <div className="mb-6">
-                  <h2 className="text-xl font-bold text-white">Largest Probability Gaps</h2>
+                  <h2 className="text-2xl font-extrabold text-white">Largest Probability Gaps</h2>
                   <p className="mt-1 text-sm text-slate-400">High-confidence set</p>
                 </div>
 
@@ -151,9 +151,9 @@ export default function PredictionsPage() {
               </div>
 
               {/* Upset Radar */}
-              <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-6">
+              <div className="rounded-2xl border border-slate-800 bg-slate-900/50 p-8">
                 <div className="mb-6">
-                  <h2 className="text-xl font-bold text-white">Upset Radar</h2>
+                  <h2 className="text-2xl font-extrabold text-white">Upset Radar</h2>
                   <p className="mt-1 text-sm text-slate-400">Road teams poised to win</p>
                 </div>
 
@@ -194,15 +194,15 @@ export default function PredictionsPage() {
             </section>
 
             {/* Game-by-Game Table */}
-            <section className="mb-20">
-              <div className="mb-6">
-                <h2 className="text-2xl font-bold text-white">Game-by-Game Sheet</h2>
+            <section className="mb-32">
+              <div className="mb-10">
+                <h2 className="text-3xl font-extrabold text-white">Game-by-Game Sheet</h2>
                 <p className="mt-1 text-sm text-slate-400">
                   Sorted by start time — win %, edge, and confidence score
                 </p>
               </div>
 
-              <div className="overflow-hidden rounded-xl border border-slate-800 bg-slate-900/50">
+              <div className="overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/50">
                 <div className="overflow-x-auto">
                   <table className="w-full">
                     <thead className="border-b border-slate-800 bg-slate-800/50">
@@ -246,7 +246,7 @@ export default function PredictionsPage() {
             </section>
           </>
         ) : (
-          <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-12 text-center">
+          <div className="rounded-2xl border border-slate-800 bg-slate-900/50 p-12 text-center">
             <p className="text-slate-400">
               No predictions yet. The nightly sync will post the next slate soon.
             </p>
@@ -259,7 +259,7 @@ export default function PredictionsPage() {
 
 function SummaryCard({ label, value, detail }: { label: string; value: string; detail: string }) {
   return (
-    <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-6">
+    <div className="rounded-2xl border border-slate-800 bg-slate-900/50 p-8">
       <p className="text-sm font-medium text-slate-400">{label}</p>
       <p className="mt-2 text-3xl font-bold text-white">{value}</p>
       <p className="mt-1 text-sm text-slate-500">{detail}</p>
