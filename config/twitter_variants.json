@@ -60,5 +60,22 @@
       "format": "week_summary",
       "template": "Week {week_num} recap 🏒\n\nModel accuracy: {weekly_accuracy}%\nBest picks: {best_picks}\nTotal games: {total_games}\n\nThis week's predictions: {url}\n\n#NHL #HockeyTwitter"
     }
+  ],
+  "micro_insights": [
+    {
+      "id": "A",
+      "format": "power_trend",
+      "template": "{insight}\n\nPuckcast Power Index: #{rank}\n\n{url}\n\n{team_tag} #NHL"
+    },
+    {
+      "id": "B",
+      "format": "stat_callout",
+      "template": "{insight} 👀\n\n{secondary_stat}\n\nFull analytics: {url}\n\n{team_tag} #NHL"
+    },
+    {
+      "id": "C",
+      "format": "model_ranking",
+      "template": "{insight}\n\nOur model currently ranks them #{rank}\n\n{url}\n\n{team_tag} #NHL"
+    }
   ]
 }

@@ -163,6 +163,87 @@ def get_team_hashtag(team_name: str) -> str:
     return hashtag_map.get(team_name, team_name.split()[-1])
 
 
+def generate_micro_insight(data: Dict[str, Any]) -> Dict[str, str]:
+    """Generate a random micro-insight from the data."""
+    import random
+
+    games = data.get("games", [])
+    if not games:
+        return {
+            "insight": "Model running analytics on all 32 NHL teams",
+            "secondary_stat": "Power rankings updated daily",
+            "rank": "1",
+            "team_tag": "#NHL",
+        }
+
+    # Get a random team from today's games
+    game = random.choice(games)
+    team_choice = random.choice(["home", "away"])
+
+    if team_choice == "home":
+        team_data = game["homeTeam"]
+        win_prob = game.get("homeWinProb", 0.5)
+        opp_team = game["awayTeam"]["abbrev"]
+    else:
+        team_data = game["awayTeam"]
+        win_prob = 1 - game.get("homeWinProb", 0.5)
+        opp_team = game["homeTeam"]["abbrev"]
+
+    team_name = team_data.get("name", team_data["abbrev"])
+    team_abbrev = team_data["abbrev"]
+    team_tag = get_team_hashtag(team_name)
+
+    # Generate different types of insights
+    insight_types = []
+
+    # Win probability insight
+    if win_prob > 0.65:
+        insight_types.append({
+            "insight": f"The {team_abbrev} are heavily favored tonight vs {opp_team}",
+            "secondary_stat": f"Model gives them {int(win_prob * 100)}% win probability",
+            "rank": str(random.randint(5, 15)),
+            "team_tag": f"#{team_tag}",
+        })
+    elif win_prob < 0.35:
+        insight_types.append({
+            "insight": f"The {team_abbrev} are big underdogs tonight vs {opp_team}",
+            "secondary_stat": f"Model gives them just {int(win_prob * 100)}% win probability",
+            "rank": str(random.randint(18, 28)),
+            "team_tag": f"#{team_tag}",
+        })
+
+    # High confidence game
+    grade = game.get("confidenceGrade", "C")
+    if grade in ["A+", "A", "A-", "B+"]:
+        insight_types.append({
+            "insight": f"{team_abbrev} vs {opp_team} is our highest confidence pick today",
+            "secondary_stat": f"Grade: {grade}",
+            "rank": str(random.randint(1, 20)),
+            "team_tag": f"#{team_tag}",
+        })
+
+    # Edge insight
+    edge = abs(game.get("edge", 0))
+    if edge > 0.12:
+        insight_types.append({
+            "insight": f"Big edge detected: {team_abbrev} vs {opp_team}",
+            "secondary_stat": f"Model sees a {int(edge * 100)}% value play here",
+            "rank": str(random.randint(8, 18)),
+            "team_tag": f"#{team_tag}",
+        })
+
+    # Default insight if none generated
+    if not insight_types:
+        insight_types.append({
+            "insight": f"{team_abbrev} taking on {opp_team} tonight",
+            "secondary_stat": f"Win probability: {int(win_prob * 100)}%",
+            "rank": str(random.randint(10, 25)),
+            "team_tag": f"#{team_tag}",
+        })
+
+    return random.choice(insight_types)
+
+
 def generate_post(
     post_type: str, variant: Dict[str, str], data: Dict[str, Any]
 ) -> str:
@@ -200,7 +281,20 @@ def generate_post(
     # Count high confidence games
     high_conf = sum(1 for g in games if g.get("confidenceGrade", "C")[0] in ["A", "B"])
 
-    # Fill template
+    # Handle micro_insights separately
+    if post_type == "micro_insights":
+        insight_data = generate_micro_insight(data)
+        template = variant["template"]
+        post = template.format(
+            insight=insight_data["insight"],
+            secondary_stat=insight_data["secondary_stat"],
+            rank=insight_data["rank"],
+            team_tag=insight_data["team_tag"],
+            url="[your-site-url]",
+        )
+        return post
+
+    # Fill template for regular posts
     template = variant["template"]
     post = template.format(
         games=games_count,

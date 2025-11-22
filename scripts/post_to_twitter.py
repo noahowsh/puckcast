@@ -36,7 +36,7 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument(
         "--post-type",
-        choices=["morning_preview", "afternoon_update", "evening_recap", "yesterday_results", "weekly_standings", "weekly_recap"],
+        choices=["morning_preview", "afternoon_update", "evening_recap", "yesterday_results", "weekly_standings", "weekly_recap", "micro_insights"],
         required=True,
         help="Type of post to create",
     )
