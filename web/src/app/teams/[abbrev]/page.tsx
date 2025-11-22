@@ -42,8 +42,9 @@ export function generateStaticParams() {
   }));
 }
 
-export default function TeamPage({ params }: { params: { abbrev: string } }) {
-  const key = params.abbrev?.toLowerCase?.();
+export default async function TeamPage({ params }: { params: Promise<{ abbrev: string }> }) {
+  const { abbrev } = await params;
+  const key = abbrev?.toLowerCase?.();
   if (!key) return notFound();
   const fallbackStandings = standingsMap.get(key);
   const snapshot =
