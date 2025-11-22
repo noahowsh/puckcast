@@ -5,40 +5,21 @@ import { TeamLogo } from "@/components/TeamLogo";
 const snapshots = buildTeamSnapshots();
 const standings = getCurrentStandings();
 
-const combined = standings.map((team) => {
-  const snap = snapshots.find((s) => s.abbrev === team.abbrev);
-  const avgProb = snap?.avgProb ?? team.pointPctg ?? 0.5;
-  const avgEdge = snap?.avgEdge ?? Math.max(Math.min(team.goalDifferential / 200, 0.15), -0.15);
-  const powerScore = snap ? formatPowerScore(snap) : computeStandingsPowerScore({ ...team, rank: team.rank });
-  return {
-    team: team.team,
-    abbrev: team.abbrev,
-    games: snap?.games ?? team.gamesPlayed ?? 0,
-    avgProb,
-    avgEdge,
-    favoriteRate: snap?.favoriteRate ?? 0.5,
-    record: `${team.wins}-${team.losses}-${team.ot}`,
-    points: team.points,
-    pointPctg: team.pointPctg,
-    standingsRank: team.rank,
-    nextGame: snap?.nextGame,
-    powerScore,
-  };
-});
-
-const rankedTeams = combined
-  .slice()
-  .sort((a, b) => b.powerScore - a.powerScore)
-  .map((team, idx) => {
-    const powerRank = idx + 1;
-    const movement = (team.standingsRank ?? powerRank) - powerRank;
-    return { ...team, powerRank, movement };
-  });
-
-function movementLabel(movement: number) {
-  if (movement === 0) return "Even";
-  return movement > 0 ? `+${movement}` : `${movement}`;
-}
+const allTeams = standings
+  .map((team) => {
+    const snap = snapshots.find((s) => s.abbrev === team.abbrev);
+    const avgProb = snap?.avgProb ?? team.pointPctg ?? 0.5;
+    const powerScore = snap ? formatPowerScore(snap) : computeStandingsPowerScore({ ...team, rank: team.rank });
+    return {
+      team: team.team,
+      abbrev: team.abbrev,
+      record: `${team.wins}-${team.losses}-${team.ot}`,
+      points: team.points,
+      avgProb,
+      powerScore,
+    };
+  })
+  .sort((a, b) => a.team.localeCompare(b.team)); // Sort alphabetically by team name
 
 export default function TeamsIndexPage() {
   return (
@@ -52,37 +33,33 @@ export default function TeamsIndexPage() {
             </div>
             <h1 className="display-xl">Find your team.</h1>
             <p className="lead">
-              Quick snapshot of every club: power rank, record, and how the model sees them today. Tap into a team page for a deeper view.
+              Browse all 32 NHL teams alphabetically. Tap any team to view detailed stats, upcoming games, and goalie performance.
             </p>
             <div className="chip-row">
-              <span className="chip-soft">Power score from model + standings</span>
+              <span className="chip-soft">Alphabetically sorted</span>
               <span className="chip-soft">Updated with live data</span>
             </div>
           </div>
         </section>
 
         <section className="nova-section">
-          <div className="power-list">
-            {rankedTeams.map((team) => (
-              <Link key={team.abbrev} href={`/teams/${team.abbrev.toLowerCase()}`} className="power-list-item">
-                <div className="power-list-item__row">
-                  <div className="power-list-item__meta">
-                    <span className="power-rank">#{team.powerRank}</span>
-                    <span className="power-name">{team.team}</span>
-                    <TeamLogo teamAbbrev={team.abbrev} size="xs" />
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {allTeams.map((team) => (
+              <Link key={team.abbrev} href={`/teams/${team.abbrev.toLowerCase()}`} className="card group">
+                <div className="flex items-start gap-4">
+                  <div className="flex-shrink-0">
+                    <TeamLogo teamAbbrev={team.abbrev} size="md" />
                   </div>
-                  <span
-                    className={`movement movement--pillless ${
-                      team.movement > 0 ? "movement--positive" : team.movement < 0 ? "movement--negative" : "movement--neutral"
-                    }`}
-                  >
-                    {movementLabel(team.movement)}
-                  </span>
-                </div>
-                <div className="power-list-item__sub">
-                  <span className="chip-soft chip-soft--mini">{team.record ?? "Record N/A"}</span>
-                  <span className="chip-soft chip-soft--mini">Power {team.powerScore}</span>
-                  <span className="chip-soft chip-soft--mini">Model win {(team.avgProb * 100).toFixed(1)}%</span>
+                  <div className="flex-1 min-w-0">
+                    <h3 className="text-lg font-bold text-white group-hover:text-cyan-400 transition-colors leading-tight mb-1">
+                      {team.team}
+                    </h3>
+                    <p className="text-sm text-white/60">{team.record}</p>
+                    <div className="flex items-center gap-2 mt-2">
+                      <span className="chip-soft chip-soft--mini">{team.points} pts</span>
+                      <span className="chip-soft chip-soft--mini">{(team.avgProb * 100).toFixed(1)}%</span>
+                    </div>
+                  </div>
                 </div>
               </Link>
             ))}
