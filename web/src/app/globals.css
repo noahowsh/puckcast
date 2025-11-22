@@ -419,6 +419,12 @@ p { line-height: 1.7; }
   color: var(--text-primary);
 }
 
+.footer-mark-clean {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .footer-title { font-weight: 800; font-size: 1.05rem; letter-spacing: -0.01em; }
 .footer-sub { font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.2em; color: var(--text-tertiary); }
 
@@ -563,6 +569,12 @@ p { line-height: 1.7; }
   font-weight: 800;
   letter-spacing: 0.08em;
   color: var(--text-primary);
+}
+
+.nav-mark-clean {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .nav-text {
