@@ -2,47 +2,63 @@
   "morning_preview": [
     {
       "id": "A",
-      "format": "emoji_heavy",
-      "template": "\ud83c\udfd2 NHL TODAY: {games} games\n\n\ud83d\udd25 TOP PICK:\n{top_game}\n\ud83d\udcca {grade} confidence\n\n{url}"
+      "format": "probabilities",
+      "template": "🏒 {games} NHL games today\n\nTop pick: {away_team} @ {home_team}\n{away_team}: {away_prob}%\n{home_team}: {home_prob}%\n\nFull predictions: {url}\n\n{team_tags}"
     },
     {
       "id": "B",
-      "format": "minimal",
-      "template": "Today's NHL predictions:\n\n{top_game}\nConfidence: {grade}\n\nFull slate \u2192 {url}"
+      "format": "clean_stats",
+      "template": "{away_team} @ {home_team}\n\nModel prediction:\n{away_team} {away_prob}%\n{home_team} {home_prob}%\nConfidence: {grade}\n\n{url}\n\n{team_tags}"
     },
     {
       "id": "C",
-      "format": "stats_focused",
-      "template": "{games} NHL games today\n\nBest pick: {top_game}\n\ud83d\udcca {home_prob}% vs {away_prob}%\nGrade: {grade}\n\n{url}"
-    },
-    {
-      "id": "D",
-      "format": "question_hook",
-      "template": "Who wins tonight? \ud83e\udd14\n\n{top_game}\n\nOur model says: {grade} confidence\nFull predictions \u2192 {url}"
+      "format": "question_format",
+      "template": "{away_team} @ {home_team} tonight\n\nWho you got? 🤔\n\nOur model:\n{home_team} {home_prob}%\n{away_team} {away_prob}%\n\n{url}\n\n{team_tags}"
     }
   ],
   "afternoon_update": [
     {
       "id": "A",
-      "format": "excitement",
-      "template": "\u26a1\ufe0f TONIGHT'S ACTION\n\n{high_conf} high-confidence picks\n{games} total games\n\nGet the edge \u2192 {url}"
+      "format": "game_count",
+      "template": "{games} NHL games tonight 🏒\n\n{high_conf} picks graded A or B\n\nAll predictions live: {url}\n\n#NHL #HockeyTwitter"
     },
     {
       "id": "B",
-      "format": "value_prop",
-      "template": "60%+ accuracy all season \ud83d\udcc8\n\n{games} games tonight\n{high_conf} A/B grade picks\n\n{url}"
+      "format": "top_matchup",
+      "template": "Tonight's top matchup:\n\n{away_team} @ {home_team}\n{home_team} {home_prob}%\n{away_team} {away_prob}%\n\n{games} games total: {url}\n\n{team_tags}"
     }
   ],
   "evening_recap": [
     {
       "id": "A",
-      "format": "tomorrow_tease",
-      "template": "\ud83c\udf19 Tonight's games wrapping up\n\nTomorrow's picks drop at 8am ET\n\ud83d\udcca Analytics live now\n\n{url}"
+      "format": "tomorrow_simple",
+      "template": "Tomorrow's NHL predictions drop at 8am ET ⏰\n\nAnalytics for all games: {url}\n\n#NHL #HockeyTwitter"
     },
     {
       "id": "B",
-      "format": "call_to_action",
-      "template": "Tonight's results coming in \ud83c\udfd2\n\nCheck tomorrow's predictions early \u2192 {url}"
+      "format": "results_tease",
+      "template": "Tonight's games wrapping up 🏒\n\nTomorrow's predictions live early: {url}\n\n#NHL #HockeyTwitter"
+    }
+  ],
+  "yesterday_results": [
+    {
+      "id": "A",
+      "format": "scoreboard",
+      "template": "Yesterday's model performance:\n\n✅ {correct} correct\n❌ {incorrect} incorrect\n📊 {accuracy}% accuracy\n\nToday's picks: {url}\n\n#NHL #HockeyTwitter"
+    }
+  ],
+  "weekly_standings": [
+    {
+      "id": "A",
+      "format": "power_rankings",
+      "template": "📊 This week in the NHL:\n\nTop 3 by our model:\n1️⃣ {top1}\n2️⃣ {top2}\n3️⃣ {top3}\n\nFull rankings: {url}\n\n#NHL #HockeyTwitter"
+    }
+  ],
+  "weekly_recap": [
+    {
+      "id": "A",
+      "format": "week_summary",
+      "template": "Week {week_num} recap 🏒\n\nModel accuracy: {weekly_accuracy}%\nBest picks: {best_picks}\nTotal games: {total_games}\n\nThis week's predictions: {url}\n\n#NHL #HockeyTwitter"
     }
   ]
 }

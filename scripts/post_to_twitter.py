@@ -36,7 +36,7 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument(
         "--post-type",
-        choices=["morning_preview", "afternoon_update", "evening_recap"],
+        choices=["morning_preview", "afternoon_update", "evening_recap", "yesterday_results", "weekly_standings", "weekly_recap"],
         required=True,
         help="Type of post to create",
     )
@@ -157,10 +157,6 @@ def main() -> None:
 
     # Replace placeholder URL with actual site URL
     post_content = post_content.replace("[your-site-url]", args.site_url)
-
-    # Add hashtags if not already present
-    if "#NHL" not in post_content:
-        post_content += "\n\n#NHL #HockeyTwitter"
 
     # Check character limit
     if len(post_content) > 280:

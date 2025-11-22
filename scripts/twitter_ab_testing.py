@@ -124,6 +124,45 @@ def select_variant(
     return random.choice(available)
 
 
+def get_team_hashtag(team_name: str) -> str:
+    """Convert team name to hashtag format."""
+    # Map team names to common hashtags
+    hashtag_map = {
+        "Anaheim Ducks": "Ducks",
+        "Boston Bruins": "NHLBruins",
+        "Buffalo Sabres": "Sabres",
+        "Calgary Flames": "Flames",
+        "Carolina Hurricanes": "Canes",
+        "Chicago Blackhawks": "Blackhawks",
+        "Colorado Avalanche": "GoAvsGo",
+        "Columbus Blue Jackets": "CBJ",
+        "Dallas Stars": "TexasHockey",
+        "Detroit Red Wings": "LGRW",
+        "Edmonton Oilers": "LetsGoOilers",
+        "Florida Panthers": "FlaPanthers",
+        "Los Angeles Kings": "GoKingsGo",
+        "Minnesota Wild": "MNWild",
+        "Montréal Canadiens": "GoHabsGo",
+        "Nashville Predators": "Smashville",
+        "New Jersey Devils": "NJDevils",
+        "New York Islanders": "Isles",
+        "New York Rangers": "NYR",
+        "Ottawa Senators": "GoSensGo",
+        "Philadelphia Flyers": "LetsGoFlyers",
+        "Pittsburgh Penguins": "LetsGoPens",
+        "San Jose Sharks": "SJSharks",
+        "Seattle Kraken": "SeaKraken",
+        "St. Louis Blues": "STLBlues",
+        "Tampa Bay Lightning": "GoBolts",
+        "Toronto Maple Leafs": "LeafsForever",
+        "Vancouver Canucks": "Canucks",
+        "Vegas Golden Knights": "VegasBorn",
+        "Washington Capitals": "ALLCAPS",
+        "Winnipeg Jets": "GoJetsGo",
+    }
+    return hashtag_map.get(team_name, team_name.split()[-1])
+
+
 def generate_post(
     post_type: str, variant: Dict[str, str], data: Dict[str, Any]
 ) -> str:
@@ -135,15 +174,28 @@ def generate_post(
     # Get top game (highest confidence)
     if games:
         top_game_data = max(games, key=lambda g: abs(g.get("edge", 0)))
-        top_game = f"{top_game_data['awayTeam']['abbrev']} @ {top_game_data['homeTeam']['abbrev']}"
+        away_team_name = top_game_data['awayTeam'].get('name', top_game_data['awayTeam']['abbrev'])
+        home_team_name = top_game_data['homeTeam'].get('name', top_game_data['homeTeam']['abbrev'])
+        away_abbrev = top_game_data['awayTeam']['abbrev']
+        home_abbrev = top_game_data['homeTeam']['abbrev']
+
         grade = top_game_data.get("confidenceGrade", "C")
         home_prob = int(top_game_data.get("homeWinProb", 0.5) * 100)
         away_prob = 100 - home_prob
+
+        # Generate team hashtags
+        away_tag = get_team_hashtag(away_team_name)
+        home_tag = get_team_hashtag(home_team_name)
+        team_tags = f"#{away_tag} #{home_tag} #NHL"
     else:
-        top_game = "No games scheduled"
+        away_abbrev = "TBD"
+        home_abbrev = "TBD"
+        away_team_name = "TBD"
+        home_team_name = "TBD"
         grade = "N/A"
         home_prob = 50
         away_prob = 50
+        team_tags = "#NHL #HockeyTwitter"
 
     # Count high confidence games
     high_conf = sum(1 for g in games if g.get("confidenceGrade", "C")[0] in ["A", "B"])
@@ -152,11 +204,13 @@ def generate_post(
     template = variant["template"]
     post = template.format(
         games=games_count,
-        top_game=top_game,
+        away_team=away_abbrev,
+        home_team=home_abbrev,
         grade=grade,
         home_prob=home_prob,
         away_prob=away_prob,
         high_conf=high_conf,
+        team_tags=team_tags,
         url="[your-site-url]",  # Replace with actual URL
     )
 
