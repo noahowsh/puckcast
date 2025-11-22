@@ -124,16 +124,16 @@ export default function TeamPage({ params }: { params: { abbrev: string } }) {
                 <div className="card-flat">
                   <p className="stat-label">Strengths</p>
                   <ul className="space-y-2 text-sm text-white/80">
-                    {strengths.map((item) => (
-                      <li key={item}>• {item}</li>
+                    {strengths.map((item, idx) => (
+                      <li key={idx}>• {item}</li>
                     ))}
                   </ul>
                 </div>
                 <div className="card-flat">
                   <p className="stat-label">Weaknesses</p>
                   <ul className="space-y-2 text-sm text-white/80">
-                    {weaknesses.map((item) => (
-                      <li key={item}>• {item}</li>
+                    {weaknesses.map((item, idx) => (
+                      <li key={idx}>• {item}</li>
                     ))}
                   </ul>
                 </div>
@@ -319,16 +319,16 @@ export default function TeamPage({ params }: { params: { abbrev: string } }) {
                       {goalie.strengths.length > 0 && (
                         <div className="flex-1">
                           <p className="text-xs text-emerald-400 mb-1">Strengths</p>
-                          {goalie.strengths.map((s) => (
-                            <p key={s} className="text-xs text-white/70">• {s}</p>
+                          {goalie.strengths.map((s, idx) => (
+                            <p key={idx} className="text-xs text-white/70">• {s}</p>
                           ))}
                         </div>
                       )}
                       {goalie.watchouts.length > 0 && (
                         <div className="flex-1">
                           <p className="text-xs text-amber-400 mb-1">Watch</p>
-                          {goalie.watchouts.map((w) => (
-                            <p key={w} className="text-xs text-white/70">• {w}</p>
+                          {goalie.watchouts.map((w, idx) => (
+                            <p key={idx} className="text-xs text-white/70">• {w}</p>
                           ))}
                         </div>
                       )}
