@@ -15,14 +15,13 @@ export function SiteFooter() {
       <div className="container footer-grid">
         <div className="footer-left">
           <div className="footer-brand">
-            <div className="footer-mark">
+            <div className="footer-mark-clean">
               <Image
                 src="/logo.png"
                 alt="Puckcast"
-                width={34}
-                height={34}
-                className="w-[34px] h-[34px] rounded-lg"
-                style={{ padding: '2px' }}
+                width={42}
+                height={42}
+                className="rounded-xl border border-[rgba(126,227,255,0.55)]"
               />
             </div>
             <div>

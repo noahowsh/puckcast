@@ -22,14 +22,13 @@ export function SiteNav() {
       <div className="container">
         <div className="nav-inner">
           <Link href="/" className="nav-brand" onClick={() => setOpen(false)}>
-            <div className="nav-mark">
+            <div className="nav-mark-clean">
               <Image
                 src="/logo.png"
                 alt="Puckcast"
-                width={36}
-                height={36}
-                className="w-9 h-9 rounded-lg"
-                style={{ padding: '2px' }}
+                width={44}
+                height={44}
+                className="rounded-xl border border-[rgba(126,227,255,0.55)]"
               />
             </div>
             <div className="nav-text">
