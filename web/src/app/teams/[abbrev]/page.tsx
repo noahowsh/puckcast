@@ -36,6 +36,12 @@ function buildWeaknesses(team: (typeof snapshots)[number]) {
   return weaknesses;
 }
 
+export async function generateStaticParams() {
+  return standings.map((team) => ({
+    abbrev: team.abbrev.toLowerCase(),
+  }));
+}
+
 export default function TeamPage({ params }: { params: { abbrev: string } }) {
   const key = params.abbrev?.toLowerCase?.();
   if (!key) return notFound();
