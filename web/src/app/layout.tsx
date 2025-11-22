@@ -26,17 +26,30 @@ export const metadata: Metadata = {
   description:
     "Data-driven NHL predictions powered by the official NHL API with 60%+ accuracy. Advanced analytics, goalie tracking, and real-time game predictions.",
   metadataBase: new URL("https://puckcast.ai"),
+  icons: {
+    icon: "/logo.png",
+    apple: "/logo.png",
+  },
   openGraph: {
     title: "Puckcast | NHL Predictions + Analytics",
     description:
       "60%+ accurate NHL predictions using 204 engineered features from official NHL data. Win probabilities and betting insights for every matchup.",
     type: "website",
     url: "https://puckcast.ai",
+    images: [
+      {
+        url: "/logo.png",
+        width: 1000,
+        height: 1000,
+        alt: "Puckcast Logo",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "Puckcast | NHL Predictions + Analytics",
     description: "Data-driven NHL predictions with 60%+ accuracy. Powered by official NHL API and advanced machine learning.",
+    images: ["/logo.png"],
   },
 };
 

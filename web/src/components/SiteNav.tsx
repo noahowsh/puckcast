@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
+import Image from "next/image";
 
 const links = [
   { href: "/", label: "Overview" },
@@ -21,7 +22,9 @@ export function SiteNav() {
       <div className="container">
         <div className="nav-inner">
           <Link href="/" className="nav-brand" onClick={() => setOpen(false)}>
-            <div className="nav-mark">PC</div>
+            <div className="nav-mark">
+              <Image src="/logo.png" alt="Puckcast" width={40} height={40} className="w-10 h-10" />
+            </div>
             <div className="nav-text">
               <span className="nav-title">Puckcast.ai</span>
               <span className="nav-sub">Predictions &amp; Index</span>
