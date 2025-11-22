@@ -77,5 +77,82 @@
       "format": "model_ranking",
       "template": "{insight}\n\nOur model currently ranks them #{rank}\n\n{url}\n\n{team_tag} #NHL"
     }
+  ],
+  "game_of_night": [
+    {
+      "id": "A",
+      "format": "spotlight",
+      "template": "🔥 Game of the Night\nPuckcast Model Confidence: {confidence}%\n\n{matchup} — {time}\nKey Factors:\n• {factor1}\n• {factor2}\n• {factor3}\n\nFull slate → {url}\n\n{team_tags}"
+    }
+  ],
+  "upset_watch": [
+    {
+      "id": "A",
+      "format": "underdog_alert",
+      "template": "🚨 Upset Watch\nOur model gives {underdog} a {underdog_prob}% chance vs {favorite} tonight.\n\nThe market sees {favorite} as heavy favorites — but…\n• {edge1}\n• {edge2}\n• {edge3}\n\nWe're watching this one closely.\n\n{url}\n\n{team_tags}"
+    }
+  ],
+  "team_surging": [
+    {
+      "id": "A",
+      "format": "trending_up",
+      "template": "📈 Surging Team: {team_name}\n\nPuckcast Power Index last 10 games:\n{old_rank} → {new_rank} ({change})\n\n• {reason1}\n• {reason2}\n• {reason3}\n\n{url}\n\n{team_tag} #NHL"
+    }
+  ],
+  "team_dropping": [
+    {
+      "id": "A",
+      "format": "trending_down",
+      "template": "📉 Team in Decline: {team_name}\n\nPower Index drop: {drop} in {games} games\n\n• {reason1}\n• {reason2}\n• {reason3}\n\n{url}\n\n{team_tag} #NHL"
+    }
+  ],
+  "bold_predictions": [
+    {
+      "id": "A",
+      "format": "weekly_thread",
+      "template": "🔮 5 Bold Predictions for the Week\n\nMost underrated: {underrated}\nDark horse: {darkhorse}\nMost likely upset: {upset}\nGoing 3-0: {hot}\nMost likely to disappoint: {cold}\n\nFull analysis: {url}\n\n#NHL #HockeyTwitter"
+    }
+  ],
+  "team_spotlight": [
+    {
+      "id": "A",
+      "format": "daily_team",
+      "template": "🔍 Team Spotlight: {team_name}\n\n• Puckcast Rank: #{rank}\n• Power Index: {power_score}\n• Last 10 Accuracy: {accuracy}\n• Trend: {trend}\n\nThe model says: {insight}\n\n{url}\n\n{team_tag} #NHL"
+    }
+  ],
+  "yesterdays_surprises": [
+    {
+      "id": "A",
+      "format": "morning_recap",
+      "template": "Last night's surprises according to our model:\n\n• {upset1}\n• {upset2}\n• {upset3}\n\nNHL chaos never dies. 🏒\n\n{url}\n\n#NHL #HockeyTwitter"
+    }
+  ],
+  "weekly_power_index": [
+    {
+      "id": "A",
+      "format": "full_rankings",
+      "template": "📊 Weekly Power Index\n\nTop 5:\n1️⃣ {team1}\n2️⃣ {team2}\n3️⃣ {team3}\n4️⃣ {team4}\n5️⃣ {team5}\n\nFull 32-team rankings: {url}\n\n#NHL #HockeyTwitter"
+    }
+  ],
+  "overrated_poll": [
+    {
+      "id": "A",
+      "format": "engagement_poll",
+      "template": "Who's the most overrated team right now?\n\n{team1_emoji} {team1}\n{team2_emoji} {team2}\n{team3_emoji} {team3}\n{team4_emoji} {team4}\n\nReply with your pick 👇\n\n{url}\n\n#NHL #HockeyTwitter"
+    }
+  ],
+  "model_accountability": [
+    {
+      "id": "A",
+      "format": "result_check",
+      "template": "Did the model get it right?\n\nWe had:\n{team1} {prob}% over {team2}\n\nFinal score:\n{team1} {score1} – {score2} {team2}\n\n{verdict}\n\n{url}\n\n{team_tags}"
+    }
+  ],
+  "fun_fact": [
+    {
+      "id": "A",
+      "format": "stat_nugget",
+      "template": "Fun Fact:\n{fact}\n\n{url}\n\n{team_tag} #NHL"
+    }
   ]
 }
