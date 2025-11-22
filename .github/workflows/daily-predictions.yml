@@ -65,11 +65,7 @@ jobs:
           git config user.name "GitHub Actions Bot"
           git config user.email "actions@github.com"
           git add web/src/data/*.json data/archive/
-          git commit -m "chore: update daily predictions and site data
-
-Generated at: $(date -u +%Y-%m-%dT%H:%M:%SZ)
-Triggered by: scheduled workflow
-Archived: yes"
+          git commit -m "chore: update daily predictions and site data ($(date -u +%Y-%m-%dT%H:%M:%SZ))"
           git push
 
       - name: Summary
