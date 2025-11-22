@@ -1,0 +1,48 @@
+{
+  "morning_preview": [
+    {
+      "id": "A",
+      "format": "emoji_heavy",
+      "template": "\ud83c\udfd2 NHL TODAY: {games} games\n\n\ud83d\udd25 TOP PICK:\n{top_game}\n\ud83d\udcca {grade} confidence\n\n{url}"
+    },
+    {
+      "id": "B",
+      "format": "minimal",
+      "template": "Today's NHL predictions:\n\n{top_game}\nConfidence: {grade}\n\nFull slate \u2192 {url}"
+    },
+    {
+      "id": "C",
+      "format": "stats_focused",
+      "template": "{games} NHL games today\n\nBest pick: {top_game}\n\ud83d\udcca {home_prob}% vs {away_prob}%\nGrade: {grade}\n\n{url}"
+    },
+    {
+      "id": "D",
+      "format": "question_hook",
+      "template": "Who wins tonight? \ud83e\udd14\n\n{top_game}\n\nOur model says: {grade} confidence\nFull predictions \u2192 {url}"
+    }
+  ],
+  "afternoon_update": [
+    {
+      "id": "A",
+      "format": "excitement",
+      "template": "\u26a1\ufe0f TONIGHT'S ACTION\n\n{high_conf} high-confidence picks\n{games} total games\n\nGet the edge \u2192 {url}"
+    },
+    {
+      "id": "B",
+      "format": "value_prop",
+      "template": "60%+ accuracy all season \ud83d\udcc8\n\n{games} games tonight\n{high_conf} A/B grade picks\n\n{url}"
+    }
+  ],
+  "evening_recap": [
+    {
+      "id": "A",
+      "format": "tomorrow_tease",
+      "template": "\ud83c\udf19 Tonight's games wrapping up\n\nTomorrow's picks drop at 8am ET\n\ud83d\udcca Analytics live now\n\n{url}"
+    },
+    {
+      "id": "B",
+      "format": "call_to_action",
+      "template": "Tonight's results coming in \ud83c\udfd2\n\nCheck tomorrow's predictions early \u2192 {url}"
+    }
+  ]
+}
