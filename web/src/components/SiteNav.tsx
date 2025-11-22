@@ -23,11 +23,17 @@ export function SiteNav() {
         <div className="nav-inner">
           <Link href="/" className="nav-brand" onClick={() => setOpen(false)}>
             <div className="nav-mark">
-              <Image src="/logo.png" alt="Puckcast" width={40} height={40} className="w-10 h-10" />
+              <Image
+                src="/logo.png"
+                alt="Puckcast"
+                width={36}
+                height={36}
+                className="w-9 h-9 rounded-lg"
+                style={{ padding: '2px' }}
+              />
             </div>
             <div className="nav-text">
               <span className="nav-title">Puckcast.ai</span>
-              <span className="nav-sub">Predictions &amp; Index</span>
             </div>
           </Link>
 

@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 export function SiteFooter() {
   const currentYear = new Date().getFullYear();
   const links = [
@@ -13,7 +15,16 @@ export function SiteFooter() {
       <div className="container footer-grid">
         <div className="footer-left">
           <div className="footer-brand">
-            <div className="footer-mark">PC</div>
+            <div className="footer-mark">
+              <Image
+                src="/logo.png"
+                alt="Puckcast"
+                width={34}
+                height={34}
+                className="w-[34px] h-[34px] rounded-lg"
+                style={{ padding: '2px' }}
+              />
+            </div>
             <div>
               <p className="footer-title">Puckcast.ai</p>
               <p className="footer-sub">Predictions &amp; Power Index</p>
