@@ -84,11 +84,7 @@ jobs:
           git config user.name "GitHub Actions Bot"
           git config user.email "actions@github.com"
           git add models/ reports/ data/archive/retraining_log.json web/src/data/modelInsights.json
-          git commit -m "chore: automated model retraining
-
-Retrained at: $(date -u +%Y-%m-%dT%H:%M:%SZ)
-Triggered by: ${{ github.event_name }}
-Auto-deployed: ${{ inputs.auto_deploy || 'true' }}"
+          git commit -m "chore: automated model retraining ($(date -u +%Y-%m-%dT%H:%M:%SZ))"
           git push
 
       - name: Create deployment summary

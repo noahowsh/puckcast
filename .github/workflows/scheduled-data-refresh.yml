@@ -160,15 +160,7 @@ jobs:
           git config user.name "GitHub Actions Bot"
           git config user.email "actions@github.com"
           git add web/src/data/*.json
-          git commit -m "chore: granular data refresh
-
-Refreshed:
-- Predictions: ${{ needs.determine-refresh.outputs.refresh_predictions }}
-- Standings: ${{ needs.determine-refresh.outputs.refresh_standings }}
-- Goalie Pulse: ${{ needs.determine-refresh.outputs.refresh_goalie_pulse }}
-- Model Insights: ${{ needs.determine-refresh.outputs.refresh_model_insights }}
-
-Timestamp: $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          git commit -m "chore: granular data refresh ($(date -u +%Y-%m-%dT%H:%M:%SZ))"
           git push
 
       - name: Summary
