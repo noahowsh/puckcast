@@ -36,7 +36,7 @@ function buildWeaknesses(team: (typeof snapshots)[number]) {
   return weaknesses;
 }
 
-export async function generateStaticParams() {
+export function generateStaticParams() {
   return standings.map((team) => ({
     abbrev: team.abbrev.toLowerCase(),
   }));
