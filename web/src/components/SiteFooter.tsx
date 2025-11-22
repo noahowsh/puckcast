@@ -17,11 +17,10 @@ export function SiteFooter() {
           <div className="footer-brand">
             <div className="footer-mark-clean">
               <Image
-                src="/logo.png"
+                src="/puckcastai.png"
                 alt="Puckcast"
                 width={42}
                 height={42}
-                className="rounded-xl border border-[rgba(126,227,255,0.55)]"
               />
             </div>
             <div>
