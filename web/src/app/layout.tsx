@@ -1,21 +1,25 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
-// Using system fonts instead of Google Fonts for better reliability
-// import { Geist, Geist_Mono } from "next/font/google";
+import { Epilogue, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 import { SiteNav } from "@/components/SiteNav";
 import { SiteFooter } from "@/components/SiteFooter";
 import { PageTransition } from "@/components/PageTransition";
 import { Analytics } from "@/components/Analytics";
 
-// System fonts fallback (can re-enable Google Fonts when network is stable)
-const geistSans = {
-  variable: "--font-geist-sans",
-};
+const display = Epilogue({
+  subsets: ["latin"],
+  weight: ["600", "700", "800"],
+  variable: "--font-display",
+  display: "swap",
+});
 
-const geistMono = {
-  variable: "--font-geist-mono",
-};
+const body = Plus_Jakarta_Sans({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-body",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: "Puckcast | NHL Predictions + Analytics",
@@ -43,12 +47,22 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+      <body className={`${display.variable} ${body.variable} antialiased`}>
         <Analytics />
-        <div className="relative min-h-screen bg-slate-950 text-white">
+        <div className="relative min-h-screen overflow-hidden text-white">
+          <div
+            className="pointer-events-none fixed inset-0"
+            aria-hidden
+          >
+            <div className="absolute inset-0 bg-gradient-to-b from-white/[0.02] via-transparent to-white/[0.04]" />
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(103,232,249,0.08),transparent_35%)]" />
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_0%,rgba(52,211,153,0.08),transparent_32%)]" />
+          </div>
           <SiteNav />
           <PageTransition>
-            <div className="pt-24">{children}</div>
+            <main className="pb-0" style={{ paddingTop: "calc(var(--nav-height) + 2.5rem)" }}>
+              {children}
+            </main>
           </PageTransition>
           <SiteFooter />
         </div>

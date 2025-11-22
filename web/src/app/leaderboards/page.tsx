@@ -1,6 +1,5 @@
 import { buildTeamSnapshots, computeStandingsPowerScore, getCurrentStandings, type TeamSnapshot } from "@/lib/current";
-import { PageHeader } from "@/components/PageHeader";
-import { TeamLogo } from "@/components/TeamLogo";
+import { teamBorderColor, teamGradient } from "@/lib/teamColors";
 
 const snapshots = buildTeamSnapshots();
 const snapshotMap = new Map(snapshots.map((team) => [team.abbrev, team]));
@@ -62,184 +61,133 @@ const biggestSlider = rankedRows.reduce<LeaderboardRow | null>((best, row) => {
 
 const pct = (value: number) => `${(value * 100).toFixed(1)}%`;
 
+function Crest({ label }: { label: string }) {
+  return (
+    <span
+      className="crest"
+      style={{
+        background: teamGradient(label),
+        borderColor: teamBorderColor(label),
+      }}
+    >
+      {label}
+    </span>
+  );
+}
+
 export default function LeaderboardsPage() {
+  const topTeam = rankedRows[0];
+  const updatedDisplay = new Intl.DateTimeFormat("en-US", {
+    timeZone: "America/New_York",
+    month: "short",
+    day: "numeric",
+    hour: "numeric",
+    minute: "numeric",
+  }).format(new Date());
+
   return (
     <div className="min-h-screen">
-      <div className="container" style={{ paddingTop: '8rem' }}>
-        <PageHeader
-          title="Power Rankings"
-          description="Our model's team strength rankings vs. traditional standings. Based on goal differential, point percentage, and predictive win rates."
-          icon={
-            <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
-            </svg>
-          }
-        />
-
-        {/* Biggest Movers */}
-        {(biggestMover || biggestSlider) && (
-          <section className="mb-16">
-            <h2 className="text-2xl font-bold text-white mb-8">Biggest Movers</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              {biggestMover && (
-                <div className="card bg-green-500/5 border-green-500/30">
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-green-500/20 border border-green-500/30">
-                      <svg className="w-6 h-6 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 10l7-7m0 0l7 7m-7-7v18" />
-                      </svg>
-                    </div>
-                    <div>
-                      <div className="text-sm font-semibold text-green-400 uppercase">Biggest Riser</div>
-                      <div className="text-xs text-slate-400">Model vs standings</div>
-                    </div>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      <TeamLogo teamAbbrev={biggestMover.abbrev} size="lg" />
-                      <div>
-                        <div className="text-xl font-bold text-white">{biggestMover.team}</div>
-                        <div className="text-sm text-slate-400">{biggestMover.record}</div>
-                      </div>
-                    </div>
-                    <div className="text-right">
-                      <div className="text-3xl font-bold text-green-400">+{biggestMover.movement}</div>
-                      <div className="text-xs text-slate-400">spots</div>
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {biggestSlider && (
-                <div className="card bg-red-500/5 border-red-500/30">
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-red-500/20 border border-red-500/30">
-                      <svg className="w-6 h-6 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
-                      </svg>
-                    </div>
-                    <div>
-                      <div className="text-sm font-semibold text-red-400 uppercase">Biggest Faller</div>
-                      <div className="text-xs text-slate-400">Model vs standings</div>
-                    </div>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      <TeamLogo teamAbbrev={biggestSlider.abbrev} size="lg" />
-                      <div>
-                        <div className="text-xl font-bold text-white">{biggestSlider.team}</div>
-                        <div className="text-sm text-slate-400">{biggestSlider.record}</div>
-                      </div>
-                    </div>
-                    <div className="text-right">
-                      <div className="text-3xl font-bold text-red-400">{biggestSlider.movement}</div>
-                      <div className="text-xs text-slate-400">spots</div>
-                    </div>
-                  </div>
-                </div>
-              )}
+      <div className="container">
+        <section className="nova-hero">
+          <div className="nova-hero__grid">
+            <div className="nova-hero__text">
+              <div className="pill-row">
+                <span className="pill">Puckcast Power Index</span>
+                <span className="pill">Updated {updatedDisplay} ET</span>
+              </div>
+              <h1 className="display-xl">The analytics snapshot of who&apos;s real.</h1>
+              <p className="lead">
+                Power score blends standings metrics (points, point percentage) with underlying strength (goal differential and model win rate).
+                These rankings refresh weekly so you always know who is outrunning or lagging behind their record.
+              </p>
             </div>
-          </section>
-        )}
 
-        {/* Full Rankings Table */}
-        <section className="mb-16">
-          <h2 className="text-2xl font-bold text-white mb-8">All 32 Teams</h2>
-          <div className="table-container">
-            <table className="data-table">
-              <thead>
-                <tr>
-                  <th>Power Rank</th>
-                  <th>Team</th>
-                  <th>Movement</th>
-                  <th>Record</th>
-                  <th>Points</th>
-                  <th>Point %</th>
-                  <th>Goal Diff</th>
-                  {snapshots.length > 0 && <th>Model Win %</th>}
-                </tr>
-              </thead>
-              <tbody>
-                {rankedRows.map((row) => {
-                  const movementDisplay = row.movement === 0 ? "—" : row.movement > 0 ? `+${row.movement}` : row.movement;
-                  const movementColor =
-                    row.movement > 0
-                      ? "text-green-400"
-                      : row.movement < 0
-                      ? "text-red-400"
-                      : "text-slate-500";
-
-                  return (
-                    <tr key={row.abbrev}>
-                      <td>
-                        <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-gradient-to-br from-sky-500/20 to-cyan-500/20 border border-sky-500/30">
-                          <span className="text-lg font-bold text-sky-400">{row.powerRank}</span>
-                        </div>
-                      </td>
-                      <td>
-                        <div className="flex items-center gap-3">
-                          <TeamLogo teamAbbrev={row.abbrev} size="sm" />
-                          <div>
-                            <div className="font-semibold text-white">{row.team}</div>
-                            <div className="text-xs text-slate-500">Standings: #{row.standingsRank}</div>
-                          </div>
-                        </div>
-                      </td>
-                      <td>
-                        <div className="flex items-center gap-2">
-                          {row.movement > 0 && (
-                            <svg className="w-4 h-4 text-green-400" fill="currentColor" viewBox="0 0 20 20">
-                              <path fillRule="evenodd" d="M5.293 9.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 7.414V15a1 1 0 11-2 0V7.414L6.707 9.707a1 1 0 01-1.414 0z" clipRule="evenodd" />
-                            </svg>
-                          )}
-                          {row.movement < 0 && (
-                            <svg className="w-4 h-4 text-red-400" fill="currentColor" viewBox="0 0 20 20">
-                              <path fillRule="evenodd" d="M14.707 10.293a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 111.414-1.414L9 12.586V5a1 1 0 012 0v7.586l2.293-2.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                            </svg>
-                          )}
-                          <span className={`font-semibold ${movementColor}`}>{movementDisplay}</span>
-                        </div>
-                      </td>
-                      <td className="font-semibold">{row.record}</td>
-                      <td>{row.points}</td>
-                      <td>{pct(row.pointPctg)}</td>
-                      <td>
-                        <span className={row.goalDifferential >= 0 ? "text-green-400" : "text-red-400"}>
-                          {row.goalDifferential >= 0 ? "+" : ""}
-                          {row.goalDifferential}
-                        </span>
-                      </td>
-                      {row.overlay && (
-                        <td className="font-semibold text-sky-400">{pct(row.overlay.avgProb)}</td>
-                      )}
-                      {!row.overlay && snapshots.length > 0 && <td className="text-slate-500">—</td>}
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
-        </section>
-
-        {/* Methodology Note */}
-        <section className="mb-16">
-          <div className="card bg-slate-800/30">
-            <h3 className="text-lg font-bold text-white mb-3">How Power Rankings Work</h3>
-            <p className="text-sm text-slate-300 leading-relaxed mb-4">
-              Our power rankings blend traditional standings metrics (points, point percentage) with advanced analytics
-              (goal differential, model win rates) to provide a more complete picture of team strength. Teams that
-              outperform their record (high goal differential, strong underlying metrics) rank higher than their
-              standings position suggests.
-            </p>
-            <div className="flex flex-wrap gap-4 text-xs text-slate-400">
-              <div className="flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-sky-500"></span>
-                <span>Power Score = Points × 0.4 + Goal Diff × 0.3 + Point% × 0.3</span>
+            <div className="nova-hero__panel">
+              <div className="stat-grid stat-grid-compact">
+                {topTeam && (
+                  <div className="stat-tile">
+                    <p className="stat-tile__label">Current #1</p>
+                    <p className="stat-tile__value">{topTeam.team}</p>
+                    <p className="stat-tile__detail">#{topTeam.powerRank} · {topTeam.record}</p>
+                  </div>
+                )}
+                {biggestMover && (
+                  <div className="stat-tile">
+                    <p className="stat-tile__label">Biggest riser</p>
+                    <p className="stat-tile__value">{biggestMover.team}</p>
+                    <p className="stat-tile__detail">+{biggestMover.movement} spots</p>
+                  </div>
+                )}
+                {biggestSlider && (
+                  <div className="stat-tile">
+                    <p className="stat-tile__label">Biggest slider</p>
+                    <p className="stat-tile__value">{biggestSlider.team}</p>
+                    <p className="stat-tile__detail">{biggestSlider.movement} spots</p>
+                  </div>
+                )}
+                <div className="stat-tile">
+                  <p className="stat-tile__label">Refresh cadence</p>
+                  <p className="stat-tile__value">Weekly</p>
+                  <p className="stat-tile__detail">Last updated {updatedDisplay} ET</p>
+                </div>
               </div>
             </div>
           </div>
         </section>
+
+        <section className="nova-section">
+          <div className="section-head">
+            <div>
+              <p className="eyebrow">Analytics snapshot</p>
+              <h2>Puckcast Power Board</h2>
+              <p className="lead-sm">Movement vs. the standings, model win rate overlay, and next opponent.</p>
+            </div>
+          </div>
+
+          <div className="power-board">
+            <div className="power-board__head">
+              <span>#</span>
+              <span>Team</span>
+              <span>Movement</span>
+              <span>Record</span>
+              <span>Point %</span>
+              <span>Goal Diff</span>
+              <span>Model Win%</span>
+              <span>Next</span>
+            </div>
+            {rankedRows.map((row) => (
+              <PowerRow key={row.abbrev} row={row} />
+            ))}
+          </div>
+        </section>
       </div>
+    </div>
+  );
+}
+
+function PowerRow({ row }: { row: LeaderboardRow }) {
+  const movementDisplay = row.movement === 0 ? "Even" : row.movement > 0 ? `+${row.movement}` : row.movement;
+  const movementTone = row.movement > 0 ? "movement--positive" : row.movement < 0 ? "movement--negative" : "movement--neutral";
+
+  return (
+    <div className="power-board__row">
+      <div className="rank-chip">#{row.powerRank}</div>
+      <div className="power-team">
+        <Crest label={row.abbrev} />
+        <div>
+          <p className="power-name">{row.team}</p>
+          <p className="micro-label">Standings #{row.standingsRank}</p>
+        </div>
+      </div>
+      <span className={`movement movement--pillless ${movementTone}`}>{movementDisplay}</span>
+      <span className="power-data">{row.record}</span>
+      <span className="power-data">{pct(row.pointPctg)}</span>
+      <span className={`power-data ${row.goalDifferential >= 0 ? "text-up" : "text-down"}`}>
+        {row.goalDifferential >= 0 ? "+" : ""}
+        {row.goalDifferential}
+      </span>
+      <span className="power-data">{row.overlay ? pct(row.overlay.avgProb) : "-"}</span>
+      <span className="power-data">{row.nextGame ? `${row.nextGame.opponent} (${row.nextGame.date})` : "TBD"}</span>
     </div>
   );
 }
