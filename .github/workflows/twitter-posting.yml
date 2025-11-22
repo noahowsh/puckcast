@@ -53,9 +53,8 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          # Note: Install tweepy or twitter API library here
-          # pip install tweepy
-          echo "📦 Dependencies installed (tweepy placeholder)"
+          pip install tweepy
+          echo "📦 Dependencies installed"
 
       - name: Read predictions data
         id: read-data
@@ -67,80 +66,14 @@ jobs:
             echo "data_exists=false" >> $GITHUB_OUTPUT
           fi
 
-      - name: Generate post content
+      - name: Test post generation (dry run)
         if: steps.read-data.outputs.data_exists == 'true'
-        id: generate-post
         run: |
-          cat > /tmp/post.py << 'EOF'
-          import json
-          import sys
-          from pathlib import Path
-
-          def generate_morning_preview(data):
-              games = data.get("games", [])
-              if not games:
-                  return "🏒 No NHL games scheduled today. Enjoy your day off!"
-
-              top_game = max(games, key=lambda g: abs(g.get("edge", 0)))
-              home = top_game["homeTeam"]["abbrev"]
-              away = top_game["awayTeam"]["abbrev"]
-              grade = top_game.get("confidenceGrade", "C")
-              home_prob = top_game.get("homeWinProb", 0.5)
-
-              return f"""🏒 NHL Predictions - {len(games)} games today!
-
-          🔥 Top Pick: {away} @ {home}
-          📊 Confidence: {grade}
-          🎯 {home}: {home_prob:.1%} | {away}: {1-home_prob:.1%}
-
-          Full predictions → [your-site-url]
-          #NHL #NHLPredictions"""
-
-          def generate_afternoon_update(data):
-              games = data.get("games", [])
-              high_conf = [g for g in games if g.get("confidenceGrade", "C")[0] in "AB"]
-
-              return f"""⚡️ NHL Update - {len(games)} games tonight
-
-          🎯 High confidence picks: {len(high_conf)}
-          💪 Model performance: 60%+ accuracy
-
-          Get tonight's predictions → [your-site-url]
-          #NHL #NHLBetting"""
-
-          def generate_evening_recap(data):
-              return f"""🌙 Tonight's NHL action wrapping up!
-
-          📈 Check tomorrow's predictions starting at 8am ET
-          📊 Model insights & analytics available now
-
-          [your-site-url]
-          #NHL #Hockey"""
-
-          def main():
-              post_type = sys.argv[1]
-              data_path = Path("web/src/data/todaysPredictions.json")
-
-              with open(data_path) as f:
-                  data = json.load(f)
-
-              if post_type == "morning_preview":
-                  post = generate_morning_preview(data)
-              elif post_type == "afternoon_update":
-                  post = generate_afternoon_update(data)
-              else:
-                  post = generate_evening_recap(data)
-
-              print(post)
-
-              # Save to file for the next step
-              Path("/tmp/post_content.txt").write_text(post)
-
-          if __name__ == "__main__":
-              main()
-          EOF
-
-          python /tmp/post.py "${{ steps.post-type.outputs.type }}"
+          echo "🧪 Testing post generation..."
+          python scripts/post_to_twitter.py \
+            --post-type ${{ steps.post-type.outputs.type }} \
+            --site-url https://puckcast.ai \
+            --dry-run
 
       - name: Post to X/Twitter
         if: steps.read-data.outputs.data_exists == 'true'
@@ -149,37 +82,30 @@ jobs:
           TWITTER_API_SECRET: ${{ secrets.TWITTER_API_SECRET }}
           TWITTER_ACCESS_TOKEN: ${{ secrets.TWITTER_ACCESS_TOKEN }}
           TWITTER_ACCESS_SECRET: ${{ secrets.TWITTER_ACCESS_SECRET }}
+          TWITTER_BEARER_TOKEN: ${{ secrets.TWITTER_BEARER_TOKEN }}
         run: |
           # Check if Twitter credentials are configured
           if [ -z "$TWITTER_API_KEY" ]; then
-            echo "⚠️  Twitter API credentials not configured. Skipping post."
-            echo "📝 Post content would have been:"
-            cat /tmp/post_content.txt
+            echo "⚠️  Twitter API credentials not configured."
+            echo "📝 Running in dry-run mode only."
+            echo ""
+            echo "To enable posting, add these secrets to your GitHub repository:"
+            echo "  Settings → Secrets and variables → Actions → New repository secret"
+            echo ""
+            echo "Required secrets:"
+            echo "  - TWITTER_API_KEY"
+            echo "  - TWITTER_API_SECRET"
+            echo "  - TWITTER_ACCESS_TOKEN"
+            echo "  - TWITTER_ACCESS_SECRET"
+            echo "  - TWITTER_BEARER_TOKEN (optional)"
             exit 0
           fi
 
-          # TODO: Implement actual Twitter API posting
-          # For now, just display the content
-          echo "📱 Would post to Twitter:"
-          cat /tmp/post_content.txt
-
-          # Example with tweepy (uncomment when ready):
-          # python << 'EOF'
-          # import tweepy
-          # import os
-          # from pathlib import Path
-          #
-          # client = tweepy.Client(
-          #     consumer_key=os.environ["TWITTER_API_KEY"],
-          #     consumer_secret=os.environ["TWITTER_API_SECRET"],
-          #     access_token=os.environ["TWITTER_ACCESS_TOKEN"],
-          #     access_token_secret=os.environ["TWITTER_ACCESS_SECRET"]
-          # )
-          #
-          # content = Path("/tmp/post_content.txt").read_text()
-          # response = client.create_tweet(text=content)
-          # print(f"✅ Posted to Twitter: {response.data['id']}")
-          # EOF
+          # Post using the Python script
+          echo "📱 Posting to X/Twitter..."
+          python scripts/post_to_twitter.py \
+            --post-type ${{ steps.post-type.outputs.type }} \
+            --site-url https://puckcast.ai
 
       - name: Summary
         run: |
