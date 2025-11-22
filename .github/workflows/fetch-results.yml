@@ -59,10 +59,7 @@ jobs:
           git config user.name "GitHub Actions Bot"
           git config user.email "actions@github.com"
           git add data/archive/ web/src/data/backtestingReport.json
-          git commit -m "chore: update game results and backtesting report
-
-Fetched at: $(date -u +%Y-%m-%dT%H:%M:%SZ)
-Automated results collection"
+          git commit -m "chore: update game results and backtesting report ($(date -u +%Y-%m-%dT%H:%M:%SZ))"
           git push
 
       - name: Summary
