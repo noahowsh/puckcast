@@ -1,12 +1,13 @@
 name: Daily Predictions Update
 
+# NOTE: This workflow may be redundant with 'scheduled-data-refresh.yml'
+# which already runs predictions 4x daily. Consider disabling if not needed.
+
 on:
   schedule:
-    # Run at 10:00 AM ET (2:00 PM UTC) every day
-    # Note: During DST (Mar-Nov), ET is UTC-4, so 10 AM ET = 2 PM UTC
-    # During EST (Nov-Mar), ET is UTC-5, so 10 AM ET = 3 PM UTC
-    # Using 2 PM UTC to cover DST period
-    - cron: '0 14 * * *'
+    # Run at 6:00 AM ET (10:00 UTC) every day for morning predictions
+    # Note: This aligns with the scheduled-data-refresh.yml morning run
+    - cron: '0 10 * * *'
   workflow_dispatch:  # Allow manual triggering
 
 env:
@@ -32,12 +33,12 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install pandas numpy scikit-learn requests typer rich
+          pip install -r requirements.txt
 
-      - name: Run data refresh pipeline
+      - name: Run fast predictions
         run: |
-          echo "🏒 Running daily data refresh..."
-          python scripts/refresh_site_data.py --date $(date +%Y-%m-%d)
+          echo "🏒 Running fast predictions (using pre-trained model)..."
+          python predict_fast.py
         continue-on-error: true
 
       - name: Archive predictions

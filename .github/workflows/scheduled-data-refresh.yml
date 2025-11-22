@@ -126,8 +126,8 @@ jobs:
       - name: Refresh predictions
         if: needs.determine-refresh.outputs.refresh_predictions == 'true'
         run: |
-          echo "🏒 Refreshing predictions..."
-          python predict_full.py
+          echo "🏒 Refreshing predictions (using fast pre-trained model)..."
+          python predict_fast.py
         continue-on-error: true
 
       - name: Refresh standings
