@@ -46,6 +46,14 @@ jobs:
           python scripts/archive_predictions.py --date $(date +%Y-%m-%d)
         continue-on-error: true
 
+      - name: Fallback fetch from live API
+        run: |
+          echo "🌐 Fetching latest predictions from live API as fallback..."
+          mkdir -p web/src/data
+          curl -sSf https://puckcast.ai/api/predictions > web/src/data/todaysPredictions.json
+          echo "✅ Fallback predictions written to web/src/data/todaysPredictions.json"
+        continue-on-error: true
+
       - name: Check for changes
         id: git-check
         run: |

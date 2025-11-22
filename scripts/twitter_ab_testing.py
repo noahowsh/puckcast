@@ -10,6 +10,7 @@ import csv
 import json
 import random
 from datetime import datetime, timezone
+from zoneinfo import ZoneInfo
 from pathlib import Path
 from typing import Any, Dict, List
 
@@ -38,8 +39,29 @@ def parse_args() -> argparse.Namespace:
 
 def load_predictions() -> Dict[str, Any]:
     """Load today's predictions."""
+    if not PREDICTIONS_FILE.exists():
+        raise FileNotFoundError(f"Predictions file not found at {PREDICTIONS_FILE}")
+
     with open(PREDICTIONS_FILE) as f:
-        return json.load(f)
+        data = json.load(f)
+
+    # Guard against stale data
+    generated_at = data.get("generatedAt")
+    if generated_at:
+        try:
+          # Normalize to ET and require same calendar day
+            generated_dt = datetime.fromisoformat(generated_at.replace("Z", "+00:00"))
+            now_utc = datetime.now(timezone.utc)
+            now_et = now_utc.astimezone(ZoneInfo("America/New_York"))
+            gen_et = generated_dt.astimezone(ZoneInfo("America/New_York"))
+            if (now_et.date() != gen_et.date()) or (now_utc - generated_dt).total_seconds() > 60 * 60 * 24:
+                raise RuntimeError(
+                    f"Stale predictions: generated {generated_dt.isoformat()}Z, today is {now_et.date()} ET"
+                )
+        except Exception as exc:
+            raise RuntimeError(f"Unable to validate predictions freshness: {exc}") from exc
+
+    return data
 
 
 def load_variants() -> Dict[str, List[Dict[str, str]]]:

@@ -73,6 +73,36 @@ jobs:
           pip install tweepy
           echo "📦 Dependencies installed"
 
+      - name: Refresh predictions (fallback pull)
+        run: |
+          echo "🌐 Fetching latest predictions from live API..."
+          mkdir -p web/src/data
+          curl -sSf https://puckcast.ai/api/predictions > web/src/data/todaysPredictions.json
+          echo "✅ Pulled latest predictions payload"
+
+      - name: Validate predictions freshness
+        run: |
+          python - <<'PYCODE'
+          import json
+          from datetime import datetime, timezone
+          from zoneinfo import ZoneInfo
+          import sys
+
+          path = "web/src/data/todaysPredictions.json"
+          with open(path) as f:
+              data = json.load(f)
+          generated_at = data.get("generatedAt")
+          if not generated_at:
+              raise SystemExit("❌ No generatedAt in predictions payload")
+          generated_dt = datetime.fromisoformat(generated_at.replace("Z", "+00:00"))
+          now_utc = datetime.now(timezone.utc)
+          now_et = now_utc.astimezone(ZoneInfo("America/New_York"))
+          gen_et = generated_dt.astimezone(ZoneInfo("America/New_York"))
+          if (now_et.date() != gen_et.date()) or (now_utc - generated_dt).total_seconds() > 60 * 60 * 24:
+              raise SystemExit(f"❌ Predictions stale: generated {generated_dt.isoformat()}Z, today is {now_et.date()} ET")
+          print(f"✅ Predictions fresh: generated {generated_dt.isoformat()}Z (ET {gen_et.isoformat()})")
+          PYCODE
+
       - name: Read predictions data
         id: read-data
         run: |
