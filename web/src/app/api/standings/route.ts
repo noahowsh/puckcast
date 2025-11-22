@@ -13,7 +13,6 @@ export const dynamic = "force-dynamic";
  */
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
-  const conferenceFilter = searchParams.get("conference");
   const limit = searchParams.get("limit");
 
   let teams = standingsData.teams;

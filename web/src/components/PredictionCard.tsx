@@ -18,56 +18,58 @@ export function PredictionCard({ prediction }: { prediction: Prediction }) {
   const totalInjuries = homeInjuryCount + awayInjuryCount;
 
   return (
-    <article className="glass-card group relative p-6 md:p-8 animate-slide-up ice-texture overflow-hidden">
+    <article className="card group animate-slide-up ice-texture">
       {/* Animated glow effect on hover */}
       <div className="absolute inset-0 bg-gradient-to-br from-sky-500/0 via-sky-500/5 to-cyan-500/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
 
-      <div className="relative z-10">
+      <div className="relative z-10 flex flex-col gap-5">
         {/* Header */}
-        <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4 md:gap-6">
-          <div className="flex-1">
-            <div className="flex items-center gap-3 mb-2">
-              <span className="text-xs font-bold uppercase tracking-widest text-sky-400">
+        <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-5">
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center gap-3 mb-3">
+              <span className="chip text-[11px] font-semibold">
                 {prediction.startTimeEt ?? "TBD"}
               </span>
-              <span className={`
-                px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider
+              <span
+                className={`
+                px-3 py-1.5 rounded-full text-[11px] font-bold uppercase tracking-[0.18em]
                 ${grade.label === "A" ? "bg-sky-500 text-white shadow-lg shadow-sky-500/30" : ""}
                 ${grade.label === "B" ? "bg-sky-500/70 text-white shadow-lg shadow-sky-500/20" : ""}
-                ${grade.label === "C" ? "bg-white/10 text-slate-300" : ""}
-              `}>
+                ${grade.label === "C" ? "bg-white/10 text-white/80" : ""}
+              `}
+              >
                 Grade {grade.label}
               </span>
             </div>
 
-            <h3 className="text-xl md:text-2xl lg:text-3xl font-bold leading-tight mb-2">
-              <span className="text-slate-300">{prediction.awayTeam.name}</span>
+            <h3 className="text-xl md:text-2xl font-extrabold leading-snug mb-3">
+              <span className="text-white/90">{prediction.awayTeam.name}</span>
               <span className="text-sky-400 font-extrabold mx-2">@</span>
               <span className="text-white">{prediction.homeTeam.name}</span>
             </h3>
 
-            <div className="flex flex-wrap items-center gap-2 text-sm">
-              <span className="px-2 py-1 rounded bg-white/5 text-slate-400 font-mono text-xs">
+            <div className="flex flex-wrap items-center gap-2 text-xs">
+              <span className="chip text-[11px]">
                 {prediction.awayTeam.abbrev}
               </span>
-              <span className="text-slate-600">→</span>
-              <span className="px-2 py-1 rounded bg-white/5 text-slate-400 font-mono text-xs">
+              <span className="text-white/30">→</span>
+              <span className="chip text-[11px]">
                 {prediction.homeTeam.abbrev}
               </span>
             </div>
           </div>
 
           {/* Edge Indicator */}
-          <div className="relative">
-            <div className="text-center p-4 rounded-xl bg-gradient-to-br from-sky-500/20 to-cyan-500/20 border border-sky-500/30 shadow-lg shadow-sky-500/20 min-w-[140px]">
-              <p className="text-xs font-bold uppercase tracking-widest text-sky-400 mb-1">Model Edge</p>
-              <p className="text-3xl md:text-4xl font-extrabold bg-gradient-to-r from-sky-400 to-cyan-400 bg-clip-text text-transparent">
+          <div className="relative flex-shrink-0">
+            <div className="text-center px-5 py-4 rounded-xl bg-gradient-to-br from-sky-500/18 to-cyan-500/18 border border-sky-500/30 shadow-lg shadow-sky-500/20 min-w-[130px]">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-sky-300 mb-2">Model Edge</p>
+              <p className="text-3xl font-extrabold bg-gradient-to-r from-sky-400 to-cyan-400 bg-clip-text text-transparent leading-tight">
                 +{edgePercent}%
               </p>
-              <p className="text-xs uppercase tracking-wider mt-1">
-                <span className="text-sky-400">{favoriteTeam.abbrev}</span>
-                <span className="text-slate-500 mx-1">·</span>
-                <span className="text-slate-400">{prediction.modelFavorite === "home" ? "Home" : "Road"}</span>
+              <p className="text-[11px] uppercase tracking-[0.18em] mt-2 text-white/70">
+                <span className="text-sky-400 font-semibold">{favoriteTeam.abbrev}</span>
+                <span className="text-white/30 mx-1">·</span>
+                <span className="text-white/60">{prediction.modelFavorite === "home" ? "Home" : "Road"}</span>
               </p>
             </div>
             {/* Pulse glow for high confidence */}
@@ -78,7 +80,7 @@ export function PredictionCard({ prediction }: { prediction: Prediction }) {
         </div>
 
         {/* Probability Bars */}
-        <div className="mt-8 space-y-4">
+        <div className="space-y-3">
           <ProbabilityBar
             label={prediction.homeTeam.name}
             abbrev={prediction.homeTeam.abbrev}
@@ -95,7 +97,7 @@ export function PredictionCard({ prediction }: { prediction: Prediction }) {
 
         {/* Day-of-game info */}
         {dayOfInfo && (
-          <div className="mt-6 flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-1.5">
             {homeGoalie && (
               <StatusChip
                 label={`🥅 ${homeGoalie.goalieName ?? "Goalie"}`}
@@ -121,16 +123,16 @@ export function PredictionCard({ prediction }: { prediction: Prediction }) {
         )}
 
         {/* Details */}
-        <div className="mt-8 pt-6 border-t border-white/10 space-y-4">
+        <div className="pt-5 border-t border-white/10 flex flex-col gap-4">
           <div>
-            <dt className="text-xs font-bold uppercase tracking-widest text-slate-500 mb-1">Venue</dt>
-            <dd className="text-base text-slate-300">{prediction.venue ?? "TBD"}</dd>
+            <dt className="stat-label mb-2">Venue</dt>
+            <dd className="text-sm text-white/80">{prediction.venue ?? "TBD"}</dd>
           </div>
 
           <div>
-            <dt className="text-xs font-bold uppercase tracking-widest text-slate-500 mb-2">Analysis</dt>
-            <dd className="text-base leading-relaxed text-slate-200">{summary}</dd>
-            <p className="mt-3 text-xs text-slate-500 italic">{grade.description}</p>
+            <dt className="stat-label mb-2">Analysis</dt>
+            <dd className="text-sm leading-relaxed text-white/80">{summary}</dd>
+            <p className="mt-3 text-xs text-white/50 italic">{grade.description}</p>
           </div>
         </div>
       </div>
@@ -150,40 +152,35 @@ function ProbabilityBar({
   highlight: boolean;
 }) {
   return (
-    <div className="space-y-2">
+    <div className="flex flex-col gap-2">
       <div className="flex items-center justify-between text-sm">
-        <div className="flex items-center gap-2">
-          <span className={`font-mono text-xs px-2 py-0.5 rounded ${
-            highlight ? "bg-sky-500/20 text-sky-400 font-bold" : "bg-white/5 text-slate-400"
+        <div className="flex items-center gap-3">
+          <span className={`chip text-[11px] font-mono ${
+            highlight ? "bg-sky-500/20 text-sky-400 border-sky-500/40 font-bold" : ""
           }`}>
             {abbrev}
           </span>
-          <span className={highlight ? "font-bold text-white" : "text-slate-400"}>
+          <span className={highlight ? "font-bold text-white" : "text-white/70"}>
             {label}
           </span>
         </div>
-        <span className={`text-lg font-bold tabular-nums ${
-          highlight ? "text-sky-400 neon-text" : "text-slate-500"
+        <span className={`text-base font-bold tabular-nums ${
+          highlight ? "text-sky-400" : "text-white/50"
         }`}>
           {value}%
         </span>
       </div>
 
       {/* Animated probability bar */}
-      <div className="relative h-3 w-full overflow-hidden rounded-full bg-white/5 border border-white/10">
+      <div className="prob-bar">
         <div
-          className={`
-            h-full rounded-full transition-all duration-1000 ease-out
-            ${highlight
-              ? "bg-gradient-to-r from-sky-500 via-cyan-500 to-sky-400 shadow-lg shadow-sky-500/50"
-              : "bg-gradient-to-r from-slate-600 to-slate-700"
-            }
-          `}
+          className={`prob-bar-segment ${
+            highlight
+              ? "bg-gradient-to-r from-sky-500 via-cyan-500 to-sky-400"
+              : "bg-gradient-to-r from-white/10 to-white/5"
+          }`}
           style={{ width: `${value}%` }}
-        >
-          {/* Inner shine effect */}
-          <div className="h-full w-full bg-gradient-to-b from-white/20 to-transparent"></div>
-        </div>
+        />
       </div>
     </div>
   );
@@ -201,19 +198,19 @@ function StatusChip({
   tone?: StatusTone;
 }) {
   const toneStyles: Record<StatusTone, string> = {
-    success: "border-sky-500/50 bg-sky-500/10 text-sky-300 shadow-sky-500/20",
-    warning: "border-slate-600/50 bg-slate-800/30 text-slate-300 shadow-slate-500/20",
-    info: "border-sky-500/50 bg-sky-500/10 text-sky-300 shadow-sky-500/20",
-    neutral: "border-white/20 bg-white/5 text-slate-300",
+    success: "border-sky-500/60 bg-sky-500/15 text-sky-200",
+    warning: "border-white/20 bg-white/10 text-white/80",
+    info: "border-sky-500/60 bg-sky-500/15 text-sky-200",
+    neutral: "border-white/15 bg-white/8 text-white/80",
   };
 
   return (
-    <div className={`inline-flex items-center gap-2 rounded-lg border px-3 py-2 text-xs font-semibold shadow-lg ${toneStyles[tone]}`}>
+    <div className={`chip ${toneStyles[tone]}`}>
       <span>{label}</span>
       {detail && (
         <>
           <span className="text-white/30">·</span>
-          <span className="text-white/60 text-xs">{detail}</span>
+          <span className="text-white/60">{detail}</span>
         </>
       )}
     </div>

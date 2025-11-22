@@ -48,7 +48,7 @@ export default function Error({
             Something went wrong
           </h2>
           <p className="text-lg text-white/70 max-w-md mx-auto">
-            We hit an unexpected error. Don't worry, our model is still working hard on predictions. Try refreshing the page or heading back home.
+            We hit an unexpected error. Don&apos;t worry, our model is still working hard on predictions. Try refreshing the page or heading back home.
           </p>
         </div>
 

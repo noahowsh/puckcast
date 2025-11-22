@@ -42,29 +42,39 @@ export function PredictionTicker({ initial }: { initial: PredictionsPayload }) {
   const topEdges = getTopEdges(currentSlate);
 
   return (
-    <div className="rounded-3xl border border-white/10 bg-black/20 p-4 text-sm text-white/80">
-      <div className="flex items-center justify-between">
-        <p className="text-xs uppercase tracking-[0.5em] text-white/60">Live edges</p>
-        <p className="text-[0.65rem] uppercase tracking-[0.5em] text-white/40">Auto-refresh</p>
+    <div className="card-elevated p-5 text-sm text-white/85 md:p-6">
+      <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex items-center gap-3">
+          <span className="inline-flex h-2 w-2 rounded-full bg-sky-400 animate-pulse-subtle" />
+          <p className="text-xs uppercase tracking-[0.32em] text-white/60">Live prediction ticker</p>
+        </div>
+        <p className="text-[0.7rem] uppercase tracking-[0.26em] text-white/50">Auto-refresh every 60s</p>
       </div>
-      <ul className="mt-3 space-y-2">
+
+      <ul className="mt-5 space-y-3">
         {topEdges.map((game) => (
-          <li key={game.id} className="space-y-1">
-            <div className="flex items-center justify-between text-white">
-              <span className="font-semibold">
+          <li
+            key={game.id}
+            className="ticker-row hover:border-white/20 hover:shadow-lg"
+          >
+            <div className="flex flex-wrap items-center justify-between gap-2 text-white">
+              <span className="font-semibold tracking-wide">
                 {game.awayTeam.abbrev} @ {game.homeTeam.abbrev}
               </span>
-              <span className="text-xs uppercase tracking-[0.4em] text-cyan-200">
-                {getPredictionGrade(game.edge).label}
+              <span className="badge text-[11px] uppercase tracking-[0.28em] text-cyan-200">
+                {getPredictionGrade(game.edge).label} grade
               </span>
             </div>
-            <div className="flex items-center justify-between text-xs text-white/70">
-              <span>
-                {game.modelFavorite === "home" ? game.homeTeam.abbrev : game.awayTeam.abbrev} → {numberFmt(
-                  game.modelFavorite === "home" ? game.homeWinProb : game.awayWinProb,
-                )}
+            <div className="flex flex-wrap items-center justify-between gap-2 text-xs text-white/70">
+              <span className="inline-flex items-center gap-2">
+                <span className="text-white/50">Edge</span>
+                <span className="font-semibold text-sky-200">
+                  {numberFmt(game.modelFavorite === "home" ? game.homeWinProb : game.awayWinProb)}
+                </span>
+                <span className="text-white/50">→</span>
+                <span>{game.modelFavorite === "home" ? game.homeTeam.abbrev : game.awayTeam.abbrev}</span>
               </span>
-              <span>{game.startTimeEt ?? "TBD"}</span>
+              <span className="text-white/50">{game.startTimeEt ?? "TBD"}</span>
             </div>
             <SparkBar value={Math.abs(game.edge)} />
           </li>

@@ -9,6 +9,7 @@ interface StatCardProps {
   };
   icon?: React.ReactNode;
   size?: 'sm' | 'md' | 'lg';
+  compact?: boolean;
   className?: string;
 }
 
@@ -18,6 +19,7 @@ export function StatCard({
   change,
   icon,
   size = 'md',
+  compact = false,
   className = ''
 }: StatCardProps) {
   const sizeClasses = {
@@ -26,6 +28,8 @@ export function StatCard({
     lg: 'p-8'
   };
 
+  const paddingClass = compact ? 'p-4' : sizeClasses[size];
+
   const valueSizes = {
     sm: 'text-2xl',
     md: 'text-3xl',
@@ -33,7 +37,7 @@ export function StatCard({
   };
 
   return (
-    <div className={`stat-card ${sizeClasses[size]} ${className}`}>
+    <div className={`stat-card ${paddingClass} ${compact ? 'stat-card-compact' : ''} ${className}`}>
       <div className="flex items-start justify-between mb-2">
         <p className="stat-label">{label}</p>
         {icon && (
