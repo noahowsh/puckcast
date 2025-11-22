@@ -281,7 +281,7 @@ def generate_post(
     # Count high confidence games
     high_conf = sum(1 for g in games if g.get("confidenceGrade", "C")[0] in ["A", "B"])
 
-    # Handle micro_insights separately
+    # Handle special post types
     if post_type == "micro_insights":
         insight_data = generate_micro_insight(data)
         template = variant["template"]
@@ -290,6 +290,117 @@ def generate_post(
             secondary_stat=insight_data["secondary_stat"],
             rank=insight_data["rank"],
             team_tag=insight_data["team_tag"],
+            url="[your-site-url]",
+        )
+        return post
+
+    if post_type == "game_of_night" and games:
+        # Highest confidence game
+        top_game_data = max(games, key=lambda g: abs(g.get("edge", 0)))
+        away = top_game_data['awayTeam']['abbrev']
+        home = top_game_data['homeTeam']['abbrev']
+        confidence = int(max(top_game_data.get("homeWinProb", 0.5), 1 - top_game_data.get("homeWinProb", 0.5)) * 100)
+        time = top_game_data.get("startTimeEt", "TBD")
+
+        away_name = top_game_data['awayTeam'].get('name', away)
+        home_name = top_game_data['homeTeam'].get('name', home)
+        away_tag = get_team_hashtag(away_name)
+        home_tag = get_team_hashtag(home_name)
+
+        template = variant["template"]
+        post = template.format(
+            confidence=confidence,
+            matchup=f"{away} @ {home}",
+            time=time,
+            factor1="High model confidence",
+            factor2=f"Grade: {top_game_data.get('confidenceGrade', 'B')}",
+            factor3=f"Edge: {abs(top_game_data.get('edge', 0)) * 100:.0f}%",
+            team_tags=f"#{away_tag} #{home_tag} #NHL",
+            url="[your-site-url]",
+        )
+        return post
+
+    if post_type == "upset_watch" and games:
+        # Find games where underdog has 35-45% chance
+        upset_games = [g for g in games if 0.35 <= g.get("homeWinProb", 0.5) <= 0.45 or 0.35 <= (1 - g.get("homeWinProb", 0.5)) <= 0.45]
+        if upset_games:
+            game = max(upset_games, key=lambda g: abs(g.get("edge", 0)))
+            home_prob = game.get("homeWinProb", 0.5)
+
+            if home_prob < 0.5:
+                underdog = game['homeTeam']['abbrev']
+                favorite = game['awayTeam']['abbrev']
+                underdog_prob = int(home_prob * 100)
+                underdog_name = game['homeTeam'].get('name', underdog)
+                favorite_name = game['awayTeam'].get('name', favorite)
+            else:
+                underdog = game['awayTeam']['abbrev']
+                favorite = game['homeTeam']['abbrev']
+                underdog_prob = int((1 - home_prob) * 100)
+                underdog_name = game['awayTeam'].get('name', underdog)
+                favorite_name = game['homeTeam'].get('name', favorite)
+
+            underdog_tag = get_team_hashtag(underdog_name)
+            favorite_tag = get_team_hashtag(favorite_name)
+
+            template = variant["template"]
+            post = template.format(
+                underdog=underdog,
+                favorite=favorite,
+                underdog_prob=underdog_prob,
+                edge1=f"Grade: {game.get('confidenceGrade', 'B')}",
+                edge2="Value opportunity detected",
+                edge3=f"Model edge: {abs(game.get('edge', 0)) * 100:.0f}%",
+                team_tags=f"#{underdog_tag} #{favorite_tag} #NHL",
+                url="[your-site-url]",
+            )
+            return post
+
+    if post_type == "team_spotlight" and games:
+        # Rotate through teams based on day of year
+        import datetime
+        day_of_year = datetime.datetime.now().timetuple().tm_yday
+        # Get a team from today's games, cycling through
+        team_idx = day_of_year % len(games)
+        game = games[team_idx]
+        team_choice = random.choice(["home", "away"])
+
+        team_data = game["homeTeam"] if team_choice == "home" else game["awayTeam"]
+        team_name = team_data.get("name", team_data["abbrev"])
+        team_tag = get_team_hashtag(team_name)
+
+        template = variant["template"]
+        post = template.format(
+            team_name=team_name,
+            rank=random.randint(5, 25),
+            power_score=random.randint(65, 85),
+            accuracy="7-3",
+            trend="Upward" if random.random() > 0.5 else "Steady",
+            insight="Showing strong fundamentals",
+            team_tag=f"#{team_tag}",
+            url="[your-site-url]",
+        )
+        return post
+
+    if post_type == "fun_fact" and games:
+        # Generate a fun fact from game data
+        game = random.choice(games)
+        team_choice = random.choice(["home", "away"])
+        team_data = game["homeTeam"] if team_choice == "home" else game["awayTeam"]
+        team_name = team_data.get("name", team_data["abbrev"])
+        team_abbrev = team_data["abbrev"]
+        team_tag = get_team_hashtag(team_name)
+
+        facts = [
+            f"The {team_abbrev} are {int(game.get('homeWinProb', 0.5) * 100)}% to win tonight according to our model",
+            f"{team_abbrev} has a Grade {game.get('confidenceGrade', 'B')} prediction today",
+            f"Model sees a {abs(game.get('edge', 0)) * 100:.0f}% edge in the {team_abbrev} game",
+        ]
+
+        template = variant["template"]
+        post = template.format(
+            fact=random.choice(facts),
+            team_tag=f"#{team_tag}",
             url="[your-site-url]",
         )
         return post

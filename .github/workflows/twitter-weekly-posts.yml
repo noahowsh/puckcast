@@ -1,0 +1,109 @@
+name: Weekly Twitter Posts
+
+on:
+  schedule:
+    # Team Spotlight - Daily at 11:00 AM ET (15:00 UTC)
+    - cron: '0 15 * * *'
+    # Fun Fact - Wed & Fri at 3:00 PM ET (19:00 UTC)
+    - cron: '0 19 * * 3,5'
+  workflow_dispatch:
+    inputs:
+      post_type:
+        description: 'Type of post to create'
+        required: true
+        type: choice
+        options:
+          - team_spotlight
+          - fun_fact
+          - yesterdays_surprises
+          - bold_predictions
+          - weekly_power_index
+          - overrated_poll
+          - model_accountability
+          - team_surging
+          - team_dropping
+
+env:
+  PYTHON_VERSION: '3.11'
+
+jobs:
+  post-to-twitter:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Determine post type
+        id: post-type
+        run: |
+          HOUR=$(date -u +%H)
+          DAY_OF_WEEK=$(date -u +%u)  # 1=Monday, 7=Sunday
+
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "type=${{ inputs.post_type }}" >> $GITHUB_OUTPUT
+          elif [ "$HOUR" = "15" ]; then
+            # Team spotlight daily at 11 AM ET
+            echo "type=team_spotlight" >> $GITHUB_OUTPUT
+          elif [ "$HOUR" = "19" ]; then
+            # Fun fact on Wed (3) and Fri (5)
+            if [ "$DAY_OF_WEEK" = "3" ] || [ "$DAY_OF_WEEK" = "5" ]; then
+              echo "type=fun_fact" >> $GITHUB_OUTPUT
+            fi
+          fi
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install tweepy
+          echo "📦 Dependencies installed"
+
+      - name: Read predictions data
+        id: read-data
+        run: |
+          echo "📊 Reading todaysPredictions.json..."
+          if [ -f web/src/data/todaysPredictions.json ]; then
+            echo "data_exists=true" >> $GITHUB_OUTPUT
+          else
+            echo "data_exists=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Test post generation (dry run)
+        if: steps.read-data.outputs.data_exists == 'true' && steps.post-type.outputs.type != ''
+        run: |
+          echo "🧪 Testing post generation..."
+          python scripts/post_to_twitter.py \
+            --post-type ${{ steps.post-type.outputs.type }} \
+            --site-url https://puckcast.ai \
+            --dry-run
+
+      - name: Post to X/Twitter
+        if: steps.read-data.outputs.data_exists == 'true' && steps.post-type.outputs.type != ''
+        env:
+          TWITTER_API_KEY: ${{ secrets.TWITTER_API_KEY }}
+          TWITTER_API_SECRET: ${{ secrets.TWITTER_API_SECRET }}
+          TWITTER_ACCESS_TOKEN: ${{ secrets.TWITTER_ACCESS_TOKEN }}
+          TWITTER_ACCESS_SECRET: ${{ secrets.TWITTER_ACCESS_SECRET }}
+          TWITTER_BEARER_TOKEN: ${{ secrets.TWITTER_BEARER_TOKEN }}
+        run: |
+          if [ -z "$TWITTER_API_KEY" ]; then
+            echo "⚠️  Twitter API credentials not configured."
+            echo "📝 Running in dry-run mode only."
+            exit 0
+          fi
+
+          echo "📱 Posting to X/Twitter..."
+          python scripts/post_to_twitter.py \
+            --post-type ${{ steps.post-type.outputs.type }} \
+            --site-url https://puckcast.ai
+
+      - name: Summary
+        if: steps.post-type.outputs.type != ''
+        run: |
+          echo "✅ Twitter posting workflow complete!"
+          echo "🕐 Post type: ${{ steps.post-type.outputs.type }}"
