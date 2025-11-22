@@ -1,14 +1,19 @@
-name: X/Twitter Posting Automation
+name: Daily Twitter Posts
 
 on:
   schedule:
-    # Post 3 times daily:
-    # - 8:00 AM ET (12:00 PM UTC) - Morning preview
-    # - 2:00 PM ET (6:00 PM UTC) - Afternoon update
-    # - 8:00 PM ET (12:00 AM UTC next day) - Evening recap
-    - cron: '0 12 * * *'  # 8 AM ET
-    - cron: '0 18 * * *'  # 2 PM ET
-    - cron: '0 0 * * *'   # 8 PM ET
+    # Morning Preview - 8:00 AM ET (12:00 UTC)
+    - cron: '0 12 * * *'
+    # Micro-Insight - 10:30 AM ET (14:30 UTC)
+    - cron: '30 14 * * *'
+    # Afternoon Update - 2:00 PM ET (18:00 UTC)
+    - cron: '0 18 * * *'
+    # Game of the Night - 5:00 PM ET (21:00 UTC)
+    - cron: '0 21 * * *'
+    # Upset Watch - 6:30 PM ET (22:30 UTC)
+    - cron: '30 22 * * *'
+    # Evening Recap - 8:00 PM ET (00:00 UTC next day)
+    - cron: '0 0 * * *'
   workflow_dispatch:
     inputs:
       post_type:
@@ -19,6 +24,10 @@ on:
           - morning_preview
           - afternoon_update
           - evening_recap
+          - micro_insights
+          - game_of_night
+          - upset_watch
+          - fun_fact
 
 env:
   PYTHON_VERSION: '3.11'
@@ -40,12 +49,20 @@ jobs:
         id: post-type
         run: |
           HOUR=$(date -u +%H)
+          MINUTE=$(date -u +%M)
+
           if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
             echo "type=${{ inputs.post_type }}" >> $GITHUB_OUTPUT
-          elif [ "$HOUR" = "12" ]; then
+          elif [ "$HOUR" = "12" ] && [ "$MINUTE" = "00" ]; then
             echo "type=morning_preview" >> $GITHUB_OUTPUT
-          elif [ "$HOUR" = "18" ]; then
+          elif [ "$HOUR" = "14" ] && [ "$MINUTE" = "30" ]; then
+            echo "type=micro_insights" >> $GITHUB_OUTPUT
+          elif [ "$HOUR" = "18" ] && [ "$MINUTE" = "00" ]; then
             echo "type=afternoon_update" >> $GITHUB_OUTPUT
+          elif [ "$HOUR" = "21" ] && [ "$MINUTE" = "00" ]; then
+            echo "type=game_of_night" >> $GITHUB_OUTPUT
+          elif [ "$HOUR" = "22" ] && [ "$MINUTE" = "30" ]; then
+            echo "type=upset_watch" >> $GITHUB_OUTPUT
           else
             echo "type=evening_recap" >> $GITHUB_OUTPUT
           fi
@@ -84,24 +101,12 @@ jobs:
           TWITTER_ACCESS_SECRET: ${{ secrets.TWITTER_ACCESS_SECRET }}
           TWITTER_BEARER_TOKEN: ${{ secrets.TWITTER_BEARER_TOKEN }}
         run: |
-          # Check if Twitter credentials are configured
           if [ -z "$TWITTER_API_KEY" ]; then
             echo "⚠️  Twitter API credentials not configured."
             echo "📝 Running in dry-run mode only."
-            echo ""
-            echo "To enable posting, add these secrets to your GitHub repository:"
-            echo "  Settings → Secrets and variables → Actions → New repository secret"
-            echo ""
-            echo "Required secrets:"
-            echo "  - TWITTER_API_KEY"
-            echo "  - TWITTER_API_SECRET"
-            echo "  - TWITTER_ACCESS_TOKEN"
-            echo "  - TWITTER_ACCESS_SECRET"
-            echo "  - TWITTER_BEARER_TOKEN (optional)"
             exit 0
           fi
 
-          # Post using the Python script
           echo "📱 Posting to X/Twitter..."
           python scripts/post_to_twitter.py \
             --post-type ${{ steps.post-type.outputs.type }} \

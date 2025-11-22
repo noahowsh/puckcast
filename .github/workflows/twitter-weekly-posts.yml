@@ -1,14 +1,11 @@
-name: X/Twitter Posting Automation
+name: Weekly Twitter Posts
 
 on:
   schedule:
-    # Post 3 times daily:
-    # - 8:00 AM ET (12:00 PM UTC) - Morning preview
-    # - 2:00 PM ET (6:00 PM UTC) - Afternoon update
-    # - 8:00 PM ET (12:00 AM UTC next day) - Evening recap
-    - cron: '0 12 * * *'  # 8 AM ET
-    - cron: '0 18 * * *'  # 2 PM ET
-    - cron: '0 0 * * *'   # 8 PM ET
+    # Team Spotlight - Daily at 11:00 AM ET (15:00 UTC)
+    - cron: '0 15 * * *'
+    # Fun Fact - Wed & Fri at 3:00 PM ET (19:00 UTC)
+    - cron: '0 19 * * 3,5'
   workflow_dispatch:
     inputs:
       post_type:
@@ -16,9 +13,15 @@ on:
         required: true
         type: choice
         options:
-          - morning_preview
-          - afternoon_update
-          - evening_recap
+          - team_spotlight
+          - fun_fact
+          - yesterdays_surprises
+          - bold_predictions
+          - weekly_power_index
+          - overrated_poll
+          - model_accountability
+          - team_surging
+          - team_dropping
 
 env:
   PYTHON_VERSION: '3.11'
@@ -40,14 +43,18 @@ jobs:
         id: post-type
         run: |
           HOUR=$(date -u +%H)
+          DAY_OF_WEEK=$(date -u +%u)  # 1=Monday, 7=Sunday
+
           if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
             echo "type=${{ inputs.post_type }}" >> $GITHUB_OUTPUT
-          elif [ "$HOUR" = "12" ]; then
-            echo "type=morning_preview" >> $GITHUB_OUTPUT
-          elif [ "$HOUR" = "18" ]; then
-            echo "type=afternoon_update" >> $GITHUB_OUTPUT
-          else
-            echo "type=evening_recap" >> $GITHUB_OUTPUT
+          elif [ "$HOUR" = "15" ]; then
+            # Team spotlight daily at 11 AM ET
+            echo "type=team_spotlight" >> $GITHUB_OUTPUT
+          elif [ "$HOUR" = "19" ]; then
+            # Fun fact on Wed (3) and Fri (5)
+            if [ "$DAY_OF_WEEK" = "3" ] || [ "$DAY_OF_WEEK" = "5" ]; then
+              echo "type=fun_fact" >> $GITHUB_OUTPUT
+            fi
           fi
 
       - name: Install dependencies
@@ -67,7 +74,7 @@ jobs:
           fi
 
       - name: Test post generation (dry run)
-        if: steps.read-data.outputs.data_exists == 'true'
+        if: steps.read-data.outputs.data_exists == 'true' && steps.post-type.outputs.type != ''
         run: |
           echo "🧪 Testing post generation..."
           python scripts/post_to_twitter.py \
@@ -76,7 +83,7 @@ jobs:
             --dry-run
 
       - name: Post to X/Twitter
-        if: steps.read-data.outputs.data_exists == 'true'
+        if: steps.read-data.outputs.data_exists == 'true' && steps.post-type.outputs.type != ''
         env:
           TWITTER_API_KEY: ${{ secrets.TWITTER_API_KEY }}
           TWITTER_API_SECRET: ${{ secrets.TWITTER_API_SECRET }}
@@ -84,30 +91,19 @@ jobs:
           TWITTER_ACCESS_SECRET: ${{ secrets.TWITTER_ACCESS_SECRET }}
           TWITTER_BEARER_TOKEN: ${{ secrets.TWITTER_BEARER_TOKEN }}
         run: |
-          # Check if Twitter credentials are configured
           if [ -z "$TWITTER_API_KEY" ]; then
             echo "⚠️  Twitter API credentials not configured."
             echo "📝 Running in dry-run mode only."
-            echo ""
-            echo "To enable posting, add these secrets to your GitHub repository:"
-            echo "  Settings → Secrets and variables → Actions → New repository secret"
-            echo ""
-            echo "Required secrets:"
-            echo "  - TWITTER_API_KEY"
-            echo "  - TWITTER_API_SECRET"
-            echo "  - TWITTER_ACCESS_TOKEN"
-            echo "  - TWITTER_ACCESS_SECRET"
-            echo "  - TWITTER_BEARER_TOKEN (optional)"
             exit 0
           fi
 
-          # Post using the Python script
           echo "📱 Posting to X/Twitter..."
           python scripts/post_to_twitter.py \
             --post-type ${{ steps.post-type.outputs.type }} \
             --site-url https://puckcast.ai
 
       - name: Summary
+        if: steps.post-type.outputs.type != ''
         run: |
           echo "✅ Twitter posting workflow complete!"
           echo "🕐 Post type: ${{ steps.post-type.outputs.type }}"
