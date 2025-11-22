@@ -24,11 +24,10 @@ export function SiteNav() {
           <Link href="/" className="nav-brand" onClick={() => setOpen(false)}>
             <div className="nav-mark-clean">
               <Image
-                src="/logo.png"
+                src="/puckcastai.png"
                 alt="Puckcast"
                 width={44}
                 height={44}
-                className="rounded-xl border border-[rgba(126,227,255,0.55)]"
               />
             </div>
             <div className="nav-text">
