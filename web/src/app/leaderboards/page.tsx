@@ -155,6 +155,11 @@ function PowerRow({ row }: { row: LeaderboardRow }) {
   const movementDisplay = row.movement === 0 ? "Even" : row.movement > 0 ? `+${row.movement}` : row.movement;
   const movementTone = row.movement > 0 ? "movement--positive" : row.movement < 0 ? "movement--negative" : "movement--neutral";
 
+  const overlayProb = row.overlay ? pct(row.overlay.avgProb) : "—";
+  const nextDisplay = row.overlay?.nextGame
+    ? `${row.overlay.nextGame.opponent} (${row.overlay.nextGame.date})`
+    : "No upcoming game found";
+
   return (
     <div className="power-board__row">
       <div className="rank-chip">#{row.powerRank}</div>
@@ -172,8 +177,8 @@ function PowerRow({ row }: { row: LeaderboardRow }) {
         {row.goalDifferential >= 0 ? "+" : ""}
         {row.goalDifferential}
       </span>
-      <span className="power-data">{row.overlay ? pct(row.overlay.avgProb) : "-"}</span>
-      <span className="power-data">{row.nextGame ? `${row.nextGame.opponent} (${row.nextGame.date})` : "TBD"}</span>
+      <span className="power-data">{overlayProb}</span>
+      <span className="power-data">{nextDisplay}</span>
     </div>
   );
 }

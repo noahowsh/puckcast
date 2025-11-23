@@ -38,7 +38,7 @@ export const metadata: Metadata = {
     url: "https://puckcast.ai",
     images: [
       {
-        url: "/puckcastai.png",
+        url: "/social-card.png",
         width: 1000,
         height: 1000,
         alt: "Puckcast Logo",
@@ -49,7 +49,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Puckcast | NHL Predictions + Analytics",
     description: "Data-driven NHL predictions with 60%+ accuracy. Powered by official NHL API and advanced machine learning.",
-    images: ["/puckcastai.png"],
+    images: ["/social-card.png"],
   },
 };
 

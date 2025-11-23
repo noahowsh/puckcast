@@ -12,7 +12,7 @@ import random
 from datetime import datetime, timezone
 from zoneinfo import ZoneInfo
 from pathlib import Path
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Iterable
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 PREDICTIONS_FILE = REPO_ROOT / "web" / "src" / "data" / "todaysPredictions.json"
@@ -148,41 +148,95 @@ def select_variant(
 
 def get_team_hashtag(team_name: str) -> str:
     """Convert team name to hashtag format."""
-    # Map team names to common hashtags
     hashtag_map = {
-        "Anaheim Ducks": "Ducks",
-        "Boston Bruins": "NHLBruins",
-        "Buffalo Sabres": "Sabres",
-        "Calgary Flames": "Flames",
-        "Carolina Hurricanes": "Canes",
-        "Chicago Blackhawks": "Blackhawks",
-        "Colorado Avalanche": "GoAvsGo",
-        "Columbus Blue Jackets": "CBJ",
-        "Dallas Stars": "TexasHockey",
-        "Detroit Red Wings": "LGRW",
-        "Edmonton Oilers": "LetsGoOilers",
-        "Florida Panthers": "FlaPanthers",
-        "Los Angeles Kings": "GoKingsGo",
-        "Minnesota Wild": "MNWild",
-        "Montréal Canadiens": "GoHabsGo",
-        "Nashville Predators": "Smashville",
-        "New Jersey Devils": "NJDevils",
-        "New York Islanders": "Isles",
-        "New York Rangers": "NYR",
-        "Ottawa Senators": "GoSensGo",
-        "Philadelphia Flyers": "LetsGoFlyers",
-        "Pittsburgh Penguins": "LetsGoPens",
-        "San Jose Sharks": "SJSharks",
-        "Seattle Kraken": "SeaKraken",
-        "St. Louis Blues": "STLBlues",
-        "Tampa Bay Lightning": "GoBolts",
-        "Toronto Maple Leafs": "LeafsForever",
-        "Vancouver Canucks": "Canucks",
-        "Vegas Golden Knights": "VegasBorn",
-        "Washington Capitals": "ALLCAPS",
-        "Winnipeg Jets": "GoJetsGo",
+        "ANA": "Ducks",
+        "ARI": "Yotes",
+        "BOS": "NHLBruins",
+        "BUF": "Sabres",
+        "CAR": "Canes",
+        "CBJ": "CBJ",
+        "CGY": "Flames",
+        "CHI": "Blackhawks",
+        "COL": "GoAvsGo",
+        "DAL": "TexasHockey",
+        "DET": "LGRW",
+        "EDM": "LetsGoOilers",
+        "FLA": "FlaPanthers",
+        "LAK": "GoKingsGo",
+        "MIN": "MNWild",
+        "MTL": "GoHabsGo",
+        "NJD": "NJDevils",
+        "NSH": "Smashville",
+        "NYI": "Isles",
+        "NYR": "NYR",
+        "OTT": "GoSensGo",
+        "PHI": "LetsGoFlyers",
+        "PIT": "LetsGoPens",
+        "SEA": "SeaKraken",
+        "SJS": "SJSharks",
+        "STL": "STLBlues",
+        "TBL": "GoBolts",
+        "TOR": "LeafsForever",
+        "VAN": "Canucks",
+        "VGK": "VegasBorn",
+        "WPG": "GoJetsGo",
+        "WSH": "ALLCAPS",
     }
-    return hashtag_map.get(team_name, team_name.split()[-1])
+    return hashtag_map.get(team_name, hashtag_map.get(team_name.split()[-1], team_name.split()[-1]))
+
+
+def get_team_handle(team_name: str, abbrev: str) -> str | None:
+    handles = {
+        "ANA": "AnaheimDucks",
+        "ARI": "ArizonaCoyotes",
+        "BOS": "NHLBruins",
+        "BUF": "BuffaloSabres",
+        "CAR": "Canes",
+        "CBJ": "BlueJacketsNHL",
+        "CGY": "NHLFlames",
+        "CHI": "NHLBlackhawks",
+        "COL": "Avalanche",
+        "DAL": "DallasStars",
+        "DET": "DetroitRedWings",
+        "EDM": "EdmontonOilers",
+        "FLA": "FlaPanthers",
+        "LAK": "LAKings",
+        "MIN": "mnwild",
+        "MTL": "CanadiensMTL",
+        "NJD": "NJDevils",
+        "NSH": "PredsNHL",
+        "NYI": "NYIslanders",
+        "NYR": "NYRangers",
+        "OTT": "Senators",
+        "PHI": "NHLFlyers",
+        "PIT": "penguins",
+        "SEA": "SeattleKraken",
+        "SJS": "SanJoseSharks",
+        "STL": "StLouisBlues",
+        "TBL": "TBLightning",
+        "TOR": "MapleLeafs",
+        "VAN": "Canucks",
+        "VGK": "GoldenKnights",
+        "WPG": "NHLJets",
+        "WSH": "Capitals",
+    }
+    return handles.get(abbrev) or handles.get(team_name)
+
+
+def build_tag_block(teams: Iterable[tuple[str, str]]) -> str:
+    """Return a string of hashtags + team mentions."""
+    hashtags = {"NHL"}  # Always include league tag
+    mentions: set[str] = set()
+    for name, abbrev in teams:
+        hashtags.add(get_team_hashtag(abbrev or name))
+        handle = get_team_handle(name, abbrev)
+        if handle:
+            mentions.add(f"@{handle}")
+    hashtag_str = " ".join(f"#{tag}" for tag in sorted(hashtags))
+    mention_str = " ".join(sorted(mentions))
+    if hashtag_str and mention_str:
+        return f"{hashtag_str} {mention_str}".strip()
+    return (hashtag_str or mention_str).strip()
 
 
 def generate_micro_insight(data: Dict[str, Any]) -> Dict[str, str]:
@@ -195,7 +249,7 @@ def generate_micro_insight(data: Dict[str, Any]) -> Dict[str, str]:
             "insight": "Model running analytics on all 32 NHL teams",
             "secondary_stat": "Power rankings updated daily",
             "rank": "1",
-            "team_tag": "#NHL",
+            "tag_block": "#NHL",
         }
 
     # Get a random team from today's games
@@ -213,7 +267,7 @@ def generate_micro_insight(data: Dict[str, Any]) -> Dict[str, str]:
 
     team_name = team_data.get("name", team_data["abbrev"])
     team_abbrev = team_data["abbrev"]
-    team_tag = get_team_hashtag(team_name)
+    tag_block = build_tag_block([(team_name, team_abbrev)])
 
     # Generate different types of insights
     insight_types = []
@@ -224,14 +278,14 @@ def generate_micro_insight(data: Dict[str, Any]) -> Dict[str, str]:
             "insight": f"The {team_abbrev} are heavily favored tonight vs {opp_team}",
             "secondary_stat": f"Model gives them {int(win_prob * 100)}% win probability",
             "rank": str(random.randint(5, 15)),
-            "team_tag": f"#{team_tag}",
+            "tag_block": tag_block,
         })
     elif win_prob < 0.35:
         insight_types.append({
             "insight": f"The {team_abbrev} are big underdogs tonight vs {opp_team}",
             "secondary_stat": f"Model gives them just {int(win_prob * 100)}% win probability",
             "rank": str(random.randint(18, 28)),
-            "team_tag": f"#{team_tag}",
+            "tag_block": tag_block,
         })
 
     # High confidence game
@@ -241,7 +295,7 @@ def generate_micro_insight(data: Dict[str, Any]) -> Dict[str, str]:
             "insight": f"{team_abbrev} vs {opp_team} is our highest confidence pick today",
             "secondary_stat": f"Grade: {grade}",
             "rank": str(random.randint(1, 20)),
-            "team_tag": f"#{team_tag}",
+            "tag_block": tag_block,
         })
 
     # Edge insight
@@ -251,7 +305,7 @@ def generate_micro_insight(data: Dict[str, Any]) -> Dict[str, str]:
             "insight": f"Big edge detected: {team_abbrev} vs {opp_team}",
             "secondary_stat": f"Model sees a {int(edge * 100)}% value play here",
             "rank": str(random.randint(8, 18)),
-            "team_tag": f"#{team_tag}",
+            "tag_block": tag_block,
         })
 
     # Default insight if none generated
@@ -260,7 +314,7 @@ def generate_micro_insight(data: Dict[str, Any]) -> Dict[str, str]:
             "insight": f"{team_abbrev} taking on {opp_team} tonight",
             "secondary_stat": f"Win probability: {int(win_prob * 100)}%",
             "rank": str(random.randint(10, 25)),
-            "team_tag": f"#{team_tag}",
+            "tag_block": tag_block,
         })
 
     return random.choice(insight_types)
@@ -273,6 +327,9 @@ def generate_post(
 
     games = data.get("games", [])
     games_count = len(games)
+    tag_block = "#NHL"
+    template = variant["template"]
+    template_uses_tags = "{team_tags}" in template or "{team_tag}" in template or "{team_mentions}" in template
 
     # Get top game (highest confidence)
     if games:
@@ -281,15 +338,11 @@ def generate_post(
         home_team_name = top_game_data['homeTeam'].get('name', top_game_data['homeTeam']['abbrev'])
         away_abbrev = top_game_data['awayTeam']['abbrev']
         home_abbrev = top_game_data['homeTeam']['abbrev']
+        tag_block = build_tag_block([(away_team_name, away_abbrev), (home_team_name, home_abbrev)])
 
         grade = top_game_data.get("confidenceGrade", "C")
         home_prob = int(top_game_data.get("homeWinProb", 0.5) * 100)
         away_prob = 100 - home_prob
-
-        # Generate team hashtags
-        away_tag = get_team_hashtag(away_team_name)
-        home_tag = get_team_hashtag(home_team_name)
-        team_tags = f"#{away_tag} #{home_tag} #NHL"
     else:
         away_abbrev = "TBD"
         home_abbrev = "TBD"
@@ -298,7 +351,7 @@ def generate_post(
         grade = "N/A"
         home_prob = 50
         away_prob = 50
-        team_tags = "#NHL #HockeyTwitter"
+        tag_block = "#NHL #HockeyTwitter"
 
     # Count high confidence games
     high_conf = sum(1 for g in games if g.get("confidenceGrade", "C")[0] in ["A", "B"])
@@ -306,15 +359,14 @@ def generate_post(
     # Handle special post types
     if post_type == "micro_insights":
         insight_data = generate_micro_insight(data)
-        template = variant["template"]
         post = template.format(
             insight=insight_data["insight"],
             secondary_stat=insight_data["secondary_stat"],
             rank=insight_data["rank"],
-            team_tag=insight_data["team_tag"],
+            team_tag=insight_data["tag_block"],
             url="[your-site-url]",
         )
-        return post
+        return post if template_uses_tags else f"{post}\n\n{insight_data['tag_block']}"
 
     if post_type == "game_of_night" and games:
         # Highest confidence game
@@ -326,10 +378,8 @@ def generate_post(
 
         away_name = top_game_data['awayTeam'].get('name', away)
         home_name = top_game_data['homeTeam'].get('name', home)
-        away_tag = get_team_hashtag(away_name)
-        home_tag = get_team_hashtag(home_name)
+        tag_block = build_tag_block([(away_name, away), (home_name, home)])
 
-        template = variant["template"]
         post = template.format(
             confidence=confidence,
             matchup=f"{away} @ {home}",
@@ -337,10 +387,10 @@ def generate_post(
             factor1="High model confidence",
             factor2=f"Grade: {top_game_data.get('confidenceGrade', 'B')}",
             factor3=f"Edge: {abs(top_game_data.get('edge', 0)) * 100:.0f}%",
-            team_tags=f"#{away_tag} #{home_tag} #NHL",
+            team_tags=tag_block,
             url="[your-site-url]",
         )
-        return post
+        return post if template_uses_tags else f"{post}\n\n{tag_block}"
 
     if post_type == "upset_watch" and games:
         # Find games where underdog has 35-45% chance
@@ -361,11 +411,8 @@ def generate_post(
                 underdog_prob = int((1 - home_prob) * 100)
                 underdog_name = game['awayTeam'].get('name', underdog)
                 favorite_name = game['homeTeam'].get('name', favorite)
+            tag_block = build_tag_block([(underdog_name, underdog), (favorite_name, favorite)])
 
-            underdog_tag = get_team_hashtag(underdog_name)
-            favorite_tag = get_team_hashtag(favorite_name)
-
-            template = variant["template"]
             post = template.format(
                 underdog=underdog,
                 favorite=favorite,
@@ -373,10 +420,10 @@ def generate_post(
                 edge1=f"Grade: {game.get('confidenceGrade', 'B')}",
                 edge2="Value opportunity detected",
                 edge3=f"Model edge: {abs(game.get('edge', 0)) * 100:.0f}%",
-                team_tags=f"#{underdog_tag} #{favorite_tag} #NHL",
+                team_tags=tag_block,
                 url="[your-site-url]",
             )
-            return post
+            return post if template_uses_tags else f"{post}\n\n{tag_block}"
 
     if post_type == "team_spotlight" and games:
         # Rotate through teams based on day of year
@@ -389,9 +436,8 @@ def generate_post(
 
         team_data = game["homeTeam"] if team_choice == "home" else game["awayTeam"]
         team_name = team_data.get("name", team_data["abbrev"])
-        team_tag = get_team_hashtag(team_name)
+        tag_block = build_tag_block([(team_name, team_data["abbrev"])])
 
-        template = variant["template"]
         post = template.format(
             team_name=team_name,
             rank=random.randint(5, 25),
@@ -399,10 +445,10 @@ def generate_post(
             accuracy="7-3",
             trend="Upward" if random.random() > 0.5 else "Steady",
             insight="Showing strong fundamentals",
-            team_tag=f"#{team_tag}",
+            team_tag=tag_block,
             url="[your-site-url]",
         )
-        return post
+        return post if template_uses_tags else f"{post}\n\n{tag_block}"
 
     if post_type == "fun_fact" and games:
         # Generate a fun fact from game data
@@ -411,7 +457,7 @@ def generate_post(
         team_data = game["homeTeam"] if team_choice == "home" else game["awayTeam"]
         team_name = team_data.get("name", team_data["abbrev"])
         team_abbrev = team_data["abbrev"]
-        team_tag = get_team_hashtag(team_name)
+        tag_block = build_tag_block([(team_name, team_abbrev)])
 
         facts = [
             f"The {team_abbrev} are {int(game.get('homeWinProb', 0.5) * 100)}% to win tonight according to our model",
@@ -419,16 +465,14 @@ def generate_post(
             f"Model sees a {abs(game.get('edge', 0)) * 100:.0f}% edge in the {team_abbrev} game",
         ]
 
-        template = variant["template"]
         post = template.format(
             fact=random.choice(facts),
-            team_tag=f"#{team_tag}",
+            team_tag=tag_block,
             url="[your-site-url]",
         )
-        return post
+        return post if template_uses_tags else f"{post}\n\n{tag_block}"
 
     # Fill template for regular posts
-    template = variant["template"]
     post = template.format(
         games=games_count,
         away_team=away_abbrev,
@@ -437,11 +481,11 @@ def generate_post(
         home_prob=home_prob,
         away_prob=away_prob,
         high_conf=high_conf,
-        team_tags=team_tags,
+        team_tags=tag_block,
         url="[your-site-url]",  # Replace with actual URL
     )
 
-    return post
+    return post if template_uses_tags else f"{post}\n\n{tag_block}"
 
 
 def log_variant_usage(post_type: str, variant: Dict[str, str]) -> None:
