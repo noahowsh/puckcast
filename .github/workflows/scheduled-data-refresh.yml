@@ -128,8 +128,7 @@ jobs:
         if: needs.determine-refresh.outputs.refresh_predictions == 'true'
         run: |
           echo "🏒 Refreshing predictions (using fast pre-trained model)..."
-          python predict_fast.py
-        continue-on-error: true
+          python predict_fast.py || echo "⚠️ Prediction script failed but continuing..."
 
       - name: Refresh standings
         if: needs.determine-refresh.outputs.refresh_standings == 'true'
