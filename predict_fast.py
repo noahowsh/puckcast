@@ -211,7 +211,8 @@ def predict_games_fast(date=None, num_games=20):
         games_for_model = filtered_games
 
     # Step 2: Build dataset (only for feature extraction)
-    seasons = recent_seasons(target_dt, count=2)  # Reduced from 3 to 2 for speed
+    # HARDCODED: Use only real seasons with actual data (not future seasons)
+    seasons = ["20232024", "20222023"]  # Real seasons with data
     print("\n2️⃣  Loading recent game data for feature extraction...")
     print(f"   (Loading {len(seasons)} season(s): {', '.join(seasons)})")
 
