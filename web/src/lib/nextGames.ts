@@ -21,10 +21,9 @@ const resolveAbbrev = (team: any) => {
 
 export async function fetchNextGamesMap(abbrevs: string[], lookaheadDays = 14): Promise<Record<string, NextGameInfo>> {
   const today = new Date();
-  const end = new Date();
-  end.setDate(end.getDate() + lookaheadDays);
   const fmt = (d: Date) => d.toISOString().slice(0, 10);
-  const url = `https://statsapi.web.nhl.com/api/v1/schedule?startDate=${fmt(today)}&endDate=${fmt(end)}`;
+  const start = fmt(today);
+  const url = `https://api-web.nhle.com/v1/schedule/${start}?expand=schedule.teams`;
 
   try {
     const res = await fetch(url, { cache: "no-store" });
@@ -32,12 +31,12 @@ export async function fetchNextGamesMap(abbrevs: string[], lookaheadDays = 14): 
     const data = await res.json();
     const map: Record<string, NextGameInfo> = {};
 
-    data?.dates?.forEach((block: any) => {
+    data?.gameWeek?.forEach((block: any) => {
       const date = block?.date;
       block?.games?.forEach((game: any) => {
-        const home = resolveAbbrev(game?.teams?.home?.team);
-        const away = resolveAbbrev(game?.teams?.away?.team);
-        const startTimeEt = formatEt(game?.gameDate);
+        const home = resolveAbbrev(game?.homeTeam);
+        const away = resolveAbbrev(game?.awayTeam);
+        const startTimeEt = formatEt(game?.startTimeUTC);
         if (home && !map[home]) map[home] = { opponent: away, date, startTimeEt };
         if (away && !map[away]) map[away] = { opponent: home, date, startTimeEt };
       });
