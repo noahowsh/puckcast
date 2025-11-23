@@ -65,8 +65,8 @@ export function teamGradient(abbrev: string) {
   if (!colors) return fallbackGradient;
   const primaryLuma = luma(colors.primary);
   // Bright colors (yellows/oranges) overpower; very dark colors disappear. Bias alpha by perceived brightness.
-  const primaryAlpha = primaryLuma > 190 ? 0.16 : primaryLuma < 70 ? 0.28 : 0.22;
-  const secondaryAlpha = primaryLuma > 190 ? 0.12 : primaryLuma < 70 ? 0.22 : 0.18;
+  const primaryAlpha = primaryLuma > 190 ? 0.12 : primaryLuma < 70 ? 0.24 : 0.20;
+  const secondaryAlpha = primaryLuma > 190 ? 0.08 : primaryLuma < 70 ? 0.18 : 0.15;
   const primary = hexToRgba(colors.primary, primaryAlpha);
   const secondary = hexToRgba(colors.secondary ?? colors.primary, secondaryAlpha);
   return `linear-gradient(145deg, ${primary}, ${secondary})`;
@@ -75,6 +75,6 @@ export function teamGradient(abbrev: string) {
 export function teamBorderColor(abbrev: string) {
   const colors = TEAM_COLORS[abbrev?.toUpperCase?.() ?? ""];
   if (!colors) return fallbackBorder;
-  const alpha = luma(colors.primary) > 190 ? 0.45 : 0.6;
+  const alpha = luma(colors.primary) > 190 ? 0.35 : luma(colors.primary) < 70 ? 0.55 : 0.5;
   return hexToRgba(colors.primary, alpha);
 }

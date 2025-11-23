@@ -1367,8 +1367,8 @@ p { line-height: 1.7; }
   padding: 0 0.35rem;
   border-radius: 0.8rem;
   background: linear-gradient(145deg, rgba(241, 217, 166, 0.2), rgba(126, 227, 255, 0.14));
-  border: 1.5px solid var(--border-medium);
-  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--border-subtle);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.18);
   color: var(--text-primary);
   font-weight: 800;
   letter-spacing: 0.14em;
