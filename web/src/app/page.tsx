@@ -296,7 +296,7 @@ function PowerListItem({ team }: { team: PowerItem }) {
         <div className="power-list-item__meta">
           <span className="power-rank">#{team.powerRank}</span>
           <span className="power-name">{team.team}</span>
-          <Crest label={team.abbrev} />
+          <TeamCrest abbrev={team.abbrev} />
         </div>
         <span className={`movement movement--pillless ${movementTone}`}>{movementDisplay}</span>
       </div>
