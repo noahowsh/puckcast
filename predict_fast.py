@@ -222,10 +222,11 @@ def predict_games_fast(date=None, num_games=20):
         print(f"   ✅ {len(dataset.games)} games loaded")
         print(f"   ✅ {dataset.features.shape[1]} features available")
     except Exception as e:
-        print(f"   ❌ Failed to load dataset: {e}")
-        print(f"   ℹ️  Exporting empty predictions due to data loading failure")
-        export_predictions_json([], generated_at=datetime.now(timezone.utc).isoformat())
-        return []
+        print(f"   ❌ CRITICAL ERROR: Failed to load dataset: {e}")
+        print(f"   ℹ️  This will cause the workflow to fail (as intended)")
+        import traceback
+        traceback.print_exc()
+        raise  # Re-raise to fail the workflow
 
     # Step 3: Use only recent games for feature extraction
     print("\n3️⃣  Extracting features from recent games...")

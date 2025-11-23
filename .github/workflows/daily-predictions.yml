@@ -5,13 +5,16 @@ name: Daily Predictions Update
 
 on:
   schedule:
-    # Run at 6:00 AM ET (10:00 UTC) every day for morning predictions
+    # Run at 5:00 AM ET (10:00 UTC in EST) every day for morning predictions
     # Note: This aligns with the scheduled-data-refresh.yml morning run
     - cron: '0 10 * * *'
   workflow_dispatch:  # Allow manual triggering
 
 env:
   PYTHON_VERSION: '3.11'
+
+permissions:
+  contents: write
 
 jobs:
   update-predictions:
@@ -38,7 +41,7 @@ jobs:
       - name: Run fast predictions
         run: |
           echo "🏒 Running predictions..."
-          python predict_simple.py || python predict_fast.py || echo "⚠️ Both prediction scripts failed"
+          python predict_fast.py
 
       - name: Archive predictions
         run: |

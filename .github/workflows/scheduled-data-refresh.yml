@@ -6,8 +6,8 @@ name: Scheduled Data Refresh (Granular)
 on:
   schedule:
     # Predictions: Daily at 5am ET and evening at 5pm ET
-    - cron: '0 9 * * *'  # 5am ET (9am UTC)
-    - cron: '0 21 * * *'  # 5pm ET (9pm UTC) for evening games
+    - cron: '0 10 * * *'  # 5am EST (10am UTC) / 5am EDT (9am UTC during DST)
+    - cron: '0 22 * * *'  # 5pm EST (10pm UTC) / 5pm EDT (9pm UTC during DST)
 
     # Standings: Once daily at midnight ET
     - cron: '0 5 * * *'  # 12am ET
@@ -77,8 +77,8 @@ jobs:
             HOUR=$(date -u +%H)
             DAY=$(date -u +%u)  # 1=Monday, 7=Sunday
 
-            # Predictions: Daily at 5am and 5pm ET (9am and 9pm UTC)
-            if [ "$HOUR" = "09" ] || [ "$HOUR" = "21" ]; then
+            # Predictions: Daily at 5am and 5pm ET (10am and 10pm UTC in EST)
+            if [ "$HOUR" = "10" ] || [ "$HOUR" = "22" ]; then
               echo "predictions=true" >> $GITHUB_OUTPUT
             fi
 
@@ -128,7 +128,7 @@ jobs:
         if: needs.determine-refresh.outputs.refresh_predictions == 'true'
         run: |
           echo "🏒 Refreshing predictions..."
-          python predict_simple.py || python predict_fast.py || echo "⚠️ Both prediction scripts failed"
+          python predict_fast.py
 
       - name: Refresh standings
         if: needs.determine-refresh.outputs.refresh_standings == 'true'
