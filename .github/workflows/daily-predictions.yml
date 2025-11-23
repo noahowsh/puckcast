@@ -38,10 +38,10 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Run fast predictions
+      - name: Run calibrated predictions
         run: |
-          echo "🏒 Running predictions..."
-          python predict_fast.py
+          echo "🏒 Running calibrated predictions..."
+          python predict_full.py
 
       - name: Archive predictions
         run: |

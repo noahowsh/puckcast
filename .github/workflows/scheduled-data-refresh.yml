@@ -127,8 +127,8 @@ jobs:
       - name: Refresh predictions
         if: needs.determine-refresh.outputs.refresh_predictions == 'true'
         run: |
-          echo "🏒 Refreshing predictions..."
-          python predict_fast.py
+          echo "🏒 Refreshing predictions (calibrated full model)..."
+          python predict_full.py
 
       - name: Refresh standings
         if: needs.determine-refresh.outputs.refresh_standings == 'true'

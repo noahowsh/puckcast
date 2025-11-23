@@ -149,6 +149,91 @@ def _filter_games_by_date(games, target_date: str) -> list[dict]:
     return filtered
 
 
+def _build_team_snapshots(games_df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Flatten games into team-level snapshots so we can construct matchup features
+    using the same column patterns as the training data.
+    """
+    frames = []
+    for side in ("home", "away"):
+        suffix = f"_{side}"
+        team_col = f"teamId_{side}"
+        cols = [c for c in games_df.columns if c.endswith(suffix)]
+        base_map = {c: c[: -len(suffix)] for c in cols}
+        keep_cols = cols + [team_col, "seasonId", "gameDate"]
+        part = games_df[keep_cols].copy()
+        part.rename(columns=base_map | {team_col: "teamId"}, inplace=True)
+        part = part.loc[:, ~part.columns.duplicated()]
+        frames.append(part)
+
+    team_games = pd.concat(frames, ignore_index=True)
+    team_games = team_games.sort_values("gameDate")
+    return team_games
+
+
+def _latest_snapshot(team_games: pd.DataFrame, team_id: int, season_id: str, cutoff: pd.Timestamp):
+    """Return the latest team snapshot before the cutoff date."""
+    mask = (team_games["teamId"] == team_id) & (team_games["seasonId"].astype(str) == str(season_id))
+    eligible = team_games.loc[mask]
+    eligible = eligible[eligible["gameDate"] < cutoff]
+    if eligible.empty:
+        return None
+    return eligible.iloc[-1]
+
+
+def _build_feature_vector(
+    feature_columns: pd.Index,
+    home_snapshot: pd.Series,
+    away_snapshot: pd.Series,
+    home_team_id: int,
+    away_team_id: int,
+) -> pd.Series:
+    """Construct feature vector aligned to the pre-trained model expectations."""
+    vec = pd.Series(0.0, index=feature_columns, dtype="float64")
+
+    def _val(s: pd.Series, key: str) -> float:
+        v = s.get(key, 0.0)
+        try:
+            if pd.isna(v):
+                return 0.0
+            return float(v)
+        except Exception:
+            return 0.0
+
+    # Rest buckets (categorical dummies)
+    home_rest_bucket = None
+    if "rest_bucket" in home_snapshot and not pd.isna(home_snapshot.get("rest_bucket")):
+        home_rest_bucket = str(home_snapshot.get("rest_bucket"))
+    away_rest_bucket = None
+    if "rest_bucket" in away_snapshot and not pd.isna(away_snapshot.get("rest_bucket")):
+        away_rest_bucket = str(away_snapshot.get("rest_bucket"))
+
+    for col in feature_columns:
+        if col.startswith("home_team_"):
+            vec[col] = 1.0 if col == f"home_team_{home_team_id}" else 0.0
+        elif col.startswith("away_team_"):
+            vec[col] = 1.0 if col == f"away_team_{away_team_id}" else 0.0
+        elif col.startswith("rest_home_"):
+            bucket = col.replace("rest_home_", "")
+            vec[col] = 1.0 if home_rest_bucket == bucket else 0.0
+        elif col.startswith("rest_away_"):
+            bucket = col.replace("rest_away_", "")
+            vec[col] = 1.0 if away_rest_bucket == bucket else 0.0
+        elif col.endswith("_diff"):
+            base = col[: -5]
+            h_val = _val(home_snapshot, base)
+            a_val = _val(away_snapshot, base)
+            vec[col] = h_val - a_val
+        elif col.endswith("_home"):
+            base = col[: -5]
+            vec[col] = _val(home_snapshot, base)
+        elif col.endswith("_away"):
+            base = col[: -5]
+            vec[col] = _val(away_snapshot, base)
+
+    return vec
+
+
 def predict_games_fast(date=None, num_games=20):
     """
     Predict NHL games using pre-trained model (FAST VERSION).
@@ -261,6 +346,8 @@ def predict_games_fast(date=None, num_games=20):
     else:
         feature_columns = eligible_features.columns
 
+    team_snapshots = _build_team_snapshots(eligible_games)
+
     for i, game in enumerate(games_for_model[:num_games], 1):
         home_id = game['homeTeamId']
         away_id = game['awayTeamId']
@@ -268,32 +355,22 @@ def predict_games_fast(date=None, num_games=20):
         away_abbrev = game['awayTeamAbbrev']
         season_id = str(game.get("season") or train_seasons[-1])
 
-        # Find most recent games for each team
-        home_recent = eligible_games[
-            (eligible_games['teamId_home'] == home_id) &
-            (eligible_games['seasonId_str'] == season_id)
-        ].tail(1)
+        # Find most recent team snapshots
+        home_snapshot = _latest_snapshot(team_snapshots, home_id, season_id, cutoff)
+        away_snapshot = _latest_snapshot(team_snapshots, away_id, season_id, cutoff)
 
-        away_recent = eligible_games[
-            (eligible_games['teamId_away'] == away_id) &
-            (eligible_games['seasonId_str'] == season_id)
-        ].tail(1)
-
-        if len(home_recent) == 0 or len(away_recent) == 0:
+        if home_snapshot is None or away_snapshot is None:
             print(f"\n{i}. {away_abbrev} @ {home_abbrev}")
             print(f"   ⚠️  Insufficient data (team hasn't played this season)")
             continue
 
-        # Get feature vectors
-        home_idx = home_recent.index[0]
-        away_idx = away_recent.index[0]
-
-        home_features = dataset.features.loc[home_idx]
-        away_features = dataset.features.loc[away_idx]
-
-        # Create matchup features (average of recent performance)
-        matchup_features = (home_features + away_features) / 2
-        matchup_features = matchup_features.reindex(feature_columns, fill_value=0.0)
+        matchup_features = _build_feature_vector(
+            feature_columns,
+            home_snapshot,
+            away_snapshot,
+            home_team_id=home_id,
+            away_team_id=away_id,
+        )
 
         # Predict with pre-trained model (FAST!)
         prob_home = model.predict_proba(matchup_features.values.reshape(1, -1))[0][1]
