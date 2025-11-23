@@ -10,12 +10,10 @@ import argparse
 import os
 import sys
 from pathlib import Path
+from typing import TYPE_CHECKING, Any, Optional
 
-try:
+if TYPE_CHECKING:
     import tweepy
-except ImportError:
-    print("❌ tweepy not installed. Install with: pip install tweepy")
-    sys.exit(1)
 
 # Import the A/B testing module
 REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -64,8 +62,14 @@ def parse_args() -> argparse.Namespace:
     return parser.parse_args()
 
 
-def get_twitter_client() -> tweepy.Client:
+def get_twitter_client():
     """Initialize Twitter API client with credentials from environment."""
+
+    try:
+        import tweepy  # type: ignore
+    except ImportError:
+        print("❌ tweepy not installed. Install with: pip install tweepy")
+        sys.exit(1)
 
     # Get credentials from environment variables
     api_key = os.getenv("TWITTER_API_KEY")
@@ -106,7 +110,7 @@ def get_twitter_client() -> tweepy.Client:
     return client
 
 
-def post_tweet(client: tweepy.Client, content: str, dry_run: bool = False) -> dict | None:
+def post_tweet(client: Optional["tweepy.Client"], content: str, dry_run: bool = False) -> Optional[dict]:
     """Post a tweet and return the response."""
 
     if dry_run:
@@ -119,8 +123,10 @@ def post_tweet(client: tweepy.Client, content: str, dry_run: bool = False) -> di
         return None
 
     try:
+        import tweepy  # type: ignore
+
         # Post the tweet
-        response = client.create_tweet(text=content)
+        response = client.create_tweet(text=content)  # type: ignore[union-attr]
 
         # Extract tweet ID
         tweet_id = response.data['id']
