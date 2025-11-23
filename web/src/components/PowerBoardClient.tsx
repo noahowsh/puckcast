@@ -61,47 +61,47 @@ export function PowerBoardClient({ rows }: { rows: LeaderboardRow[] }) {
         });
         setNextGames(map);
       } catch (err) {
-        console.warn(\"schedule fetch failed\", err);
+        console.warn("schedule fetch failed", err);
       }
     };
     fetchNextGames();
   }, []);
 
   const renderRow = (row: LeaderboardRow) => {
-    const movementDisplay = row.movement === 0 ? \"Even\" : row.movement > 0 ? `+${row.movement}` : row.movement;
-    const movementTone = row.movement > 0 ? \"movement--positive\" : row.movement < 0 ? \"movement--negative\" : \"movement--neutral\";
-    const overlayProb = row.overlay ? formatPct(row.overlay.avgProb) : \"—\";
+    const movementDisplay = row.movement === 0 ? "Even" : row.movement > 0 ? `+${row.movement}` : row.movement;
+    const movementTone = row.movement > 0 ? "movement--positive" : row.movement < 0 ? "movement--negative" : "movement--neutral";
+    const overlayProb = row.overlay ? formatPct(row.overlay.avgProb) : "—";
     const next = nextGames[row.abbrev];
     const nextDisplay = next
-      ? `${next.opponent} (${next.date}${next.startTimeEt ? ` · ${next.startTimeEt} ET` : \"\"})`
-      : \"Next game TBA\";
+      ? `${next.opponent} (${next.date}${next.startTimeEt ? ` · ${next.startTimeEt} ET` : ""})`
+      : "Next game TBA";
 
     return (
-      <div className=\"power-board__row\" key={row.abbrev}>
-        <div className=\"rank-chip\">#{row.powerRank}</div>
-        <div className=\"power-team\">
+      <div className="power-board__row" key={row.abbrev}>
+        <div className="rank-chip">#{row.powerRank}</div>
+        <div className="power-team">
           <TeamCrest abbrev={row.abbrev} />
           <div>
-            <p className=\"power-name\">{row.team}</p>
-            <p className=\"micro-label\">Standings #{row.standingsRank}</p>
+            <p className="power-name">{row.team}</p>
+            <p className="micro-label">Standings #{row.standingsRank}</p>
           </div>
         </div>
         <span className={`movement movement--pillless ${movementTone}`}>{movementDisplay}</span>
-        <span className=\"power-data\">{row.record}</span>
-        <span className=\"power-data\">{formatPct(row.pointPctg)}</span>
-        <span className={`power-data ${row.goalDifferential >= 0 ? \"text-up\" : \"text-down\"}`}>
-          {row.goalDifferential >= 0 ? \"+\" : \"\"}
+        <span className="power-data">{row.record}</span>
+        <span className="power-data">{formatPct(row.pointPctg)}</span>
+        <span className={`power-data ${row.goalDifferential >= 0 ? "text-up" : "text-down"}`}>
+          {row.goalDifferential >= 0 ? "+" : ""}
           {row.goalDifferential}
         </span>
-        <span className=\"power-data\">{overlayProb}</span>
-        <span className=\"power-data\">{nextDisplay}</span>
+        <span className="power-data">{overlayProb}</span>
+        <span className="power-data">{nextDisplay}</span>
       </div>
     );
   };
 
   return (
-    <div className=\"power-board\">
-      <div className=\"power-board__head\">
+    <div className="power-board">
+      <div className="power-board__head">
         <span>#</span>
         <span>Team</span>
         <span>Movement</span>
