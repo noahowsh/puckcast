@@ -77,8 +77,8 @@ jobs:
             HOUR=$(date -u +%H)
             DAY=$(date -u +%u)  # 1=Monday, 7=Sunday
 
-            # Predictions: 4x daily at specific hours
-            if [ "$HOUR" = "10" ] || [ "$HOUR" = "16" ] || [ "$HOUR" = "22" ] || [ "$HOUR" = "04" ]; then
+            # Predictions: Daily at 5am and 5pm ET (9am and 9pm UTC)
+            if [ "$HOUR" = "09" ] || [ "$HOUR" = "21" ]; then
               echo "predictions=true" >> $GITHUB_OUTPUT
             fi
 
