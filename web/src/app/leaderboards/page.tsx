@@ -1,5 +1,6 @@
 import { buildTeamSnapshots, computeStandingsPowerScore, getCurrentStandings, type TeamSnapshot } from "@/lib/current";
 import { TeamCrest } from "@/components/TeamCrest";
+import { PowerBoardClient, type LeaderboardRow } from "@/components/PowerBoardClient";
 
 const snapshots = buildTeamSnapshots();
 const snapshotMap = new Map(snapshots.map((team) => [team.abbrev, team]));
@@ -8,21 +9,6 @@ const nameToAbbrev = new Map<string, string>(standings.map((team) => [team.team,
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
-
-type LeaderboardRow = {
-  powerRank: number;
-  standingsRank: number;
-  movement: number;
-  team: string;
-  abbrev: string;
-  record: string;
-  points: number;
-  goalDifferential: number;
-  pointPctg: number;
-  powerScore: number;
-  nextGame?: TeamSnapshot["nextGame"];
-  overlay?: TeamSnapshot;
-};
 
 const rankedRows: LeaderboardRow[] = standings
   .map((standing) => {
@@ -40,7 +26,6 @@ const rankedRows: LeaderboardRow[] = standings
       goalDifferential: standing.goalDifferential,
       pointPctg: standing.pointPctg,
       powerScore: power,
-      nextGame: snap?.nextGame,
       overlay: snap,
     };
   })
@@ -197,56 +182,9 @@ export default async function LeaderboardsPage() {
             </div>
           </div>
 
-          <div className="power-board">
-            <div className="power-board__head">
-              <span>#</span>
-              <span>Team</span>
-              <span>Movement</span>
-              <span>Record</span>
-              <span>Point %</span>
-              <span>Goal Diff</span>
-              <span>Model Win%</span>
-              <span>Next</span>
-            </div>
-            {rankedRows.map((row) => (
-              <PowerRow key={row.abbrev} row={row} nextGames={nextGames} />
-            ))}
-          </div>
+          <PowerBoardClient rows={rankedRows} />
         </section>
       </div>
-    </div>
-  );
-}
-
-function PowerRow({ row, nextGames }: { row: LeaderboardRow; nextGames: Record<string, NextGameInfo> }) {
-  const movementDisplay = row.movement === 0 ? "Even" : row.movement > 0 ? `+${row.movement}` : row.movement;
-  const movementTone = row.movement > 0 ? "movement--positive" : row.movement < 0 ? "movement--negative" : "movement--neutral";
-
-  const overlayProb = row.overlay ? pct(row.overlay.avgProb) : "—";
-  const next = nextGames[row.abbrev] || row.overlay?.nextGame;
-  const nextDisplay = next
-    ? `${next.opponent} (${next.date}${next.startTimeEt ? ` · ${next.startTimeEt} ET` : ""})`
-    : "Next game TBA";
-
-  return (
-    <div className="power-board__row">
-      <div className="rank-chip">#{row.powerRank}</div>
-      <div className="power-team">
-        <TeamCrest abbrev={row.abbrev} />
-        <div>
-          <p className="power-name">{row.team}</p>
-          <p className="micro-label">Standings #{row.standingsRank}</p>
-        </div>
-      </div>
-      <span className={`movement movement--pillless ${movementTone}`}>{movementDisplay}</span>
-      <span className="power-data">{row.record}</span>
-      <span className="power-data">{pct(row.pointPctg)}</span>
-      <span className={`power-data ${row.goalDifferential >= 0 ? "text-up" : "text-down"}`}>
-        {row.goalDifferential >= 0 ? "+" : ""}
-        {row.goalDifferential}
-      </span>
-      <span className="power-data">{overlayProb}</span>
-      <span className="power-data">{nextDisplay}</span>
     </div>
   );
 }

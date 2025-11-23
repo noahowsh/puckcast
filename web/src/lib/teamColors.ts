@@ -72,8 +72,8 @@ export function teamGradient(abbrev: string) {
   // Improve contrast for deep blue logos that disappear on dark backgrounds:
   // layer a light wash behind the logo.
   if (["TBL", "TOR", "VAN"].includes(safe)) {
-    const light = "rgba(255, 255, 255, 0.28)";
-    const dark = hexToRgba(colors.primary, 0.26);
+    const light = "rgba(255, 255, 255, 0.38)";
+    const dark = hexToRgba(colors.primary, 0.32);
     return `linear-gradient(145deg, ${light}, ${dark})`;
   }
 
@@ -86,7 +86,7 @@ export function teamBorderColor(abbrev: string) {
   const colors = TEAM_COLORS[abbrev?.toUpperCase?.() ?? ""];
   if (!colors) return fallbackBorder;
   if (["TBL", "TOR", "VAN"].includes(abbrev?.toUpperCase?.() ?? "")) {
-    return "rgba(255, 255, 255, 0.4)";
+    return "rgba(255, 255, 255, 0.5)";
   }
   const alpha = luma(colors.primary) > 190 ? 0.35 : luma(colors.primary) < 70 ? 0.55 : 0.5;
   return hexToRgba(colors.primary, alpha);
