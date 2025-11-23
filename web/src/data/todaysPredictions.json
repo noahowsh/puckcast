@@ -1,4 +1,1270 @@
 {
-  "generatedAt": "2025-11-23T00:30:00.000Z",
-  "games": []
+  "generatedAt": "2025-11-23T04:28:19.999859+00:00",
+  "games": [
+    {
+      "id": "2025020347",
+      "gameDate": "2025-11-23",
+      "startTimeEt": "2025-11-23T18:00:00Z",
+      "startTimeUtc": "2025-11-23T18:00:00Z",
+      "homeTeam": {
+        "name": "Sabres",
+        "abbrev": "BUF"
+      },
+      "awayTeam": {
+        "name": "Hurricanes",
+        "abbrev": "CAR"
+      },
+      "homeWinProb": 0.5,
+      "awayWinProb": 0.5,
+      "confidenceScore": 0.0,
+      "confidenceGrade": "C",
+      "edge": 0.0,
+      "summary": "Game data available. Full predictions updating soon.",
+      "modelFavorite": "home",
+      "venue": "KeyBank Center",
+      "season": "20252026"
+    },
+    {
+      "id": "2025020348",
+      "gameDate": "2025-11-23",
+      "startTimeEt": "2025-11-23T21:00:00Z",
+      "startTimeUtc": "2025-11-23T21:00:00Z",
+      "homeTeam": {
+        "name": "Jets",
+        "abbrev": "WPG"
+      },
+      "awayTeam": {
+        "name": "Wild",
+        "abbrev": "MIN"
+      },
+      "homeWinProb": 0.5,
+      "awayWinProb": 0.5,
+      "confidenceScore": 0.0,
+      "confidenceGrade": "C",
+      "edge": 0.0,
+      "summary": "Game data available. Full predictions updating soon.",
+      "modelFavorite": "home",
+      "venue": "Canada Life Centre",
+      "season": "20252026"
+    },
+    {
+      "id": "2025020349",
+      "gameDate": "2025-11-23",
+      "startTimeEt": "2025-11-23T22:00:00Z",
+      "startTimeUtc": "2025-11-23T22:00:00Z",
+      "homeTeam": {
+        "name": "Islanders",
+        "abbrev": "NYI"
+      },
+      "awayTeam": {
+        "name": "Kraken",
+        "abbrev": "SEA"
+      },
+      "homeWinProb": 0.5,
+      "awayWinProb": 0.5,
+      "confidenceScore": 0.0,
+      "confidenceGrade": "C",
+      "edge": 0.0,
+      "summary": "Game data available. Full predictions updating soon.",
+      "modelFavorite": "home",
+      "venue": "UBS Arena",
+      "season": "20252026"
+    },
+    {
+      "id": "2025020350",
+      "gameDate": "2025-11-23",
+      "startTimeEt": "2025-11-24T00:00:00Z",
+      "startTimeUtc": "2025-11-24T00:00:00Z",
+      "homeTeam": {
+        "name": "Blackhawks",
+        "abbrev": "CHI"
+      },
+      "awayTeam": {
+        "name": "Avalanche",
+        "abbrev": "COL"
+      },
+      "homeWinProb": 0.5,
+      "awayWinProb": 0.5,
+      "confidenceScore": 0.0,
+      "confidenceGrade": "C",
+      "edge": 0.0,
+      "summary": "Game data available. Full predictions updating soon.",
+      "modelFavorite": "home",
+      "venue": "United Center",
+      "season": "20252026"
+    },
+    {
+      "id": "2025020351",
+      "gameDate": "2025-11-23",
+      "startTimeEt": "2025-11-24T01:00:00Z",
+      "startTimeUtc": "2025-11-24T01:00:00Z",
+      "homeTeam": {
+        "name": "Sharks",
+        "abbrev": "SJS"
+      },
+      "awayTeam": {
+        "name": "Bruins",
+        "abbrev": "BOS"
+      },
+      "homeWinProb": 0.5,
+      "awayWinProb": 0.5,
+      "confidenceScore": 0.0,
+      "confidenceGrade": "C",
+      "edge": 0.0,
+      "summary": "Game data available. Full predictions updating soon.",
+      "modelFavorite": "home",
+      "venue": "SAP Center at San Jose",
+      "season": "20252026"
+    },
+    {
+      "id": "2025020352",
+      "gameDate": "2025-11-23",
+      "startTimeEt": "2025-11-24T02:00:00Z",
+      "startTimeUtc": "2025-11-24T02:00:00Z",
+      "homeTeam": {
+        "name": "Canucks",
+        "abbrev": "VAN"
+      },
+      "awayTeam": {
+        "name": "Flames",
+        "abbrev": "CGY"
+      },
+      "homeWinProb": 0.5,
+      "awayWinProb": 0.5,
+      "confidenceScore": 0.0,
+      "confidenceGrade": "C",
+      "edge": 0.0,
+      "summary": "Game data available. Full predictions updating soon.",
+      "modelFavorite": "home",
+      "venue": "Rogers Arena",
+      "season": "20252026"
+    },
+    {
+      "id": "2025020353",
+      "gameDate": "2025-11-24",
+      "startTimeEt": "2025-11-25T00:00:00Z",
+      "startTimeUtc": "2025-11-25T00:00:00Z",
+      "homeTeam": {
+        "name": "Lightning",
+        "abbrev": "TBL"
+      },
+      "awayTeam": {
+        "name": "Flyers",
+        "abbrev": "PHI"
+      },
+      "homeWinProb": 0.5,
+      "awayWinProb": 0.5,
+      "confidenceScore": 0.0,
+      "confidenceGrade": "C",
+      "edge": 0.0,
+      "summary": "Game data available. Full predictions updating soon.",
+      "modelFavorite": "home",
+      "venue": "Benchmark International Arena",
+      "season": "20252026"
+    },
+    {
+      "id": "2025020354",
+      "gameDate": "2025-11-24",
+      "startTimeEt": "2025-11-25T00:00:00Z",
+      "startTimeUtc": "2025-11-25T00:00:00Z",
+      "homeTeam": {
+        "name": "Devils",
+        "abbrev": "NJD"
+      },
+      "awayTeam": {
+        "name": "Red Wings",
+        "abbrev": "DET"
+      },
+      "homeWinProb": 0.5,
+      "awayWinProb": 0.5,
+      "confidenceScore": 0.0,
+      "confidenceGrade": "C",
+      "edge": 0.0,
+      "summary": "Game data available. Full predictions updating soon.",
+      "modelFavorite": "home",
+      "venue": "Prudential Center",
+      "season": "20252026"
+    },
+    {
+      "id": "2025020355",
+      "gameDate": "2025-11-24",
+      "startTimeEt": "2025-11-25T00:00:00Z",
+      "startTimeUtc": "2025-11-25T00:00:00Z",
+      "homeTeam": {
+        "name": "Rangers",
+        "abbrev": "NYR"
+      },
+      "awayTeam": {
+        "name": "Blues",
+        "abbrev": "STL"
+      },
+      "homeWinProb": 0.5,
+      "awayWinProb": 0.5,
+      "confidenceScore": 0.0,
+      "confidenceGrade": "C",
+      "edge": 0.0,
+      "summary": "Game data available. Full predictions updating soon.",
+      "modelFavorite": "home",
+      "venue": "Madison Square Garden",
+      "season": "20252026"
+    },
+    {
+      "id": "2025020356",
+      "gameDate": "2025-11-24",
+      "startTimeEt": "2025-11-25T00:00:00Z",
+      "startTimeUtc": "2025-11-25T00:00:00Z",
+      "homeTeam": {
+        "name": "Capitals",
+        "abbrev": "WSH"
+      },
+      "awayTeam": {
+        "name": "Blue Jackets",
+        "abbrev": "CBJ"
+      },
+      "homeWinProb": 0.5,
+      "awayWinProb": 0.5,
+      "confidenceScore": 0.0,
+      "confidenceGrade": "C",
+      "edge": 0.0,
+      "summary": "Game data available. Full predictions updating soon.",
+      "modelFavorite": "home",
+      "venue": "Capital One Arena",
+      "season": "20252026"
+    },
+    {
+      "id": "2025020357",
+      "gameDate": "2025-11-24",
+      "startTimeEt": "2025-11-25T01:00:00Z",
+      "startTimeUtc": "2025-11-25T01:00:00Z",
+      "homeTeam": {
+        "name": "Predators",
+        "abbrev": "NSH"
+      },
+      "awayTeam": {
+        "name": "Panthers",
+        "abbrev": "FLA"
+      },
+      "homeWinProb": 0.5,
+      "awayWinProb": 0.5,
+      "confidenceScore": 0.0,
+      "confidenceGrade": "C",
+      "edge": 0.0,
+      "summary": "Game data available. Full predictions updating soon.",
+      "modelFavorite": "home",
+      "venue": "Bridgestone Arena",
+      "season": "20252026"
+    },
+    {
+      "id": "2025020358",
+      "gameDate": "2025-11-24",
+      "startTimeEt": "2025-11-25T02:00:00Z",
+      "startTimeUtc": "2025-11-25T02:00:00Z",
+      "homeTeam": {
+        "name": "Mammoth",
+        "abbrev": "UTA"
+      },
+      "awayTeam": {
+        "name": "Golden Knights",
+        "abbrev": "VGK"
+      },
+      "homeWinProb": 0.5,
+      "awayWinProb": 0.5,
+      "confidenceScore": 0.0,
+      "confidenceGrade": "C",
+      "edge": 0.0,
+      "summary": "Game data available. Full predictions updating soon.",
+      "modelFavorite": "home",
+      "venue": "Delta Center",
+      "season": "20252026"
+    },
+    {
+      "id": "2025020359",
+      "gameDate": "2025-11-24",
+      "startTimeEt": "2025-11-25T02:00:00Z",
+      "startTimeUtc": "2025-11-25T02:00:00Z",
+      "homeTeam": {
+        "name": "Kings",
+        "abbrev": "LAK"
+      },
+      "awayTeam": {
+        "name": "Senators",
+        "abbrev": "OTT"
+      },
+      "homeWinProb": 0.5,
+      "awayWinProb": 0.5,
+      "confidenceScore": 0.0,
+      "confidenceGrade": "C",
+      "edge": 0.0,
+      "summary": "Game data available. Full predictions updating soon.",
+      "modelFavorite": "home",
+      "venue": "Crypto.com Arena",
+      "season": "20252026"
+    },
+    {
+      "id": "2025020360",
+      "gameDate": "2025-11-25",
+      "startTimeEt": "2025-11-26T02:00:00Z",
+      "startTimeUtc": "2025-11-26T02:00:00Z",
+      "homeTeam": {
+        "name": "Oilers",
+        "abbrev": "EDM"
+      },
+      "awayTeam": {
+        "name": "Stars",
+        "abbrev": "DAL"
+      },
+      "homeWinProb": 0.5,
+      "awayWinProb": 0.5,
+      "confidenceScore": 0.0,
+      "confidenceGrade": "C",
+      "edge": 0.0,
+      "summary": "Game data available. Full predictions updating soon.",
+      "modelFavorite": "home",
+      "venue": "Rogers Place",
+      "season": "20252026"
+    },
+    {
+      "id": "2025020361",
+      "gameDate": "2025-11-26",
+      "startTimeEt": "2025-11-27T00:00:00Z",
+      "startTimeUtc": "2025-11-27T00:00:00Z",
+      "homeTeam": {
+        "name": "Red Wings",
+        "abbrev": "DET"
+      },
+      "awayTeam": {
+        "name": "Predators",
+        "abbrev": "NSH"
+      },
+      "homeWinProb": 0.5,
+      "awayWinProb": 0.5,
+      "confidenceScore": 0.0,
+      "confidenceGrade": "C",
+      "edge": 0.0,
+      "summary": "Game data available. Full predictions updating soon.",
+      "modelFavorite": "home",
+      "venue": "Little Caesars Arena",
+      "season": "20252026"
+    },
+    {
+      "id": "2025020362",
+      "gameDate": "2025-11-26",
+      "startTimeEt": "2025-11-27T00:00:00Z",
+      "startTimeUtc": "2025-11-27T00:00:00Z",
+      "homeTeam": {
+        "name": "Lightning",
+        "abbrev": "TBL"
+      },
+      "awayTeam": {
+        "name": "Flames",
+        "abbrev": "CGY"
+      },
+      "homeWinProb": 0.5,
+      "awayWinProb": 0.5,
+      "confidenceScore": 0.0,
+      "confidenceGrade": "C",
+      "edge": 0.0,
+      "summary": "Game data available. Full predictions updating soon.",
+      "modelFavorite": "home",
+      "venue": "Benchmark International Arena",
+      "season": "20252026"
+    },
+    {
+      "id": "2025020363",
+      "gameDate": "2025-11-26",
+      "startTimeEt": "2025-11-27T00:00:00Z",
+      "startTimeUtc": "2025-11-27T00:00:00Z",
+      "homeTeam": {
+        "name": "Panthers",
+        "abbrev": "FLA"
+      },
+      "awayTeam": {
+        "name": "Flyers",
+        "abbrev": "PHI"
+      },
+      "homeWinProb": 0.5,
+      "awayWinProb": 0.5,
+      "confidenceScore": 0.0,
+      "confidenceGrade": "C",
+      "edge": 0.0,
+      "summary": "Game data available. Full predictions updating soon.",
+      "modelFavorite": "home",
+      "venue": "Amerant Bank Arena",
+      "season": "20252026"
+    },
+    {
+      "id": "2025020364",
+      "gameDate": "2025-11-26",
+      "startTimeEt": "2025-11-27T00:00:00Z",
+      "startTimeUtc": "2025-11-27T00:00:00Z",
+      "homeTeam": {
+        "name": "Devils",
+        "abbrev": "NJD"
+      },
+      "awayTeam": {
+        "name": "Blues",
+        "abbrev": "STL"
+      },
+      "homeWinProb": 0.5,
+      "awayWinProb": 0.5,
+      "confidenceScore": 0.0,
+      "confidenceGrade": "C",
+      "edge": 0.0,
+      "summary": "Game data available. Full predictions updating soon.",
+      "modelFavorite": "home",
+      "venue": "Prudential Center",
+      "season": "20252026"
+    },
+    {
+      "id": "2025020365",
+      "gameDate": "2025-11-26",
+      "startTimeEt": "2025-11-27T00:00:00Z",
+      "startTimeUtc": "2025-11-27T00:00:00Z",
+      "homeTeam": {
+        "name": "Islanders",
+        "abbrev": "NYI"
+      },
+      "awayTeam": {
+        "name": "Bruins",
+        "abbrev": "BOS"
+      },
+      "homeWinProb": 0.5,
+      "awayWinProb": 0.5,
+      "confidenceScore": 0.0,
+      "confidenceGrade": "C",
+      "edge": 0.0,
+      "summary": "Game data available. Full predictions updating soon.",
+      "modelFavorite": "home",
+      "venue": "UBS Arena",
+      "season": "20252026"
+    },
+    {
+      "id": "2025020366",
+      "gameDate": "2025-11-26",
+      "startTimeEt": "2025-11-27T00:00:00Z",
+      "startTimeUtc": "2025-11-27T00:00:00Z",
+      "homeTeam": {
+        "name": "Penguins",
+        "abbrev": "PIT"
+      },
+      "awayTeam": {
+        "name": "Sabres",
+        "abbrev": "BUF"
+      },
+      "homeWinProb": 0.5,
+      "awayWinProb": 0.5,
+      "confidenceScore": 0.0,
+      "confidenceGrade": "C",
+      "edge": 0.0,
+      "summary": "Game data available. Full predictions updating soon.",
+      "modelFavorite": "home",
+      "venue": "PPG Paints Arena",
+      "season": "20252026"
+    },
+    {
+      "id": "2025020367",
+      "gameDate": "2025-11-26",
+      "startTimeEt": "2025-11-27T00:00:00Z",
+      "startTimeUtc": "2025-11-27T00:00:00Z",
+      "homeTeam": {
+        "name": "Capitals",
+        "abbrev": "WSH"
+      },
+      "awayTeam": {
+        "name": "Jets",
+        "abbrev": "WPG"
+      },
+      "homeWinProb": 0.5,
+      "awayWinProb": 0.5,
+      "confidenceScore": 0.0,
+      "confidenceGrade": "C",
+      "edge": 0.0,
+      "summary": "Game data available. Full predictions updating soon.",
+      "modelFavorite": "home",
+      "venue": "Capital One Arena",
+      "season": "20252026"
+    },
+    {
+      "id": "2025020368",
+      "gameDate": "2025-11-26",
+      "startTimeEt": "2025-11-27T00:00:00Z",
+      "startTimeUtc": "2025-11-27T00:00:00Z",
+      "homeTeam": {
+        "name": "Hurricanes",
+        "abbrev": "CAR"
+      },
+      "awayTeam": {
+        "name": "Rangers",
+        "abbrev": "NYR"
+      },
+      "homeWinProb": 0.5,
+      "awayWinProb": 0.5,
+      "confidenceScore": 0.0,
+      "confidenceGrade": "C",
+      "edge": 0.0,
+      "summary": "Game data available. Full predictions updating soon.",
+      "modelFavorite": "home",
+      "venue": "Lenovo Center",
+      "season": "20252026"
+    },
+    {
+      "id": "2025020369",
+      "gameDate": "2025-11-26",
+      "startTimeEt": "2025-11-27T00:00:00Z",
+      "startTimeUtc": "2025-11-27T00:00:00Z",
+      "homeTeam": {
+        "name": "Blue Jackets",
+        "abbrev": "CBJ"
+      },
+      "awayTeam": {
+        "name": "Maple Leafs",
+        "abbrev": "TOR"
+      },
+      "homeWinProb": 0.5,
+      "awayWinProb": 0.5,
+      "confidenceScore": 0.0,
+      "confidenceGrade": "C",
+      "edge": 0.0,
+      "summary": "Game data available. Full predictions updating soon.",
+      "modelFavorite": "home",
+      "venue": "Nationwide Arena",
+      "season": "20252026"
+    },
+    {
+      "id": "2025020370",
+      "gameDate": "2025-11-26",
+      "startTimeEt": "2025-11-27T01:30:00Z",
+      "startTimeUtc": "2025-11-27T01:30:00Z",
+      "homeTeam": {
+        "name": "Blackhawks",
+        "abbrev": "CHI"
+      },
+      "awayTeam": {
+        "name": "Wild",
+        "abbrev": "MIN"
+      },
+      "homeWinProb": 0.5,
+      "awayWinProb": 0.5,
+      "confidenceScore": 0.0,
+      "confidenceGrade": "C",
+      "edge": 0.0,
+      "summary": "Game data available. Full predictions updating soon.",
+      "modelFavorite": "home",
+      "venue": "United Center",
+      "season": "20252026"
+    },
+    {
+      "id": "2025020371",
+      "gameDate": "2025-11-26",
+      "startTimeEt": "2025-11-27T02:00:00Z",
+      "startTimeUtc": "2025-11-27T02:00:00Z",
+      "homeTeam": {
+        "name": "Avalanche",
+        "abbrev": "COL"
+      },
+      "awayTeam": {
+        "name": "Sharks",
+        "abbrev": "SJS"
+      },
+      "homeWinProb": 0.5,
+      "awayWinProb": 0.5,
+      "confidenceScore": 0.0,
+      "confidenceGrade": "C",
+      "edge": 0.0,
+      "summary": "Game data available. Full predictions updating soon.",
+      "modelFavorite": "home",
+      "venue": "Ball Arena",
+      "season": "20252026"
+    },
+    {
+      "id": "2025020372",
+      "gameDate": "2025-11-26",
+      "startTimeEt": "2025-11-27T02:30:00Z",
+      "startTimeUtc": "2025-11-27T02:30:00Z",
+      "homeTeam": {
+        "name": "Mammoth",
+        "abbrev": "UTA"
+      },
+      "awayTeam": {
+        "name": "Canadiens",
+        "abbrev": "MTL"
+      },
+      "homeWinProb": 0.5,
+      "awayWinProb": 0.5,
+      "confidenceScore": 0.0,
+      "confidenceGrade": "C",
+      "edge": 0.0,
+      "summary": "Game data available. Full predictions updating soon.",
+      "modelFavorite": "home",
+      "venue": "Delta Center",
+      "season": "20252026"
+    },
+    {
+      "id": "2025020373",
+      "gameDate": "2025-11-26",
+      "startTimeEt": "2025-11-27T03:00:00Z",
+      "startTimeUtc": "2025-11-27T03:00:00Z",
+      "homeTeam": {
+        "name": "Golden Knights",
+        "abbrev": "VGK"
+      },
+      "awayTeam": {
+        "name": "Senators",
+        "abbrev": "OTT"
+      },
+      "homeWinProb": 0.5,
+      "awayWinProb": 0.5,
+      "confidenceScore": 0.0,
+      "confidenceGrade": "C",
+      "edge": 0.0,
+      "summary": "Game data available. Full predictions updating soon.",
+      "modelFavorite": "home",
+      "venue": "T-Mobile Arena",
+      "season": "20252026"
+    },
+    {
+      "id": "2025020374",
+      "gameDate": "2025-11-26",
+      "startTimeEt": "2025-11-27T03:00:00Z",
+      "startTimeUtc": "2025-11-27T03:00:00Z",
+      "homeTeam": {
+        "name": "Ducks",
+        "abbrev": "ANA"
+      },
+      "awayTeam": {
+        "name": "Canucks",
+        "abbrev": "VAN"
+      },
+      "homeWinProb": 0.5,
+      "awayWinProb": 0.5,
+      "confidenceScore": 0.0,
+      "confidenceGrade": "C",
+      "edge": 0.0,
+      "summary": "Game data available. Full predictions updating soon.",
+      "modelFavorite": "home",
+      "venue": "Honda Center",
+      "season": "20252026"
+    },
+    {
+      "id": "2025020375",
+      "gameDate": "2025-11-26",
+      "startTimeEt": "2025-11-27T03:00:00Z",
+      "startTimeUtc": "2025-11-27T03:00:00Z",
+      "homeTeam": {
+        "name": "Kraken",
+        "abbrev": "SEA"
+      },
+      "awayTeam": {
+        "name": "Stars",
+        "abbrev": "DAL"
+      },
+      "homeWinProb": 0.5,
+      "awayWinProb": 0.5,
+      "confidenceScore": 0.0,
+      "confidenceGrade": "C",
+      "edge": 0.0,
+      "summary": "Game data available. Full predictions updating soon.",
+      "modelFavorite": "home",
+      "venue": "Climate Pledge Arena",
+      "season": "20252026"
+    },
+    {
+      "id": "2025020377",
+      "gameDate": "2025-11-28",
+      "startTimeEt": "2025-11-28T17:00:00Z",
+      "startTimeUtc": "2025-11-28T17:00:00Z",
+      "homeTeam": {
+        "name": "Red Wings",
+        "abbrev": "DET"
+      },
+      "awayTeam": {
+        "name": "Lightning",
+        "abbrev": "TBL"
+      },
+      "homeWinProb": 0.5,
+      "awayWinProb": 0.5,
+      "confidenceScore": 0.0,
+      "confidenceGrade": "C",
+      "edge": 0.0,
+      "summary": "Game data available. Full predictions updating soon.",
+      "modelFavorite": "home",
+      "venue": "Little Caesars Arena",
+      "season": "20252026"
+    },
+    {
+      "id": "2025020376",
+      "gameDate": "2025-11-28",
+      "startTimeEt": "2025-11-28T18:00:00Z",
+      "startTimeUtc": "2025-11-28T18:00:00Z",
+      "homeTeam": {
+        "name": "Bruins",
+        "abbrev": "BOS"
+      },
+      "awayTeam": {
+        "name": "Rangers",
+        "abbrev": "NYR"
+      },
+      "homeWinProb": 0.5,
+      "awayWinProb": 0.5,
+      "confidenceScore": 0.0,
+      "confidenceGrade": "C",
+      "edge": 0.0,
+      "summary": "Game data available. Full predictions updating soon.",
+      "modelFavorite": "home",
+      "venue": "TD Garden",
+      "season": "20252026"
+    },
+    {
+      "id": "2025020378",
+      "gameDate": "2025-11-28",
+      "startTimeEt": "2025-11-28T20:30:00Z",
+      "startTimeUtc": "2025-11-28T20:30:00Z",
+      "homeTeam": {
+        "name": "Wild",
+        "abbrev": "MIN"
+      },
+      "awayTeam": {
+        "name": "Avalanche",
+        "abbrev": "COL"
+      },
+      "homeWinProb": 0.5,
+      "awayWinProb": 0.5,
+      "confidenceScore": 0.0,
+      "confidenceGrade": "C",
+      "edge": 0.0,
+      "summary": "Game data available. Full predictions updating soon.",
+      "modelFavorite": "home",
+      "venue": "Grand Casino Arena",
+      "season": "20252026"
+    },
+    {
+      "id": "2025020379",
+      "gameDate": "2025-11-28",
+      "startTimeEt": "2025-11-28T21:00:00Z",
+      "startTimeUtc": "2025-11-28T21:00:00Z",
+      "homeTeam": {
+        "name": "Sabres",
+        "abbrev": "BUF"
+      },
+      "awayTeam": {
+        "name": "Devils",
+        "abbrev": "NJD"
+      },
+      "homeWinProb": 0.5,
+      "awayWinProb": 0.5,
+      "confidenceScore": 0.0,
+      "confidenceGrade": "C",
+      "edge": 0.0,
+      "summary": "Game data available. Full predictions updating soon.",
+      "modelFavorite": "home",
+      "venue": "KeyBank Center",
+      "season": "20252026"
+    },
+    {
+      "id": "2025020380",
+      "gameDate": "2025-11-28",
+      "startTimeEt": "2025-11-28T21:00:00Z",
+      "startTimeUtc": "2025-11-28T21:00:00Z",
+      "homeTeam": {
+        "name": "Panthers",
+        "abbrev": "FLA"
+      },
+      "awayTeam": {
+        "name": "Flames",
+        "abbrev": "CGY"
+      },
+      "homeWinProb": 0.5,
+      "awayWinProb": 0.5,
+      "confidenceScore": 0.0,
+      "confidenceGrade": "C",
+      "edge": 0.0,
+      "summary": "Game data available. Full predictions updating soon.",
+      "modelFavorite": "home",
+      "venue": "Amerant Bank Arena",
+      "season": "20252026"
+    },
+    {
+      "id": "2025020381",
+      "gameDate": "2025-11-28",
+      "startTimeEt": "2025-11-28T21:00:00Z",
+      "startTimeUtc": "2025-11-28T21:00:00Z",
+      "homeTeam": {
+        "name": "Islanders",
+        "abbrev": "NYI"
+      },
+      "awayTeam": {
+        "name": "Flyers",
+        "abbrev": "PHI"
+      },
+      "homeWinProb": 0.5,
+      "awayWinProb": 0.5,
+      "confidenceScore": 0.0,
+      "confidenceGrade": "C",
+      "edge": 0.0,
+      "summary": "Game data available. Full predictions updating soon.",
+      "modelFavorite": "home",
+      "venue": "UBS Arena",
+      "season": "20252026"
+    },
+    {
+      "id": "2025020382",
+      "gameDate": "2025-11-28",
+      "startTimeEt": "2025-11-28T21:00:00Z",
+      "startTimeUtc": "2025-11-28T21:00:00Z",
+      "homeTeam": {
+        "name": "Blues",
+        "abbrev": "STL"
+      },
+      "awayTeam": {
+        "name": "Senators",
+        "abbrev": "OTT"
+      },
+      "homeWinProb": 0.5,
+      "awayWinProb": 0.5,
+      "confidenceScore": 0.0,
+      "confidenceGrade": "C",
+      "edge": 0.0,
+      "summary": "Game data available. Full predictions updating soon.",
+      "modelFavorite": "home",
+      "venue": "Enterprise Center",
+      "season": "20252026"
+    },
+    {
+      "id": "2025020383",
+      "gameDate": "2025-11-28",
+      "startTimeEt": "2025-11-28T21:00:00Z",
+      "startTimeUtc": "2025-11-28T21:00:00Z",
+      "homeTeam": {
+        "name": "Golden Knights",
+        "abbrev": "VGK"
+      },
+      "awayTeam": {
+        "name": "Canadiens",
+        "abbrev": "MTL"
+      },
+      "homeWinProb": 0.5,
+      "awayWinProb": 0.5,
+      "confidenceScore": 0.0,
+      "confidenceGrade": "C",
+      "edge": 0.0,
+      "summary": "Game data available. Full predictions updating soon.",
+      "modelFavorite": "home",
+      "venue": "T-Mobile Arena",
+      "season": "20252026"
+    },
+    {
+      "id": "2025020384",
+      "gameDate": "2025-11-28",
+      "startTimeEt": "2025-11-28T21:00:00Z",
+      "startTimeUtc": "2025-11-28T21:00:00Z",
+      "homeTeam": {
+        "name": "Ducks",
+        "abbrev": "ANA"
+      },
+      "awayTeam": {
+        "name": "Kings",
+        "abbrev": "LAK"
+      },
+      "homeWinProb": 0.5,
+      "awayWinProb": 0.5,
+      "confidenceScore": 0.0,
+      "confidenceGrade": "C",
+      "edge": 0.0,
+      "summary": "Game data available. Full predictions updating soon.",
+      "modelFavorite": "home",
+      "venue": "Honda Center",
+      "season": "20252026"
+    },
+    {
+      "id": "2025020385",
+      "gameDate": "2025-11-28",
+      "startTimeEt": "2025-11-28T21:00:00Z",
+      "startTimeUtc": "2025-11-28T21:00:00Z",
+      "homeTeam": {
+        "name": "Sharks",
+        "abbrev": "SJS"
+      },
+      "awayTeam": {
+        "name": "Canucks",
+        "abbrev": "VAN"
+      },
+      "homeWinProb": 0.5,
+      "awayWinProb": 0.5,
+      "confidenceScore": 0.0,
+      "confidenceGrade": "C",
+      "edge": 0.0,
+      "summary": "Game data available. Full predictions updating soon.",
+      "modelFavorite": "home",
+      "venue": "SAP Center at San Jose",
+      "season": "20252026"
+    },
+    {
+      "id": "2025020386",
+      "gameDate": "2025-11-28",
+      "startTimeEt": "2025-11-28T22:00:00Z",
+      "startTimeUtc": "2025-11-28T22:00:00Z",
+      "homeTeam": {
+        "name": "Capitals",
+        "abbrev": "WSH"
+      },
+      "awayTeam": {
+        "name": "Maple Leafs",
+        "abbrev": "TOR"
+      },
+      "homeWinProb": 0.5,
+      "awayWinProb": 0.5,
+      "confidenceScore": 0.0,
+      "confidenceGrade": "C",
+      "edge": 0.0,
+      "summary": "Game data available. Full predictions updating soon.",
+      "modelFavorite": "home",
+      "venue": "Capital One Arena",
+      "season": "20252026"
+    },
+    {
+      "id": "2025020387",
+      "gameDate": "2025-11-28",
+      "startTimeEt": "2025-11-28T22:00:00Z",
+      "startTimeUtc": "2025-11-28T22:00:00Z",
+      "homeTeam": {
+        "name": "Hurricanes",
+        "abbrev": "CAR"
+      },
+      "awayTeam": {
+        "name": "Jets",
+        "abbrev": "WPG"
+      },
+      "homeWinProb": 0.5,
+      "awayWinProb": 0.5,
+      "confidenceScore": 0.0,
+      "confidenceGrade": "C",
+      "edge": 0.0,
+      "summary": "Game data available. Full predictions updating soon.",
+      "modelFavorite": "home",
+      "venue": "Lenovo Center",
+      "season": "20252026"
+    },
+    {
+      "id": "2025020388",
+      "gameDate": "2025-11-28",
+      "startTimeEt": "2025-11-29T00:00:00Z",
+      "startTimeUtc": "2025-11-29T00:00:00Z",
+      "homeTeam": {
+        "name": "Blue Jackets",
+        "abbrev": "CBJ"
+      },
+      "awayTeam": {
+        "name": "Penguins",
+        "abbrev": "PIT"
+      },
+      "homeWinProb": 0.5,
+      "awayWinProb": 0.5,
+      "confidenceScore": 0.0,
+      "confidenceGrade": "C",
+      "edge": 0.0,
+      "summary": "Game data available. Full predictions updating soon.",
+      "modelFavorite": "home",
+      "venue": "Nationwide Arena",
+      "season": "20252026"
+    },
+    {
+      "id": "2025020389",
+      "gameDate": "2025-11-28",
+      "startTimeEt": "2025-11-29T01:00:00Z",
+      "startTimeUtc": "2025-11-29T01:00:00Z",
+      "homeTeam": {
+        "name": "Blackhawks",
+        "abbrev": "CHI"
+      },
+      "awayTeam": {
+        "name": "Predators",
+        "abbrev": "NSH"
+      },
+      "homeWinProb": 0.5,
+      "awayWinProb": 0.5,
+      "confidenceScore": 0.0,
+      "confidenceGrade": "C",
+      "edge": 0.0,
+      "summary": "Game data available. Full predictions updating soon.",
+      "modelFavorite": "home",
+      "venue": "United Center",
+      "season": "20252026"
+    },
+    {
+      "id": "2025020390",
+      "gameDate": "2025-11-28",
+      "startTimeEt": "2025-11-29T01:00:00Z",
+      "startTimeUtc": "2025-11-29T01:00:00Z",
+      "homeTeam": {
+        "name": "Stars",
+        "abbrev": "DAL"
+      },
+      "awayTeam": {
+        "name": "Mammoth",
+        "abbrev": "UTA"
+      },
+      "homeWinProb": 0.5,
+      "awayWinProb": 0.5,
+      "confidenceScore": 0.0,
+      "confidenceGrade": "C",
+      "edge": 0.0,
+      "summary": "Game data available. Full predictions updating soon.",
+      "modelFavorite": "home",
+      "venue": "American Airlines Center",
+      "season": "20252026"
+    },
+    {
+      "id": "2025020391",
+      "gameDate": "2025-11-29",
+      "startTimeEt": "2025-11-29T19:00:00Z",
+      "startTimeUtc": "2025-11-29T19:00:00Z",
+      "homeTeam": {
+        "name": "Rangers",
+        "abbrev": "NYR"
+      },
+      "awayTeam": {
+        "name": "Lightning",
+        "abbrev": "TBL"
+      },
+      "homeWinProb": 0.5,
+      "awayWinProb": 0.5,
+      "confidenceScore": 0.0,
+      "confidenceGrade": "C",
+      "edge": 0.0,
+      "summary": "Game data available. Full predictions updating soon.",
+      "modelFavorite": "home",
+      "venue": "Madison Square Garden",
+      "season": "20252026"
+    },
+    {
+      "id": "2025020392",
+      "gameDate": "2025-11-29",
+      "startTimeEt": "2025-11-29T20:00:00Z",
+      "startTimeUtc": "2025-11-29T20:00:00Z",
+      "homeTeam": {
+        "name": "Avalanche",
+        "abbrev": "COL"
+      },
+      "awayTeam": {
+        "name": "Canadiens",
+        "abbrev": "MTL"
+      },
+      "homeWinProb": 0.5,
+      "awayWinProb": 0.5,
+      "confidenceScore": 0.0,
+      "confidenceGrade": "C",
+      "edge": 0.0,
+      "summary": "Game data available. Full predictions updating soon.",
+      "modelFavorite": "home",
+      "venue": "Ball Arena",
+      "season": "20252026"
+    },
+    {
+      "id": "2025020393",
+      "gameDate": "2025-11-29",
+      "startTimeEt": "2025-11-29T21:00:00Z",
+      "startTimeUtc": "2025-11-29T21:00:00Z",
+      "homeTeam": {
+        "name": "Kraken",
+        "abbrev": "SEA"
+      },
+      "awayTeam": {
+        "name": "Oilers",
+        "abbrev": "EDM"
+      },
+      "homeWinProb": 0.5,
+      "awayWinProb": 0.5,
+      "confidenceScore": 0.0,
+      "confidenceGrade": "C",
+      "edge": 0.0,
+      "summary": "Game data available. Full predictions updating soon.",
+      "modelFavorite": "home",
+      "venue": "Climate Pledge Arena",
+      "season": "20252026"
+    },
+    {
+      "id": "2025020394",
+      "gameDate": "2025-11-29",
+      "startTimeEt": "2025-11-30T00:00:00Z",
+      "startTimeUtc": "2025-11-30T00:00:00Z",
+      "homeTeam": {
+        "name": "Bruins",
+        "abbrev": "BOS"
+      },
+      "awayTeam": {
+        "name": "Red Wings",
+        "abbrev": "DET"
+      },
+      "homeWinProb": 0.5,
+      "awayWinProb": 0.5,
+      "confidenceScore": 0.0,
+      "confidenceGrade": "C",
+      "edge": 0.0,
+      "summary": "Game data available. Full predictions updating soon.",
+      "modelFavorite": "home",
+      "venue": "TD Garden",
+      "season": "20252026"
+    },
+    {
+      "id": "2025020395",
+      "gameDate": "2025-11-29",
+      "startTimeEt": "2025-11-30T00:00:00Z",
+      "startTimeUtc": "2025-11-30T00:00:00Z",
+      "homeTeam": {
+        "name": "Devils",
+        "abbrev": "NJD"
+      },
+      "awayTeam": {
+        "name": "Flyers",
+        "abbrev": "PHI"
+      },
+      "homeWinProb": 0.5,
+      "awayWinProb": 0.5,
+      "confidenceScore": 0.0,
+      "confidenceGrade": "C",
+      "edge": 0.0,
+      "summary": "Game data available. Full predictions updating soon.",
+      "modelFavorite": "home",
+      "venue": "Prudential Center",
+      "season": "20252026"
+    },
+    {
+      "id": "2025020396",
+      "gameDate": "2025-11-29",
+      "startTimeEt": "2025-11-30T00:00:00Z",
+      "startTimeUtc": "2025-11-30T00:00:00Z",
+      "homeTeam": {
+        "name": "Penguins",
+        "abbrev": "PIT"
+      },
+      "awayTeam": {
+        "name": "Maple Leafs",
+        "abbrev": "TOR"
+      },
+      "homeWinProb": 0.5,
+      "awayWinProb": 0.5,
+      "confidenceScore": 0.0,
+      "confidenceGrade": "C",
+      "edge": 0.0,
+      "summary": "Game data available. Full predictions updating soon.",
+      "modelFavorite": "home",
+      "venue": "PPG Paints Arena",
+      "season": "20252026"
+    },
+    {
+      "id": "2025020397",
+      "gameDate": "2025-11-29",
+      "startTimeEt": "2025-11-30T00:00:00Z",
+      "startTimeUtc": "2025-11-30T00:00:00Z",
+      "homeTeam": {
+        "name": "Predators",
+        "abbrev": "NSH"
+      },
+      "awayTeam": {
+        "name": "Jets",
+        "abbrev": "WPG"
+      },
+      "homeWinProb": 0.5,
+      "awayWinProb": 0.5,
+      "confidenceScore": 0.0,
+      "confidenceGrade": "C",
+      "edge": 0.0,
+      "summary": "Game data available. Full predictions updating soon.",
+      "modelFavorite": "home",
+      "venue": "Bridgestone Arena",
+      "season": "20252026"
+    },
+    {
+      "id": "2025020398",
+      "gameDate": "2025-11-29",
+      "startTimeEt": "2025-11-30T01:00:00Z",
+      "startTimeUtc": "2025-11-30T01:00:00Z",
+      "homeTeam": {
+        "name": "Blues",
+        "abbrev": "STL"
+      },
+      "awayTeam": {
+        "name": "Mammoth",
+        "abbrev": "UTA"
+      },
+      "homeWinProb": 0.5,
+      "awayWinProb": 0.5,
+      "confidenceScore": 0.0,
+      "confidenceGrade": "C",
+      "edge": 0.0,
+      "summary": "Game data available. Full predictions updating soon.",
+      "modelFavorite": "home",
+      "venue": "Enterprise Center",
+      "season": "20252026"
+    },
+    {
+      "id": "2025020399",
+      "gameDate": "2025-11-29",
+      "startTimeEt": "2025-11-30T01:00:00Z",
+      "startTimeUtc": "2025-11-30T01:00:00Z",
+      "homeTeam": {
+        "name": "Wild",
+        "abbrev": "MIN"
+      },
+      "awayTeam": {
+        "name": "Sabres",
+        "abbrev": "BUF"
+      },
+      "homeWinProb": 0.5,
+      "awayWinProb": 0.5,
+      "confidenceScore": 0.0,
+      "confidenceGrade": "C",
+      "edge": 0.0,
+      "summary": "Game data available. Full predictions updating soon.",
+      "modelFavorite": "home",
+      "venue": "Grand Casino Arena",
+      "season": "20252026"
+    },
+    {
+      "id": "2025020400",
+      "gameDate": "2025-11-29",
+      "startTimeEt": "2025-11-30T03:00:00Z",
+      "startTimeUtc": "2025-11-30T03:00:00Z",
+      "homeTeam": {
+        "name": "Golden Knights",
+        "abbrev": "VGK"
+      },
+      "awayTeam": {
+        "name": "Sharks",
+        "abbrev": "SJS"
+      },
+      "homeWinProb": 0.5,
+      "awayWinProb": 0.5,
+      "confidenceScore": 0.0,
+      "confidenceGrade": "C",
+      "edge": 0.0,
+      "summary": "Game data available. Full predictions updating soon.",
+      "modelFavorite": "home",
+      "venue": "T-Mobile Arena",
+      "season": "20252026"
+    },
+    {
+      "id": "2025020401",
+      "gameDate": "2025-11-29",
+      "startTimeEt": "2025-11-30T03:00:00Z",
+      "startTimeUtc": "2025-11-30T03:00:00Z",
+      "homeTeam": {
+        "name": "Kings",
+        "abbrev": "LAK"
+      },
+      "awayTeam": {
+        "name": "Canucks",
+        "abbrev": "VAN"
+      },
+      "homeWinProb": 0.5,
+      "awayWinProb": 0.5,
+      "confidenceScore": 0.0,
+      "confidenceGrade": "C",
+      "edge": 0.0,
+      "summary": "Game data available. Full predictions updating soon.",
+      "modelFavorite": "home",
+      "venue": "Crypto.com Arena",
+      "season": "20252026"
+    }
+  ]
 }
