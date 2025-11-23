@@ -211,9 +211,9 @@ def predict_games_fast(date=None, num_games=20):
         games_for_model = filtered_games
 
     # Step 2: Build dataset (only for feature extraction)
-    # HARDCODED: Use only real seasons with LOCAL data (not future seasons)
-    # Using only 20232024 because it's available locally and sufficient for features
-    seasons = ["20232024"]  # Real season with local data
+    # HARDCODED: Use real seasons with LOCAL raw data (not future seasons)
+    # These seasons have data in data/raw/web_v1/ that will be cached on first run
+    seasons = ["20232024", "20212022"]  # Real seasons with local raw data
     print("\n2️⃣  Loading recent game data for feature extraction...")
     print(f"   (Loading {len(seasons)} season(s): {', '.join(seasons)})")
 
