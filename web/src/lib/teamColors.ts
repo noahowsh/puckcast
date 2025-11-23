@@ -69,11 +69,14 @@ export function teamGradient(abbrev: string) {
   let primaryAlpha = primaryLuma > 190 ? 0.12 : primaryLuma < 70 ? 0.24 : 0.20;
   let secondaryAlpha = primaryLuma > 190 ? 0.08 : primaryLuma < 70 ? 0.18 : 0.15;
 
-  // Improve contrast for deep blue logos that disappear on dark backgrounds
+  // Improve contrast for deep blue logos that disappear on dark backgrounds:
+  // give them a lighter wash plus their color so the crest doesn't melt into the page.
   if (["TBL", "TOR", "VAN"].includes(safe)) {
-    primaryAlpha = 0.24;
-    secondaryAlpha = 0.18;
+    const light = "rgba(255, 255, 255, 0.18)";
+    const dark = hexToRgba(colors.primary, 0.22);
+    return `linear-gradient(145deg, ${light}, ${dark})`;
   }
+
   const primary = hexToRgba(colors.primary, primaryAlpha);
   const secondary = hexToRgba(colors.secondary ?? colors.primary, secondaryAlpha);
   return `linear-gradient(145deg, ${primary}, ${secondary})`;

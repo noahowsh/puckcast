@@ -67,12 +67,12 @@ type NextGameInfo = { opponent: string; date: string; startTimeEt: string | null
 async function fetchNextGames(abbrevs: string[]): Promise<Record<string, NextGameInfo>> {
   const today = new Date();
   const end = new Date();
-  end.setDate(end.getDate() + 7);
+  end.setDate(end.getDate() + 14); // two-week lookahead
   const fmt = (d: Date) => d.toISOString().slice(0, 10);
   const url = `https://statsapi.web.nhl.com/api/v1/schedule?startDate=${fmt(today)}&endDate=${fmt(end)}`;
 
   try {
-    const res = await fetch(url, { next: { revalidate: 60 * 30 } });
+    const res = await fetch(url, { cache: "no-store" });
     if (!res.ok) {
       console.warn("schedule fetch failed", res.status);
       return {};
