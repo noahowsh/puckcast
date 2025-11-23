@@ -1,7 +1,7 @@
-\"use client\";
+"use client";
 
-import React from \"react\";
-import { TeamCrest } from \"@/components/TeamCrest\";
+import React from "react";
+import { TeamCrest } from "@/components/TeamCrest";
 
 type NextGameInfo = { opponent: string; date: string; startTimeEt: string | null };
 
