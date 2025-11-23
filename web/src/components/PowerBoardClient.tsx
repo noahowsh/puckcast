@@ -43,10 +43,10 @@ export function PowerBoardClient({ rows }: { rows: LeaderboardRow[] }) {
         const formatEt = (iso: string) => {
           if (!iso) return null;
           const dt = new Date(iso);
-          return new Intl.DateTimeFormat(\"en-US\", {
-            timeZone: \"America/New_York\",
-            hour: \"numeric\",
-            minute: \"2-digit\",
+          return new Intl.DateTimeFormat("en-US", {
+            timeZone: "America/New_York",
+            hour: "numeric",
+            minute: "2-digit",
           }).format(dt);
         };
         data?.dates?.forEach((block: any) => {
