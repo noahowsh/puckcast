@@ -10,29 +10,24 @@ Puckcast is a machine learning system that predicts NHL game outcomes using 204 
 
 ## 🚀 Quick Start
 
-### Make Predictions
+### Predict today (web feed)
 ```bash
-# Predict tonight's games
-python3 predict_tonight.py
-
-# View predictions in dashboard
-python3 dashboard.py
+python3 predict_fast.py      # fast pre-trained model → web/src/data/todaysPredictions.json
+# or
+python3 predict_full.py      # calibrated full run (slower)
 ```
 
-### Train Model
+### Run the web app
 ```bash
-# Train with default settings (3 seasons)
-python3 -m src.nhl_prediction.train
-
-# Results: Model accuracy, feature importance, performance metrics
+cd web
+npm install
+npm run dev                  # http://localhost:3000
 ```
 
-### Run Analysis
+### Train / analyze
 ```bash
-# Feature importance analysis
+python3 -m src.nhl_prediction.train          # train model
 python3 analysis/feature_importance_analysis.py
-
-# Hyperparameter tuning
 python3 analysis/hyperparameter_tuning.py
 ```
 
@@ -52,6 +47,11 @@ python3 analysis/hyperparameter_tuning.py
 **Training Data:** 3 seasons (2021-2024), 3,690 games
 **Model:** Logistic Regression (C=0.001, decay=0.85)
 **Features:** 204 total → 50 recommended (top performers)
+
+**Data feeds powering the site**
+- `web/src/data/todaysPredictions.json` (updated by `predict_fast.py` / `predict_full.py`)
+- `web/src/data/currentStandings.json`, `goaliePulse.json`, `modelInsights.json`
+- Next-game lookup for power board: `web/src/app/api/next-games` (calls NHL schedule API)
 
 ---
 
@@ -80,22 +80,19 @@ puckcast/
 │   ├── feature_pruning_results.csv        # Feature selection results
 │   └── hyperparameter_tuning_results.csv  # 60 configurations tested
 │
-├── web/                             # Streamlit dashboard
-│   ├── dashboard.py                 # Main UI
-│   └── src/data/                    # Daily data feeds
+├── web/                             # Next.js site (production UI)
+│   ├── src/app/                     # App routes + components
+│   ├── src/data/                    # Data feeds (predictions, standings, goalie pulse, etc.)
+│   ├── public/                      # Static assets (logos, social card)
+│   └── package.json                 # Frontend deps/scripts
 │
 ├── data/                            # Model data
 │   ├── xg_model.pkl                 # Expected goals model
 │   └── cache/                       # NHL API cache
 │
-├── temp_outputs/                    # Temporary files
-│   ├── *.log                        # Training logs
-│   └── test scripts                 # Development scripts
-│
-└── docs/                            # Documentation
-    ├── archive_v1/                  # Historical documentation
-    ├── data_sources_and_api_plan.md
-    └── group_report_2.md
+├── scripts/                         # Utility scripts (Twitter, data refresh, etc.)
+├── temp_outputs/                    # Temporary files/logs
+└── docs/                            # Documentation (current + archive)
 ```
 
 ---
