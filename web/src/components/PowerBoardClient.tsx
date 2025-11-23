@@ -30,17 +30,13 @@ export function PowerBoardClient({ rows, initialNextGames }: { rows: Leaderboard
 
   React.useEffect(() => {
     const fetchNextGames = async () => {
-      const today = new Date();
-      const end = new Date();
-      end.setDate(end.getDate() + 14);
-      const fmt = (d: Date) => d.toISOString().slice(0, 10);
-      const url = `https://statsapi.web.nhl.com/api/v1/schedule?startDate=${fmt(today)}&endDate=${fmt(end)}`;
+      const url = "https://statsapi.web.nhl.com/api/v1/teams?expand=team.schedule.next";
       try {
         const res = await fetch(url);
         if (!res.ok) return;
         const data = await res.json();
         const map: Record<string, NextGameInfo> = {};
-        const formatEt = (iso: string) => {
+        const formatEt = (iso: string | undefined) => {
           if (!iso) return null;
           const dt = new Date(iso);
           return new Intl.DateTimeFormat("en-US", {
@@ -49,15 +45,20 @@ export function PowerBoardClient({ rows, initialNextGames }: { rows: Leaderboard
             minute: "2-digit",
           }).format(dt);
         };
-        data?.dates?.forEach((block: any) => {
-          const date = block?.date;
-          block?.games?.forEach((game: any) => {
-            const home = game?.teams?.home?.team?.abbreviation || game?.teams?.home?.team?.triCode;
-            const away = game?.teams?.away?.team?.abbreviation || game?.teams?.away?.team?.triCode;
-            const startTimeEt = formatEt(game?.gameDate);
-            if (home && !map[home]) map[home] = { opponent: away, date, startTimeEt };
-            if (away && !map[away]) map[away] = { opponent: home, date, startTimeEt };
-          });
+        data?.teams?.forEach((team: any) => {
+          const abbr = team?.abbreviation;
+          const dates = team?.nextGameSchedule?.dates;
+          if (!abbr || !dates || !dates.length) return;
+          const game = dates[0]?.games?.[0];
+          if (!game) return;
+          const home = game?.teams?.home?.team?.abbreviation;
+          const away = game?.teams?.away?.team?.abbreviation;
+          const opponent = home === abbr ? away : home;
+          const date = dates[0]?.date;
+          const startTimeEt = formatEt(game?.gameDate);
+          if (opponent) {
+            map[abbr] = { opponent, date, startTimeEt };
+          }
         });
         if (Object.keys(map).length) {
           setNextGames(map);
@@ -72,7 +73,7 @@ export function PowerBoardClient({ rows, initialNextGames }: { rows: Leaderboard
   const renderRow = (row: LeaderboardRow) => {
     const movementDisplay = row.movement === 0 ? "Even" : row.movement > 0 ? `+${row.movement}` : row.movement;
     const movementTone = row.movement > 0 ? "movement--positive" : row.movement < 0 ? "movement--negative" : "movement--neutral";
-    const overlayProb = row.overlay ? formatPct(row.overlay.avgProb) : formatPct(row.pointPctg || 0.5);
+    const overlayProb = row.overlay ? formatPct(row.overlay.avgProb) : formatPct(row.pointPctg ?? 0.5);
     const next = nextGames[row.abbrev];
     const nextDisplay = next
       ? `${next.opponent} (${next.date}${next.startTimeEt ? ` · ${next.startTimeEt} ET` : ""})`
