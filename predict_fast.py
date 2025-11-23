@@ -211,9 +211,7 @@ def predict_games_fast(date=None, num_games=20):
         games_for_model = filtered_games
 
     # Step 2: Build dataset (only for feature extraction)
-    # HARDCODED: Use real seasons with LOCAL raw data (not future seasons)
-    # These seasons have data in data/raw/web_v1/ that will be cached on first run
-    seasons = ["20232024", "20212022"]  # Real seasons with local raw data
+    seasons = recent_seasons(anchor=target_dt, count=3)
     print("\n2️⃣  Loading recent game data for feature extraction...")
     print(f"   (Loading {len(seasons)} season(s): {', '.join(seasons)})")
 
@@ -254,7 +252,14 @@ def predict_games_fast(date=None, num_games=20):
 
     predictions = []
     eligible_games["seasonId_str"] = eligible_games["seasonId"].astype(str)
-    feature_columns = eligible_features.columns
+
+    # Align features to the pre-trained model expectations to avoid shape mismatches
+    model_feature_columns = getattr(model, "feature_names_in_", None)
+    if model_feature_columns is not None:
+        feature_columns = pd.Index(model_feature_columns)
+        eligible_features = eligible_features.reindex(columns=feature_columns, fill_value=0.0)
+    else:
+        feature_columns = eligible_features.columns
 
     for i, game in enumerate(games_for_model[:num_games], 1):
         home_id = game['homeTeamId']

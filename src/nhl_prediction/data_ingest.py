@@ -4,6 +4,9 @@ from __future__ import annotations
 
 import logging
 from dataclasses import dataclass
+import os
+import requests
+import shutil
 from functools import lru_cache
 from pathlib import Path
 from typing import Iterable, List
@@ -44,6 +47,24 @@ def load_moneypuck_data(data_path: Path = MONEYPUCK_DATA_PATH) -> pd.DataFrame:
         DataFrame with game-level team statistics including expected goals,
         shot quality metrics, and advanced analytics.
     """
+    if not data_path.exists():
+        data_path.parent.mkdir(parents=True, exist_ok=True)
+        source_url = os.getenv(
+            "MONEYPUCK_DATA_URL",
+            "https://moneypuck.com/moneypuck/playerData/careers/gameByGame/all_teams.csv",
+        )
+        LOGGER.warning(f"MoneyPuck data missing at {data_path} — downloading from {source_url}")
+        try:
+            with requests.get(source_url, stream=True, timeout=120) as resp:
+                resp.raise_for_status()
+                with open(data_path, "wb") as f:
+                    shutil.copyfileobj(resp.raw, f)
+            size_mb = data_path.stat().st_size / 1e6
+            LOGGER.info(f"Downloaded MoneyPuck data ({size_mb:.1f} MB) to {data_path}")
+        except Exception as e:
+            LOGGER.error(f"Failed to download MoneyPuck data: {e}")
+            raise
+
     LOGGER.info(f"Loading MoneyPuck data from {data_path}")
     df = pd.read_csv(data_path)
     
@@ -204,25 +225,33 @@ def fetch_multi_season_logs(seasons: Iterable[str]) -> pd.DataFrame:
     Returns:
         Combined DataFrame with all requested seasons
     """
+    prefer_native = os.getenv("PUCKCAST_NATIVE_INGEST", "").lower() in ("1", "true", "yes")
+    moneypuck_exists = MONEYPUCK_DATA_PATH.exists()
+
+    # Use MoneyPuck CSV when available (fast path) unless explicitly opting into native ingest.
+    if moneypuck_exists and not prefer_native:
+        frames = [fetch_team_game_logs(SeasonConfig(season_id=str(season))) for season in seasons]
+        combined = pd.concat(frames, ignore_index=True)
+        combined["gameDate"] = pd.to_datetime(combined["gameDate"])
+
+        LOGGER.info("Loaded %d team-games across %d seasons from MoneyPuck CSV",
+                    len(combined), len(seasons))
+
+        combined = enhance_with_goalie_features(combined)
+        return combined
+
+    # Native ingest uses NHL play-by-play with caching (much slower without cache).
     native = load_native_game_logs(seasons)
     if not native.empty:
         native["gameDate"] = pd.to_datetime(native["gameDate"])
         LOGGER.info("Loaded %d native team-games across %d seasons (%s)",
                     len(native), len(seasons), ", ".join(str(s) for s in seasons))
-        # Add individual starting goalie features
         native = enhance_with_goalie_features(native)
         return native
 
-    frames = [fetch_team_game_logs(SeasonConfig(season_id=str(season))) for season in seasons]
-    combined = pd.concat(frames, ignore_index=True)
-    combined["gameDate"] = pd.to_datetime(combined["gameDate"])
-
-    LOGGER.info(f"Falling back to MoneyPuck: combined {len(combined)} team-games across {len(seasons)} seasons")
-
-    # Add individual starting goalie features
-    combined = enhance_with_goalie_features(combined)
-
-    return combined
+    # If native ingest fails and MoneyPuck isn't available, return empty frame.
+    LOGGER.warning("No game logs could be loaded (MoneyPuck missing?); returning empty dataset")
+    return pd.DataFrame()
 
 
 @lru_cache(maxsize=1)
