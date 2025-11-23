@@ -1,6 +1,7 @@
 import { buildTeamSnapshots, computeStandingsPowerScore, getCurrentStandings, type TeamSnapshot } from "@/lib/current";
 import { TeamCrest } from "@/components/TeamCrest";
 import { PowerBoardClient, type LeaderboardRow } from "@/components/PowerBoardClient";
+import { fetchNextGamesMap } from "@/lib/nextGames";
 
 const snapshots = buildTeamSnapshots();
 const snapshotMap = new Map(snapshots.map((team) => [team.abbrev, team]));
@@ -113,7 +114,7 @@ async function fetchNextGames(abbrevs: string[]): Promise<Record<string, NextGam
 }
 
 export default async function LeaderboardsPage() {
-  const nextGames = await fetchNextGames(rankedRows.map((r) => r.abbrev));
+  const nextGames = await fetchNextGamesMap(rankedRows.map((r) => r.abbrev), 14);
   const topTeam = rankedRows[0];
   const updatedDisplay = new Intl.DateTimeFormat("en-US", {
     timeZone: "America/New_York",
