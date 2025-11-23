@@ -158,7 +158,7 @@ function PowerRow({ row }: { row: LeaderboardRow }) {
   const overlayProb = row.overlay ? pct(row.overlay.avgProb) : "—";
   const nextDisplay = row.overlay?.nextGame
     ? `${row.overlay.nextGame.opponent} (${row.overlay.nextGame.date})`
-    : "No upcoming game found";
+    : "Off day (next TBD)";
 
   return (
     <div className="power-board__row">

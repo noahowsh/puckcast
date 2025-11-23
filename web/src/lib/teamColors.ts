@@ -61,12 +61,19 @@ const luma = (hex: string) => {
 };
 
 export function teamGradient(abbrev: string) {
-  const colors = TEAM_COLORS[abbrev?.toUpperCase?.() ?? ""];
+  const safe = abbrev?.toUpperCase?.() ?? "";
+  const colors = TEAM_COLORS[safe];
   if (!colors) return fallbackGradient;
   const primaryLuma = luma(colors.primary);
   // Bright colors (yellows/oranges) overpower; very dark colors disappear. Bias alpha by perceived brightness.
-  const primaryAlpha = primaryLuma > 190 ? 0.12 : primaryLuma < 70 ? 0.24 : 0.20;
-  const secondaryAlpha = primaryLuma > 190 ? 0.08 : primaryLuma < 70 ? 0.18 : 0.15;
+  let primaryAlpha = primaryLuma > 190 ? 0.12 : primaryLuma < 70 ? 0.24 : 0.20;
+  let secondaryAlpha = primaryLuma > 190 ? 0.08 : primaryLuma < 70 ? 0.18 : 0.15;
+
+  // Improve contrast for deep blue logos that disappear on dark backgrounds
+  if (["TBL", "TOR", "VAN"].includes(safe)) {
+    primaryAlpha = 0.16;
+    secondaryAlpha = 0.12;
+  }
   const primary = hexToRgba(colors.primary, primaryAlpha);
   const secondary = hexToRgba(colors.secondary ?? colors.primary, secondaryAlpha);
   return `linear-gradient(145deg, ${primary}, ${secondary})`;
