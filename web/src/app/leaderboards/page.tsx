@@ -6,6 +6,9 @@ const snapshotMap = new Map(snapshots.map((team) => [team.abbrev, team]));
 const standings = getCurrentStandings();
 const nameToAbbrev = new Map<string, string>(standings.map((team) => [team.team, team.abbrev]));
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 type LeaderboardRow = {
   powerRank: number;
   standingsRank: number;

@@ -70,10 +70,10 @@ export function teamGradient(abbrev: string) {
   let secondaryAlpha = primaryLuma > 190 ? 0.08 : primaryLuma < 70 ? 0.18 : 0.15;
 
   // Improve contrast for deep blue logos that disappear on dark backgrounds:
-  // give them a lighter wash plus their color so the crest doesn't melt into the page.
+  // layer a light wash behind the logo.
   if (["TBL", "TOR", "VAN"].includes(safe)) {
-    const light = "rgba(255, 255, 255, 0.18)";
-    const dark = hexToRgba(colors.primary, 0.22);
+    const light = "rgba(255, 255, 255, 0.28)";
+    const dark = hexToRgba(colors.primary, 0.26);
     return `linear-gradient(145deg, ${light}, ${dark})`;
   }
 
@@ -85,6 +85,9 @@ export function teamGradient(abbrev: string) {
 export function teamBorderColor(abbrev: string) {
   const colors = TEAM_COLORS[abbrev?.toUpperCase?.() ?? ""];
   if (!colors) return fallbackBorder;
+  if (["TBL", "TOR", "VAN"].includes(abbrev?.toUpperCase?.() ?? "")) {
+    return "rgba(255, 255, 255, 0.4)";
+  }
   const alpha = luma(colors.primary) > 190 ? 0.35 : luma(colors.primary) < 70 ? 0.55 : 0.5;
   return hexToRgba(colors.primary, alpha);
 }
