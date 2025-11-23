@@ -53,6 +53,10 @@ python3 analysis/hyperparameter_tuning.py
 - `web/src/data/currentStandings.json`, `goaliePulse.json`, `modelInsights.json`
 - Next-game lookup for power board: `web/src/app/api/next-games` (calls NHL schedule API)
 
+## 🔐 Secrets / Env
+- X/Twitter automation: `TWITTER_API_KEY`, `TWITTER_API_SECRET`, `TWITTER_ACCESS_TOKEN`, `TWITTER_ACCESS_SECRET` (optional `TWITTER_BEARER_TOKEN`).
+- Google Analytics: gtag `G-ZSYWJKWQM3` is embedded in `web/src/app/layout.tsx`.
+
 ---
 
 ## 📁 Project Structure
