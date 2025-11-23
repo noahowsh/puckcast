@@ -37,8 +37,8 @@ jobs:
 
       - name: Run fast predictions
         run: |
-          echo "🏒 Running fast predictions (using pre-trained model)..."
-          python predict_fast.py || echo "⚠️ Prediction script failed but continuing..."
+          echo "🏒 Running predictions..."
+          python predict_simple.py || python predict_fast.py || echo "⚠️ Both prediction scripts failed"
 
       - name: Archive predictions
         run: |
