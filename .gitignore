@@ -69,6 +69,8 @@ data/*.pkl
 
 # Daily prediction exports
 predictions_*.csv
+devserver.log
+temp_outputs/
 
 # Debug and test scripts (but allow tests/ directory)
 test_*.py
