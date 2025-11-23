@@ -30,8 +30,17 @@ SRC_DIR = REPO_ROOT / "src"
 if str(SRC_DIR) not in sys.path:
     sys.path.insert(0, str(SRC_DIR))
 
-from nhl_prediction.player_hub.context import refresh_player_hub_context  # noqa: E402
-from _native_pipeline import derive_season_id  # noqa: E402
+# Optional player hub context (skip if missing)
+try:
+    from nhl_prediction.player_hub.context import refresh_player_hub_context  # type: ignore
+except ImportError:
+    refresh_player_hub_context = None  # type: ignore
+
+try:
+    from _native_pipeline import derive_season_id  # type: ignore
+except ImportError:
+    def derive_season_id(target_date):
+        return f"{target_date.year}{target_date.year + 1}"
 
 
 def parse_args() -> argparse.Namespace:
@@ -137,10 +146,16 @@ def refresh_goalie_pulse(target: date) -> None:
 
 def refresh_player_hub(target: date, season_id: str) -> None:
     LOGGER.info("Refreshing Player Hub context (date=%s, season=%s)", target.isoformat(), season_id)
-    refresh_player_hub_context(target, season_id)
+    if refresh_player_hub_context:
+        refresh_player_hub_context(target, season_id)
+    else:
+        LOGGER.info("Player Hub context not available (module missing); skipping.")
 
 
 def build_player_hub_artifacts(target: date, season_id: str, *, force: bool = False) -> None:
+    if not PLAYER_HUB_ARTIFACT_SCRIPT.exists():
+        LOGGER.info("Player Hub artifact script missing; skipping.")
+        return
     LOGGER.info("Building Player Hub artifacts (date=%s, season=%s)", target.isoformat(), season_id)
     args = ["--season", season_id, "--date", target.isoformat()]
     if force:
