@@ -250,9 +250,9 @@ export default function PredictionsPage() {
                     {upsetRadar.map((game) => (
                       <div key={game.id} className="upset-card">
                         <div className="versus">
-                          <Crest label={game.awayTeam.abbrev} />
+                          <TeamCrest abbrev={game.awayTeam.abbrev} />
                           <span className="versus__divider">at</span>
-                          <Crest label={game.homeTeam.abbrev} />
+                          <TeamCrest abbrev={game.homeTeam.abbrev} />
                         </div>
                         <div className="upset-card__prob">
                           <span className="edge-card__prob-value">{pct(game.awayWinProb)}</span>
