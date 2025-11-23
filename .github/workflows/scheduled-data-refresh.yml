@@ -5,8 +5,9 @@ name: Scheduled Data Refresh (Granular)
 
 on:
   schedule:
-    # Predictions: Every 6 hours during game days (6am, 12pm, 6pm, 12am ET / UTC+4)
-    - cron: '0 10,16,22,4 * * *'  # 6am, 12pm, 6pm, 12am ET (approximate)
+    # Predictions: Daily at 5am ET and evening at 5pm ET
+    - cron: '0 9 * * *'  # 5am ET (9am UTC)
+    - cron: '0 21 * * *'  # 5pm ET (9pm UTC) for evening games
 
     # Standings: Once daily at midnight ET
     - cron: '0 5 * * *'  # 12am ET
