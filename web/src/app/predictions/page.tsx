@@ -8,6 +8,7 @@ import type { Prediction, PredictionsPayload } from "@/types/prediction";
 import { getPredictionsPayload, selectCurrentSlate } from "@/lib/data";
 import { getPredictionGrade } from "@/lib/prediction";
 import { teamBorderColor, teamGradient } from "@/lib/teamColors";
+import { TeamCrest } from "@/components/TeamCrest";
 
 const payload: PredictionsPayload = getPredictionsPayload();
 const todaysPredictions = selectCurrentSlate(payload.games);
@@ -27,20 +28,6 @@ const updatedDisplay = updatedTimestamp
 const pct = (num: number) => `${(num * 100).toFixed(1)}%`;
 
 type SortKey = "edge" | "time";
-
-function Crest({ label }: { label: string }) {
-  return (
-    <span
-      className="crest"
-      style={{
-        background: teamGradient(label),
-        borderColor: teamBorderColor(label),
-      }}
-    >
-      {label}
-    </span>
-  );
-}
 
 function EdgeMeter({ value }: { value: number }) {
   const width = Math.min(Math.abs(value) * 520, 100);
@@ -72,14 +59,14 @@ function PredictionRow({ game }: { game: Prediction }) {
   const grade = getPredictionGrade(game.edge);
   return (
     <div className="prediction-row">
-      <div className="prediction-row__teams">
-        <div className="versus">
-          <Crest label={game.awayTeam.abbrev} />
-          <span className="versus__divider">@</span>
-          <Crest label={game.homeTeam.abbrev} />
-        </div>
-        <div className="prediction-row__meta">
-          <span className="tag">{game.startTimeEt ?? "TBD"}</span>
+          <div className="prediction-row__teams">
+            <div className="versus">
+              <TeamCrest abbrev={game.awayTeam.abbrev} />
+              <span className="versus__divider">@</span>
+              <TeamCrest abbrev={game.homeTeam.abbrev} />
+            </div>
+            <div className="prediction-row__meta">
+              <span className="tag">{game.startTimeEt ?? "TBD"}</span>
           <span className="chip-soft">{game.modelFavorite === "home" ? "Home tilt" : "Road lean"}</span>
         </div>
       </div>

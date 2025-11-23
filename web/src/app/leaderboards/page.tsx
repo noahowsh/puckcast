@@ -1,5 +1,5 @@
 import { buildTeamSnapshots, computeStandingsPowerScore, getCurrentStandings, type TeamSnapshot } from "@/lib/current";
-import { teamBorderColor, teamGradient } from "@/lib/teamColors";
+import { TeamCrest } from "@/components/TeamCrest";
 
 const snapshots = buildTeamSnapshots();
 const snapshotMap = new Map(snapshots.map((team) => [team.abbrev, team]));
@@ -60,20 +60,6 @@ const biggestSlider = rankedRows.reduce<LeaderboardRow | null>((best, row) => {
 }, null);
 
 const pct = (value: number) => `${(value * 100).toFixed(1)}%`;
-
-function Crest({ label }: { label: string }) {
-  return (
-    <span
-      className="crest"
-      style={{
-        background: teamGradient(label),
-        borderColor: teamBorderColor(label),
-      }}
-    >
-      {label}
-    </span>
-  );
-}
 
 export default function LeaderboardsPage() {
   const topTeam = rankedRows[0];
@@ -173,7 +159,7 @@ function PowerRow({ row }: { row: LeaderboardRow }) {
     <div className="power-board__row">
       <div className="rank-chip">#{row.powerRank}</div>
       <div className="power-team">
-        <Crest label={row.abbrev} />
+        <TeamCrest abbrev={row.abbrev} />
         <div>
           <p className="power-name">{row.team}</p>
           <p className="micro-label">Standings #{row.standingsRank}</p>

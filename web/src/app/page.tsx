@@ -5,7 +5,7 @@ import type { ModelInsights } from "@/types/insights";
 import { getPredictionsPayload, selectCurrentSlate } from "@/lib/data";
 import { buildTeamSnapshots, computeStandingsPowerScore, getCurrentStandings } from "@/lib/current";
 import { getPredictionGrade } from "@/lib/prediction";
-import { teamBorderColor, teamGradient } from "@/lib/teamColors";
+import { TeamCrest } from "@/components/TeamCrest";
 
 const modelInsights = insightsData as ModelInsights;
 const predictionsPayload = getPredictionsPayload();
@@ -63,20 +63,6 @@ const updatedDisplay = updatedTimestamp
   : null;
 
 type PowerItem = (typeof powerIndex)[number];
-
-function Crest({ label }: { label: string }) {
-  return (
-    <span
-      className="crest"
-      style={{
-        background: teamGradient(label),
-        borderColor: teamBorderColor(label),
-      }}
-    >
-      {label}
-    </span>
-  );
-}
 
 function EdgeMeter({ value }: { value: number }) {
   const width = Math.min(Math.abs(value) * 520, 100);
@@ -159,9 +145,9 @@ export default function Home() {
                       <div key={game.id} className="edge-card edge-card--compact">
                         <div className="edge-card__header">
                           <div className="versus">
-                            <Crest label={game.awayTeam.abbrev} />
+                            <TeamCrest abbrev={game.awayTeam.abbrev} />
                             <span className="versus__divider">@</span>
-                            <Crest label={game.homeTeam.abbrev} />
+                            <TeamCrest abbrev={game.homeTeam.abbrev} />
                           </div>
                           <span className="tag">{game.startTimeEt ?? "TBD"}</span>
                         </div>
@@ -193,9 +179,9 @@ export default function Home() {
                     {upsetRadar.map((game) => (
                       <div key={game.id} className="upset-card">
                         <div className="versus">
-                          <Crest label={game.awayTeam.abbrev} />
+                          <TeamCrest abbrev={game.awayTeam.abbrev} />
                           <span className="versus__divider">at</span>
-                          <Crest label={game.homeTeam.abbrev} />
+                          <TeamCrest abbrev={game.homeTeam.abbrev} />
                         </div>
                         <div className="upset-card__prob">
                           <span className="tag">Road lean</span>

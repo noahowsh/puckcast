@@ -78,3 +78,8 @@ export function teamBorderColor(abbrev: string) {
   const alpha = luma(colors.primary) > 190 ? 0.35 : luma(colors.primary) < 70 ? 0.55 : 0.5;
   return hexToRgba(colors.primary, alpha);
 }
+
+export function teamLogoUrl(abbrev: string) {
+  const safe = abbrev?.toUpperCase?.() ?? "";
+  return `https://assets.nhle.com/logos/nhl/svg/${safe}_light.svg`;
+}
