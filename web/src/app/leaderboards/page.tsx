@@ -182,7 +182,7 @@ export default async function LeaderboardsPage() {
             </div>
           </div>
 
-          <PowerBoardClient rows={rankedRows} />
+          <PowerBoardClient rows={rankedRows} initialNextGames={nextGames} />
         </section>
       </div>
     </div>

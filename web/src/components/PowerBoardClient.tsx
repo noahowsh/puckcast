@@ -25,8 +25,8 @@ function formatPct(value: number) {
 
 const nameFallback: Record<string, string> = {};
 
-export function PowerBoardClient({ rows }: { rows: LeaderboardRow[] }) {
-  const [nextGames, setNextGames] = React.useState<Record<string, NextGameInfo>>({});
+export function PowerBoardClient({ rows, initialNextGames }: { rows: LeaderboardRow[]; initialNextGames?: Record<string, NextGameInfo> }) {
+  const [nextGames, setNextGames] = React.useState<Record<string, NextGameInfo>>(initialNextGames || {});
 
   React.useEffect(() => {
     const fetchNextGames = async () => {
@@ -59,7 +59,9 @@ export function PowerBoardClient({ rows }: { rows: LeaderboardRow[] }) {
             if (away && !map[away]) map[away] = { opponent: home, date, startTimeEt };
           });
         });
-        setNextGames(map);
+        if (Object.keys(map).length) {
+          setNextGames(map);
+        }
       } catch (err) {
         console.warn("schedule fetch failed", err);
       }
@@ -70,7 +72,7 @@ export function PowerBoardClient({ rows }: { rows: LeaderboardRow[] }) {
   const renderRow = (row: LeaderboardRow) => {
     const movementDisplay = row.movement === 0 ? "Even" : row.movement > 0 ? `+${row.movement}` : row.movement;
     const movementTone = row.movement > 0 ? "movement--positive" : row.movement < 0 ? "movement--negative" : "movement--neutral";
-    const overlayProb = row.overlay ? formatPct(row.overlay.avgProb) : "—";
+    const overlayProb = row.overlay ? formatPct(row.overlay.avgProb) : formatPct(row.pointPctg || 0.5);
     const next = nextGames[row.abbrev];
     const nextDisplay = next
       ? `${next.opponent} (${next.date}${next.startTimeEt ? ` · ${next.startTimeEt} ET` : ""})`
