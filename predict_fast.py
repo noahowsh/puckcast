@@ -211,14 +211,19 @@ def predict_games_fast(date=None, num_games=20):
         games_for_model = filtered_games
 
     # Step 2: Build dataset (only for feature extraction)
-    seasons = recent_seasons(target_dt, count=3)
+    seasons = recent_seasons(target_dt, count=2)  # Reduced from 3 to 2 for speed
     print("\n2️⃣  Loading recent game data for feature extraction...")
     print(f"   (Loading {len(seasons)} season(s): {', '.join(seasons)})")
 
-    dataset = build_dataset(seasons)
-
-    print(f"   ✅ {len(dataset.games)} games loaded")
-    print(f"   ✅ {dataset.features.shape[1]} features available")
+    try:
+        dataset = build_dataset(seasons)
+        print(f"   ✅ {len(dataset.games)} games loaded")
+        print(f"   ✅ {dataset.features.shape[1]} features available")
+    except Exception as e:
+        print(f"   ❌ Failed to load dataset: {e}")
+        print(f"   ℹ️  Exporting empty predictions due to data loading failure")
+        export_predictions_json([], generated_at=datetime.now(timezone.utc).isoformat())
+        return []
 
     # Step 3: Use only recent games for feature extraction
     print("\n3️⃣  Extracting features from recent games...")
