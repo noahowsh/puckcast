@@ -129,6 +129,8 @@ jobs:
         run: |
           echo "🏒 Refreshing predictions (calibrated full model)..."
           python predict_full.py
+          echo "🔍 Validating predictions payload..."
+          python scripts/validate_predictions.py web/src/data/todaysPredictions.json
 
       - name: Refresh standings
         if: needs.determine-refresh.outputs.refresh_standings == 'true'

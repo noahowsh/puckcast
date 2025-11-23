@@ -43,6 +43,11 @@ jobs:
           echo "🏒 Running calibrated predictions..."
           python predict_full.py
 
+      - name: Validate predictions payload
+        run: |
+          echo "🔍 Validating predictions payload..."
+          python scripts/validate_predictions.py web/src/data/todaysPredictions.json
+
       - name: Archive predictions
         run: |
           echo "📦 Archiving predictions..."
