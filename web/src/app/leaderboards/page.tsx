@@ -4,6 +4,7 @@ import { TeamCrest } from "@/components/TeamCrest";
 const snapshots = buildTeamSnapshots();
 const snapshotMap = new Map(snapshots.map((team) => [team.abbrev, team]));
 const standings = getCurrentStandings();
+const nameToAbbrev = new Map<string, string>(standings.map((team) => [team.team, team.abbrev]));
 
 type LeaderboardRow = {
   powerRank: number;
@@ -61,7 +62,70 @@ const biggestSlider = rankedRows.reduce<LeaderboardRow | null>((best, row) => {
 
 const pct = (value: number) => `${(value * 100).toFixed(1)}%`;
 
-export default function LeaderboardsPage() {
+type NextGameInfo = { opponent: string; date: string; startTimeEt: string | null };
+
+async function fetchNextGames(abbrevs: string[]): Promise<Record<string, NextGameInfo>> {
+  const today = new Date();
+  const end = new Date();
+  end.setDate(end.getDate() + 7);
+  const fmt = (d: Date) => d.toISOString().slice(0, 10);
+  const url = `https://statsapi.web.nhl.com/api/v1/schedule?startDate=${fmt(today)}&endDate=${fmt(end)}`;
+
+  try {
+    const res = await fetch(url, { next: { revalidate: 60 * 30 } });
+    if (!res.ok) {
+      console.warn("schedule fetch failed", res.status);
+      return {};
+    }
+    const data = await res.json();
+    const map: Record<string, NextGameInfo> = {};
+
+    const resolveAbbrev = (team: any) => {
+      const cand = team?.abbreviation || team?.triCode || nameToAbbrev.get(team?.name) || team?.teamName || team?.name;
+      return (cand || "").toString().toUpperCase();
+    };
+
+    const formatEt = (iso: string) => {
+      if (!iso) return null;
+      const dt = new Date(iso);
+      return new Intl.DateTimeFormat("en-US", {
+        timeZone: "America/New_York",
+        hour: "numeric",
+        minute: "2-digit",
+      }).format(dt);
+    };
+
+    data?.dates?.forEach((block: any) => {
+      const date = block?.date;
+      block?.games?.forEach((game: any) => {
+        const homeTeam = game?.teams?.home?.team;
+        const awayTeam = game?.teams?.away?.team;
+        const home = resolveAbbrev(homeTeam);
+        const away = resolveAbbrev(awayTeam);
+        const startTimeEt = formatEt(game?.gameDate);
+        if (home && !map[home]) {
+          map[home] = { opponent: away, date, startTimeEt };
+        }
+        if (away && !map[away]) {
+          map[away] = { opponent: home, date, startTimeEt };
+        }
+      });
+    });
+
+    // Keep only requested teams
+    const filtered: Record<string, NextGameInfo> = {};
+    abbrevs.forEach((abbr) => {
+      if (map[abbr]) filtered[abbr] = map[abbr];
+    });
+    return filtered;
+  } catch (e) {
+    console.warn("schedule fetch exception", e);
+    return {};
+  }
+}
+
+export default async function LeaderboardsPage() {
+  const nextGames = await fetchNextGames(rankedRows.map((r) => r.abbrev));
   const topTeam = rankedRows[0];
   const updatedDisplay = new Intl.DateTimeFormat("en-US", {
     timeZone: "America/New_York",
@@ -142,7 +206,7 @@ export default function LeaderboardsPage() {
               <span>Next</span>
             </div>
             {rankedRows.map((row) => (
-              <PowerRow key={row.abbrev} row={row} />
+              <PowerRow key={row.abbrev} row={row} nextGames={nextGames} />
             ))}
           </div>
         </section>
@@ -151,14 +215,15 @@ export default function LeaderboardsPage() {
   );
 }
 
-function PowerRow({ row }: { row: LeaderboardRow }) {
+function PowerRow({ row, nextGames }: { row: LeaderboardRow; nextGames: Record<string, NextGameInfo> }) {
   const movementDisplay = row.movement === 0 ? "Even" : row.movement > 0 ? `+${row.movement}` : row.movement;
   const movementTone = row.movement > 0 ? "movement--positive" : row.movement < 0 ? "movement--negative" : "movement--neutral";
 
   const overlayProb = row.overlay ? pct(row.overlay.avgProb) : "—";
-  const nextDisplay = row.overlay?.nextGame
-    ? `${row.overlay.nextGame.opponent} (${row.overlay.nextGame.date})`
-    : "Off day (next TBD)";
+  const next = nextGames[row.abbrev] || row.overlay?.nextGame;
+  const nextDisplay = next
+    ? `${next.opponent} (${next.date}${next.startTimeEt ? ` · ${next.startTimeEt} ET` : ""})`
+    : "Next game TBA";
 
   return (
     <div className="power-board__row">

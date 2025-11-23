@@ -7,7 +7,7 @@ type Props = {
   className?: string;
 };
 
-export function TeamCrest({ abbrev, size = 48, className }: Props) {
+export function TeamCrest({ abbrev, size = 54, className }: Props) {
   const safe = abbrev?.toUpperCase?.() ?? "";
   const src = teamLogoUrl(safe);
 

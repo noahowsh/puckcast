@@ -71,8 +71,8 @@ export function teamGradient(abbrev: string) {
 
   // Improve contrast for deep blue logos that disappear on dark backgrounds
   if (["TBL", "TOR", "VAN"].includes(safe)) {
-    primaryAlpha = 0.16;
-    secondaryAlpha = 0.12;
+    primaryAlpha = 0.24;
+    secondaryAlpha = 0.18;
   }
   const primary = hexToRgba(colors.primary, primaryAlpha);
   const secondary = hexToRgba(colors.secondary ?? colors.primary, secondaryAlpha);
