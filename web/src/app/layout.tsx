@@ -6,6 +6,7 @@ import { SiteNav } from "@/components/SiteNav";
 import { SiteFooter } from "@/components/SiteFooter";
 import { PageTransition } from "@/components/PageTransition";
 import { Analytics } from "@/components/Analytics";
+import Script from "next/script";
 
 const display = Epilogue({
   subsets: ["latin"],
@@ -61,6 +62,18 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${display.variable} ${body.variable} antialiased`}>
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-ZSYWJKWQM3"
+          strategy="afterInteractive"
+        />
+        <Script id="ga-gtag" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-ZSYWJKWQM3');
+          `}
+        </Script>
         <Analytics />
         <div className="relative min-h-screen overflow-hidden text-white">
           <div
