@@ -12,20 +12,9 @@
 - **Model posture:** Calibrated logistic regression remains the primary engine (~59% accuracy, +6 pts over baseline) with isotonic calibration and enriched inputs (special teams, goalie/injury metadata).
 
 ### Quick Visuals
-```
-Pipeline (ingest → features → model → outputs)
-┌──────────┐   ┌──────────────┐   ┌────────────┐   ┌─────────────┐
-│ Data     │→→│ Feature       │→→│ Calibrated  │→→│ Web + API +  │
-│ (MoneyPuck│  │ Engineering   │  │ Logistic Reg│  │ Social Posts │
-│ + NHL API)│  │ (140+ signals)│  │ (isotonic)  │  │ (JSON + X)   │
-└──────────┘   └──────────────┘   └────────────┘   └─────────────┘
-
-Automation Windows (ET)
-08:00 10:30 14:00 17:00 18:30 20:00
-  🟦    🟪    🟦    🟦     🟦     🟦
-  slate micro afternoon GOTN  upset  recap
-  summary insight update           watch
-```
+- Pipeline overview: ![Pipeline](assets/pipeline_diagram.png)
+- Automation windows (ET): ![Automation](assets/automation_schedule.png)
+- Accuracy lift vs baseline: ![Accuracy](assets/accuracy_comparison.png)
 
 Key metrics table:
 
