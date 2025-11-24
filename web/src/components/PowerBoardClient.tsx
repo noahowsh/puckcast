@@ -27,6 +27,20 @@ const nameFallback: Record<string, string> = {};
 export function PowerBoardClient({ rows, initialNextGames }: { rows: LeaderboardRow[]; initialNextGames?: Record<string, NextGameInfo> }) {
   const [nextGames, setNextGames] = React.useState<Record<string, NextGameInfo>>(initialNextGames || {});
 
+  const formatDate = (date?: string | null) => {
+    if (!date) return null;
+    const dt = new Date(date);
+    if (Number.isNaN(dt.getTime())) return date;
+    return new Intl.DateTimeFormat("en-US", { month: "short", day: "numeric" }).format(dt);
+  };
+
+  const formatTimeEt = (time?: string | null) => {
+    if (!time) return null;
+    // Ensure single ET suffix
+    const trimmed = time.replace(/\s*ET$/i, "").trim();
+    return `${trimmed} ET`;
+  };
+
   React.useEffect(() => {
     const fetchNextGames = async () => {
       const url = "/api/next-games";
@@ -51,8 +65,10 @@ export function PowerBoardClient({ rows, initialNextGames }: { rows: Leaderboard
     const movementTone = row.movement > 0 ? "movement--positive" : row.movement < 0 ? "movement--negative" : "movement--neutral";
     const overlayProb = row.overlay && row.overlay.avgProb ? formatPct(row.overlay.avgProb) : "—";
     const next = nextGames[row.abbrev];
+    const nextDate = formatDate(next?.date);
+    const nextTime = formatTimeEt(next?.startTimeEt);
     const nextDisplay = next
-      ? `${next.opponent} (${next.date}${next.startTimeEt ? ` · ${next.startTimeEt} ET` : ""})`
+      ? `${next.opponent}${nextDate || nextTime ? " (" : ""}${[nextDate, nextTime].filter(Boolean).join(" · ")}${nextDate || nextTime ? ")" : ""}`
       : "Next game TBA";
 
     return (
