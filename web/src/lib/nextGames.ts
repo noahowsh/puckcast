@@ -22,32 +22,37 @@ const resolveAbbrev = (team: any) => {
 export async function fetchNextGamesMap(abbrevs: string[], lookaheadDays = 14): Promise<Record<string, NextGameInfo>> {
   const today = new Date();
   const fmt = (d: Date) => d.toISOString().slice(0, 10);
-  const start = fmt(today);
-  const url = `https://api-web.nhle.com/v1/schedule/${start}?expand=schedule.teams`;
 
-  try {
-    const res = await fetch(url, { cache: "no-store" });
-    if (!res.ok) return {};
-    const data = await res.json();
-    const map: Record<string, NextGameInfo> = {};
+  const map: Record<string, NextGameInfo> = {};
 
-    data?.gameWeek?.forEach((block: any) => {
-      const date = block?.date;
-      block?.games?.forEach((game: any) => {
-        const home = resolveAbbrev(game?.homeTeam);
-        const away = resolveAbbrev(game?.awayTeam);
-        const startTimeEt = formatEt(game?.startTimeUTC);
-        if (home && !map[home]) map[home] = { opponent: away, date, startTimeEt };
-        if (away && !map[away]) map[away] = { opponent: home, date, startTimeEt };
+  for (let offset = 0; offset < lookaheadDays; offset += 1) {
+    const target = new Date(today);
+    target.setDate(today.getDate() + offset);
+    const url = `https://api-web.nhle.com/v1/schedule/${fmt(target)}?expand=schedule.teams`;
+    try {
+      const res = await fetch(url, { cache: "no-store" });
+      if (!res.ok) continue;
+      const data = await res.json();
+      data?.gameWeek?.forEach((block: any) => {
+        const date = block?.date;
+        block?.games?.forEach((game: any) => {
+          const home = resolveAbbrev(game?.homeTeam);
+          const away = resolveAbbrev(game?.awayTeam);
+          const startTimeEt = formatEt(game?.startTimeUTC);
+          if (home && !map[home]) map[home] = { opponent: away, date, startTimeEt };
+          if (away && !map[away]) map[away] = { opponent: home, date, startTimeEt };
+        });
       });
-    });
-
-    const filtered: Record<string, NextGameInfo> = {};
-    abbrevs.forEach((abbr) => {
-      if (map[abbr]) filtered[abbr] = map[abbr];
-    });
-    return filtered;
-  } catch {
-    return {};
+      // Early exit if we've filled all abbrevs
+      if (abbrevs.every((a) => map[a])) break;
+    } catch {
+      continue;
+    }
   }
+
+  const filtered: Record<string, NextGameInfo> = {};
+  abbrevs.forEach((abbr) => {
+    if (map[abbr]) filtered[abbr] = map[abbr];
+  });
+  return filtered;
 }
