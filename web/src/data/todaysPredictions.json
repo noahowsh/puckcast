@@ -1,52 +1,6 @@
 {
-  "generatedAt": "2025-11-23T23:08:18.301004+00:00",
+  "generatedAt": "2025-11-24T01:27:57.401548+00:00",
   "games": [
-    {
-      "id": "2025020350",
-      "gameDate": "2025-11-23",
-      "startTimeEt": "7:00 PM ET",
-      "startTimeUtc": "2025-11-24T00:00:00+00:00",
-      "homeTeam": {
-        "name": "Blackhawks",
-        "abbrev": "CHI"
-      },
-      "awayTeam": {
-        "name": "Avalanche",
-        "abbrev": "COL"
-      },
-      "homeWinProb": 0.4663,
-      "awayWinProb": 0.5337,
-      "confidenceScore": 0.067,
-      "confidenceGrade": "C+",
-      "edge": -0.034,
-      "summary": "Avalanche project at 53% as the road lean \u2014 a C+-tier edge worth 3.4 pts over a coin flip.",
-      "modelFavorite": "away",
-      "venue": "United Center",
-      "season": "20252026"
-    },
-    {
-      "id": "2025020351",
-      "gameDate": "2025-11-23",
-      "startTimeEt": "8:00 PM ET",
-      "startTimeUtc": "2025-11-24T01:00:00+00:00",
-      "homeTeam": {
-        "name": "Sharks",
-        "abbrev": "SJS"
-      },
-      "awayTeam": {
-        "name": "Bruins",
-        "abbrev": "BOS"
-      },
-      "homeWinProb": 0.4663,
-      "awayWinProb": 0.5337,
-      "confidenceScore": 0.067,
-      "confidenceGrade": "C+",
-      "edge": -0.034,
-      "summary": "Bruins project at 53% as the road lean \u2014 a C+-tier edge worth 3.4 pts over a coin flip.",
-      "modelFavorite": "away",
-      "venue": "SAP Center at San Jose",
-      "season": "20252026"
-    },
     {
       "id": "2025020352",
       "gameDate": "2025-11-23",
@@ -60,12 +14,12 @@
         "name": "Flames",
         "abbrev": "CGY"
       },
-      "homeWinProb": 0.4663,
-      "awayWinProb": 0.5337,
-      "confidenceScore": 0.067,
-      "confidenceGrade": "C+",
-      "edge": -0.034,
-      "summary": "Flames project at 53% as the road lean \u2014 a C+-tier edge worth 3.4 pts over a coin flip.",
+      "homeWinProb": 0.4074,
+      "awayWinProb": 0.5926,
+      "confidenceScore": 0.185,
+      "confidenceGrade": "B",
+      "edge": -0.093,
+      "summary": "Flames project at 59% as the road lean \u2014 a B-tier edge worth 9.3 pts over a coin flip.",
       "modelFavorite": "away",
       "venue": "Rogers Arena",
       "season": "20252026"
