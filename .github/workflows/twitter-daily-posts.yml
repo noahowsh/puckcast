@@ -75,10 +75,20 @@ jobs:
 
       - name: Refresh predictions (fallback pull)
         run: |
+          set -e
           echo "🌐 Fetching latest predictions from live API..."
           mkdir -p web/src/data
-          curl -fsSL --location https://www.puckcast.ai/api/predictions -o web/src/data/todaysPredictions.json
-          echo "✅ Pulled latest predictions payload"
+          if curl -fsSL --location https://www.puckcast.ai/api/predictions -o web/src/data/todaysPredictions.json; then
+            echo "✅ Pulled latest predictions payload"
+          else
+            echo "⚠️ Live API fetch failed; falling back to existing file if available"
+            if [ -f web/src/data/todaysPredictions.json ]; then
+              echo "ℹ️ Using existing web/src/data/todaysPredictions.json"
+            else
+              echo "❌ No predictions payload available after API failure"
+              exit 1
+            fi
+          fi
 
       - name: Validate predictions freshness
         run: |
