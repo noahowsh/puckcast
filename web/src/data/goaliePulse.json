@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2025-11-24T13:26:37.544569+00:00",
+  "updatedAt": "2025-11-24T23:11:18.812440+00:00",
   "notes": "Goalie performance metrics calculated from NHL Stats API data. GSAx estimates based on save percentage above league average.",
   "goalies": [
     {
@@ -317,23 +317,6 @@
       "nextOpponent": "PHI"
     },
     {
-      "name": "Igor Shesterkin",
-      "team": "NYR",
-      "rollingGsa": 0.7,
-      "seasonGsa": 3.8,
-      "restDays": 2,
-      "startLikelihood": 0.8,
-      "trend": "stable",
-      "note": "Igor Shesterkin showing promise with limited sample size \u2014 monitor progression closely.",
-      "strengths": [
-        "Solid fundamentals"
-      ],
-      "watchouts": [
-        "Inconsistent results"
-      ],
-      "nextOpponent": "STL"
-    },
-    {
       "name": "Jeremy Swayman",
       "team": "BOS",
       "rollingGsa": 0.7,
@@ -349,6 +332,23 @@
         "Inconsistent results"
       ],
       "nextOpponent": "NYI"
+    },
+    {
+      "name": "Igor Shesterkin",
+      "team": "NYR",
+      "rollingGsa": 0.7,
+      "seasonGsa": 3.8,
+      "restDays": 2,
+      "startLikelihood": 0.8,
+      "trend": "stable",
+      "note": "Igor Shesterkin showing promise with limited sample size \u2014 monitor progression closely.",
+      "strengths": [
+        "Solid fundamentals"
+      ],
+      "watchouts": [
+        "Inconsistent results"
+      ],
+      "nextOpponent": "STL"
     },
     {
       "name": "Joey Daccord",
@@ -454,6 +454,23 @@
       "nextOpponent": "OTT"
     },
     {
+      "name": "David Rittich",
+      "team": "NYI",
+      "rollingGsa": 0.4,
+      "seasonGsa": 1.1,
+      "restDays": 3,
+      "startLikelihood": 0.6,
+      "trend": "stable",
+      "note": "David Rittich showing promise with limited sample size \u2014 monitor progression closely.",
+      "strengths": [
+        "Solid fundamentals"
+      ],
+      "watchouts": [
+        "Limited recent data"
+      ],
+      "nextOpponent": "BOS"
+    },
+    {
       "name": "Ilya Sorokin",
       "team": "NYI",
       "rollingGsa": 0.4,
@@ -486,23 +503,6 @@
         "High goals against"
       ],
       "nextOpponent": "CBJ"
-    },
-    {
-      "name": "David Rittich",
-      "team": "NYI",
-      "rollingGsa": 0.4,
-      "seasonGsa": 1.0,
-      "restDays": 3,
-      "startLikelihood": 0.6,
-      "trend": "stable",
-      "note": "David Rittich showing promise with limited sample size \u2014 monitor progression closely.",
-      "strengths": [
-        "Solid fundamentals"
-      ],
-      "watchouts": [
-        "Limited recent data"
-      ],
-      "nextOpponent": "BOS"
     },
     {
       "name": "Lukas Dostal",
