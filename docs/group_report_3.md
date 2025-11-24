@@ -7,7 +7,7 @@
 ---
 
 ## Executive Summary (what changed vs. Report 2)
-- **Stronger delivery:** Automated slate summary at 8 AM ET, richer fun-facts (special teams, injuries, goalie rest), and handle-safe social posts.
+- **Stronger delivery:** Automated slate summary at 8 AM ET, richer fun-facts (special teams, injuries, goalie rest), and clearer “why” signals on the slate.
 - **Production stability:** Hardened fallbacks for predictions API, no leading mentions, validation gates on every run.
 - **Model posture:** Calibrated logistic regression remains the primary engine (59.3% accuracy vs 53.7% baseline; log loss 0.676; Brier 0.240) with isotonic calibration and enriched inputs (special teams, goalie/injury metadata).
 
@@ -26,9 +26,8 @@ Key metrics table:
 | Log loss                           | 0.676      | Lower is better (calibration)         |
 | Brier score                        | 0.240      | Probability accuracy                  |
 | Games evaluated                    | 1,230      | 2023-24 season                        |
-| Feature count                      | 140+       | Rolling form, xG/shot quality, rest   |
+| Feature count                      | 200+       | Rolling form, xG/shot quality, rest   |
 | Daily automation                   | 6×/day     | Predictions + social + validation     |
-| Social safety                      | ✅         | No leading @; handle-tagged later     |
 
 ---
 
@@ -45,8 +44,10 @@ Predict NHL game outcomes with calibrated, actionable win probabilities that out
 - Current automation schedules (GitHub Actions + Vercel) are available and secrets configured.
 
 ## Analytical Setup & Analysis
-- **Data pipeline:** MoneyPuck game logs (team-level), NHL schedule/results, special teams, goalie/injury ingest; robust validation (schema + freshness checks).
-- **Features (140+):** Rolling form, xG/shot quality, special teams splits, rest/back-to-back, travel, Elo-like ratings, goaltending quality, injury/goalie rest overlays.
+- **Data sources:** MoneyPuck game logs (team-level xG/shot quality/possession), NHL Stats API (schedule/results/teams), special teams and lineup context, goalie/injury ingest. Validation includes schema and freshness checks.
+- **Data pipeline:** Native ingest + cached MoneyPuck pulls; enriched predictions payload with special teams, injury counts, goalie projections, start times, and edges.
+- **Features (200+):** Rolling form (3/5/10), xG/shot quality, special teams splits (PP/PK diff), rest/back-to-back, travel penalties, Elo-like ratings, goaltending quality, injury gap, goalie rest delta, venue/home ice.
+- **Feature engineering approach:** Lagged rolling windows to avoid leakage; deltas (home-away) for matchup context; categorical buckets for rest/travel; calibrated probabilities via isotonic regression; edges expressed in percentage points and graded (A–C).
 - **Modeling:** Calibrated logistic regression (isotonic) chosen for stability and interpretability; native ingest/xG model available as fallback.
 - **Validation:** Temporal splits (train on past seasons, validate on most recent season); avoids leakage via lagged features; probability calibration measured against baseline.
 - **Automation:** Daily/6x-daily refresh workflows, validation gates, fallback fetch, and social posting. Monitoring workflow alerts on stale data or anomalies.
@@ -63,8 +64,9 @@ Predict NHL game outcomes with calibrated, actionable win probabilities that out
 
 ## Key Results (current v6 snapshot)
 - Test accuracy: 59.3% vs 53.7% home baseline (2023-24 holdout); log loss 0.676, Brier 0.240.
-- Model edges surfaced as grades (A–C) and used for site and social content.
-- Daily slate summary posts and full JSON payloads auto-publish; API enriched with goalies, injuries, special teams; no leading mentions in social posts.
+- Calibration by edge buckets (2023-24 holdout): 0–5 pts ~49% (n=198), 5–10 pts ~50.7% (n=221), 10–15 pts ~59.5% (n=195), 15–20 pts ~56.1% (n=180), 20+ pts ~69.5% (n=436).
+- Model edges surfaced as grades (A–C) and used for site/API content.
+- Daily slate summary auto-publishes; API enriched with goalies, injuries, special teams; validation/fallbacks keep payload fresh.
 
 ## Implications & Recommendations
 - **Operational:** Keep the calibrated model as default; continue daily validation (stale-data + anomaly checks). Monitor API fallback success; keep retries/backoff for predictions API.
