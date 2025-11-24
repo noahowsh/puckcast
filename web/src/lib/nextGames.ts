@@ -19,12 +19,7 @@ const formatEt = (iso: string | undefined) => {
 
 const resolveAbbrev = (team: any) => {
   const rawName = (team?.name || team?.teamName || "").toString().toLowerCase();
-  const cand =
-    team?.abbreviation ||
-    team?.triCode ||
-    nameToAbbrev.get(rawName) ||
-    nameToAbbrev.get((team?.teamName || "").toString().toLowerCase()) ||
-    nameToAbbrev.get((team?.teamName || "").toString().toLowerCase());
+  const cand = team?.abbreviation || team?.triCode || nameToAbbrev.get(rawName) || nameToAbbrev.get((team?.teamName || "").toString().toLowerCase());
   const up = (cand || "").toString().toUpperCase();
   return abbrevSet.has(up) ? up : "";
 };
@@ -36,7 +31,7 @@ export async function fetchNextGamesMap(abbrevs: string[], lookaheadDays = 14): 
   const end = fmt(new Date(today.getTime() + lookaheadDays * 24 * 60 * 60 * 1000));
   const map: Record<string, NextGameInfo> = {};
 
-  // Seed from current predictions payload (guarantees teams on today's slate show something)
+  // Seed from current predictions payload (only if gameDate is today or in the future)
   const predictions = predictionsPayloadRaw as { games?: any[] };
   const games = predictions?.games || [];
   games.forEach((game: any) => {
@@ -44,6 +39,7 @@ export async function fetchNextGamesMap(abbrevs: string[], lookaheadDays = 14): 
     const away = (game?.awayTeam?.abbrev || "").toString().toUpperCase();
     const date = game?.gameDate;
     const startEt = game?.startTimeEt || formatEt(game?.startTimeUtc);
+    if (date && date < start) return; // skip past
     if (home && !map[home]) map[home] = { opponent: away, date, startTimeEt: startEt ?? null };
     if (away && !map[away]) map[away] = { opponent: home, date, startTimeEt: startEt ?? null };
   });
@@ -74,6 +70,10 @@ export async function fetchNextGamesMap(abbrevs: string[], lookaheadDays = 14): 
   const filtered: Record<string, NextGameInfo> = {};
   abbrevs.forEach((abbr) => {
     if (map[abbr]) filtered[abbr] = map[abbr];
+    // ensure we don't leave any team empty if schedule/predictions miss
+    if (!filtered[abbr]) {
+      filtered[abbr] = { opponent: "TBD", date: null as any, startTimeEt: null };
+    }
   });
   return filtered;
 }
