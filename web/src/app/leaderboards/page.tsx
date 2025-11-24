@@ -16,7 +16,7 @@ const rankedRows: LeaderboardRow[] = standings
     const snap = snapshotMap.get(standing.abbrev);
     const power = computeStandingsPowerScore(standing);
     const record = `${standing.wins}-${standing.losses}-${standing.ot}`;
-    const overlayAvg = snap?.avgProb ?? standing.pointPctg ?? 0.5;
+    const overlayAvg = snap?.avgProb;
     return {
       powerRank: 0,
       standingsRank: standing.rank,

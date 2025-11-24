@@ -49,7 +49,7 @@ export function PowerBoardClient({ rows, initialNextGames }: { rows: Leaderboard
   const renderRow = (row: LeaderboardRow) => {
     const movementDisplay = row.movement === 0 ? "Even" : row.movement > 0 ? `+${row.movement}` : row.movement;
     const movementTone = row.movement > 0 ? "movement--positive" : row.movement < 0 ? "movement--negative" : "movement--neutral";
-    const overlayProb = row.overlay ? formatPct(row.overlay.avgProb) : "—";
+    const overlayProb = row.overlay && row.overlay.avgProb ? formatPct(row.overlay.avgProb) : "—";
     const next = nextGames[row.abbrev];
     const nextDisplay = next
       ? `${next.opponent} (${next.date}${next.startTimeEt ? ` · ${next.startTimeEt} ET` : ""})`
