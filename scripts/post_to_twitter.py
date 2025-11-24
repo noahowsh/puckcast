@@ -110,7 +110,23 @@ def get_twitter_client():
     return client
 
 
-def post_tweet(client: Optional["tweepy.Client"], content: str, dry_run: bool = False) -> Optional[dict]:
+def _upload_media(api_key: str, api_secret: str, access_token: str, access_secret: str, image_path: Path):
+    """Upload media via v1.1 API (tweepy.API) and return media_id."""
+    import tweepy  # type: ignore
+
+    auth = tweepy.OAuth1UserHandler(api_key, api_secret, access_token, access_secret)
+    api = tweepy.API(auth)
+    media = api.media_upload(str(image_path))
+    return media.media_id
+
+
+def post_tweet(
+    client: Optional["tweepy.Client"],
+    content: str,
+    *,
+    dry_run: bool = False,
+    image_path: Path | None = None,
+) -> Optional[dict]:
     """Post a tweet and return the response."""
 
     if dry_run:
@@ -125,8 +141,21 @@ def post_tweet(client: Optional["tweepy.Client"], content: str, dry_run: bool = 
     try:
         import tweepy  # type: ignore
 
+        media_ids = None
+        if image_path and image_path.exists():
+            print(f"🖼  Attaching image: {image_path}")
+            try:
+                api_key = os.getenv("TWITTER_API_KEY", "")
+                api_secret = os.getenv("TWITTER_API_SECRET", "")
+                access_token = os.getenv("TWITTER_ACCESS_TOKEN", "")
+                access_secret = os.getenv("TWITTER_ACCESS_SECRET", "")
+                media_id = _upload_media(api_key, api_secret, access_token, access_secret, image_path)
+                media_ids = [media_id]
+            except Exception as media_err:  # noqa: BLE001 - want to keep posting even if media fails
+                print(f"⚠️  Media upload failed, posting without image: {media_err}")
+
         # Post the tweet
-        response = client.create_tweet(text=content)  # type: ignore[union-attr]
+        response = client.create_tweet(text=content, media_ids=media_ids)  # type: ignore[union-attr]
 
         # Extract tweet ID
         tweet_id = response.data['id']
@@ -181,8 +210,13 @@ def main() -> None:
     if not args.dry_run:
         client = get_twitter_client()
 
+    # Social sharing image (optional)
+    social_image = REPO_ROOT / "web" / "public" / "puckcastsocial.png"
+    if args.dry_run:
+        social_image = None  # skip media in dry-run for speed
+
     # Post the tweet
-    result = post_tweet(client, post_content, dry_run=args.dry_run)
+    result = post_tweet(client, post_content, dry_run=args.dry_run, image_path=social_image if social_image and social_image.exists() else None)
 
     # Log variant usage for A/B testing analysis
     if not args.dry_run:

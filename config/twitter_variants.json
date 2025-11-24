@@ -8,12 +8,12 @@
     {
       "id": "B",
       "format": "clean_stats",
-      "template": "{away_team} @ {home_team}\n\nModel prediction:\n{away_team} {away_prob}%\n{home_team} {home_prob}%\nConfidence: {grade}\n\n{url}\n\n{team_tags}"
+      "template": "Matchup: {away_team} at {home_team}\n\nModel prediction:\n{away_team} {away_prob}%\n{home_team} {home_prob}%\nConfidence: {grade}\n\n{url}\n\n{team_tags}"
     },
     {
       "id": "C",
       "format": "question_format",
-      "template": "{away_team} at {home_team} tonight\n\nWho you got? 🤔\n\nOur model:\n{home_team} {home_prob}%\n{away_team} {away_prob}%\n\n{url}\n\n{team_tags}"
+      "template": "Who you got tonight? 🤔\n{away_team} at {home_team}\n\nOur model:\n{home_team} {home_prob}%\n{away_team} {away_prob}%\n\n{url}\n\n{team_tags}"
     }
   ],
   "afternoon_update": [
