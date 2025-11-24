@@ -1,4 +1,5 @@
 import { getCurrentStandings } from "@/lib/current";
+import predictionsPayloadRaw from "@/data/todaysPredictions.json";
 
 export type NextGameInfo = { opponent: string; date: string; startTimeEt: string | null };
 
@@ -58,6 +59,23 @@ export async function fetchNextGamesMap(abbrevs: string[], lookaheadDays = 14): 
     abbrevs.forEach((abbr) => {
       if (map[abbr]) filtered[abbr] = map[abbr];
     });
+    // Fill missing teams from today's predictions payload (next closest)
+    const predictions = predictionsPayloadRaw as { games?: any[] };
+    const games = predictions?.games || [];
+    if (games.length) {
+      games.forEach((game: any) => {
+        const home = (game?.homeTeam?.abbrev || "").toString().toUpperCase();
+        const away = (game?.awayTeam?.abbrev || "").toString().toUpperCase();
+        const date = game?.gameDate;
+        const startEt = game?.startTimeEt || formatEt(game?.startTimeUtc);
+        if (home && !filtered[home] && abbrevs.includes(home)) {
+          filtered[home] = { opponent: away, date, startTimeEt: startEt ?? null };
+        }
+        if (away && !filtered[away] && abbrevs.includes(away)) {
+          filtered[away] = { opponent: home, date, startTimeEt: startEt ?? null };
+        }
+      });
+    }
     return filtered;
   } catch {
     return {};
