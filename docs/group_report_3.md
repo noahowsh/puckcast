@@ -15,8 +15,8 @@
 - Pipeline overview: ![Pipeline](assets/pipeline_diagram.png)
 - Automation windows (ET): ![Automation](assets/automation_schedule.png)
 - Accuracy lift vs baseline: ![Accuracy](assets/accuracy_comparison.png)
-- Calibration curve (illustrative): ![Calibration](assets/calibration_curve.png)
-- Top feature signals (illustrative): ![Feature Importance](assets/feature_importance.png)
+- Calibration curve: ![Calibration](assets/calibration_curve.png)
+- Top feature signals: ![Feature Importance](assets/feature_importance.png)
 
 Key metrics table:
 
