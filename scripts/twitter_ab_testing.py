@@ -343,6 +343,9 @@ def generate_post(
         grade = top_game_data.get("confidenceGrade", "C")
         home_prob = int(top_game_data.get("homeWinProb", 0.5) * 100)
         away_prob = 100 - home_prob
+        # Prefer @handles in-line if available
+        away_team_display = f"@{get_team_handle(away_team_name, away_abbrev)}" if get_team_handle(away_team_name, away_abbrev) else away_team_name
+        home_team_display = f"@{get_team_handle(home_team_name, home_abbrev)}" if get_team_handle(home_team_name, home_abbrev) else home_team_name
     else:
         away_abbrev = "TBD"
         home_abbrev = "TBD"
@@ -352,6 +355,8 @@ def generate_post(
         home_prob = 50
         away_prob = 50
         tag_block = "#NHL #HockeyTwitter"
+        away_team_display = away_team_name
+        home_team_display = home_team_name
 
     # Count high confidence games
     high_conf = sum(1 for g in games if g.get("confidenceGrade", "C")[0] in ["A", "B"])
@@ -455,14 +460,17 @@ def generate_post(
         game = random.choice(games)
         team_choice = random.choice(["home", "away"])
         team_data = game["homeTeam"] if team_choice == "home" else game["awayTeam"]
+        win_prob = game.get("homeWinProb", 0.5) if team_choice == "home" else 1 - game.get("homeWinProb", 0.5)
+        opp_team = game["awayTeam"]["abbrev"] if team_choice == "home" else game["homeTeam"]["abbrev"]
         team_name = team_data.get("name", team_data["abbrev"])
         team_abbrev = team_data["abbrev"]
         tag_block = build_tag_block([(team_name, team_abbrev)])
 
         facts = [
-            f"The {team_abbrev} are {int(game.get('homeWinProb', 0.5) * 100)}% to win tonight according to our model",
-            f"{team_abbrev} has a Grade {game.get('confidenceGrade', 'B')} prediction today",
-            f"Model sees a {abs(game.get('edge', 0)) * 100:.0f}% edge in the {team_abbrev} game",
+            f"{team_abbrev} open {int(win_prob * 100)}% vs {opp_team} (Grade {game.get('confidenceGrade', 'B')})",
+            f"Big edge: {abs(game.get('edge', 0)) * 100:.1f} pts on {team_abbrev} vs {opp_team}",
+            f"{team_abbrev} {'road' if team_choice == 'away' else 'home'} lean at {game.get('startTimeEt', 'TBD')} — model sees value",
+            f"Top confidence matchup: {team_abbrev} vs {opp_team} (Grade {game.get('confidenceGrade', 'B')}, {int(win_prob * 100)}%)",
         ]
 
         post = template.format(
@@ -475,8 +483,8 @@ def generate_post(
     # Fill template for regular posts
     post = template.format(
         games=games_count,
-        away_team=away_abbrev,
-        home_team=home_abbrev,
+        away_team=away_team_display,
+        home_team=home_team_display,
         grade=grade,
         home_prob=home_prob,
         away_prob=away_prob,
