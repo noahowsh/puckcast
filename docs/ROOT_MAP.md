@@ -1,7 +1,7 @@
 # Repository Map: Active vs Legacy
 
 ## Active inputs/outputs (keep current)
-- `predict_fast.py`, `predict_full.py`, `predict_simple.py`, `predict_tonight.py`
+- `predict_full.py`, `predict_simple.py`, `predict_tonight.py`
 - `scripts/` (see scripts/README.md) and `scripts/run_daily.sh`
 - `web/` (Next.js site), `web/src/data/*.json` feeds, `web/public/` assets
 - `src/nhl_prediction/` (model code), `model_v6_6seasons.pkl`

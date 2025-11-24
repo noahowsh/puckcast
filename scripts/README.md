@@ -1,7 +1,7 @@
 # Scripts Overview
 
 ## Live/Automation
-- `predict_fast.py` / `predict_full.py` — generate web feed (`web/src/data/todaysPredictions.json`).
+- `predict_full.py` — generate web feed (`web/src/data/todaysPredictions.json`).
 - `scripts/validate_predictions.py` — sanity-check predictions payload (used in workflows).
 - `scripts/twitter_ab_testing.py` + `scripts/post_to_twitter.py` — X automation (hashtags/mentions auto-added).
 - `scripts/archive_predictions.py` — archives daily predictions.

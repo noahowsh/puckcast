@@ -26,5 +26,4 @@
 
 ## Scripts
 - scripts/twitter_ab_testing.py, scripts/post_to_twitter.py (social)
-- predict_fast.py / predict_full.py (feed generation)
-
+- predict_full.py (feed generation)

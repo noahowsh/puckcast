@@ -12,8 +12,6 @@ Puckcast is a machine learning system that predicts NHL game outcomes using 204 
 
 ### Predict today (web feed)
 ```bash
-python3 predict_fast.py      # fast pre-trained model → web/src/data/todaysPredictions.json
-# or
 python3 predict_full.py      # calibrated full run (slower)
 ```
 
@@ -49,7 +47,7 @@ python3 analysis/hyperparameter_tuning.py
 **Features:** 204 total → 50 recommended (top performers)
 
 **Data feeds powering the site**
-- `web/src/data/todaysPredictions.json` (updated by `predict_fast.py` / `predict_full.py`)
+- `web/src/data/todaysPredictions.json` (updated by `predict_full.py`)
 - `web/src/data/currentStandings.json`, `goaliePulse.json`, `modelInsights.json`
 - Next-game lookup for power board: `web/src/app/api/next-games` (calls NHL schedule API)
 
