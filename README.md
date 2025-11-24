@@ -59,44 +59,22 @@ python3 analysis/hyperparameter_tuning.py
 
 ---
 
-## 📁 Project Structure
+## 📁 Project Structure (cleaned)
 
 ```
 puckcast/
-├── README.md                          # ← You are here
-├── FEATURE_DICTIONARY.md              # Complete guide to all 204 features
-├── COMPREHENSIVE_AUDIT_V2.md          # Full system audit
-├── V2_OPTIMIZATION_RESULTS.md         # Latest optimization results
-│
-├── src/nhl_prediction/               # Core prediction engine
-│   ├── train.py                      # Model training
-│   ├── pipeline.py                   # Data pipeline, Elo ratings
-│   ├── features.py                   # Feature engineering (200+ features)
-│   ├── goalie_features.py            # Goalie performance tracking
-│   ├── native_ingest.py              # NHL API data ingestion, xG model
-│   ├── data_ingest.py                # Data loading and validation
-│   └── data_sources/                 # NHL API clients
-│
-├── analysis/                         # Analysis scripts and results
-│   ├── feature_importance_analysis.py
-│   ├── hyperparameter_tuning.py
-│   ├── feature_importance_rankings.csv    # All features ranked
-│   ├── feature_pruning_results.csv        # Feature selection results
-│   └── hyperparameter_tuning_results.csv  # 60 configurations tested
-│
-├── web/                             # Next.js site (production UI)
-│   ├── src/app/                     # App routes + components
-│   ├── src/data/                    # Data feeds (predictions, standings, goalie pulse, etc.)
-│   ├── public/                      # Static assets (logos, social card)
-│   └── package.json                 # Frontend deps/scripts
-│
-├── data/                            # Model data
-│   ├── xg_model.pkl                 # Expected goals model
-│   └── cache/                       # NHL API cache
-│
-├── scripts/                         # Utility scripts (Twitter, data refresh, etc.)
-├── temp_outputs/                    # Temporary files/logs
-└── docs/                            # Documentation (current + archive)
+├── README.md                # ← You are here
+├── src/nhl_prediction/      # Core prediction engine
+├── analysis/                # Active analysis scripts/results
+├── web/                     # Next.js site (app, data feeds, assets)
+├── scripts/                 # Automation/data helpers (+ run_daily.sh)
+├── data/                    # Model/data assets (xg_model.pkl, cache)
+├── docs/                    # Current docs + indexes
+├── archive/                 # Legacy docs/dashboards
+├── temp_outputs/            # Temp files (ignored)
+├── requirements.txt         # Python deps
+├── runtime.txt              # Runtime pin
+└── model_v6_6seasons.pkl    # Pretrained model
 ```
 
 ---
