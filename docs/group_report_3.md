@@ -12,11 +12,16 @@
 - **Model posture:** Calibrated logistic regression remains the primary engine (59.3% accuracy vs 53.7% baseline; log loss 0.676; Brier 0.240) with isotonic calibration and enriched inputs (special teams, goalie/injury metadata).
 
 ### Quick Visuals
-- Pipeline overview: ![Pipeline](assets/pipeline_diagram.png)
-- Automation windows (ET): ![Automation](assets/automation_schedule.png)
-- Accuracy lift vs baseline: ![Accuracy](assets/accuracy_comparison.png)
-- Calibration curve: ![Calibration](assets/calibration_curve.png)
-- Top feature signals: ![Feature Importance](assets/feature_importance.png)
+- Pipeline overview: ![Pipeline](assets/pipeline_diagram.png)  
+  *Data ingest (MoneyPuck + NHL API) → 200+ features → calibrated logreg → JSON/API/reports.*
+- Automation windows (ET): ![Automation](assets/automation_schedule.png)  
+  *Daily post cadence: slate summary at 08:00, then rotating insights through 20:00.*
+- Accuracy lift vs baseline: ![Accuracy](assets/accuracy_comparison.png)  
+  *Model v6 beats the 53.7% home baseline with 59.3% accuracy on 2023-24 holdout.*
+- Calibration curve: ![Calibration](assets/calibration_curve.png)  
+  *Probabilities track observed outcomes; curve hugs the diagonal with low log loss/Brier.*
+- Top feature signals: ![Feature Importance](assets/feature_importance.png)  
+  *Rolling goal diff, special teams, rest/back-to-back, xG/shot quality, and possession lead.*
 
 Key metrics table:
 
@@ -79,6 +84,14 @@ Predict NHL game outcomes with calibrated, actionable win probabilities that out
 - Playoffs not separately tuned; high-variance games may be miscalibrated.
 - Social automation depends on external API stability and configured secrets.
 - Data gaps (e.g., missing injuries/goalies) fall back to averages and can dampen edge quality.
+
+## Future Work (Puckcast 7.0 themes)
+- Playoff mode: separate calibration, series odds, OT/shootout bias adjustments.
+- Feature refresh: injury gap weighting, richer special teams, goalie rest delta, travel penalties.
+- Explainability: per-game “why” chips (rest, special teams, goalie, injury) on slate and API.
+- Performance page: live metrics (accuracy, log loss, Brier, calibration bins), feature importance, bankroll curve.
+- Props-style insights: shots/points/save tiers for top skaters/goalies; simple “over/under vibe” without odds.
+- Drift and freshness: SLA monitors on generatedAt, retry/backoff on fetch, and calibration tracker automation.
 
 ## Conclusion
 The v6 system is production-stable, calibrated, and automated end-to-end. It meaningfully beats baseline pickers while staying explainable. With the current automation (web, API, and social), the product is user-facing and repeatable; further gains should focus on richer special-teams/goalie dynamics and postseason calibration rather than core pipeline rewrites.
