@@ -18,8 +18,15 @@ const formatEt = (iso: string | undefined) => {
 };
 
 const resolveAbbrev = (team: any) => {
-  const rawName = (team?.name || team?.teamName || "").toString().toLowerCase();
-  const cand = team?.abbreviation || team?.triCode || nameToAbbrev.get(rawName) || nameToAbbrev.get((team?.teamName || "").toString().toLowerCase());
+  const rawName = (team?.name || team?.teamName || team?.commonName?.default || team?.placeName?.default || "").toString().toLowerCase();
+  const cand =
+    team?.abbrev ||
+    team?.abbreviation ||
+    team?.triCode ||
+    nameToAbbrev.get(rawName) ||
+    nameToAbbrev.get((team?.teamName || "").toString().toLowerCase()) ||
+    nameToAbbrev.get((team?.commonName?.default || "").toString().toLowerCase()) ||
+    nameToAbbrev.get((team?.placeName?.default || "").toString().toLowerCase());
   const up = (cand || "").toString().toUpperCase();
   return abbrevSet.has(up) ? up : "";
 };
@@ -44,36 +51,36 @@ export async function fetchNextGamesMap(abbrevs: string[], lookaheadDays = 14): 
     if (away && !map[away]) map[away] = { opponent: home, date, startTimeEt: startEt ?? null };
   });
 
-  // Overlay with NHL schedule (start-end range) to fill missing teams or better dates
-  try {
-    const url = `https://statsapi.web.nhl.com/api/v1/schedule?startDate=${start}&endDate=${end}`;
-    const res = await fetch(url, { cache: "no-store" });
-    if (res.ok) {
+  // Overlay with NHL schedule (per-day loop on api-web.nhle.com) to fill missing teams or better dates
+  for (let offset = 0; offset < lookaheadDays; offset += 1) {
+    const target = new Date(today.getTime() + offset * 24 * 60 * 60 * 1000);
+    const dateStr = fmt(target);
+    try {
+      const url = `https://api-web.nhle.com/v1/schedule/${dateStr}`;
+      const res = await fetch(url, { cache: "no-store" });
+      if (!res.ok) continue;
       const data = await res.json();
-      data?.dates?.forEach((block: any) => {
+      data?.gameWeek?.forEach((block: any) => {
         const date = block?.date;
         block?.games?.forEach((game: any) => {
-          const homeTeam = game?.teams?.home?.team;
-          const awayTeam = game?.teams?.away?.team;
-          const home = resolveAbbrev(homeTeam);
-          const away = resolveAbbrev(awayTeam);
-          const startTimeEt = formatEt(game?.gameDate);
+          const home = resolveAbbrev(game?.homeTeam);
+          const away = resolveAbbrev(game?.awayTeam);
+          const startTimeEt = formatEt(game?.startTimeUTC);
           if (home && !map[home]) map[home] = { opponent: away, date, startTimeEt };
           if (away && !map[away]) map[away] = { opponent: home, date, startTimeEt };
         });
       });
+      // Early exit if all teams filled
+      if (abbrevs.every((a) => map[a])) break;
+    } catch {
+      continue;
     }
-  } catch {
-    // ignore
   }
 
   const filtered: Record<string, NextGameInfo> = {};
   abbrevs.forEach((abbr) => {
     if (map[abbr]) filtered[abbr] = map[abbr];
-    // ensure we don't leave any team empty if schedule/predictions miss
-    if (!filtered[abbr]) {
-      filtered[abbr] = { opponent: "TBD", date: null as any, startTimeEt: null };
-    }
+    else filtered[abbr] = { opponent: "TBD", date: null as any, startTimeEt: null };
   });
   return filtered;
 }
