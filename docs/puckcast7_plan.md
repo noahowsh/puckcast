@@ -77,6 +77,16 @@
 
 ---
 
+## New add-ons to consider
+- **Mobile-first power board:** Compact view and sticky column headers for small screens; collapse next-game text to opponent + day only.
+- **Outcome backfill job:** Nightly NHL results ingest to enrich archived predictions with actual winners; unlock true calibration bins and post-hoc accuracy per slate.
+- **Confidence bins on site:** Show live bin accuracies (0–5, 5–10, 10–15, 15–20, 20+) sourced from calibration tracker.
+- **Alerting for stale edges:** Surface a banner if predictions are older than X hours or if API fallback was used.
+- **Team matchup heatmaps:** Matrix of model accuracy and edge performance vs each opponent; highlight chronic misses.
+- **Fast “what-if” toggles:** Simulate a starter swap or injury removal to show sensitivity of win prob/edge.
+
+---
+
 ## Data/Artifact Sources to Leverage
 - `web/src/data/modelInsights.json` (live metrics, feature importance, buckets)
 - `reports/calibration_curve.png`, `reports/feature_importance_v2.csv` (real plots/coefficients)
