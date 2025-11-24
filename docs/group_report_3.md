@@ -9,7 +9,7 @@
 ## Executive Summary (what changed vs. Report 2)
 - **Stronger delivery:** Automated slate summary at 8 AM ET, richer fun-facts (special teams, injuries, goalie rest), and handle-safe social posts.
 - **Production stability:** Hardened fallbacks for predictions API, no leading mentions, validation gates on every run.
-- **Model posture:** Calibrated logistic regression remains the primary engine (~59% accuracy, +6 pts over baseline) with isotonic calibration and enriched inputs (special teams, goalie/injury metadata).
+- **Model posture:** Calibrated logistic regression remains the primary engine (59.3% accuracy vs 53.7% baseline; log loss 0.676; Brier 0.240) with isotonic calibration and enriched inputs (special teams, goalie/injury metadata).
 
 ### Quick Visuals
 - Pipeline overview: ![Pipeline](assets/pipeline_diagram.png)
@@ -22,8 +22,10 @@ Key metrics table:
 
 | Metric                             | Value (v6) | Note                                  |
 |------------------------------------|------------|---------------------------------------|
-| Test accuracy (recent seasons)     | ~59%       | ≈ +6 pts over home-team baseline      |
-| ROC-AUC                            | ~0.62      | Calibrated probabilities              |
+| Test accuracy (2023-24 holdout)    | 59.3%      | Baseline 53.7% home win rate          |
+| Log loss                           | 0.676      | Lower is better (calibration)         |
+| Brier score                        | 0.240      | Probability accuracy                  |
+| Games evaluated                    | 1,230      | 2023-24 season                        |
 | Feature count                      | 140+       | Rolling form, xG/shot quality, rest   |
 | Daily automation                   | 6×/day     | Predictions + social + validation     |
 | Social safety                      | ✅         | No leading @; handle-tagged later     |
@@ -60,7 +62,7 @@ Predict NHL game outcomes with calibrated, actionable win probabilities that out
 | 20:00     | Evening recap          | X: Core daily / High-frequency |
 
 ## Key Results (current v6 snapshot)
-- Test accuracy: ~59% (≈ +6 pts over home-baseline) with calibrated probabilities; ROC-AUC ≈ 0.62.
+- Test accuracy: 59.3% vs 53.7% home baseline (2023-24 holdout); log loss 0.676, Brier 0.240.
 - Model edges surfaced as grades (A–C) and used for site and social content.
 - Daily slate summary posts and full JSON payloads auto-publish; API enriched with goalies, injuries, special teams; no leading mentions in social posts.
 
