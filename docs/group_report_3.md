@@ -13,7 +13,7 @@
 
 ### Quick Visuals
 - Pipeline overview: ![Pipeline](assets/pipeline_diagram.png)  
-  *Data ingest (MoneyPuck + NHL API) → 200+ features → calibrated logreg → JSON/API/reports.*
+  *Data ingest (NHL API + internal xG/shot model) → 200+ features → calibrated logreg → JSON/API/reports.*
 - Automation windows (ET): ![Automation](assets/automation_schedule.png)  
   *Daily post cadence: slate summary at 08:00, then rotating insights through 20:00.*
 - Accuracy lift vs baseline: ![Accuracy](assets/accuracy_comparison.png)  
@@ -44,13 +44,13 @@ Predict NHL game outcomes with calibrated, actionable win probabilities that out
 
 ## Assumptions
 - Regular-season context; playoffs not modeled separately.
-- MoneyPuck + NHL API data are timely and correct; missing data fall back to league-average/zeroed features.
+- NHL API data (schedule/results/plays) are timely and correct; missing data fall back to league-average/zeroed features.
 - No in-game live updating (pregame probabilities only).
 - Current automation schedules (GitHub Actions + Vercel) are available and secrets configured.
 
 ## Analytical Setup & Analysis
-- **Data sources:** MoneyPuck game logs (team-level xG/shot quality/possession), NHL Stats API (schedule/results/teams), special teams and lineup context, goalie/injury ingest. Validation includes schema and freshness checks.
-- **Data pipeline:** Native ingest + cached MoneyPuck pulls; enriched predictions payload with special teams, injury counts, goalie projections, start times, and edges.
+- **Data sources:** NHL Stats API (schedule, results, teams, play-by-play) plus internal xG/shot-quality model; special teams and lineup context; goalie/injury ingest. Validation includes schema and freshness checks.
+- **Data pipeline:** Native ingest + cached internal artifacts; enriched predictions payload with special teams, injury counts, goalie projections, start times, and edges.
 - **Features (200+):** Rolling form (3/5/10), xG/shot quality, special teams splits (PP/PK diff), rest/back-to-back, travel penalties, Elo-like ratings, goaltending quality, injury gap, goalie rest delta, venue/home ice.
 - **Feature engineering approach:** Lagged rolling windows to avoid leakage; deltas (home-away) for matchup context; categorical buckets for rest/travel; calibrated probabilities via isotonic regression; edges expressed in percentage points and graded (A–C).
 - **Modeling:** Calibrated logistic regression (isotonic) chosen for stability and interpretability; native ingest/xG model available as fallback.
@@ -77,7 +77,7 @@ Predict NHL game outcomes with calibrated, actionable win probabilities that out
 - **Operational:** Keep the calibrated model as default; continue daily validation (stale-data + anomaly checks). Monitor API fallback success; keep retries/backoff for predictions API.
 - **Content:** Lead with the 8 AM slate summary; rotate insights (special teams, injury gaps, goalie rest) to avoid “all probability” tone. Maintain handle-safe openings to stay in the Posts tab.
 - **Model:** Next lift likely from richer special-teams and goalie form dynamics; add playoff-specific calibration before postseason.
-- **Data quality:** Maintain MoneyPuck cache freshness; monitor injury/goalie ingest coverage; ensure GitHub secrets stay valid for social posts.
+- **Data quality:** Monitor injury/goalie ingest coverage; ensure GitHub secrets stay valid; keep ingest caches warm and validated.
 
 ## Limitations
 - No live in-game updates; pregame only.
@@ -97,7 +97,7 @@ Predict NHL game outcomes with calibrated, actionable win probabilities that out
 The v6 system is production-stable, calibrated, and automated end-to-end. It meaningfully beats baseline pickers while staying explainable. With the current automation (web, API, and social), the product is user-facing and repeatable; further gains should focus on richer special-teams/goalie dynamics and postseason calibration rather than core pipeline rewrites.
 
 ## References
-- MoneyPuck game-by-game data (https://moneypuck.com)  
-- NHL Stats API (schedule, teams, results)  
+- NHL Stats API (schedule, teams, results, plays)  
+- Internal xG/shot-quality model + derived team logs  
 - scikit-learn (logistic regression, calibration)  
 - Puckcast repository: data pipeline, model code, and automation workflows
