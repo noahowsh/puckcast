@@ -341,16 +341,83 @@ def build_fun_facts(games: List[Dict[str, Any]]) -> List[tuple[str, List[tuple[s
     if not games:
         return [("Model crunching numbers for all 32 teams today.", [("NHL", "NHL")])]
 
-    # Biggest model edge
+    def teams_for(game: Dict[str, Any]) -> List[tuple[str, str]]:
+        return [
+            (game["awayTeam"].get("name", game["awayTeam"]["abbrev"]), game["awayTeam"]["abbrev"]),
+            (game["homeTeam"].get("name", game["homeTeam"]["abbrev"]), game["homeTeam"]["abbrev"]),
+        ]
+
+    # Special teams mismatches
+    st_games = [
+        (
+            g,
+            (g.get("specialTeams") or {}).get("home"),
+            (g.get("specialTeams") or {}).get("away"),
+        )
+        for g in games
+        if g.get("specialTeams")
+    ]
+    for g, home_st, away_st in st_games:
+        if home_st and isinstance(home_st.get("diff"), (int, float)) and abs(home_st["diff"]) >= 5:
+            facts.append(
+                (
+                    f"Special teams edge: {format_team_display(g['homeTeam'])} PP vs {format_team_display(g['awayTeam'])} PK ({home_st['diff']:+.1f} pts)",
+                    teams_for(g),
+                )
+            )
+        if away_st and isinstance(away_st.get("diff"), (int, float)) and abs(away_st["diff"]) >= 5:
+            facts.append(
+                (
+                    f"Special teams edge: {format_team_display(g['awayTeam'])} PP vs {format_team_display(g['homeTeam'])} PK ({away_st['diff']:+.1f} pts)",
+                    teams_for(g),
+                )
+            )
+
+    # Injury gaps
+    for g in games:
+        info = g.get("dayOfInfo") or {}
+        home_inj = int(info.get("homeInjuryCount") or 0)
+        away_inj = int(info.get("awayInjuryCount") or 0)
+        diff = abs(home_inj - away_inj)
+        if diff >= 2 and (home_inj or away_inj):
+            leader = g["homeTeam"] if home_inj < away_inj else g["awayTeam"]
+            trailer = g["awayTeam"] if leader is g["homeTeam"] else g["homeTeam"]
+            facts.append(
+                (
+                    f"Injury gap: {format_team_display(leader)} healthier vs {format_team_display(trailer)} ({home_inj}-{away_inj} injuries)",
+                    teams_for(g),
+                )
+            )
+
+    # Goalie rest edges
+    for g in games:
+        goalies = g.get("projectedGoalies") or {}
+        home = goalies.get("home") or {}
+        away = goalies.get("away") or {}
+        if "restDays" in home and "restDays" in away:
+            try:
+                rest_diff = int((home.get("restDays") or 0) - (away.get("restDays") or 0))
+            except Exception:
+                rest_diff = 0
+            if abs(rest_diff) >= 2:
+                rested = (g["homeTeam"], home) if rest_diff > 0 else (g["awayTeam"], away)
+                tired = (g["awayTeam"], away) if rest_diff > 0 else (g["homeTeam"], home)
+                rested_name = rested[0].get("name", rested[0].get("abbrev"))
+                tired_name = tired[0].get("name", tired[0].get("abbrev"))
+                facts.append(
+                    (
+                        f"Goaltending rest edge: {rested_name} starter has {abs(rest_diff)} more rest days than {tired_name}",
+                        teams_for(g),
+                    )
+                )
+
+    # Biggest model edge (keep one)
     best_edge = max(games, key=lambda g: abs(g.get("edge", 0.0)))
     edge_pts = abs(best_edge.get("edge", 0.0)) * 100
     facts.append(
         (
             f"Biggest model edge: {format_matchup(best_edge)} (Grade {best_edge.get('confidenceGrade', 'B')}, {edge_pts:.1f} pts)",
-            [
-                (best_edge["awayTeam"].get("name", best_edge["awayTeam"]["abbrev"]), best_edge["awayTeam"]["abbrev"]),
-                (best_edge["homeTeam"].get("name", best_edge["homeTeam"]["abbrev"]), best_edge["homeTeam"]["abbrev"]),
-            ],
+            teams_for(best_edge),
         )
     )
 
@@ -360,11 +427,8 @@ def build_fun_facts(games: List[Dict[str, Any]]) -> List[tuple[str, List[tuple[s
     away_prob = 1 - home_prob
     facts.append(
         (
-            f"Toss-up alert: {format_matchup(close_game)} ({int(home_prob*100)}% vs {int(away_prob*100)}%)",
-            [
-                (close_game["awayTeam"].get("name", close_game["awayTeam"]["abbrev"]), close_game["awayTeam"]["abbrev"]),
-                (close_game["homeTeam"].get("name", close_game["homeTeam"]["abbrev"]), close_game["homeTeam"]["abbrev"]),
-            ],
+            f"Toss-up: {format_matchup(close_game)} ({int(home_prob*100)}% vs {int(away_prob*100)}%)",
+            teams_for(close_game),
         )
     )
 
@@ -376,10 +440,7 @@ def build_fun_facts(games: List[Dict[str, Any]]) -> List[tuple[str, List[tuple[s
         facts.append(
             (
                 f"Road lean: {format_team_display(road['awayTeam'])} at {format_team_display(road['homeTeam'])} ({road_prob}% on the road)",
-                [
-                    (road["awayTeam"].get("name", road["awayTeam"]["abbrev"]), road["awayTeam"]["abbrev"]),
-                    (road["homeTeam"].get("name", road["homeTeam"]["abbrev"]), road["homeTeam"]["abbrev"]),
-                ],
+                teams_for(road),
             )
         )
 
