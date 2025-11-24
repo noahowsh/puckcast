@@ -429,6 +429,31 @@ def build_fun_facts(games: List[Dict[str, Any]]) -> List[tuple[str, List[tuple[s
     return facts
 
 
+def build_slate_summary(games: List[Dict[str, Any]], max_chars: int = 220) -> str:
+    """Compact summary of all games with probs/grade, clipped to fit tweet."""
+    if not games:
+        return "Off day — no games scheduled."
+
+    lines: List[str] = []
+    used = 0
+    for g in sorted(games, key=lambda x: x.get("startTimeEt") or ""):
+        home_abbr = g["homeTeam"]["abbrev"]
+        away_abbr = g["awayTeam"]["abbrev"]
+        home_prob = int(g.get("homeWinProb", 0.5) * 100)
+        away_prob = 100 - home_prob
+        grade = g.get("confidenceGrade", "B")
+        time = (g.get("startTimeEt") or "TBD").replace(" ET", "")
+        fav_prob = max(home_prob, away_prob)
+        fav = home_abbr if home_prob >= away_prob else away_abbr
+        line = f"{away_abbr} at {home_abbr} {time} — {fav} {fav_prob}% ({grade})"
+        if used + len(line) + 1 > max_chars:
+            lines.append("…")
+            break
+        lines.append(line)
+        used += len(line) + 1
+    return "\n".join(lines)
+
+
 def generate_post(
     post_type: str, variant: Dict[str, str], data: Dict[str, Any]
 ) -> str:
@@ -481,6 +506,11 @@ def generate_post(
             url="[your-site-url]",
         )
         return post if template_uses_tags else f"{post}\n\n{insight_data['tag_block']}"
+
+    if post_type == "slate_summary":
+        summary = build_slate_summary(games)
+        post = template.format(summary=summary, url="[your-site-url]")
+        return post if template_uses_tags else f"{post}\n\n#NHL"
 
     if post_type == "game_of_night" and games:
         # Highest confidence game

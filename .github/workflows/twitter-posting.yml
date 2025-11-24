@@ -43,7 +43,7 @@ jobs:
           if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
             echo "type=${{ inputs.post_type }}" >> $GITHUB_OUTPUT
           elif [ "$HOUR" = "12" ]; then
-            echo "type=morning_preview" >> $GITHUB_OUTPUT
+            echo "type=slate_summary" >> $GITHUB_OUTPUT
           elif [ "$HOUR" = "18" ]; then
             echo "type=afternoon_update" >> $GITHUB_OUTPUT
           else

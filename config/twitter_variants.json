@@ -16,6 +16,13 @@
       "template": "Who you got tonight? 🤔\n{away_team} at {home_team}\n\nOur model:\n{home_team} {home_prob}%\n{away_team} {away_prob}%\n\n{url}\n\n{team_tags}"
     }
   ],
+  "slate_summary": [
+    {
+      "id": "A",
+      "format": "full_slate",
+      "template": "Today's slate (ET):\n{summary}\n\nMore picks: {url}"
+    }
+  ],
   "afternoon_update": [
     {
       "id": "A",
