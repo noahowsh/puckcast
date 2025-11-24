@@ -77,7 +77,7 @@ jobs:
         run: |
           echo "🌐 Fetching latest predictions from live API..."
           mkdir -p web/src/data
-          curl -sSf https://puckcast.ai/api/predictions > web/src/data/todaysPredictions.json
+          curl -fsSL --location https://www.puckcast.ai/api/predictions -o web/src/data/todaysPredictions.json
           echo "✅ Pulled latest predictions payload"
 
       - name: Validate predictions freshness
