@@ -320,6 +320,115 @@ def generate_micro_insight(data: Dict[str, Any]) -> Dict[str, str]:
     return random.choice(insight_types)
 
 
+def format_team_display(team: Dict[str, Any]) -> str:
+    """Return team handle if available, else name/abbrev."""
+    name = team.get("name") or team.get("abbrev")
+    abbrev = team.get("abbrev")
+    handle = get_team_handle(name or "", abbrev or "")
+    return f"@{handle}" if handle else (name or abbrev or "Team")
+
+
+def format_matchup(game: Dict[str, Any], sep: str = " at ") -> str:
+    """Human-friendly matchup string with handles when possible."""
+    away = format_team_display(game["awayTeam"])
+    home = format_team_display(game["homeTeam"])
+    return f"{away}{sep}{home}"
+
+
+def build_fun_facts(games: List[Dict[str, Any]]) -> List[tuple[str, List[tuple[str, str]]]]:
+    """Assemble varied fun-fact snippets from the slate. Returns (fact, teams) tuples."""
+    facts: List[tuple[str, List[tuple[str, str]]]] = []
+    if not games:
+        return [("Model crunching numbers for all 32 teams today.", [("NHL", "NHL")])]
+
+    # Biggest model edge
+    best_edge = max(games, key=lambda g: abs(g.get("edge", 0.0)))
+    edge_pts = abs(best_edge.get("edge", 0.0)) * 100
+    facts.append(
+        (
+            f"Biggest model edge: {format_matchup(best_edge)} (Grade {best_edge.get('confidenceGrade', 'B')}, {edge_pts:.1f} pts)",
+            [
+                (best_edge["awayTeam"].get("name", best_edge["awayTeam"]["abbrev"]), best_edge["awayTeam"]["abbrev"]),
+                (best_edge["homeTeam"].get("name", best_edge["homeTeam"]["abbrev"]), best_edge["homeTeam"]["abbrev"]),
+            ],
+        )
+    )
+
+    # Tightest game (closest to coin flip)
+    close_game = min(games, key=lambda g: abs(g.get("edge", 1.0)))
+    home_prob = close_game.get("homeWinProb", 0.5)
+    away_prob = 1 - home_prob
+    facts.append(
+        (
+            f"Toss-up alert: {format_matchup(close_game)} ({int(home_prob*100)}% vs {int(away_prob*100)}%)",
+            [
+                (close_game["awayTeam"].get("name", close_game["awayTeam"]["abbrev"]), close_game["awayTeam"]["abbrev"]),
+                (close_game["homeTeam"].get("name", close_game["homeTeam"]["abbrev"]), close_game["homeTeam"]["abbrev"]),
+            ],
+        )
+    )
+
+    # Road favorite
+    road_favs = [g for g in games if g.get("modelFavorite") == "away" and (1 - g.get("homeWinProb", 0.5)) >= 0.55]
+    if road_favs:
+        road = max(road_favs, key=lambda g: (1 - g.get("homeWinProb", 0.5)))
+        road_prob = int((1 - road.get("homeWinProb", 0.5)) * 100)
+        facts.append(
+            (
+                f"Road lean: {format_team_display(road['awayTeam'])} at {format_team_display(road['homeTeam'])} ({road_prob}% on the road)",
+                [
+                    (road["awayTeam"].get("name", road["awayTeam"]["abbrev"]), road["awayTeam"]["abbrev"]),
+                    (road["homeTeam"].get("name", road["homeTeam"]["abbrev"]), road["homeTeam"]["abbrev"]),
+                ],
+            )
+        )
+
+    # High-confidence (A grade)
+    a_games = [g for g in games if str(g.get("confidenceGrade", "C")).startswith("A")]
+    if a_games:
+        a_game = max(a_games, key=lambda g: abs(g.get("edge", 0.0)))
+        prob = a_game.get("homeWinProb", 0.5)
+        fav = a_game["homeTeam"] if prob >= 0.5 else a_game["awayTeam"]
+        opp = a_game["awayTeam"] if prob >= 0.5 else a_game["homeTeam"]
+        fav_prob = int(max(prob, 1 - prob) * 100)
+        facts.append(
+            (
+                f"Grade A edge: {format_team_display(fav)} ({fav_prob}% win chance, {a_game.get('startTimeEt', 'TBD')})",
+                [
+                    (fav.get("name", fav.get("abbrev")), fav.get("abbrev")),
+                    (opp.get("name", opp.get("abbrev")), opp.get("abbrev")),
+                ],
+            )
+        )
+
+    # Upset radar (35-45% underdog)
+    upset_games = [
+        g for g in games if 0.35 <= g.get("homeWinProb", 0.5) <= 0.45 or 0.35 <= (1 - g.get("homeWinProb", 0.5)) <= 0.45
+    ]
+    if upset_games:
+        g = max(upset_games, key=lambda g: abs(g.get("edge", 0.0)))
+        home_prob = g.get("homeWinProb", 0.5)
+        if home_prob < 0.5:
+            dog = g["homeTeam"]
+            fav = g["awayTeam"]
+            dog_prob = int(home_prob * 100)
+        else:
+            dog = g["awayTeam"]
+            fav = g["homeTeam"]
+            dog_prob = int((1 - home_prob) * 100)
+        facts.append(
+            (
+                f"Upset watch: {format_team_display(dog)} at {format_team_display(fav)} ({dog_prob}% upset shot)",
+                [
+                    (dog.get("name", dog.get("abbrev")), dog.get("abbrev")),
+                    (fav.get("name", fav.get("abbrev")), fav.get("abbrev")),
+                ],
+            )
+        )
+
+    return facts
+
+
 def generate_post(
     post_type: str, variant: Dict[str, str], data: Dict[str, Any]
 ) -> str:
@@ -344,8 +453,8 @@ def generate_post(
         home_prob = int(top_game_data.get("homeWinProb", 0.5) * 100)
         away_prob = 100 - home_prob
         # Prefer @handles in-line if available
-        away_team_display = f"@{get_team_handle(away_team_name, away_abbrev)}" if get_team_handle(away_team_name, away_abbrev) else away_team_name
-        home_team_display = f"@{get_team_handle(home_team_name, home_abbrev)}" if get_team_handle(home_team_name, home_abbrev) else home_team_name
+        away_team_display = format_team_display(top_game_data["awayTeam"])
+        home_team_display = format_team_display(top_game_data["homeTeam"])
     else:
         away_abbrev = "TBD"
         home_abbrev = "TBD"
@@ -376,18 +485,16 @@ def generate_post(
     if post_type == "game_of_night" and games:
         # Highest confidence game
         top_game_data = max(games, key=lambda g: abs(g.get("edge", 0)))
-        away = top_game_data['awayTeam']['abbrev']
-        home = top_game_data['homeTeam']['abbrev']
         confidence = int(max(top_game_data.get("homeWinProb", 0.5), 1 - top_game_data.get("homeWinProb", 0.5)) * 100)
         time = top_game_data.get("startTimeEt", "TBD")
 
-        away_name = top_game_data['awayTeam'].get('name', away)
-        home_name = top_game_data['homeTeam'].get('name', home)
-        tag_block = build_tag_block([(away_name, away), (home_name, home)])
+        away_name = top_game_data['awayTeam'].get('name', top_game_data['awayTeam']['abbrev'])
+        home_name = top_game_data['homeTeam'].get('name', top_game_data['homeTeam']['abbrev'])
+        tag_block = build_tag_block([(away_name, top_game_data['awayTeam']['abbrev']), (home_name, top_game_data['homeTeam']['abbrev'])])
 
         post = template.format(
             confidence=confidence,
-            matchup=f"{away} @ {home}",
+            matchup=format_matchup(top_game_data),
             time=time,
             factor1="High model confidence",
             factor2=f"Grade: {top_game_data.get('confidenceGrade', 'B')}",
@@ -405,18 +512,18 @@ def generate_post(
             home_prob = game.get("homeWinProb", 0.5)
 
             if home_prob < 0.5:
-                underdog = game['homeTeam']['abbrev']
-                favorite = game['awayTeam']['abbrev']
+                underdog = format_team_display(game['homeTeam'])
+                favorite = format_team_display(game['awayTeam'])
                 underdog_prob = int(home_prob * 100)
-                underdog_name = game['homeTeam'].get('name', underdog)
-                favorite_name = game['awayTeam'].get('name', favorite)
+                underdog_name = game['homeTeam'].get('name', game['homeTeam']['abbrev'])
+                favorite_name = game['awayTeam'].get('name', game['awayTeam']['abbrev'])
             else:
-                underdog = game['awayTeam']['abbrev']
-                favorite = game['homeTeam']['abbrev']
+                underdog = format_team_display(game['awayTeam'])
+                favorite = format_team_display(game['homeTeam'])
                 underdog_prob = int((1 - home_prob) * 100)
-                underdog_name = game['awayTeam'].get('name', underdog)
-                favorite_name = game['homeTeam'].get('name', favorite)
-            tag_block = build_tag_block([(underdog_name, underdog), (favorite_name, favorite)])
+                underdog_name = game['awayTeam'].get('name', game['awayTeam']['abbrev'])
+                favorite_name = game['homeTeam'].get('name', game['homeTeam']['abbrev'])
+            tag_block = build_tag_block([(underdog_name, game['homeTeam']['abbrev']), (favorite_name, game['awayTeam']['abbrev'])])
 
             post = template.format(
                 underdog=underdog,
@@ -441,10 +548,11 @@ def generate_post(
 
         team_data = game["homeTeam"] if team_choice == "home" else game["awayTeam"]
         team_name = team_data.get("name", team_data["abbrev"])
+        team_display = format_team_display(team_data)
         tag_block = build_tag_block([(team_name, team_data["abbrev"])])
 
         post = template.format(
-            team_name=team_name,
+            team_name=team_display,
             rank=random.randint(5, 25),
             power_score=random.randint(65, 85),
             accuracy="7-3",
@@ -457,24 +565,12 @@ def generate_post(
 
     if post_type == "fun_fact" and games:
         # Generate a fun fact from game data
-        game = random.choice(games)
-        team_choice = random.choice(["home", "away"])
-        team_data = game["homeTeam"] if team_choice == "home" else game["awayTeam"]
-        win_prob = game.get("homeWinProb", 0.5) if team_choice == "home" else 1 - game.get("homeWinProb", 0.5)
-        opp_team = game["awayTeam"]["abbrev"] if team_choice == "home" else game["homeTeam"]["abbrev"]
-        team_name = team_data.get("name", team_data["abbrev"])
-        team_abbrev = team_data["abbrev"]
-        tag_block = build_tag_block([(team_name, team_abbrev)])
-
-        facts = [
-            f"{team_abbrev} open {int(win_prob * 100)}% vs {opp_team} (Grade {game.get('confidenceGrade', 'B')})",
-            f"Big edge: {abs(game.get('edge', 0)) * 100:.1f} pts on {team_abbrev} vs {opp_team}",
-            f"{team_abbrev} {'road' if team_choice == 'away' else 'home'} lean at {game.get('startTimeEt', 'TBD')} — model sees value",
-            f"Top confidence matchup: {team_abbrev} vs {opp_team} (Grade {game.get('confidenceGrade', 'B')}, {int(win_prob * 100)}%)",
-        ]
+        facts = build_fun_facts(games)
+        fact_text, fact_teams = random.choice(facts)
+        tag_block = build_tag_block(fact_teams)
 
         post = template.format(
-            fact=random.choice(facts),
+            fact=fact_text,
             team_tag=tag_block,
             url="[your-site-url]",
         )

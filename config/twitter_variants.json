@@ -3,7 +3,7 @@
     {
       "id": "A",
       "format": "probabilities",
-      "template": "🏒 {games} NHL games today\n\nTop pick: {away_team} @ {home_team}\n{away_team}: {away_prob}%\n{home_team}: {home_prob}%\n\nFull predictions: {url}\n\n{team_tags}"
+      "template": "🏒 {games} NHL games today\n\nTop pick: {away_team} at {home_team}\n{away_team}: {away_prob}%\n{home_team}: {home_prob}%\n\nFull predictions: {url}\n\n{team_tags}"
     },
     {
       "id": "B",
@@ -13,7 +13,7 @@
     {
       "id": "C",
       "format": "question_format",
-      "template": "{away_team} @ {home_team} tonight\n\nWho you got? 🤔\n\nOur model:\n{home_team} {home_prob}%\n{away_team} {away_prob}%\n\n{url}\n\n{team_tags}"
+      "template": "{away_team} at {home_team} tonight\n\nWho you got? 🤔\n\nOur model:\n{home_team} {home_prob}%\n{away_team} {away_prob}%\n\n{url}\n\n{team_tags}"
     }
   ],
   "afternoon_update": [
@@ -25,7 +25,7 @@
     {
       "id": "B",
       "format": "top_matchup",
-      "template": "Tonight's top matchup:\n\n{away_team} @ {home_team}\n{home_team} {home_prob}%\n{away_team} {away_prob}%\n\n{games} games total: {url}\n\n{team_tags}"
+      "template": "Tonight's top matchup:\n\n{away_team} at {home_team}\n{home_team} {home_prob}%\n{away_team} {away_prob}%\n\n{games} games total: {url}\n\n{team_tags}"
     }
   ],
   "evening_recap": [
