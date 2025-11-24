@@ -2,7 +2,9 @@ import { getCurrentStandings } from "@/lib/current";
 
 export type NextGameInfo = { opponent: string; date: string; startTimeEt: string | null };
 
-const nameToAbbrev = new Map<string, string>(getCurrentStandings().map((team) => [team.team, team.abbrev]));
+const standings = getCurrentStandings();
+const nameToAbbrev = new Map<string, string>(standings.map((team) => [team.team.toLowerCase(), team.abbrev]));
+const abbrevSet = new Set(standings.map((t) => t.abbrev));
 
 const formatEt = (iso: string | undefined) => {
   if (!iso) return null;
@@ -15,8 +17,15 @@ const formatEt = (iso: string | undefined) => {
 };
 
 const resolveAbbrev = (team: any) => {
-  const cand = team?.abbreviation || team?.triCode || nameToAbbrev.get(team?.name) || team?.teamName || team?.name;
-  return (cand || "").toString().toUpperCase();
+  const rawName = (team?.name || team?.teamName || "").toString().toLowerCase();
+  const cand =
+    team?.abbreviation ||
+    team?.triCode ||
+    nameToAbbrev.get(rawName) ||
+    nameToAbbrev.get((team?.teamName || "").toString().toLowerCase()) ||
+    nameToAbbrev.get((team?.teamName || "").toString().toLowerCase());
+  const up = (cand || "").toString().toUpperCase();
+  return abbrevSet.has(up) ? up : "";
 };
 
 export async function fetchNextGamesMap(abbrevs: string[], lookaheadDays = 14): Promise<Record<string, NextGameInfo>> {

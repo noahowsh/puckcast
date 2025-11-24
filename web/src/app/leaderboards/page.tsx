@@ -1,4 +1,5 @@
 import { buildTeamSnapshots, computeStandingsPowerScore, getCurrentStandings, type TeamSnapshot } from "@/lib/current";
+import modelInsightsRaw from "@/data/modelInsights.json";
 import { TeamCrest } from "@/components/TeamCrest";
 import { PowerBoardClient, type LeaderboardRow } from "@/components/PowerBoardClient";
 import { fetchNextGamesMap } from "@/lib/nextGames";
@@ -7,6 +8,10 @@ const snapshots = buildTeamSnapshots();
 const snapshotMap = new Map(snapshots.map((team) => [team.abbrev, team]));
 const standings = getCurrentStandings();
 const nameToAbbrev = new Map<string, string>(standings.map((team) => [team.team, team.abbrev]));
+const modelInsights = modelInsightsRaw as any;
+const teamModelAccuracy = new Map<string, number>(
+  (modelInsights?.teamPerformance || []).map((t: any) => [t.abbrev, t.modelAccuracy]),
+);
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -16,7 +21,7 @@ const rankedRows: LeaderboardRow[] = standings
     const snap = snapshotMap.get(standing.abbrev);
     const power = computeStandingsPowerScore(standing);
     const record = `${standing.wins}-${standing.losses}-${standing.ot}`;
-    const overlayAvg = snap?.avgProb ?? 0;
+    const overlayAvg = snap?.avgProb ?? teamModelAccuracy.get(standing.abbrev) ?? 0;
     return {
       powerRank: 0,
       standingsRank: standing.rank,
