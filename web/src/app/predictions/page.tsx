@@ -99,16 +99,14 @@ function PredictionRow({ game }: { game: Prediction }) {
 function ConfidenceLadder() {
   const ladder = [...modelInsights.confidenceBuckets].reverse();
   const bandLabel = (label: string) => {
-    // label examples: "20+ pts", "17-19 pts", "14-16 pts", "10-13 pts", "7-9 pts", "4-6 pts", "2-3 pts", "<2 pts"
+    // Expected bands: 0-5, 5-10, 10-15, 15-20, 20+ pts
     const key = label.replace(/\s+/g, "").toLowerCase();
+    if (key.startsWith("0-5")) return "C";
+    if (key.startsWith("5-10")) return "B-";
+    if (key.startsWith("10-15")) return "B+";
+    if (key.startsWith("15-20")) return "A-";
     if (key.startsWith("20")) return "A+";
-    if (key.startsWith("17")) return "A";
-    if (key.startsWith("14")) return "A-";
-    if (key.startsWith("10")) return "B+";
-    if (key.startsWith("7")) return "B";
-    if (key.startsWith("4")) return "B-";
-    if (key.startsWith("2")) return "C+";
-    return "C";
+    return "";
   };
   return (
     <div className="bento-card">
@@ -119,7 +117,12 @@ function ConfidenceLadder() {
           <div key={bucket.label} className="ladder__row">
             <div>
               <p className="edge-card__team">
-                {bucket.label} <span className="chip-soft" style={{ marginLeft: "0.35rem" }}>{bandLabel(bucket.label)}</span>
+                {bucket.label}{" "}
+                {bandLabel(bucket.label) && (
+                  <span className="chip-soft" style={{ marginLeft: "0.35rem" }}>
+                    {bandLabel(bucket.label)}
+                  </span>
+                )}
               </p>
               <p className="micro-label">{bucket.count} games</p>
             </div>
