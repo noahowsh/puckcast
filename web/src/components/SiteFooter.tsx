@@ -1,5 +1,7 @@
 import Image from "next/image";
 
+const SITE_VERSION = "v6.1";
+
 export function SiteFooter() {
   const currentYear = new Date().getFullYear();
   const links = [
@@ -49,7 +51,7 @@ export function SiteFooter() {
           </a>
           <div className="footer-meta">
             <span className="footer-note">Not affiliated with the NHL. Data from public NHL API. Analytics only, not betting advice.</span>
-            <span className="footer-note">© {currentYear} Puckcast.ai · OWSH Unlimited LLC</span>
+            <span className="footer-note">© {currentYear} Puckcast.ai · OWSH Unlimited LLC · {SITE_VERSION}</span>
           </div>
         </div>
       </div>
