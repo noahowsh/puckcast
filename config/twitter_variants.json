@@ -44,7 +44,7 @@
     {
       "id": "B",
       "format": "results_tease",
-      "template": "Tonight's games wrapping up 🏒\n\nTomorrow's predictions live early: {url}\n\n#NHL #HockeyTwitter"
+      "template": "Tonight's games wrapping up 🏒 ({date_label})\n\nTomorrow's predictions live early: {url}\n\n#NHL #HockeyTwitter"
     }
   ],
   "yesterday_results": [

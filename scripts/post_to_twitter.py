@@ -176,6 +176,11 @@ def main() -> None:
     # Replace placeholder URL with actual site URL
     post_content = post_content.replace("[your-site-url]", args.site_url)
 
+    # Optional context label to avoid duplicate-content rejections across workflows
+    context_label = os.getenv("TWEET_CONTEXT_LABEL", "").strip()
+    if context_label:
+        post_content = f"{post_content}\n{context_label}"
+
     # Check character limit
     if len(post_content) > 280:
         print(f"⚠️  Warning: Post is {len(post_content)} characters (limit: 280)")

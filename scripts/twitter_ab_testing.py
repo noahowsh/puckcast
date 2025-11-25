@@ -520,6 +520,7 @@ def generate_post(
 ) -> str:
     """Generate post content using selected variant template."""
 
+    date_label = datetime.now(ZoneInfo("America/New_York")).strftime("%b %d")
     games = data.get("games", [])
     games_count = len(games)
     tag_block = "#NHL"
@@ -565,12 +566,13 @@ def generate_post(
             rank=insight_data["rank"],
             team_tag=insight_data["tag_block"],
             url="[your-site-url]",
+            date_label=date_label,
         )
         return post if template_uses_tags else f"{post}\n\n{insight_data['tag_block']}"
 
     if post_type == "slate_summary":
         summary = build_slate_summary(games)
-        post = template.format(summary=summary, url="[your-site-url]")
+        post = template.format(summary=summary, url="[your-site-url]", date_label=date_label)
         return post if template_uses_tags else f"{post}\n\n#NHL"
 
     if post_type == "game_of_night" and games:
@@ -592,6 +594,7 @@ def generate_post(
             factor3=f"Edge: {abs(top_game_data.get('edge', 0)) * 100:.0f}%",
             team_tags=tag_block,
             url="[your-site-url]",
+            date_label=date_label,
         )
         return post if template_uses_tags else f"{post}\n\n{tag_block}"
 
@@ -625,6 +628,7 @@ def generate_post(
                 edge3=f"Model edge: {abs(game.get('edge', 0)) * 100:.0f}%",
                 team_tags=tag_block,
                 url="[your-site-url]",
+                date_label=date_label,
             )
             return post if template_uses_tags else f"{post}\n\n{tag_block}"
 
@@ -651,6 +655,7 @@ def generate_post(
             insight="Showing strong fundamentals",
             team_tag=tag_block,
             url="[your-site-url]",
+            date_label=date_label,
         )
         return post if template_uses_tags else f"{post}\n\n{tag_block}"
 
@@ -664,6 +669,7 @@ def generate_post(
             fact=fact_text,
             team_tag=tag_block,
             url="[your-site-url]",
+            date_label=date_label,
         )
         return post if template_uses_tags else f"{post}\n\n{tag_block}"
 
@@ -678,6 +684,7 @@ def generate_post(
         high_conf=high_conf,
         team_tags=tag_block,
         url="[your-site-url]",  # Replace with actual URL
+        date_label=date_label,
     )
 
     return post if template_uses_tags else f"{post}\n\n{tag_block}"
