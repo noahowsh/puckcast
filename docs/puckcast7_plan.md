@@ -26,6 +26,7 @@
 - **Playoff-tuned calibration:** Separate playoff models or calibration layers; heavier weight on goalies, special teams, and matchups with high familiarity.
 - **Ensemble exploration:** Blend calibrated logreg with gradient boosting (HistGBM) and/or light neural tabular models; maintain calibration via isotonic/Platt.
 - **Feature refresh:** Add special-teams diff, goalie rest delta, injury gap, travel penalty to core model; reevaluate regularization strengths.
+- **Calibration refresh:** Refit calibrator with larger validation windows (multi-season), test Platt vs isotonic smoothing to avoid plateaus, and publish calibration curves with version tags.
 - **Drift monitoring:** Weekly metrics on accuracy, log loss, Brier; alert on drops vs trailing 30-day mean.
 - **Simulation:** Monte Carlo sim for playoff brackets; series win odds; scenario explorer.
 - **Fair odds export:** Convert probabilities to fair odds, hold-adjusted odds; enable display or downstream pricing comparison (comms only, not betting).

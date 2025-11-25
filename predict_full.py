@@ -220,6 +220,14 @@ def export_predictions_json(predictions, generated_at=None, player_hub_payload=N
         payload["playerHubMeta"] = hub_meta
 
     for pred in predictions:
+        home_prob_display = pred.get("home_win_prob_raw", pred.get("home_win_prob", 0.0))
+        away_prob_display = pred.get("away_win_prob_raw", pred.get("away_win_prob", 0.0))
+        # Fallback to complement if only one side is present
+        if away_prob_display == 0.0 and "home_win_prob_raw" in pred and "away_win_prob_raw" not in pred:
+            away_prob_display = 1 - home_prob_display
+        if home_prob_display == 0.0 and "away_win_prob_raw" in pred and "home_win_prob_raw" not in pred:
+            home_prob_display = 1 - away_prob_display
+
         game_entry = {
             "id": str(pred.get("game_id", pred.get("game_num"))),
             "gameDate": pred.get("date"),
@@ -233,8 +241,8 @@ def export_predictions_json(predictions, generated_at=None, player_hub_payload=N
                 "name": pred.get("away_team_name", pred.get("away_team")),
                 "abbrev": pred.get("away_team"),
             },
-            "homeWinProb": round(pred.get("home_win_prob", 0.0), 4),
-            "awayWinProb": round(pred.get("away_win_prob", 0.0), 4),
+            "homeWinProb": round(home_prob_display, 4),
+            "awayWinProb": round(away_prob_display, 4),
             "confidenceScore": round(pred.get("confidence", 0.0), 3),
             "confidenceGrade": pred.get("confidence_grade", "C"),
             "edge": round(pred.get("edge", 0.0), 3),
@@ -405,15 +413,22 @@ def predict_games(date=None, num_games=20):
         
         # Predict with calibrated model
         prob_home_raw = model.predict_proba(matchup_features.values.reshape(1, -1))[0][1]
-        prob_home = apply_calibration(prob_home_raw, calibrator)
-        prob_away = 1 - prob_home
+        prob_home_calibrated = apply_calibration(prob_home_raw, calibrator)
+        prob_home_display = prob_home_raw  # Show raw probabilities to avoid calibration plateaus
+        prob_away_raw = 1 - prob_home_raw
+        prob_away_calibrated = 1 - prob_home_calibrated
 
         start_time_utc_iso, start_time_et = format_start_times(game.get('startTimeUTC', ''))
-        edge = prob_home - 0.5
+        edge = prob_home_calibrated - 0.5
         confidence_score = abs(edge) * 2  # 0-1 scale
         confidence_grade = grade_from_edge(edge)
-        model_favorite = 'home' if prob_home >= prob_away else 'away'
-        summary = build_summary(game.get('homeTeamName', home_abbrev), game.get('awayTeamName', away_abbrev), prob_home, confidence_grade)
+        model_favorite = 'home' if prob_home_calibrated >= prob_away_calibrated else 'away'
+        summary = build_summary(
+            game.get('homeTeamName', home_abbrev),
+            game.get('awayTeamName', away_abbrev),
+            prob_home_calibrated,
+            confidence_grade,
+        )
         
         # Store prediction
         predictions.append({
@@ -429,10 +444,15 @@ def predict_games(date=None, num_games=20):
             'away_team_name': game.get('awayTeamName', away_abbrev),
             'home_team': home_abbrev,
             'home_team_name': game.get('homeTeamName', home_abbrev),
-            'home_win_prob': prob_home,
-            'away_win_prob': prob_away,
+            # Display raw probabilities for UI while keeping calibrated for decisioning
+            'home_win_prob': prob_home_display,
+            'away_win_prob': prob_away_raw,
+            'home_win_prob_raw': prob_home_raw,
+            'away_win_prob_raw': prob_away_raw,
+            'home_win_prob_calibrated': prob_home_calibrated,
+            'away_win_prob_calibrated': prob_away_calibrated,
             'edge': edge,
-            'predicted_winner': home_abbrev if prob_home > 0.5 else away_abbrev,
+            'predicted_winner': home_abbrev if prob_home_calibrated > 0.5 else away_abbrev,
             'model_favorite': model_favorite,
             'confidence': confidence_score,
             'confidence_grade': confidence_grade,
@@ -441,19 +461,19 @@ def predict_games(date=None, num_games=20):
         
         # Display prediction
         print(f"\n{i}. {away_abbrev} @ {home_abbrev}")
-        print(f"   Home Win: {prob_home:.1%}  |  Away Win: {prob_away:.1%}")
+        print(f"   Home Win (raw): {prob_home_display:.1%}  |  Away Win (raw): {prob_away_raw:.1%}")
         
         # Classify prediction strength
         confidence_pct = confidence_score * 100
 
-        if prob_home > 0.70:
+        if prob_home_calibrated > 0.70:
             print(f"   ✅ Prediction: {home_abbrev} STRONG FAVORITE")
-        elif prob_home < 0.30:
+        elif prob_home_calibrated < 0.30:
             print(f"   ✅ Prediction: {away_abbrev} STRONG FAVORITE")
-        elif 0.45 <= prob_home <= 0.55:
+        elif 0.45 <= prob_home_calibrated <= 0.55:
             print(f"   ⚖️  Prediction: TOSS-UP (too close to call)")
         else:
-            favorite = home_abbrev if prob_home > 0.5 else away_abbrev
+            favorite = home_abbrev if prob_home_calibrated > 0.5 else away_abbrev
             print(f"   📊 Prediction: {favorite} ({confidence_pct:.0f}% confidence)")
     
     # Summary
