@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-const SITE_VERSION = "v6.1";
+const SITE_VERSION = "v6.2";
 
 export function SiteFooter() {
   const currentYear = new Date().getFullYear();
