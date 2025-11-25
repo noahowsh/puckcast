@@ -58,6 +58,12 @@ jobs:
         run: |
           git config user.name "GitHub Actions Bot"
           git config user.email "actions@github.com"
+          # backtestingReport.json may not exist if no games were final; create placeholder to avoid pathspec errors
+          if [ ! -f web/src/data/backtestingReport.json ]; then
+            echo '{"message":"No backtesting data yet","generatedAt":"'$(date -u +%Y-%m-%dT%H:%M:%SZ)'"}' > web/src/data/backtestingReport.json
+          fi
+          git fetch origin main
+          git rebase origin/main
           git add data/archive/ web/src/data/backtestingReport.json
           git commit -m "chore: update game results and backtesting report ($(date -u +%Y-%m-%dT%H:%M:%SZ))"
           git push

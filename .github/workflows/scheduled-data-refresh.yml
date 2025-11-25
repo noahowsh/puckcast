@@ -158,6 +158,12 @@ jobs:
         run: |
           git diff --quiet web/src/data/*.json || echo "changes=true" >> $GITHUB_OUTPUT
 
+      - name: Rebase on latest main
+        if: steps.git-check.outputs.changes == 'true'
+        run: |
+          git fetch origin main
+          git rebase origin/main
+
       - name: Commit and push changes
         if: steps.git-check.outputs.changes == 'true'
         run: |
