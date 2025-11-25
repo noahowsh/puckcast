@@ -634,8 +634,7 @@ def generate_post(
 
     if post_type == "team_spotlight" and games:
         # Rotate through teams based on day of year
-        import datetime
-        day_of_year = datetime.datetime.now().timetuple().tm_yday
+        day_of_year = datetime.now().timetuple().tm_yday
         # Get a team from today's games, cycling through
         team_idx = day_of_year % len(games)
         game = games[team_idx]
