@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2025-11-24T23:11:18.812440+00:00",
+  "updatedAt": "2025-11-25T13:27:07.773275+00:00",
   "notes": "Goalie performance metrics calculated from NHL Stats API data. GSAx estimates based on save percentage above league average.",
   "goalies": [
     {
@@ -18,7 +18,7 @@
       "watchouts": [
         "Limited recent data"
       ],
-      "nextOpponent": "STL"
+      "nextOpponent": "CAR"
     },
     {
       "name": "Jesper Wallstedt",
@@ -147,6 +147,23 @@
       "nextOpponent": "EDM"
     },
     {
+      "name": "Andrei Vasilevskiy",
+      "team": "TBL",
+      "rollingGsa": 1.0,
+      "seasonGsa": 5.4,
+      "restDays": 2,
+      "startLikelihood": 0.9,
+      "trend": "steady",
+      "note": "Consistent performance from Andrei Vasilevskiy with a 2.36 GAA \u2014 reliable starter for TBL.",
+      "strengths": [
+        "Solid fundamentals"
+      ],
+      "watchouts": [
+        "Inconsistent results"
+      ],
+      "nextOpponent": "CGY"
+    },
+    {
       "name": "Connor Hellebuyck",
       "team": "WPG",
       "rollingGsa": 1.0,
@@ -162,6 +179,23 @@
         "Inconsistent results"
       ],
       "nextOpponent": "WSH"
+    },
+    {
+      "name": "Daniil Tarasov",
+      "team": "FLA",
+      "rollingGsa": 0.9,
+      "seasonGsa": 2.2,
+      "restDays": 3,
+      "startLikelihood": 0.7,
+      "trend": "steady",
+      "note": "Consistent performance from Daniil Tarasov with a 2.45 GAA \u2014 reliable starter for FLA.",
+      "strengths": [
+        "Solid fundamentals"
+      ],
+      "watchouts": [
+        "Limited recent data"
+      ],
+      "nextOpponent": "PHI"
     },
     {
       "name": "Yaroslav Askarov",
@@ -198,6 +232,23 @@
       "nextOpponent": "BUF"
     },
     {
+      "name": "Logan Thompson",
+      "team": "WSH",
+      "rollingGsa": 0.9,
+      "seasonGsa": 5.0,
+      "restDays": 2,
+      "startLikelihood": 0.9,
+      "trend": "steady",
+      "note": "Consistent performance from Logan Thompson with a 2.16 GAA \u2014 reliable starter for WSH.",
+      "strengths": [
+        "Exceptional goals against average"
+      ],
+      "watchouts": [
+        "Inconsistent results"
+      ],
+      "nextOpponent": "WPG"
+    },
+    {
       "name": "Philipp Grubauer",
       "team": "SEA",
       "rollingGsa": 0.9,
@@ -229,7 +280,7 @@
       "watchouts": [
         "Limited recent data"
       ],
-      "nextOpponent": "TBL"
+      "nextOpponent": "FLA"
     },
     {
       "name": "Tristan Jarry",
@@ -266,55 +317,21 @@
       "nextOpponent": "SJS"
     },
     {
-      "name": "Daniil Tarasov",
-      "team": "FLA",
+      "name": "Darcy Kuemper",
+      "team": "LAK",
       "rollingGsa": 0.7,
-      "seasonGsa": 1.5,
-      "restDays": 3,
-      "startLikelihood": 0.6,
-      "trend": "stable",
-      "note": "Daniil Tarasov showing promise with limited sample size \u2014 monitor progression closely.",
-      "strengths": [
-        "Solid fundamentals"
-      ],
-      "watchouts": [
-        "Limited recent data"
-      ],
-      "nextOpponent": "NSH"
-    },
-    {
-      "name": "Logan Thompson",
-      "team": "WSH",
-      "rollingGsa": 0.7,
-      "seasonGsa": 3.6,
+      "seasonGsa": 3.9,
       "restDays": 2,
       "startLikelihood": 0.8,
       "trend": "stable",
-      "note": "Logan Thompson showing promise with limited sample size \u2014 monitor progression closely.",
+      "note": "Darcy Kuemper showing promise with limited sample size \u2014 monitor progression closely.",
       "strengths": [
         "Exceptional goals against average"
       ],
       "watchouts": [
-        "Inconsistent results"
+        "Limited recent data"
       ],
-      "nextOpponent": "CBJ"
-    },
-    {
-      "name": "Andrei Vasilevskiy",
-      "team": "TBL",
-      "rollingGsa": 0.7,
-      "seasonGsa": 3.4,
-      "restDays": 2,
-      "startLikelihood": 0.8,
-      "trend": "stable",
-      "note": "Andrei Vasilevskiy showing promise with limited sample size \u2014 monitor progression closely.",
-      "strengths": [
-        "Solid fundamentals"
-      ],
-      "watchouts": [
-        "Inconsistent results"
-      ],
-      "nextOpponent": "PHI"
+      "nextOpponent": "ANA"
     },
     {
       "name": "Jeremy Swayman",
@@ -337,7 +354,7 @@
       "name": "Igor Shesterkin",
       "team": "NYR",
       "rollingGsa": 0.7,
-      "seasonGsa": 3.8,
+      "seasonGsa": 3.9,
       "restDays": 2,
       "startLikelihood": 0.8,
       "trend": "stable",
@@ -348,7 +365,7 @@
       "watchouts": [
         "Inconsistent results"
       ],
-      "nextOpponent": "STL"
+      "nextOpponent": "CAR"
     },
     {
       "name": "Joey Daccord",
@@ -382,7 +399,7 @@
       "watchouts": [
         "Limited recent data"
       ],
-      "nextOpponent": "DET"
+      "nextOpponent": "STL"
     },
     {
       "name": "Arturs Silovs",
@@ -435,23 +452,6 @@
         "High goals against"
       ],
       "nextOpponent": "CBJ"
-    },
-    {
-      "name": "Darcy Kuemper",
-      "team": "LAK",
-      "rollingGsa": 0.4,
-      "seasonGsa": 2.2,
-      "restDays": 2,
-      "startLikelihood": 0.8,
-      "trend": "stable",
-      "note": "Darcy Kuemper showing promise with limited sample size \u2014 monitor progression closely.",
-      "strengths": [
-        "Solid fundamentals"
-      ],
-      "watchouts": [
-        "Limited recent data"
-      ],
-      "nextOpponent": "OTT"
     },
     {
       "name": "David Rittich",
