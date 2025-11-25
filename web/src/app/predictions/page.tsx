@@ -57,6 +57,7 @@ function PredictionRow({ game }: { game: Prediction }) {
   const favorite = game.modelFavorite === "home" ? game.homeTeam : game.awayTeam;
   const prob = game.modelFavorite === "home" ? game.homeWinProb : game.awayWinProb;
   const grade = getPredictionGrade(game.edge);
+  const edgePts = Math.abs(game.edge * 100);
   return (
     <div className="prediction-row">
           <div className="prediction-row__teams">
@@ -79,7 +80,7 @@ function PredictionRow({ game }: { game: Prediction }) {
         </div>
         <div className="prediction-row__grade">
           <span className="edge-card__grade">{grade.label}</span>
-          <span className="chip-soft">{(game.edge * 100).toFixed(1)} pts edge</span>
+          <span className="chip-soft">{edgePts.toFixed(1)} pts edge</span>
         </div>
       </div>
 
