@@ -115,7 +115,7 @@ class TestTwitterABTesting:
     def test_variant_selection(self):
         """Test that variant selection works."""
         variants = {
-            "morning_preview": [
+            "morning_slate": [
                 {"id": "A", "format": "emoji_heavy", "template": "Test {games}"},
                 {"id": "B", "format": "minimal", "template": "Test {games}"},
             ]
@@ -124,11 +124,11 @@ class TestTwitterABTesting:
         from twitter_ab_testing import select_variant
 
         # Test forced variant
-        variant = select_variant("morning_preview", variants, forced_variant="A")
+        variant = select_variant("morning_slate", variants, "A")
         assert variant["id"] == "A"
 
         # Test random selection
-        variant = select_variant("morning_preview", variants, forced_variant=None)
+        variant = select_variant("morning_slate", variants, None)
         assert variant["id"] in ["A", "B"]
 
     def test_post_generation(self):
