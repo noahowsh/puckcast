@@ -419,14 +419,15 @@ def predict_games(date=None, num_games=20):
         prob_away_calibrated = 1 - prob_home_calibrated
 
         start_time_utc_iso, start_time_et = format_start_times(game.get('startTimeUTC', ''))
-        edge = prob_home_calibrated - 0.5
+        # Use raw probabilities for display and edge/grade to avoid calibration plateaus
+        edge = prob_home_display - 0.5
         confidence_score = abs(edge) * 2  # 0-1 scale
         confidence_grade = grade_from_edge(edge)
-        model_favorite = 'home' if prob_home_calibrated >= prob_away_calibrated else 'away'
+        model_favorite = 'home' if prob_home_display >= prob_away_raw else 'away'
         summary = build_summary(
             game.get('homeTeamName', home_abbrev),
             game.get('awayTeamName', away_abbrev),
-            prob_home_calibrated,
+            prob_home_display,
             confidence_grade,
         )
         
@@ -452,7 +453,7 @@ def predict_games(date=None, num_games=20):
             'home_win_prob_calibrated': prob_home_calibrated,
             'away_win_prob_calibrated': prob_away_calibrated,
             'edge': edge,
-            'predicted_winner': home_abbrev if prob_home_calibrated > 0.5 else away_abbrev,
+            'predicted_winner': home_abbrev if prob_home_display > 0.5 else away_abbrev,
             'model_favorite': model_favorite,
             'confidence': confidence_score,
             'confidence_grade': confidence_grade,
@@ -466,14 +467,14 @@ def predict_games(date=None, num_games=20):
         # Classify prediction strength
         confidence_pct = confidence_score * 100
 
-        if prob_home_calibrated > 0.70:
+        if prob_home_display > 0.70:
             print(f"   ✅ Prediction: {home_abbrev} STRONG FAVORITE")
-        elif prob_home_calibrated < 0.30:
+        elif prob_home_display < 0.30:
             print(f"   ✅ Prediction: {away_abbrev} STRONG FAVORITE")
-        elif 0.45 <= prob_home_calibrated <= 0.55:
+        elif 0.45 <= prob_home_display <= 0.55:
             print(f"   ⚖️  Prediction: TOSS-UP (too close to call)")
         else:
-            favorite = home_abbrev if prob_home_calibrated > 0.5 else away_abbrev
+            favorite = home_abbrev if prob_home_display > 0.5 else away_abbrev
             print(f"   📊 Prediction: {favorite} ({confidence_pct:.0f}% confidence)")
     
     # Summary
