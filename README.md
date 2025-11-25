@@ -1,10 +1,12 @@
 # 🏒 Puckcast - NHL Game Prediction System
 
-**Version:** 2.0
-**Accuracy:** 60.89% (vs 53.7% baseline)
+**Version:** 6.2  
+**Model:** Logistic Regression (isotonic-calibrated) on 206 engineered features  
+**Training Window:** 3 most recent seasons (auto-advances; currently 2023–2026)  
+**Current holdout (from `web/src/data/modelInsights.json`):** 59.3% accuracy vs 53.7% baseline, log loss 0.676, Brier 0.240  
 **Status:** Active Development
 
-Puckcast is a machine learning system that predicts NHL game outcomes using 204 engineered features including advanced metrics like Expected Goals (xG), goalie performance, schedule fatigue, and Elo ratings.
+Puckcast predicts NHL outcomes using MoneyPuck team-game logs, custom feature engineering (rest/travel, xG, special teams, goalie form, Elo), and a calibrated logistic model. The Next.js site consumes the exported JSON payloads for the daily slate.
 
 ---
 
@@ -12,7 +14,7 @@ Puckcast is a machine learning system that predicts NHL game outcomes using 204 
 
 ### Predict today (web feed)
 ```bash
-python3 predict_full.py      # calibrated full run (slower)
+python3 predict_full.py      # generates predictions_YYYY-MM-DD.csv + web/src/data/todaysPredictions.json
 ```
 
 ### Run the web app
@@ -22,34 +24,28 @@ npm install
 npm run dev                  # http://localhost:3000
 ```
 
-### Train / analyze
+### Train / analyze (advanced)
 ```bash
-python3 -m src.nhl_prediction.train          # train model
-python3 analysis/feature_importance_analysis.py
-python3 analysis/hyperparameter_tuning.py
+# Full dataset build + training utilities live under src/nhl_prediction
+python3 analysis/feature_importance_analysis.py   # optional, requires cached data
+# Training entrypoints are currently prediction-focused; historical backtests use scripts/fetch_results.py + archives
 ```
 
 ---
 
-## 📊 Current Performance
+## 📊 Current Performance (live payload)
 
-| Metric | Value |
-|--------|-------|
-| **Test Accuracy** | 60.89% |
-| **ROC-AUC** | 0.6421 |
-| **Log Loss** | 0.6594 |
-| **Baseline (Random)** | 50.0% |
-| **Baseline (Home Team)** | 53.7% |
-| **Edge over Random** | **+10.89pp** |
+- Accuracy: **59.3%** (holdout in `modelInsights.json`)
+- Baseline (home team rate): **53.7%**
+- Log loss: **0.676**
+- Brier: **0.240**
+- Avg edge: **16.1 pts** (vs coin flip)
 
-**Training Data:** 3 seasons (2021-2024), 3,690 games
-**Model:** Logistic Regression (C=0.001, decay=0.85)
-**Features:** 204 total → 50 recommended (top performers)
-
-**Data feeds powering the site**
-- `web/src/data/todaysPredictions.json` (updated by `predict_full.py`)
-- `web/src/data/currentStandings.json`, `goaliePulse.json`, `modelInsights.json`
-- Next-game lookup for power board: `web/src/app/api/next-games` (calls NHL schedule API)
+Feeds powering the site:
+- `web/src/data/todaysPredictions.json` (daily slate, updated by `predict_full.py` + actions)
+- `web/src/data/modelInsights.json` (holdout metrics, confidence buckets)
+- `web/src/data/currentStandings.json`, `goaliePulse.json`
+- Next-game lookup for the power board: `web/src/app/api/next-games` (NHL schedule API)
 
 ## 🔐 Secrets / Env
 - X/Twitter automation: `TWITTER_API_KEY`, `TWITTER_API_SECRET`, `TWITTER_ACCESS_TOKEN`, `TWITTER_ACCESS_SECRET` (optional `TWITTER_BEARER_TOKEN`).
@@ -57,147 +53,89 @@ python3 analysis/hyperparameter_tuning.py
 
 ---
 
-## 📁 Project Structure (cleaned)
+## 📁 Project Structure (current)
 
 ```
 puckcast/
 ├── README.md                # ← You are here
-├── src/nhl_prediction/      # Core prediction engine
-├── analysis/                # Active analysis scripts/results
-├── web/                     # Next.js site (app, data feeds, assets)
-├── scripts/                 # Automation/data helpers (+ run_daily.sh)
-├── data/                    # Model/data assets (xg_model.pkl, cache)
-├── docs/                    # Current docs + indexes
+├── src/nhl_prediction/      # Core prediction engine (pipeline, features, model helpers, NHL API client)
+├── analysis/                # Analysis scripts/results (feature importance, hyperparam sweeps)
+├── web/                     # Next.js site (app router, components, data feeds in web/src/data)
+├── scripts/                 # Automation helpers (Twitter posting, validation, backtesting)
+├── data/                    # Static assets (MoneyPuck, team metadata), archives of predictions/results
+├── docs/                    # Current docs + roadmap (see docs/INDEX.md)
 ├── archive/                 # Legacy docs/dashboards
-├── temp_outputs/            # Temp files (ignored)
 ├── requirements.txt         # Python deps
-├── runtime.txt              # Runtime pin
-└── model_v6_6seasons.pkl    # Pretrained model
+├── runtime.txt              # Runtime pin (Heroku/Render style)
+└── model_v6_6seasons.pkl    # Pretrained model artifact
 ```
 
 ---
 
-## 🎯 Key Features
+## 🎯 Model + Features (current)
 
-### 1. Advanced Metrics
-- **Expected Goals (xG):** Custom model (94.8% accuracy) using shot location, type, rebounds
-- **High-Danger Shots:** Royal Road/slot tracking
-- **Goalie GSAx:** Goals Saved Above Expected
-
-### 2. Schedule Intelligence
-- Back-to-back detection
-- Rest day advantages
-- Travel burden tracking
-- Schedule density (games in 3/6 days)
-
-### 3. Team Strength
-- Elo ratings (margin-adjusted)
-- Rolling performance windows (3/5/10 games)
-- Season-to-date aggregates
-- Momentum indicators
-
-### 4. Goalie Tracking
-- Individual goalie stats (500 goalie-seasons)
-- Starting goalie likelihood
-- Recent form trends
-- Rest patterns
-
-### 5. Shot Quality
-- Shannon entropy for shot diversity
-- Shot type breakdown
-- Rebound detection and tracking
-- Danger zone analysis
+- **Features:** 206 engineered features (differentials and dummies) built from MoneyPuck team-game logs:
+  - Rest/travel: rest buckets, b2b flags, games in last 3/6 days, travel burden, altitude.
+  - Performance windows: rolling win%, goal diff, shots/corsi/fenwick, xG, special teams proxies.
+  - Goalie form: rolling save%, GSAX, shots faced, start likelihood, rest days.
+  - Elo: margin-adjusted Elo with home-ice baked in.
+  - Team IDs as dummies for capture of residual strength.
+- **Model:** Logistic Regression (StandardScaler + LBFGS), hyperparameter C tuned on penultimate season; isotonic calibration on the most recent validation season.
+- **Edge definition:** `(favorite_prob - 0.5)`; grades map to bands (C <2 pts, C+ 2–3, B- 4–6, B 7–9, B+ 10–13, A- 15–20, A+ ≥20).
+- **Output:** Raw probabilities are used for display and edge/grade; calibrated probs retained in the payload for analysis.
 
 ---
 
 ## 📖 Documentation
 
-### Essential Reading
+## 📖 Documentation (pointers)
 
-| Document | Purpose | Audience |
-|----------|---------|----------|
-| **[FEATURE_DICTIONARY.md](FEATURE_DICTIONARY.md)** | Complete guide to all 204 features | Everyone |
-| **[COMPREHENSIVE_AUDIT_V2.md](COMPREHENSIVE_AUDIT_V2.md)** | Full system audit, inventory | Developers |
-| **[V2_OPTIMIZATION_RESULTS.md](V2_OPTIMIZATION_RESULTS.md)** | Latest optimization results | Data Scientists |
-
-### Feature Documentation
-
-**[FEATURE_DICTIONARY.md](FEATURE_DICTIONARY.md)** includes:
-- All 204 features ranked by importance
-- Detailed calculations and formulas
-- Feature categories and groups
-- Top 50 recommended features
-- Zero-importance features to remove
-- Best practices for feature engineering
-
-### Analysis Results
-
-**[V2_OPTIMIZATION_RESULTS.md](V2_OPTIMIZATION_RESULTS.md)** includes:
-- Feature importance analysis
-- Hyperparameter tuning (60 configurations)
-- Top 50 features provide +0.81pp gain
-- Optimal settings: C=1.0, decay=1.0
+- **docs/INDEX.md** – current doc map and where to look.
+- **docs/ROOT_MAP.md** – high-level system map.
+- **docs/puckcast7_plan.md** – roadmap toward 7.0 (updated with calibration refresh notes).
+- **scripts/README.md** – helper scripts, validation, archives.
+- Legacy/archived docs live under `docs/archive` and `archive/`.
 
 ---
 
-## 🧠 Model Architecture
+## 🧠 Pipeline (current)
 
-### Pipeline Flow
 ```
-NHL API Data
+MoneyPuck team-game logs (3 seasons) + team metadata
     ↓
-Native Ingestion (play-by-play parsing)
+Feature engineering (rest/travel, rolling stats, xG, Elo, goalie form, dummies)
     ↓
-xG Model (shot quality prediction)
+Train logistic regression (chronological split; last season for validation)
     ↓
-Feature Engineering (204 features)
+Isotonic calibration on validation season
     ↓
-Elo Calculations
+Predict future schedule (fetch_schedule/fetch_future_games)
     ↓
-Goalie Features
-    ↓
-Game Dataframe (home vs away differentials)
-    ↓
-Train/Test Split (chronological)
-    ↓
-Logistic Regression + HistGradientBoosting
-    ↓
-Predictions
+Export CSV + web/src/data/todaysPredictions.json
 ```
 
-### Key Components
+Notes:
+- Raw probs drive edge/grades; calibrated probs also exported.
+- Archives: `data/archive/predictions/predictions_YYYY-MM-DD.json` + CSV for backtests.
 
-**Data Sources:**
-- NHL Gamecenter API (play-by-play)
-- GoaliePulse (goalie stats)
-- Custom xG model
+## 🤖 Automation (GitHub Actions)
 
-**Models:**
-1. **xG Model:** Gradient Boosting (94.8% accuracy, 23K shots)
-2. **Game Prediction:** Logistic Regression (60.89% accuracy)
+- `scheduled-data-refresh.yml` – predictions/standings/goalie pulse/model insights (AM/PM) with rebase-before-push.
+- `daily-predictions.yml` – morning prediction run (may be redundant; see refresh).
+- `fetch-results.yml` – pulls final scores, updates archives/backtesting (creates placeholder report if none).
+- `twitter-daily.yml` – 4-slot X posting (morning slate, team highlight, prior-day results recap, tomorrow tease).
 
-**Feature Engineering:**
-- 204 total features
-- 17 categories
-- Differentials (home - away)
-- Rolling windows (3/5/10 games)
-- Season aggregates
-- Elo ratings
+## 🌐 Frontend
 
----
+- Next.js (app router) under `web/`.
+- Data fed via `web/src/data/*.json` generated by scripts/actions.
+- Edge and grades on the site use raw probabilities (edge = |prob - 0.5|).
 
-## 📊 Feature Importance (Top 10)
+## ⚡ Quick Facts
 
-| Rank | Feature | Importance | Category |
-|------|---------|------------|----------|
-| 1 | rolling_high_danger_shots_3_diff | 0.0317 | Shot Quality |
-| 2 | games_played_prior_away | 0.0266 | Season Progress |
-| 3 | games_played_prior_home | 0.0265 | Season Progress |
-| 4 | is_b2b_diff | 0.0263 | Schedule/Rest |
-| 5 | goalie_rolling_gsa_diff | 0.0258 | Goalie Performance |
-| 6 | shotsFor_roll_10_diff | 0.0165 | Shot Volume |
-| 7 | rest_away_one_day | 0.0163 | Schedule/Rest |
-| 8 | games_last_3d_diff | 0.0162 | Schedule/Rest |
+- Current slate data: `web/src/data/todaysPredictions.json` (regenerated each run).
+- Confidence ladder bands: 0–5 (C), 5–10 (B-), 10–15 (B+), 15–20 (A-), 20+ (A+).
+- Version badge on site footer: v6.2.
 | 9 | season_shot_margin_diff | 0.0160 | Shot Volume |
 | 10 | rolling_goal_diff_10_diff | 0.0157 | Goal Differential |
 
