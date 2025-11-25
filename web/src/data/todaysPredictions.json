@@ -1,165 +1,464 @@
 {
-  "generatedAt": "2025-11-24T23:08:56.004292+00:00",
+  "generatedAt": "2025-11-25T02:17:14.173882+00:00",
   "games": [
     {
-      "id": "2025020353",
-      "gameDate": "2025-11-24",
+      "id": "2025020360",
+      "gameDate": "2025-11-25",
+      "startTimeEt": "9:00 PM ET",
+      "startTimeUtc": "2025-11-26T02:00:00+00:00",
+      "homeTeam": {
+        "name": "Oilers",
+        "abbrev": "EDM"
+      },
+      "awayTeam": {
+        "name": "Stars",
+        "abbrev": "DAL"
+      },
+      "homeWinProb": 0.4418,
+      "awayWinProb": 0.5582,
+      "confidenceScore": 0.052,
+      "confidenceGrade": "C+",
+      "edge": -0.026,
+      "summary": "Stars project at 53% as the road lean \u2014 a C+-tier edge worth 2.6 pts over a coin flip.",
+      "modelFavorite": "away",
+      "venue": "Rogers Place",
+      "season": "20252026"
+    },
+    {
+      "id": "2025020361",
+      "gameDate": "2025-11-26",
       "startTimeEt": "7:00 PM ET",
-      "startTimeUtc": "2025-11-25T00:00:00+00:00",
+      "startTimeUtc": "2025-11-27T00:00:00+00:00",
+      "homeTeam": {
+        "name": "Red Wings",
+        "abbrev": "DET"
+      },
+      "awayTeam": {
+        "name": "Predators",
+        "abbrev": "NSH"
+      },
+      "homeWinProb": 0.6126,
+      "awayWinProb": 0.3874,
+      "confidenceScore": 0.25,
+      "confidenceGrade": "B+",
+      "edge": 0.125,
+      "summary": "Red Wings project at 62% as the home lean \u2014 a B+-tier edge worth 12.5 pts over a coin flip.",
+      "modelFavorite": "home",
+      "venue": "Little Caesars Arena",
+      "season": "20252026"
+    },
+    {
+      "id": "2025020362",
+      "gameDate": "2025-11-26",
+      "startTimeEt": "7:00 PM ET",
+      "startTimeUtc": "2025-11-27T00:00:00+00:00",
       "homeTeam": {
         "name": "Lightning",
         "abbrev": "TBL"
       },
       "awayTeam": {
-        "name": "Flyers",
-        "abbrev": "PHI"
+        "name": "Flames",
+        "abbrev": "CGY"
       },
-      "homeWinProb": 0.6579,
-      "awayWinProb": 0.3421,
-      "confidenceScore": 0.316,
-      "confidenceGrade": "A-",
-      "edge": 0.158,
-      "summary": "Lightning project at 66% as the home lean \u2014 an A--tier edge worth 15.8 pts over a coin flip.",
+      "homeWinProb": 0.6214,
+      "awayWinProb": 0.3786,
+      "confidenceScore": 0.25,
+      "confidenceGrade": "B+",
+      "edge": 0.125,
+      "summary": "Lightning project at 62% as the home lean \u2014 a B+-tier edge worth 12.5 pts over a coin flip.",
       "modelFavorite": "home",
       "venue": "Benchmark International Arena",
       "season": "20252026"
     },
     {
-      "id": "2025020354",
-      "gameDate": "2025-11-24",
+      "id": "2025020363",
+      "gameDate": "2025-11-26",
       "startTimeEt": "7:00 PM ET",
-      "startTimeUtc": "2025-11-25T00:00:00+00:00",
+      "startTimeUtc": "2025-11-27T00:00:00+00:00",
+      "homeTeam": {
+        "name": "Panthers",
+        "abbrev": "FLA"
+      },
+      "awayTeam": {
+        "name": "Flyers",
+        "abbrev": "PHI"
+      },
+      "homeWinProb": 0.5248,
+      "awayWinProb": 0.4752,
+      "confidenceScore": 0.052,
+      "confidenceGrade": "C+",
+      "edge": -0.026,
+      "summary": "Flyers project at 53% as the road lean \u2014 a C+-tier edge worth 2.6 pts over a coin flip.",
+      "modelFavorite": "away",
+      "venue": "Amerant Bank Arena",
+      "season": "20252026"
+    },
+    {
+      "id": "2025020364",
+      "gameDate": "2025-11-26",
+      "startTimeEt": "7:00 PM ET",
+      "startTimeUtc": "2025-11-27T00:00:00+00:00",
       "homeTeam": {
         "name": "Devils",
         "abbrev": "NJD"
       },
       "awayTeam": {
-        "name": "Red Wings",
-        "abbrev": "DET"
+        "name": "Blues",
+        "abbrev": "STL"
       },
-      "homeWinProb": 0.4678,
-      "awayWinProb": 0.5322,
-      "confidenceScore": 0.064,
+      "homeWinProb": 0.4742,
+      "awayWinProb": 0.5258,
+      "confidenceScore": 0.052,
       "confidenceGrade": "C+",
-      "edge": -0.032,
-      "summary": "Red Wings project at 53% as the road lean \u2014 a C+-tier edge worth 3.2 pts over a coin flip.",
+      "edge": -0.026,
+      "summary": "Blues project at 53% as the road lean \u2014 a C+-tier edge worth 2.6 pts over a coin flip.",
       "modelFavorite": "away",
       "venue": "Prudential Center",
       "season": "20252026"
     },
     {
-      "id": "2025020355",
-      "gameDate": "2025-11-24",
+      "id": "2025020365",
+      "gameDate": "2025-11-26",
       "startTimeEt": "7:00 PM ET",
-      "startTimeUtc": "2025-11-25T00:00:00+00:00",
+      "startTimeUtc": "2025-11-27T00:00:00+00:00",
       "homeTeam": {
-        "name": "Rangers",
-        "abbrev": "NYR"
+        "name": "Islanders",
+        "abbrev": "NYI"
       },
       "awayTeam": {
-        "name": "Blues",
-        "abbrev": "STL"
+        "name": "Bruins",
+        "abbrev": "BOS"
       },
-      "homeWinProb": 0.4678,
-      "awayWinProb": 0.5322,
-      "confidenceScore": 0.064,
-      "confidenceGrade": "C+",
-      "edge": -0.032,
-      "summary": "Blues project at 53% as the road lean \u2014 a C+-tier edge worth 3.2 pts over a coin flip.",
-      "modelFavorite": "away",
-      "venue": "Madison Square Garden",
+      "homeWinProb": 0.6039,
+      "awayWinProb": 0.3961,
+      "confidenceScore": 0.25,
+      "confidenceGrade": "B+",
+      "edge": 0.125,
+      "summary": "Islanders project at 62% as the home lean \u2014 a B+-tier edge worth 12.5 pts over a coin flip.",
+      "modelFavorite": "home",
+      "venue": "UBS Arena",
       "season": "20252026"
     },
     {
-      "id": "2025020356",
-      "gameDate": "2025-11-24",
+      "id": "2025020366",
+      "gameDate": "2025-11-26",
       "startTimeEt": "7:00 PM ET",
-      "startTimeUtc": "2025-11-25T00:00:00+00:00",
+      "startTimeUtc": "2025-11-27T00:00:00+00:00",
+      "homeTeam": {
+        "name": "Penguins",
+        "abbrev": "PIT"
+      },
+      "awayTeam": {
+        "name": "Sabres",
+        "abbrev": "BUF"
+      },
+      "homeWinProb": 0.6517,
+      "awayWinProb": 0.3483,
+      "confidenceScore": 0.263,
+      "confidenceGrade": "B+",
+      "edge": 0.132,
+      "summary": "Penguins project at 63% as the home lean \u2014 a B+-tier edge worth 13.2 pts over a coin flip.",
+      "modelFavorite": "home",
+      "venue": "PPG Paints Arena",
+      "season": "20252026"
+    },
+    {
+      "id": "2025020367",
+      "gameDate": "2025-11-26",
+      "startTimeEt": "7:00 PM ET",
+      "startTimeUtc": "2025-11-27T00:00:00+00:00",
       "homeTeam": {
         "name": "Capitals",
         "abbrev": "WSH"
       },
       "awayTeam": {
-        "name": "Blue Jackets",
-        "abbrev": "CBJ"
+        "name": "Jets",
+        "abbrev": "WPG"
       },
-      "homeWinProb": 0.5849,
-      "awayWinProb": 0.4151,
-      "confidenceScore": 0.17,
+      "homeWinProb": 0.4138,
+      "awayWinProb": 0.5862,
+      "confidenceScore": 0.185,
       "confidenceGrade": "B",
-      "edge": 0.085,
-      "summary": "Capitals project at 58% as the home lean \u2014 a B-tier edge worth 8.5 pts over a coin flip.",
-      "modelFavorite": "home",
+      "edge": -0.093,
+      "summary": "Jets project at 59% as the road lean \u2014 a B-tier edge worth 9.3 pts over a coin flip.",
+      "modelFavorite": "away",
       "venue": "Capital One Arena",
       "season": "20252026"
     },
     {
-      "id": "2025020357",
-      "gameDate": "2025-11-24",
-      "startTimeEt": "8:00 PM ET",
-      "startTimeUtc": "2025-11-25T01:00:00+00:00",
+      "id": "2025020368",
+      "gameDate": "2025-11-26",
+      "startTimeEt": "7:00 PM ET",
+      "startTimeUtc": "2025-11-27T00:00:00+00:00",
       "homeTeam": {
-        "name": "Predators",
-        "abbrev": "NSH"
+        "name": "Hurricanes",
+        "abbrev": "CAR"
       },
       "awayTeam": {
-        "name": "Panthers",
-        "abbrev": "FLA"
+        "name": "Rangers",
+        "abbrev": "NYR"
       },
-      "homeWinProb": 0.4678,
-      "awayWinProb": 0.5322,
-      "confidenceScore": 0.064,
-      "confidenceGrade": "C+",
-      "edge": -0.032,
-      "summary": "Panthers project at 53% as the road lean \u2014 a C+-tier edge worth 3.2 pts over a coin flip.",
-      "modelFavorite": "away",
-      "venue": "Bridgestone Arena",
+      "homeWinProb": 0.5976,
+      "awayWinProb": 0.4024,
+      "confidenceScore": 0.211,
+      "confidenceGrade": "B+",
+      "edge": 0.106,
+      "summary": "Hurricanes project at 61% as the home lean \u2014 a B+-tier edge worth 10.6 pts over a coin flip.",
+      "modelFavorite": "home",
+      "venue": "Lenovo Center",
       "season": "20252026"
     },
     {
-      "id": "2025020358",
-      "gameDate": "2025-11-24",
+      "id": "2025020369",
+      "gameDate": "2025-11-26",
+      "startTimeEt": "7:00 PM ET",
+      "startTimeUtc": "2025-11-27T00:00:00+00:00",
+      "homeTeam": {
+        "name": "Blue Jackets",
+        "abbrev": "CBJ"
+      },
+      "awayTeam": {
+        "name": "Maple Leafs",
+        "abbrev": "TOR"
+      },
+      "homeWinProb": 0.571,
+      "awayWinProb": 0.429,
+      "confidenceScore": 0.179,
+      "confidenceGrade": "B",
+      "edge": 0.09,
+      "summary": "Blue Jackets project at 59% as the home lean \u2014 a B-tier edge worth 9.0 pts over a coin flip.",
+      "modelFavorite": "home",
+      "venue": "Nationwide Arena",
+      "season": "20252026"
+    },
+    {
+      "id": "2025020370",
+      "gameDate": "2025-11-26",
+      "startTimeEt": "8:30 PM ET",
+      "startTimeUtc": "2025-11-27T01:30:00+00:00",
+      "homeTeam": {
+        "name": "Blackhawks",
+        "abbrev": "CHI"
+      },
+      "awayTeam": {
+        "name": "Wild",
+        "abbrev": "MIN"
+      },
+      "homeWinProb": 0.6043,
+      "awayWinProb": 0.3957,
+      "confidenceScore": 0.25,
+      "confidenceGrade": "B+",
+      "edge": 0.125,
+      "summary": "Blackhawks project at 62% as the home lean \u2014 a B+-tier edge worth 12.5 pts over a coin flip.",
+      "modelFavorite": "home",
+      "venue": "United Center",
+      "season": "20252026"
+    },
+    {
+      "id": "2025020371",
+      "gameDate": "2025-11-26",
       "startTimeEt": "9:00 PM ET",
-      "startTimeUtc": "2025-11-25T02:00:00+00:00",
+      "startTimeUtc": "2025-11-27T02:00:00+00:00",
+      "homeTeam": {
+        "name": "Avalanche",
+        "abbrev": "COL"
+      },
+      "awayTeam": {
+        "name": "Sharks",
+        "abbrev": "SJS"
+      },
+      "homeWinProb": 0.5436,
+      "awayWinProb": 0.4564,
+      "confidenceScore": 0.0,
+      "confidenceGrade": "C",
+      "edge": 0.0,
+      "summary": "Avalanche project at 50% as the home lean \u2014 a C-tier edge worth 0.0 pts over a coin flip.",
+      "modelFavorite": "home",
+      "venue": "Ball Arena",
+      "season": "20252026"
+    },
+    {
+      "id": "2025020372",
+      "gameDate": "2025-11-26",
+      "startTimeEt": "9:30 PM ET",
+      "startTimeUtc": "2025-11-27T02:30:00+00:00",
       "homeTeam": {
         "name": "Mammoth",
         "abbrev": "UTA"
       },
       "awayTeam": {
-        "name": "Golden Knights",
-        "abbrev": "VGK"
+        "name": "Canadiens",
+        "abbrev": "MTL"
       },
-      "homeWinProb": 0.4678,
-      "awayWinProb": 0.5322,
-      "confidenceScore": 0.064,
+      "homeWinProb": 0.5189,
+      "awayWinProb": 0.4811,
+      "confidenceScore": 0.052,
       "confidenceGrade": "C+",
-      "edge": -0.032,
-      "summary": "Golden Knights project at 53% as the road lean \u2014 a C+-tier edge worth 3.2 pts over a coin flip.",
+      "edge": -0.026,
+      "summary": "Canadiens project at 53% as the road lean \u2014 a C+-tier edge worth 2.6 pts over a coin flip.",
       "modelFavorite": "away",
       "venue": "Delta Center",
       "season": "20252026"
     },
     {
-      "id": "2025020359",
-      "gameDate": "2025-11-24",
-      "startTimeEt": "9:00 PM ET",
-      "startTimeUtc": "2025-11-25T02:00:00+00:00",
+      "id": "2025020373",
+      "gameDate": "2025-11-26",
+      "startTimeEt": "10:00 PM ET",
+      "startTimeUtc": "2025-11-27T03:00:00+00:00",
       "homeTeam": {
-        "name": "Kings",
-        "abbrev": "LAK"
+        "name": "Golden Knights",
+        "abbrev": "VGK"
       },
       "awayTeam": {
         "name": "Senators",
         "abbrev": "OTT"
       },
-      "homeWinProb": 0.4678,
-      "awayWinProb": 0.5322,
-      "confidenceScore": 0.064,
+      "homeWinProb": 0.5079,
+      "awayWinProb": 0.4921,
+      "confidenceScore": 0.052,
       "confidenceGrade": "C+",
-      "edge": -0.032,
-      "summary": "Senators project at 53% as the road lean \u2014 a C+-tier edge worth 3.2 pts over a coin flip.",
+      "edge": -0.026,
+      "summary": "Senators project at 53% as the road lean \u2014 a C+-tier edge worth 2.6 pts over a coin flip.",
       "modelFavorite": "away",
-      "venue": "Crypto.com Arena",
+      "venue": "T-Mobile Arena",
+      "season": "20252026"
+    },
+    {
+      "id": "2025020374",
+      "gameDate": "2025-11-26",
+      "startTimeEt": "10:00 PM ET",
+      "startTimeUtc": "2025-11-27T03:00:00+00:00",
+      "homeTeam": {
+        "name": "Ducks",
+        "abbrev": "ANA"
+      },
+      "awayTeam": {
+        "name": "Canucks",
+        "abbrev": "VAN"
+      },
+      "homeWinProb": 0.4576,
+      "awayWinProb": 0.5424,
+      "confidenceScore": 0.052,
+      "confidenceGrade": "C+",
+      "edge": -0.026,
+      "summary": "Canucks project at 53% as the road lean \u2014 a C+-tier edge worth 2.6 pts over a coin flip.",
+      "modelFavorite": "away",
+      "venue": "Honda Center",
+      "season": "20252026"
+    },
+    {
+      "id": "2025020375",
+      "gameDate": "2025-11-26",
+      "startTimeEt": "10:00 PM ET",
+      "startTimeUtc": "2025-11-27T03:00:00+00:00",
+      "homeTeam": {
+        "name": "Kraken",
+        "abbrev": "SEA"
+      },
+      "awayTeam": {
+        "name": "Stars",
+        "abbrev": "DAL"
+      },
+      "homeWinProb": 0.4354,
+      "awayWinProb": 0.5646,
+      "confidenceScore": 0.052,
+      "confidenceGrade": "C+",
+      "edge": -0.026,
+      "summary": "Stars project at 53% as the road lean \u2014 a C+-tier edge worth 2.6 pts over a coin flip.",
+      "modelFavorite": "away",
+      "venue": "Climate Pledge Arena",
+      "season": "20252026"
+    },
+    {
+      "id": "2025020377",
+      "gameDate": "2025-11-28",
+      "startTimeEt": "12:00 PM ET",
+      "startTimeUtc": "2025-11-28T17:00:00+00:00",
+      "homeTeam": {
+        "name": "Red Wings",
+        "abbrev": "DET"
+      },
+      "awayTeam": {
+        "name": "Lightning",
+        "abbrev": "TBL"
+      },
+      "homeWinProb": 0.5663,
+      "awayWinProb": 0.4337,
+      "confidenceScore": 0.179,
+      "confidenceGrade": "B",
+      "edge": 0.09,
+      "summary": "Red Wings project at 59% as the home lean \u2014 a B-tier edge worth 9.0 pts over a coin flip.",
+      "modelFavorite": "home",
+      "venue": "Little Caesars Arena",
+      "season": "20252026"
+    },
+    {
+      "id": "2025020376",
+      "gameDate": "2025-11-28",
+      "startTimeEt": "1:00 PM ET",
+      "startTimeUtc": "2025-11-28T18:00:00+00:00",
+      "homeTeam": {
+        "name": "Bruins",
+        "abbrev": "BOS"
+      },
+      "awayTeam": {
+        "name": "Rangers",
+        "abbrev": "NYR"
+      },
+      "homeWinProb": 0.3847,
+      "awayWinProb": 0.6153,
+      "confidenceScore": 0.185,
+      "confidenceGrade": "B",
+      "edge": -0.093,
+      "summary": "Rangers project at 59% as the road lean \u2014 a B-tier edge worth 9.3 pts over a coin flip.",
+      "modelFavorite": "away",
+      "venue": "TD Garden",
+      "season": "20252026"
+    },
+    {
+      "id": "2025020378",
+      "gameDate": "2025-11-28",
+      "startTimeEt": "3:30 PM ET",
+      "startTimeUtc": "2025-11-28T20:30:00+00:00",
+      "homeTeam": {
+        "name": "Wild",
+        "abbrev": "MIN"
+      },
+      "awayTeam": {
+        "name": "Avalanche",
+        "abbrev": "COL"
+      },
+      "homeWinProb": 0.3696,
+      "awayWinProb": 0.6304,
+      "confidenceScore": 0.185,
+      "confidenceGrade": "B",
+      "edge": -0.093,
+      "summary": "Avalanche project at 59% as the road lean \u2014 a B-tier edge worth 9.3 pts over a coin flip.",
+      "modelFavorite": "away",
+      "venue": "Grand Casino Arena",
+      "season": "20252026"
+    },
+    {
+      "id": "2025020379",
+      "gameDate": "2025-11-28",
+      "startTimeEt": "4:00 PM ET",
+      "startTimeUtc": "2025-11-28T21:00:00+00:00",
+      "homeTeam": {
+        "name": "Sabres",
+        "abbrev": "BUF"
+      },
+      "awayTeam": {
+        "name": "Devils",
+        "abbrev": "NJD"
+      },
+      "homeWinProb": 0.4948,
+      "awayWinProb": 0.5052,
+      "confidenceScore": 0.052,
+      "confidenceGrade": "C+",
+      "edge": -0.026,
+      "summary": "Devils project at 53% as the road lean \u2014 a C+-tier edge worth 2.6 pts over a coin flip.",
+      "modelFavorite": "away",
+      "venue": "KeyBank Center",
       "season": "20252026"
     }
   ]
