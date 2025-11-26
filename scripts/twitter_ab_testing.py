@@ -62,7 +62,7 @@ WINNER_HASHTAGS = {
     "BOS": "#NHLBruins",
     "BUF": "#LetsGoBuffalo",
     "CGY": "#Flames",
-    "CAR": "#CauseChaos",
+    "CAR": "#Canes",
     "CHI": "#Blackhawks",
     "COL": "#GoAvsGo",
     "CBJ": "#CBJ",
@@ -90,7 +90,7 @@ WINNER_HASHTAGS = {
     "WSH": "#ALLCAPS",
     "WPG": "#GoJetsGo",
     # Expansion/placeholder
-    "UTA": "#UTAH",
+    "UTA": "#TusksUp",
 }
 
 
