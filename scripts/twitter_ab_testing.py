@@ -149,11 +149,14 @@ def generate_post(post_type: str, variant: Dict[str, str], data: Dict[str, Any])
             lines.append(line)
             tag_set.add(f"#{g['homeTeam']['abbrev']}")
             tag_set.add(f"#{g['awayTeam']['abbrev']}")
-            if sum(len(l) + 1 for l in lines) > 200:  # keep tweet short
+            if sum(len(l) + 1 for l in lines) > 180:  # keep tweet short
                 lines.append("…")
                 break
         slate_lines = "\n".join(lines) if lines else "No games posted."
-        tag_block = " ".join(sorted(tag_set)) if tag_set else "#NHL"
+        # Limit tags to keep total length under control
+        tags_sorted = sorted(tag_set)
+        max_tags = 8
+        tag_block = " ".join(tags_sorted[:max_tags]) if tags_sorted else "#NHL"
         mapping = {
             "date_label": date_label,
             "slate_lines": slate_lines,
