@@ -144,9 +144,15 @@ def generate_post(post_type: str, variant: Dict[str, str], data: Dict[str, Any])
             fav_is_home = g.get("modelFavorite", "home") == "home"
             fav = g["homeTeam"] if fav_is_home else g["awayTeam"]
             prob = int((g["homeWinProb"] if fav_is_home else g["awayWinProb"]) * 100)
-            line = f"{g['awayTeam']['abbrev']} @ {g['homeTeam']['abbrev']} — {fav.get('abbrev', fav.get('name',''))} {prob}% #{g['awayTeam']['abbrev']} #{g['homeTeam']['abbrev']}"
+            away_tag = g["awayTeam"].get("abbrev") or ""
+            home_tag = g["homeTeam"].get("abbrev") or ""
+            fav_tag = fav.get("abbrev", fav.get("name", ""))
+            line = (
+                f"{away_tag} @ {home_tag} — {fav_tag} {prob}% "
+                f"@{g['awayTeam'].get('abbrev','')} @{g['homeTeam'].get('abbrev','')}"
+            )
             lines.append(line)
-        slate_lines = "\n".join(lines) if lines else "No games posted."
+        slate_lines = "\n".join(lines) if lines else "No NHL games today. Next slate drops at 8am ET."
         mapping = {
             "date_label": date_label,
             "slate_lines": slate_lines,

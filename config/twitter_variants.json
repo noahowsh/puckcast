@@ -3,7 +3,7 @@
     {
       "id": "A",
       "format": "morning_slate",
-      "template": "Puckcast daily predictions for {date_label}\n{slate_lines}\n\n{team_tags}"
+      "template": "NHL game predictions for {date_label} (Puckcast)\n{slate_lines}"
     }
   ],
   "team_highlight": [
