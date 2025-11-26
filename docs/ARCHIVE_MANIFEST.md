@@ -9,6 +9,7 @@ This manifest lists where older or superseded documentation and assets now live.
 - `docs/archive/` — Historical notes and intermediate reports.
 - `docs/archive_v1/` — Early model/dash docs (pre-v6 series).
 - `archive/legacy_web_docs/` — Default Next.js scaffold README (moved from `web/README 2.md`).
+- `docs/archive/puckcast7_plan_legacy.md` — superseded v7 planning doc (replaced by `docs/PUCKCAST_V7_SPEC.md`).
 
 ## Data/model artifacts
 - `data/archive/predictions/` — Daily prediction payloads (JSON) for backtests.
