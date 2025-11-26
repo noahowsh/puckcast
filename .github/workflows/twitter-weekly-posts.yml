@@ -13,15 +13,9 @@ on:
         required: true
         type: choice
         options:
-          - team_spotlight
-          - fun_fact
-          - yesterdays_surprises
-          - bold_predictions
-          - weekly_power_index
-          - overrated_poll
-          - model_accountability
-          - team_surging
-          - team_dropping
+          - team_highlight
+          - results_recap
+          - tomorrow_tease
 
 env:
   PYTHON_VERSION: '3.11'
@@ -48,12 +42,12 @@ jobs:
           if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
             echo "type=${{ inputs.post_type }}" >> $GITHUB_OUTPUT
           elif [ "$HOUR" = "15" ]; then
-            # Team spotlight daily at 11 AM ET
-            echo "type=team_spotlight" >> $GITHUB_OUTPUT
+            # Team highlight daily at 11 AM ET
+            echo "type=team_highlight" >> $GITHUB_OUTPUT
           elif [ "$HOUR" = "19" ]; then
-            # Fun fact on Wed (3) and Fri (5)
+            # Results recap on Wed (3) and Fri (5)
             if [ "$DAY_OF_WEEK" = "3" ] || [ "$DAY_OF_WEEK" = "5" ]; then
-              echo "type=fun_fact" >> $GITHUB_OUTPUT
+              echo "type=results_recap" >> $GITHUB_OUTPUT
             fi
           fi
 
