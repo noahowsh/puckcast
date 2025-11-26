@@ -19,6 +19,42 @@ ARCHIVE_DIR = REPO_ROOT / "data" / "archive" / "predictions"
 AB_TRACKER = REPO_ROOT / "data" / "archive" / "twitter_ab_tests.csv"
 AB_VARIANTS = REPO_ROOT / "config" / "twitter_variants.json"
 
+# X/Twitter team handles (fallback to hashtag if missing/unknown)
+TEAM_HANDLES = {
+    "ANA": "@AnaheimDucks",
+    "ARI": "@ArizonaCoyotes",
+    "BOS": "@NHLBruins",
+    "BUF": "@BuffaloSabres",
+    "CGY": "@NHLFlames",
+    "CAR": "@Canes",
+    "CHI": "@NHLBlackhawks",
+    "COL": "@Avalanche",
+    "CBJ": "@BlueJacketsNHL",
+    "DAL": "@DallasStars",
+    "DET": "@DetroitRedWings",
+    "EDM": "@EdmontonOilers",
+    "FLA": "@FlaPanthers",
+    "LAK": "@LAKings",
+    "MIN": "@mnwild",
+    "MTL": "@CanadiensMTL",
+    "NSH": "@PredsNHL",
+    "NJD": "@NJDevils",
+    "NYI": "@NYIslanders",
+    "NYR": "@NYRangers",
+    "OTT": "@Senators",
+    "PHI": "@NHLFlyers",
+    "PIT": "@penguins",
+    "SJS": "@SanJoseSharks",
+    "SEA": "@SeattleKraken",
+    "STL": "@StLouisBlues",
+    "TBL": "@TBLightning",
+    "TOR": "@MapleLeafs",
+    "VAN": "@Canucks",
+    "VGK": "@GoldenKnights",
+    "WSH": "@Capitals",
+    "WPG": "@NHLJets",
+}
+
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Generate Twitter posts.")
@@ -79,6 +115,10 @@ def _format_time(et_str: str | None) -> str:
 def _build_tag_block(teams: List[Dict[str, str]]) -> str:
     tags = [f"#{t['abbrev']}" for t in teams if t.get("abbrev")]
     return " ".join(tags) if tags else "#NHL"
+
+
+def _handle_for_abbrev(abbrev: str) -> str:
+    return TEAM_HANDLES.get(abbrev, f"#{abbrev}")
 
 
 def _fetch_game_result(game_id: str):
@@ -147,9 +187,11 @@ def generate_post(post_type: str, variant: Dict[str, str], data: Dict[str, Any])
             away_tag = g["awayTeam"].get("abbrev") or ""
             home_tag = g["homeTeam"].get("abbrev") or ""
             fav_tag = fav.get("abbrev", fav.get("name", ""))
+            away_handle = _handle_for_abbrev(away_tag)
+            home_handle = _handle_for_abbrev(home_tag)
             line = (
                 f"{away_tag} @ {home_tag} — {fav_tag} {prob}% "
-                f"@{g['awayTeam'].get('abbrev','')} @{g['homeTeam'].get('abbrev','')}"
+                f"{away_handle} {home_handle}"
             )
             lines.append(line)
         slate_lines = "\n".join(lines) if lines else "No NHL games today. Next slate drops at 8am ET."
