@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2025-11-25T13:27:07.773275+00:00",
+  "updatedAt": "2025-11-26T23:11:15.681175+00:00",
   "notes": "Goalie performance metrics calculated from NHL Stats API data. GSAx estimates based on save percentage above league average.",
   "goalies": [
     {
@@ -144,7 +144,7 @@
       "watchouts": [
         "Limited recent data"
       ],
-      "nextOpponent": "EDM"
+      "nextOpponent": "SEA"
     },
     {
       "name": "Andrei Vasilevskiy",
