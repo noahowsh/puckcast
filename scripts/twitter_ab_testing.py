@@ -135,28 +135,36 @@ def generate_post(post_type: str, variant: Dict[str, str], data: Dict[str, Any])
     template = variant["template"]
 
     if post_type == "morning_slate":
-        games_sorted = sorted(games, key=lambda g: g.get("edge", 0), reverse=True)
-        top = games_sorted[0] if games_sorted else None
-        favorite_team = "TBD"
-        favorite_prob = 50
-        first_time = "TBD"
-        tag_block = "#NHL"
-        if top:
-            fav_is_home = top.get("modelFavorite", "home") == "home"
-            fav = top["homeTeam"] if fav_is_home else top["awayTeam"]
-            favorite_team = fav.get("name", fav.get("abbrev"))
-            favorite_prob = int((top["homeWinProb"] if fav_is_home else top["awayWinProb"]) * 100)
-            first_time = _format_time(top.get("startTimeEt"))
-            tag_block = _build_tag_block([top["homeTeam"], top["awayTeam"]])
-        return template.format(
-            date_label=date_label,
-            games=len(games),
-            favorite_team=favorite_team,
-            favorite_prob=favorite_prob,
-            first_time=first_time,
-            url="[your-site-url]",
-            team_tags=tag_block,
+        games_sorted = sorted(
+            games,
+            key=lambda g: (g.get("startTimeEt") or "ZZZ", -abs(g.get("edge", 0))),
         )
+        lines = []
+        tag_set = set()
+        for g in games_sorted:
+            fav_is_home = g.get("modelFavorite", "home") == "home"
+            fav = g["homeTeam"] if fav_is_home else g["awayTeam"]
+            prob = int((g["homeWinProb"] if fav_is_home else g["awayWinProb"]) * 100)
+            line = f"{g['awayTeam']['abbrev']} @ {g['homeTeam']['abbrev']} — {fav.get('abbrev', fav.get('name',''))} {prob}%"
+            lines.append(line)
+            tag_set.add(f"#{g['homeTeam']['abbrev']}")
+            tag_set.add(f"#{g['awayTeam']['abbrev']}")
+            if sum(len(l) + 1 for l in lines) > 200:  # keep tweet short
+                lines.append("…")
+                break
+        slate_lines = "\n".join(lines) if lines else "No games posted."
+        tag_block = " ".join(sorted(tag_set)) if tag_set else "#NHL"
+        mapping = {
+            "date_label": date_label,
+            "slate_lines": slate_lines,
+            "team_tags": tag_block,
+            "games": len(games),
+            "favorite_team": "",
+            "favorite_prob": "",
+            "first_time": "",
+            "url": "",
+        }
+        return template.format(**mapping)
 
     if post_type == "team_highlight":
         top = max(games, key=lambda g: abs(g.get("edge", 0)), default=None)

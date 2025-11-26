@@ -3,7 +3,7 @@
     {
       "id": "A",
       "format": "morning_slate",
-      "template": "🏒 {date_label} slate: {games} NHL games\nTop lean: {favorite_team} {favorite_prob}%\nPuck drops start {first_time}\n\nFull model board: {url}\n\n{team_tags}"
+      "template": "Puckcast daily predictions for {date_label}\n{slate_lines}\n\n{team_tags}"
     }
   ],
   "team_highlight": [
