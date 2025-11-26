@@ -65,19 +65,11 @@ jobs:
             echo "type=tomorrow_tease" >> $GITHUB_OUTPUT
           fi
 
-      - name: Refresh predictions payload
+      - name: Ensure predictions payload exists
         run: |
-          set -e
-          echo "🌐 Fetching latest predictions from live API (fallback to local run if needed)..."
-          mkdir -p web/src/data
-          if curl -fsSL --location https://www.puckcast.ai/api/predictions -o web/src/data/todaysPredictions.json; then
-            echo "✅ Pulled latest predictions payload"
-          else
-            echo "⚠️ Live API fetch failed; generating locally with predict_full.py..."
-            python predict_full.py
-          fi
           if [ ! -f web/src/data/todaysPredictions.json ]; then
-            echo "❌ No predictions payload available after refresh"
+            echo "❌ Missing web/src/data/todaysPredictions.json from the latest refresh."
+            echo "Run predict_full.py or the scheduled refresh workflow before posting."
             exit 1
           fi
 
