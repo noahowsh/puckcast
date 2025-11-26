@@ -36,6 +36,10 @@ env:
   PYTHON_VERSION: '3.11'
 permissions:
   contents: write
+
+concurrency:
+  group: scheduled-data-refresh
+  cancel-in-progress: false
   
 jobs:
   determine-refresh:
@@ -162,7 +166,7 @@ jobs:
         if: steps.git-check.outputs.changes == 'true'
         run: |
           git fetch origin main
-          git rebase origin/main
+          git pull --rebase --autostash origin main
 
       - name: Commit and push changes
         if: steps.git-check.outputs.changes == 'true'

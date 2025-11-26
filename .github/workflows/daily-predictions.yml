@@ -16,6 +16,10 @@ env:
 permissions:
   contents: write
 
+concurrency:
+  group: daily-predictions
+  cancel-in-progress: false
+
 jobs:
   update-predictions:
     runs-on: ubuntu-latest
@@ -72,6 +76,12 @@ jobs:
         id: git-check
         run: |
           git diff --quiet web/src/data/*.json data/archive/ || echo "changes=true" >> $GITHUB_OUTPUT
+
+      - name: Rebase on latest main
+        if: steps.git-check.outputs.changes == 'true'
+        run: |
+          git fetch origin main
+          git pull --rebase --autostash origin main
 
       - name: Commit and push changes
         if: steps.git-check.outputs.changes == 'true'
