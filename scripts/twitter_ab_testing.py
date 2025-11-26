@@ -55,6 +55,44 @@ TEAM_HANDLES = {
     "WPG": "@NHLJets",
 }
 
+# Primary team hashtags for winner shout (fallback to #ABBREV if unknown)
+WINNER_HASHTAGS = {
+    "ANA": "#FlyTogether",
+    "ARI": "#Yotes",
+    "BOS": "#NHLBruins",
+    "BUF": "#LetsGoBuffalo",
+    "CGY": "#Flames",
+    "CAR": "#CauseChaos",
+    "CHI": "#Blackhawks",
+    "COL": "#GoAvsGo",
+    "CBJ": "#CBJ",
+    "DAL": "#TexasHockey",
+    "DET": "#LGRW",
+    "EDM": "#LetsGoOilers",
+    "FLA": "#TimeToHunt",
+    "LAK": "#GoKingsGo",
+    "MIN": "#mnwild",
+    "MTL": "#GoHabsGo",
+    "NSH": "#Smashville",
+    "NJD": "#NJDevils",
+    "NYI": "#Isles",
+    "NYR": "#NYR",
+    "OTT": "#GoSensGo",
+    "PHI": "#LetsGoFlyers",
+    "PIT": "#LetsGoPens",
+    "SJS": "#SJSharks",
+    "SEA": "#SeaKraken",
+    "STL": "#stlblues",
+    "TBL": "#GoBolts",
+    "TOR": "#LeafsForever",
+    "VAN": "#Canucks",
+    "VGK": "#VegasBorn",
+    "WSH": "#ALLCAPS",
+    "WPG": "#GoJetsGo",
+    # Expansion/placeholder
+    "UTA": "#UTAH",
+}
+
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Generate Twitter posts.")
@@ -119,6 +157,10 @@ def _build_tag_block(teams: List[Dict[str, str]]) -> str:
 
 def _handle_for_abbrev(abbrev: str) -> str:
     return TEAM_HANDLES.get(abbrev, f"#{abbrev}")
+
+
+def _winner_tag(abbrev: str) -> str:
+    return WINNER_HASHTAGS.get(abbrev, f"#{abbrev}")
 
 
 def _fetch_game_result(game_id: str):
@@ -189,8 +231,9 @@ def generate_post(post_type: str, variant: Dict[str, str], data: Dict[str, Any])
             fav_tag = fav.get("abbrev", fav.get("name", ""))
             away_handle = _handle_for_abbrev(away_tag)
             home_handle = _handle_for_abbrev(home_tag)
+            win_hash = _winner_tag(fav_tag)
             line = (
-                f"{away_tag} @ {home_tag} — {fav_tag} {prob}% "
+                f"{away_tag} @ {home_tag} — {fav_tag} {prob}% {win_hash} "
                 f"{away_handle} {home_handle}"
             )
             lines.append(line)

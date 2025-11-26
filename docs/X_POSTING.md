@@ -27,7 +27,7 @@ Current post types (all configured in `twitter-daily.yml` and `twitter-weekly-po
 
 - **Morning slate**:  
   `NHL game predictions for {date} (Puckcast)`  
-  Per-game lines: `{AWAY} @ {HOME} — {FAV} {prob}% {away_handle} {home_handle}`  
+  Per-game lines: `{AWAY} @ {HOME} — {FAV} {prob}% {winner_hashtag} {away_handle} {home_handle}`  
   Includes all games; threads if necessary. If no games: “No NHL games today. Next slate drops at 8am ET.”
 
 - **Team highlight**:  
