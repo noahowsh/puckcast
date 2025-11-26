@@ -105,40 +105,40 @@ def get_twitter_client():
 
 def post_tweet(
     client: Optional["tweepy.Client"],
-    content: str,
+    content: str | list[str],
     *,
     dry_run: bool = False,
-) -> Optional[dict]:
+) -> Optional[list[dict]]:
     """Post a tweet and return the response."""
+
+    tweets = content if isinstance(content, list) else [content]
 
     if dry_run:
         print("\n" + "="*70)
-        print("🔍 DRY RUN - Would post this tweet:")
+        print("🔍 DRY RUN - Would post these tweet(s):")
         print("="*70)
-        print(content)
+        for idx, t in enumerate(tweets, 1):
+            print(f"[{idx}] {t}\n--- (len {len(t)}/280)")
         print("="*70)
-        print(f"\n📏 Character count: {len(content)}/280")
         return None
 
     try:
         import tweepy  # type: ignore
 
         # Post the tweet
-        response = client.create_tweet(text=content)  # type: ignore[union-attr]
+        results = []
+        reply_id = None
+        for t in tweets:
+            response = client.create_tweet(text=t, in_reply_to_tweet_id=reply_id)  # type: ignore[union-attr]
+            tweet_id = response.data['id']
+            tweet_url = f"https://twitter.com/i/web/status/{tweet_id}"
+            print(f"\n✅ Tweet posted successfully!")
+            print(f"🔗 URL: {tweet_url}")
+            print(f"📊 Tweet ID: {tweet_id}")
+            results.append({"id": tweet_id, "url": tweet_url, "text": t})
+            reply_id = tweet_id
 
-        # Extract tweet ID
-        tweet_id = response.data['id']
-        tweet_url = f"https://twitter.com/i/web/status/{tweet_id}"
-
-        print(f"\n✅ Tweet posted successfully!")
-        print(f"🔗 URL: {tweet_url}")
-        print(f"📊 Tweet ID: {tweet_id}")
-
-        return {
-            "id": tweet_id,
-            "url": tweet_url,
-            "text": content,
-        }
+        return results
 
     except tweepy.TweepyException as e:
         print(f"\n❌ Error posting tweet: {e}")
@@ -174,10 +174,31 @@ def main() -> None:
     if context_label:
         post_content = f"{post_content}\n{context_label}"
 
+    # Chunk for threads if too long (morning_slate only)
+    tweets_to_post: list[str] = []
+    if args.post_type == "morning_slate":
+        lines = [line for line in post_content.split("\n") if line.strip()]
+        if not lines:
+            print("❌ No content to post.")
+            sys.exit(1)
+        header = lines[0]
+        body = lines[1:]
+        chunk = header
+        for line in body:
+            if len(chunk) + len(line) + 1 > 260:
+                tweets_to_post.append(chunk)
+                chunk = f"Continued:\n{line}"
+            else:
+                chunk = chunk + "\n" + line
+        tweets_to_post.append(chunk)
+    else:
+        tweets_to_post = [post_content]
+
     # Check character limit
-    if len(post_content) > 280:
-        print(f"⚠️  Warning: Post is {len(post_content)} characters (limit: 280)")
-        print("Post will be truncated by Twitter!")
+    for t in tweets_to_post:
+        if len(t) > 280:
+            print(f"⚠️  Warning: Post is {len(t)} characters (limit: 280)")
+            print("Post will be truncated by Twitter!")
 
     # Initialize Twitter client (unless dry run)
     client = None
@@ -185,7 +206,7 @@ def main() -> None:
         client = get_twitter_client()
 
     # Post the tweet
-    result = post_tweet(client, post_content, dry_run=args.dry_run)
+    result = post_tweet(client, tweets_to_post, dry_run=args.dry_run)
 
     # Log variant usage for A/B testing analysis
     if not args.dry_run:

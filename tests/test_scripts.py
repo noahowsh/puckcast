@@ -165,7 +165,7 @@ class TestTwitterABTesting:
         from twitter_ab_testing import generate_post
 
         post = generate_post("morning_slate", variant, data)
-        assert "2 NHL games" in post or "NHL games today" in post
+        assert "2 NHL games" in post or "NHL games tonight" in post
 
 
 class TestTrackCalibration:

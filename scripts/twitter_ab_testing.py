@@ -140,27 +140,17 @@ def generate_post(post_type: str, variant: Dict[str, str], data: Dict[str, Any])
             key=lambda g: (g.get("startTimeEt") or "ZZZ", -abs(g.get("edge", 0))),
         )
         lines = []
-        tag_set = set()
         for g in games_sorted:
             fav_is_home = g.get("modelFavorite", "home") == "home"
             fav = g["homeTeam"] if fav_is_home else g["awayTeam"]
             prob = int((g["homeWinProb"] if fav_is_home else g["awayWinProb"]) * 100)
-            line = f"{g['awayTeam']['abbrev']} @ {g['homeTeam']['abbrev']} — {fav.get('abbrev', fav.get('name',''))} {prob}%"
+            line = f"{g['awayTeam']['abbrev']} @ {g['homeTeam']['abbrev']} — {fav.get('abbrev', fav.get('name',''))} {prob}% #{g['awayTeam']['abbrev']} #{g['homeTeam']['abbrev']}"
             lines.append(line)
-            tag_set.add(f"#{g['homeTeam']['abbrev']}")
-            tag_set.add(f"#{g['awayTeam']['abbrev']}")
-            if sum(len(l) + 1 for l in lines) > 180:  # keep tweet short
-                lines.append("…")
-                break
         slate_lines = "\n".join(lines) if lines else "No games posted."
-        # Limit tags to keep total length under control
-        tags_sorted = sorted(tag_set)
-        max_tags = 8
-        tag_block = " ".join(tags_sorted[:max_tags]) if tags_sorted else "#NHL"
         mapping = {
             "date_label": date_label,
             "slate_lines": slate_lines,
-            "team_tags": tag_block,
+            "team_tags": "",
             "games": len(games),
             "favorite_team": "",
             "favorite_prob": "",
