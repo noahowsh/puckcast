@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2025-11-29T13:19:08.927227+00:00",
+  "updatedAt": "2025-11-29T23:11:05.437535+00:00",
   "notes": "Goalie performance metrics calculated from NHL Stats API data. GSAx estimates based on save percentage above league average.",
   "goalies": [
     {
@@ -341,11 +341,11 @@
       "name": "Igor Shesterkin",
       "team": "NYR",
       "rollingGsa": 0.8,
-      "seasonGsa": 5.6,
+      "seasonGsa": 5.9,
       "restDays": 1,
       "startLikelihood": 0.9,
       "trend": "steady",
-      "note": "Consistent performance from Igor Shesterkin with a 2.45 GAA \u2014 reliable starter for NYR.",
+      "note": "Consistent performance from Igor Shesterkin with a 2.48 GAA \u2014 reliable starter for NYR.",
       "strengths": [
         "Proven winner"
       ],
