@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2025-11-30T13:18:43.452070+00:00",
+  "updatedAt": "2025-11-30T23:11:07.369566+00:00",
   "notes": "Goalie performance metrics calculated from NHL Stats API data. GSAx estimates based on save percentage above league average.",
   "goalies": [
     {
@@ -218,6 +218,24 @@
       "nextOpponent": "NYI"
     },
     {
+      "name": "Logan Thompson",
+      "team": "WSH",
+      "rollingGsa": 1.2,
+      "seasonGsa": 7.3,
+      "restDays": 2,
+      "startLikelihood": 0.9,
+      "trend": "steady",
+      "note": "Consistent performance from Logan Thompson with a 2.08 GAA \u2014 reliable starter for WSH.",
+      "strengths": [
+        "Exceptional goals against average",
+        "Proven winner"
+      ],
+      "watchouts": [
+        "Inconsistent results"
+      ],
+      "nextOpponent": "NYI"
+    },
+    {
       "name": "Jeremy Swayman",
       "team": "BOS",
       "rollingGsa": 1.1,
@@ -285,24 +303,6 @@
         "Limited recent data"
       ],
       "nextOpponent": "PHI"
-    },
-    {
-      "name": "Logan Thompson",
-      "team": "WSH",
-      "rollingGsa": 0.9,
-      "seasonGsa": 5.2,
-      "restDays": 2,
-      "startLikelihood": 0.9,
-      "trend": "steady",
-      "note": "Consistent performance from Logan Thompson with a 2.15 GAA \u2014 reliable starter for WSH.",
-      "strengths": [
-        "Exceptional goals against average",
-        "Proven winner"
-      ],
-      "watchouts": [
-        "Inconsistent results"
-      ],
-      "nextOpponent": "NYI"
     },
     {
       "name": "Dan Vladar",
@@ -492,23 +492,6 @@
       "nextOpponent": "EDM"
     },
     {
-      "name": "Ilya Sorokin",
-      "team": "NYI",
-      "rollingGsa": 0.1,
-      "seasonGsa": 0.5,
-      "restDays": 2,
-      "startLikelihood": 0.8,
-      "trend": "stable",
-      "note": "Ilya Sorokin showing promise with limited sample size \u2014 monitor progression closely.",
-      "strengths": [
-        "Solid fundamentals"
-      ],
-      "watchouts": [
-        "Inconsistent results"
-      ],
-      "nextOpponent": "WSH"
-    },
-    {
       "name": "Jet Greaves",
       "team": "CBJ",
       "rollingGsa": 0.1,
@@ -524,6 +507,23 @@
         "Limited recent data"
       ],
       "nextOpponent": "NJD"
+    },
+    {
+      "name": "David Rittich",
+      "team": "NYI",
+      "rollingGsa": 0.1,
+      "seasonGsa": 0.3,
+      "restDays": 3,
+      "startLikelihood": 0.6,
+      "trend": "stable",
+      "note": "David Rittich showing promise with limited sample size \u2014 monitor progression closely.",
+      "strengths": [
+        "Solid fundamentals"
+      ],
+      "watchouts": [
+        "Limited recent data"
+      ],
+      "nextOpponent": "WSH"
     }
   ]
 }
