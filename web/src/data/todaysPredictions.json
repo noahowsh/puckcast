@@ -1,75 +1,6 @@
 {
-  "generatedAt": "2025-11-30T11:18:48.822868+00:00",
+  "generatedAt": "2025-11-30T23:09:35.945227+00:00",
   "games": [
-    {
-      "id": "2025020402",
-      "gameDate": "2025-11-30",
-      "startTimeEt": "1:00 PM ET",
-      "startTimeUtc": "2025-11-30T18:00:00+00:00",
-      "homeTeam": {
-        "name": "Islanders",
-        "abbrev": "NYI"
-      },
-      "awayTeam": {
-        "name": "Capitals",
-        "abbrev": "WSH"
-      },
-      "homeWinProb": 0.5965,
-      "awayWinProb": 0.4035,
-      "confidenceScore": 0.193,
-      "confidenceGrade": "B",
-      "edge": 0.096,
-      "summary": "Islanders project at 60% as the home lean \u2014 a B-tier edge worth 9.6 pts over a coin flip.",
-      "modelFavorite": "home",
-      "venue": "UBS Arena",
-      "season": "20252026"
-    },
-    {
-      "id": "2025020403",
-      "gameDate": "2025-11-30",
-      "startTimeEt": "3:30 PM ET",
-      "startTimeUtc": "2025-11-30T20:30:00+00:00",
-      "homeTeam": {
-        "name": "Blackhawks",
-        "abbrev": "CHI"
-      },
-      "awayTeam": {
-        "name": "Ducks",
-        "abbrev": "ANA"
-      },
-      "homeWinProb": 0.4971,
-      "awayWinProb": 0.5029,
-      "confidenceScore": 0.006,
-      "confidenceGrade": "C",
-      "edge": -0.003,
-      "summary": "Ducks project at 50% as the road lean \u2014 a C-tier edge worth 0.3 pts over a coin flip.",
-      "modelFavorite": "away",
-      "venue": "United Center",
-      "season": "20252026"
-    },
-    {
-      "id": "2025020404",
-      "gameDate": "2025-11-30",
-      "startTimeEt": "5:00 PM ET",
-      "startTimeUtc": "2025-11-30T22:00:00+00:00",
-      "homeTeam": {
-        "name": "Hurricanes",
-        "abbrev": "CAR"
-      },
-      "awayTeam": {
-        "name": "Flames",
-        "abbrev": "CGY"
-      },
-      "homeWinProb": 0.5899,
-      "awayWinProb": 0.4101,
-      "confidenceScore": 0.18,
-      "confidenceGrade": "B",
-      "edge": 0.09,
-      "summary": "Hurricanes project at 59% as the home lean \u2014 a B-tier edge worth 9.0 pts over a coin flip.",
-      "modelFavorite": "home",
-      "venue": "Lenovo Center",
-      "season": "20252026"
-    },
     {
       "id": "2025020405",
       "gameDate": "2025-11-30",
@@ -83,8 +14,8 @@
         "name": "Senators",
         "abbrev": "OTT"
       },
-      "homeWinProb": 0.6192,
-      "awayWinProb": 0.3808,
+      "homeWinProb": 0.6189,
+      "awayWinProb": 0.3811,
       "confidenceScore": 0.238,
       "confidenceGrade": "B+",
       "edge": 0.119,
