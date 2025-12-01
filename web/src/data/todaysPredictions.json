@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2025-12-01T11:24:36.161925+00:00",
+  "generatedAt": "2025-12-01T23:09:21.755387+00:00",
   "games": [
     {
       "id": "2025020406",
@@ -14,9 +14,9 @@
         "name": "Blue Jackets",
         "abbrev": "CBJ"
       },
-      "homeWinProb": 0.6293,
-      "awayWinProb": 0.3707,
-      "confidenceScore": 0.259,
+      "homeWinProb": 0.6291,
+      "awayWinProb": 0.3709,
+      "confidenceScore": 0.258,
       "confidenceGrade": "B+",
       "edge": 0.129,
       "summary": "Devils project at 63% as the home lean \u2014 a B+-tier edge worth 12.9 pts over a coin flip.",
@@ -37,12 +37,12 @@
         "name": "Penguins",
         "abbrev": "PIT"
       },
-      "homeWinProb": 0.4904,
-      "awayWinProb": 0.5096,
+      "homeWinProb": 0.4906,
+      "awayWinProb": 0.5094,
       "confidenceScore": 0.019,
       "confidenceGrade": "C",
-      "edge": -0.01,
-      "summary": "Penguins project at 51% as the road lean \u2014 a C-tier edge worth 1.0 pts over a coin flip.",
+      "edge": -0.009,
+      "summary": "Penguins project at 51% as the road lean \u2014 a C-tier edge worth 0.9 pts over a coin flip.",
       "modelFavorite": "away",
       "venue": "Xfinity Mobile Arena",
       "season": "20252026"
@@ -60,12 +60,12 @@
         "name": "Jets",
         "abbrev": "WPG"
       },
-      "homeWinProb": 0.4896,
-      "awayWinProb": 0.5104,
-      "confidenceScore": 0.021,
+      "homeWinProb": 0.4908,
+      "awayWinProb": 0.5092,
+      "confidenceScore": 0.018,
       "confidenceGrade": "C",
-      "edge": -0.01,
-      "summary": "Jets project at 51% as the road lean \u2014 a C-tier edge worth 1.0 pts over a coin flip.",
+      "edge": -0.009,
+      "summary": "Jets project at 51% as the road lean \u2014 a C-tier edge worth 0.9 pts over a coin flip.",
       "modelFavorite": "away",
       "venue": "KeyBank Center",
       "season": "20252026"
@@ -83,12 +83,12 @@
         "name": "Ducks",
         "abbrev": "ANA"
       },
-      "homeWinProb": 0.5473,
-      "awayWinProb": 0.4527,
-      "confidenceScore": 0.095,
+      "homeWinProb": 0.5489,
+      "awayWinProb": 0.4511,
+      "confidenceScore": 0.098,
       "confidenceGrade": "B-",
-      "edge": 0.047,
-      "summary": "Blues project at 55% as the home lean \u2014 a B--tier edge worth 4.7 pts over a coin flip.",
+      "edge": 0.049,
+      "summary": "Blues project at 55% as the home lean \u2014 a B--tier edge worth 4.9 pts over a coin flip.",
       "modelFavorite": "home",
       "venue": "Enterprise Center",
       "season": "20252026"
@@ -106,8 +106,8 @@
         "name": "Mammoth",
         "abbrev": "UTA"
       },
-      "homeWinProb": 0.4853,
-      "awayWinProb": 0.5147,
+      "homeWinProb": 0.4854,
+      "awayWinProb": 0.5146,
       "confidenceScore": 0.029,
       "confidenceGrade": "C",
       "edge": -0.015,
