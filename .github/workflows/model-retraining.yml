@@ -22,6 +22,7 @@ on:
 
 env:
   PYTHON_VERSION: '3.11'
+  ACTIONS_TOKEN: ${{ secrets.ACTIONS_PAT != '' && secrets.ACTIONS_PAT || github.token }}
 
 jobs:
   retrain-model:
@@ -47,7 +48,7 @@ jobs:
       - name: Run model retraining
         id: retrain
         run: |
-          CMD="python scripts/retrain_model.py"
+          CMD="PYTHONPATH=src python scripts/retrain_model.py"
 
           # Add auto-deploy flag
           if [ "${{ inputs.auto_deploy }}" = "true" ] || [ "${{ github.event_name }}" = "schedule" ]; then
@@ -85,7 +86,7 @@ jobs:
           git config user.email "actions@github.com"
           git add models/ reports/ data/archive/retraining_log.json web/src/data/modelInsights.json
           git commit -m "chore: automated model retraining ($(date -u +%Y-%m-%dT%H:%M:%SZ))"
-          git push
+          git push https://${ACTIONS_TOKEN}@github.com/${{ github.repository }} HEAD:main
 
       - name: Create deployment summary
         if: steps.git-check.outputs.changes == 'true'

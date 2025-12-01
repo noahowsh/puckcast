@@ -107,6 +107,7 @@ jobs:
           TWITTER_ACCESS_TOKEN: ${{ secrets.TWITTER_ACCESS_TOKEN }}
           TWITTER_ACCESS_SECRET: ${{ secrets.TWITTER_ACCESS_SECRET }}
           TWITTER_BEARER_TOKEN: ${{ secrets.TWITTER_BEARER_TOKEN }}
+          TWEET_CONTEXT_LABEL: "daily-${{ github.run_id }}"
         run: |
           if [ -z "$TWITTER_API_KEY" ]; then
             echo "⚠️ Twitter API credentials not configured. Skipping post."
