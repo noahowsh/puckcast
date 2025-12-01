@@ -217,22 +217,29 @@ def generate_post(post_type: str, variant: Dict[str, str], data: Dict[str, Any])
     template = variant["template"]
 
     if post_type == "morning_slate":
-        games_sorted = sorted(
-            games,
-            key=lambda g: (g.get("startTimeEt") or "ZZZ", -abs(g.get("edge", 0))),
-        )
-        lines = []
-        for g in games_sorted:
-            fav_is_home = g.get("modelFavorite", "home") == "home"
-            fav = g["homeTeam"] if fav_is_home else g["awayTeam"]
-            prob = int((g["homeWinProb"] if fav_is_home else g["awayWinProb"]) * 100)
-            away_tag = g["awayTeam"].get("abbrev") or ""
-            home_tag = g["homeTeam"].get("abbrev") or ""
-            fav_tag = fav.get("abbrev", fav.get("name", ""))
-            win_hash = _winner_tag(fav_tag)
-            line = f"{away_tag} @ {home_tag} — {win_hash} {prob}%"
-            lines.append(line)
-        slate_lines = "\n".join(lines) if lines else "No NHL games today. Next slate drops at 8am ET."
+        if not games:
+            slate_lines = "No NHL games today. Next slate drops at 8am ET."
+        else:
+            games_sorted = sorted(games, key=lambda g: -abs(g.get("edge", 0)))
+            top_marquee = games_sorted[0]
+            lines = []
+            for g in games_sorted:
+                fav_is_home = g.get("modelFavorite", "home") == "home"
+                fav = g["homeTeam"] if fav_is_home else g["awayTeam"]
+                prob = int((g["homeWinProb"] if fav_is_home else g["awayWinProb"]) * 100)
+                away_tag = g["awayTeam"].get("abbrev") or ""
+                home_tag = g["homeTeam"].get("abbrev") or ""
+                fav_tag = fav.get("abbrev", fav.get("name", ""))
+                win_hash = _winner_tag(fav_tag)
+                edge_pts = abs(g.get("edge", 0)) * 100
+                line = f"{away_tag} @ {home_tag} — {win_hash} {prob}% (edge {edge_pts:.1f} pts)"
+                lines.append(line)
+            marquee_edge = abs(top_marquee.get("edge", 0)) * 100
+            marquee_fav_is_home = top_marquee.get("modelFavorite", "home") == "home"
+            marquee_fav = top_marquee["homeTeam"] if marquee_fav_is_home else top_marquee["awayTeam"]
+            marquee_line = f"Marquee: {top_marquee['awayTeam']['abbrev']} @ {top_marquee['homeTeam']['abbrev']} — {_winner_tag(marquee_fav.get('abbrev',''))} ({marquee_edge:.1f} pts edge)"
+            lines.insert(0, marquee_line)
+            slate_lines = "\n".join(lines)
         mapping = {
             "date_label": date_label,
             "slate_lines": slate_lines,
@@ -248,23 +255,21 @@ def generate_post(post_type: str, variant: Dict[str, str], data: Dict[str, Any])
     if post_type == "team_highlight":
         top = max(games, key=lambda g: abs(g.get("edge", 0)), default=None)
         if not top:
-            return f"No games on {date_label}. { '[your-site-url]'}"
+            return f"No games on {date_label}. "
         fav_is_home = top.get("modelFavorite", "home") == "home"
         fav = top["homeTeam"] if fav_is_home else top["awayTeam"]
         under = top["awayTeam"] if fav_is_home else top["homeTeam"]
         favorite_prob = int((top["homeWinProb"] if fav_is_home else top["awayWinProb"]) * 100)
         edge_label = f"{abs(top.get('edge', 0)) * 100:.1f} pts"
-        tag_block = _build_tag_block([fav, under])
+        win_hash = _winner_tag(fav.get("abbrev", ""))
+        headline = f"{win_hash} over {under.get('abbrev')} @ {favorite_prob}%"
+        details = f"Edge: {edge_label} | Time: {_format_time(top.get('startTimeEt'))}"
+        angle = f"Streak/form angle: top edge on board"
         return template.format(
+            headline=headline,
+            details=details,
+            angle=angle,
             date_label=date_label,
-            team_name=fav.get("name", fav.get("abbrev")),
-            opponent_label=f"{under.get('abbrev')} @ {fav.get('abbrev')}" if fav_is_home else f"{fav.get('abbrev')} @ {under.get('abbrev')}",
-            start_time=_format_time(top.get("startTimeEt")),
-            favorite_team=fav.get("name", fav.get("abbrev")),
-            favorite_prob=favorite_prob,
-            edge_label=edge_label,
-            url="[your-site-url]",
-            team_tags=tag_block,
         )
 
     if post_type == "results_recap":
@@ -274,6 +279,8 @@ def generate_post(post_type: str, variant: Dict[str, str], data: Dict[str, Any])
         accuracy = f"{(correct / total * 100):.0f}" if total else "0"
         hits = ", ".join(recap["hits"]) if recap["hits"] else "None"
         misses = ", ".join(recap["misses"]) if recap["misses"] else "None"
+        big_hit = recap["hits"][0] if recap["hits"] else "None"
+        big_miss = recap["misses"][0] if recap["misses"] else "None"
         return template.format(
             date_label=recap["date"],
             correct=correct,
@@ -281,11 +288,19 @@ def generate_post(post_type: str, variant: Dict[str, str], data: Dict[str, Any])
             accuracy=accuracy,
             hits=hits,
             misses=misses,
-            url="[your-site-url]",
+            big_hit=big_hit,
+            big_miss=big_miss,
         )
 
     if post_type == "tomorrow_tease":
-        return template.format(date_label=date_label, url="[your-site-url]")
+        tease_pool = [
+            "Tomorrow's board lands at 8am ET — set an alert",
+            "Early drop: fresh edges at 8am ET",
+            "Wake up to the slate at 8am ET",
+            "Tomorrow's probabilities post at 8am ET",
+        ]
+        tease_line = random.choice(tease_pool)
+        return template.format(date_label=date_label, tease_line=tease_line)
 
     raise ValueError(f"Unsupported post type: {post_type}")
 

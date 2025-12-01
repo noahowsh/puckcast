@@ -185,14 +185,18 @@ def main() -> None:
         body = lines[1:]
         chunk = header
         for line in body:
-            if len(chunk) + len(line) + 1 > 260:
+            if len(chunk) + len(line) + 1 > 240:
                 tweets_to_post.append(chunk)
-                chunk = f"Continued:\n{line}"
+                chunk = f"More edges:\n{line}"
             else:
                 chunk = chunk + "\n" + line
         tweets_to_post.append(chunk)
     else:
         tweets_to_post = [post_content]
+
+    # For recap, optionally add link as reply to avoid preview in main tweet
+    if args.post_type == "results_recap" and args.site_url:
+        tweets_to_post.append(f"Full slate + live board: {args.site_url}")
 
     # Check character limit
     for t in tweets_to_post:

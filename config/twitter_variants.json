@@ -10,21 +10,21 @@
     {
       "id": "A",
       "format": "team_highlight",
-      "template": "Spotlight: {team_name}\nNext up: {opponent_label} ({start_time})\nModel lean: {favorite_team} {favorite_prob}%\nEdge: {edge_label}\n\nSee today’s predictions: {url}\n\n{team_tags}"
+      "template": "Edge watch: {headline}\n{details}\n{angle}"
     }
   ],
   "results_recap": [
     {
       "id": "A",
       "format": "results_recap",
-      "template": "{date_label} recap: {correct}/{total} correct ({accuracy}%)\nHits: {hits}\nMisses: {misses}\n\nFull recap + predictions: {url}"
+      "template": "{date_label} recap: {correct}/{total} ({accuracy}%)\nBig hit: {big_hit}\nBig miss: {big_miss}"
     }
   ],
   "tomorrow_tease": [
     {
       "id": "A",
       "format": "tomorrow_tease",
-      "template": "Tomorrow’s predictions drop at 8am ET ⏰ ({date_label})\n\nAnalytics for every game: {url}\n\n#NHL #HockeyTwitter"
+      "template": "{tease_line} ({date_label})\n#NHL #HockeyTwitter"
     }
   ]
 }
