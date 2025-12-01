@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2025-11-30T23:11:07.369566+00:00",
+  "updatedAt": "2025-12-01T13:28:50.435702+00:00",
   "notes": "Goalie performance metrics calculated from NHL Stats API data. GSAx estimates based on save percentage above league average.",
   "goalies": [
     {
@@ -41,10 +41,10 @@
     {
       "name": "Devin Cooley",
       "team": "CGY",
-      "rollingGsa": 2.2,
-      "seasonGsa": 6.6,
-      "restDays": 3,
-      "startLikelihood": 0.85,
+      "rollingGsa": 2.3,
+      "seasonGsa": 7.6,
+      "restDays": 2,
+      "startLikelihood": 0.95,
       "trend": "surging",
       "note": "Devin Cooley is playing at an elite level with a 0.930 save percentage, providing CGY with a strong defensive anchor.",
       "strengths": [
@@ -54,7 +54,7 @@
       "watchouts": [
         "Limited recent data"
       ],
-      "nextOpponent": "CAR"
+      "nextOpponent": "NSH"
     },
     {
       "name": "Pyotr Kochetkov",
@@ -72,7 +72,7 @@
       "watchouts": [
         "Limited recent data"
       ],
-      "nextOpponent": "CGY"
+      "nextOpponent": "TOR"
     },
     {
       "name": "Mackenzie Blackwood",
@@ -129,22 +129,22 @@
       "nextOpponent": "VAN"
     },
     {
-      "name": "Spencer Knight",
-      "team": "CHI",
+      "name": "Casey DeSmith",
+      "team": "DAL",
       "rollingGsa": 1.5,
-      "seasonGsa": 8.0,
-      "restDays": 2,
-      "startLikelihood": 0.95,
-      "trend": "surging",
-      "note": "Spencer Knight is playing at an elite level with a 0.920 save percentage, providing CHI with a strong defensive anchor.",
+      "seasonGsa": 4.5,
+      "restDays": 3,
+      "startLikelihood": 0.7,
+      "trend": "steady",
+      "note": "Consistent performance from Casey DeSmith with a 2.07 GAA \u2014 reliable starter for DAL.",
       "strengths": [
-        "Elite save percentage",
+        "Exceptional goals against average",
         "Strong rebound control"
       ],
       "watchouts": [
-        "Inconsistent results"
+        "Limited recent data"
       ],
-      "nextOpponent": "ANA"
+      "nextOpponent": "NYR"
     },
     {
       "name": "Jake Allen",
@@ -182,22 +182,21 @@
       "nextOpponent": "FLA"
     },
     {
-      "name": "Casey DeSmith",
-      "team": "DAL",
+      "name": "Spencer Knight",
+      "team": "CHI",
       "rollingGsa": 1.4,
-      "seasonGsa": 3.7,
-      "restDays": 3,
-      "startLikelihood": 0.7,
+      "seasonGsa": 7.8,
+      "restDays": 2,
+      "startLikelihood": 0.9,
       "trend": "steady",
-      "note": "Consistent performance from Casey DeSmith with a 2.20 GAA \u2014 reliable starter for DAL.",
+      "note": "Consistent performance from Spencer Knight with a 2.51 GAA \u2014 reliable starter for CHI.",
       "strengths": [
-        "Exceptional goals against average",
         "Strong rebound control"
       ],
       "watchouts": [
-        "Limited recent data"
+        "Inconsistent results"
       ],
-      "nextOpponent": "OTT"
+      "nextOpponent": "VGK"
     },
     {
       "name": "Andrei Vasilevskiy",
@@ -233,7 +232,7 @@
       "watchouts": [
         "Inconsistent results"
       ],
-      "nextOpponent": "NYI"
+      "nextOpponent": "LAK"
     },
     {
       "name": "Jeremy Swayman",
@@ -390,6 +389,23 @@
       "nextOpponent": "TOR"
     },
     {
+      "name": "Brandon Bussi",
+      "team": "CAR",
+      "rollingGsa": 0.5,
+      "seasonGsa": 1.4,
+      "restDays": 3,
+      "startLikelihood": 0.6,
+      "trend": "stable",
+      "note": "Brandon Bussi showing promise with limited sample size \u2014 monitor progression closely.",
+      "strengths": [
+        "Exceptional goals against average"
+      ],
+      "watchouts": [
+        "Limited recent data"
+      ],
+      "nextOpponent": "TOR"
+    },
+    {
       "name": "Darcy Kuemper",
       "team": "LAK",
       "rollingGsa": 0.5,
@@ -455,7 +471,7 @@
       "watchouts": [
         "Inconsistent results"
       ],
-      "nextOpponent": "CHI"
+      "nextOpponent": "STL"
     },
     {
       "name": "Thatcher Demko",
@@ -507,23 +523,6 @@
         "Limited recent data"
       ],
       "nextOpponent": "NJD"
-    },
-    {
-      "name": "David Rittich",
-      "team": "NYI",
-      "rollingGsa": 0.1,
-      "seasonGsa": 0.3,
-      "restDays": 3,
-      "startLikelihood": 0.6,
-      "trend": "stable",
-      "note": "David Rittich showing promise with limited sample size \u2014 monitor progression closely.",
-      "strengths": [
-        "Solid fundamentals"
-      ],
-      "watchouts": [
-        "Limited recent data"
-      ],
-      "nextOpponent": "WSH"
     }
   ]
 }
