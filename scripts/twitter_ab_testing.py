@@ -6,6 +6,7 @@ Minimal Twitter post generator for the new 4-post cadence.
 import argparse
 import csv
 import json
+import random
 import ssl
 from datetime import datetime, timedelta, timezone
 from zoneinfo import ZoneInfo
