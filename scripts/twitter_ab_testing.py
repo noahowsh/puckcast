@@ -294,14 +294,22 @@ def generate_post(post_type: str, variant: Dict[str, str], data: Dict[str, Any])
         )
 
     if post_type == "tomorrow_tease":
-        tease_pool = [
-            "Tomorrow's board lands at 8am ET — set an alert",
-            "Early drop: fresh edges at 8am ET",
-            "Wake up to the slate at 8am ET",
-            "Tomorrow's probabilities post at 8am ET",
-        ]
-        tease_line = random.choice(tease_pool)
-        return template.format(date_label=date_label, tease_line=tease_line)
+        if not games:
+            edge_lines = "No games tonight. Next slate drops at 8am ET."
+        else:
+            top_edges = sorted(games, key=lambda g: -abs(g.get("edge", 0)))[:4]
+            lines = []
+            for g in top_edges:
+                fav_is_home = g.get("modelFavorite", "home") == "home"
+                fav = g["homeTeam"] if fav_is_home else g["awayTeam"]
+                prob = int((g["homeWinProb"] if fav_is_home else g["awayWinProb"]) * 100)
+                fav_tag = fav.get("abbrev", fav.get("name", ""))
+                win_hash = _winner_tag(fav_tag)
+                edge_pts = abs(g.get("edge", 0)) * 100
+                line = f"{g['awayTeam']['abbrev']} @ {g['homeTeam']['abbrev']} — {win_hash} {prob}% ({edge_pts:.1f} pts)"
+                lines.append(line)
+            edge_lines = "\n".join(lines)
+        return template.format(date_label=date_label, edge_lines=edge_lines)
 
     raise ValueError(f"Unsupported post type: {post_type}")
 

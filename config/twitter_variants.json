@@ -24,7 +24,7 @@
     {
       "id": "A",
       "format": "tomorrow_tease",
-      "template": "{tease_line} ({date_label})\n#NHL #HockeyTwitter"
+      "template": "Late edges for {date_label}:\n{edge_lines}"
     }
   ]
 }
