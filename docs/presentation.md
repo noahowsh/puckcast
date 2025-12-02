@@ -116,12 +116,12 @@ Hero image echoing Slide 1 with a simple “puckcast.ai” tag.
 
 ## Visual Stubs (lightweight markdown “images” you can drop in slides)
 
-**Flow diagram (Slide 2):**
+**Slide 2 — Flow diagram:**
 ```
 Data (MoneyPuck, Goalie pulls) → Features (rest/travel/xG/special teams/goalie/Elo) → Model (LogReg + isotonic) → JSON/API → Site
 ```
 
-**Performance cards (Slide 3):**
+**Slide 3 — Performance cards:**
 ```
 | Accuracy | Baseline |
 | 59.3%    | 53.7%    |
@@ -130,32 +130,37 @@ Data (MoneyPuck, Goalie pulls) → Features (rest/travel/xG/special teams/goalie
 | 0.676    | 0.240 | 16.1 pts |
 ```
 
-**Prediction card (Slide 4/7):**
+**Slide 4 — Prediction card (clean slate):**
 ```
 DAL @ SEA   Updated 7:05 PM
 Home 44%  | Away 56%
 Badges: [Rest +1] [Confirmed: Oettinger]
 ```
 
-**Power v2 row (Slide 5):**
+**Slide 5 — Power v2 row:**
 ```
 2. Rangers  ↑
 Why: strong 5v5 form, PK > league, shot quality edge vs SOS.
 ```
 
-**Season table row (Slide 6):**
+**Slide 6 — Season sims table snippet:**
 ```
-NYR: Playoff 88%, Division 34%, Conference 18%, Cup 7% (↑)
-```
-
-**Performance snippet (Slide 8):**
-```
-7-day: 61.5% | Season: 59.3%
-Hits (last 5): NYR>CAR, PIT>BUF...
-Calibration: points track the diagonal (mini-plot).
+Team   Playoff   Division   Conf   Cup   Trend
+NYR    88%       34%        18%    7%    ↑
+DAL    84%       42%        15%    6%    →
+TOR    81%       28%        14%    5%    ↓
+(last updated: HH:MM ET, sims: 10k)
 ```
 
-**Stability checklist (Slide 9):**
+**Slide 8 — Performance snippet:**
+```
+7-day: 61.5%   Season: 59.3%
+Hits (last 5): NYR>CAR, PIT>BUF, TOR>CBJ, DAL>SEA, CGY>TBL
+Misses (last 5): STL<NJD, VAN<ANA, OTT<VGK, PHI<FLA, MIN<CHI
+Calibration: points near diagonal (mini-plot placeholder)
+```
+
+**Slide 9 — Stability checklist:**
 - ✅ Anti-stale timestamps
 - ✅ Retry on ingest
 - ✅ JSON completeness validation
@@ -165,3 +170,17 @@ Calibration: points track the diagonal (mini-plot).
 - Start with the pain (“Hockey is noisy”), then the signal (features/model), then receipts (performance), then the experience (slate/power/sims), then the reliability (stability), then the near future (v7.1).
 - Keep it conversational: “Here’s what we saw; here’s how we fixed it; here’s what you get.”
 - Time budget: ~45–60 seconds per slide; skip live demos to stay under 10 minutes.
+
+
+**Slide 10 — Roadmap bar:**
+```
+Now (v7): Sims, Power v2, Perf page, Goalie pipeline, Model refresh, Slate UX
+Next (v7.1): Goalie Page MVP, Past Slate Archive, Power trend tweaks, Minor UX
+Later (v8+): Matchup deep dive, Explainability chips, Team hubs, PP/PK dashboard, Rink effects, Ensembles
+```
+**Slide 11 — Impact cards:**
+```
+Fans: Faster, clearer edges
+Analysts: Calibrated probs + traceable factors
+Product: Reliable slate + season context (sims + Power v2)
+```
