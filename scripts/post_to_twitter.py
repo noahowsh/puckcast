@@ -169,11 +169,6 @@ def main() -> None:
     # Replace placeholder URL with actual site URL
     post_content = post_content.replace("[your-site-url]", args.site_url)
 
-    # Optional context label to avoid duplicate-content rejections across workflows
-    context_label = os.getenv("TWEET_CONTEXT_LABEL", "").strip()
-    if context_label:
-        post_content = f"{post_content}\n{context_label}"
-
     # Chunk for threads if too long (morning_slate only)
     tweets_to_post: list[str] = []
     if args.post_type == "morning_slate":
