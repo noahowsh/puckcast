@@ -6,17 +6,17 @@
 ╚═══════════════════════════════════════════════════════════╝
 
 FULL MODEL NHL PREDICTIONS
-Predict today's games using 141 advanced features
+Predict today's games using 206 advanced features
 
 Usage:
     python predict_full.py
-    
+
     # Or predict specific date:
     python predict_full.py 2024-11-15
 
 Requirements:
     - Internet connection (NHL API)
-    - Updated MoneyPuck data
+    - Cached game data will be used if available
 """
 
 import sys

@@ -173,7 +173,8 @@ def fetch_team_special_teams(season_id: str = '20242025') -> pd.DataFrame:
     
     **For Backtesting:**
     You CANNOT use this API for historical predictions because it only returns
-    CURRENT season stats. For training data, use MoneyPuck's historical database.
+    CURRENT season stats. For training data, use the native ingest system which
+    processes historical play-by-play data.
     """
     _rate_limit()
     
