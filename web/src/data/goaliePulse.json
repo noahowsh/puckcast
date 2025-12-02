@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2025-12-01T23:11:23.653497+00:00",
+  "updatedAt": "2025-12-02T13:30:08.011206+00:00",
   "notes": "Goalie performance metrics calculated from NHL Stats API data. GSAx estimates based on save percentage above league average.",
   "goalies": [
     {
@@ -147,24 +147,6 @@
       "nextOpponent": "NYR"
     },
     {
-      "name": "Jake Allen",
-      "team": "NJD",
-      "rollingGsa": 1.4,
-      "seasonGsa": 6.2,
-      "restDays": 2,
-      "startLikelihood": 0.8,
-      "trend": "steady",
-      "note": "Consistent performance from Jake Allen with a 2.27 GAA \u2014 reliable starter for NJD.",
-      "strengths": [
-        "Exceptional goals against average",
-        "Strong rebound control"
-      ],
-      "watchouts": [
-        "Limited recent data"
-      ],
-      "nextOpponent": "CBJ"
-    },
-    {
       "name": "Joseph Woll",
       "team": "TOR",
       "rollingGsa": 1.4,
@@ -284,7 +266,7 @@
       "watchouts": [
         "Inconsistent results"
       ],
-      "nextOpponent": "BUF"
+      "nextOpponent": "MTL"
     },
     {
       "name": "Sergei Murashov",
@@ -301,24 +283,7 @@
       "watchouts": [
         "Limited recent data"
       ],
-      "nextOpponent": "PHI"
-    },
-    {
-      "name": "Dan Vladar",
-      "team": "PHI",
-      "rollingGsa": 0.9,
-      "seasonGsa": 4.6,
-      "restDays": 2,
-      "startLikelihood": 0.9,
-      "trend": "steady",
-      "note": "Consistent performance from Dan Vladar with a 2.43 GAA \u2014 reliable starter for PHI.",
-      "strengths": [
-        "Proven winner"
-      ],
-      "watchouts": [
-        "Limited recent data"
-      ],
-      "nextOpponent": "PIT"
+      "nextOpponent": "TBL"
     },
     {
       "name": "Philipp Grubauer",
@@ -355,21 +320,55 @@
       "nextOpponent": "DAL"
     },
     {
-      "name": "Yaroslav Askarov",
-      "team": "SJS",
-      "rollingGsa": 0.7,
-      "seasonGsa": 3.9,
+      "name": "Tristan Jarry",
+      "team": "PIT",
+      "rollingGsa": 0.8,
+      "seasonGsa": 3.1,
       "restDays": 2,
       "startLikelihood": 0.8,
-      "trend": "stable",
-      "note": "Yaroslav Askarov showing promise with limited sample size \u2014 monitor progression closely.",
+      "trend": "steady",
+      "note": "Consistent performance from Tristan Jarry with a 2.57 GAA \u2014 reliable starter for PIT.",
+      "strengths": [
+        "Solid fundamentals"
+      ],
+      "watchouts": [
+        "Limited recent data"
+      ],
+      "nextOpponent": "TBL"
+    },
+    {
+      "name": "Jake Allen",
+      "team": "NJD",
+      "rollingGsa": 0.8,
+      "seasonGsa": 3.8,
+      "restDays": 2,
+      "startLikelihood": 0.8,
+      "trend": "steady",
+      "note": "Consistent performance from Jake Allen with a 2.48 GAA \u2014 reliable starter for NJD.",
       "strengths": [
         "Solid fundamentals"
       ],
       "watchouts": [
         "Inconsistent results"
       ],
-      "nextOpponent": "UTA"
+      "nextOpponent": "DAL"
+    },
+    {
+      "name": "Yaroslav Askarov",
+      "team": "SJS",
+      "rollingGsa": 0.7,
+      "seasonGsa": 4.2,
+      "restDays": 2,
+      "startLikelihood": 0.8,
+      "trend": "stable",
+      "note": "Yaroslav Askarov showing promise with limited sample size \u2014 monitor progression closely.",
+      "strengths": [
+        "Proven winner"
+      ],
+      "watchouts": [
+        "Inconsistent results"
+      ],
+      "nextOpponent": "WSH"
     },
     {
       "name": "Brandon Bussi",
@@ -423,6 +422,23 @@
       "nextOpponent": "WSH"
     },
     {
+      "name": "Dan Vladar",
+      "team": "PHI",
+      "rollingGsa": 0.5,
+      "seasonGsa": 2.5,
+      "restDays": 2,
+      "startLikelihood": 0.8,
+      "trend": "stable",
+      "note": "Dan Vladar showing promise with limited sample size \u2014 monitor progression closely.",
+      "strengths": [
+        "Proven winner"
+      ],
+      "watchouts": [
+        "Inconsistent results"
+      ],
+      "nextOpponent": "BUF"
+    },
+    {
       "name": "Filip Gustavsson",
       "team": "MIN",
       "rollingGsa": 0.4,
@@ -440,23 +456,6 @@
       "nextOpponent": "EDM"
     },
     {
-      "name": "Tristan Jarry",
-      "team": "PIT",
-      "rollingGsa": 0.4,
-      "seasonGsa": 1.4,
-      "restDays": 2,
-      "startLikelihood": 0.7,
-      "trend": "stable",
-      "note": "Tristan Jarry showing promise with limited sample size \u2014 monitor progression closely.",
-      "strengths": [
-        "Solid fundamentals"
-      ],
-      "watchouts": [
-        "Limited recent data"
-      ],
-      "nextOpponent": "PHI"
-    },
-    {
       "name": "Lukas Dostal",
       "team": "ANA",
       "rollingGsa": 0.3,
@@ -471,7 +470,7 @@
       "watchouts": [
         "Inconsistent results"
       ],
-      "nextOpponent": "STL"
+      "nextOpponent": "UTA"
     },
     {
       "name": "Thatcher Demko",
@@ -522,7 +521,7 @@
       "watchouts": [
         "Limited recent data"
       ],
-      "nextOpponent": "NJD"
+      "nextOpponent": "DET"
     }
   ]
 }
