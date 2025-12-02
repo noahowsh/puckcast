@@ -215,35 +215,56 @@ def _results_recap_payload() -> Dict[str, Any]:
 def generate_post(post_type: str, variant: Dict[str, str], data: Dict[str, Any]) -> str:
     games = data.get("games", [])
     date_label = datetime.now(ZoneInfo("America/New_York")).strftime("%b %d")
+    seven_day_acc = data.get("sevenDayAccuracy")
+    seven_day_acc_str = f"{float(seven_day_acc):.1f}" if seven_day_acc is not None else "N/A"
     template = variant["template"]
 
     if post_type == "morning_slate":
         if not games:
             slate_lines = "No NHL games today. Next slate drops at 8am ET."
         else:
-            games_sorted = sorted(games, key=lambda g: -abs(g.get("edge", 0)))
-            top_marquee = games_sorted[0]
-            lines = []
-            for g in games_sorted:
+            high_conf = []
+            for g in games:
                 fav_is_home = g.get("modelFavorite", "home") == "home"
+                prob = (g["homeWinProb"] if fav_is_home else g["awayWinProb"]) * 100
+                if prob < 57:
+                    continue
                 fav = g["homeTeam"] if fav_is_home else g["awayTeam"]
-                prob = int((g["homeWinProb"] if fav_is_home else g["awayWinProb"]) * 100)
                 away_tag = g["awayTeam"].get("abbrev") or ""
                 home_tag = g["homeTeam"].get("abbrev") or ""
                 fav_tag = fav.get("abbrev", fav.get("name", ""))
                 win_hash = _winner_tag(fav_tag)
                 edge_pts = abs(g.get("edge", 0)) * 100
-                line = f"{away_tag} @ {home_tag} — {win_hash} {prob}% (edge {edge_pts:.1f} pts)"
-                lines.append(line)
-            marquee_edge = abs(top_marquee.get("edge", 0)) * 100
-            marquee_fav_is_home = top_marquee.get("modelFavorite", "home") == "home"
-            marquee_fav = top_marquee["homeTeam"] if marquee_fav_is_home else top_marquee["awayTeam"]
-            marquee_line = f"Marquee: {top_marquee['awayTeam']['abbrev']} @ {top_marquee['homeTeam']['abbrev']} — {_winner_tag(marquee_fav.get('abbrev',''))} ({marquee_edge:.1f} pts edge)"
-            lines.insert(0, marquee_line)
-            slate_lines = "\n".join(lines)
+                high_conf.append({
+                    "prob": prob,
+                    "edge_pts": edge_pts,
+                    "away": away_tag,
+                    "home": home_tag,
+                    "win_hash": win_hash,
+                })
+
+            if not high_conf:
+                slate_lines = "No high-confidence edges today (all <57%). Next slate drops at 8am ET."
+            else:
+                high_conf.sort(key=lambda g: -g["prob"])
+                marquee_line = None
+                if high_conf[0]["prob"] >= 60:
+                    m = high_conf[0]
+                    marquee_line = (
+                        f"Marquee: {m['away']} @ {m['home']} — "
+                        f"{m['prob']:.0f}% {m['win_hash']} ({m['edge_pts']:.1f} pts)"
+                    )
+                lines = [
+                    f"{g['away']} @ {g['home']} — {g['prob']:.0f}% {g['win_hash']} ({g['edge_pts']:.1f} pts)"
+                    for g in high_conf
+                ]
+                if marquee_line:
+                    lines.insert(0, marquee_line)
+                slate_lines = "\n".join(lines)
         mapping = {
             "date_label": date_label,
             "slate_lines": slate_lines,
+            "seven_day_acc": seven_day_acc_str,
             "team_tags": "",
             "games": len(games),
             "favorite_team": "",
@@ -261,12 +282,12 @@ def generate_post(post_type: str, variant: Dict[str, str], data: Dict[str, Any])
         fav = top["homeTeam"] if fav_is_home else top["awayTeam"]
         under = top["awayTeam"] if fav_is_home else top["homeTeam"]
         favorite_prob = int((top["homeWinProb"] if fav_is_home else top["awayWinProb"]) * 100)
-        edge_pct = abs(top.get("edge", 0)) * 100
+        edge_pts = abs(top.get("edge", 0)) * 100
         return template.format(
             favorite=fav.get("abbrev", fav.get("name", "")),
             opponent=under.get("abbrev", under.get("name", "")),
             prob=favorite_prob,
-            edge_pct=f"{edge_pct:.1f}",
+            edge_pts=f"{edge_pts:.1f}",
             start_time=_format_time(top.get("startTimeEt")),
         )
 
@@ -299,7 +320,7 @@ def generate_post(post_type: str, variant: Dict[str, str], data: Dict[str, Any])
                 fav_tag = fav.get("abbrev", fav.get("name", ""))
                 win_hash = _winner_tag(fav_tag)
                 edge_pts = abs(g.get("edge", 0)) * 100
-                line = f"{g['awayTeam']['abbrev']} @ {g['homeTeam']['abbrev']} — {win_hash} {prob}% ({edge_pts:.1f} pts)"
+                line = f"{g['awayTeam']['abbrev']} @ {g['homeTeam']['abbrev']} — {prob}% {win_hash} ({edge_pts:.1f} pts)"
                 lines.append(line)
             edge_lines = "\n".join(lines)
         return template.format(date_label=date_label, edge_lines=edge_lines)

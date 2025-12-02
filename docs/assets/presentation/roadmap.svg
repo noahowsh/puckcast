@@ -1,0 +1,26 @@
+<svg width="720" height="200" viewBox="0 0 720 200" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    .pill { fill:#0f1f36; stroke:#4ea1ff; stroke-width:2; rx:16; ry:16; }
+    .title { fill:#e8f1ff; font-family:'Inter','Segoe UI',sans-serif; font-size:16px; font-weight:700; }
+    .text { fill:#cfe5ff; font-family:'Inter','Segoe UI',sans-serif; font-size:13px; }
+  </style>
+  <rect class="pill" x="20" y="30" width="200" height="140" />
+  <text class="title" x="120" y="60" text-anchor="middle">Now (v7)</text>
+  <text class="text" x="120" y="85" text-anchor="middle">Sims, Power v2</text>
+  <text class="text" x="120" y="105" text-anchor="middle">Perf page, Goalie pipe</text>
+  <text class="text" x="120" y="125" text-anchor="middle">Model refresh, Slate UX</text>
+
+  <rect class="pill" x="260" y="30" width="200" height="140" />
+  <text class="title" x="360" y="60" text-anchor="middle">Next (v7.1)</text>
+  <text class="text" x="360" y="85" text-anchor="middle">Goalie Page MVP</text>
+  <text class="text" x="360" y="105" text-anchor="middle">Past Slate Archive</text>
+  <text class="text" x="360" y="125" text-anchor="middle">Power trend tweaks</text>
+  <text class="text" x="360" y="145" text-anchor="middle">Minor UX polish</text>
+
+  <rect class="pill" x="500" y="30" width="200" height="140" />
+  <text class="title" x="600" y="60" text-anchor="middle">Later (v8+)</text>
+  <text class="text" x="600" y="85" text-anchor="middle">Matchup deep dive</text>
+  <text class="text" x="600" y="105" text-anchor="middle">Explainability chips</text>
+  <text class="text" x="600" y="125" text-anchor="middle">Team hubs, PP/PK</text>
+  <text class="text" x="600" y="145" text-anchor="middle">Rink effects, ensembles</text>
+</svg>

@@ -1,0 +1,22 @@
+<svg width="640" height="200" viewBox="0 0 640 200" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    .row { fill:#0f1f36; stroke:#344d6f; stroke-width:1; }
+    .team { fill:#e8f1ff; font-family:'Inter','Segoe UI',sans-serif; font-size:16px; font-weight:700; }
+    .arrow { fill:#8ee0a1; font-family:'Inter','Segoe UI',sans-serif; font-size:16px; }
+    .desc { fill:#cfe5ff; font-family:'Inter','Segoe UI',sans-serif; font-size:13px; }
+  </style>
+  <rect class="row" x="20" y="20" width="600" height="50" rx="8" ry="8" />
+  <text class="team" x="40" y="50">1. COL</text>
+  <text class="arrow" x="110" y="50">↑</text>
+  <text class="desc" x="150" y="50">5v5 xG surge, PK trending up, softer SOS</text>
+
+  <rect class="row" x="20" y="80" width="600" height="50" rx="8" ry="8" />
+  <text class="team" x="40" y="110">2. NYR</text>
+  <text class="arrow" x="110" y="110">→</text>
+  <text class="desc" x="150" y="110">Stable form, PP cooling, injuries easing</text>
+
+  <rect class="row" x="20" y="140" width="600" height="50" rx="8" ry="8" />
+  <text class="team" x="40" y="170">3. DAL</text>
+  <text class="arrow" x="110" y="170">↓</text>
+  <text class="desc" x="150" y="170">Shot quality dipped, PK leaks, tougher road swing</text>
+</svg>

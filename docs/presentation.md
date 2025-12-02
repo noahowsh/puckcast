@@ -8,8 +8,15 @@ Story-first outline for a <10 minute deck. Copy is ready to paste; visuals are d
 **Copy:**  
 Hockey is noisy. Odds swing with goalies, travel, and back-to-backs. We built Puckcast to turn daily chaos into clean, trustworthy probabilities.
 
-**Visual prompt:**  
-Hero image: goalie in crease with a subtle overlay of data bars/nodes.
+**Visual (copy-paste SVG-ready mock):**
+```
+Goalie in crease + overlay:
+[GOALIE SILHOUETTE]
+│  Metrics Overlay  │
+│  Save%  .914      │
+│  xG diff +0.23    │
+│  Rest 1 day       │
+```
 
 ---
 
@@ -17,8 +24,28 @@ Hero image: goalie in crease with a subtle overlay of data bars/nodes.
 **Copy:**  
 Behind every prediction: 206 engineered features—rest, travel, rolling xG, special teams, goalie form, Elo. Trained on the last 3 seasons, calibrated to match real outcomes.
 
-**Visual prompt:**  
-Minimal flow: Data → Features → Model (LogReg + calibration) → JSON/API → Site.
+**Visual (flow diagram):**
+```
+Data
+│
+├─ MoneyPuck team games
+├─ Goalie feeds
+└─ Schedule/injuries
+      │
+      ▼
+Features (206)
+│ rest, travel, rolling xG, PP/PK, goalie form, Elo
+      │
+      ▼
+Model
+│ LogReg + isotonic
+│ + threshold tuning
+      │
+      ▼
+Outputs
+├─ JSON (predictions, sims)
+└─ Site (/predictions, /power, /season)
+```
 
 ---
 
@@ -26,8 +53,18 @@ Minimal flow: Data → Features → Model (LogReg + calibration) → JSON/API �
 **Copy:**  
 Holdout accuracy: 59.3% (vs 53.7% baseline). Log loss: 0.676, Brier: 0.240. Average edge: 16.1 pts over a coin flip.
 
-**Visual prompt:**  
-Three small cards: Accuracy vs Baseline, Log loss, Avg edge bar.
+**Visual (metrics cards):**
+```
+[Accuracy]
+  59.3%  vs  53.7% baseline
+
+[Log loss]
+  0.676 (lower is better)
+
+[Avg edge]
+  16.1 pts over coin flip
+  |##########------|
+```
 
 ---
 
@@ -35,15 +72,16 @@ Three small cards: Accuracy vs Baseline, Log loss, Avg edge bar.
 **Copy:**  
 Clean, fast, scannable. We strip the clutter: updated timestamp, refined bars, 1–2 badges max (rest/goalie/injury).
 
-**Visual prompt:**  
-Mock prediction card: matchup, win % bars, tiny badges, updated time.
-
-**Before/After (text mock):**
+**Visual (before/after cards):**
 ```
-Before: DAL @ SEA | 44% / 56% | Edge: -2.6 pts | chips chips chips | lorem summary
-After:  DAL @ SEA   Updated 7:05 PM
-        Home 44% | Away 56%
-        Badges: [Rest +1] [Confirmed: Oettinger]
+Before (cluttered)
+DAL @ SEA | 44% / 56% | Edge: -2.6 pts
+[chips][chips][chips] lorem ipsum summary
+
+After (clean)
+DAL @ SEA      Updated 7:05 PM
+Home 44%  | Away 56%
+Badges: [Rest +1] [Confirmed: Oettinger]
 ```
 
 ---
@@ -52,8 +90,12 @@ After:  DAL @ SEA   Updated 7:05 PM
 **Copy:**  
 Power Index v2 pairs movement arrows with 1–2 sentences on why: recent form, special teams, injuries, shot quality, strength of schedule.
 
-**Visual prompt:**  
-Ranked list with ↑/↓ arrows and a short one-line explanation per team.
+**Visual (rank rows):**
+```
+1. COL  ↑  "5v5 xG surge, PK trending up, softer SOS"
+2. NYR  →  "Stable form, PP cooling, injuries easing"
+3. DAL  ↓  "Shot quality dipped, PK leaks, tougher road swing"
+```
 
 ---
 
@@ -61,8 +103,14 @@ Ranked list with ↑/↓ arrows and a short one-line explanation per team.
 **Copy:**  
 Daily simulations (5k–20k runs) give playoff/division/conference/Cup odds. One page, last-updated stamp, and probability bars you can trust.
 
-**Visual prompt:**  
-Table snippet with teams + playoff/division/Cup bars and tiny trend arrows.
+**Visual (table snippet):**
+```
+Team   Playoff   Division   Conf   Cup   Trend
+NYR    88% ██████████░░      34%    18%   7%    ↑
+DAL    84% █████████░░░      42%    15%   6%    →
+TOR    81% ████████░░░░      28%    14%   5%    ↓
+(last updated: HH:MM ET, sims: 10k)
+```
 
 ---
 
@@ -70,8 +118,12 @@ Table snippet with teams + playoff/division/Cup bars and tiny trend arrows.
 **Copy:**  
 We pull expected/confirmed starters, rest, and inject goalie strength into the model. Light badges show “Confirmed” or “Likely” so edges aren’t blind to the crease.
 
-**Visual prompt:**  
-Goalie badge examples on a card: “Confirmed: Shesterkin” / “Likely: Saros”.
+**Visual (badge examples):**
+```
+Confirmed: Shesterkin  | Likely: Saros
+Rest: 2 days           | Rest: 1 day
+Impact: +1.8 pts       | Impact: +0.9 pts
+```
 
 ---
 
@@ -79,8 +131,19 @@ Goalie badge examples on a card: “Confirmed: Shesterkin” / “Likely: Saros�
 **Copy:**  
 7-day and season accuracy at a glance. A hits/misses strip for the last 20–30 games. One calibration/reliability glimpse—no black boxes.
 
-**Visual prompt:**  
-Small chart/card: 7-day accuracy, season accuracy, simple calibration mini-plot.
+**Visual (mini dashboard):**
+```
+7-day accuracy: 61.5%   Season: 59.3%
+Hits (last 5):  NYR>CAR, PIT>BUF, TOR>CBJ, DAL>SEA, CGY>TBL
+Misses (last 5): STL<NJD, VAN<ANA, OTT<VGK, PHI<FLA, MIN<CHI
+Calibration (sketch):
+Observed win rate
+^
+|    *      *
+| *        *
+|   *   *
+|______Predicted win prob→
+```
 
 ---
 
@@ -88,8 +151,13 @@ Small chart/card: 7-day accuracy, season accuracy, simple calibration mini-plot.
 **Copy:**  
 Anti-stale checks. Timestamp validation. Retry logic on ingest. JSON completeness checks. We hardened the pipeline so you get fresh data, not surprises.
 
-**Visual prompt:**  
-Checklist graphic with green ticks.
+**Visual (checklist):**
+```
+[x] Anti-stale timestamps on predictions
+[x] Retry logic on ingest (NHL API)
+[x] JSON completeness validation
+[x] Freshness checks before publish
+```
 
 **What went wrong / how we fixed it (bullet story):**
 - Problem: stale or missing JSON during early morning posts.
@@ -102,8 +170,12 @@ Checklist graphic with green ticks.
 **Copy:**  
 Goalie Page MVP. Past Slate Archive. Extra trend indicators for Power Index. Minor UX polish.
 
-**Visual prompt:**  
-Roadmap bar with “Now” (v7), “Next” (v7.1), “Later” (v8+).
+**Visual (roadmap bar):**
+```
+Now (v7): Sims | Power v2 | Perf page | Goalie pipeline | Model refresh | Slate UX
+Next (v7.1): Goalie Page MVP | Past Slate Archive | Power trend tweaks | Minor UX
+Later (v8+): Matchup deep dive | Explainability chips | Team hubs | PP/PK | Rink effects
+```
 
 ---
 
@@ -129,12 +201,27 @@ Model favorite: DAL 56%, edge 6 pts over coin flip.
 **Copy:**  
 Hockey is chaos; Puckcast makes it legible. Daily edges, honest receipts, and season odds that update with reality.
 
-**Visual prompt:**  
-Hero image echoing Slide 1 with a simple “puckcast.ai” tag.
+**Visual (closing card):**
+```
+PUCKCAST
+Daily edges. Honest receipts. Season odds that move with reality.
+```
 
 ---
 
 ## Visual Stubs (lightweight markdown “images” you can drop in slides)
+
+Ready-to-use assets (SVG) in `docs/assets/presentation/`:
+- `flow.svg`
+- `metrics.svg`
+- `prediction_card.svg`
+- `power_rows.svg`
+- `sims_table.svg`
+- `goalie_badges.svg`
+- `calibration.svg`
+- `recap_cards.svg`
+- `roadmap.svg`
+- `closing.svg`
 
 **Slide 2 — Flow diagram:**
 ```

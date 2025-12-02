@@ -1,0 +1,41 @@
+<svg width="720" height="260" viewBox="0 0 720 260" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    .box { fill:#0b1e3f; stroke:#5da9ff; stroke-width:2; rx:8; ry:8; }
+    .text { fill:#e8f1ff; font-family:'Inter', 'Segoe UI', sans-serif; font-size:16px; }
+    .label { fill:#cfe5ff; font-family:'Inter', 'Segoe UI', sans-serif; font-size:14px; }
+    .arrow { stroke:#5da9ff; stroke-width:2; marker-end:url(#arrowhead); }
+    .caption { fill:#b4c8e6; font-size:13px; font-family:'Inter', 'Segoe UI', sans-serif; }
+  </style>
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#5da9ff" />
+    </marker>
+  </defs>
+  <rect class="box" x="30" y="40" width="150" height="110" />
+  <text class="text" x="105" y="75" text-anchor="middle">Data</text>
+  <text class="label" x="105" y="100" text-anchor="middle">MoneyPuck, goalies</text>
+  <text class="label" x="105" y="120" text-anchor="middle">Schedule, injuries</text>
+
+  <rect class="box" x="220" y="40" width="170" height="110" />
+  <text class="text" x="305" y="70" text-anchor="middle">Features (206)</text>
+  <text class="label" x="305" y="95" text-anchor="middle">Rest, travel, rolling xG</text>
+  <text class="label" x="305" y="115" text-anchor="middle">PP/PK, goalie form, Elo</text>
+
+  <rect class="box" x="430" y="40" width="150" height="110" />
+  <text class="text" x="505" y="75" text-anchor="middle">Model</text>
+  <text class="label" x="505" y="100" text-anchor="middle">LogReg + isotonic</text>
+  <text class="label" x="505" y="120" text-anchor="middle">Threshold tuning</text>
+
+  <rect class="box" x="610" y="40" width="80" height="110" />
+  <text class="text" x="650" y="80" text-anchor="middle">JSON</text>
+  <text class="label" x="650" y="105" text-anchor="middle">API</text>
+
+  <line class="arrow" x1="180" y1="95" x2="220" y2="95" />
+  <line class="arrow" x1="390" y1="95" x2="430" y2="95" />
+  <line class="arrow" x1="580" y1="95" x2="610" y2="95" />
+
+  <text class="caption" x="105" y="180" text-anchor="middle">Source</text>
+  <text class="caption" x="305" y="180" text-anchor="middle">Feature engineering</text>
+  <text class="caption" x="505" y="180" text-anchor="middle">Train + calibrate</text>
+  <text class="caption" x="650" y="180" text-anchor="middle">Serve</text>
+</svg>

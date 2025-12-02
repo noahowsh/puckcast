@@ -1,0 +1,22 @@
+<svg width="720" height="200" viewBox="0 0 720 200" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    .card { fill:#0f243f; stroke:#4ea1ff; stroke-width:2; rx:10; ry:10; }
+    .title { fill:#e8f1ff; font-family:'Inter','Segoe UI',sans-serif; font-size:16px; font-weight:600; }
+    .value { fill:#8ee0a1; font-family:'Inter','Segoe UI',sans-serif; font-size:28px; font-weight:700; }
+    .label { fill:#cfe5ff; font-family:'Inter','Segoe UI',sans-serif; font-size:14px; }
+  </style>
+  <rect class="card" x="30" y="30" width="200" height="140" />
+  <text class="title" x="130" y="60" text-anchor="middle">Accuracy</text>
+  <text class="value" x="130" y="100" text-anchor="middle">59.3%</text>
+  <text class="label" x="130" y="125" text-anchor="middle">Baseline 53.7%</text>
+
+  <rect class="card" x="260" y="30" width="200" height="140" />
+  <text class="title" x="360" y="60" text-anchor="middle">Log loss</text>
+  <text class="value" x="360" y="100" text-anchor="middle">0.676</text>
+  <text class="label" x="360" y="125" text-anchor="middle">Lower is better</text>
+
+  <rect class="card" x="490" y="30" width="200" height="140" />
+  <text class="title" x="590" y="60" text-anchor="middle">Avg edge</text>
+  <text class="value" x="590" y="100" text-anchor="middle">16.1 pts</text>
+  <text class="label" x="590" y="125" text-anchor="middle">Over coin flip</text>
+</svg>

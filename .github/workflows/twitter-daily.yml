@@ -6,8 +6,8 @@ on:
     - cron: "0 13 * * *"
     # Team highlight (2:30 PM ET / 19:30 UTC during DST)
     - cron: "30 19 * * *"
-    # Results recap (5:30 PM ET / 22:30 UTC during DST)
-    - cron: "30 22 * * *"
+    # Results recap (10:30 PM ET / 03:30 UTC during DST)
+    - cron: "30 3 * * *"
     # Tomorrow tease (9:30 PM ET / 02:30 UTC next day during DST)
     - cron: "30 2 * * *"
   workflow_dispatch:
@@ -59,7 +59,7 @@ jobs:
             echo "type=morning_slate" >> $GITHUB_OUTPUT
           elif [ "$HOUR" = "19" ] && [ "$MINUTE" = "30" ]; then
             echo "type=team_highlight" >> $GITHUB_OUTPUT
-          elif [ "$HOUR" = "22" ] && [ "$MINUTE" = "30" ]; then
+          elif [ "$HOUR" = "3" ] && [ "$MINUTE" = "30" ]; then
             echo "type=results_recap" >> $GITHUB_OUTPUT
           else
             echo "type=tomorrow_tease" >> $GITHUB_OUTPUT

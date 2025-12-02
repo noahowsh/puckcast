@@ -1,0 +1,21 @@
+<svg width="520" height="240" viewBox="0 0 520 240" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    .bg { fill:#0f1f36; stroke:#4ea1ff; stroke-width:2; rx:12; ry:12; }
+    .axis { stroke:#cfe5ff; stroke-width:1; }
+    .diag { stroke:#4ea1ff; stroke-width:2; stroke-dasharray:4 4; }
+    .point { fill:#8ee0a1; }
+    .label { fill:#cfe5ff; font-family:'Inter','Segoe UI',sans-serif; font-size:12px; }
+    .title { fill:#e8f1ff; font-family:'Inter','Segoe UI',sans-serif; font-size:16px; font-weight:700; }
+  </style>
+  <rect class="bg" x="20" y="20" width="480" height="200" />
+  <text class="title" x="40" y="50">Calibration snapshot</text>
+  <line class="axis" x1="60" y1="180" x2="440" y2="180" />
+  <line class="axis" x1="60" y1="80" x2="60" y2="180" />
+  <line class="diag" x1="60" y1="180" x2="440" y2="80" />
+  <circle class="point" cx="140" cy="150" r="6" />
+  <circle class="point" cx="220" cy="135" r="6" />
+  <circle class="point" cx="300" cy="125" r="6" />
+  <circle class="point" cx="360" cy="115" r="6" />
+  <text class="label" x="400" y="195">Predicted win prob →</text>
+  <text class="label" x="15" y="85" transform="rotate(-90 15 85)">Observed win rate →</text>
+</svg>

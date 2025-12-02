@@ -1,0 +1,10 @@
+<svg width="640" height="200" viewBox="0 0 640 200" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    .bg { fill:#0f1f36; stroke:#4ea1ff; stroke-width:2; rx:16; ry:16; }
+    .title { fill:#e8f1ff; font-family:'Inter','Segoe UI',sans-serif; font-size:26px; font-weight:800; letter-spacing:1px; }
+    .sub { fill:#cfe5ff; font-family:'Inter','Segoe UI',sans-serif; font-size:16px; }
+  </style>
+  <rect class="bg" x="20" y="20" width="600" height="160" />
+  <text class="title" x="320" y="90" text-anchor="middle">PUCKCAST</text>
+  <text class="sub" x="320" y="125" text-anchor="middle">Daily edges. Honest receipts. Season odds that move with reality.</text>
+</svg>

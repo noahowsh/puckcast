@@ -179,8 +179,10 @@ def main() -> None:
         header = lines[0]
         body = lines[1:]
         chunk = header
+        # Slightly conservative limit to keep threads clean while avoiding orphaned lines
+        limit = 260
         for line in body:
-            if len(chunk) + len(line) + 1 > 240:
+            if len(chunk) + len(line) + 1 > limit:
                 tweets_to_post.append(chunk)
                 chunk = f"More edges:\n{line}"
             else:

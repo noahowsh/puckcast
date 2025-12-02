@@ -3,28 +3,28 @@
     {
       "id": "A",
       "format": "morning_slate",
-      "template": "NHL game predictions for {date_label} (Puckcast)\n{slate_lines}"
+      "template": "Today’s NHL slate (Puckcast Model) 🏒\n{slate_lines}\n7-day accuracy: {seven_day_acc}%"
     }
   ],
   "team_highlight": [
     {
       "id": "A",
       "format": "team_highlight",
-      "template": "Edge Watch: {favorite} over {opponent} — {prob}% 🔍\nEdge: {edge_pct}% | Time: {start_time}\nContext: Highest edge on the board."
+      "template": "Edge Watch: {favorite} over {opponent} — {prob}% 🧊\nEdge: {edge_pts} pts | Time: {start_time}\nContext: Highest edge on the board."
     }
   ],
   "results_recap": [
     {
       "id": "A",
       "format": "results_recap",
-      "template": "Tonight’s results (Puckcast) 🏒\nRecord: {record}\nTop hit: {big_hit}\nTop miss: {big_miss}"
+      "template": "Tonight’s results (Puckcast) 📊\nRecord: {record}\nTop hit: {big_hit}\nTop miss: {big_miss}\nModel recalibrates nightly."
     }
   ],
   "tomorrow_tease": [
     {
       "id": "A",
       "format": "tomorrow_tease",
-      "template": "Late edges for {date_label}:\n{edge_lines}"
+      "template": "Late edges for {date_label} 🧊\n{edge_lines}"
     }
   ]
 }
