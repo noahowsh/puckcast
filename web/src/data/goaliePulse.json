@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2025-12-02T13:30:08.011206+00:00",
+  "updatedAt": "2025-12-02T23:11:17.339572+00:00",
   "notes": "Goalie performance metrics calculated from NHL Stats API data. GSAx estimates based on save percentage above league average.",
   "goalies": [
     {
@@ -320,6 +320,23 @@
       "nextOpponent": "DAL"
     },
     {
+      "name": "Jake Allen",
+      "team": "NJD",
+      "rollingGsa": 0.8,
+      "seasonGsa": 3.9,
+      "restDays": 2,
+      "startLikelihood": 0.8,
+      "trend": "steady",
+      "note": "Consistent performance from Jake Allen with a 2.48 GAA \u2014 reliable starter for NJD.",
+      "strengths": [
+        "Solid fundamentals"
+      ],
+      "watchouts": [
+        "Inconsistent results"
+      ],
+      "nextOpponent": "DAL"
+    },
+    {
       "name": "Tristan Jarry",
       "team": "PIT",
       "rollingGsa": 0.8,
@@ -335,23 +352,6 @@
         "Limited recent data"
       ],
       "nextOpponent": "TBL"
-    },
-    {
-      "name": "Jake Allen",
-      "team": "NJD",
-      "rollingGsa": 0.8,
-      "seasonGsa": 3.8,
-      "restDays": 2,
-      "startLikelihood": 0.8,
-      "trend": "steady",
-      "note": "Consistent performance from Jake Allen with a 2.48 GAA \u2014 reliable starter for NJD.",
-      "strengths": [
-        "Solid fundamentals"
-      ],
-      "watchouts": [
-        "Inconsistent results"
-      ],
-      "nextOpponent": "DAL"
     },
     {
       "name": "Yaroslav Askarov",
