@@ -38,6 +38,14 @@ Clean, fast, scannable. We strip the clutter: updated timestamp, refined bars, 1
 **Visual prompt:**  
 Mock prediction card: matchup, win % bars, tiny badges, updated time.
 
+**Before/After (text mock):**
+```
+Before: DAL @ SEA | 44% / 56% | Edge: -2.6 pts | chips chips chips | lorem summary
+After:  DAL @ SEA   Updated 7:05 PM
+        Home 44% | Away 56%
+        Badges: [Rest +1] [Confirmed: Oettinger]
+```
+
 ---
 
 ### Slide 5 — Explainability Where It Matters (Power v2)
@@ -83,6 +91,11 @@ Anti-stale checks. Timestamp validation. Retry logic on ingest. JSON completenes
 **Visual prompt:**  
 Checklist graphic with green ticks.
 
+**What went wrong / how we fixed it (bullet story):**
+- Problem: stale or missing JSON during early morning posts.
+- Fix: anti-stale timestamp checks + retry logic; enforce completeness validation before publish.
+- Result: daily slate posts without manual babysitting.
+
 ---
 
 ### Slide 10 — Next Up (v7.1 Targets)
@@ -102,6 +115,13 @@ For the product: reliability + richer season context (sim engine + Power v2).
 
 **Visual prompt:**  
 Three benefit cards.
+
+**Mini-case (marquee edge narrative, optional):**
+```
+Game: DAL @ SEA
+Edge drivers: goalie rest (+1), rolling xG edge (DAL), travel neutral, special teams slight tilt.
+Model favorite: DAL 56%, edge 6 pts over coin flip.
+```
 
 ---
 
@@ -184,3 +204,17 @@ Fans: Faster, clearer edges
 Analysts: Calibrated probs + traceable factors
 Product: Reliable slate + season context (sims + Power v2)
 ```
+
+
+## “Why the model works” (single-feature highlight, optional slide or callout)
+```
+Goalie rest delta: When a starter is +1 day rest vs opponent’s starter, edges improve ~2–3 pts.
+Special teams diff: PP/PK differential nudges edges 1–2 pts, amplified when PK gaps are large.
+Rolling xG (EWMA): Short-window shot quality stabilizes faster than win%, giving earlier signals.
+```
+
+## Extra hooks you can mention (talk track only)
+- “We removed clutter to make the slate readable in 5 seconds.”
+- “We added goalie confirmation so we don’t post blind edges.”
+- “Sim engine gives season context; Power v2 explains ‘why’ in one line.”
+- “Stability work means no more 5 AM fire drills.”
