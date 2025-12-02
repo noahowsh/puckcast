@@ -25,6 +25,7 @@ Goalie in crease + overlay:
 Behind every prediction: 206 engineered features—rest, travel, rolling xG, special teams, goalie form, Elo. Trained on the last 3 seasons, calibrated to match real outcomes.
 
 **Visual (flow diagram):**
+![Flow](./assets/presentation/flow.svg)
 ```
 Data
 │
@@ -54,6 +55,7 @@ Outputs
 Holdout accuracy: 59.3% (vs 53.7% baseline). Log loss: 0.676, Brier: 0.240. Average edge: 16.1 pts over a coin flip.
 
 **Visual (metrics cards):**
+![Metrics](./assets/presentation/metrics.svg)
 ```
 [Accuracy]
   59.3%  vs  53.7% baseline
@@ -73,6 +75,7 @@ Holdout accuracy: 59.3% (vs 53.7% baseline). Log loss: 0.676, Brier: 0.240. Aver
 Clean, fast, scannable. We strip the clutter: updated timestamp, refined bars, 1–2 badges max (rest/goalie/injury).
 
 **Visual (before/after cards):**
+![Prediction card](./assets/presentation/prediction_card.svg)
 ```
 Before (cluttered)
 DAL @ SEA | 44% / 56% | Edge: -2.6 pts
@@ -91,6 +94,7 @@ Badges: [Rest +1] [Confirmed: Oettinger]
 Power Index v2 pairs movement arrows with 1–2 sentences on why: recent form, special teams, injuries, shot quality, strength of schedule.
 
 **Visual (rank rows):**
+![Power rows](./assets/presentation/power_rows.svg)
 ```
 1. COL  ↑  "5v5 xG surge, PK trending up, softer SOS"
 2. NYR  →  "Stable form, PP cooling, injuries easing"
@@ -104,6 +108,7 @@ Power Index v2 pairs movement arrows with 1–2 sentences on why: recent form, s
 Daily simulations (5k–20k runs) give playoff/division/conference/Cup odds. One page, last-updated stamp, and probability bars you can trust.
 
 **Visual (table snippet):**
+![Sims table](./assets/presentation/sims_table.svg)
 ```
 Team   Playoff   Division   Conf   Cup   Trend
 NYR    88% ██████████░░      34%    18%   7%    ↑
@@ -119,6 +124,7 @@ TOR    81% ████████░░░░      28%    14%   5%    ↓
 We pull expected/confirmed starters, rest, and inject goalie strength into the model. Light badges show “Confirmed” or “Likely” so edges aren’t blind to the crease.
 
 **Visual (badge examples):**
+![Goalie badges](./assets/presentation/goalie_badges.svg)
 ```
 Confirmed: Shesterkin  | Likely: Saros
 Rest: 2 days           | Rest: 1 day
@@ -132,6 +138,8 @@ Impact: +1.8 pts       | Impact: +0.9 pts
 7-day and season accuracy at a glance. A hits/misses strip for the last 20–30 games. One calibration/reliability glimpse—no black boxes.
 
 **Visual (mini dashboard):**
+![Calibration](./assets/presentation/calibration.svg)
+![Recap cards](./assets/presentation/recap_cards.svg)
 ```
 7-day accuracy: 61.5%   Season: 59.3%
 Hits (last 5):  NYR>CAR, PIT>BUF, TOR>CBJ, DAL>SEA, CGY>TBL
@@ -171,6 +179,7 @@ Anti-stale checks. Timestamp validation. Retry logic on ingest. JSON completenes
 Goalie Page MVP. Past Slate Archive. Extra trend indicators for Power Index. Minor UX polish.
 
 **Visual (roadmap bar):**
+![Roadmap](./assets/presentation/roadmap.svg)
 ```
 Now (v7): Sims | Power v2 | Perf page | Goalie pipeline | Model refresh | Slate UX
 Next (v7.1): Goalie Page MVP | Past Slate Archive | Power trend tweaks | Minor UX
@@ -202,6 +211,7 @@ Model favorite: DAL 56%, edge 6 pts over coin flip.
 Hockey is chaos; Puckcast makes it legible. Daily edges, honest receipts, and season odds that update with reality.
 
 **Visual (closing card):**
+![Closing](./assets/presentation/closing.svg)
 ```
 PUCKCAST
 Daily edges. Honest receipts. Season odds that move with reality.
