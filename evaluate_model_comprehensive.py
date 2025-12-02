@@ -88,7 +88,8 @@ print("[3/6] Training Logistic Regression model...")
 print("=" * 80)
 
 model = create_baseline_model(C=OPTIMAL_C, random_state=42)
-model = fit_model(model, X_train, y_train, sample_weight=train_weights)
+training_mask = pd.Series(True, index=X_train.index)
+model = fit_model(model, X_train, y_train, training_mask, sample_weight=train_weights)
 
 print(f"✓ Model trained successfully")
 print(f"   Model type: {type(model).__name__}")
@@ -103,11 +104,13 @@ print("[4/6] Generating predictions...")
 print("=" * 80)
 
 # Train set predictions
-y_train_pred_proba = predict_probabilities(model, X_train)
+train_mask_pred = pd.Series(True, index=X_train.index)
+y_train_pred_proba = predict_probabilities(model, X_train, train_mask_pred)
 y_train_pred = (y_train_pred_proba >= 0.5).astype(int)
 
 # Test set predictions
-y_test_pred_proba = predict_probabilities(model, X_test)
+test_mask_pred = pd.Series(True, index=X_test.index)
+y_test_pred_proba = predict_probabilities(model, X_test, test_mask_pred)
 y_test_pred = (y_test_pred_proba >= 0.5).astype(int)
 
 print(f"✓ Predictions generated")
