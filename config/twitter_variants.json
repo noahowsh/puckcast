@@ -10,14 +10,14 @@
     {
       "id": "A",
       "format": "team_highlight",
-      "template": "Edge watch: {headline}\n{details}\n{angle}"
+      "template": "Edge Watch: {favorite} over {opponent} — {prob}% 🔍\nEdge: {edge_pct}% | Time: {start_time}\nContext: Highest edge on the board."
     }
   ],
   "results_recap": [
     {
       "id": "A",
       "format": "results_recap",
-      "template": "{date_label} recap: {correct}/{total} ({accuracy}%)\nBig hit: {big_hit}\nBig miss: {big_miss}"
+      "template": "Tonight’s results (Puckcast) 🏒\nRecord: {record}\nTop hit: {big_hit}\nTop miss: {big_miss}"
     }
   ],
   "tomorrow_tease": [

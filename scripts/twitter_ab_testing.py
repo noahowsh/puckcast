@@ -261,34 +261,27 @@ def generate_post(post_type: str, variant: Dict[str, str], data: Dict[str, Any])
         fav = top["homeTeam"] if fav_is_home else top["awayTeam"]
         under = top["awayTeam"] if fav_is_home else top["homeTeam"]
         favorite_prob = int((top["homeWinProb"] if fav_is_home else top["awayWinProb"]) * 100)
-        edge_label = f"{abs(top.get('edge', 0)) * 100:.1f} pts"
-        win_hash = _winner_tag(fav.get("abbrev", ""))
-        headline = f"{win_hash} over {under.get('abbrev')} @ {favorite_prob}%"
-        details = f"Edge: {edge_label} | Time: {_format_time(top.get('startTimeEt'))}"
-        angle = f"Streak/form angle: top edge on board"
+        edge_pct = abs(top.get("edge", 0)) * 100
         return template.format(
-            headline=headline,
-            details=details,
-            angle=angle,
-            date_label=date_label,
+            favorite=fav.get("abbrev", fav.get("name", "")),
+            opponent=under.get("abbrev", under.get("name", "")),
+            prob=favorite_prob,
+            edge_pct=f"{edge_pct:.1f}",
+            start_time=_format_time(top.get("startTimeEt")),
         )
 
     if post_type == "results_recap":
         recap = _results_recap_payload()
         total = recap["total"]
         correct = recap["correct"]
-        accuracy = f"{(correct / total * 100):.0f}" if total else "0"
+        accuracy = f"{(correct / total * 100):.1f}" if total else "0.0"
         hits = ", ".join(recap["hits"]) if recap["hits"] else "None"
         misses = ", ".join(recap["misses"]) if recap["misses"] else "None"
         big_hit = recap["hits"][0] if recap["hits"] else "None"
         big_miss = recap["misses"][0] if recap["misses"] else "None"
+        record = f"{correct}-{total - correct} ({accuracy}%)" if total else "0-0 (0.0%)"
         return template.format(
-            date_label=recap["date"],
-            correct=correct,
-            total=total,
-            accuracy=accuracy,
-            hits=hits,
-            misses=misses,
+            record=record,
             big_hit=big_hit,
             big_miss=big_miss,
         )
