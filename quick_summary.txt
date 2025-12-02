@@ -4,9 +4,9 @@ WHERE WE ARE & WHERE WE'RE GOING
 
 📍 CURRENT STATUS
 --------------------------------------------------------------------------------
-✅ Custom xG model (94.8% accuracy on shots)
-✅ 141 engineered features (all MoneyPuck metrics)
-✅ 6 seasons of training data (2017-2023)
+✅ Custom xG model (gradient boosting on NHL play-by-play)
+✅ 206 engineered features (from native NHL API ingestion)
+✅ Multi-season training data with caching
 ✅ Sample weighting (0.85 decay - recent seasons prioritized)
 ✅ Testing on full 2023-24 season
 
