@@ -382,6 +382,10 @@ def _process_game_plays(game_id: str, pbp: Dict[str, Any], xg_model: ExpectedGoa
             "reboundsAgainst": 0,
             "reboundGoalsFor": 0,
             "reboundGoalsAgainst": 0,
+            "rushShotsFor": 0,  # Shots within 4s of turnover/zone entry
+            "rushShotsAgainst": 0,
+            "rushGoalsFor": 0,
+            "rushGoalsAgainst": 0,
             "penaltiesTaken": 0,
             "penaltiesDrawn": 0,
             "penaltyMinutes": 0,
@@ -422,6 +426,10 @@ def _process_game_plays(game_id: str, pbp: Dict[str, Any], xg_model: ExpectedGoa
             "reboundsAgainst": 0,
             "reboundGoalsFor": 0,
             "reboundGoalsAgainst": 0,
+            "rushShotsFor": 0,  # Shots within 4s of turnover/zone entry
+            "rushShotsAgainst": 0,
+            "rushGoalsFor": 0,
+            "rushGoalsAgainst": 0,
             "penaltiesTaken": 0,
             "penaltiesDrawn": 0,
             "penaltyMinutes": 0,
@@ -514,6 +522,14 @@ def _process_game_plays(game_id: str, pbp: Dict[str, Any], xg_model: ExpectedGoa
                 stats[acting_team]["highDangerxGoalsFor"] += xg
                 stats[opponent_team]["highDangerxGoalsAgainst"] += xg
 
+            # Rush shots (within 4s of turnover/faceoff/zone entry)
+            if features.is_rush_shot:
+                stats[acting_team]["rushShotsFor"] += 1
+                stats[opponent_team]["rushShotsAgainst"] += 1
+                if type_key == "goal":
+                    stats[acting_team]["rushGoalsFor"] += 1
+                    stats[opponent_team]["rushGoalsAgainst"] += 1
+
         # Track events for rush detection (after processing all events)
         if type_key in ["takeaway", "giveaway", "faceoff-won"]:
             last_event_time = current_time_sec
@@ -604,6 +620,13 @@ def _process_game_plays(game_id: str, pbp: Dict[str, Any], xg_model: ExpectedGoa
         # Shot block percentage (how many opponent shots did we block?)
         total_opponent_attempts = s["shotAttemptsAgainst"]
         s["shotBlockPct"] = (s["blockedShotsFor"] / total_opponent_attempts * 100) if total_opponent_attempts > 0 else 0.0
+
+        # Rush shot percentage (what % of our shots are rush shots?)
+        total_shots = s["shotsForPerGame"]
+        s["rushShotPct"] = (s["rushShotsFor"] / total_shots * 100) if total_shots > 0 else 0.0
+
+        # Rush goal conversion (how effective are our rush shots?)
+        s["rushGoalConversion"] = (s["rushGoalsFor"] / s["rushShotsFor"] * 100) if s["rushShotsFor"] > 0 else 0.0
 
     return stats
 
