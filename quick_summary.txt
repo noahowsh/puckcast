@@ -1,90 +1,135 @@
 ================================================================================
-WHERE WE ARE & WHERE WE'RE GOING
+PUCKCAST.AI - NHL PREDICTION MODEL STATUS
 ================================================================================
 
-📍 CURRENT STATUS
+📍 CURRENT STATUS (Enhanced NHL API-Only Model)
 --------------------------------------------------------------------------------
-✅ Custom xG model (gradient boosting on NHL play-by-play)
-✅ 206 engineered features (from native NHL API ingestion)
-✅ Multi-season training data with caching
-✅ Sample weighting (0.85 decay - recent seasons prioritized)
-✅ Testing on full 2023-24 season
+✅ 100% NHL API data (NO MoneyPuck dependency)
+✅ Enhanced xG model with rush shot detection
+✅ 204 engineered features from native NHL play-by-play
+✅ Multi-season training with caching (2021-22, 2022-23, 2023-24)
+✅ Comprehensive evaluation framework
 
-Expected Current Accuracy: ~59-60% (baseline ~53%)
+Current Performance (2023-24 Test Season):
+  Test Accuracy: 59.92% (baseline: 53.74%, +6.18pp)
+  ROC-AUC: 0.6350
+  A+ Predictions: 68.01% accuracy on 422 games
+  High Confidence (A+/A/A-): 61.76% accuracy on 659 games
 
 
-🎯 REALISTIC TARGETS
+🔥 RECENT ENHANCEMENTS
 --------------------------------------------------------------------------------
-Week 1  (Quick Wins):           61-62%  (+1-2%)  ← START HERE
-Week 2-3 (xG Improvements):     62-63%  (+0-1%)
-Week 4-6 (Roster Context):      64-66%  (+2-3%)
-Week 8-10 (Advanced Features):  65-68%  (+1-2%)
-Week 12+ (Ensemble):            66-70%  (+1-2%)
+✅ Rush Shot Detection
+   - Shots within 4s of turnover/faceoff/zone entry
+   - 15-20% higher goal probability
+   - Tracked: rushShotsFor/Against, rushGoalConversion
+
+✅ Enhanced xG Model
+   - Improved hyperparameters (max_depth: 5, max_leaf_nodes: 41)
+   - Training accuracy: 94.6%, Validation: 95.3%
+   - Features: distance, angle, shot type, rush status, period, zone
+
+✅ Possession Metrics
+   - Takeaways, giveaways, possessionDifferential
+   - Hits tracking (hitsFor/Against, hitDifferential)
+   - Shot blocking (blockedShotsFor/Against, shotBlockPct)
+
+✅ Data Caching
+   - 7,872 team-games cached across 3 seasons
+   - xG model persisted to data/xg_model.pkl
+   - Fast incremental updates
 
 
-🔥 QUICK WINS THIS WEEK
+📊 WHAT'S AVAILABLE
 --------------------------------------------------------------------------------
-1. Train baseline & measure        (5 min)     →  Know where we are
-2. Add starting goalie features     (3 hours)   →  +1-2% accuracy
-3. Add rebound detection to xG      (2 hours)   →  +0.5-1% accuracy  
-4. Tune sample weight decay         (30 min)    →  +0.3-0.8% accuracy
-
-TOTAL TIME: ~6 hours
-TOTAL GAIN: +2-4% accuracy
-TARGET: 61-63% by end of week
+✅ data/xg_model.pkl              - Enhanced xG model (156KB)
+✅ data/cache/*.parquet           - Cached season data
+✅ evaluate_model_comprehensive.py - Full evaluation pipeline
+✅ predict_full.py                - Production prediction script
+✅ src/nhl_prediction/            - Core prediction modules
 
 
-💡 WHY THESE FEATURES MATTER
+🎯 NEXT OPPORTUNITIES FOR IMPROVEMENT
 --------------------------------------------------------------------------------
-Starting Goalies:  Goaltending = 30-40% of game outcome
-                   League-best goalie vs league-worst = 10-15% win probability
+1. Individual Goalie Tracking (#5 most important feature)
+   - Currently: Team-level goaltending
+   - Upgrade: Individual goalie GSA per game
+   - Expected Impact: +0.5-1.0% accuracy
 
-Rebounds:          2-3x higher goal probability than normal shots
-                   Accounts for ~15% of goals scored
+2. Line Combination Features
+   - Track forward line chemistry
+   - Defensive pairing effectiveness
+   - Expected Impact: +0.3-0.5% accuracy
 
-Sample Weights:    Recent patterns more relevant
-                   2024 hockey ≠ 2017 hockey (rule changes, play style)
+3. Schedule Factors (Already Strong)
+   - Rest days (B2B tracking) ✓
+   - Home/away splits ✓
+   - Recent form (rolling windows) ✓
+
+4. Advanced Shot Quality
+   - Pre-shot movement
+   - Pass sequences
+   - Traffic/screens
+   - Expected Impact: +0.2-0.4% accuracy
 
 
-📊 WHAT YOU ALREADY HAVE
+💡 KEY METRICS BY CONFIDENCE LEVEL
 --------------------------------------------------------------------------------
-✅ data/feeds/starters.json    - Starting goalie data per game
-✅ data/feeds/injuries.json    - Player injury status
-✅ Play-by-play events         - Can detect rebounds
-✅ 336 cached games            - Ready for training
+Grade    Games    Accuracy    Avg Edge
+A+       422      68.01%      28.2%     ← Highest value predictions
+A        116      63.79%      18.7%
+A-       121      56.20%      15.4%
+B+       158      57.59%      12.0%
+B        125      52.80%      8.5%
+B-       123      52.03%      5.6%
+C+       79       54.43%      2.9%
+C        86       51.16%      1.1%
 
-Just need to CONNECT THE DOTS!
 
-
-🚀 NEXT STEPS
+🚀 RUNNING THE MODEL
 --------------------------------------------------------------------------------
-Option A: Start with quick wins (recommended)
-  → python -m src.nhl_prediction.train  (get baseline)
-  → Add goalie features
-  → Add rebounds
-  → Tune decay factor
-  → Target: 61-63% by weekend
+Generate Predictions:
+  python predict_full.py [YYYY-MM-DD]
 
-Option B: Go deeper first
-  → Read ROADMAP_TO_EXCELLENCE.md
-  → Plan longer-term improvements
-  → Prioritize based on time/impact
+Evaluate Model:
+  python evaluate_model_comprehensive.py
 
-Option C: Keep building infrastructure
-  → Improve native ingestion
-  → Cache more play-by-play data
-  → Set up automated data pipeline
+Train Model:
+  python train_optimal.py
 
 
-💪 MY RECOMMENDATION
+📁 PROJECT STRUCTURE
 --------------------------------------------------------------------------------
-Let's knock out the quick wins first!
+src/nhl_prediction/
+  ├── data_ingest.py       - Data loading (NHL API only)
+  ├── native_ingest.py     - Play-by-play processing & xG
+  ├── goalie_features.py   - Goaltending metrics
+  ├── pipeline.py          - Feature engineering
+  ├── model.py             - Model training & prediction
+  └── nhl_api.py           - NHL API client
 
-1. Train baseline NOW (5 min) - see where we are
-2. Add starting goalies TODAY (3 hours) - biggest impact
-3. Add rebounds TODAY (2 hours) - easy win
+data/
+  ├── cache/               - Cached season data (parquet)
+  └── xg_model.pkl         - Trained xG model
 
-By tonight: 61-63% accuracy (up from ~59%)
-By next week: 64-66% with injuries + advanced xG
+reports/
+  ├── model_evaluation_comprehensive.csv
+  ├── confidence_buckets.csv
+  └── visualizations/
 
-LET'S GO! 🏒🔥
+
+✅ COMPLETED MILESTONES
+--------------------------------------------------------------------------------
+✅ Removed all MoneyPuck dependencies
+✅ Built custom xG model from NHL play-by-play
+✅ Added rush shot detection and tracking
+✅ Enhanced possession and physicality metrics
+✅ Created comprehensive evaluation framework
+✅ Achieved 59.92% test accuracy (59.27% baseline matched)
+✅ 68% accuracy on highest confidence (A+) predictions
+
+
+🎯 STATUS: Production-Ready NHL API-Only Model
+--------------------------------------------------------------------------------
+The model is fully operational with no external data dependencies.
+All predictions are generated from official NHL API data.

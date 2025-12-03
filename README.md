@@ -1,12 +1,13 @@
 # 🏒 Puckcast - NHL Game Prediction System
 
-**Version:** 6.2  
-**Model:** Logistic Regression (isotonic-calibrated) on 206 engineered features  
-**Training Window:** 3 most recent seasons (auto-advances; currently 2023–2026)  
-**Current holdout (from `web/src/data/modelInsights.json`):** 59.3% accuracy vs 53.7% baseline, log loss 0.676, Brier 0.240  
-**Status:** Active Development
+**Version:** 6.3 (Enhanced NHL API-Only)
+**Model:** Logistic Regression (isotonic-calibrated) on 204 engineered features
+**Training Window:** 3 most recent seasons (currently 2021-22, 2022-23, 2023-24)
+**Current Performance:** 59.92% accuracy vs 53.74% baseline, ROC-AUC 0.6350, Brier 0.2403
+**Data Source:** 100% NHL API (no MoneyPuck dependency)
+**Status:** Production-Ready
 
-Puckcast predicts NHL outcomes using MoneyPuck team-game logs, custom feature engineering (rest/travel, xG, special teams, goalie form, Elo), and a calibrated logistic model. The Next.js site consumes the exported JSON payloads for the daily slate.
+Puckcast predicts NHL outcomes using native NHL API play-by-play data, custom xG model with rush shot detection, advanced feature engineering (possession, shot quality, schedule factors), and a calibrated logistic model. The system processes 7,800+ games with comprehensive caching for fast predictions.
 
 ---
 
@@ -33,19 +34,29 @@ python3 analysis/feature_importance_analysis.py   # optional, requires cached da
 
 ---
 
-## 📊 Current Performance (live payload)
+## 📊 Current Performance (2023-24 Test Season)
 
-- Accuracy: **59.3%** (holdout in `modelInsights.json`)
-- Baseline (home team rate): **53.7%**
-- Log loss: **0.676**
-- Brier: **0.240**
-- Avg edge: **16.1 pts** (vs coin flip)
+**Overall Metrics:**
+- Test Accuracy: **59.92%** (baseline: 53.74%, +6.18pp improvement)
+- ROC-AUC: **0.6350**
+- Log Loss: **0.6761**
+- Brier Score: **0.2403**
+
+**Confidence Breakdown:**
+- A+ Predictions (422 games): **68.01%** accuracy, 28.2% avg edge
+- A Predictions (116 games): **63.79%** accuracy, 18.7% avg edge
+- High Confidence (A+/A/A-): **61.76%** accuracy on 659 games
+
+**Data Processing:**
+- 7,872 team-games across 3 seasons
+- Custom xG model: 94.6% train accuracy, 95.3% validation
+- 204 engineered features from native NHL play-by-play
 
 Feeds powering the site:
-- `web/src/data/todaysPredictions.json` (daily slate, updated by `predict_full.py` + actions)
+- `web/src/data/todaysPredictions.json` (daily slate, updated by `predict_full.py`)
 - `web/src/data/modelInsights.json` (holdout metrics, confidence buckets)
 - `web/src/data/currentStandings.json`, `goaliePulse.json`
-- Next-game lookup for the power board: `web/src/app/api/next-games` (NHL schedule API)
+- Next-game lookup: `web/src/app/api/next-games` (NHL schedule API)
 
 ## 🔐 Secrets / Env
 - X/Twitter automation: `TWITTER_API_KEY`, `TWITTER_API_SECRET`, `TWITTER_ACCESS_TOKEN`, `TWITTER_ACCESS_SECRET` (optional `TWITTER_BEARER_TOKEN`).
