@@ -31,7 +31,7 @@ from nhl_prediction.train import compute_season_weights
 from nhl_prediction.goalie_tracker import GoalieTracker
 
 # Paths
-GOALIE_TRACKER_PATH = Path("data/goalie_tracker_train_only.pkl")
+GOALIE_TRACKER_PATH = Path("data/goalie_tracker_train_only_fixed.pkl")  # FIXED version with proper xG and GSA
 STARTING_GOALIES_DB = Path("data/starting_goalies.db")
 
 # Configuration
@@ -67,19 +67,22 @@ def add_simple_goalie_features(
     starting_goalies_df: pd.DataFrame
 ) -> pd.DataFrame:
     """
-    Add SIMPLE individual goalie features (no GSA).
+    Add individual goalie features with PROPER GSA.
 
     Features per game:
+    - goalie_gsa_last5_home/away: GSA avg over last 5 starts (NOW FIXED!)
     - goalie_save_pct_last5_home/away: Save % over last 5 starts
     - goalie_games_last5_home/away: Games played in last 5 starts
     - goalie_starter_known_home/away: 1 if we have data, 0 otherwise
     """
-    print("Adding simple goalie features (save%, games played)...")
+    print("Adding individual goalie features (GSA, save%, games played)...")
 
     features = features.copy()
 
     # Create goalie feature columns
     goalie_cols = [
+        'goalie_gsa_last5_home',
+        'goalie_gsa_last5_away',
         'goalie_save_pct_last5_home',
         'goalie_save_pct_last5_away',
         'goalie_games_last5_home',
@@ -116,6 +119,7 @@ def add_simple_goalie_features(
             games_played = home_form.get('games_played', 0)
 
             if games_played >= 3:  # Require at least 3 games of history
+                features.at[idx, 'goalie_gsa_last5_home'] = home_form.get('gsa_avg', 0.0)
                 features.at[idx, 'goalie_save_pct_last5_home'] = home_form.get('save_pct', 0.910)
                 features.at[idx, 'goalie_games_last5_home'] = games_played
                 features.at[idx, 'goalie_starter_known_home'] = 1.0
@@ -126,6 +130,7 @@ def add_simple_goalie_features(
             games_played = away_form.get('games_played', 0)
 
             if games_played >= 3:  # Require at least 3 games of history
+                features.at[idx, 'goalie_gsa_last5_away'] = away_form.get('gsa_avg', 0.0)
                 features.at[idx, 'goalie_save_pct_last5_away'] = away_form.get('save_pct', 0.910)
                 features.at[idx, 'goalie_games_last5_away'] = games_played
                 features.at[idx, 'goalie_starter_known_away'] = 1.0
@@ -137,6 +142,9 @@ def add_simple_goalie_features(
             games_with_sufficient_data += 1
 
     # Add differential features
+    features['goalie_gsa_diff'] = (
+        features['goalie_gsa_last5_home'] - features['goalie_gsa_last5_away']
+    )
     features['goalie_save_pct_diff'] = (
         features['goalie_save_pct_last5_home'] - features['goalie_save_pct_last5_away']
     )
