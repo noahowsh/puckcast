@@ -24,7 +24,7 @@ from nhl_prediction.train import compute_season_weights
 from nhl_prediction.goalie_tracker import GoalieTracker
 
 # Paths
-GOALIE_TRACKER_PATH = Path("data/goalie_tracker.pkl")
+GOALIE_TRACKER_PATH = Path("data/goalie_tracker_train_only.pkl")  # TRAINING DATA ONLY - no test set leakage
 STARTING_GOALIES_DB = Path("data/starting_goalies.db")
 
 # Configuration
