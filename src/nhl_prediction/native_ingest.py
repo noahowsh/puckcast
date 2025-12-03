@@ -94,6 +94,10 @@ class ShotFeatures:
     zone: str  # O, D, N
     is_rush_shot: bool = False  # Shot taken quickly after zone entry
     period: int = 1
+    # V7.0 Enhanced features
+    is_deflection: bool = False  # Tip-in or deflection
+    is_screened: bool = False  # Goalie view blocked
+    is_one_timer: bool = False  # Shot immediately after pass
 
     def to_dict(self) -> Dict[str, Any]:
         return {
@@ -105,6 +109,10 @@ class ShotFeatures:
             "is_offensive_zone": 1 if self.zone == "O" else 0,
             "is_rush_shot": 1 if self.is_rush_shot else 0,
             "is_third_period": 1 if self.period >= 3 else 0,
+            # V7.0 enhanced features
+            "is_deflection": 1 if self.is_deflection else 0,
+            "is_screened": 1 if self.is_screened else 0,
+            "is_one_timer": 1 if self.is_one_timer else 0,
         }
 
 
@@ -160,6 +168,25 @@ def _extract_shot_features(play: Dict[str, Any], home_defending: str, period: in
         last_event_type in ["takeaway", "giveaway", "faceoff-won"]
     )
 
+    # V7.0: Enhanced shot features
+    # Deflection detection (from shot type)
+    is_deflection = shot_type in ["tip-in", "deflected", "tipped"]
+
+    # Screening detection (from description or deflection implies traffic)
+    description = details.get("description", "").lower()
+    is_screened = (
+        is_deflection or
+        distance > 15.0 and any(kw in description for kw in ["screened", "screen", "traffic"])
+    )
+
+    # One-timer detection (pass to shot, inferred from shot type or description)
+    # Note: Limited by NHL API data - best approximation
+    is_one_timer = (
+        shot_type in ["slap", "snap"] and
+        time_since_last > 0 and time_since_last <= 2 and
+        last_event_type in ["pass", "play"]
+    )
+
     return ShotFeatures(
         distance=distance,
         angle=angle,
@@ -169,6 +196,9 @@ def _extract_shot_features(play: Dict[str, Any], home_defending: str, period: in
         zone=zone,
         is_rush_shot=is_rush,
         period=period,
+        is_deflection=is_deflection,
+        is_screened=is_screened,
+        is_one_timer=is_one_timer,
     )
 
 
@@ -266,11 +296,13 @@ def _train_xg_model(training_data: pd.DataFrame) -> HistGradientBoostingClassifi
     # Encode shot types
     shot_type_dummies = pd.get_dummies(training_data["shot_type"], prefix="shot")
 
-    # Prepare features (includes rebound, rush, and period detection)
+    # Prepare features (includes rebound, rush, period detection, and V7.0 enhancements)
     feature_cols = [
         "distance", "angle",
         "is_even_strength", "is_power_play", "is_offensive_zone",
-        "is_rebound", "is_rush_shot", "is_third_period"
+        "is_rebound", "is_rush_shot", "is_third_period",
+        # V7.0 enhanced features
+        "is_deflection", "is_screened", "is_one_timer"
     ]
     X = pd.concat([training_data[feature_cols], shot_type_dummies], axis=1)
     y = training_data["is_goal"]
