@@ -182,7 +182,7 @@ def build_goalie_database(seasons: List[str] = ["20212022", "20222023", "2023202
     LOGGER.info(f"=" * 80)
     LOGGER.info(f"Games processed: {games_processed}/{total_games}")
     LOGGER.info(f"Goalie performances: {goalies_processed}")
-    LOGGER.info(f"Unique goalies: {len(tracker.goalies)}")
+    LOGGER.info(f"Unique goalies: {len(tracker.goalie_games)}")
 
     # Display top goalies by games played
     LOGGER.info(f"\nTop 10 Goalies by Games Played:")
@@ -190,7 +190,7 @@ def build_goalie_database(seasons: List[str] = ["20212022", "20222023", "2023202
     LOGGER.info("-" * 80)
 
     goalie_summaries = []
-    for goalie_id, games in tracker.goalies.items():
+    for goalie_id, games in tracker.goalie_games.items():
         total_saves = sum(g['saves'] for g in games)
         total_shots = sum(g['shots_against'] for g in games)
         total_goals = sum(g['goals_against'] for g in games)
