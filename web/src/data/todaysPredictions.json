@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2025-12-03T11:25:10.436265+00:00",
+  "generatedAt": "2025-12-03T23:11:26.536395+00:00",
   "games": [
     {
       "id": "2025020421",
@@ -14,12 +14,12 @@
         "name": "Stars",
         "abbrev": "DAL"
       },
-      "homeWinProb": 0.4699,
-      "awayWinProb": 0.5301,
-      "confidenceScore": 0.06,
+      "homeWinProb": 0.4691,
+      "awayWinProb": 0.5309,
+      "confidenceScore": 0.062,
       "confidenceGrade": "C+",
-      "edge": -0.03,
-      "summary": "Stars project at 53% as the road lean \u2014 a C+-tier edge worth 3.0 pts over a coin flip.",
+      "edge": -0.031,
+      "summary": "Stars project at 53% as the road lean \u2014 a C+-tier edge worth 3.1 pts over a coin flip.",
       "modelFavorite": "away",
       "venue": "Prudential Center",
       "season": "20252026"
@@ -37,9 +37,9 @@
         "name": "Jets",
         "abbrev": "WPG"
       },
-      "homeWinProb": 0.4861,
-      "awayWinProb": 0.5139,
-      "confidenceScore": 0.028,
+      "homeWinProb": 0.4863,
+      "awayWinProb": 0.5137,
+      "confidenceScore": 0.027,
       "confidenceGrade": "C",
       "edge": -0.014,
       "summary": "Jets project at 51% as the road lean \u2014 a C-tier edge worth 1.4 pts over a coin flip.",
@@ -60,12 +60,12 @@
         "name": "Sabres",
         "abbrev": "BUF"
       },
-      "homeWinProb": 0.459,
-      "awayWinProb": 0.541,
-      "confidenceScore": 0.082,
-      "confidenceGrade": "B-",
-      "edge": -0.041,
-      "summary": "Sabres project at 54% as the road lean \u2014 a B--tier edge worth 4.1 pts over a coin flip.",
+      "homeWinProb": 0.461,
+      "awayWinProb": 0.539,
+      "confidenceScore": 0.078,
+      "confidenceGrade": "C+",
+      "edge": -0.039,
+      "summary": "Sabres project at 54% as the road lean \u2014 a C+-tier edge worth 3.9 pts over a coin flip.",
       "modelFavorite": "away",
       "venue": "Xfinity Mobile Arena",
       "season": "20252026"
@@ -83,8 +83,8 @@
         "name": "Mammoth",
         "abbrev": "UTA"
       },
-      "homeWinProb": 0.4241,
-      "awayWinProb": 0.5759,
+      "homeWinProb": 0.424,
+      "awayWinProb": 0.576,
       "confidenceScore": 0.152,
       "confidenceGrade": "B",
       "edge": -0.076,
@@ -106,9 +106,9 @@
         "name": "Capitals",
         "abbrev": "WSH"
       },
-      "homeWinProb": 0.4571,
-      "awayWinProb": 0.5429,
-      "confidenceScore": 0.086,
+      "homeWinProb": 0.4574,
+      "awayWinProb": 0.5426,
+      "confidenceScore": 0.085,
       "confidenceGrade": "B-",
       "edge": -0.043,
       "summary": "Capitals project at 54% as the road lean \u2014 a B--tier edge worth 4.3 pts over a coin flip.",
