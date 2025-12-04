@@ -1,10 +1,11 @@
 # 🏒 Puckcast NHL Prediction Model - Complete Documentation
 
-> **Last Updated**: December 4, 2024
+> **Last Updated**: December 4, 2024 17:30 UTC
 > **Current Model**: V7.3 Situational Features
-> **Production Accuracy**: 61.38% on 2023-24 test set
+> **Production Accuracy**: 61.38% on 2023-24 test set (1,230 games)
+> **Features**: 220 total (213 baseline + 7 situational)
 > **Branch**: `claude/v7-beta-01111xrERXjGtBfF6RaMBsNr`
-> **Status**: ✅ Production Ready
+> **Status**: ✅ Production Ready - Deployed to puckcast.ai
 
 ---
 
@@ -17,7 +18,7 @@
 | **Target Accuracy** | 62.00% | ⚠️ Not Reached |
 | **Gap** | 0.62pp (8 predictions) | ⚠️ Feature Ceiling |
 | **Model Type** | Logistic Regression + Isotonic Calibration | ✅ Production Ready |
-| **Features** | 216 (209 baseline + 7 situational) | ✅ Optimized |
+| **Features** | 220 (213 baseline + 7 situational) | ✅ Optimized |
 
 ---
 

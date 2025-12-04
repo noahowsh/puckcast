@@ -1,18 +1,29 @@
 #!/usr/bin/env python3
 """
-V7.3: Situational Context Features
+V7.3: Situational Context Features - Production Training Script
 
-V7.0 (209 features) + 5 new situational features = 214 total features
+Last Updated: December 4, 2024
+Status: PRODUCTION - Active training script for V7.3 model
+Model Accuracy: 61.38% on 2023-24 holdout (1,230 games)
 
-NEW FEATURES:
-1. Fatigue Index - Weighted games in last 7 days
-2. Third Period Trailing Performance - Win% in close games (clutch proxy)
-3. Travel Distance - Miles traveled since last game
-4. Divisional Matchup - Same division flag
-5. Post-Break Performance - First game after 4+ days rest
+FEATURES: 220 total (213 baseline + 7 situational)
+- 209 original baseline features from V7.0
+- 4 additional baseline features from pipeline
+- 7 NEW situational features:
+  1. fatigue_index_diff - Weighted games played in last 7 days
+  2. third_period_trailing_perf_diff - Win% when trailing in 3rd period
+  3. travel_distance_diff - Miles traveled since last game
+  4. divisional_matchup - Same division indicator (0/1)
+  5. post_break_game_home - First game after 4+ days rest (home)
+  6. post_break_game_away - First game after 4+ days rest (away)
+  7. post_break_game_diff - Post-break differential
 
-Expected improvement: +0.40 to +0.70pp (conservative: +0.20 to +0.35pp)
-Target: Close gap from 60.89% → 62%+
+RESULTS:
+- V7.0 Baseline: 60.89% (209 features)
+- V7.3 Production: 61.38% (220 features)
+- Improvement: +0.49pp (+6 predictions per 1,230 games)
+
+This script trains the production model used at puckcast.ai
 """
 
 import sys
