@@ -1,7 +1,7 @@
 # 🏒 Puckcast - NHL Game Prediction System
 
 **Version:** 6.2  
-**Model:** Logistic Regression (isotonic-calibrated) on 206 engineered features  
+**Model:** Logistic Regression (isotonic-calibrated) on 204 engineered features  
 **Training Window:** 3 most recent seasons (auto-advances; currently 2023–2026)  
 **Current holdout (from `web/src/data/modelInsights.json`):** 59.3% accuracy vs 53.7% baseline, log loss 0.676, Brier 0.240  
 **Status:** Active Development
@@ -74,7 +74,7 @@ puckcast/
 
 ## 🎯 Model + Features (current)
 
-- **Features:** 206 engineered features (differentials and dummies) built from MoneyPuck team-game logs:
+- **Features:** 204 engineered features (differentials and dummies) built from MoneyPuck team-game logs:
   - Rest/travel: rest buckets, b2b flags, games in last 3/6 days, travel burden, altitude.
   - Performance windows: rolling win%, goal diff, shots/corsi/fenwick, xG, special teams proxies.
   - Goalie form: rolling save%, GSAX, shots faced, start likelihood, rest days.
