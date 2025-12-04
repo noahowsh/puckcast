@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2025-12-03T23:12:33.727099+00:00",
+  "updatedAt": "2025-12-04T13:29:03.490714+00:00",
   "notes": "Goalie performance metrics calculated from NHL Stats API data. GSAx estimates based on save percentage above league average.",
   "goalies": [
     {
@@ -126,7 +126,7 @@
       "watchouts": [
         "Limited recent data"
       ],
-      "nextOpponent": "NJD"
+      "nextOpponent": "SJS"
     },
     {
       "name": "Scott Wedgewood",
@@ -180,7 +180,7 @@
       "watchouts": [
         "Inconsistent results"
       ],
-      "nextOpponent": "SJS"
+      "nextOpponent": "ANA"
     },
     {
       "name": "Andrei Vasilevskiy",
@@ -249,7 +249,7 @@
       "watchouts": [
         "Inconsistent results"
       ],
-      "nextOpponent": "MTL"
+      "nextOpponent": "BUF"
     },
     {
       "name": "Sergei Murashov",
@@ -317,7 +317,7 @@
       "watchouts": [
         "Inconsistent results"
       ],
-      "nextOpponent": "DAL"
+      "nextOpponent": "VGK"
     },
     {
       "name": "Tristan Jarry",
@@ -335,23 +335,6 @@
         "Limited recent data"
       ],
       "nextOpponent": "TBL"
-    },
-    {
-      "name": "Yaroslav Askarov",
-      "team": "SJS",
-      "rollingGsa": 0.7,
-      "seasonGsa": 4.2,
-      "restDays": 2,
-      "startLikelihood": 0.8,
-      "trend": "stable",
-      "note": "Yaroslav Askarov showing promise with limited sample size \u2014 monitor progression closely.",
-      "strengths": [
-        "Proven winner"
-      ],
-      "watchouts": [
-        "Inconsistent results"
-      ],
-      "nextOpponent": "WSH"
     },
     {
       "name": "Jeremy Swayman",
@@ -422,6 +405,23 @@
       "nextOpponent": "NSH"
     },
     {
+      "name": "Jake Oettinger",
+      "team": "DAL",
+      "rollingGsa": 0.5,
+      "seasonGsa": 2.9,
+      "restDays": 2,
+      "startLikelihood": 0.8,
+      "trend": "stable",
+      "note": "Jake Oettinger showing promise with limited sample size \u2014 monitor progression closely.",
+      "strengths": [
+        "Proven winner"
+      ],
+      "watchouts": [
+        "Limited recent data"
+      ],
+      "nextOpponent": "SJS"
+    },
+    {
       "name": "Dan Vladar",
       "team": "PHI",
       "rollingGsa": 0.5,
@@ -436,7 +436,7 @@
       "watchouts": [
         "Inconsistent results"
       ],
-      "nextOpponent": "BUF"
+      "nextOpponent": "COL"
     },
     {
       "name": "Filip Gustavsson",
@@ -473,6 +473,24 @@
       "nextOpponent": "COL"
     },
     {
+      "name": "Yaroslav Askarov",
+      "team": "SJS",
+      "rollingGsa": 0.3,
+      "seasonGsa": 2.1,
+      "restDays": 2,
+      "startLikelihood": 0.8,
+      "trend": "stable",
+      "note": "Yaroslav Askarov showing promise with limited sample size \u2014 monitor progression closely.",
+      "strengths": [
+        "Proven winner"
+      ],
+      "watchouts": [
+        "High goals against",
+        "Inconsistent results"
+      ],
+      "nextOpponent": "DAL"
+    },
+    {
       "name": "Lukas Dostal",
       "team": "ANA",
       "rollingGsa": 0.3,
@@ -487,7 +505,7 @@
       "watchouts": [
         "Inconsistent results"
       ],
-      "nextOpponent": "UTA"
+      "nextOpponent": "WSH"
     },
     {
       "name": "Thatcher Demko",
@@ -505,23 +523,6 @@
         "Limited recent data"
       ],
       "nextOpponent": "UTA"
-    },
-    {
-      "name": "Joey Daccord",
-      "team": "SEA",
-      "rollingGsa": 0.2,
-      "seasonGsa": 0.8,
-      "restDays": 2,
-      "startLikelihood": 0.8,
-      "trend": "stable",
-      "note": "Joey Daccord showing promise with limited sample size \u2014 monitor progression closely.",
-      "strengths": [
-        "Solid fundamentals"
-      ],
-      "watchouts": [
-        "Inconsistent results"
-      ],
-      "nextOpponent": "EDM"
     }
   ]
 }
