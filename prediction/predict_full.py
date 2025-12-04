@@ -29,11 +29,12 @@ import pandas as pd
 import numpy as np
 
 # Add src to path
-sys.path.insert(0, str(Path(__file__).parent / 'src'))
+sys.path.insert(0, str(Path(__file__).parent.parent / 'src'))
 
 from nhl_prediction.nhl_api import fetch_future_games, fetch_todays_games, fetch_schedule
 from nhl_prediction.pipeline import build_dataset
 from nhl_prediction.model import calibrate_threshold, create_baseline_model, fit_model, tune_logreg_c
+from nhl_prediction.situational_features import add_situational_features
 # from nhl_prediction.player_hub.context import refresh_player_hub_context  # Module not implemented yet
 
 # Suppress sklearn warnings

@@ -24,7 +24,7 @@ import pandas as pd
 import numpy as np
 from sklearn.metrics import accuracy_score, roc_auc_score, log_loss
 
-sys.path.insert(0, str(Path(__file__).parent / 'src'))
+sys.path.insert(0, str(Path(__file__).parent.parent / 'src'))
 
 from nhl_prediction.pipeline import build_dataset
 from nhl_prediction.model import create_baseline_model, fit_model, predict_probabilities
