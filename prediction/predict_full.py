@@ -330,10 +330,22 @@ def predict_games(date=None, num_games=20):
     print(f"   (Loading {len(seasons)} season(s): {', '.join(seasons)})")
 
     dataset = build_dataset(seasons)
-    
+
     print(f"   ✅ {len(dataset.games)} games loaded")
-    print(f"   ✅ {dataset.features.shape[1]} features engineered")
-    
+    print(f"   ✅ {dataset.features.shape[1]} baseline features engineered")
+
+    # Add V7.3 situational features
+    games_with_situational = add_situational_features(dataset.games)
+    v7_3_features = ['fatigue_index_diff', 'third_period_trailing_perf_diff',
+                     'travel_distance_diff', 'divisional_matchup',
+                     'post_break_game_home', 'post_break_game_away', 'post_break_game_diff']
+    available_v7_3 = [f for f in v7_3_features if f in games_with_situational.columns]
+
+    # Combine baseline + situational features
+    features_v7_3 = pd.concat([dataset.features, games_with_situational[available_v7_3]], axis=1)
+    print(f"   ✅ {len(available_v7_3)} V7.3 situational features added")
+    print(f"   ✅ Total: {features_v7_3.shape[1]} features (V7.3 Production Model)")
+
     # Step 3: Train calibrated model using only past games
     print("\n3️⃣  Training calibrated logistic regression model...")
     predict_date = target_dt
@@ -346,7 +358,7 @@ def predict_games(date=None, num_games=20):
         return []
     
     eligible_games = dataset.games.loc[eligible_mask].copy()
-    eligible_features = dataset.features.loc[eligible_mask].copy()
+    eligible_features = features_v7_3.loc[eligible_mask].copy()
     eligible_target = dataset.target.loc[eligible_mask].copy()
     train_seasons = sorted(eligible_games["seasonId"].unique().tolist())
     
@@ -404,9 +416,9 @@ def predict_games(date=None, num_games=20):
         # Get feature vectors
         home_idx = home_recent.index[0]
         away_idx = away_recent.index[0]
-        
-        home_features = dataset.features.loc[home_idx]
-        away_features = dataset.features.loc[away_idx]
+
+        home_features = features_v7_3.loc[home_idx]
+        away_features = features_v7_3.loc[away_idx]
         
         # Create matchup features (average of recent performance)
         matchup_features = (home_features + away_features) / 2
