@@ -71,6 +71,7 @@ data/*.pkl
 predictions_*.csv
 devserver.log
 temp_outputs/
+prediction/web/
 
 # Debug and test scripts (but allow tests/ directory)
 test_*.py
