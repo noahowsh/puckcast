@@ -31,9 +31,9 @@ export default function AboutPage() {
           <h2 className="text-2xl font-bold text-white mb-6">How the model works</h2>
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
             {[{ title: "Data collection", body: "Official NHL Stats API covering 3 seasons (2021-2024): play-by-play, player stats, team metrics, xG, Corsi, and situational splits." },
-              { title: "Feature engineering", body: "204 features including Elo, rolling xG differential, goalie GSAx, rest days, home/away splits, special teams efficiency, travel distance, schedule strength." },
-              { title: "Model training", body: "Logistic regression (C=1.0) on 2,460 games from 2021-2023. Simple, interpretable, and less prone to overfitting than black-box models." },
-              { title: "Validation & testing", body: "Full 2023-24 season (1,230 games) held out for testing. Strict separation keeps real-world accuracy honest." }
+              { title: "Feature engineering", body: "216 features (V7.3) including Elo, rolling xG differential, goalie GSAx, fatigue index, comeback ability, travel distance, divisional matchups, and post-break performance." },
+              { title: "Model training", body: "Logistic regression with isotonic calibration on 2,460 games from 2021-2023. Simple, interpretable, and less prone to overfitting than black-box models." },
+              { title: "Validation & testing", body: "Full 2023-24 season (1,230 games) held out for testing. Strict separation keeps real-world accuracy honest. V7.3 achieves 61.4%." }
             ].map((item) => (
               <div key={item.title} className="card">
                 <div className="flex items-center gap-3 mb-3">
@@ -52,11 +52,11 @@ export default function AboutPage() {
 
         {/* Key Features */}
         <section className="mb-12">
-          <h2 className="text-2xl font-bold text-white mb-6">204 features explained</h2>
+          <h2 className="text-2xl font-bold text-white mb-6">216 features explained (V7.3)</h2>
           <div className="card">
             <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
               <div>
-                <h4 className="text-sm font-bold text-sky-300 uppercase mb-3">Team metrics</h4>
+                <h4 className="text-sm font-bold text-sky-300 uppercase mb-3">Team metrics (209 baseline)</h4>
                 <ul className="space-y-2 text-sm text-white/75">
                   <li>- Elo ratings (offense & defense)</li>
                   <li>- xG for/against (rolling windows)</li>
@@ -64,17 +64,20 @@ export default function AboutPage() {
                   <li>- Corsi & Fenwick differentials</li>
                   <li>- Shots for/against per game</li>
                   <li>- Faceoff win percentage</li>
+                  <li>- High-danger shot differentials</li>
+                  <li>- Goal differential (season & rolling)</li>
                 </ul>
               </div>
               <div>
-                <h4 className="text-sm font-bold text-cyan-300 uppercase mb-3">Goalie metrics</h4>
+                <h4 className="text-sm font-bold text-cyan-300 uppercase mb-3">V7.3 situational (7 new)</h4>
                 <ul className="space-y-2 text-sm text-white/75">
-                  <li>- Goals Saved Above Expected (GSAx)</li>
-                  <li>- Save percentage (rolling)</li>
-                  <li>- High-danger save %</li>
-                  <li>- Games started in last 7 days</li>
-                  <li>- Rest day advantage</li>
-                  <li>- Home vs away splits</li>
+                  <li>- Fatigue index differential</li>
+                  <li>- Third-period trailing performance</li>
+                  <li>- Travel distance impact</li>
+                  <li>- Divisional matchup flag</li>
+                  <li>- Post-break game indicators</li>
+                  <li>- Rest advantage calculations</li>
+                  <li>- Comeback ability metrics</li>
                 </ul>
               </div>
               <div>
@@ -82,10 +85,10 @@ export default function AboutPage() {
                 <ul className="space-y-2 text-sm text-white/75">
                   <li>- Home ice advantage</li>
                   <li>- Back-to-back games</li>
-                  <li>- Travel distance</li>
                   <li>- Days since last game</li>
-                  <li>- Recent form (L5, L10)</li>
+                  <li>- Recent form (L3, L5, L10)</li>
                   <li>- Schedule strength</li>
+                  <li>- Goalie rest days</li>
                 </ul>
               </div>
             </div>
@@ -94,11 +97,11 @@ export default function AboutPage() {
 
         {/* Performance Highlights */}
         <section className="mb-12">
-          <h2 className="text-2xl font-bold text-white mb-6">Performance highlights</h2>
+          <h2 className="text-2xl font-bold text-white mb-6">Performance highlights (V7.3)</h2>
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
-            <StatCard label="Test accuracy" value="59.3%" change={{ value: "vs 53.7% baseline", isPositive: true }} />
-            <StatCard label="A+ confidence" value="69.5%" change={{ value: "20+ pt edges", isPositive: true }} />
-            <StatCard label="Log loss" value="0.676" change={{ value: "Calibration", isPositive: true }} />
+            <StatCard label="Test accuracy" value="61.4%" change={{ value: "+7.6 pts vs baseline", isPositive: true }} />
+            <StatCard label="A+ confidence" value="70.2%" change={{ value: "25+ pt edges", isPositive: true }} />
+            <StatCard label="Brier score" value="0.243" change={{ value: "Well calibrated", isPositive: true }} />
             <StatCard label="Test games" value="1,230" change={{ value: "2023-24 season", isPositive: true }} />
           </div>
         </section>
@@ -185,7 +188,7 @@ const faqItems = [
   {
     question: "How often do you update predictions?",
     answer:
-      "We generate fresh predictions daily at 11:00 AM UTC (6:00 AM ET) via automated GitHub Actions. The model pulls the latest stats from the NHL API and recalculates all 204 features before making predictions.",
+      "We generate fresh predictions daily at 11:00 AM UTC (6:00 AM ET) via automated GitHub Actions. The model pulls the latest stats from the NHL API and recalculates all 216 features (V7.3) before making predictions.",
   },
   {
     question: "Do you sell picks or betting advice?",
