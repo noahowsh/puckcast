@@ -76,13 +76,15 @@ export type DayOfInfo = {
 export type StartingGoaliesPayload = {
   generatedAt: string;
   date: string;
-  teams: Record<string, StartingGoalieInfo>;
+  teams?: Record<string, StartingGoalieInfo>;
   games: Array<{
     gameId: string;
     homeTeam?: string | null;
     awayTeam?: string | null;
-    homeGoalie?: StartingGoalieInfo | null;
-    awayGoalie?: StartingGoalieInfo | null;
+    homeGoalie?: string | StartingGoalieInfo | null;
+    awayGoalie?: string | StartingGoalieInfo | null;
+    source?: string;
+    confidence?: number;
   }>;
 };
 
