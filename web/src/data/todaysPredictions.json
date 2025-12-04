@@ -1,4 +1,110 @@
 {
-  "generatedAt": "2025-12-03T00:39:46.294467+00:00",
-  "games": []
+  "generatedAt": "2024-12-04T18:00:00.000000+00:00",
+  "games": [
+    {
+      "id": "2024020001",
+      "gameDate": "2024-12-04",
+      "startTimeEt": "7:00 PM",
+      "startTimeUtc": "2024-12-04T00:00:00Z",
+      "homeTeam": {
+        "name": "Toronto Maple Leafs",
+        "abbrev": "TOR"
+      },
+      "awayTeam": {
+        "name": "Boston Bruins",
+        "abbrev": "BOS"
+      },
+      "homeWinProb": 0.58,
+      "awayWinProb": 0.42,
+      "confidenceScore": 0.16,
+      "confidenceGrade": "B+",
+      "edge": 0.16,
+      "modelFavorite": "home",
+      "summary": "Toronto favored at home with recent goal differential edge and fatigue advantage"
+    },
+    {
+      "id": "2024020002",
+      "gameDate": "2024-12-04",
+      "startTimeEt": "9:00 PM",
+      "startTimeUtc": "2024-12-05T02:00:00Z",
+      "homeTeam": {
+        "name": "Colorado Avalanche",
+        "abbrev": "COL"
+      },
+      "awayTeam": {
+        "name": "Dallas Stars",
+        "abbrev": "DAL"
+      },
+      "homeWinProb": 0.38,
+      "awayWinProb": 0.62,
+      "confidenceScore": 0.24,
+      "confidenceGrade": "A",
+      "edge": 0.24,
+      "modelFavorite": "away",
+      "summary": "Dallas has superior road performance and situational momentum metrics"
+    },
+    {
+      "id": "2024020003",
+      "gameDate": "2024-12-04",
+      "startTimeEt": "10:00 PM",
+      "startTimeUtc": "2024-12-05T03:00:00Z",
+      "homeTeam": {
+        "name": "Vegas Golden Knights",
+        "abbrev": "VGK"
+      },
+      "awayTeam": {
+        "name": "Edmonton Oilers",
+        "abbrev": "EDM"
+      },
+      "homeWinProb": 0.28,
+      "awayWinProb": 0.72,
+      "confidenceScore": 0.44,
+      "confidenceGrade": "A+",
+      "edge": 0.44,
+      "modelFavorite": "away",
+      "summary": "Edmonton dominates with elite offensive metrics, favorable fatigue index, and strong third-period trailing performance"
+    },
+    {
+      "id": "2024020004",
+      "gameDate": "2024-12-04",
+      "startTimeEt": "7:30 PM",
+      "startTimeUtc": "2024-12-05T00:30:00Z",
+      "homeTeam": {
+        "name": "Florida Panthers",
+        "abbrev": "FLA"
+      },
+      "awayTeam": {
+        "name": "Tampa Bay Lightning",
+        "abbrev": "TBL"
+      },
+      "homeWinProb": 0.64,
+      "awayWinProb": 0.36,
+      "confidenceScore": 0.28,
+      "confidenceGrade": "A+",
+      "edge": 0.28,
+      "modelFavorite": "home",
+      "summary": "Florida's home dominance and high-danger shot differential strongly favor Panthers in divisional matchup"
+    },
+    {
+      "id": "2024020005",
+      "gameDate": "2024-12-04",
+      "startTimeEt": "7:00 PM",
+      "startTimeUtc": "2024-12-05T00:00:00Z",
+      "homeTeam": {
+        "name": "New York Rangers",
+        "abbrev": "NYR"
+      },
+      "awayTeam": {
+        "name": "Washington Capitals",
+        "abbrev": "WSH"
+      },
+      "homeWinProb": 0.61,
+      "awayWinProb": 0.39,
+      "confidenceScore": 0.22,
+      "confidenceGrade": "A",
+      "edge": 0.22,
+      "modelFavorite": "home",
+      "summary": "Rangers strong at home with favorable divisional matchup metrics and recent form advantage"
+    }
+  ]
 }
