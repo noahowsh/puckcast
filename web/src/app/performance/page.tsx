@@ -102,7 +102,10 @@ export default function PerformancePage() {
               .reverse()
               .map((bucket) => (
                 <div key={bucket.label} className="stat-card">
-                  <p className="stat-label">{bucket.label}</p>
+                  <div className="flex items-center justify-between mb-2">
+                    <p className="stat-label">{bucket.label}</p>
+                    <span className="px-2 py-1 text-xs font-bold rounded bg-white/10 text-white">{bucket.grade}</span>
+                  </div>
                   <p className="stat-value text-3xl">{pct(bucket.accuracy)}</p>
                   <p className="text-sm text-white/60">{bucket.count.toLocaleString()} games</p>
                   <div className="edge-meter edge-meter--thick mt-4">

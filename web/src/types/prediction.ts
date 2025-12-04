@@ -3,7 +3,7 @@ export type TeamInfo = {
   abbrev: string;
 };
 
-export type ConfidenceGrade = "A+" | "A" | "A-" | "B+" | "B" | "B-" | "C+" | "C";
+export type ConfidenceGrade = "A+" | "A" | "B+" | "B" | "C+" | "C";
 
 export type Prediction = {
   id: string;
