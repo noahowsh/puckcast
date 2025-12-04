@@ -34,7 +34,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Puckcast | NHL Predictions + Analytics",
     description:
-      "60%+ accurate NHL predictions using 204 engineered features from official NHL data. Win probabilities and betting insights for every matchup.",
+      "60%+ accurate NHL predictions using 216 engineered features from official NHL data. Win probabilities and betting insights for every matchup.",
     type: "website",
     url: "https://puckcast.ai",
     images: [

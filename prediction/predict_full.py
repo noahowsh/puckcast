@@ -6,7 +6,7 @@
 ╚═══════════════════════════════════════════════════════════╝
 
 FULL MODEL NHL PREDICTIONS
-Predict today's games using 206 advanced features
+Predict today's games using V7.3 (220 features: 213 baseline + 7 situational)
 
 Usage:
     python predict_full.py
