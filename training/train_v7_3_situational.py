@@ -2,26 +2,24 @@
 """
 V7.3: Situational Context Features - Production Training Script
 
-Last Updated: December 4, 2024
+Last Updated: December 5, 2025
 Status: PRODUCTION - Active training script for V7.3 model
-Model Accuracy: 61.38% on 2023-24 holdout (1,230 games)
+Model Accuracy: 60.49% on 2023-24 holdout (1,230 games) - VERIFIED
 
-FEATURES: 220 total (213 baseline + 7 situational)
+FEATURES: 222 total (209 baseline + 13 situational)
 - 209 original baseline features from V7.0
-- 4 additional baseline features from pipeline
-- 7 NEW situational features:
-  1. fatigue_index_diff - Weighted games played in last 7 days
-  2. third_period_trailing_perf_diff - Win% when trailing in 3rd period
-  3. travel_distance_diff - Miles traveled since last game
-  4. divisional_matchup - Same division indicator (0/1)
-  5. post_break_game_home - First game after 4+ days rest (home)
-  6. post_break_game_away - First game after 4+ days rest (away)
-  7. post_break_game_diff - Post-break differential
+- 13 situational features:
+  1-3. fatigue_index_home/away/diff - Weighted games in last 7 days
+  4-6. third_period_trailing_perf_home/away/diff - Win% when trailing in 3rd
+  7-9. travel_distance_home/away/diff - Miles traveled since last game
+  10-11. travel_burden_home/away - Combined travel impact
+  12. divisional_matchup - Same division indicator (0/1)
+  13-15. post_break_game_home/away/diff - First game after 4+ days rest
 
-RESULTS:
-- V7.0 Baseline: 60.89% (209 features)
-- V7.3 Production: 61.38% (220 features)
-- Improvement: +0.49pp (+6 predictions per 1,230 games)
+VERIFIED RESULTS (December 5, 2025):
+- V7.0 Baseline: 60.24% (209 features)
+- V7.3 Production: 60.49% (222 features)
+- Improvement: +0.25pp over V7.0 baseline
 
 This script trains the production model used at puckcast.ai
 """
@@ -89,11 +87,11 @@ def main():
     print("="*80)
     print(f"Started: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
     print()
-    print("BASELINE: V7.0 Logistic Regression")
+    print("BASELINE: V7.0 Logistic Regression (Verified)")
     print("  Features:  209")
-    print("  Accuracy:  60.89%")
-    print("  Log Loss:  0.6752")
-    print("  A+ Bucket: 69.5% (436 games)")
+    print("  Accuracy:  60.24%")
+    print("  Log Loss:  0.6682")
+    print("  A+ Bucket: 71.8% (234 games)")
     print()
     print("V7.3 ADDITIONS: 5 Situational Context Features")
     print("  1. Fatigue Index (games in last 7 days)")
@@ -206,11 +204,11 @@ def main():
     print(f"  ROC-AUC:   {test_auc:.4f}")
     print(f"  Log Loss:  {test_logloss:.4f}")
 
-    # Compare to V7.0
-    v7_0_acc = 0.6089
-    v7_0_logloss = 0.6752
-    v7_0_a_plus_acc = 0.695
-    v7_0_a_plus_games = 436
+    # Compare to V7.0 (Verified Dec 5, 2025)
+    v7_0_acc = 0.6024
+    v7_0_logloss = 0.6682
+    v7_0_a_plus_acc = 0.718
+    v7_0_a_plus_games = 234
 
     improvement_acc = (test_acc - v7_0_acc) * 100
     improvement_logloss = v7_0_logloss - test_logloss

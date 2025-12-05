@@ -1,8 +1,8 @@
 # 📚 Puckcast Documentation Index
 
-> **Last Updated**: December 4, 2024  
-> **Branch**: `claude/v7-beta-01111xrERXjGtBfF6RaMBsNr`  
-> **Production Model**: V7.3 Situational Features (61.38%)
+> **Last Updated**: December 5, 2025
+> **Branch**: `claude/general-session-01DHkFDbjDoSMauSZKsxY6vx`
+> **Production Model**: V7.3 Situational Features (60.49% - Verified)
 
 ---
 
@@ -43,7 +43,7 @@ docs/
 
 Complete production model guide with features, metrics, training instructions.
 
-**Key Metrics**: 61.38% accuracy, 216 features, ROC-AUC 0.6432
+**Key Metrics**: 60.49% accuracy, 222 features, ROC-AUC 0.6402 (Verified Dec 5, 2025)
 
 ---
 
@@ -118,7 +118,7 @@ Historical docs from earlier development stages in `archive/` directory.
 |---------|----------|------|--------|---------------|
 | V7.0 | 60.89% | Dec 2 | Superseded | Baseline |
 | V7.1 | 58.62% | Dec 3 | Failed | [GOALIE_TRACKING.md](experiments/GOALIE_TRACKING.md) |
-| **V7.3** | **61.38%** | **Dec 3** | **✅ PRODUCTION** | **[V7.3_PRODUCTION_MODEL.md](current/V7.3_PRODUCTION_MODEL.md)** |
+| **V7.3** | **60.49%** | **Dec 3** | **✅ PRODUCTION** | **[V7.3_PRODUCTION_MODEL.md](current/V7.3_PRODUCTION_MODEL.md)** |
 | V7.4 | 60.00% | Dec 4 | Failed | [V7.4_HEAD_TO_HEAD.md](experiments/V7.4_HEAD_TO_HEAD.md) |
 | V7.5 | 60.08% | Dec 4 | Failed | [V7.5_INTERACTIONS.md](experiments/V7.5_INTERACTIONS.md) |
 | V7.6 | 60.73% | Dec 4 | Failed | [V7.6_TEAM_CALIBRATION.md](experiments/V7.6_TEAM_CALIBRATION.md) |

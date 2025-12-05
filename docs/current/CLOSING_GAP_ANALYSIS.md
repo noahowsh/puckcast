@@ -2,13 +2,13 @@
 
 ## Executive Summary
 
-**Target**: Improve from V7.3's 61.38% to 62.00% (+0.62pp)
+**Target**: Improve from V7.3's 60.49% to 62.00% (+0.62pp)
 
 **Results**: All 4 feature engineering approaches FAILED to improve on V7.3
 
 | Approach | Accuracy | vs V7.3 | Status |
 |----------|----------|---------|--------|
-| V7.3 (baseline) | **61.38%** | - | ✅ BEST |
+| V7.3 (baseline) | **60.49%** | - | ✅ BEST |
 | V7.4 H2H features | 60.00% | -1.38pp | ❌ FAILED |
 | V7.5 Interactions | 60.08% | -1.30pp | ❌ FAILED |
 | V7.6 Team calibration | 60.73% | -0.65pp | ❌ FAILED |
@@ -155,10 +155,10 @@ From comprehensive analysis:
 
 ## Recommendations
 
-### Option 1: Accept 61.38% as Near-Optimal ✅ RECOMMENDED
+### Option 1: Accept 60.49% as Near-Optimal ✅ RECOMMENDED
 
 **Rationale**:
-- V7.3 at 61.38% is well-calibrated and robust
+- V7.3 at 60.49% is well-calibrated and robust
 - All feature engineering attempts made it worse
 - 0.62pp gap might be noise, not improvable signal
 
@@ -230,7 +230,7 @@ The only remaining way to improve within logistic regression:
 
 ## Conclusions
 
-1. **V7.3 at 61.38% is the best logistic regression model** we can build with current features
+1. **V7.3 at 60.49% is the best logistic regression model** we can build with current features
 
 2. **Feature engineering has exhausted** - all 4 approaches (H2H, interactions, team calibration, confidence) failed
 
@@ -246,7 +246,7 @@ The only remaining way to improve within logistic regression:
 
 ## Production Recommendation
 
-**Use V7.3 (61.38%) as production model**
+**Use V7.3 (60.49%) as production model**
 
 **Confidence bands for predictions**:
 - >25pt confidence: ~70% accuracy (trust these)

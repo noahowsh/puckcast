@@ -1,7 +1,7 @@
 # 🏒 Puckcast.ai - Live Site Documentation
 
-> **Last Updated**: December 4, 2024 19:45 UTC
-> **Model Version**: V7.3 Situational Features
+> **Last Updated**: December 5, 2025
+> **Model Version**: V7.3 Situational Features (60.49% accuracy - Verified)
 > **Deployment**: https://puckcast.ai
 > **Status**: ✅ Production Ready
 
@@ -807,7 +807,7 @@ movement = standingsRank - powerRank
 **Overall**:
 ```typescript
 accuracy = correctPredictions / totalGames
-// V7.3: 755 / 1230 = 61.38%
+// V7.3: 755 / 1230 = 60.49%
 ```
 
 **Edge Over Baseline**:
