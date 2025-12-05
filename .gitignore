@@ -79,3 +79,4 @@ test_*.py
 ablation_*.py
 !tests/test_*.py
 !tests/*_test.py
+catboost_info/
