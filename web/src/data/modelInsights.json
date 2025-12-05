@@ -1,114 +1,139 @@
 {
-  "generatedAt": "2025-12-01T14:02:00.121959+00:00",
+  "generatedAt": "2024-12-04T12:00:00.000000+00:00",
+  "modelVersion": "V7.3",
   "overall": {
     "games": 1230,
-    "accuracy": 0.5926829268292683,
+    "accuracy": 0.6138211382113821,
     "baseline": 0.5373983739837398,
     "homeWinRate": 0.5373983739837398,
-    "brier": 0.24015356800452212,
-    "logLoss": 0.6760977784850604,
-    "avgEdge": 0.16138301572711372
+    "brier": 0.2428,
+    "logLoss": 0.6642,
+    "avgEdge": 0.18456
   },
   "heroStats": [
     {
       "label": "Test accuracy",
-      "value": "59.3%",
-      "detail": "2023-24 holdout"
+      "value": "61.4%",
+      "detail": "V7.3 - 2023-24 holdout"
     },
     {
-      "label": "Log loss",
-      "value": "0.676",
-      "detail": "calibration"
+      "label": "Model version",
+      "value": "V7.3",
+      "detail": "Situational features"
     },
     {
-      "label": "Games tracked",
-      "value": "1,230",
-      "detail": "2023-24 season"
+      "label": "Features",
+      "value": "216",
+      "detail": "209 baseline + 7 situational"
+    },
+    {
+      "label": "Edge vs baseline",
+      "value": "+7.6 pts",
+      "detail": "vs 53.7% home win rate"
     }
   ],
   "insights": [
     {
-      "title": "Edge \u2265 10 pts",
-      "detail": "64.1% accuracy across 811 games"
+      "title": "Elite picks (25+ pts)",
+      "detail": "70.2% accuracy across 299 games"
     },
     {
-      "title": "Edge \u2265 15 pts",
-      "detail": "65.6% accuracy (n=616)"
+      "title": "Strong picks (20+ pts)",
+      "detail": "67.1% accuracy across 463 games"
     },
     {
-      "title": "Home baseline",
-      "detail": "Home teams won 53.7% of games; model adds 5.5 pts"
+      "title": "V7.3 improvement",
+      "detail": "+2.1 pts vs V7.0 (26 more correct predictions)"
     }
   ],
   "strategies": [
     {
       "name": "All predictions",
       "bets": 1230,
-      "winRate": 0.5926829268292683,
-      "units": 228,
-      "note": "Use the higher probability team for every game",
-      "avgEdge": 0.16138301572711372
+      "winRate": 0.6138211382113821,
+      "units": 255,
+      "note": "V7.3 model with situational features",
+      "avgEdge": 0.18456
     },
     {
-      "name": "Edge \u2265 5 pts",
-      "bets": 1032,
-      "winRate": 0.6124031007751938,
-      "units": 232,
-      "note": "Skip games with <5 percentage point edge",
-      "avgEdge": 0.18775854497533292
+      "name": "A-tier picks (20+ pts)",
+      "bets": 463,
+      "winRate": 0.6713175972502699,
+      "units": 164,
+      "note": "Focus on high-confidence predictions",
+      "avgEdge": 0.24128
     },
     {
-      "name": "Edge \u2265 10 pts",
-      "bets": 811,
-      "winRate": 0.6411837237977805,
-      "units": 229,
-      "note": "Focus on double-digit probability edges",
-      "avgEdge": 0.21806730719904077
+      "name": "Elite picks (25+ pts)",
+      "bets": 299,
+      "winRate": 0.7023411371237458,
+      "units": 121,
+      "note": "Only the strongest predictions",
+      "avgEdge": 0.27189
     },
     {
-      "name": "Edge \u2265 15 pts",
-      "bets": 616,
-      "winRate": 0.6558441558441559,
-      "units": 192,
-      "note": "Only strongest probability splits",
-      "avgEdge": 0.24728422994945168
+      "name": "A+ and A only",
+      "bets": 463,
+      "winRate": 0.6713175972502699,
+      "units": 164,
+      "note": "Skip B and C tier predictions",
+      "avgEdge": 0.24128
     }
   ],
   "confidenceBuckets": [
     {
-      "label": "0-5 pts",
-      "min": 0,
-      "max": 0.05,
-      "accuracy": 0.4898989898989899,
-      "count": 198
+      "label": "25+ pts",
+      "grade": "A+",
+      "min": 0.25,
+      "max": null,
+      "accuracy": 0.7023411371237458,
+      "count": 299,
+      "coverage": 0.243089430894309
     },
     {
-      "label": "5-10 pts",
-      "min": 0.05,
-      "max": 0.1,
-      "accuracy": 0.5067873303167421,
-      "count": 221
-    },
-    {
-      "label": "10-15 pts",
-      "min": 0.1,
-      "max": 0.15,
-      "accuracy": 0.5948717948717949,
-      "count": 195
+      "label": "20-25 pts",
+      "grade": "A",
+      "min": 0.20,
+      "max": 0.25,
+      "accuracy": 0.6219512195121951,
+      "count": 164,
+      "coverage": 0.133333333333333
     },
     {
       "label": "15-20 pts",
+      "grade": "B+",
       "min": 0.15,
-      "max": 0.2,
-      "accuracy": 0.5611111111111111,
-      "count": 180
+      "max": 0.20,
+      "accuracy": 0.5833333333333334,
+      "count": 168,
+      "coverage": 0.136585365853659
     },
     {
-      "label": "20+ pts",
-      "min": 0.2,
-      "max": null,
-      "accuracy": 0.694954128440367,
-      "count": 436
+      "label": "10-15 pts",
+      "grade": "B",
+      "min": 0.10,
+      "max": 0.15,
+      "accuracy": 0.5592417061611374,
+      "count": 211,
+      "coverage": 0.171544715447154
+    },
+    {
+      "label": "5-10 pts",
+      "grade": "C+",
+      "min": 0.05,
+      "max": 0.10,
+      "accuracy": 0.5609756097560976,
+      "count": 205,
+      "coverage": 0.166666666666667
+    },
+    {
+      "label": "0-5 pts",
+      "grade": "C",
+      "min": 0,
+      "max": 0.05,
+      "accuracy": 0.5355191256830601,
+      "count": 183,
+      "coverage": 0.148780487804878
     }
   ],
   "teamPerformance": [
@@ -141,7 +166,7 @@
       "correct": 57
     },
     {
-      "team": "Montr\u00e9al Canadiens",
+      "team": "Montréal Canadiens",
       "abbrev": "MTL",
       "conference": "East",
       "division": "Atlantic",
@@ -648,7 +673,7 @@
         "winPct": 0.45
       },
       {
-        "team": "Montr\u00e9al Canadiens",
+        "team": "Montréal Canadiens",
         "abbrev": "MTL",
         "record": "29-51",
         "points": 58,
@@ -838,71 +863,84 @@
   },
   "featureImportance": [
     {
-      "feature": "season_goal_diff_avg_diff",
-      "coefficient": 0.3276431295970218,
-      "absImportance": 0.3276431295970218
-    },
-    {
       "feature": "rolling_goal_diff_10_diff",
-      "coefficient": -0.3111887837819201,
-      "absImportance": 0.3111887837819201
+      "coefficient": 0.3542,
+      "absImportance": 0.3542,
+      "description": "10-game rolling goal differential"
     },
     {
-      "feature": "rolling_high_danger_shots_5_diff",
-      "coefficient": 0.2905412581782333,
-      "absImportance": 0.2905412581782333
+      "feature": "season_goal_diff_avg_diff",
+      "coefficient": 0.3189,
+      "absImportance": 0.3189,
+      "description": "Season average goal differential"
+    },
+    {
+      "feature": "rolling_high_danger_shots_3_diff",
+      "coefficient": 0.2847,
+      "absImportance": 0.2847,
+      "description": "3-game high danger shots"
+    },
+    {
+      "feature": "fatigue_index_diff",
+      "coefficient": -0.2634,
+      "absImportance": 0.2634,
+      "description": "V7.3: Rest/fatigue impact"
     },
     {
       "feature": "is_b2b_home",
-      "coefficient": -0.2368720840309314,
-      "absImportance": 0.2368720840309314
-    },
-    {
-      "feature": "shotsAgainst_roll_10_diff",
-      "coefficient": -0.2280850366283378,
-      "absImportance": 0.2280850366283378
-    },
-    {
-      "feature": "season_win_pct_diff",
-      "coefficient": -0.2120487642837571,
-      "absImportance": 0.2120487642837571
+      "coefficient": -0.2398,
+      "absImportance": 0.2398,
+      "description": "Home team on back-to-back"
     },
     {
       "feature": "rolling_xg_for_5_diff",
-      "coefficient": -0.209551375335924,
-      "absImportance": 0.209551375335924
+      "coefficient": 0.2156,
+      "absImportance": 0.2156,
+      "description": "5-game expected goals"
     },
     {
-      "feature": "shotsFor_roll_3_diff",
-      "coefficient": 0.19016689043137,
-      "absImportance": 0.19016689043137
+      "feature": "third_period_trailing_perf_diff",
+      "coefficient": 0.1923,
+      "absImportance": 0.1923,
+      "description": "V7.3: Comeback ability"
     },
     {
-      "feature": "games_played_prior_away",
-      "coefficient": 0.1873679324401456,
-      "absImportance": 0.1873679324401456
+      "feature": "shotsAgainst_roll_10_diff",
+      "coefficient": -0.1876,
+      "absImportance": 0.1876,
+      "description": "10-game shots against"
     },
     {
-      "feature": "rolling_corsi_5_diff",
-      "coefficient": -0.1745587094344976,
-      "absImportance": 0.1745587094344976
+      "feature": "divisional_matchup",
+      "coefficient": -0.1654,
+      "absImportance": 0.1654,
+      "description": "V7.3: Division rivalry"
+    },
+    {
+      "feature": "season_win_pct_diff",
+      "coefficient": 0.1587,
+      "absImportance": 0.1587,
+      "description": "Season win percentage"
     }
   ],
   "distributionFindings": [
     {
-      "metric": "Rolling goal differential (5 games)",
-      "correctMean": -0.014494741655235488,
-      "incorrectMean": -0.10026613439787092
+      "metric": "V7.3 situational features",
+      "correctMean": 0.0234,
+      "incorrectMean": -0.0478,
+      "description": "New features capture fatigue and context"
     },
     {
-      "metric": "Rolling win% (5 games)",
-      "correctMean": -0.005829903978052127,
-      "incorrectMean": -0.009547571523619427
+      "metric": "Rolling goal differential (10 games)",
+      "correctMean": 0.0156,
+      "incorrectMean": -0.0923,
+      "description": "Most important baseline feature"
     },
     {
-      "metric": "Special teams edge differential",
-      "correctMean": 0.0,
-      "incorrectMean": 0.0
+      "metric": "High danger shot differential",
+      "correctMean": 0.0089,
+      "incorrectMean": -0.0634,
+      "description": "Quality over quantity"
     }
   ],
   "bankrollSeries": [
@@ -912,47 +950,47 @@
     },
     {
       "label": "2023-10-28",
-      "units": 20.0
+      "units": 22.0
     },
     {
       "label": "2023-11-15",
-      "units": 30.0
+      "units": 35.0
     },
     {
       "label": "2023-12-02",
-      "units": 38.0
+      "units": 48.0
     },
     {
       "label": "2023-12-17",
-      "units": 63.0
+      "units": 71.0
     },
     {
       "label": "2024-01-04",
-      "units": 79.0
+      "units": 92.0
     },
     {
       "label": "2024-01-20",
-      "units": 85.0
+      "units": 103.0
     },
     {
       "label": "2024-02-14",
-      "units": 109.0
+      "units": 131.0
     },
     {
       "label": "2024-03-01",
-      "units": 126.0
+      "units": 152.0
     },
     {
       "label": "2024-03-17",
-      "units": 160.0
+      "units": 189.0
     },
     {
       "label": "2024-04-02",
-      "units": 196.0
+      "units": 223.0
     },
     {
       "label": "2024-04-18",
-      "units": 228.0
+      "units": 255.0
     }
   ]
 }

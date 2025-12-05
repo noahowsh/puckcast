@@ -70,6 +70,12 @@ def build_dataset(seasons: Iterable[str]) -> Dataset:
         "season_xg_against_avg",
         "season_xg_diff_avg",
         "momentum_xg",
+        # V7.0: Momentum-weighted rolling features
+        "momentum_xg_for_4",
+        "momentum_xg_against_4",
+        "momentum_goal_diff_4",
+        "momentum_high_danger_shots_4",
+        "momentum_win_rate_4",
     ]
 
     for window in rolling_windows:

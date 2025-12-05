@@ -9,10 +9,12 @@ export type StrategySummary = {
 
 export type ConfidenceBucket = {
   label: string;
+  grade: string;
   min: number;
   max: number | null;
   accuracy: number;
   count: number;
+  coverage?: number;
 };
 
 export type TeamPerformance = {

@@ -1,181 +1,165 @@
 """Individual starting goalie features for game prediction.
 
-This module provides goalie-specific features beyond team averages:
-- Individual goalie stats (save %, GSAx)
-- Goalie recent form (last 5 games)
-- Rest days since last start
-- Backup vs starter flags
-- Goalie vs opponent history
+V7.0 ENHANCEMENT: Individual goalie tracking replaces team-level metrics.
+This is the #1 priority improvement, expected +0.8-1.2% accuracy.
 
-Expected improvement: +0.5-1.0% accuracy
+Features individual goalie stats:
+- Goals Saved Above Expected (GSA) - recent form
+- Save percentage by shot type (overall, high-danger, rush)
+- Performance vs specific opponents
+- Recent form (last 3/5/10 starts)
+
+Data source: GoalieTracker from NHL API play-by-play
 """
 
 from __future__ import annotations
 
 import logging
+from typing import Dict, Any, Optional
 from pathlib import Path
-from typing import Dict, Any
 
 import pandas as pd
 import numpy as np
 
+# Import V7.0 goalie tracker
+try:
+    from .goalie_tracker import GoalieTracker, build_goalie_database
+except ImportError:
+    # Fallback if goalie_tracker not available
+    GoalieTracker = None
+    build_goalie_database = None
+
 LOGGER = logging.getLogger(__name__)
-_PROJECT_ROOT = Path(__file__).resolve().parents[2]
-GOALIE_DATA_PATH = _PROJECT_ROOT / "data" / "moneypuck_goalies.csv"
 
 
-def load_goalie_stats() -> pd.DataFrame:
+def enhance_with_goalie_features(
+    team_logs: pd.DataFrame,
+    goalie_tracker: Optional[GoalieTracker] = None,
+    starting_goalies: Optional[Dict] = None
+) -> pd.DataFrame:
     """
-    Load and process individual goalie statistics from MoneyPuck.
+    V7.0: Add individual goalie features to team logs.
 
-    Returns:
-        DataFrame with goalie-level stats by season
-    """
-    if not GOALIE_DATA_PATH.exists():
-        LOGGER.warning(f"Goalie data not found at {GOALIE_DATA_PATH}")
-        return pd.DataFrame()
-
-    df = pd.read_csv(GOALIE_DATA_PATH)
-
-    # Filter to 'all' situation (full game stats)
-    df = df[df['situation'] == 'all'].copy()
-
-    # Calculate key metrics
-    df['save_pct'] = 1 - (df['goals'] / df['ongoal'].replace(0, np.nan))
-    df['gsax'] = df['xGoals'] - df['goals']  # Goals Saved Above Expected
-    df['gsax_per_60'] = (df['gsax'] / (df['icetime'] / 3600)) * 60
-
-    # Games played and ice time
-    df['games_played'] = df['games_played']
-    df['avg_icetime_per_game'] = df['icetime'] / df['games_played'].replace(0, 1)
-
-    # Starter flag (played > 30 games or avg > 45 min/game)
-    df['is_likely_starter'] = (
-        (df['games_played'] > 30) |
-        (df['avg_icetime_per_game'] > 2700)  # 45 minutes
-    )
-
-    # Clean up
-    df = df[[
-        'playerId', 'season', 'name', 'team', 'position',
-        'games_played', 'icetime', 'save_pct', 'gsax', 'gsax_per_60',
-        'is_likely_starter', 'xGoals', 'goals', 'ongoal'
-    ]].copy()
-
-    # Fill NaN save_pct with league average
-    df['save_pct'] = df['save_pct'].fillna(0.900)
-    df['gsax_per_60'] = df['gsax_per_60'].fillna(0.0)
-
-    LOGGER.info(f"Loaded {len(df)} goalie-season records ({df['playerId'].nunique()} unique goalies)")
-
-    return df
-
-
-def get_team_starting_goalie(team: str, season: int, goalie_stats: pd.DataFrame) -> Dict[str, Any]:
-    """
-    Get the likely starting goalie for a team in a given season.
+    If goalie_tracker is provided, adds individual goalie stats.
+    Otherwise, falls back to team-level metrics.
 
     Args:
-        team: Team abbreviation (e.g., "TOR")
-        season: Season year (e.g., 2023 for 2023-24)
-        goalie_stats: DataFrame from load_goalie_stats()
+        team_logs: DataFrame with team-level game logs
+        goalie_tracker: Optional GoalieTracker with individual stats
+        starting_goalies: Optional dict mapping {game_date: {team: goalie_id}}
 
     Returns:
-        Dict with starter stats or defaults if not found
+        Enhanced DataFrame with goalie features
     """
-    team_goalies = goalie_stats[
-        (goalie_stats['team'] == team) &
-        (goalie_stats['season'] == season)
-    ].copy()
+    # V7.0: Individual goalie features
+    if goalie_tracker is not None and starting_goalies is not None:
+        LOGGER.info("V7.0: Adding individual goalie features")
+        return _add_individual_goalie_features(team_logs, goalie_tracker, starting_goalies)
 
-    if team_goalies.empty:
-        return {
-            'goalie_name': 'Unknown',
-            'goalie_save_pct': 0.900,  # League average
-            'goalie_gsax_per_60': 0.0,
-            'goalie_games_played': 0,
-            'goalie_is_starter': False,
-        }
-
-    # Sort by ice time to get primary starter
-    team_goalies = team_goalies.sort_values('icetime', ascending=False)
-    starter = team_goalies.iloc[0]
-
-    return {
-        'goalie_name': starter['name'],
-        'goalie_save_pct': starter['save_pct'],
-        'goalie_gsax_per_60': starter['gsax_per_60'],
-        'goalie_games_played': starter['games_played'],
-        'goalie_is_starter': starter['is_likely_starter'],
-        'goalie_xgoals_faced': starter['xGoals'],
-        'goalie_goals_allowed': starter['goals'],
-    }
+    # V6.3 fallback: Team-level only
+    LOGGER.info("Using team-level goalie features (V6.3 mode)")
+    return team_logs
 
 
-def add_starting_goalie_features(games: pd.DataFrame, use_cache: bool = True) -> pd.DataFrame:
+def _add_individual_goalie_features(
+    team_logs: pd.DataFrame,
+    tracker: GoalieTracker,
+    starting_goalies: Dict
+) -> pd.DataFrame:
     """
-    Add individual starting goalie features to game logs.
+    Add individual starting goalie features.
 
-    This replaces team-average goalie stats with starter-specific stats.
+    New features added:
+    - goalie_gsa_last5_home/away: GSA avg over last 5 starts
+    - goalie_save_pct_last5_home/away: Overall save %
+    - goalie_hd_save_pct_last5_home/away: High-danger save %
+    - goalie_vs_opp_save_pct_home/away: Historical vs opponent
+    - goalie_gsa_diff: Matchup quality (home GSA - away GSA)
+    - goalie_quality_diff: Save % differential
 
     Args:
-        games: DataFrame with game logs (must have teamAbbrev, seasonId)
-        use_cache: Whether to use cached goalie stats
+        team_logs: Team game logs
+        tracker: GoalieTracker with goalie history
+        starting_goalies: Starting goalie assignments
 
     Returns:
-        DataFrame with added goalie features
+        DataFrame with individual goalie features
     """
-    LOGGER.info("Adding individual starting goalie features...")
+    # Initialize new columns
+    goalie_features = [
+        'goalie_gsa_last5_home', 'goalie_gsa_last5_away',
+        'goalie_save_pct_last5_home', 'goalie_save_pct_last5_away',
+        'goalie_hd_save_pct_last5_home', 'goalie_hd_save_pct_last5_away',
+        'goalie_vs_opp_save_pct_home', 'goalie_vs_opp_save_pct_away',
+        'goalie_games_played_last5_home', 'goalie_games_played_last5_away'
+    ]
 
-    # Load goalie stats
-    goalie_stats = load_goalie_stats()
+    for feature in goalie_features:
+        team_logs[feature] = 0.0
 
-    if goalie_stats.empty:
-        LOGGER.warning("No goalie data available, skipping goalie features")
-        return games
+    features_added = 0
 
-    games = games.copy()
+    # Process each game
+    for idx, row in team_logs.iterrows():
+        game_date = str(row.get('gameDate', ''))
+        home_team = str(row.get('teamAbbrev_home', ''))
+        away_team = str(row.get('teamAbbrev_away', ''))
 
-    # Extract season year from seasonId (e.g., "20232024" -> 2023)
-    games['season_year'] = games['seasonId'].astype(str).str[:4].astype(int)
+        # Get starting goalies for this game
+        game_starters = starting_goalies.get(game_date, {})
+        home_goalie_id = game_starters.get(home_team)
+        away_goalie_id = game_starters.get(away_team)
 
-    # Get starter for each team-game
-    def get_goalie_features(row):
-        team = row['teamAbbrev']
-        season = row['season_year']
-        return pd.Series(get_team_starting_goalie(team, season, goalie_stats))
+        # Home goalie features
+        if home_goalie_id:
+            home_recent = tracker.get_recent_form(home_goalie_id, game_date, last_n_games=5)
+            team_logs.at[idx, 'goalie_gsa_last5_home'] = home_recent.get('gsa_avg', 0.0)
+            team_logs.at[idx, 'goalie_save_pct_last5_home'] = home_recent.get('save_pct', 0.910)
+            team_logs.at[idx, 'goalie_hd_save_pct_last5_home'] = home_recent.get('hd_save_pct', 0.850)
+            team_logs.at[idx, 'goalie_games_played_last5_home'] = home_recent.get('games_played', 0)
 
-    # Apply to each row (this will be slow for large datasets)
-    # Could be optimized with groupby/merge but this is clearer
-    goalie_features = games.apply(get_goalie_features, axis=1)
+            # vs opponent
+            home_vs_away = tracker.get_vs_opponent(home_goalie_id, away_team, game_date)
+            team_logs.at[idx, 'goalie_vs_opp_save_pct_home'] = home_vs_away.get('save_pct', 0.910)
 
-    # Add goalie features to games
-    for col in goalie_features.columns:
-        games[col] = goalie_features[col]
+            features_added += 1
 
-    # Calculate goalie quality tier (for categorical features)
-    games['goalie_tier'] = pd.cut(
-        games['goalie_save_pct'],
-        bins=[0, 0.890, 0.910, 0.920, 1.0],
-        labels=['below_avg', 'average', 'good', 'elite']
+        # Away goalie features
+        if away_goalie_id:
+            away_recent = tracker.get_recent_form(away_goalie_id, game_date, last_n_games=5)
+            team_logs.at[idx, 'goalie_gsa_last5_away'] = away_recent.get('gsa_avg', 0.0)
+            team_logs.at[idx, 'goalie_save_pct_last5_away'] = away_recent.get('save_pct', 0.910)
+            team_logs.at[idx, 'goalie_hd_save_pct_last5_away'] = away_recent.get('hd_save_pct', 0.850)
+            team_logs.at[idx, 'goalie_games_played_last5_away'] = away_recent.get('games_played', 0)
+
+            # vs opponent
+            away_vs_home = tracker.get_vs_opponent(away_goalie_id, home_team, game_date)
+            team_logs.at[idx, 'goalie_vs_opp_save_pct_away'] = away_vs_home.get('save_pct', 0.910)
+
+            features_added += 1
+
+    # Add differential features
+    team_logs['goalie_gsa_diff'] = (
+        team_logs['goalie_gsa_last5_home'] - team_logs['goalie_gsa_last5_away']
+    )
+    team_logs['goalie_quality_diff'] = (
+        team_logs['goalie_save_pct_last5_home'] - team_logs['goalie_save_pct_last5_away']
+    )
+    team_logs['goalie_hd_quality_diff'] = (
+        team_logs['goalie_hd_save_pct_last5_home'] - team_logs['goalie_hd_save_pct_last5_away']
     )
 
-    games = games.drop(columns=['season_year'])
+    LOGGER.info(f"Added individual goalie features for {features_added} goalie assignments")
+    LOGGER.info(f"Total goalie features: {len([c for c in team_logs.columns if 'goalie' in c.lower()])}")
 
-    LOGGER.info(f"Added goalie features to {len(games)} games")
-    LOGGER.info(f"  Starters identified: {games['goalie_is_starter'].sum()} / {len(games)}")
-    LOGGER.info(f"  Avg save %: {games['goalie_save_pct'].mean():.3f}")
-    LOGGER.info(f"  Avg GSAx/60: {games['goalie_gsax_per_60'].mean():.2f}")
-
-    return games
+    return team_logs
 
 
 def create_goalie_matchup_features(games: pd.DataFrame) -> pd.DataFrame:
     """
     Create goalie vs goalie matchup features for prediction.
 
-    This builds on add_starting_goalie_features() and creates
-    differential/comparative features between opposing goalies.
+    Builds differential features between opposing goalies.
 
     Args:
         games: DataFrame with home/away goalie features
@@ -185,37 +169,15 @@ def create_goalie_matchup_features(games: pd.DataFrame) -> pd.DataFrame:
     """
     games = games.copy()
 
-    # These should exist after merging home/away team logs
-    home_cols = [c for c in games.columns if c.startswith('goalie_') and c.endswith('_home')]
-    away_cols = [c for c in games.columns if c.startswith('goalie_') and c.endswith('_away')]
-
-    if not home_cols or not away_cols:
-        LOGGER.warning("No home/away goalie columns found - run this after building game matchups")
-        return games
-
     # Goalie quality differential (home - away)
-    if 'goalie_save_pct_home' in games.columns and 'goalie_save_pct_away' in games.columns:
+    if 'team_save_pct_home' in games.columns and 'team_save_pct_away' in games.columns:
         games['goalie_save_pct_diff'] = (
-            games['goalie_save_pct_home'] - games['goalie_save_pct_away']
+            games['team_save_pct_home'] - games['team_save_pct_away']
         )
 
-    if 'goalie_gsax_per_60_home' in games.columns and 'goalie_gsax_per_60_away' in games.columns:
+    if 'team_gsax_per_60_home' in games.columns and 'team_gsax_per_60_away' in games.columns:
         games['goalie_gsax_diff'] = (
-            games['goalie_gsax_per_60_home'] - games['goalie_gsax_per_60_away']
-        )
-
-    # Experience differential
-    if 'goalie_games_played_home' in games.columns and 'goalie_games_played_away' in games.columns:
-        games['goalie_experience_diff'] = (
-            games['goalie_games_played_home'] - games['goalie_games_played_away']
-        )
-
-    # Starter vs backup flag
-    if 'goalie_is_starter_home' in games.columns and 'goalie_is_starter_away' in games.columns:
-        games['home_has_starter'] = games['goalie_is_starter_home'].astype(int)
-        games['away_has_starter'] = games['goalie_is_starter_away'].astype(int)
-        games['starter_advantage'] = (
-            games['home_has_starter'] - games['away_has_starter']
+            games['team_gsax_per_60_home'] - games['team_gsax_per_60_away']
         )
 
     LOGGER.info(f"Created {sum(1 for c in games.columns if 'goalie' in c and 'diff' in c)} goalie matchup features")
@@ -223,27 +185,7 @@ def create_goalie_matchup_features(games: pd.DataFrame) -> pd.DataFrame:
     return games
 
 
-# Convenience function for full pipeline
-def enhance_with_goalie_features(team_logs: pd.DataFrame) -> pd.DataFrame:
-    """
-    Full goalie feature enhancement pipeline.
-
-    Call this on team game logs before building matchups.
-
-    Args:
-        team_logs: DataFrame with team-level game logs
-
-    Returns:
-        Enhanced DataFrame with individual goalie features
-    """
-    team_logs = add_starting_goalie_features(team_logs)
-    return team_logs
-
-
 __all__ = [
-    'load_goalie_stats',
-    'get_team_starting_goalie',
-    'add_starting_goalie_features',
-    'create_goalie_matchup_features',
     'enhance_with_goalie_features',
+    'create_goalie_matchup_features',
 ]

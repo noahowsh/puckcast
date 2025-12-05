@@ -24,11 +24,51 @@ TREND_SCORE = {
 def _lagged_rolling(group: pd.Series, window: int, min_periods: int = 1) -> pd.Series:
     """
     Compute rolling average using ONLY prior games.
-    
+
     CRITICAL: .shift(1) ensures current game is EXCLUDED.
     This is ESSENTIAL for pre-game prediction.
     """
     return group.shift(1).rolling(window, min_periods=min_periods).mean()
+
+
+def _momentum_weighted_rolling(group: pd.Series, weights: list[float]) -> pd.Series:
+    """
+    Compute momentum-weighted rolling average using ONLY prior games.
+
+    Weights recent games more heavily to capture hot/cold streaks.
+    Default weights: [0.4, 0.3, 0.2, 0.1] for last 4 games.
+
+    CRITICAL: .shift(1) ensures current game is EXCLUDED (pre-game only).
+
+    Args:
+        group: Series of values to compute weighted average over
+        weights: Weight vector (most recent first), e.g., [0.4, 0.3, 0.2, 0.1]
+
+    Returns:
+        Series of momentum-weighted averages
+    """
+    window = len(weights)
+    shifted = group.shift(1)  # CRITICAL: exclude current game
+
+    def weighted_avg(values):
+        """Apply weights to rolling window."""
+        if len(values) < 1:
+            return 0.0
+        # Pad if not enough history
+        if len(values) < window:
+            # Pad front with zeros
+            padded = [0.0] * (window - len(values)) + list(values)
+        else:
+            padded = list(values[-window:])
+
+        # Reverse so most recent is first (matches weight order)
+        padded_reversed = list(reversed(padded))
+
+        # Compute weighted average
+        return sum(v * w for v, w in zip(padded_reversed, weights))
+
+    return shifted.rolling(window, min_periods=1).apply(weighted_avg, raw=False)
+
 
 
 ALTITUDE_FEET_BY_TEAM: dict[int, float] = {
@@ -528,6 +568,35 @@ def engineer_team_features(logs: pd.DataFrame, rolling_windows: Iterable[int] = 
                 )
 
     logs = logs.assign(**roll_features)
+
+    # V7.0: Momentum-weighted rolling features (weights recent games more heavily)
+    # Using [0.4, 0.3, 0.2, 0.1] weights for last 4 games
+    MOMENTUM_WEIGHTS = [0.4, 0.3, 0.2, 0.1]
+    momentum_features: dict[str, pd.Series] = {}
+
+    # Core momentum features (highest impact)
+    if "xGoalsFor" in logs.columns:
+        momentum_features["momentum_xg_for_4"] = group["xGoalsFor"].transform(
+            lambda s: _momentum_weighted_rolling(s, MOMENTUM_WEIGHTS)
+        )
+        momentum_features["momentum_xg_against_4"] = group["xGoalsAgainst"].transform(
+            lambda s: _momentum_weighted_rolling(s, MOMENTUM_WEIGHTS)
+        )
+
+    momentum_features["momentum_goal_diff_4"] = group["goal_diff"].transform(
+        lambda s: _momentum_weighted_rolling(s, MOMENTUM_WEIGHTS)
+    )
+
+    if "highDangerShotsFor" in logs.columns:
+        momentum_features["momentum_high_danger_shots_4"] = group["highDangerShotsFor"].transform(
+            lambda s: _momentum_weighted_rolling(s, MOMENTUM_WEIGHTS)
+        )
+
+    momentum_features["momentum_win_rate_4"] = group["win"].transform(
+        lambda s: _momentum_weighted_rolling(s, MOMENTUM_WEIGHTS)
+    )
+
+    logs = logs.assign(**momentum_features)
 
     # Shot margin trends
     logs["shot_margin"] = logs["shotsForPerGame"] - logs["shotsAgainstPerGame"]

@@ -93,7 +93,7 @@ export default function PerformancePage() {
             <div>
               <p className="eyebrow">Confidence calibration</p>
               <h2>Accuracy by edge band</h2>
-              <p className="lead-sm">204-feature model, official NHL API data, {overview.games.toLocaleString()} holdout games.</p>
+              <p className="lead-sm">V7.3 model with 216 features, official NHL API data, {overview.games.toLocaleString()} holdout games.</p>
             </div>
           </div>
           <div className="power-grid">
@@ -102,7 +102,10 @@ export default function PerformancePage() {
               .reverse()
               .map((bucket) => (
                 <div key={bucket.label} className="stat-card">
-                  <p className="stat-label">{bucket.label}</p>
+                  <div className="flex items-center justify-between mb-2">
+                    <p className="stat-label">{bucket.label}</p>
+                    <span className="px-2 py-1 text-xs font-bold rounded bg-white/10 text-white">{bucket.grade}</span>
+                  </div>
                   <p className="stat-value text-3xl">{pct(bucket.accuracy)}</p>
                   <p className="text-sm text-white/60">{bucket.count.toLocaleString()} games</p>
                   <div className="edge-meter edge-meter--thick mt-4">

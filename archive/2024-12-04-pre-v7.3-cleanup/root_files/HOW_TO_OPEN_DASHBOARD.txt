@@ -1,0 +1,94 @@
+🏒 NHL PREDICTION MODEL - HOW TO OPEN THE DASHBOARD
+====================================================
+
+STEP 1: Open Terminal/Command Prompt
+-------------------------------------
+Mac: Press Cmd+Space, type "Terminal", press Enter
+Windows: Press Win+R, type "cmd", press Enter
+
+STEP 2: Navigate to Project Folder
+-----------------------------------
+cd "/Users/noahowsiany/Desktop/Predictive Model 3.3/NHLpredictionmodel"
+
+STEP 3: Run the Enhanced Dashboard
+-----------------------------------
+streamlit run visualization_dashboard_enhanced.py
+
+STEP 4: Open in Browser
+------------------------
+The dashboard will automatically open at:
+http://localhost:8501
+
+If it doesn't open automatically, copy that URL into your browser.
+
+====================================================
+
+ALTERNATIVE METHOD (Using Launcher):
+------------------------------------
+./launch_dashboard.sh
+
+Then select option 1 for the enhanced dashboard.
+
+====================================================
+
+WHAT YOU'LL SEE:
+----------------
+✅ Beautiful interactive dashboard
+✅ Top metrics cards (Accuracy, Brier Score, etc.)
+✅ Sidebar navigation with 11 pages
+✅ Interactive charts and filters
+✅ Comprehensive explanations
+✅ Help & documentation built-in
+
+====================================================
+
+TROUBLESHOOTING:
+----------------
+If it doesn't work:
+
+1. Install requirements:
+   pip install streamlit pandas plotly pillow
+
+2. Generate visualizations first:
+   python create_visualizations.py
+
+3. Try different port:
+   streamlit run visualization_dashboard_enhanced.py --server.port 8502
+   Then go to: http://localhost:8502
+
+4. Check Python path for original dashboard:
+   export PYTHONPATH="${PYTHONPATH}:${PWD}/src"
+   streamlit run streamlit_app.py
+
+====================================================
+
+FEATURES YOU'LL LOVE:
+---------------------
+📊 Overview - See everything at a glance
+📈 Interactive Analytics - Filter and explore data
+🎯 Confidence Analysis - Understand model certainty
+🔥 xGoals Analysis - The #1 predictor explained
+⏰ Performance Over Time - Track consistency
+🌡️ Team Performance - Team-by-team breakdown
+🏟️ Home Ice Advantage - Home/away patterns
+🔬 Advanced Statistics - Deep analytics
+📊 Data Explorer - Browse and download data
+ℹ️ Help & Documentation - Complete guide
+
+====================================================
+
+TO STOP THE DASHBOARD:
+----------------------
+Press Ctrl+C in the terminal
+
+====================================================
+
+NEED MORE HELP?
+---------------
+Read: DASHBOARD_GUIDE.md (comprehensive guide)
+Read: QUICK_START.md (quick reference)
+
+Or check the Help section in the dashboard itself!
+
+====================================================
+
