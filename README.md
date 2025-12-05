@@ -120,7 +120,31 @@ python prediction/predict_simple.py TOR BOS
 python prediction/predict_full.py
 ```
 
-### 2. Train V7.3 (Production Model)
+### 2. Fetch Historical Data (Expanded Training)
+
+```bash
+# Check what historical data is cached
+python training/fetch_historical_data.py --check
+
+# Fetch all historical seasons (2017-18 through 2020-21)
+python training/fetch_historical_data.py
+
+# Fetch a specific season only
+python training/fetch_historical_data.py --season 20172018
+
+# Re-fetch a season (overwrite cache)
+python training/fetch_historical_data.py --season 20172018 --force
+```
+
+**Historical Season Notes**:
+| Season | Description | Expected Games |
+|--------|-------------|----------------|
+| 2017-18 | Full 82-game season, 31 teams | ~1,271 |
+| 2018-19 | Full 82-game season, 31 teams | ~1,271 |
+| 2019-20 | COVID-shortened (pause March 11, 2020) | ~1,082 |
+| 2020-21 | COVID-shortened 56-game season | ~868 |
+
+### 3. Train V7.3 (Production Model)
 
 ```bash
 python training/train_v7_3_situational.py
@@ -132,7 +156,7 @@ python training/train_v7_3_situational.py
 # Model saved: model_v7_3_situational.pkl
 ```
 
-### 3. Analyze Performance
+### 4. Analyze Performance
 
 ```bash
 # Comprehensive error analysis

@@ -100,3 +100,63 @@ Implementation-wise, add a lightweight `legacy_api.py` with the same interface a
 3. Spike an xG model using Web v1 PBP to ensure we can reproduce MoneyPuck-like shot values before fully migrating training data.
 
 This roadmap keeps the current MoneyPuck-powered model running while gradually layering in official NHL data feeds, opening the door to richer features and faster updates once the new ingestion pieces are in place.
+
+## 6. Historical Data Expansion
+
+### Available Historical Seasons
+
+The NHL Web API (`api-web.nhle.com/v1`) supports play-by-play data going back to the **2017-18 season**. This means we can expand the training dataset significantly beyond the current 2021-22 to 2023-24 range.
+
+| Season | API Support | Game Count | Notes |
+|--------|-------------|------------|-------|
+| 2017-18 | ✅ Full | ~1,271 | First season with 31 teams (VGK expansion) |
+| 2018-19 | ✅ Full | ~1,271 | Full 82-game season |
+| 2019-20 | ✅ Partial | ~1,082 | COVID-shortened - regular season paused March 11, 2020 |
+| 2020-21 | ✅ Full | ~868 | COVID-shortened 56-game season, all-division schedule |
+| 2021-22 | ✅ Full | ~1,312 | Full 82-game season, 32 teams (SEA expansion) |
+| 2022-23 | ✅ Full | ~1,312 | Full 82-game season |
+| 2023-24 | ✅ Full | ~1,312 | Full 82-game season |
+| 2024-25 | ✅ In Progress | ~1,312 | Current season |
+
+### Fetching Historical Data
+
+Use the `training/fetch_historical_data.py` script to fetch historical seasons:
+
+```bash
+# Check what's already cached
+python training/fetch_historical_data.py --check
+
+# Fetch all historical seasons (2017-18 to 2020-21)
+python training/fetch_historical_data.py
+
+# Fetch a specific season
+python training/fetch_historical_data.py --season 20172018
+```
+
+### Data Format Compatibility
+
+The NHL API returns identical play-by-play structure for all seasons from 2017-18 onward:
+- Shot events with `xCoord`, `yCoord`, `shotType`, `zoneCode`
+- Goals, assists, penalties with full detail
+- Game state, period info, situation codes (5v5, PP, PK)
+
+This means the existing `native_ingest.py` code works for all historical seasons without modification.
+
+### Season-Specific Considerations
+
+**2019-20 COVID Season**:
+- Regular season paused March 11, 2020 after ~68-71 games per team
+- Playoffs resumed in August 2020 "bubble" format
+- Only pre-pause regular season games are included (playoff bubble not in regular season data)
+
+**2020-21 COVID Season**:
+- 56-game shortened season
+- All-division schedule (teams only played within their division)
+- Canadian teams in separate division due to border restrictions
+- May affect divisional feature effectiveness for this season
+
+**Training Strategy with Expanded Data**:
+
+1. **More Training Data**: 2017-18 through 2022-23 (5+ seasons, ~6,200 games)
+2. **Holdout Test**: 2023-24 season (consistent with current methodology)
+3. **Expected Impact**: More data typically improves model stability, may reduce variance in predictions
