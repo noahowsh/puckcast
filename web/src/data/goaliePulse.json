@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2025-12-05T13:25:35.589214+00:00",
+  "updatedAt": "2025-12-05T23:13:04.979506+00:00",
   "notes": "Goalie performance metrics calculated from NHL Stats API data. GSAx estimates based on save percentage above league average.",
   "goalies": [
     {
@@ -46,7 +46,7 @@
       "restDays": 3,
       "startLikelihood": 0.85,
       "trend": "surging",
-      "note": "Joseph Woll is playing at an elite level with a 0.927 save percentage, providing TOR with a strong defensive anchor.",
+      "note": "Joseph Woll is playing at an elite level with a 0.928 save percentage, providing TOR with a strong defensive anchor.",
       "strengths": [
         "Elite save percentage",
         "Strong rebound control"
