@@ -27,7 +27,7 @@ if str(SRC_DIR) not in sys.path:
 from nhl_prediction.nhl_api import fetch_schedule  # noqa: E402
 
 OUTPUT_PATH = REPO_ROOT / "web" / "src" / "data" / "goaliePulse.json"
-SEASON_ID = "20252026"
+SEASON_ID = "20242025"
 GOALIE_STATS_URL = "https://api.nhle.com/stats/rest/en/goalie/summary"
 
 
@@ -36,7 +36,7 @@ def parse_args() -> argparse.Namespace:
         description="Generate goalie pulse data with performance trends and insights."
     )
     parser.add_argument("--date", required=True, help="Date string (YYYY-MM-DD).")
-    parser.add_argument("--season", default=SEASON_ID, help="Season ID (e.g., 20252026).")
+    parser.add_argument("--season", default=SEASON_ID, help="Season ID (e.g., 20242025).")
     return parser.parse_args()
 
 

@@ -16,7 +16,7 @@ from urllib.request import Request, urlopen
 ROOT = Path(__file__).resolve().parents[1]
 OUTPUT_PATH = ROOT / "web" / "src" / "data" / "currentStandings.json"
 TEAM_MAP_PATH = ROOT / "data" / "nhl_teams.csv"
-SEASON_ID = "20252026"
+SEASON_ID = "20242025"
 STATS_BASE = "https://api.nhle.com/stats/rest/en/team/summary"
 
 
