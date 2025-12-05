@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2025-12-05T11:22:39.442776+00:00",
+  "generatedAt": "2025-12-05T23:11:58.947735+00:00",
   "games": [
     {
       "id": "2025020436",
@@ -14,12 +14,12 @@
         "name": "Golden Knights",
         "abbrev": "VGK"
       },
-      "homeWinProb": 0.5155,
-      "awayWinProb": 0.4845,
-      "confidenceScore": 0.031,
+      "homeWinProb": 0.515,
+      "awayWinProb": 0.485,
+      "confidenceScore": 0.03,
       "confidenceGrade": "C",
-      "edge": 0.016,
-      "summary": "Devils project at 52% as the home lean \u2014 a C-tier edge worth 1.6 pts over a coin flip.",
+      "edge": 0.015,
+      "summary": "Devils project at 52% as the home lean \u2014 a C-tier edge worth 1.5 pts over a coin flip.",
       "modelFavorite": "home",
       "venue": "Prudential Center",
       "season": "20252026"
@@ -37,12 +37,12 @@
         "name": "Sabres",
         "abbrev": "BUF"
       },
-      "homeWinProb": 0.5466,
-      "awayWinProb": 0.4534,
-      "confidenceScore": 0.093,
+      "homeWinProb": 0.5458,
+      "awayWinProb": 0.4542,
+      "confidenceScore": 0.092,
       "confidenceGrade": "B-",
-      "edge": 0.047,
-      "summary": "Jets project at 55% as the home lean \u2014 a B--tier edge worth 4.7 pts over a coin flip.",
+      "edge": 0.046,
+      "summary": "Jets project at 55% as the home lean \u2014 a B--tier edge worth 4.6 pts over a coin flip.",
       "modelFavorite": "home",
       "venue": "Canada Life Centre",
       "season": "20252026"
@@ -60,9 +60,9 @@
         "name": "Sharks",
         "abbrev": "SJS"
       },
-      "homeWinProb": 0.7621,
-      "awayWinProb": 0.2379,
-      "confidenceScore": 0.524,
+      "homeWinProb": 0.7624,
+      "awayWinProb": 0.2376,
+      "confidenceScore": 0.525,
       "confidenceGrade": "A+",
       "edge": 0.262,
       "summary": "Stars project at 76% as the home lean \u2014 an A+-tier edge worth 26.2 pts over a coin flip.",
@@ -83,12 +83,12 @@
         "name": "Mammoth",
         "abbrev": "UTA"
       },
-      "homeWinProb": 0.5651,
-      "awayWinProb": 0.4349,
+      "homeWinProb": 0.5648,
+      "awayWinProb": 0.4352,
       "confidenceScore": 0.13,
       "confidenceGrade": "B-",
       "edge": 0.065,
-      "summary": "Canucks project at 57% as the home lean \u2014 a B--tier edge worth 6.5 pts over a coin flip.",
+      "summary": "Canucks project at 56% as the home lean \u2014 a B--tier edge worth 6.5 pts over a coin flip.",
       "modelFavorite": "home",
       "venue": "Rogers Arena",
       "season": "20252026"
@@ -106,9 +106,9 @@
         "name": "Capitals",
         "abbrev": "WSH"
       },
-      "homeWinProb": 0.4963,
-      "awayWinProb": 0.5037,
-      "confidenceScore": 0.007,
+      "homeWinProb": 0.4959,
+      "awayWinProb": 0.5041,
+      "confidenceScore": 0.008,
       "confidenceGrade": "C",
       "edge": -0.004,
       "summary": "Capitals project at 50% as the road lean \u2014 a C-tier edge worth 0.4 pts over a coin flip.",
