@@ -24,6 +24,9 @@ from sklearn.preprocessing import StandardScaler
 sys.path.insert(0, str(Path(__file__).parent.parent / 'src'))
 
 from nhl_prediction.pipeline import build_dataset
+from nhl_prediction.situational_features import add_situational_features
+from nhl_prediction.model import create_baseline_model, fit_model, predict_probabilities
+from nhl_prediction.train import compute_season_weights
 
 
 # V7.7 Stable Features (23 features - NO team dummies)
@@ -91,6 +94,38 @@ def create_v79_engineered_features(features_df, games_df):
     eng['is_saturday'] = (games_df['gameDate'].dt.dayofweek == 5).astype(int).values
 
     return eng
+
+
+def test_v73_situational(train_seasons, test_season):
+    """Test V7.3 with situational features (the TRUE V7.3)."""
+    all_seasons = train_seasons + [test_season]
+    dataset = build_dataset(all_seasons)
+    games = dataset.games.copy()
+    features = dataset.features.copy()
+    target = dataset.target.copy()
+
+    # Add situational features
+    games_sit = add_situational_features(games)
+    sit_cols = [c for c in games_sit.columns if any(k in c for k in
+        ['fatigue', 'trailing', 'travel', 'divisional', 'break'])]
+
+    features_full = pd.concat([features, games_sit[sit_cols]], axis=1).fillna(0)
+
+    train_mask = games['seasonId'].isin(train_seasons)
+    test_mask = games['seasonId'] == test_season
+
+    X_train, y_train = features_full[train_mask], target[train_mask]
+    X_test, y_test = features_full[test_mask], target[test_mask]
+
+    weights = compute_season_weights(games[train_mask], train_seasons, decay_factor=1.0)
+
+    model = create_baseline_model(C=0.05)
+    model = fit_model(model, X_train, y_train, pd.Series(True, index=X_train.index), sample_weight=weights)
+
+    proba = predict_probabilities(model, X_test, pd.Series(True, index=X_test.index))
+    acc = accuracy_score(y_test, (proba >= 0.5).astype(int))
+
+    return acc, y_test.mean(), len(features_full.columns)
 
 
 def test_model(games, features, target, train_seasons, test_season,
@@ -164,10 +199,10 @@ def main():
 
     # Test each model
     models = [
-        ("V7.3 (baseline)", None, 0.05, None, "All 211 features"),
+        ("V7.3 (situational)", "v73", 0.05, None, "222 features (209 + 13 situational)"),
         ("V7.6 (team dummies)", None, 0.01, 59, "Top 59 (includes team dummies)"),
         ("V7.7 (stable)", v77_idx, 0.01, None, "23 stable features (NO team dummies)"),
-        ("V7.9 (enhanced)", None, 0.005, None, "42 features (36 base + 6 engineered)"),
+        ("V7.9 (enhanced)", "v79", 0.005, None, "42 features (36 base + 6 engineered)"),
     ]
 
     print("=" * 70)
@@ -178,7 +213,11 @@ def main():
     print("-" * 70)
 
     for name, feat_idx, C, n_select, description in models:
-        if name == "V7.9 (enhanced)":
+        if name == "V7.3 (situational)":
+            # V7.3 with situational features - uses pipeline + sample weights
+            acc1, base1, n_feat = test_v73_situational(['20212022', '20222023'], '20232024')
+            acc2, base2, _ = test_v73_situational(['20222023', '20232024'], '20242025')
+        elif name == "V7.9 (enhanced)":
             # V7.9 uses its own feature set
             X_v79 = v79_full.values
 
