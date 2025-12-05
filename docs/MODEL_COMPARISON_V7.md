@@ -16,20 +16,21 @@ This document compares all model versions tested with forward validation on both
 
 | Model | Features | 23-24 | 24-25 | Average | Variance | Status |
 |-------|----------|-------|-------|---------|----------|--------|
-| V7.3 (baseline) | 211 (all) | 60.33% | 57.62% | 58.97% | 2.7pp | ❌ High variance |
-| V7.6 (team dummies) | 59 selected | **60.98%** | 58.61% | 59.79% | 2.4pp | ❌ High variance |
+| V7.3 (situational) | 222 (209+13) | **60.49%** | 56.86% | 58.68% | 3.6pp | ❌ Worst variance |
+| V7.6 (team dummies) | 59 selected | 60.98% | 58.61% | 59.79% | 2.4pp | ❌ High variance |
 | V7.7 (stable) | 23 curated | 59.51% | 60.21% | 59.86% | 0.7pp | ✓ Good |
 | V7.8 (expanded) | 35 features | 60.16% | 59.60% | 59.88% | 0.6pp | ✓ Good |
 | **V7.9 (enhanced)** | 42 features | 60.24% | **60.21%** | **60.23%** | **0.0pp** | ✅ Best |
 
 ## Model Details
 
-### V7.3 - Baseline Production Model
+### V7.3 - Situational Features Model
 - **File:** `training/train_v7_3_situational.py`
-- **Features:** 211 total (all available features)
+- **Features:** 222 total (209 baseline + 13 situational)
+- **Situational features:** fatigue_index, travel_distance, third_period_trailing_perf, divisional_matchup, post_break_game
 - **Regularization:** C=0.05
-- **Issue:** Heavy reliance on team-specific patterns that don't transfer to new seasons
-- **Result:** 2.7pp drop from 23-24 to 24-25
+- **Issue:** Situational features overfit heavily - travel/fatigue patterns from 21-23 don't predict 24-25
+- **Result:** 3.6pp drop from 60.49% to 56.86% - **worst variance of all models**
 
 ### V7.6 - Feature Selection with Team Dummies
 - **File:** `training/train_v7_6_feature_selection.py`

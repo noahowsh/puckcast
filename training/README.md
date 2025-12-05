@@ -4,11 +4,17 @@ This directory contains all model training, validation, and experimentation scri
 
 ## Production Models
 
-| Script | Model | Accuracy | Status |
-|--------|-------|----------|--------|
-| `train_v7_9_enhanced.py` | V7.9 Enhanced | 60.23% avg | **RECOMMENDED** |
-| `train_v7_7_stable.py` | V7.7 Stable | 59.86% avg | Good alternative |
-| `train_v7_3_situational.py` | V7.3 Baseline | 58.97% avg | Baseline only |
+| Script | Model | Accuracy | Variance | Status |
+|--------|-------|----------|----------|--------|
+| `train_v7_9_enhanced.py` | V7.9 Enhanced | 60.23% avg | 0.0pp | **RECOMMENDED** |
+| `train_v7_7_stable.py` | V7.7 Stable | 59.86% avg | 0.7pp | Good alternative |
+
+## Legacy Models (High Variance - Not Recommended)
+
+| Script | Model | 23-24 | 24-25 | Variance | Issue |
+|--------|-------|-------|-------|----------|-------|
+| `train_v7_3_situational.py` | V7.3 | 60.49% | 56.86% | 3.6pp | Situational features overfit |
+| `train_v7_6_feature_selection.py` | V7.6 | 60.98% | 58.61% | 2.4pp | Team dummies overfit |
 
 ## Comparison & Validation Scripts
 
@@ -63,25 +69,26 @@ The following scripts contain experiments that did NOT improve results:
 ## Model Evolution Summary
 
 ```
-V7.3 (baseline)   -> 58.97% avg, 2.7pp variance (211 features - too many)
+V7.3 (situational) -> 58.68% avg, 3.6pp variance (situational features overfit)
      |
 V7.4 (tree models) -> FAILED (worse than LogReg)
      |
 V7.5 (features)    -> Mixed results
      |
-V7.6 (selection)   -> 59.79% avg, 2.4pp variance (team dummies caused overfitting)
+V7.6 (selection)   -> 59.79% avg, 2.4pp variance (team dummies overfit)
      |
-V7.7 (stable)      -> 59.86% avg, 0.7pp variance (removed team dummies)
+V7.7 (stable)      -> 59.86% avg, 0.7pp variance (removed ALL overfit features)
      |
-V7.9 (enhanced)    -> 60.23% avg, 0.0pp variance (added engineered features) **BEST**
+V7.9 (enhanced)    -> 60.23% avg, 0.0pp variance (+ engineered features) **BEST**
 ```
 
 ## Key Learnings
 
 1. **Team dummies overfit**: 33 of 59 V7.6 features were team-specific - they don't generalize
-2. **Simpler is better**: LogisticRegression outperforms tree-based models
-3. **Consistency matters**: A stable 60% is better than volatile 61%/58%
-4. **Feature engineering works**: Momentum acceleration and interaction terms helped
+2. **Situational features overfit**: V7.3's fatigue/travel features had worst variance (3.6pp)
+3. **Simpler is better**: LogisticRegression outperforms tree-based models
+4. **Consistency matters**: A stable 60% is better than volatile 61%/58%
+5. **Feature engineering works**: Momentum acceleration and interaction terms helped (when done right)
 
 ## Recommended Usage
 
