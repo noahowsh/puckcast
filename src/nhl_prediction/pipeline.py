@@ -107,6 +107,19 @@ def build_dataset(seasons: Iterable[str]) -> Dataset:
                 f"rolling_penaltyKillNetPct_{window}",
                 f"rolling_seasonPointPct_{window}",
                 f"rolling_specialTeamEdge_{window}",
+                # NEW: Rebound features (MoneyPuck-inspired)
+                f"rolling_rebounds_for_{window}",
+                f"rolling_rebound_goals_{window}",
+                # NEW: Penalty differential
+                f"rolling_penalty_diff_{window}",
+                # NEW: Rush features (MoneyPuck-inspired)
+                f"rolling_rush_shots_{window}",
+                f"rolling_rush_goals_{window}",
+                # NEW: High danger xG (more refined than shots)
+                f"rolling_hd_xg_for_{window}",
+                f"rolling_hd_xg_against_{window}",
+                # NEW: Turnover differential
+                f"rolling_turnover_diff_{window}",
             ]
         )
 

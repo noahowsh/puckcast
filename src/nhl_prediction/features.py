@@ -532,6 +532,33 @@ def engineer_team_features(logs: pd.DataFrame, rolling_windows: Iterable[int] = 
                 lambda s, w=window: _lagged_rolling(s, w)
             )
 
+        # Rush stats rolling (NEW - MoneyPuck-inspired)
+        if "rushShotsFor" in logs.columns:
+            roll_features[f"rolling_rush_shots_{window}"] = group["rushShotsFor"].transform(
+                lambda s, w=window: _lagged_rolling(s, w)
+            )
+        if "rushGoalsFor" in logs.columns:
+            roll_features[f"rolling_rush_goals_{window}"] = group["rushGoalsFor"].transform(
+                lambda s, w=window: _lagged_rolling(s, w)
+            )
+
+        # High danger xG rolling (NEW - more refined than just shots)
+        if "highDangerxGoalsFor" in logs.columns:
+            roll_features[f"rolling_hd_xg_for_{window}"] = group["highDangerxGoalsFor"].transform(
+                lambda s, w=window: _lagged_rolling(s, w)
+            )
+        if "highDangerxGoalsAgainst" in logs.columns:
+            roll_features[f"rolling_hd_xg_against_{window}"] = group["highDangerxGoalsAgainst"].transform(
+                lambda s, w=window: _lagged_rolling(s, w)
+            )
+
+        # Turnover differential rolling (NEW)
+        if "takeaways" in logs.columns and "giveaways" in logs.columns:
+            logs["turnover_diff"] = logs["takeaways"] - logs["giveaways"]
+            roll_features[f"rolling_turnover_diff_{window}"] = group["turnover_diff"].transform(
+                lambda s, w=window: _lagged_rolling(s, w)
+            )
+
         # Goaltending rolling (NEW - Season aggregate gets rolling average for stability)
         if "team_save_pct" in logs.columns:
             roll_features[f"rolling_save_pct_{window}"] = group["team_save_pct"].transform(
