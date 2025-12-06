@@ -1,5 +1,6 @@
 import { buildTeamSnapshots, computeStandingsPowerScore, getCurrentStandings, type TeamSnapshot } from "@/lib/current";
 import modelInsightsRaw from "@/data/modelInsights.json";
+import powerIndexSnapshot from "@/data/powerIndexSnapshot.json";
 import { TeamCrest } from "@/components/TeamCrest";
 import { PowerBoardClient, type LeaderboardRow } from "@/components/PowerBoardClient";
 import { fetchNextGamesMap } from "@/lib/nextGames";
@@ -13,8 +14,13 @@ const teamModelAccuracy = new Map<string, number>(
   (modelInsights?.teamPerformance || []).map((t: any) => [t.abbrev, t.modelAccuracy]),
 );
 
+// Weekly update schedule - only revalidate once per week
 export const dynamic = "force-dynamic";
-export const revalidate = 0;
+export const revalidate = 604800; // 7 days in seconds
+
+// Get movement reasons from snapshot
+const movementReasons = powerIndexSnapshot.movementReasons as Record<string, string>;
+const weekOf = powerIndexSnapshot.weekOf;
 
 const rankedRows: LeaderboardRow[] = standings
   .map((standing) => {
@@ -34,6 +40,7 @@ const rankedRows: LeaderboardRow[] = standings
       pointPctg: standing.pointPctg,
       powerScore: power,
       overlay: { avgProb: overlayAvg },
+      movementReason: movementReasons[standing.abbrev] ?? undefined,
     };
   })
   .sort((a, b) => b.powerScore - a.powerScore)
@@ -122,13 +129,6 @@ async function fetchNextGames(abbrevs: string[]): Promise<Record<string, NextGam
 export default async function LeaderboardsPage() {
   const nextGames = await fetchNextGamesMap(rankedRows.map((r) => r.abbrev), 14);
   const topTeam = rankedRows[0];
-  const updatedDisplay = new Intl.DateTimeFormat("en-US", {
-    timeZone: "America/New_York",
-    month: "short",
-    day: "numeric",
-    hour: "numeric",
-    minute: "numeric",
-  }).format(new Date());
 
   return (
     <div className="min-h-screen">
@@ -138,12 +138,12 @@ export default async function LeaderboardsPage() {
             <div className="nova-hero__text">
               <div className="pill-row">
                 <span className="pill">Puckcast Power Index</span>
-                <span className="pill">Updated {updatedDisplay} ET</span>
+                <span className="pill">Week of {weekOf}</span>
               </div>
               <h1 className="display-xl">The analytics snapshot of who&apos;s real.</h1>
               <p className="lead">
                 Power score blends standings metrics (points, point percentage) with underlying strength (goal differential and model win rate).
-                These rankings refresh weekly so you always know who is outrunning or lagging behind their record.
+                Rankings update every Monday to capture a full week of movement.
               </p>
             </div>
 
@@ -177,24 +177,30 @@ export default async function LeaderboardsPage() {
               {/* Movers Section */}
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
                 {biggestMover && (
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.75rem', background: 'rgba(110, 240, 194, 0.1)', borderRadius: '0.5rem', border: '1px solid rgba(110, 240, 194, 0.2)' }}>
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" style={{ color: 'var(--mint)', flexShrink: 0 }}>
+                  <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem', padding: '0.75rem', background: 'rgba(110, 240, 194, 0.1)', borderRadius: '0.5rem', border: '1px solid rgba(110, 240, 194, 0.2)' }}>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" style={{ color: 'var(--mint)', flexShrink: 0, marginTop: '2px' }}>
                       <path d="M12 19V5M5 12l7-7 7 7" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
                     </svg>
                     <div>
                       <p style={{ fontSize: '0.7rem', textTransform: 'uppercase', color: 'var(--text-tertiary)', fontWeight: 600 }}>Rising</p>
                       <p style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--mint)' }}>{biggestMover.abbrev} +{biggestMover.movement}</p>
+                      {biggestMover.movementReason && (
+                        <p style={{ fontSize: '0.65rem', color: 'var(--text-tertiary)', marginTop: '0.25rem', lineHeight: 1.3 }}>{biggestMover.movementReason}</p>
+                      )}
                     </div>
                   </div>
                 )}
                 {biggestSlider && (
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.75rem', background: 'rgba(255, 148, 168, 0.1)', borderRadius: '0.5rem', border: '1px solid rgba(255, 148, 168, 0.2)' }}>
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" style={{ color: 'var(--rose)', flexShrink: 0 }}>
+                  <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem', padding: '0.75rem', background: 'rgba(255, 148, 168, 0.1)', borderRadius: '0.5rem', border: '1px solid rgba(255, 148, 168, 0.2)' }}>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" style={{ color: 'var(--rose)', flexShrink: 0, marginTop: '2px' }}>
                       <path d="M12 5v14M5 12l7 7 7-7" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
                     </svg>
                     <div>
                       <p style={{ fontSize: '0.7rem', textTransform: 'uppercase', color: 'var(--text-tertiary)', fontWeight: 600 }}>Falling</p>
                       <p style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--rose)' }}>{biggestSlider.abbrev} {biggestSlider.movement}</p>
+                      {biggestSlider.movementReason && (
+                        <p style={{ fontSize: '0.65rem', color: 'var(--text-tertiary)', marginTop: '0.25rem', lineHeight: 1.3 }}>{biggestSlider.movementReason}</p>
+                      )}
                     </div>
                   </div>
                 )}
