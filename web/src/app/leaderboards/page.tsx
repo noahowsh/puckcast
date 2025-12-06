@@ -147,34 +147,57 @@ export default async function LeaderboardsPage() {
               </p>
             </div>
 
-            <div className="nova-hero__panel">
-              <div className="stat-grid stat-grid-compact">
-                {topTeam && (
-                  <div className="stat-tile">
-                    <p className="stat-tile__label">Current #1</p>
-                    <p className="stat-tile__value">{topTeam.team}</p>
-                    <p className="stat-tile__detail">#{topTeam.powerRank} · {topTeam.record}</p>
+            {/* Visual: Top 3 Podium + Movers */}
+            <div className="nova-hero__panel" style={{ padding: '1.25rem' }}>
+              {/* Top 3 Teams Podium */}
+              <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'center', gap: '0.5rem', marginBottom: '1.25rem' }}>
+                {/* #2 */}
+                <div style={{ textAlign: 'center', flex: 1 }}>
+                  <TeamCrest abbrev={rankedRows[1]?.abbrev ?? ''} size="md" />
+                  <div style={{ marginTop: '0.5rem', padding: '0.75rem 0.5rem', background: 'rgba(192, 192, 192, 0.15)', borderRadius: '0.5rem 0.5rem 0 0', borderTop: '3px solid silver' }}>
+                    <p style={{ fontSize: '1.25rem', fontWeight: 800, color: 'silver' }}>2</p>
                   </div>
-                )}
+                </div>
+                {/* #1 */}
+                <div style={{ textAlign: 'center', flex: 1 }}>
+                  <TeamCrest abbrev={rankedRows[0]?.abbrev ?? ''} size="lg" />
+                  <div style={{ marginTop: '0.5rem', padding: '1rem 0.5rem', background: 'rgba(255, 215, 0, 0.15)', borderRadius: '0.5rem 0.5rem 0 0', borderTop: '3px solid gold' }}>
+                    <p style={{ fontSize: '1.5rem', fontWeight: 800, color: 'gold' }}>1</p>
+                  </div>
+                </div>
+                {/* #3 */}
+                <div style={{ textAlign: 'center', flex: 1 }}>
+                  <TeamCrest abbrev={rankedRows[2]?.abbrev ?? ''} size="md" />
+                  <div style={{ marginTop: '0.5rem', padding: '0.5rem', background: 'rgba(205, 127, 50, 0.15)', borderRadius: '0.5rem 0.5rem 0 0', borderTop: '3px solid #cd7f32' }}>
+                    <p style={{ fontSize: '1.1rem', fontWeight: 800, color: '#cd7f32' }}>3</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Movers Section */}
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
                 {biggestMover && (
-                  <div className="stat-tile">
-                    <p className="stat-tile__label">Biggest riser</p>
-                    <p className="stat-tile__value">{biggestMover.team}</p>
-                    <p className="stat-tile__detail">+{biggestMover.movement} spots</p>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.75rem', background: 'rgba(110, 240, 194, 0.1)', borderRadius: '0.5rem', border: '1px solid rgba(110, 240, 194, 0.2)' }}>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" style={{ color: 'var(--mint)', flexShrink: 0 }}>
+                      <path d="M12 19V5M5 12l7-7 7 7" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                    <div>
+                      <p style={{ fontSize: '0.7rem', textTransform: 'uppercase', color: 'var(--text-tertiary)', fontWeight: 600 }}>Rising</p>
+                      <p style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--mint)' }}>{biggestMover.abbrev} +{biggestMover.movement}</p>
+                    </div>
                   </div>
                 )}
                 {biggestSlider && (
-                  <div className="stat-tile">
-                    <p className="stat-tile__label">Biggest slider</p>
-                    <p className="stat-tile__value">{biggestSlider.team}</p>
-                    <p className="stat-tile__detail">{biggestSlider.movement} spots</p>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.75rem', background: 'rgba(255, 148, 168, 0.1)', borderRadius: '0.5rem', border: '1px solid rgba(255, 148, 168, 0.2)' }}>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" style={{ color: 'var(--rose)', flexShrink: 0 }}>
+                      <path d="M12 5v14M5 12l7 7 7-7" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                    <div>
+                      <p style={{ fontSize: '0.7rem', textTransform: 'uppercase', color: 'var(--text-tertiary)', fontWeight: 600 }}>Falling</p>
+                      <p style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--rose)' }}>{biggestSlider.abbrev} {biggestSlider.movement}</p>
+                    </div>
                   </div>
                 )}
-                <div className="stat-tile">
-                  <p className="stat-tile__label">Refresh cadence</p>
-                  <p className="stat-tile__value">Weekly</p>
-                  <p className="stat-tile__detail">Last updated {updatedDisplay} ET</p>
-                </div>
               </div>
             </div>
           </div>

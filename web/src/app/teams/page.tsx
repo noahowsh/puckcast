@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { buildTeamSnapshots, computeStandingsPowerScore, formatPowerScore, getCurrentStandings } from "@/lib/current";
 import { TeamLogo } from "@/components/TeamLogo";
+import { TeamCrest } from "@/components/TeamCrest";
 
 const snapshots = buildTeamSnapshots();
 const standings = getCurrentStandings();
@@ -21,23 +22,62 @@ const allTeams = standings
   })
   .sort((a, b) => a.team.localeCompare(b.team)); // Sort alphabetically by team name
 
+// Get top 5 teams by points for the visual
+const topTeams = [...standings].sort((a, b) => b.points - a.points).slice(0, 5);
+const maxPoints = topTeams[0]?.points ?? 1;
+
 export default function TeamsIndexPage() {
   return (
     <div className="min-h-screen">
       <div className="container">
         <section className="nova-hero nav-offset">
-          <div className="nova-hero__text">
-            <div className="pill-row">
-              <span className="pill">Team Index</span>
-              <span className="pill">All 32 teams</span>
+          <div className="nova-hero__grid">
+            <div className="nova-hero__text">
+              <div className="pill-row">
+                <span className="pill">Team Index</span>
+                <span className="pill">All 32 teams</span>
+              </div>
+              <h1 className="display-xl">Find your team.</h1>
+              <p className="lead">
+                Browse all 32 NHL teams alphabetically. Tap any team to view detailed stats, upcoming games, and goalie performance.
+              </p>
+              <div className="chip-row">
+                <span className="chip-soft">Alphabetically sorted</span>
+                <span className="chip-soft">Updated with live data</span>
+              </div>
             </div>
-            <h1 className="display-xl">Find your team.</h1>
-            <p className="lead">
-              Browse all 32 NHL teams alphabetically. Tap any team to view detailed stats, upcoming games, and goalie performance.
-            </p>
-            <div className="chip-row">
-              <span className="chip-soft">Alphabetically sorted</span>
-              <span className="chip-soft">Updated with live data</span>
+
+            {/* League Leaders Mini Visual */}
+            <div className="nova-hero__panel">
+              <p style={{ fontSize: '0.75rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-tertiary)', marginBottom: '1rem' }}>
+                League Leaders
+              </p>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem' }}>
+                {topTeams.map((team, idx) => (
+                  <div key={team.abbrev} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                    <span style={{ width: '1.25rem', fontSize: '0.8rem', fontWeight: 700, color: idx === 0 ? 'var(--mint)' : 'var(--text-tertiary)' }}>
+                      {idx + 1}
+                    </span>
+                    <TeamCrest abbrev={team.abbrev} size="sm" />
+                    <div style={{ flex: 1 }}>
+                      <div style={{ height: '0.5rem', background: 'rgba(255,255,255,0.1)', borderRadius: '0.25rem', overflow: 'hidden' }}>
+                        <div style={{
+                          width: `${(team.points / maxPoints) * 100}%`,
+                          height: '100%',
+                          background: idx === 0 ? 'linear-gradient(90deg, var(--aqua), var(--mint))' : 'var(--aqua)',
+                          borderRadius: '0.25rem'
+                        }} />
+                      </div>
+                    </div>
+                    <span style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--text-primary)', minWidth: '2.5rem', textAlign: 'right' }}>
+                      {team.points}
+                    </span>
+                  </div>
+                ))}
+              </div>
+              <Link href="/leaderboards" className="cta cta-ghost" style={{ width: '100%', justifyContent: 'center', marginTop: '1rem' }}>
+                Full Power Index →
+              </Link>
             </div>
           </div>
         </section>

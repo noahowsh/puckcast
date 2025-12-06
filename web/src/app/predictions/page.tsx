@@ -165,35 +165,51 @@ export default function PredictionsPage() {
               </p>
             </div>
 
-            <div className="nova-hero__panel">
-              <div className="stat-grid">
-                <div className="stat-tile">
-                  <p className="stat-tile__label">Holdout accuracy</p>
-                  <p className="stat-tile__value">{pct(modelInsights.overall.accuracy)}</p>
-                  <p className="stat-tile__detail">Baseline {pct(modelInsights.overall.baseline)}</p>
+            {/* Visual: Tonight's Grade Distribution */}
+            <div className="nova-hero__panel" style={{ padding: '1.25rem' }}>
+              <p style={{ fontSize: '0.75rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-tertiary)', marginBottom: '1rem' }}>
+                Tonight&apos;s Slate
+              </p>
+
+              {/* Grade bars */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', marginBottom: '1rem' }}>
+                {(() => {
+                  const aCount = todaysPredictions.filter(g => getPredictionGrade(g.edge).label.includes('A')).length;
+                  const bCount = todaysPredictions.filter(g => getPredictionGrade(g.edge).label.includes('B')).length;
+                  const cCount = todaysPredictions.length - aCount - bCount;
+                  const total = todaysPredictions.length || 1;
+
+                  return [
+                    { label: 'A-tier', count: aCount, pct: (aCount / total) * 100, color: 'linear-gradient(90deg, var(--aqua), var(--mint))' },
+                    { label: 'B-tier', count: bCount, pct: (bCount / total) * 100, color: 'var(--amber)' },
+                    { label: 'Toss-ups', count: cCount, pct: (cCount / total) * 100, color: 'rgba(255,255,255,0.3)' },
+                  ].map((tier) => (
+                    <div key={tier.label} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                      <span style={{ width: '4rem', fontSize: '0.8rem', color: 'var(--text-secondary)' }}>{tier.label}</span>
+                      <div style={{ flex: 1, height: '1.25rem', background: 'rgba(255,255,255,0.08)', borderRadius: '0.375rem', overflow: 'hidden' }}>
+                        <div style={{ width: `${tier.pct}%`, height: '100%', background: tier.color, borderRadius: '0.375rem', minWidth: tier.count > 0 ? '8px' : '0' }} />
+                      </div>
+                      <span style={{ width: '1.5rem', fontSize: '0.9rem', fontWeight: 700, textAlign: 'right' }}>{tier.count}</span>
+                    </div>
+                  ));
+                })()}
+              </div>
+
+              {/* Summary stats */}
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem', paddingTop: '0.75rem', borderTop: '1px solid var(--border-subtle)' }}>
+                <div style={{ textAlign: 'center' }}>
+                  <p style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--mint)' }}>{(summary.avgEdge * 100).toFixed(1)}</p>
+                  <p style={{ fontSize: '0.7rem', color: 'var(--text-tertiary)', textTransform: 'uppercase' }}>Avg edge (pts)</p>
                 </div>
-                <div className="stat-tile">
-                  <p className="stat-tile__label">Average edge</p>
-                  <p className="stat-tile__value">{(summary.avgEdge * 100).toFixed(1)} pts</p>
-                  <p className="stat-tile__detail">Per matchup</p>
-                </div>
-                <div className="stat-tile">
-                  <p className="stat-tile__label">A grades</p>
-                  <p className="stat-tile__value">{summary.aGrades}</p>
-                  <p className="stat-tile__detail">+ B grade: {todaysPredictions.length - summary.aGrades - summary.tossUps}</p>
-                </div>
-                <div className="stat-tile">
-                  <p className="stat-tile__label">Toss ups</p>
-                  <p className="stat-tile__value">{summary.tossUps}</p>
-                  <p className="stat-tile__detail">Less than 2 pts edge</p>
+                <div style={{ textAlign: 'center' }}>
+                  <p style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--aqua)' }}>{pct(modelInsights.overall.accuracy)}</p>
+                  <p style={{ fontSize: '0.7rem', color: 'var(--text-tertiary)', textTransform: 'uppercase' }}>Model accuracy</p>
                 </div>
               </div>
-              <div className="cta-row">
-                <Link href="/performance" className="cta cta-ghost">
-                  View model receipts
-                </Link>
-                <Link href="/leaderboards" className="cta cta-light">
-                  Power index
+
+              <div className="cta-row" style={{ marginTop: '1rem' }}>
+                <Link href="/performance" className="cta cta-ghost" style={{ flex: 1, justifyContent: 'center' }}>
+                  Model receipts
                 </Link>
               </div>
             </div>
