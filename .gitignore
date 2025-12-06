@@ -64,8 +64,11 @@ data/moneypuck_all_games.csv
 data/moneypuck_*.parquet
 data/raw/
 data/processed/
-data/cache/
 data/*.pkl
+
+# Cache directory (but keep native_logs training data)
+data/cache/
+!data/cache/native_logs_*.parquet
 
 # Daily prediction exports
 predictions_*.csv
