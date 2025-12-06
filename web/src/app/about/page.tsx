@@ -30,10 +30,10 @@ export default function AboutPage() {
         <section className="mb-12">
           <h2 className="text-2xl font-bold text-white mb-6">How the model works</h2>
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-            {[{ title: "Data collection", body: "Official NHL Stats API covering 3 seasons (2021-2024): play-by-play, player stats, team metrics, xG, Corsi, and situational splits." },
-              { title: "Feature engineering", body: "216 features (V7.3) including Elo, rolling xG differential, goalie GSAx, fatigue index, comeback ability, travel distance, divisional matchups, and post-break performance." },
-              { title: "Model training", body: "Logistic regression with isotonic calibration on 2,460 games from 2021-2023. Simple, interpretable, and less prone to overfitting than black-box models." },
-              { title: "Validation & testing", body: "Full 2023-24 season (1,230 games) held out for testing. Strict separation keeps real-world accuracy honest. V7.3 achieves 61.4%." }
+            {[{ title: "Data collection", body: "Official NHL Stats API covering 8 seasons (2017-2025): play-by-play, player stats, team metrics, xG, Corsi, and situational splits." },
+              { title: "Feature engineering", body: "220+ features (V7.9) including Elo, rolling xG differential, goalie GSAx, fatigue index, comeback ability, travel distance, divisional matchups, and post-break performance." },
+              { title: "Model training", body: "Logistic regression with isotonic calibration using a 4-season training window. Simple, interpretable, and optimized for probability calibration (LogLoss: 0.6584)." },
+              { title: "Validation & testing", body: "Forward validation across multiple seasons. V7.9 achieves 60.2% accuracy with best-in-class calibration. 4-season window balances recency with data volume." }
             ].map((item) => (
               <div key={item.title} className="card">
                 <div className="flex items-center gap-3 mb-3">
@@ -52,7 +52,7 @@ export default function AboutPage() {
 
         {/* Key Features */}
         <section className="mb-12">
-          <h2 className="text-2xl font-bold text-white mb-6">216 features explained (V7.3)</h2>
+          <h2 className="text-2xl font-bold text-white mb-6">220+ features explained (V7.9)</h2>
           <div className="card">
             <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
               <div>
@@ -69,7 +69,7 @@ export default function AboutPage() {
                 </ul>
               </div>
               <div>
-                <h4 className="text-sm font-bold text-cyan-300 uppercase mb-3">V7.3 situational (7 new)</h4>
+                <h4 className="text-sm font-bold text-cyan-300 uppercase mb-3">V7.9 Enhanced (13 situational)</h4>
                 <ul className="space-y-2 text-sm text-white/75">
                   <li>- Fatigue index differential</li>
                   <li>- Third-period trailing performance</li>
@@ -77,7 +77,7 @@ export default function AboutPage() {
                   <li>- Divisional matchup flag</li>
                   <li>- Post-break game indicators</li>
                   <li>- Rest advantage calculations</li>
-                  <li>- Comeback ability metrics</li>
+                  <li>- Momentum acceleration metrics</li>
                 </ul>
               </div>
               <div>
@@ -97,12 +97,12 @@ export default function AboutPage() {
 
         {/* Performance Highlights */}
         <section className="mb-12">
-          <h2 className="text-2xl font-bold text-white mb-6">Performance highlights (V7.3)</h2>
+          <h2 className="text-2xl font-bold text-white mb-6">Performance highlights (V7.9)</h2>
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
-            <StatCard label="Test accuracy" value="61.4%" change={{ value: "+7.6 pts vs baseline", isPositive: true }} />
-            <StatCard label="A+ confidence" value="70.2%" change={{ value: "25+ pt edges", isPositive: true }} />
-            <StatCard label="Brier score" value="0.243" change={{ value: "Well calibrated", isPositive: true }} />
-            <StatCard label="Test games" value="1,230" change={{ value: "2023-24 season", isPositive: true }} />
+            <StatCard label="Test accuracy" value="60.2%" change={{ value: "+6.5 pts vs baseline", isPositive: true }} />
+            <StatCard label="A+ confidence" value="71.5%" change={{ value: "20+ pt edges", isPositive: true }} />
+            <StatCard label="Log loss" value="0.6584" change={{ value: "Best calibration", isPositive: true }} />
+            <StatCard label="Training window" value="4 seasons" change={{ value: "2020-2024 data", isPositive: true }} />
           </div>
         </section>
 
@@ -188,7 +188,7 @@ const faqItems = [
   {
     question: "How often do you update predictions?",
     answer:
-      "We generate fresh predictions daily at 11:00 AM UTC (6:00 AM ET) via automated GitHub Actions. The model pulls the latest stats from the NHL API and recalculates all 216 features (V7.3) before making predictions.",
+      "We generate fresh predictions daily at 10:00 AM and 10:00 PM UTC via automated GitHub Actions. The model pulls the latest stats from the NHL API and recalculates all 220+ features (V7.9) before making predictions.",
   },
   {
     question: "Do you sell picks or betting advice?",

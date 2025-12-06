@@ -3,6 +3,47 @@ import { getPredictionGrade, normalizeSummaryWithGrade } from "@/lib/prediction"
 
 const percent = (value: number) => Math.round(value * 100);
 
+function ShareButton({ prediction, grade }: { prediction: Prediction; grade: { label: string } }) {
+  const homePercent = percent(prediction.homeWinProb);
+  const awayPercent = percent(prediction.awayWinProb);
+  const favoriteTeam = prediction.modelFavorite === "home" ? prediction.homeTeam : prediction.awayTeam;
+  const favoritePercent = prediction.modelFavorite === "home" ? homePercent : awayPercent;
+
+  const tweetText = encodeURIComponent(
+    `🏒 ${prediction.awayTeam.abbrev} @ ${prediction.homeTeam.abbrev}\n\n` +
+    `📊 PuckCast.ai picks ${favoriteTeam.abbrev} (${favoritePercent}%)\n` +
+    `Grade: ${grade.label} | Edge: +${Math.round(Math.abs(prediction.edge) * 100)}%\n\n` +
+    `#NHL #HockeyTwitter`
+  );
+  const tweetUrl = `https://twitter.com/intent/tweet?text=${tweetText}&url=https://puckcast.ai/predictions`;
+
+  const handleCopyLink = async () => {
+    const shareText = `${prediction.awayTeam.abbrev} @ ${prediction.homeTeam.abbrev} - PuckCast picks ${favoriteTeam.abbrev} (${favoritePercent}%) Grade ${grade.label}`;
+    await navigator.clipboard.writeText(`${shareText} https://puckcast.ai/predictions`);
+  };
+
+  return (
+    <div className="flex items-center gap-2">
+      <a
+        href={tweetUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="chip text-[11px] hover:bg-sky-500/20 hover:border-sky-500/40 hover:text-sky-300 transition-colors cursor-pointer"
+        title="Share on X"
+      >
+        𝕏 Share
+      </a>
+      <button
+        onClick={handleCopyLink}
+        className="chip text-[11px] hover:bg-sky-500/20 hover:border-sky-500/40 hover:text-sky-300 transition-colors cursor-pointer"
+        title="Copy to clipboard"
+      >
+        📋 Copy
+      </button>
+    </div>
+  );
+}
+
 export function PredictionCard({ prediction }: { prediction: Prediction }) {
   const homePercent = percent(prediction.homeWinProb);
   const awayPercent = percent(prediction.awayWinProb);
@@ -133,6 +174,11 @@ export function PredictionCard({ prediction }: { prediction: Prediction }) {
             <dt className="stat-label mb-2">Analysis</dt>
             <dd className="text-sm leading-relaxed text-white/80">{summary}</dd>
             <p className="mt-3 text-xs text-white/50 italic">{grade.description}</p>
+          </div>
+
+          {/* Share */}
+          <div className="pt-3 border-t border-white/5">
+            <ShareButton prediction={prediction} grade={grade} />
           </div>
         </div>
       </div>
