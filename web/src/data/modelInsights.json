@@ -59,15 +59,15 @@
       "name": "A-tier (≥20 pts)",
       "bets": 739,
       "winRate": 0.7645,
-      "units": 392,
+      "units": 391,
       "note": "A+ and A grades combined",
       "avgEdge": 0.251
     },
     {
       "name": "B+ or better (≥15 pts)",
       "bets": 1428,
-      "winRate": 0.7128,
-      "units": 590,
+      "winRate": 0.7108,
+      "units": 602,
       "note": "Good confidence threshold",
       "avgEdge": 0.208
     },
@@ -157,28 +157,28 @@
       "season": "2024-25",
       "games": 1312,
       "accuracy": 0.6006,
-      "logLoss": 0.6590,
+      "logLoss": 0.6609,
       "baseline": 0.5625
     },
     {
       "season": "2023-24",
       "games": 1230,
       "accuracy": 0.6122,
-      "logLoss": 0.6570,
+      "logLoss": 0.6579,
       "baseline": 0.5374
     },
     {
       "season": "2022-23",
       "games": 1230,
       "accuracy": 0.6065,
-      "logLoss": 0.6545,
+      "logLoss": 0.6542,
       "baseline": 0.5138
     },
     {
       "season": "2021-22",
       "games": 1230,
       "accuracy": 0.6276,
-      "logLoss": 0.6490,
+      "logLoss": 0.6513,
       "baseline": 0.5415
     }
   ],

@@ -31,9 +31,9 @@ export default function AboutPage() {
           <h2 className="text-2xl font-bold text-white mb-6">How the model works</h2>
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
             {[{ title: "Data collection", body: "Official NHL Stats API covering 8 seasons (2017-2025): play-by-play, player stats, team metrics, xG, Corsi, and situational splits." },
-              { title: "Feature engineering", body: "19 curated features (V8.0) including improved Elo ratings with season carryover, rolling xG/Corsi/Fenwick differentials, goalie GSAx, fatigue metrics, and momentum indicators." },
-              { title: "Model training", body: "Logistic regression with isotonic calibration using a 4-season training window. Simple, interpretable, and optimized for probability calibration (LogLoss: 0.6543)." },
-              { title: "Validation & testing", body: "Forward validation on holdout data. V8.0 achieves 61.4% accuracy on 5,002 test games (4 seasons) with best-in-class calibration (log loss 0.6543). Each season tested using model trained only on prior 4 years." }
+              { title: "Feature engineering", body: "38 curated features (V8.1) including improved Elo ratings with season carryover, rolling xG/Corsi/Fenwick differentials, goalie GSAx, fatigue metrics, faceoff stats, and momentum indicators." },
+              { title: "Model training", body: "Logistic regression with isotonic calibration using a 4-season training window. Simple, interpretable, and optimized for probability calibration (LogLoss: 0.6561)." },
+              { title: "Validation & testing", body: "Forward validation on holdout data. V8.1 achieves 61.2% accuracy on 5,002 test games (4 seasons) with best-in-class calibration (log loss 0.6561). Each season tested using model trained only on prior 4 years." }
             ].map((item) => (
               <div key={item.title} className="card">
                 <div className="flex items-center gap-3 mb-3">
@@ -52,7 +52,7 @@ export default function AboutPage() {
 
         {/* Key Features */}
         <section className="mb-12">
-          <h2 className="text-2xl font-bold text-white mb-6">19 features explained (V8.0)</h2>
+          <h2 className="text-2xl font-bold text-white mb-6">38 features explained (V8.1)</h2>
           <div className="card">
             <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
               <div>
@@ -67,24 +67,27 @@ export default function AboutPage() {
                 </ul>
               </div>
               <div>
-                <h4 className="text-sm font-bold text-cyan-300 uppercase mb-3">Possession & Performance (7)</h4>
+                <h4 className="text-sm font-bold text-cyan-300 uppercase mb-3">Rolling Stats (20)</h4>
                 <ul className="space-y-2 text-sm text-white/75">
-                  <li>- Rolling Corsi (3 & 10 game)</li>
-                  <li>- High-danger shots (5 game)</li>
-                  <li>- xG momentum acceleration</li>
-                  <li>- Goal momentum acceleration</li>
-                  <li>- Momentum xG differential</li>
-                  <li>- Goalie trend score</li>
+                  <li>- Win pct (3, 5, 10 game rolling)</li>
+                  <li>- Goal diff (3, 5, 10 game rolling)</li>
+                  <li>- xG diff (3, 5, 10 game rolling)</li>
+                  <li>- Corsi/Fenwick possession metrics</li>
+                  <li>- High-danger shots (5, 10 game)</li>
+                  <li>- Faceoff % (5 game) - NEW in V8.1</li>
+                  <li>- Shot volume (10 game) - NEW in V8.1</li>
                 </ul>
               </div>
               <div>
-                <h4 className="text-sm font-bold text-emerald-300 uppercase mb-3">Rest & Fatigue (6)</h4>
+                <h4 className="text-sm font-bold text-emerald-300 uppercase mb-3">Rest & Goaltending (12)</h4>
                 <ul className="space-y-2 text-sm text-white/75">
                   <li>- Team rest days differential</li>
-                  <li>- Back-to-back (home)</li>
-                  <li>- Back-to-back (away)</li>
+                  <li>- Back-to-back (home/away)</li>
+                  <li>- Games in last 3/6 days - NEW in V8.1</li>
                   <li>- Save percentage rolling diffs</li>
+                  <li>- Goalie GSAx (5, 10 game)</li>
                   <li>- Goalie trend scoring</li>
+                  <li>- Momentum indicators</li>
                 </ul>
               </div>
             </div>
@@ -93,11 +96,11 @@ export default function AboutPage() {
 
         {/* Performance Highlights */}
         <section className="mb-12">
-          <h2 className="text-2xl font-bold text-white mb-6">Performance highlights (V8.0)</h2>
+          <h2 className="text-2xl font-bold text-white mb-6">Performance highlights (V8.1)</h2>
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
-            <StatCard label="Test accuracy" value="61.4%" change={{ value: "+7.7 pts vs baseline", isPositive: true }} />
-            <StatCard label="A+ confidence" value="71.5%" change={{ value: "25+ pt edges", isPositive: true }} />
-            <StatCard label="Log loss" value="0.6543" change={{ value: "Best calibration", isPositive: true }} />
+            <StatCard label="Test accuracy" value="61.2%" change={{ value: "+7.2 pts vs baseline", isPositive: true }} />
+            <StatCard label="A+ confidence" value="78.4%" change={{ value: "25+ pt edges", isPositive: true }} />
+            <StatCard label="Log loss" value="0.6561" change={{ value: "Best calibration", isPositive: true }} />
             <StatCard label="Training window" value="4 seasons" change={{ value: "Rolling window", isPositive: true }} />
           </div>
         </section>

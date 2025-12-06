@@ -1,14 +1,15 @@
 # Training Window Analysis
 
 **Date:** December 6, 2025
-**Model:** V8.0 Enhanced
+**Model:** V8.1 Enhanced
 **Data:** 8 seasons (2017-18 to 2024-25), 9,739 games
 
 ## Summary
 
-After extensive testing, we determined that **4 seasons** with **Elo season carryover** is the optimal configuration for the V8.0 model.
+After extensive testing, we determined that **4 seasons** with **Elo season carryover** is the optimal configuration for the V8.1 model.
 
-**Production Choice:** 4 seasons + optimized Elo (HA=35, carry=0.5) + feature cleanup = **61.4% accuracy**
+**Production Choice:** 4 seasons + optimized Elo (HA=35, carry=0.5) + 38 curated features = **61.2% accuracy**
+**Previous (V8.0):** 35 features = 60.9% accuracy
 **Previous (V7.9):** 4 seasons, no Elo carryover = 60.4% accuracy
 
 ## Test Results

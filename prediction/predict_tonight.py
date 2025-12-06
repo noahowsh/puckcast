@@ -126,7 +126,7 @@ def main(date_str: str = None):
             print(f'   📊 Prediction: {winner} (slight {conf:.0%} edge)')
     
     print('\n' + '='*80)
-    print('✅ Model: V8.0 (improved Elo + 35 curated features)')
+    print('✅ Model: V8.1 (improved Elo + 38 curated features)')
     print('✅ Trained on rolling 4-season window with season carryover')
     print('='*80)
 
