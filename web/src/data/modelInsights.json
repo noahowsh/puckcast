@@ -35,11 +35,11 @@
   "insights": [
     {
       "title": "A+ picks (≥25 pts)",
-      "detail": "71.5% accuracy - elite confidence tier"
+      "detail": "80.3% accuracy - elite confidence tier"
     },
     {
       "title": "A picks (20-25 pts)",
-      "detail": "68.2% accuracy - strong confidence tier"
+      "detail": "72.7% accuracy - strong confidence tier"
     },
     {
       "title": "V8.0 improvements",
@@ -49,35 +49,35 @@
   "strategies": [
     {
       "name": "A+ only (≥25 pts)",
-      "bets": 684,
-      "winRate": 0.715,
-      "units": 292,
+      "bets": 309,
+      "winRate": 0.803,
+      "units": 164,
       "note": "Elite confidence picks only",
       "avgEdge": 0.285
     },
     {
       "name": "A-tier (≥20 pts)",
-      "bets": 1198,
-      "winRate": 0.699,
-      "units": 478,
+      "bets": 726,
+      "winRate": 0.759,
+      "units": 326,
       "note": "A+ and A grades combined",
-      "avgEdge": 0.245
+      "avgEdge": 0.248
     },
     {
       "name": "B+ or better (≥15 pts)",
-      "bets": 1912,
-      "winRate": 0.642,
-      "units": 545,
+      "bets": 1458,
+      "winRate": 0.711,
+      "units": 520,
       "note": "Good confidence threshold",
-      "avgEdge": 0.208
+      "avgEdge": 0.211
     },
     {
       "name": "All predictions",
-      "bets": 4722,
-      "winRate": 0.596,
-      "units": 576,
+      "bets": 5002,
+      "winRate": 0.614,
+      "units": 859,
       "note": "Every game across 4 seasons",
-      "avgEdge": 0.182
+      "avgEdge": 0.110
     }
   ],
   "confidenceBuckets": [
@@ -86,9 +86,9 @@
       "grade": "A+",
       "min": 0.25,
       "max": null,
-      "accuracy": 0.715,
-      "count": 684,
-      "coverage": 0.145,
+      "accuracy": 0.803,
+      "count": 309,
+      "coverage": 0.062,
       "description": "Elite confidence - our strongest picks"
     },
     {
@@ -96,9 +96,9 @@
       "grade": "A",
       "min": 0.20,
       "max": 0.25,
-      "accuracy": 0.682,
-      "count": 514,
-      "coverage": 0.109,
+      "accuracy": 0.727,
+      "count": 417,
+      "coverage": 0.083,
       "description": "Strong confidence - high conviction calls"
     },
     {
@@ -106,9 +106,9 @@
       "grade": "B+",
       "min": 0.15,
       "max": 0.20,
-      "accuracy": 0.620,
-      "count": 714,
-      "coverage": 0.151,
+      "accuracy": 0.663,
+      "count": 732,
+      "coverage": 0.146,
       "description": "Good confidence - solid lean"
     },
     {
@@ -116,9 +116,9 @@
       "grade": "B",
       "min": 0.10,
       "max": 0.15,
-      "accuracy": 0.578,
-      "count": 780,
-      "coverage": 0.165,
+      "accuracy": 0.625,
+      "count": 934,
+      "coverage": 0.187,
       "description": "Medium confidence - slight edge"
     },
     {
@@ -126,9 +126,9 @@
       "grade": "C+",
       "min": 0.05,
       "max": 0.10,
-      "accuracy": 0.554,
-      "count": 1101,
-      "coverage": 0.233,
+      "accuracy": 0.576,
+      "count": 1230,
+      "coverage": 0.246,
       "description": "Weak confidence - marginal lean"
     },
     {
@@ -136,9 +136,9 @@
       "grade": "C",
       "min": 0,
       "max": 0.05,
-      "accuracy": 0.512,
-      "count": 929,
-      "coverage": 0.197,
+      "accuracy": 0.538,
+      "count": 1380,
+      "coverage": 0.276,
       "description": "Coin flip - no meaningful edge"
     }
   ],

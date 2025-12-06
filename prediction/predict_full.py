@@ -6,7 +6,7 @@
 ╚═══════════════════════════════════════════════════════════╝
 
 FULL MODEL NHL PREDICTIONS
-Predict today's games using V7.9 Enhanced (4-season training window, C=0.005 optimal)
+Predict today's games using V8.0 (4-season training window, improved Elo with season carryover)
 
 Usage:
     python predict_full.py
@@ -339,17 +339,17 @@ def predict_games(date=None, num_games=20):
     print(f"   ✅ {len(dataset.games)} games loaded")
     print(f"   ✅ {dataset.features.shape[1]} baseline features engineered")
 
-    # Add V7.9 situational features
+    # Add situational features
     games_with_situational = add_situational_features(dataset.games)
-    v79_features = ['fatigue_index_diff', 'third_period_trailing_perf_diff',
+    situational_features = ['fatigue_index_diff', 'third_period_trailing_perf_diff',
                     'travel_distance_diff', 'divisional_matchup',
                     'post_break_game_home', 'post_break_game_away', 'post_break_game_diff']
-    available_v79 = [f for f in v79_features if f in games_with_situational.columns]
+    available_situational = [f for f in situational_features if f in games_with_situational.columns]
 
     # Combine baseline + situational features
-    features_v79 = pd.concat([dataset.features, games_with_situational[available_v79]], axis=1)
-    print(f"   ✅ {len(available_v79)} V7.9 situational features added")
-    print(f"   ✅ Total: {features_v79.shape[1]} features (V7.9 Enhanced Model)")
+    features_full = pd.concat([dataset.features, games_with_situational[available_situational]], axis=1)
+    print(f"   ✅ {len(available_situational)} situational features added")
+    print(f"   ✅ Total: {features_full.shape[1]} features (V8.0 Model)")
 
     # Step 3: Train calibrated model using only past games
     print("\n3️⃣  Training calibrated logistic regression model...")
@@ -363,7 +363,7 @@ def predict_games(date=None, num_games=20):
         return []
     
     eligible_games = dataset.games.loc[eligible_mask].copy()
-    eligible_features = features_v79.loc[eligible_mask].copy()
+    eligible_features = features_full.loc[eligible_mask].copy()
     eligible_target = dataset.target.loc[eligible_mask].copy()
     train_seasons = sorted(eligible_games["seasonId"].unique().tolist())
     
@@ -422,8 +422,8 @@ def predict_games(date=None, num_games=20):
         home_idx = home_recent.index[0]
         away_idx = away_recent.index[0]
 
-        home_features = features_v79.loc[home_idx]
-        away_features = features_v79.loc[away_idx]
+        home_features = features_full.loc[home_idx]
+        away_features = features_full.loc[away_idx]
         
         # Create matchup features (average of recent performance)
         matchup_features = (home_features + away_features) / 2
