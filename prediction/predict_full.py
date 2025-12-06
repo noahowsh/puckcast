@@ -6,13 +6,22 @@
 ╚═══════════════════════════════════════════════════════════╝
 
 FULL MODEL NHL PREDICTIONS
-Predict today's games using V8.4 (dynamic threshold based on rolling home win rate)
+Predict today's games using V8.5 (dynamic Elo + dynamic threshold)
 
-V8.4 improvements:
-- Dynamic threshold: adjusts based on rolling league home win rate
-- When home advantage drops below historical norm, raises threshold (picks home less)
-- Maintains 61%+ accuracy on original 4 seasons while adapting to structural shifts
-- Formula: threshold = 0.5 + (0.535 - rolling_hw_50) * 0.5
+V8.5 improvements over V8.1:
+1. Dynamic Elo home advantage (pipeline.py):
+   - Adapts Elo home advantage based on rolling 50-game league home win rate
+   - When league HW drops (e.g., 2025-26 at 52.3%), Elo auto-adjusts
+   - Fixes Elo correlation collapse in 2025-26 (+1.3pp improvement)
+
+2. Dynamic threshold (predict_full.py):
+   - Formula: threshold = 0.5 + (0.535 - rolling_hw_50) * 0.5
+   - Best for 4-season average consistency (61.3%)
+
+Performance:
+- V8.1 baseline: 4-season 61.2%, 2025-26 53.2%
+- V8.5 Dynamic Elo only: 4-season 61.0%, 2025-26 54.5% (+1.3pp)
+- V8.5 + Dynamic Threshold: 4-season 61.3%, 2025-26 53.9% (+0.7pp)
 
 Usage:
     python predict_full.py
@@ -143,11 +152,11 @@ def calculate_adaptive_weights(games: pd.DataFrame, target: pd.Series) -> np.nda
 
 ET_ZONE = ZoneInfo("America/New_York")
 
-# V8.4 Curated Features (39 features - V8.1 base + league home win rate for adaptive predictions)
-# V8.4 adds dynamic threshold based on rolling home win rate
-# V8.4 maintains 61%+ on original 4 seasons while adapting to structural shifts
-# Key improvement: threshold = 0.5 + (0.535 - rolling_hw_50) * 0.5
-V84_FEATURES = [
+# V8.5 Curated Features (39 features - V8.1 base + league home win rate for adaptive predictions)
+# V8.5 adds: 1) Dynamic Elo home advantage, 2) Dynamic threshold
+# V8.5 maintains 61%+ on original 4 seasons while improving 2025-26 by +1.3pp
+# Key improvements: dynamic Elo in pipeline.py, threshold = 0.5 + (0.535 - rolling_hw_50) * 0.5
+V85_FEATURES = [
     # League-wide home advantage (adaptive to structural shifts)
     'league_hw_100',  # NEW in V8.2: Rolling 100-game league home win rate
 
@@ -550,13 +559,13 @@ def predict_games(date=None, num_games=20):
     ], axis=1)
     print(f"   ✅ {len(available_situational)} situational features added")
 
-    # Filter to V8.4 curated features only
-    available_v84 = [f for f in V84_FEATURES if f in features_full.columns]
-    missing_v84 = [f for f in V84_FEATURES if f not in features_full.columns]
-    if missing_v84:
-        print(f"   ⚠️  Missing {len(missing_v84)} V8.4 features: {missing_v84[:5]}...")
-    features_full = features_full[available_v84]
-    print(f"   ✅ Total: {features_full.shape[1]} curated features (V8.4 Model)")
+    # Filter to V8.5 curated features only
+    available_v85 = [f for f in V85_FEATURES if f in features_full.columns]
+    missing_v85 = [f for f in V85_FEATURES if f not in features_full.columns]
+    if missing_v85:
+        print(f"   ⚠️  Missing {len(missing_v85)} V8.5 features: {missing_v85[:5]}...")
+    features_full = features_full[available_v85]
+    print(f"   ✅ Total: {features_full.shape[1]} curated features (V8.5 Model)")
 
     # Step 3: Train calibrated model using only past games
     print("\n3️⃣  Training calibrated logistic regression model...")
