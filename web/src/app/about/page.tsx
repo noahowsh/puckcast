@@ -31,7 +31,7 @@ export default function AboutPage() {
           <h2 className="text-2xl font-bold text-white mb-6">How the model works</h2>
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
             {[{ title: "Data collection", body: "Official NHL Stats API covering 8 seasons (2017-2025): play-by-play, player stats, team metrics, xG, Corsi, and situational splits." },
-              { title: "Feature engineering", body: "220+ features (V7.9) including Elo, rolling xG differential, goalie GSAx, fatigue index, comeback ability, travel distance, divisional matchups, and post-break performance." },
+              { title: "Feature engineering", body: "~50 curated features (V7.9) including Elo ratings, rolling xG differential, goalie GSAx, fatigue index, comeback ability, travel distance, divisional matchups, and post-break performance." },
               { title: "Model training", body: "Logistic regression with isotonic calibration using a 4-season training window. Simple, interpretable, and optimized for probability calibration (LogLoss: 0.6584)." },
               { title: "Validation & testing", body: "Forward validation across multiple seasons. V7.9 achieves 60.2% accuracy with best-in-class calibration. 4-season window balances recency with data volume." }
             ].map((item) => (
@@ -52,11 +52,11 @@ export default function AboutPage() {
 
         {/* Key Features */}
         <section className="mb-12">
-          <h2 className="text-2xl font-bold text-white mb-6">220+ features explained (V7.9)</h2>
+          <h2 className="text-2xl font-bold text-white mb-6">~50 features explained (V7.9)</h2>
           <div className="card">
             <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
               <div>
-                <h4 className="text-sm font-bold text-sky-300 uppercase mb-3">Team metrics (209 baseline)</h4>
+                <h4 className="text-sm font-bold text-sky-300 uppercase mb-3">Core metrics (~37 baseline)</h4>
                 <ul className="space-y-2 text-sm text-white/75">
                   <li>- Elo ratings (offense & defense)</li>
                   <li>- xG for/against (rolling windows)</li>
@@ -69,7 +69,7 @@ export default function AboutPage() {
                 </ul>
               </div>
               <div>
-                <h4 className="text-sm font-bold text-cyan-300 uppercase mb-3">V7.9 Enhanced (13 situational)</h4>
+                <h4 className="text-sm font-bold text-cyan-300 uppercase mb-3">V7.9 situational (7 features)</h4>
                 <ul className="space-y-2 text-sm text-white/75">
                   <li>- Fatigue index differential</li>
                   <li>- Third-period trailing performance</li>
@@ -188,7 +188,7 @@ const faqItems = [
   {
     question: "How often do you update predictions?",
     answer:
-      "We generate fresh predictions daily at 10:00 AM and 10:00 PM UTC via automated GitHub Actions. The model pulls the latest stats from the NHL API and recalculates all 220+ features (V7.9) before making predictions.",
+      "We generate fresh predictions daily at 10:00 AM and 10:00 PM UTC via automated GitHub Actions. The model pulls the latest stats from the NHL API and recalculates all ~50 features (V7.9) before making predictions.",
   },
   {
     question: "Do you sell picks or betting advice?",
