@@ -178,7 +178,7 @@ Remove `goalie_rest_days_diff` from the feature set. The `rest_diff` feature (wh
 home_advantage = 35.0  # Up from 30.0
 season_carryover = 0.5  # New (was 0.0 / full reset)
 
-# Features: 19 features (removed goalie_rest_days_diff)
+# Features: 35 curated features (removed goalie_rest_days_diff which degraded 77%)
 ```
 
 ### Final Results

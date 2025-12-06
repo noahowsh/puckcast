@@ -43,6 +43,44 @@ warnings.filterwarnings('ignore', category=UserWarning)
 WEB_PREDICTIONS_PATH = Path(__file__).parent.parent / "web" / "src" / "data" / "todaysPredictions.json"
 ET_ZONE = ZoneInfo("America/New_York")
 
+# V8.0 Curated Features (35 base features - removed goalie_rest_days_diff which degraded 77%)
+V80_FEATURES = [
+    # Elo ratings (improved with season carryover)
+    'elo_diff_pre', 'elo_expectation_home',
+
+    # Rolling win percentage
+    'rolling_win_pct_10_diff', 'rolling_win_pct_5_diff', 'rolling_win_pct_3_diff',
+
+    # Rolling goal differential
+    'rolling_goal_diff_10_diff', 'rolling_goal_diff_5_diff', 'rolling_goal_diff_3_diff',
+
+    # Rolling xG differential
+    'rolling_xg_diff_10_diff', 'rolling_xg_diff_5_diff', 'rolling_xg_diff_3_diff',
+
+    # Possession metrics (improving over time - up 26-32%)
+    'rolling_corsi_10_diff', 'rolling_corsi_5_diff', 'rolling_corsi_3_diff',
+    'rolling_fenwick_10_diff', 'rolling_fenwick_5_diff',
+
+    # Season-level stats
+    'season_win_pct_diff', 'season_goal_diff_avg_diff',
+    'season_xg_diff_avg_diff', 'season_shot_margin_diff',
+
+    # Rest and schedule (rest_diff improved +53%)
+    'rest_diff', 'is_b2b_home', 'is_b2b_away',
+    'games_last_6d_home',
+
+    # Goaltending (removed goalie_rest_days_diff - degraded 77%)
+    'rolling_save_pct_10_diff', 'rolling_save_pct_5_diff', 'rolling_save_pct_3_diff',
+    'rolling_gsax_5_diff', 'rolling_gsax_10_diff',
+    'goalie_trend_score_diff',
+
+    # Momentum
+    'momentum_win_pct_diff', 'momentum_goal_diff_diff', 'momentum_xg_diff',
+
+    # High danger shots
+    'rolling_high_danger_shots_5_diff', 'rolling_high_danger_shots_10_diff',
+]
+
 def recent_seasons(anchor: datetime | date | None = None, count: int = 4) -> list[str]:
     """Return the most recent NHL season IDs ending at the anchor date."""
     if anchor is None:
@@ -349,7 +387,14 @@ def predict_games(date=None, num_games=20):
     # Combine baseline + situational features
     features_full = pd.concat([dataset.features, games_with_situational[available_situational]], axis=1)
     print(f"   ✅ {len(available_situational)} situational features added")
-    print(f"   ✅ Total: {features_full.shape[1]} features (V8.0 Model)")
+
+    # Filter to V8.0 curated features only
+    available_v80 = [f for f in V80_FEATURES if f in features_full.columns]
+    missing_v80 = [f for f in V80_FEATURES if f not in features_full.columns]
+    if missing_v80:
+        print(f"   ⚠️  Missing {len(missing_v80)} V8.0 features: {missing_v80[:5]}...")
+    features_full = features_full[available_v80]
+    print(f"   ✅ Total: {features_full.shape[1]} curated features (V8.0 Model)")
 
     # Step 3: Train calibrated model using only past games
     print("\n3️⃣  Training calibrated logistic regression model...")
