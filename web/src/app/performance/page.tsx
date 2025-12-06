@@ -294,7 +294,7 @@ export default function PerformancePage() {
                     <span style={{ fontSize: '0.8rem', color: 'var(--text-tertiary)' }}>≥20 pts edge</span>
                   </div>
                   <p style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', lineHeight: 1.5 }}>
-                    High confidence. Our best picks where the model sees a clear statistical advantage. A+ picks hit at 80%+.
+                    High confidence. Our best picks where the model sees a clear statistical advantage. A+ picks hit at ~79%.
                   </p>
                 </div>
                 <div>

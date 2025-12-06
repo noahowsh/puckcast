@@ -181,22 +181,37 @@ season_carryover = 0.5  # New (was 0.0 / full reset)
 # Features: 35 curated features (removed goalie_rest_days_diff which degraded 77%)
 ```
 
-### Final Results
+### Final Results (VERIFIED Dec 6, 2025)
 
-| Metric | V7.9 | V8.0 | Improvement |
-|--------|------|------|-------------|
-| **Accuracy** | 60.37% | **61.40%** | **+1.03pp** |
-| **Log Loss** | 0.6582 | **0.6543** | **-0.0039** |
-| **Edge vs Baseline** | +6.6pp | **+7.7pp** | **+1.1pp** |
+| Metric | Value |
+|--------|-------|
+| **Accuracy** | **60.84%** |
+| **Log Loss** | **0.6558** |
+| **Brier Score** | **0.2320** |
+| **Baseline** | 53.92% |
+| **Edge vs Baseline** | **+6.92pp** |
+| **Test Games** | 5,002 |
 
-### By Season
+### By Season (VERIFIED)
 
-| Season | V7.9 | V8.0 | Change |
-|--------|------|------|--------|
-| 2021-22 | 62.76% | 64.15% | +1.39pp |
-| 2022-23 | 58.78% | 60.57% | +1.79pp |
-| 2023-24 | 60.16% | 60.98% | +0.82pp |
-| 2024-25 | 59.76% | 59.91% | +0.15pp |
+| Season | Games | Accuracy | Log Loss |
+|--------|-------|----------|----------|
+| 2021-22 | 1,230 | 62.60% | 0.6496 |
+| 2022-23 | 1,230 | 60.65% | 0.6543 |
+| 2023-24 | 1,230 | 61.30% | 0.6577 |
+| 2024-25 | 1,312 | 58.92% | 0.6610 |
+
+### Confidence Buckets (VERIFIED)
+
+| Grade | Games | Accuracy |
+|-------|-------|----------|
+| A+ | 313 | 78.59% |
+| A | 391 | 73.66% |
+| B+ | 650 | 67.38% |
+| B | 1,002 | 62.08% |
+| C+ | 1,232 | 57.79% |
+| C | 1,414 | 52.12% |
+| **A-tier** | **704** | **75.85%** |
 
 ## Next Steps
 

@@ -1,20 +1,20 @@
 {
-  "generatedAt": "2025-12-06T12:00:00.000000+00:00",
+  "generatedAt": "2025-12-06T20:30:00.000000+00:00",
   "modelVersion": "V8.0",
   "overall": {
     "games": 5002,
-    "accuracy": 0.6140,
-    "baseline": 0.5374,
-    "homeWinRate": 0.5374,
-    "brier": 0.228,
-    "logLoss": 0.6543,
-    "avgEdge": 0.185
+    "accuracy": 0.6084,
+    "baseline": 0.5392,
+    "homeWinRate": 0.5392,
+    "brier": 0.232,
+    "logLoss": 0.6558,
+    "avgEdge": 0.169
   },
   "heroStats": [
     {
       "label": "Test accuracy",
-      "value": "61.4%",
-      "detail": "4-season holdout average"
+      "value": "60.8%",
+      "detail": "4-season holdout validation"
     },
     {
       "label": "Model version",
@@ -28,54 +28,54 @@
     },
     {
       "label": "Edge vs baseline",
-      "value": "+7.7 pts",
-      "detail": "vs 53.7% home win rate"
+      "value": "+6.9 pts",
+      "detail": "vs 53.9% home win rate"
     }
   ],
   "insights": [
     {
       "title": "A+ picks (≥25 pts)",
-      "detail": "80.3% accuracy - elite confidence tier"
+      "detail": "78.6% accuracy - elite confidence tier"
     },
     {
       "title": "A picks (20-25 pts)",
-      "detail": "72.7% accuracy - strong confidence tier"
+      "detail": "73.7% accuracy - strong confidence tier"
     },
     {
       "title": "V8.0 improvements",
-      "detail": "Elo carryover + feature cleanup = +1.0pp"
+      "detail": "Elo carryover + curated features"
     }
   ],
   "strategies": [
     {
       "name": "A+ only (≥25 pts)",
-      "bets": 309,
-      "winRate": 0.803,
-      "units": 164,
+      "bets": 313,
+      "winRate": 0.7859,
+      "units": 179,
       "note": "Elite confidence picks only",
       "avgEdge": 0.285
     },
     {
       "name": "A-tier (≥20 pts)",
-      "bets": 726,
-      "winRate": 0.759,
-      "units": 326,
+      "bets": 704,
+      "winRate": 0.7585,
+      "units": 364,
       "note": "A+ and A grades combined",
       "avgEdge": 0.248
     },
     {
       "name": "B+ or better (≥15 pts)",
-      "bets": 1458,
-      "winRate": 0.711,
-      "units": 520,
+      "bets": 1354,
+      "winRate": 0.7179,
+      "units": 590,
       "note": "Good confidence threshold",
       "avgEdge": 0.211
     },
     {
       "name": "All predictions",
       "bets": 5002,
-      "winRate": 0.614,
-      "units": 859,
+      "winRate": 0.6084,
+      "units": 1084,
       "note": "Every game across 4 seasons",
       "avgEdge": 0.110
     }
@@ -86,9 +86,9 @@
       "grade": "A+",
       "min": 0.25,
       "max": null,
-      "accuracy": 0.803,
-      "count": 309,
-      "coverage": 0.062,
+      "accuracy": 0.7859,
+      "count": 313,
+      "coverage": 0.063,
       "description": "Elite confidence - our strongest picks"
     },
     {
@@ -96,9 +96,9 @@
       "grade": "A",
       "min": 0.20,
       "max": 0.25,
-      "accuracy": 0.727,
-      "count": 417,
-      "coverage": 0.083,
+      "accuracy": 0.7366,
+      "count": 391,
+      "coverage": 0.078,
       "description": "Strong confidence - high conviction calls"
     },
     {
@@ -106,9 +106,9 @@
       "grade": "B+",
       "min": 0.15,
       "max": 0.20,
-      "accuracy": 0.663,
-      "count": 732,
-      "coverage": 0.146,
+      "accuracy": 0.6738,
+      "count": 650,
+      "coverage": 0.130,
       "description": "Good confidence - solid lean"
     },
     {
@@ -116,9 +116,9 @@
       "grade": "B",
       "min": 0.10,
       "max": 0.15,
-      "accuracy": 0.625,
-      "count": 934,
-      "coverage": 0.187,
+      "accuracy": 0.6208,
+      "count": 1002,
+      "coverage": 0.200,
       "description": "Medium confidence - slight edge"
     },
     {
@@ -126,8 +126,8 @@
       "grade": "C+",
       "min": 0.05,
       "max": 0.10,
-      "accuracy": 0.576,
-      "count": 1230,
+      "accuracy": 0.5779,
+      "count": 1232,
       "coverage": 0.246,
       "description": "Weak confidence - marginal lean"
     },
@@ -136,17 +136,17 @@
       "grade": "C",
       "min": 0,
       "max": 0.05,
-      "accuracy": 0.538,
-      "count": 1380,
-      "coverage": 0.276,
+      "accuracy": 0.5212,
+      "count": 1414,
+      "coverage": 0.283,
       "description": "Coin flip - no meaningful edge"
     }
   ],
   "currentSeason": {
     "season": "2025-26",
     "games": 347,
-    "accuracy": 0.613,
-    "logLoss": 0.651,
+    "accuracy": 0.589,
+    "logLoss": 0.661,
     "baseline": 0.542,
     "aGradeAccuracy": 0.724,
     "aGradeGames": 52,
@@ -156,29 +156,29 @@
     {
       "season": "2024-25",
       "games": 1312,
-      "accuracy": 0.599,
-      "logLoss": 0.656,
-      "baseline": 0.563
+      "accuracy": 0.5892,
+      "logLoss": 0.6610,
+      "baseline": 0.539
     },
     {
       "season": "2023-24",
-      "games": 1312,
-      "accuracy": 0.610,
-      "logLoss": 0.652,
-      "baseline": 0.537
+      "games": 1230,
+      "accuracy": 0.6130,
+      "logLoss": 0.6577,
+      "baseline": 0.539
     },
     {
       "season": "2022-23",
-      "games": 1312,
-      "accuracy": 0.606,
-      "logLoss": 0.654,
-      "baseline": 0.541
+      "games": 1230,
+      "accuracy": 0.6065,
+      "logLoss": 0.6543,
+      "baseline": 0.538
     },
     {
       "season": "2021-22",
-      "games": 1066,
-      "accuracy": 0.642,
-      "logLoss": 0.646,
+      "games": 1230,
+      "accuracy": 0.6260,
+      "logLoss": 0.6496,
       "baseline": 0.541
     }
   ],
