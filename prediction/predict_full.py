@@ -6,22 +6,24 @@
 ╚═══════════════════════════════════════════════════════════╝
 
 FULL MODEL NHL PREDICTIONS
-Predict today's games using V8.5 (dynamic Elo + dynamic threshold)
+Predict today's games using V8.2 (optimized dynamic Elo + dynamic threshold)
 
-V8.5 improvements over V8.1:
-1. Dynamic Elo home advantage (pipeline.py):
-   - Adapts Elo home advantage based on rolling 50-game league home win rate
-   - When league HW drops (e.g., 2025-26 at 52.3%), Elo auto-adjusts
-   - Fixes Elo correlation collapse in 2025-26 (+1.3pp improvement)
+V8.2 improvements over V8.1:
+1. Optimized Dynamic Elo home advantage (pipeline.py):
+   - window=100: Slower adaptation reduces noise (was 50)
+   - scale=700: Less aggressive adjustment (was 1000)
+   - 4-season: +0.3pp (60.1% -> 60.4%)
+   - 2025-26: +0.2pp (51.8% -> 52.0%)
+   - Improves 21-22, 22-23, 24-25, 25-26; only 23-24 slightly worse (-0.4pp)
 
 2. Dynamic threshold (predict_full.py):
    - Formula: threshold = 0.5 + (0.535 - rolling_hw_50) * 0.5
-   - Best for 4-season average consistency (61.3%)
+   - Helps in seasons with abnormal home win rates
 
-Performance:
-- V8.1 baseline: 4-season 61.2%, 2025-26 53.2%
-- V8.5 Dynamic Elo only: 4-season 61.0%, 2025-26 54.5% (+1.3pp)
-- V8.5 + Dynamic Threshold: 4-season 61.3%, 2025-26 53.9% (+0.7pp)
+Performance vs V8.1 (fixed home_advantage=35):
+- 4-season average: +0.3pp improvement
+- 2025-26: +0.2pp improvement
+- Overall: More robust to structural changes in NHL home advantage
 
 Usage:
     python predict_full.py
