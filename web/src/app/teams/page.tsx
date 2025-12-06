@@ -58,7 +58,7 @@ export default function TeamsIndexPage() {
                     <span style={{ width: '1.25rem', fontSize: '0.8rem', fontWeight: 700, color: idx === 0 ? 'var(--mint)' : 'var(--text-tertiary)' }}>
                       {idx + 1}
                     </span>
-                    <TeamCrest abbrev={team.abbrev} size="sm" />
+                    <TeamCrest abbrev={team.abbrev} size={32} />
                     <div style={{ flex: 1 }}>
                       <div style={{ height: '0.5rem', background: 'rgba(255,255,255,0.1)', borderRadius: '0.25rem', overflow: 'hidden' }}>
                         <div style={{

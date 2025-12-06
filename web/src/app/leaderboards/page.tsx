@@ -153,21 +153,21 @@ export default async function LeaderboardsPage() {
               <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'center', gap: '0.5rem', marginBottom: '1.25rem' }}>
                 {/* #2 */}
                 <div style={{ textAlign: 'center', flex: 1 }}>
-                  <TeamCrest abbrev={rankedRows[1]?.abbrev ?? ''} size="md" />
+                  <TeamCrest abbrev={rankedRows[1]?.abbrev ?? ''} size={48} />
                   <div style={{ marginTop: '0.5rem', padding: '0.75rem 0.5rem', background: 'rgba(192, 192, 192, 0.15)', borderRadius: '0.5rem 0.5rem 0 0', borderTop: '3px solid silver' }}>
                     <p style={{ fontSize: '1.25rem', fontWeight: 800, color: 'silver' }}>2</p>
                   </div>
                 </div>
                 {/* #1 */}
                 <div style={{ textAlign: 'center', flex: 1 }}>
-                  <TeamCrest abbrev={rankedRows[0]?.abbrev ?? ''} size="lg" />
+                  <TeamCrest abbrev={rankedRows[0]?.abbrev ?? ''} size={64} />
                   <div style={{ marginTop: '0.5rem', padding: '1rem 0.5rem', background: 'rgba(255, 215, 0, 0.15)', borderRadius: '0.5rem 0.5rem 0 0', borderTop: '3px solid gold' }}>
                     <p style={{ fontSize: '1.5rem', fontWeight: 800, color: 'gold' }}>1</p>
                   </div>
                 </div>
                 {/* #3 */}
                 <div style={{ textAlign: 'center', flex: 1 }}>
-                  <TeamCrest abbrev={rankedRows[2]?.abbrev ?? ''} size="md" />
+                  <TeamCrest abbrev={rankedRows[2]?.abbrev ?? ''} size={48} />
                   <div style={{ marginTop: '0.5rem', padding: '0.5rem', background: 'rgba(205, 127, 50, 0.15)', borderRadius: '0.5rem 0.5rem 0 0', borderTop: '3px solid #cd7f32' }}>
                     <p style={{ fontSize: '1.1rem', fontWeight: 800, color: '#cd7f32' }}>3</p>
                   </div>
