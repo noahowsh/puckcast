@@ -1,15 +1,15 @@
 # Training Window Analysis
 
 **Date:** December 6, 2025
-**Model:** V7.9 Enhanced
+**Model:** V8.0 Enhanced
 **Data:** 8 seasons (2017-18 to 2024-25), 9,739 games
 
 ## Summary
 
-After extensive testing, we determined that **3-4 seasons** is the optimal training window for the V7.9 model.
+After extensive testing, we determined that **4 seasons** with **Elo season carryover** is the optimal configuration for the V8.0 model.
 
-**Production Choice:** 4 seasons
-**Backup Option:** 3 seasons (slightly higher accuracy)
+**Production Choice:** 4 seasons + 50% Elo carryover = **61.2% accuracy**
+**Previous (V7.9):** 4 seasons, no Elo carryover = 60.4% accuracy
 
 ## Test Results
 
@@ -89,8 +89,48 @@ Feature store enables ~3000x faster model testing:
 - **Before:** ~24 minutes for full comparison
 - **After:** ~0.5 seconds
 
+## V8.0 Elo Improvement (December 2025)
+
+### Problem Identified
+
+Elo correlation with outcomes dropped significantly over time:
+- 2021-22: 0.253 correlation
+- 2024-25: 0.154 correlation (-39% drop)
+
+This was due to:
+1. **Increased league parity** - Elo spread compressed 17%
+2. **Full season reset** - Each season started from scratch, losing valuable team information
+
+### Solution: Season Carryover
+
+Instead of resetting Elo ratings to 1500 each season, carry over 50% of the deviation from mean:
+
+```python
+# New rating = base + carryover * (old_rating - base)
+new_rating = 1500 + 0.5 * (prev_rating - 1500)
+```
+
+### Results
+
+| Configuration | Avg Accuracy | Log Loss |
+|--------------|--------------|----------|
+| K=10, HA=30, carry=0 (old) | 59.07% | 0.6582 |
+| K=10, HA=30, carry=0.5 (new) | 60.38% | -- |
+| **Full model with carry=0.5** | **61.18%** | **0.6546** |
+
+**Improvement: +0.81pp accuracy, -0.0036 log loss**
+
+### Implementation
+
+Updated `src/nhl_prediction/pipeline.py` `_add_elo_features()` function:
+- Added `season_carryover` parameter (default 0.5)
+- Previous season ratings regress 50% toward 1500 at season start
+- Maintains team strength information across seasons
+
 ## Next Steps
 
-1. Update production model to use 4-season window
-2. Set up automated feature store rebuilds
-3. Track prediction accuracy over time
+1. ~~Update production model to use 4-season window~~ ✓
+2. ~~Implement Elo season carryover~~ ✓ (V8.0)
+3. Set up automated feature store rebuilds
+4. Track prediction accuracy over time
+5. Investigate other degrading features for potential improvements

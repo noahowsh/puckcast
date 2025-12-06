@@ -1,25 +1,25 @@
 {
   "generatedAt": "2025-12-06T12:00:00.000000+00:00",
-  "modelVersion": "V7.9",
+  "modelVersion": "V8.0",
   "overall": {
-    "games": 1230,
-    "accuracy": 0.6024,
+    "games": 5002,
+    "accuracy": 0.6118,
     "baseline": 0.5374,
     "homeWinRate": 0.5374,
-    "brier": 0.234,
-    "logLoss": 0.6584,
+    "brier": 0.230,
+    "logLoss": 0.6546,
     "avgEdge": 0.185
   },
   "heroStats": [
     {
       "label": "Test accuracy",
-      "value": "60.2%",
-      "detail": "2023-24 holdout season"
+      "value": "61.2%",
+      "detail": "4-season holdout average"
     },
     {
       "label": "Model version",
-      "value": "V7.9",
-      "detail": "~50 curated features"
+      "value": "V8.0",
+      "detail": "20 curated features + improved Elo"
     },
     {
       "label": "Training window",
@@ -28,7 +28,7 @@
     },
     {
       "label": "Edge vs baseline",
-      "value": "+6.5 pts",
+      "value": "+7.4 pts",
       "detail": "vs 53.7% home win rate"
     }
   ],
@@ -42,8 +42,8 @@
       "detail": "68.2% accuracy - strong confidence tier"
     },
     {
-      "title": "V7.9 calibration",
-      "detail": "Best log loss (0.6584) with 4-season window"
+      "title": "V8.0 Elo improvement",
+      "detail": "Season carryover boosts accuracy +0.8pp"
     }
   ],
   "strategies": [
@@ -154,32 +154,32 @@
   },
   "seasonBreakdown": [
     {
-      "season": "2023-24",
-      "games": 1230,
-      "accuracy": 0.602,
+      "season": "2024-25",
+      "games": 1312,
+      "accuracy": 0.597,
       "logLoss": 0.658,
+      "baseline": 0.563
+    },
+    {
+      "season": "2023-24",
+      "games": 1312,
+      "accuracy": 0.610,
+      "logLoss": 0.654,
       "baseline": 0.537
     },
     {
       "season": "2022-23",
       "games": 1312,
-      "accuracy": 0.598,
-      "logLoss": 0.662,
+      "accuracy": 0.607,
+      "logLoss": 0.656,
       "baseline": 0.541
     },
     {
       "season": "2021-22",
-      "games": 1312,
-      "accuracy": 0.594,
-      "logLoss": 0.668,
-      "baseline": 0.535
-    },
-    {
-      "season": "2020-21",
-      "games": 868,
-      "accuracy": 0.588,
-      "logLoss": 0.672,
-      "baseline": 0.528
+      "games": 1066,
+      "accuracy": 0.634,
+      "logLoss": 0.648,
+      "baseline": 0.541
     }
   ],
   "teamPerformance": [],
