@@ -28,6 +28,10 @@ _last_request_time = 0
 _min_request_interval = 0.5  # seconds between requests
 
 
+_default_headers = {
+    'User-Agent': 'Mozilla/5.0 (compatible; PuckCast/1.0; +https://puckcast.ai)'
+}
+
 def _rate_limit():
     """Ensure we don't hammer the API."""
     global _last_request_time
@@ -63,7 +67,7 @@ def fetch_schedule(date: str) -> List[Dict]:
     logger.info(f"Fetching schedule from: {url}")
     
     try:
-        response = requests.get(url, timeout=10)
+        response = requests.get(url, headers=_default_headers, timeout=10)
         response.raise_for_status()
     except requests.exceptions.RequestException as e:
         logger.error(f"Failed to fetch schedule for {date}: {e}")

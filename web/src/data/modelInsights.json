@@ -181,44 +181,7 @@
     "consistent": [],
     "volatile": []
   },
-  "featureImportance": [
-    {
-      "feature": "elo_diff",
-      "coefficient": 0.2103,
-      "absImportance": 0.2103,
-      "description": "Team Elo rating difference"
-    },
-    {
-      "feature": "rolling_xg_diff_10",
-      "coefficient": 0.1794,
-      "absImportance": 0.1794,
-      "description": "10-game rolling expected goals differential"
-    },
-    {
-      "feature": "rolling_gsax_5_diff",
-      "coefficient": 0.1741,
-      "absImportance": 0.1741,
-      "description": "5-game goalie saves above expected"
-    },
-    {
-      "feature": "is_b2b_home",
-      "coefficient": -0.1459,
-      "absImportance": 0.1459,
-      "description": "Home team on back-to-back"
-    },
-    {
-      "feature": "high_danger_diff",
-      "coefficient": 0.1285,
-      "absImportance": 0.1285,
-      "description": "High-danger scoring chance differential"
-    },
-    {
-      "feature": "fatigue_index_diff",
-      "coefficient": -0.0938,
-      "absImportance": 0.0938,
-      "description": "Rest/fatigue differential"
-    }
-  ],
+  "featureImportance": [],
   "distributionFindings": [],
   "bankrollSeries": []
 }
