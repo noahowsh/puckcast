@@ -15,6 +15,15 @@ export type ConfidenceBucket = {
   accuracy: number;
   count: number;
   coverage?: number;
+  description?: string;
+};
+
+export type SeasonBreakdown = {
+  season: string;
+  games: number;
+  accuracy: number;
+  logLoss: number;
+  baseline: number;
 };
 
 export type TeamPerformance = {
@@ -77,6 +86,7 @@ export type BankrollPoint = {
 
 export type ModelInsights = {
   generatedAt: string;
+  modelVersion?: string;
   overall: {
     games: number;
     accuracy: number;
@@ -90,6 +100,7 @@ export type ModelInsights = {
   insights: HeadlineInsight[];
   strategies: StrategySummary[];
   confidenceBuckets: ConfidenceBucket[];
+  seasonBreakdown?: SeasonBreakdown[];
   teamPerformance: TeamPerformance[];
   standings: {
     east: StandingEntry[];

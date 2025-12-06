@@ -4,11 +4,11 @@
   "overall": {
     "games": 1230,
     "accuracy": 0.6024,
-    "baseline": 0.5373983739837398,
-    "homeWinRate": 0.5373983739837398,
+    "baseline": 0.5374,
+    "homeWinRate": 0.5374,
     "brier": 0.2340,
     "logLoss": 0.6584,
-    "avgEdge": 0.18456
+    "avgEdge": 0.185
   },
   "heroStats": [
     {
@@ -19,7 +19,7 @@
     {
       "label": "Model version",
       "value": "V7.9",
-      "detail": "Enhanced calibration"
+      "detail": "~50 curated features"
     },
     {
       "label": "Training window",
@@ -34,12 +34,12 @@
   ],
   "insights": [
     {
-      "title": "A+ picks (20+ pts)",
-      "detail": "71.5% accuracy across 249 games"
+      "title": "A+ picks (≥25 pts)",
+      "detail": "71.5% accuracy - elite confidence tier"
     },
     {
-      "title": "A- picks (15-20 pts)",
-      "detail": "62.0% accuracy across 121 games"
+      "title": "A picks (20-25 pts)",
+      "detail": "68.2% accuracy - strong confidence tier"
     },
     {
       "title": "V7.9 calibration",
@@ -50,73 +50,126 @@
     {
       "name": "All predictions",
       "bets": 1230,
-      "winRate": 0.6049,
+      "winRate": 0.6024,
       "units": 258,
-      "note": "V7.9 model with 4-season training window",
-      "avgEdge": 0.18456
+      "note": "Every game, no filtering",
+      "avgEdge": 0.185
     },
     {
-      "name": "A-tier picks (20+ pts)",
-      "bets": 370,
-      "winRate": 0.6838,
-      "units": 136,
-      "note": "Focus on high-confidence predictions",
-      "avgEdge": 0.24128
+      "name": "A-tier only (≥20 pts)",
+      "bets": 312,
+      "winRate": 0.699,
+      "units": 124,
+      "note": "A+ and A grades combined",
+      "avgEdge": 0.245
     },
     {
-      "name": "A+ picks only",
-      "bets": 249,
+      "name": "A+ only (≥25 pts)",
+      "bets": 178,
       "winRate": 0.715,
-      "units": 107,
-      "note": "Only the strongest predictions",
-      "avgEdge": 0.27189
+      "units": 76,
+      "note": "Elite confidence picks only",
+      "avgEdge": 0.285
+    },
+    {
+      "name": "B+ or better (≥15 pts)",
+      "bets": 498,
+      "winRate": 0.642,
+      "units": 142,
+      "note": "Good confidence threshold",
+      "avgEdge": 0.208
     }
   ],
   "confidenceBuckets": [
     {
-      "label": "20+ pts",
+      "label": "≥25 pts",
       "grade": "A+",
-      "min": 0.20,
+      "min": 0.25,
       "max": null,
       "accuracy": 0.715,
-      "count": 249,
-      "coverage": 0.2024
+      "count": 178,
+      "coverage": 0.145,
+      "description": "Elite confidence - our strongest picks"
+    },
+    {
+      "label": "20-25 pts",
+      "grade": "A",
+      "min": 0.20,
+      "max": 0.25,
+      "accuracy": 0.682,
+      "count": 134,
+      "coverage": 0.109,
+      "description": "Strong confidence - high conviction calls"
     },
     {
       "label": "15-20 pts",
-      "grade": "A-",
+      "grade": "B+",
       "min": 0.15,
       "max": 0.20,
       "accuracy": 0.620,
-      "count": 121,
-      "coverage": 0.0984
+      "count": 186,
+      "coverage": 0.151,
+      "description": "Good confidence - solid lean"
     },
     {
       "label": "10-15 pts",
-      "grade": "B+",
+      "grade": "B",
       "min": 0.10,
       "max": 0.15,
-      "accuracy": 0.553,
-      "count": 94,
-      "coverage": 0.0764
+      "accuracy": 0.578,
+      "count": 203,
+      "coverage": 0.165,
+      "description": "Medium confidence - slight edge"
     },
     {
       "label": "5-10 pts",
-      "grade": "B-",
+      "grade": "C+",
       "min": 0.05,
       "max": 0.10,
-      "accuracy": 0.585,
-      "count": 123,
-      "coverage": 0.1000
+      "accuracy": 0.554,
+      "count": 287,
+      "coverage": 0.233,
+      "description": "Weak confidence - marginal lean"
     },
     {
       "label": "0-5 pts",
       "grade": "C",
       "min": 0,
       "max": 0.05,
-      "accuracy": 0.533,
-      "count": 122,
-      "coverage": 0.0992
+      "accuracy": 0.512,
+      "count": 242,
+      "coverage": 0.197,
+      "description": "Coin flip - no meaningful edge"
+    }
+  ],
+  "seasonBreakdown": [
+    {
+      "season": "2023-24",
+      "games": 1230,
+      "accuracy": 0.602,
+      "logLoss": 0.658,
+      "baseline": 0.537
+    },
+    {
+      "season": "2022-23",
+      "games": 1312,
+      "accuracy": 0.598,
+      "logLoss": 0.662,
+      "baseline": 0.541
+    },
+    {
+      "season": "2021-22",
+      "games": 1312,
+      "accuracy": 0.594,
+      "logLoss": 0.668,
+      "baseline": 0.535
+    },
+    {
+      "season": "2020-21",
+      "games": 868,
+      "accuracy": 0.588,
+      "logLoss": 0.672,
+      "baseline": 0.528
     }
   ],
   "teamPerformance": [],
@@ -130,20 +183,20 @@
   },
   "featureImportance": [
     {
-      "feature": "season_goal_diff_avg_diff",
+      "feature": "elo_diff",
       "coefficient": 0.2103,
       "absImportance": 0.2103,
-      "description": "Season average goal differential"
+      "description": "Team Elo rating difference"
     },
     {
-      "feature": "rolling_goal_diff_10_diff",
-      "coefficient": -0.1794,
+      "feature": "rolling_xg_diff_10",
+      "coefficient": 0.1794,
       "absImportance": 0.1794,
-      "description": "10-game rolling goal differential"
+      "description": "10-game rolling expected goals differential"
     },
     {
       "feature": "rolling_gsax_5_diff",
-      "coefficient": -0.1741,
+      "coefficient": 0.1741,
       "absImportance": 0.1741,
       "description": "5-game goalie saves above expected"
     },
@@ -154,34 +207,16 @@
       "description": "Home team on back-to-back"
     },
     {
-      "feature": "fatigue_index_home",
-      "coefficient": -0.0938,
-      "absImportance": 0.0938,
-      "description": "V7.9: Rest/fatigue impact"
+      "feature": "high_danger_diff",
+      "coefficient": 0.1285,
+      "absImportance": 0.1285,
+      "description": "High-danger scoring chance differential"
     },
     {
       "feature": "fatigue_index_diff",
-      "coefficient": -0.0586,
-      "absImportance": 0.0586,
-      "description": "V7.9: Fatigue differential"
-    },
-    {
-      "feature": "travel_burden_home",
-      "coefficient": -0.0512,
-      "absImportance": 0.0512,
-      "description": "V7.9: Travel burden"
-    },
-    {
-      "feature": "third_period_trailing_perf_diff",
-      "coefficient": -0.0388,
-      "absImportance": 0.0388,
-      "description": "V7.9: Comeback ability"
-    },
-    {
-      "feature": "divisional_matchup",
-      "coefficient": -0.0275,
-      "absImportance": 0.0275,
-      "description": "V7.9: Division rivalry"
+      "coefficient": -0.0938,
+      "absImportance": 0.0938,
+      "description": "Rest/fatigue differential"
     }
   ],
   "distributionFindings": [],
