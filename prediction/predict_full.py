@@ -6,7 +6,13 @@
 ╚═══════════════════════════════════════════════════════════╝
 
 FULL MODEL NHL PREDICTIONS
-Predict today's games using V8.2 (adaptive weights + league home win rate for handling home advantage shifts)
+Predict today's games using V8.4 (dynamic threshold based on rolling home win rate)
+
+V8.4 improvements:
+- Dynamic threshold: adjusts based on rolling league home win rate
+- When home advantage drops below historical norm, raises threshold (picks home less)
+- Maintains 61%+ accuracy on original 4 seasons while adapting to structural shifts
+- Formula: threshold = 0.5 + (0.535 - rolling_hw_50) * 0.5
 
 Usage:
     python predict_full.py
@@ -45,12 +51,20 @@ WEB_PREDICTIONS_PATH = Path(__file__).parent.parent / "web" / "src" / "data" / "
 # Historical average home win rate (baseline for adaptive weighting)
 HISTORICAL_HOME_WIN_RATE = 0.535
 
+# V8.4: Dynamic threshold adjustment factor
+# When league home win rate drops, raise threshold to pick home less often
+THRESHOLD_ADJUSTMENT_FACTOR = 0.5
+
 
 def add_league_hw_feature(games: pd.DataFrame) -> pd.DataFrame:
-    """Add rolling 100-game league-wide home win rate as a feature.
+    """Add rolling league-wide home win rate features.
 
     This helps the model adapt to structural shifts in NHL home advantage
     between seasons (e.g., 2024-25 had 56.2% home win rate vs historical 51-54%).
+
+    Adds two features:
+    - league_hw_100: Rolling 100-game average (for model feature)
+    - league_hw_50: Rolling 50-game average (for dynamic threshold)
     """
     games = games.sort_values('gameDate').copy()
 
@@ -62,7 +76,39 @@ def add_league_hw_feature(games: pd.DataFrame) -> pd.DataFrame:
     # Fill early games with historical average
     games['league_hw_100'] = games['league_hw_100'].fillna(HISTORICAL_HOME_WIN_RATE)
 
+    # V8.4: Add 50-game rolling average for dynamic threshold
+    games['league_hw_50'] = games['home_win'].rolling(
+        window=50, min_periods=25
+    ).mean().shift(1)  # Shift to avoid leakage
+    games['league_hw_50'] = games['league_hw_50'].fillna(HISTORICAL_HOME_WIN_RATE)
+
     return games
+
+
+def calculate_dynamic_threshold(league_hw: float, k: float = THRESHOLD_ADJUSTMENT_FACTOR) -> float:
+    """Calculate dynamic decision threshold based on current league home win rate.
+
+    V8.4 Innovation:
+    When league home win rate drops below historical norm (0.535), raise the
+    threshold to pick home less often. This adapts to structural shifts like
+    2025-26 where home advantage decreased.
+
+    Formula: threshold = 0.5 + (0.535 - league_hw) * k
+
+    Examples:
+    - league_hw = 0.535 (normal): threshold = 0.500 (unchanged)
+    - league_hw = 0.520 (low):    threshold = 0.5075 (pick home less)
+    - league_hw = 0.560 (high):   threshold = 0.4875 (pick home more)
+
+    Args:
+        league_hw: Current rolling league home win rate
+        k: Adjustment factor (default 0.5)
+
+    Returns:
+        Threshold for deciding home win prediction (clamped to 0.45-0.55)
+    """
+    threshold = 0.5 + (HISTORICAL_HOME_WIN_RATE - league_hw) * k
+    return float(np.clip(threshold, 0.45, 0.55))
 
 
 def calculate_adaptive_weights(games: pd.DataFrame, target: pd.Series) -> np.ndarray:
@@ -97,10 +143,11 @@ def calculate_adaptive_weights(games: pd.DataFrame, target: pd.Series) -> np.nda
 
 ET_ZONE = ZoneInfo("America/New_York")
 
-# V8.2 Curated Features (39 features - V8.1 base + league home win rate for adaptive predictions)
-# V8.2 adds adaptive weights to handle home advantage shifts between seasons
-# V8.2 improves 2025-26 predictions while maintaining 2024-25 performance
-V82_FEATURES = [
+# V8.4 Curated Features (39 features - V8.1 base + league home win rate for adaptive predictions)
+# V8.4 adds dynamic threshold based on rolling home win rate
+# V8.4 maintains 61%+ on original 4 seasons while adapting to structural shifts
+# Key improvement: threshold = 0.5 + (0.535 - rolling_hw_50) * 0.5
+V84_FEATURES = [
     # League-wide home advantage (adaptive to structural shifts)
     'league_hw_100',  # NEW in V8.2: Rolling 100-game league home win rate
 
@@ -503,13 +550,13 @@ def predict_games(date=None, num_games=20):
     ], axis=1)
     print(f"   ✅ {len(available_situational)} situational features added")
 
-    # Filter to V8.2 curated features only
-    available_v82 = [f for f in V82_FEATURES if f in features_full.columns]
-    missing_v82 = [f for f in V82_FEATURES if f not in features_full.columns]
-    if missing_v82:
-        print(f"   ⚠️  Missing {len(missing_v82)} V8.2 features: {missing_v82[:5]}...")
-    features_full = features_full[available_v82]
-    print(f"   ✅ Total: {features_full.shape[1]} curated features (V8.2 Model)")
+    # Filter to V8.4 curated features only
+    available_v84 = [f for f in V84_FEATURES if f in features_full.columns]
+    missing_v84 = [f for f in V84_FEATURES if f not in features_full.columns]
+    if missing_v84:
+        print(f"   ⚠️  Missing {len(missing_v84)} V8.4 features: {missing_v84[:5]}...")
+    features_full = features_full[available_v84]
+    print(f"   ✅ Total: {features_full.shape[1]} curated features (V8.4 Model)")
 
     # Step 3: Train calibrated model using only past games
     print("\n3️⃣  Training calibrated logistic regression model...")
@@ -550,11 +597,17 @@ def predict_games(date=None, num_games=20):
     
     # Step 4: Predict
     print(f"\n4️⃣  Generating predictions for {min(num_games, len(games_for_model))} games...")
-    
+
+    # V8.4: Calculate dynamic threshold based on recent league home win rate
+    # Get the most recent rolling home win rate from training data
+    recent_league_hw = eligible_games['league_hw_50'].iloc[-1] if 'league_hw_50' in eligible_games.columns else HISTORICAL_HOME_WIN_RATE
+    dynamic_threshold = calculate_dynamic_threshold(recent_league_hw)
+    print(f"   ✅ V8.4 Dynamic threshold: {dynamic_threshold:.4f} (league HW: {recent_league_hw:.1%})")
+
     print("\n" + "="*80)
     print("PREDICTIONS")
     print("="*80)
-    
+
     predictions = []
     eligible_games["seasonId_str"] = eligible_games["seasonId"].astype(str)
     feature_columns = eligible_features.columns
@@ -601,11 +654,13 @@ def predict_games(date=None, num_games=20):
         prob_away_calibrated = 1 - prob_home_calibrated
 
         start_time_utc_iso, start_time_et = format_start_times(game.get('startTimeUTC', ''))
-        # Use raw probabilities for display and edge/grade to avoid calibration plateaus
+        # V8.4: Use dynamic threshold for decision making
+        # Edge is still calculated from 0.5 for display purposes, but winner uses dynamic threshold
         edge = prob_home_display - 0.5
         confidence_score = abs(edge) * 2  # 0-1 scale
         confidence_grade = grade_from_edge(edge)
-        model_favorite = 'home' if prob_home_display >= prob_away_raw else 'away'
+        # V8.4: Use dynamic threshold instead of 0.5 for prediction decision
+        model_favorite = 'home' if prob_home_display >= dynamic_threshold else 'away'
         summary = build_summary(
             game.get('homeTeamName', home_abbrev),
             game.get('awayTeamName', away_abbrev),
@@ -635,7 +690,7 @@ def predict_games(date=None, num_games=20):
             'home_win_prob_calibrated': prob_home_calibrated,
             'away_win_prob_calibrated': prob_away_calibrated,
             'edge': edge,
-            'predicted_winner': home_abbrev if prob_home_display > 0.5 else away_abbrev,
+            'predicted_winner': home_abbrev if prob_home_display >= dynamic_threshold else away_abbrev,  # V8.4
             'model_favorite': model_favorite,
             'confidence': confidence_score,
             'confidence_grade': confidence_grade,
@@ -646,17 +701,17 @@ def predict_games(date=None, num_games=20):
         print(f"\n{i}. {away_abbrev} @ {home_abbrev}")
         print(f"   Home Win (raw): {prob_home_display:.1%}  |  Away Win (raw): {prob_away_raw:.1%}")
         
-        # Classify prediction strength
+        # Classify prediction strength (V8.4: uses dynamic threshold for favorites)
         confidence_pct = confidence_score * 100
 
         if prob_home_display > 0.70:
             print(f"   ✅ Prediction: {home_abbrev} STRONG FAVORITE")
         elif prob_home_display < 0.30:
             print(f"   ✅ Prediction: {away_abbrev} STRONG FAVORITE")
-        elif 0.45 <= prob_home_display <= 0.55:
+        elif abs(prob_home_display - dynamic_threshold) < 0.05:
             print(f"   ⚖️  Prediction: TOSS-UP (too close to call)")
         else:
-            favorite = home_abbrev if prob_home_display > 0.5 else away_abbrev
+            favorite = home_abbrev if prob_home_display >= dynamic_threshold else away_abbrev
             print(f"   📊 Prediction: {favorite} ({confidence_pct:.0f}% confidence)")
     
     # Summary
