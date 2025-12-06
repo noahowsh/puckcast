@@ -1,8 +1,8 @@
 # NHL Game Prediction Model — Final Project Report (v3)
 
 **Group:** Puckcast ML Team  
-**Date:** November 24, 2025  
-**Team Members:** Noah O., [add teammates]
+**Date:** December 05, 2025  
+**Team Members:** Noah O., Team (update with final roster)
 
 ---
 
@@ -11,17 +11,17 @@
 - **Production stability:** Hardened fallbacks for predictions API, no leading mentions, validation gates on every run.
 - **Model posture:** Calibrated logistic regression remains the primary engine (59.3% accuracy vs 53.7% baseline; log loss 0.676; Brier 0.240) with isotonic calibration and enriched inputs (special teams, goalie/injury metadata).
 
-### Quick Visuals
-- Pipeline overview: ![Pipeline](assets/pipeline_diagram.png)  
-  *Data ingest (NHL API + internal xG/shot model) → 200+ features → calibrated logreg → JSON/API/reports.*
-- Automation windows (ET): ![Automation](assets/automation_schedule.png)  
-  *Daily post cadence: slate summary at 08:00, then rotating insights through 20:00.*
-- Accuracy lift vs baseline: ![Accuracy](assets/accuracy_comparison.png)  
-  *Model v6 beats the 53.7% home baseline with 59.3% accuracy on 2023-24 holdout.*
-- Calibration curve: ![Calibration](assets/calibration_curve.png)  
-  *Probabilities track observed outcomes; curve hugs the diagonal with low log loss/Brier.*
-- Top feature signals: ![Feature Importance](assets/feature_importance.png)  
-  *Rolling goal diff, special teams, rest/back-to-back, xG/shot quality, and possession lead.*
+### Quick Visuals (v6 snapshots)
+- Pipeline overview (v6): ![Pipeline](assets/presentation/flow.svg)  
+  *NHL API ingest + internal xG → 200+ lagged features → calibrated logreg → JSON/API/reports.*
+- Metrics (v6): ![Metrics](assets/presentation/metrics.svg)  
+  *Accuracy 59.3% vs 53.7% baseline; log loss 0.676; Brier 0.240.*
+- Calibration curve (v6): ![Calibration](assets/presentation/calibration.svg)  
+  *Probabilities track observed outcomes; curve near diagonal.*
+- Feature signals (v6): ![Feature Importance](assets/feature_importance.png)  
+  *Rolling goal diff, special teams, rest/B2B, xG/shot quality, possession.*
+- Slate card example: ![Prediction](assets/presentation/prediction_card.svg)  
+  *Clean matchup layout with badges and timestamps.*
 
 Key metrics table:
 
@@ -43,10 +43,18 @@ We built and deployed an end-to-end NHL win-probability system that ingests live
 Predict NHL game outcomes with calibrated, actionable win probabilities that outperform simple baselines (home-team or moneyline implied) while remaining production-ready for daily automation and public-facing content.
 
 ## Assumptions
-- Regular-season context; playoffs not modeled separately.
-- NHL API data (schedule/results/plays) are timely and correct; missing data fall back to league-average/zeroed features.
-- No in-game live updating (pregame probabilities only).
-- Current automation schedules (GitHub Actions + Vercel) are available and secrets configured.
+- Scope: regular season only; playoffs not separately modeled or calibrated.
+- Timing: pregame probabilities only; no in-game/live updates.
+- Data freshness: NHL API schedule/results/plays available; on gaps we fall back to league-average/zeroed features.
+- Automation: GitHub Actions + Vercel secrets are configured and usable.
+- No external odds/market data used in training; purely model-based probabilities.
+
+## Analytical Setup & Methods
+- **Data ingest:** NHL Stats API (schedule, teams, results, plays) plus internal xG/shot-quality model; goalie and injury context pulled into features.
+- **Feature engineering:** 200+ lagged/differenced features (rolling 3/5/10 for win%, goal/xG diff, shot quality, PP/PK, rest/B2B, travel, Elo-like ratings, goalie/injury flags). All rolling stats use lag (`shift(1)`) to avoid leakage; matchup context uses home-away deltas.
+- **Modeling:** Calibrated logistic regression with isotonic calibration; edges expressed in percentage points and graded (A–C).
+- **Validation:** Temporal split—train on prior seasons, test on most recent (2023-24 holdout). Metrics: accuracy, log loss, Brier, AUC, calibration by edge buckets. Baseline: home-win majority (53.7%).
+- **Automation & gates:** Schema/freshness validation on every refresh; failing validation blocks publish; posting workflow avoids leading mentions.
 
 ## Analytical Setup & Analysis
 - **Data sources:** NHL Stats API (schedule, results, teams, play-by-play) plus internal xG/shot-quality model; special teams and lineup context; goalie/injury ingest. Validation includes schema and freshness checks.
@@ -100,4 +108,7 @@ The v6 system is production-stable, calibrated, and automated end-to-end. It mea
 - NHL Stats API (schedule, teams, results, plays)  
 - Internal xG/shot-quality model + derived team logs  
 - scikit-learn (logistic regression, calibration)  
-- Puckcast repository: data pipeline, model code, and automation workflows
+- Puckcast repository (data pipeline, model code, automation workflows)  
+- GitHub Actions + Vercel deployment (automation and hosting)  
+- Pandas/NumPy (data prep), internal validation scripts (schema/freshness), isotonic calibration toolkit  
+- Visualization assets in `docs/assets/` (pipeline, automation, accuracy, calibration, feature importance)  
