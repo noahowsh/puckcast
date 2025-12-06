@@ -250,6 +250,13 @@ p { line-height: 1.7; }
   }
 }
 
+/* Performance page hero - stack on tablet and below */
+@media (max-width: 900px) {
+  .hero-grid[style*="340px"] {
+    grid-template-columns: 1fr !important;
+  }
+}
+
 .divider {
   height: 1px;
   background: var(--border-subtle);

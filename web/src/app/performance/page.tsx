@@ -18,40 +18,130 @@ export default function PerformancePage() {
   return (
     <div className="min-h-screen">
       <div className="container">
-        {/* Hero - Clean Single Column */}
+        {/* Hero - Two Column with Visualization */}
         <section className="nova-hero nav-offset">
-          <div style={{ maxWidth: '800px' }}>
-            <div className="pill-row">
-              <span className="pill">Model Performance</span>
-              <span className="pill">V8.0</span>
-            </div>
-            <h1 className="display-xl" style={{ marginBottom: '0.75rem' }}>Does the model work?</h1>
-            <p className="lead" style={{ marginBottom: '1.5rem' }}>
-              Yes. We tested V8.0 on {overview.games.toLocaleString()} holdout games across 4 seasons —
-              games the model never saw during training. It correctly predicted {pct(overview.accuracy)} of outcomes,
-              beating the {pct(overview.baseline)} home-team baseline by <span style={{ color: 'var(--mint)' }}>+{edge} percentage points</span>.
-            </p>
+          <div className="hero-grid" style={{
+            display: 'grid',
+            gridTemplateColumns: '1fr 340px',
+            gap: '3rem',
+            alignItems: 'center'
+          }}>
+            {/* Left: Text content */}
+            <div>
+              <div className="pill-row">
+                <span className="pill">Model Performance</span>
+                <span className="pill">V8.0</span>
+              </div>
+              <h1 className="display-xl" style={{ marginBottom: '0.75rem' }}>Does the model work?</h1>
+              <p className="lead" style={{ marginBottom: '1.5rem' }}>
+                Yes. We tested V8.0 on {overview.games.toLocaleString()} holdout games across 4 seasons —
+                games the model never saw during training. It correctly predicted {pct(overview.accuracy)} of outcomes,
+                beating the {pct(overview.baseline)} home-team baseline by <span style={{ color: 'var(--mint)' }}>+{edge} percentage points</span>.
+              </p>
 
+              <div style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(4, 1fr)',
+                gap: '1rem'
+              }}>
+                <div className="stat-tile">
+                  <p className="stat-tile__label">Accuracy</p>
+                  <p className="stat-tile__value" style={{ color: 'var(--aqua)' }}>{pct(overview.accuracy)}</p>
+                </div>
+                <div className="stat-tile">
+                  <p className="stat-tile__label">Log Loss</p>
+                  <p className="stat-tile__value">{overview.logLoss.toFixed(3)}</p>
+                </div>
+                <div className="stat-tile">
+                  <p className="stat-tile__label">A+ Picks</p>
+                  <p className="stat-tile__value" style={{ color: 'var(--mint)' }}>{pct(confidenceBuckets[0]?.accuracy ?? 0)}</p>
+                </div>
+                <div className="stat-tile">
+                  <p className="stat-tile__label">Test Games</p>
+                  <p className="stat-tile__value">{overview.games.toLocaleString()}</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Right: Confidence Grade Visualization */}
             <div style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(4, 1fr)',
-              gap: '1rem'
+              background: 'rgba(6, 12, 24, 0.6)',
+              border: '1px solid var(--border-subtle)',
+              borderRadius: '1rem',
+              padding: '1.25rem'
             }}>
-              <div className="stat-tile">
-                <p className="stat-tile__label">Accuracy</p>
-                <p className="stat-tile__value" style={{ color: 'var(--aqua)' }}>{pct(overview.accuracy)}</p>
+              <p style={{
+                fontSize: '0.75rem',
+                fontWeight: 600,
+                textTransform: 'uppercase',
+                letterSpacing: '0.08em',
+                color: 'var(--text-tertiary)',
+                marginBottom: '1rem'
+              }}>
+                Accuracy by Grade
+              </p>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem' }}>
+                {confidenceBuckets.map((bucket) => {
+                  const isATier = bucket.grade.startsWith("A");
+                  const isBTier = bucket.grade.startsWith("B");
+                  const barColor = isATier
+                    ? 'linear-gradient(90deg, var(--aqua), var(--mint))'
+                    : isBTier
+                      ? 'var(--amber)'
+                      : 'rgba(255, 255, 255, 0.25)';
+                  const labelColor = isATier ? 'var(--aqua)' : isBTier ? 'var(--amber)' : 'var(--text-secondary)';
+
+                  return (
+                    <div key={bucket.grade} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                      <span style={{
+                        width: '2rem',
+                        fontSize: '0.85rem',
+                        fontWeight: 700,
+                        color: labelColor
+                      }}>
+                        {bucket.grade}
+                      </span>
+                      <div style={{
+                        flex: 1,
+                        height: '1.25rem',
+                        background: 'rgba(255, 255, 255, 0.05)',
+                        borderRadius: '0.25rem',
+                        overflow: 'hidden',
+                        position: 'relative'
+                      }}>
+                        <div style={{
+                          width: `${bucket.accuracy * 100}%`,
+                          height: '100%',
+                          background: barColor,
+                          borderRadius: '0.25rem',
+                          transition: 'width 0.3s ease'
+                        }} />
+                      </div>
+                      <span style={{
+                        width: '3rem',
+                        fontSize: '0.85rem',
+                        fontWeight: 600,
+                        color: 'var(--text-primary)',
+                        textAlign: 'right'
+                      }}>
+                        {pct(bucket.accuracy)}
+                      </span>
+                    </div>
+                  );
+                })}
               </div>
-              <div className="stat-tile">
-                <p className="stat-tile__label">Log Loss</p>
-                <p className="stat-tile__value">{overview.logLoss.toFixed(3)}</p>
-              </div>
-              <div className="stat-tile">
-                <p className="stat-tile__label">A+ Picks</p>
-                <p className="stat-tile__value" style={{ color: 'var(--mint)' }}>{pct(confidenceBuckets[0]?.accuracy ?? 0)}</p>
-              </div>
-              <div className="stat-tile">
-                <p className="stat-tile__label">Test Games</p>
-                <p className="stat-tile__value">{overview.games.toLocaleString()}</p>
+              <div style={{
+                marginTop: '1rem',
+                paddingTop: '0.75rem',
+                borderTop: '1px solid var(--border-subtle)',
+                display: 'flex',
+                justifyContent: 'space-between',
+                fontSize: '0.75rem',
+                color: 'var(--text-tertiary)'
+              }}>
+                <span>50%</span>
+                <span style={{ color: 'var(--text-secondary)' }}>Baseline: {pct(overview.baseline)}</span>
+                <span>100%</span>
               </div>
             </div>
           </div>
@@ -204,7 +294,7 @@ export default function PerformancePage() {
                     <span style={{ fontSize: '0.8rem', color: 'var(--text-tertiary)' }}>≥20 pts edge</span>
                   </div>
                   <p style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', lineHeight: 1.5 }}>
-                    High confidence. Our best picks where the model sees a clear statistical advantage. Historically ~70% accurate.
+                    High confidence. Our best picks where the model sees a clear statistical advantage. A+ picks hit at 80%+.
                   </p>
                 </div>
                 <div>
