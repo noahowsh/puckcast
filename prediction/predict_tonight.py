@@ -126,8 +126,8 @@ def main(date_str: str = None):
             print(f'   📊 Prediction: {winner} (slight {conf:.0%} edge)')
     
     print('\n' + '='*80)
-    print('✅ Model: Logistic Regression with 141 features (including goaltending)')
-    print('✅ Trained on games from 4 most recent seasons (2021-2024)')
+    print('✅ Model: V8.0 (improved Elo + 19 curated features)')
+    print('✅ Trained on rolling 4-season window with season carryover')
     print('='*80)
 
 

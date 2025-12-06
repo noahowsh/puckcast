@@ -40,7 +40,7 @@ from nhl_prediction.situational_features import add_situational_features
 # Suppress sklearn warnings
 warnings.filterwarnings('ignore', category=UserWarning)
 
-WEB_PREDICTIONS_PATH = Path(__file__).parent / "web" / "src" / "data" / "todaysPredictions.json"
+WEB_PREDICTIONS_PATH = Path(__file__).parent.parent / "web" / "src" / "data" / "todaysPredictions.json"
 ET_ZONE = ZoneInfo("America/New_York")
 
 def recent_seasons(anchor: datetime | date | None = None, count: int = 4) -> list[str]:
