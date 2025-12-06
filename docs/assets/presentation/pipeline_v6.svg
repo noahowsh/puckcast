@@ -1,0 +1,42 @@
+<svg width="800" height="260" viewBox="0 0 800 260" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .box { fill:#0f1f2f; stroke:#4ec0f0; stroke-width:2; rx:10; ry:10; }
+      .text { fill:#e6f4ff; font-family:'Helvetica Neue', Arial, sans-serif; font-size:16px; font-weight:600; }
+      .label { fill:#b8d4f5; font-family:'Helvetica Neue', Arial, sans-serif; font-size:13px; }
+      .arrow { stroke:#4ec0f0; stroke-width:2; marker-end:url(#arrowhead); }
+      .caption { fill:#9fb9d9; font-family:'Helvetica Neue', Arial, sans-serif; font-size:12px; }
+    </style>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#4ec0f0" />
+    </marker>
+  </defs>
+  <rect class="box" x="30" y="60" width="170" height="120" />
+  <text class="text" x="115" y="95" text-anchor="middle">Ingest</text>
+  <text class="label" x="115" y="120" text-anchor="middle">NHL API + xG model</text>
+  <text class="label" x="115" y="140" text-anchor="middle">Schedule, plays, goalies</text>
+
+  <rect class="box" x="240" y="60" width="190" height="120" />
+  <text class="text" x="335" y="95" text-anchor="middle">Features (200+)</text>
+  <text class="label" x="335" y="120" text-anchor="middle">Rolling form 3/5/10</text>
+  <text class="label" x="335" y="140" text-anchor="middle">PP/PK, rest/travel, Elo</text>
+
+  <rect class="box" x="470" y="60" width="140" height="120" />
+  <text class="text" x="540" y="95" text-anchor="middle">Model</text>
+  <text class="label" x="540" y="120" text-anchor="middle">Calibrated logreg</text>
+  <text class="label" x="540" y="140" text-anchor="middle">Isotonic + grades</text>
+
+  <rect class="box" x="650" y="60" width="110" height="120" />
+  <text class="text" x="705" y="95" text-anchor="middle">Publish</text>
+  <text class="label" x="705" y="120" text-anchor="middle">JSON/API</text>
+  <text class="label" x="705" y="140" text-anchor="middle">Site + posts</text>
+
+  <line class="arrow" x1="200" y1="120" x2="240" y2="120" />
+  <line class="arrow" x1="430" y1="120" x2="470" y2="120" />
+  <line class="arrow" x1="610" y1="120" x2="650" y2="120" />
+
+  <text class="caption" x="115" y="205" text-anchor="middle">Data freshness + validation</text>
+  <text class="caption" x="335" y="205" text-anchor="middle">Lagged windows to avoid leakage</text>
+  <text class="caption" x="540" y="205" text-anchor="middle">Edges → grades A–C</text>
+  <text class="caption" x="705" y="205" text-anchor="middle">Autoslate @ 08:00 ET</text>
+</svg>

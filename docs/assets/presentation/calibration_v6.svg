@@ -1,0 +1,22 @@
+<svg width="640" height="260" viewBox="0 0 640 260" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    .bg { fill:#0f1f2f; stroke:#4ec0f0; stroke-width:2; rx:14; ry:14; }
+    .axis { stroke:#b8d4f5; stroke-width:1; }
+    .diag { stroke:#4ec0f0; stroke-width:2; stroke-dasharray:5 5; }
+    .point { fill:#8de0a3; opacity:0.9; }
+    .label { fill:#b8d4f5; font-family:'Helvetica Neue', Arial, sans-serif; font-size:13px; }
+    .title { fill:#e6f4ff; font-family:'Helvetica Neue', Arial, sans-serif; font-size:16px; font-weight:700; }
+  </style>
+  <rect class="bg" x="20" y="20" width="600" height="220" />
+  <text class="title" x="320" y="55" text-anchor="middle">Calibration (v6)</text>
+  <line class="axis" x1="80" y1="200" x2="540" y2="200" />
+  <line class="axis" x1="80" y1="90" x2="80" y2="200" />
+  <line class="diag" x1="80" y1="200" x2="540" y2="90" />
+  <circle class="point" cx="160" cy="170" r="8" />
+  <circle class="point" cx="230" cy="155" r="8" />
+  <circle class="point" cx="300" cy="140" r="8" />
+  <circle class="point" cx="380" cy="125" r="8" />
+  <circle class="point" cx="450" cy="115" r="8" />
+  <text class="label" x="520" y="215">Predicted win prob →</text>
+  <text class="label" x="40" y="95" transform="rotate(-90 40 95)">Observed win rate →</text>
+</svg>

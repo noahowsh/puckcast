@@ -1,0 +1,22 @@
+<svg width="800" height="220" viewBox="0 0 800 220" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    .card { fill:#0f1f2f; stroke:#4ec0f0; stroke-width:2; rx:12; ry:12; }
+    .title { fill:#e6f4ff; font-family:'Helvetica Neue', Arial, sans-serif; font-size:16px; font-weight:700; }
+    .value { fill:#8de0a3; font-family:'Helvetica Neue', Arial, sans-serif; font-size:30px; font-weight:800; }
+    .label { fill:#b8d4f5; font-family:'Helvetica Neue', Arial, sans-serif; font-size:14px; }
+  </style>
+  <rect class="card" x="40" y="30" width="200" height="150" />
+  <text class="title" x="140" y="65" text-anchor="middle">Accuracy</text>
+  <text class="value" x="140" y="110" text-anchor="middle">59.3%</text>
+  <text class="label" x="140" y="135" text-anchor="middle">Baseline 53.7%</text>
+
+  <rect class="card" x="300" y="30" width="200" height="150" />
+  <text class="title" x="400" y="65" text-anchor="middle">Log loss</text>
+  <text class="value" x="400" y="110" text-anchor="middle">0.676</text>
+  <text class="label" x="400" y="135" text-anchor="middle">Lower is better</text>
+
+  <rect class="card" x="560" y="30" width="200" height="150" />
+  <text class="title" x="660" y="65" text-anchor="middle">Brier</text>
+  <text class="value" x="660" y="110" text-anchor="middle">0.240</text>
+  <text class="label" x="660" y="135" text-anchor="middle">Calibrated probs</text>
+</svg>

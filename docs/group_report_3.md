@@ -12,15 +12,15 @@
 - **Model posture:** Calibrated logistic regression remains the primary engine (59.3% accuracy vs 53.7% baseline; log loss 0.676; Brier 0.240) with isotonic calibration and enriched inputs (special teams, goalie/injury metadata).
 
 ### Quick Visuals (v6 snapshots)
-- Pipeline overview (v6): ![Pipeline](assets/presentation/flow.svg)  
-  *From NHL API ingest + internal xG → 200+ lagged features → calibrated logreg → JSON/API/reports.*
-- Key metrics (v6): ![Metrics](assets/presentation/metrics.svg)  
+- Pipeline overview (v6): ![Pipeline](assets/presentation/pipeline_v6.svg)  
+  *NHL API ingest + internal xG → 200+ lagged features → calibrated logreg → JSON/API/reports.*
+- Key metrics (v6): ![Metrics](assets/presentation/metrics_v6.svg)  
   *Holdout (2023-24): 59.3% vs 53.7% baseline; log loss 0.676; Brier 0.240.*
-- Calibration curve (v6): ![Calibration](assets/presentation/calibration.svg)  
+- Calibration curve (v6): ![Calibration](assets/presentation/calibration_v6.svg)  
   *Probabilities hug the diagonal; low log loss/Brier indicates well-calibrated outputs.*
-- Feature signals (v6): ![Feature Importance](assets/feature_importance.png)  
+- Feature signals (v6): ![Feature signals](assets/presentation/feature_signals_v6.svg)  
   *Rolling goal diff, special teams, rest/B2B, xG/shot quality, possession lead the lift.*
-- Slate card example: ![Prediction](assets/presentation/prediction_card.svg)  
+- Slate card example: ![Prediction](assets/presentation/slate_card_v6.svg)  
   *Clean matchup layout with updated time and minimal badges (rest/goalie/injury).*
 
 Key metrics table:
