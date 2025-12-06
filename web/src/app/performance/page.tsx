@@ -23,11 +23,11 @@ export default function PerformancePage() {
           <div style={{ maxWidth: '800px' }}>
             <div className="pill-row">
               <span className="pill">Model Performance</span>
-              <span className="pill">V7.9</span>
+              <span className="pill">V8.0</span>
             </div>
             <h1 className="display-xl" style={{ marginBottom: '0.75rem' }}>Does the model work?</h1>
             <p className="lead" style={{ marginBottom: '1.5rem' }}>
-              Yes. We tested V7.9 on {overview.games.toLocaleString()} holdout games from the 2023-24 season —
+              Yes. We tested V8.0 on {overview.games.toLocaleString()} holdout games across 4 seasons —
               games the model never saw during training. It correctly predicted {pct(overview.accuracy)} of outcomes,
               beating the {pct(overview.baseline)} home-team baseline by <span style={{ color: 'var(--mint)' }}>+{edge} percentage points</span>.
             </p>
@@ -120,7 +120,7 @@ export default function PerformancePage() {
               <p className="lead-sm">
                 Every prediction gets a grade based on edge size. Higher grades = higher confidence = higher historical accuracy.
                 <span style={{ color: 'var(--text-tertiary)', display: 'block', marginTop: '0.3rem', fontSize: '0.85rem' }}>
-                  Based on 2023-24 season holdout testing
+                  Based on 4-season holdout testing
                 </span>
               </p>
             </div>
@@ -387,8 +387,8 @@ export default function PerformancePage() {
               <p className="micro-label">Holdout Testing</p>
               <h3>{overview.games.toLocaleString()} games</h3>
               <p className="bento-copy">
-                <strong>What it is:</strong> Testing on games the model has never seen. We trained on 4 prior seasons
-                and tested on 2023-24 — a full season the model never touched during training.
+                <strong>What it is:</strong> Testing on games the model has never seen. For each season tested,
+                the model was trained only on 4 prior seasons — true forward validation across 4 holdout years.
               </p>
               <p className="bento-copy" style={{ marginTop: '0.5rem' }}>
                 <strong>Why it matters:</strong> Prevents overfitting. Results from holdout testing show real-world
@@ -407,7 +407,7 @@ export default function PerformancePage() {
               <p className="lead-sm">
                 Historical performance by confidence threshold.
                 <span style={{ color: 'var(--text-tertiary)', display: 'block', marginTop: '0.3rem', fontSize: '0.85rem' }}>
-                  Based on 2023-24 season holdout testing
+                  Based on 4-season holdout testing
                 </span>
               </p>
             </div>
@@ -481,8 +481,8 @@ export default function PerformancePage() {
               <div>
                 <p style={{ fontWeight: 700, color: 'var(--amber)', marginBottom: '0.35rem' }}>Holdout test results</p>
                 <p style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', lineHeight: 1.6 }}>
-                  The main accuracy and log loss numbers come from testing on the 2023-24 season (1,230 games).
-                  The model was trained on a rolling 4-season window of prior data and tested on games it never saw.
+                  The main accuracy and log loss numbers come from testing across 4 seasons (5,002 games total).
+                  Each season was tested using a model trained only on the 4 prior seasons — true out-of-sample validation.
                 </p>
               </div>
               <div>
