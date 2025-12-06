@@ -13,15 +13,17 @@
 
 ### Quick Visuals (v6 snapshots)
 - Pipeline overview (v6): ![Pipeline](assets/presentation/flow.svg)  
-  *NHL API ingest + internal xG → 200+ lagged features → calibrated logreg → JSON/API/reports.*
-- Metrics (v6): ![Metrics](assets/presentation/metrics.svg)  
-  *Accuracy 59.3% vs 53.7% baseline; log loss 0.676; Brier 0.240.*
+  *From NHL API ingest + internal xG → 200+ lagged features → calibrated logreg → JSON/API/reports.*
+- Key metrics (v6): ![Metrics](assets/presentation/metrics.svg)  
+  *Holdout (2023-24): 59.3% vs 53.7% baseline; log loss 0.676; Brier 0.240.*
 - Calibration curve (v6): ![Calibration](assets/presentation/calibration.svg)  
-  *Probabilities track observed outcomes; curve near diagonal.*
+  *Probabilities hug the diagonal; low log loss/Brier indicates well-calibrated outputs.*
 - Feature signals (v6): ![Feature Importance](assets/feature_importance.png)  
-  *Rolling goal diff, special teams, rest/B2B, xG/shot quality, possession.*
+  *Rolling goal diff, special teams, rest/B2B, xG/shot quality, possession lead the lift.*
 - Slate card example: ![Prediction](assets/presentation/prediction_card.svg)  
-  *Clean matchup layout with badges and timestamps.*
+  *Clean matchup layout with updated time and minimal badges (rest/goalie/injury).*
+
+_Note: Use the SVG set in `docs/assets/presentation/` for high-res export (flow.svg, metrics.svg, calibration.svg, prediction_card.svg)._
 
 Key metrics table:
 
