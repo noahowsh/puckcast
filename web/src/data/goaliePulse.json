@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2025-12-05T23:13:04.979506+00:00",
+  "updatedAt": "2025-12-06T13:19:09.002849+00:00",
   "notes": "Goalie performance metrics calculated from NHL Stats API data. GSAx estimates based on save percentage above league average.",
   "goalies": [
     {
@@ -108,7 +108,7 @@
       "watchouts": [
         "Limited recent data"
       ],
-      "nextOpponent": "SJS"
+      "nextOpponent": "PIT"
     },
     {
       "name": "Scott Wedgewood",
@@ -185,11 +185,11 @@
       "name": "Logan Thompson",
       "team": "WSH",
       "rollingGsa": 1.4,
-      "seasonGsa": 8.9,
-      "restDays": 2,
+      "seasonGsa": 9.4,
+      "restDays": 1,
       "startLikelihood": 0.9,
       "trend": "steady",
-      "note": "Consistent performance from Logan Thompson with a 2.02 GAA \u2014 reliable starter for WSH.",
+      "note": "Consistent performance from Logan Thompson with a 2.06 GAA \u2014 reliable starter for WSH.",
       "strengths": [
         "Exceptional goals against average",
         "Proven winner"
@@ -197,7 +197,7 @@
       "watchouts": [
         "Inconsistent results"
       ],
-      "nextOpponent": "ANA"
+      "nextOpponent": "CBJ"
     },
     {
       "name": "Dennis Hildeby",
@@ -249,7 +249,7 @@
       "watchouts": [
         "Inconsistent results"
       ],
-      "nextOpponent": "BUF"
+      "nextOpponent": "EDM"
     },
     {
       "name": "Tristan Jarry",
@@ -317,7 +317,7 @@
       "watchouts": [
         "Inconsistent results"
       ],
-      "nextOpponent": "VGK"
+      "nextOpponent": "BOS"
     },
     {
       "name": "Darcy Kuemper",
@@ -371,6 +371,23 @@
       "nextOpponent": "NSH"
     },
     {
+      "name": "Jake Oettinger",
+      "team": "DAL",
+      "rollingGsa": 0.6,
+      "seasonGsa": 3.6,
+      "restDays": 2,
+      "startLikelihood": 0.8,
+      "trend": "stable",
+      "note": "Jake Oettinger showing promise with limited sample size \u2014 monitor progression closely.",
+      "strengths": [
+        "Proven winner"
+      ],
+      "watchouts": [
+        "Limited recent data"
+      ],
+      "nextOpponent": "PIT"
+    },
+    {
       "name": "Daniil Tarasov",
       "team": "FLA",
       "rollingGsa": 0.6,
@@ -386,23 +403,6 @@
         "Limited recent data"
       ],
       "nextOpponent": "CBJ"
-    },
-    {
-      "name": "Jake Oettinger",
-      "team": "DAL",
-      "rollingGsa": 0.5,
-      "seasonGsa": 2.9,
-      "restDays": 2,
-      "startLikelihood": 0.8,
-      "trend": "stable",
-      "note": "Jake Oettinger showing promise with limited sample size \u2014 monitor progression closely.",
-      "strengths": [
-        "Proven winner"
-      ],
-      "watchouts": [
-        "Limited recent data"
-      ],
-      "nextOpponent": "SJS"
     },
     {
       "name": "Dan Vladar",
@@ -456,22 +456,21 @@
       "nextOpponent": "VAN"
     },
     {
-      "name": "Yaroslav Askarov",
-      "team": "SJS",
-      "rollingGsa": 0.3,
-      "seasonGsa": 2.1,
+      "name": "Eric Comrie",
+      "team": "WPG",
+      "rollingGsa": 0.4,
+      "seasonGsa": 1.5,
       "restDays": 2,
-      "startLikelihood": 0.8,
+      "startLikelihood": 0.7,
       "trend": "stable",
-      "note": "Yaroslav Askarov showing promise with limited sample size \u2014 monitor progression closely.",
+      "note": "Eric Comrie showing promise with limited sample size \u2014 monitor progression closely.",
       "strengths": [
-        "Proven winner"
+        "Solid fundamentals"
       ],
       "watchouts": [
-        "High goals against",
         "Inconsistent results"
       ],
-      "nextOpponent": "DAL"
+      "nextOpponent": "EDM"
     },
     {
       "name": "Lukas Dostal",
@@ -488,7 +487,25 @@
       "watchouts": [
         "Inconsistent results"
       ],
-      "nextOpponent": "WSH"
+      "nextOpponent": "CHI"
+    },
+    {
+      "name": "Yaroslav Askarov",
+      "team": "SJS",
+      "rollingGsa": 0.2,
+      "seasonGsa": 1.5,
+      "restDays": 2,
+      "startLikelihood": 0.8,
+      "trend": "stable",
+      "note": "Yaroslav Askarov showing promise with limited sample size \u2014 monitor progression closely.",
+      "strengths": [
+        "Proven winner"
+      ],
+      "watchouts": [
+        "High goals against",
+        "Inconsistent results"
+      ],
+      "nextOpponent": "CAR"
     },
     {
       "name": "Thatcher Demko",
@@ -505,24 +522,7 @@
       "watchouts": [
         "Limited recent data"
       ],
-      "nextOpponent": "UTA"
-    },
-    {
-      "name": "Jet Greaves",
-      "team": "CBJ",
-      "rollingGsa": 0.1,
-      "seasonGsa": 0.5,
-      "restDays": 2,
-      "startLikelihood": 0.8,
-      "trend": "stable",
-      "note": "Jet Greaves showing promise with limited sample size \u2014 monitor progression closely.",
-      "strengths": [
-        "Solid fundamentals"
-      ],
-      "watchouts": [
-        "Limited recent data"
-      ],
-      "nextOpponent": "FLA"
+      "nextOpponent": "MIN"
     }
   ]
 }
