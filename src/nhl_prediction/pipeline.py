@@ -212,12 +212,13 @@ def _add_elo_features(
     games: pd.DataFrame,
     base_rating: float = 1500.0,
     k_factor: float = 10.0,
-    home_advantage: float = 30.0,
+    home_advantage: float = 35.0,
     season_carryover: float = 0.5,
 ) -> pd.DataFrame:
     """Compute pre-game Elo ratings per team per season.
 
     Args:
+        home_advantage: Elo points added to home team. Default 35.0 (optimized).
         season_carryover: Fraction of rating to carry over between seasons.
             0.0 = full reset, 1.0 = no reset, 0.5 = regress 50% toward mean.
             Default 0.5 improves accuracy by ~0.8pp over full reset.

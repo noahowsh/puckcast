@@ -3,23 +3,23 @@
   "modelVersion": "V8.0",
   "overall": {
     "games": 5002,
-    "accuracy": 0.6118,
+    "accuracy": 0.6140,
     "baseline": 0.5374,
     "homeWinRate": 0.5374,
-    "brier": 0.230,
-    "logLoss": 0.6546,
+    "brier": 0.228,
+    "logLoss": 0.6543,
     "avgEdge": 0.185
   },
   "heroStats": [
     {
       "label": "Test accuracy",
-      "value": "61.2%",
+      "value": "61.4%",
       "detail": "4-season holdout average"
     },
     {
       "label": "Model version",
       "value": "V8.0",
-      "detail": "20 curated features + improved Elo"
+      "detail": "19 curated features + improved Elo"
     },
     {
       "label": "Training window",
@@ -28,7 +28,7 @@
     },
     {
       "label": "Edge vs baseline",
-      "value": "+7.4 pts",
+      "value": "+7.7 pts",
       "detail": "vs 53.7% home win rate"
     }
   ],
@@ -42,8 +42,8 @@
       "detail": "68.2% accuracy - strong confidence tier"
     },
     {
-      "title": "V8.0 Elo improvement",
-      "detail": "Season carryover boosts accuracy +0.8pp"
+      "title": "V8.0 improvements",
+      "detail": "Elo carryover + feature cleanup = +1.0pp"
     }
   ],
   "strategies": [
@@ -156,29 +156,29 @@
     {
       "season": "2024-25",
       "games": 1312,
-      "accuracy": 0.597,
-      "logLoss": 0.658,
+      "accuracy": 0.599,
+      "logLoss": 0.656,
       "baseline": 0.563
     },
     {
       "season": "2023-24",
       "games": 1312,
       "accuracy": 0.610,
-      "logLoss": 0.654,
+      "logLoss": 0.652,
       "baseline": 0.537
     },
     {
       "season": "2022-23",
       "games": 1312,
-      "accuracy": 0.607,
-      "logLoss": 0.656,
+      "accuracy": 0.606,
+      "logLoss": 0.654,
       "baseline": 0.541
     },
     {
       "season": "2021-22",
       "games": 1066,
-      "accuracy": 0.634,
-      "logLoss": 0.648,
+      "accuracy": 0.642,
+      "logLoss": 0.646,
       "baseline": 0.541
     }
   ],

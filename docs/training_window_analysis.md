@@ -8,7 +8,7 @@
 
 After extensive testing, we determined that **4 seasons** with **Elo season carryover** is the optimal configuration for the V8.0 model.
 
-**Production Choice:** 4 seasons + 50% Elo carryover = **61.2% accuracy**
+**Production Choice:** 4 seasons + optimized Elo (HA=35, carry=0.5) + feature cleanup = **61.4% accuracy**
 **Previous (V7.9):** 4 seasons, no Elo carryover = 60.4% accuracy
 
 ## Test Results
@@ -115,22 +115,95 @@ new_rating = 1500 + 0.5 * (prev_rating - 1500)
 | Configuration | Avg Accuracy | Log Loss |
 |--------------|--------------|----------|
 | K=10, HA=30, carry=0 (old) | 59.07% | 0.6582 |
-| K=10, HA=30, carry=0.5 (new) | 60.38% | -- |
-| **Full model with carry=0.5** | **61.18%** | **0.6546** |
-
-**Improvement: +0.81pp accuracy, -0.0036 log loss**
+| K=10, HA=30, carry=0.5 | 60.38% | -- |
+| K=10, HA=35, carry=0.5 | 60.56% | -- |
+| **Full model (HA=35, carry=0.5)** | **61.20%** | **0.6545** |
 
 ### Implementation
 
 Updated `src/nhl_prediction/pipeline.py` `_add_elo_features()` function:
 - Added `season_carryover` parameter (default 0.5)
+- Updated `home_advantage` default to 35.0 (from 30.0)
 - Previous season ratings regress 50% toward 1500 at season start
-- Maintains team strength information across seasons
+
+## Feature Degradation Analysis (December 2025)
+
+### Features with Significant Degradation (>20% correlation drop)
+
+| Feature | 2021-22 | 2024-25 | Change |
+|---------|---------|---------|--------|
+| **goalie_rest_days_diff** | 0.084 | 0.019 | **-77%** |
+| elo_expectation_home | 0.249 | 0.154 | -38% (fixed) |
+| season_win_pct_diff | 0.189 | 0.125 | -34% |
+| goalie_trend_score_diff | 0.093 | 0.062 | -34% |
+| season_goal_diff_avg_diff | 0.207 | 0.138 | -33% |
+
+### Features that Improved
+
+| Feature | 2021-22 | 2024-25 | Change |
+|---------|---------|---------|--------|
+| rolling_corsi_5_diff | 0.104 | 0.138 | **+32%** |
+| rolling_fenwick_5_diff | 0.114 | 0.144 | **+26%** |
+| rest_diff | 0.047 | 0.072 | **+53%** |
+
+### Key Insight: Possession Metrics Rising
+
+As league parity increases, **underlying performance metrics (Corsi, Fenwick)** are becoming MORE predictive while **outcome-based metrics (wins, goals)** are becoming LESS predictive.
+
+## Goalie Rest Feature Removal
+
+### Analysis
+
+The `goalie_rest_days_diff` feature showed the most severe degradation (-77%). Deep analysis revealed:
+
+1. **Effect collapsed**: In 2021-22, teams with big rest advantage won 69.2% vs 40.8% (28pp gap). In 2024-25, it's 73.1% vs 64.8% (8pp gap).
+
+2. **Redundant with team rest**: Goalie rest was 1.77x more predictive than team rest in 2021-22, but dropped to 0.26x by 2024-25.
+
+3. **Adding it hurts**: When tested, removing the feature improved accuracy:
+
+| Configuration | Accuracy | Log Loss |
+|--------------|----------|----------|
+| With goalie_rest_days_diff | 61.20% | 0.6545 |
+| **Without goalie_rest_days_diff** | **61.40%** | **0.6543** |
+
+### Recommendation
+
+Remove `goalie_rest_days_diff` from the feature set. The `rest_diff` feature (which is improving) captures the relevant signal.
+
+## Final V8.0 Configuration
+
+```python
+# Elo settings
+home_advantage = 35.0  # Up from 30.0
+season_carryover = 0.5  # New (was 0.0 / full reset)
+
+# Features: 19 features (removed goalie_rest_days_diff)
+```
+
+### Final Results
+
+| Metric | V7.9 | V8.0 | Improvement |
+|--------|------|------|-------------|
+| **Accuracy** | 60.37% | **61.40%** | **+1.03pp** |
+| **Log Loss** | 0.6582 | **0.6543** | **-0.0039** |
+| **Edge vs Baseline** | +6.6pp | **+7.7pp** | **+1.1pp** |
+
+### By Season
+
+| Season | V7.9 | V8.0 | Change |
+|--------|------|------|--------|
+| 2021-22 | 62.76% | 64.15% | +1.39pp |
+| 2022-23 | 58.78% | 60.57% | +1.79pp |
+| 2023-24 | 60.16% | 60.98% | +0.82pp |
+| 2024-25 | 59.76% | 59.91% | +0.15pp |
 
 ## Next Steps
 
 1. ~~Update production model to use 4-season window~~ ✓
 2. ~~Implement Elo season carryover~~ ✓ (V8.0)
-3. Set up automated feature store rebuilds
-4. Track prediction accuracy over time
-5. Investigate other degrading features for potential improvements
+3. ~~Optimize Elo home advantage to 35~~ ✓ (V8.0)
+4. ~~Remove degraded goalie_rest_days_diff feature~~ ✓ (V8.0)
+5. Set up automated feature store rebuilds
+6. Track prediction accuracy over time
+7. Monitor Corsi/Fenwick features (improving - may warrant more weight)
