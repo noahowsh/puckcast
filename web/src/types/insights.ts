@@ -26,6 +26,17 @@ export type SeasonBreakdown = {
   baseline: number;
 };
 
+export type CurrentSeason = {
+  season: string;
+  games: number;
+  accuracy: number;
+  logLoss: number;
+  baseline: number;
+  aGradeAccuracy: number;
+  aGradeGames: number;
+  asOf: string;
+};
+
 export type TeamPerformance = {
   team: string;
   abbrev: string;
@@ -101,6 +112,7 @@ export type ModelInsights = {
   insights: HeadlineInsight[];
   strategies: StrategySummary[];
   confidenceBuckets: ConfidenceBucket[];
+  currentSeason?: CurrentSeason;
   seasonBreakdown?: SeasonBreakdown[];
   teamPerformance: TeamPerformance[];
   standings: {

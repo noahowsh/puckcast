@@ -142,6 +142,16 @@
       "description": "Coin flip - no meaningful edge"
     }
   ],
+  "currentSeason": {
+    "season": "2025-26",
+    "games": 347,
+    "accuracy": 0.613,
+    "logLoss": 0.651,
+    "baseline": 0.542,
+    "aGradeAccuracy": 0.724,
+    "aGradeGames": 52,
+    "asOf": "Dec 6, 2025"
+  },
   "seasonBreakdown": [
     {
       "season": "2023-24",
