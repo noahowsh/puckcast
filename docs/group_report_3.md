@@ -23,8 +23,6 @@
 - Slate card example: ![Prediction](assets/presentation/prediction_card.svg)  
   *Clean matchup layout with updated time and minimal badges (rest/goalie/injury).*
 
-_Note: Use the SVG set in `docs/assets/presentation/` for high-res export (flow.svg, metrics.svg, calibration.svg, prediction_card.svg)._
-
 Key metrics table:
 
 | Metric                             | Value (v6) | Note                                  |
