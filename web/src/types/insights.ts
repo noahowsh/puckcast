@@ -60,6 +60,7 @@ export type FeatureImportance = {
   feature: string;
   coefficient: number;
   absImportance: number;
+  description?: string;
 };
 
 export type DistributionFinding = {
