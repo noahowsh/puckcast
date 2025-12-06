@@ -18,46 +18,88 @@ export default function PerformancePage() {
   return (
     <div className="min-h-screen">
       <div className="container">
-        {/* Hero - Simplified */}
+        {/* Hero - Two Column Balanced */}
         <section className="nova-hero nav-offset">
-          <div className="pill-row">
-            <span className="pill">Model Performance</span>
-            <span className="pill">V7.9</span>
-            <span className="pill" style={{ borderColor: 'rgba(110, 240, 194, 0.4)', background: 'rgba(110, 240, 194, 0.1)' }}>
-              Historical Data (4 seasons)
-            </span>
-          </div>
-          <h1 className="display-xl" style={{ marginBottom: '0.5rem' }}>Does the model work?</h1>
-          <p className="lead" style={{ marginBottom: '1.5rem' }}>
-            Yes. Tested on {overview.games.toLocaleString()} holdout games across 4 NHL seasons (2020-2024).
-            We measure accuracy, calibration, and edge — transparency first.
-          </p>
+          <div className="nova-hero__grid nova-hero__grid--balanced">
+            {/* Left Column */}
+            <div className="nova-hero__text">
+              <div className="pill-row">
+                <span className="pill">Model Performance</span>
+                <span className="pill">V7.9</span>
+              </div>
+              <h1 className="display-xl" style={{ marginBottom: '0.75rem' }}>Does the model work?</h1>
+              <p className="lead" style={{ marginBottom: '1.25rem' }}>
+                Yes, it works. We tested V7.9 across 4 full NHL seasons (2020-2024)
+                using holdout validation — training on older data, then predicting games
+                the model had never seen. The stats below are averages across all {overview.games.toLocaleString()} test games.
+              </p>
 
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))',
-            gap: '1rem',
-            maxWidth: '800px'
-          }}>
-            <div style={{ textAlign: 'center' }}>
-              <p className="eyebrow">Test Accuracy</p>
-              <p style={{ fontSize: '2.2rem', fontWeight: 800, color: 'var(--aqua)' }}>{pct(overview.accuracy)}</p>
-              <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>+{edge} pts vs baseline</p>
+              <div style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(2, 1fr)',
+                gap: '0.75rem'
+              }}>
+                <div className="stat-tile">
+                  <p className="stat-tile__label">Avg Accuracy</p>
+                  <p className="stat-tile__value" style={{ color: 'var(--aqua)' }}>{pct(overview.accuracy)}</p>
+                  <p className="stat-tile__detail">+{edge} pts vs baseline</p>
+                </div>
+                <div className="stat-tile">
+                  <p className="stat-tile__label">Baseline</p>
+                  <p className="stat-tile__value">{pct(overview.baseline)}</p>
+                  <p className="stat-tile__detail">Always pick home team</p>
+                </div>
+                <div className="stat-tile">
+                  <p className="stat-tile__label">Games Tested</p>
+                  <p className="stat-tile__value">{overview.games.toLocaleString()}</p>
+                  <p className="stat-tile__detail">Across 4 seasons</p>
+                </div>
+                <div className="stat-tile">
+                  <p className="stat-tile__label">Record</p>
+                  <p className="stat-tile__value" style={{ fontSize: '1.3rem' }}>{correct.toLocaleString()} - {incorrect.toLocaleString()}</p>
+                  <p className="stat-tile__detail">Correct - Incorrect</p>
+                </div>
+              </div>
             </div>
-            <div style={{ textAlign: 'center' }}>
-              <p className="eyebrow">Baseline</p>
-              <p style={{ fontSize: '2.2rem', fontWeight: 800, color: 'var(--text-primary)' }}>{pct(overview.baseline)}</p>
-              <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>Home win rate</p>
-            </div>
-            <div style={{ textAlign: 'center' }}>
-              <p className="eyebrow">Log Loss</p>
-              <p style={{ fontSize: '2.2rem', fontWeight: 800, color: 'var(--text-primary)' }}>{overview.logLoss.toFixed(3)}</p>
-              <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>Lower = better</p>
-            </div>
-            <div style={{ textAlign: 'center' }}>
-              <p className="eyebrow">A+ Accuracy</p>
-              <p style={{ fontSize: '2.2rem', fontWeight: 800, color: 'var(--mint)' }}>{pct(confidenceBuckets[0]?.accuracy ?? 0)}</p>
-              <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>{confidenceBuckets[0]?.count ?? 0} picks</p>
+
+            {/* Right Column */}
+            <div className="nova-hero__panel">
+              <p className="micro-label" style={{ marginBottom: '0.5rem' }}>Calibration &amp; Quality</p>
+              <div style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(2, 1fr)',
+                gap: '0.75rem'
+              }}>
+                <div className="stat-tile">
+                  <p className="stat-tile__label">Log Loss</p>
+                  <p className="stat-tile__value">{overview.logLoss.toFixed(3)}</p>
+                  <p className="stat-tile__detail">Lower = better</p>
+                </div>
+                <div className="stat-tile">
+                  <p className="stat-tile__label">Brier Score</p>
+                  <p className="stat-tile__value">{overview.brier.toFixed(3)}</p>
+                  <p className="stat-tile__detail">Probability accuracy</p>
+                </div>
+                <div className="stat-tile">
+                  <p className="stat-tile__label">A+ Accuracy</p>
+                  <p className="stat-tile__value" style={{ color: 'var(--mint)' }}>{pct(confidenceBuckets[0]?.accuracy ?? 0)}</p>
+                  <p className="stat-tile__detail">{confidenceBuckets[0]?.count ?? 0} elite picks</p>
+                </div>
+                <div className="stat-tile">
+                  <p className="stat-tile__label">Avg Edge</p>
+                  <p className="stat-tile__value">{(overview.avgEdge * 100).toFixed(1)} pts</p>
+                  <p className="stat-tile__detail">Per prediction</p>
+                </div>
+              </div>
+              <p style={{
+                fontSize: '0.85rem',
+                color: 'var(--text-tertiary)',
+                marginTop: '1rem',
+                paddingTop: '0.75rem',
+                borderTop: '1px solid var(--border-subtle)'
+              }}>
+                All metrics averaged from 2020-21, 2021-22, 2022-23, and 2023-24 seasons.
+              </p>
             </div>
           </div>
         </section>
