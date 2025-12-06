@@ -1,1 +1,105 @@
-{"message":"No backtesting data yet","generatedAt":"2025-12-02T08:36:35Z"}
+{
+  "generatedAt": "2025-12-06T23:00:00Z",
+  "modelVersion": "V8.2",
+  "summary": {
+    "fourSeasonAverage": 0.6104,
+    "fiveSeasonAverage": 0.5970,
+    "logLoss": 0.6559,
+    "totalGames": 5002,
+    "trainingWindow": "4 seasons",
+    "validationMethod": "Leave-one-season-out cross-validation"
+  },
+  "seasonResults": [
+    {
+      "season": "2021-22",
+      "games": 1230,
+      "accuracy": 0.6309,
+      "logLoss": 0.6523,
+      "homeWinRate": 0.5415,
+      "edgeOverBaseline": 0.0894
+    },
+    {
+      "season": "2022-23",
+      "games": 1230,
+      "accuracy": 0.6049,
+      "logLoss": 0.6544,
+      "homeWinRate": 0.5138,
+      "edgeOverBaseline": 0.0911
+    },
+    {
+      "season": "2023-24",
+      "games": 1230,
+      "accuracy": 0.6114,
+      "logLoss": 0.6571,
+      "homeWinRate": 0.5374,
+      "edgeOverBaseline": 0.0740
+    },
+    {
+      "season": "2024-25",
+      "games": 1312,
+      "accuracy": 0.5945,
+      "logLoss": 0.6600,
+      "homeWinRate": 0.5625,
+      "edgeOverBaseline": 0.0320
+    },
+    {
+      "season": "2025-26 (partial)",
+      "games": 440,
+      "accuracy": 0.5432,
+      "logLoss": 0.6925,
+      "homeWinRate": 0.5200,
+      "edgeOverBaseline": 0.0232,
+      "note": "Early season (Oct-Nov) - model improves ~7pp by March/April"
+    }
+  ],
+  "monthlyPattern": {
+    "description": "Model accuracy typically improves from October to April as Elo ratings stabilize",
+    "octNov": "56-58% accuracy (early season noise)",
+    "dec": "63% accuracy (big improvement)",
+    "marApr": "64% accuracy (peak performance)"
+  },
+  "confidenceTiers": [
+    {
+      "grade": "A+",
+      "threshold": "25+ pts",
+      "accuracy": 0.7928,
+      "games": 333
+    },
+    {
+      "grade": "A",
+      "threshold": "20-25 pts",
+      "accuracy": 0.7203,
+      "games": 404
+    },
+    {
+      "grade": "B+",
+      "threshold": "15-20 pts",
+      "accuracy": 0.6725,
+      "games": 687
+    },
+    {
+      "grade": "B",
+      "threshold": "10-15 pts",
+      "accuracy": 0.6195,
+      "games": 975
+    },
+    {
+      "grade": "C+",
+      "threshold": "5-10 pts",
+      "accuracy": 0.5776,
+      "games": 1231
+    },
+    {
+      "grade": "C",
+      "threshold": "0-5 pts",
+      "accuracy": 0.5190,
+      "games": 1372
+    }
+  ],
+  "v82Improvements": [
+    "Dynamic Elo home advantage adapting to league trends (window=100, scale=700)",
+    "Adaptive sample weights for training",
+    "League home win rate as explicit feature",
+    "Improved early season calibration"
+  ]
+}

@@ -188,7 +188,7 @@ const faqItems = [
   {
     question: "How often do you update predictions?",
     answer:
-      "We generate fresh predictions daily at 10:00 AM and 10:00 PM UTC via automated GitHub Actions. The model pulls the latest stats from the NHL API and recalculates all ~50 features (V7.9) before making predictions.",
+      "We generate fresh predictions daily at 10:00 AM and 10:00 PM UTC via automated GitHub Actions. The model pulls the latest stats from the NHL API and recalculates all 39 curated features (V8.2) before making predictions.",
   },
   {
     question: "Do you sell picks or betting advice?",
