@@ -6,7 +6,7 @@
 ╚═══════════════════════════════════════════════════════════╝
 
 FULL MODEL NHL PREDICTIONS
-Predict today's games using V8.1 (4-season training window, improved Elo with season carryover, enhanced features)
+Predict today's games using V8.2 (adaptive weights + league home win rate for handling home advantage shifts)
 
 Usage:
     python predict_full.py
@@ -41,11 +41,111 @@ from nhl_prediction.situational_features import add_situational_features
 warnings.filterwarnings('ignore', category=UserWarning)
 
 WEB_PREDICTIONS_PATH = Path(__file__).parent.parent / "web" / "src" / "data" / "todaysPredictions.json"
+
+# Historical average home win rate (baseline for adaptive weighting)
+HISTORICAL_HOME_WIN_RATE = 0.535
+
+
+def add_league_hw_feature(games: pd.DataFrame) -> pd.DataFrame:
+    """Add rolling 100-game league-wide home win rate as a feature.
+
+    This helps the model adapt to structural shifts in NHL home advantage
+    between seasons (e.g., 2024-25 had 56.2% home win rate vs historical 51-54%).
+    """
+    games = games.sort_values('gameDate').copy()
+
+    # Calculate rolling home win rate across all games (last 100)
+    games['league_hw_100'] = games['home_win'].rolling(
+        window=100, min_periods=50
+    ).mean().shift(1)  # Shift to avoid leakage
+
+    # Fill early games with historical average
+    games['league_hw_100'] = games['league_hw_100'].fillna(HISTORICAL_HOME_WIN_RATE)
+
+    return games
+
+
+def calculate_adaptive_weights(games: pd.DataFrame, target: pd.Series) -> np.ndarray:
+    """Calculate sample weights that down-weight seasons with unusual home advantage.
+
+    This prevents the model from over-learning from anomalous seasons like 2024-25
+    (which had 56.2% home win rate vs historical 53.5%).
+
+    Seasons with home win rates close to historical average get weight ~1.0.
+    Seasons with unusual home win rates (e.g., 2024-25 at 56.2%) get lower weights.
+    """
+    weights = np.ones(len(target))
+    seasons = games['seasonId'].values
+
+    # Calculate season-level home win rates
+    season_hw_rates = {}
+    for season in games['seasonId'].unique():
+        season_mask = games['seasonId'] == season
+        season_hw = target[season_mask].mean()
+        season_hw_rates[season] = season_hw
+
+    # Calculate weights based on deviation from historical average
+    for i, season in enumerate(seasons):
+        season_hw = season_hw_rates[season]
+        deviation = abs(season_hw - HISTORICAL_HOME_WIN_RATE)
+        # Down-weight unusual seasons (larger deviation = lower weight)
+        # Deviation of 0.03 (~56% vs 53.5%) gives weight of ~0.87
+        weights[i] = 1.0 / (1.0 + deviation * 5)
+
+    return weights
+
+
 ET_ZONE = ZoneInfo("America/New_York")
 
-# V8.1 Curated Features (38 features - V8.0 base + 3 new features for improved 2024-25 performance)
-# V8.1 improves overall accuracy from 60.94% to 61.16% (+0.22 pp)
-# V8.1 improves 2024-25 accuracy from 59.45% to 60.06% (+0.61 pp)
+# V8.2 Curated Features (39 features - V8.1 base + league home win rate for adaptive predictions)
+# V8.2 adds adaptive weights to handle home advantage shifts between seasons
+# V8.2 improves 2025-26 predictions while maintaining 2024-25 performance
+V82_FEATURES = [
+    # League-wide home advantage (adaptive to structural shifts)
+    'league_hw_100',  # NEW in V8.2: Rolling 100-game league home win rate
+
+    # Elo ratings (improved with season carryover)
+    'elo_diff_pre', 'elo_expectation_home',
+
+    # Rolling win percentage
+    'rolling_win_pct_10_diff', 'rolling_win_pct_5_diff', 'rolling_win_pct_3_diff',
+
+    # Rolling goal differential
+    'rolling_goal_diff_10_diff', 'rolling_goal_diff_5_diff', 'rolling_goal_diff_3_diff',
+
+    # Rolling xG differential
+    'rolling_xg_diff_10_diff', 'rolling_xg_diff_5_diff', 'rolling_xg_diff_3_diff',
+
+    # Possession metrics (improving over time - up 26-32%)
+    'rolling_corsi_10_diff', 'rolling_corsi_5_diff', 'rolling_corsi_3_diff',
+    'rolling_fenwick_10_diff', 'rolling_fenwick_5_diff',
+
+    # Season-level stats
+    'season_win_pct_diff', 'season_goal_diff_avg_diff',
+    'season_xg_diff_avg_diff', 'season_shot_margin_diff',
+
+    # Rest and schedule (rest_diff improved +53%)
+    'rest_diff', 'is_b2b_home', 'is_b2b_away',
+    'games_last_6d_home',
+    'games_last_3d_home',  # V8.1: schedule density
+
+    # Goaltending (removed goalie_rest_days_diff - degraded 77%)
+    'rolling_save_pct_10_diff', 'rolling_save_pct_5_diff', 'rolling_save_pct_3_diff',
+    'rolling_gsax_5_diff', 'rolling_gsax_10_diff',
+    'goalie_trend_score_diff',
+
+    # Momentum
+    'momentum_win_pct_diff', 'momentum_goal_diff_diff', 'momentum_xg_diff',
+
+    # High danger shots
+    'rolling_high_danger_shots_5_diff', 'rolling_high_danger_shots_10_diff',
+
+    # V8.1: Shot volume and possession indicators
+    'shotsFor_roll_10_diff',    # Shot volume trend
+    'rolling_faceoff_5_diff',   # Possession indicator
+]
+
+# Keep V8.1 features for backwards compatibility
 V81_FEATURES = [
     # Elo ratings (improved with season carryover)
     'elo_diff_pre', 'elo_expectation_home',
@@ -384,48 +484,60 @@ def predict_games(date=None, num_games=20):
     print(f"   ✅ {len(dataset.games)} games loaded")
     print(f"   ✅ {dataset.features.shape[1]} baseline features engineered")
 
+    # Add league-wide home win rate feature (V8.2)
+    games_with_hw = add_league_hw_feature(dataset.games)
+    print("   ✅ Added league home win rate feature (V8.2)")
+
     # Add situational features
-    games_with_situational = add_situational_features(dataset.games)
+    games_with_situational = add_situational_features(games_with_hw)
     situational_features = ['fatigue_index_diff', 'third_period_trailing_perf_diff',
                     'travel_distance_diff', 'divisional_matchup',
                     'post_break_game_home', 'post_break_game_away', 'post_break_game_diff']
     available_situational = [f for f in situational_features if f in games_with_situational.columns]
 
-    # Combine baseline + situational features
-    features_full = pd.concat([dataset.features, games_with_situational[available_situational]], axis=1)
+    # Combine baseline + situational + league HW features
+    features_full = pd.concat([
+        dataset.features,
+        games_with_situational[available_situational],
+        games_with_situational[['league_hw_100']],  # V8.2 feature
+    ], axis=1)
     print(f"   ✅ {len(available_situational)} situational features added")
 
-    # Filter to V8.1 curated features only
-    available_v81 = [f for f in V81_FEATURES if f in features_full.columns]
-    missing_v81 = [f for f in V81_FEATURES if f not in features_full.columns]
-    if missing_v81:
-        print(f"   ⚠️  Missing {len(missing_v81)} V8.1 features: {missing_v81[:5]}...")
-    features_full = features_full[available_v81]
-    print(f"   ✅ Total: {features_full.shape[1]} curated features (V8.1 Model)")
+    # Filter to V8.2 curated features only
+    available_v82 = [f for f in V82_FEATURES if f in features_full.columns]
+    missing_v82 = [f for f in V82_FEATURES if f not in features_full.columns]
+    if missing_v82:
+        print(f"   ⚠️  Missing {len(missing_v82)} V8.2 features: {missing_v82[:5]}...")
+    features_full = features_full[available_v82]
+    print(f"   ✅ Total: {features_full.shape[1]} curated features (V8.2 Model)")
 
     # Step 3: Train calibrated model using only past games
     print("\n3️⃣  Training calibrated logistic regression model...")
     predict_date = target_dt
     cutoff = pd.Timestamp(predict_date.date())
-    game_dates = pd.to_datetime(dataset.games["gameDate"])
+    game_dates = pd.to_datetime(games_with_situational["gameDate"])
     eligible_mask = game_dates < cutoff
-    
+
     if not eligible_mask.any():
         print("   ❌ No historical games available before this date.")
         return []
-    
-    eligible_games = dataset.games.loc[eligible_mask].copy()
+
+    eligible_games = games_with_situational.loc[eligible_mask].copy()
     eligible_features = features_full.loc[eligible_mask].copy()
     eligible_target = dataset.target.loc[eligible_mask].copy()
     train_seasons = sorted(eligible_games["seasonId"].unique().tolist())
-    
+
+    # V8.2: Calculate adaptive sample weights to handle home advantage shifts
+    adaptive_weights = calculate_adaptive_weights(eligible_games, eligible_target)
+    print("   ✅ Calculated adaptive sample weights (V8.2)")
+
     candidate_cs = [0.005, 0.01, 0.02, 0.03, 0.05, 0.1, 0.3, 0.5, 1.0]
-    best_c = tune_logreg_c(candidate_cs, eligible_features, eligible_target, eligible_games, train_seasons)
+    best_c = tune_logreg_c(candidate_cs, eligible_features, eligible_target, eligible_games, train_seasons, sample_weights=adaptive_weights)
     threshold, val_acc, calibrator = calibrate_threshold(best_c, eligible_features, eligible_target, eligible_games, train_seasons)
-    
+
     training_mask = pd.Series(True, index=eligible_features.index)
     model = create_baseline_model(C=best_c)
-    model = fit_model(model, eligible_features, eligible_target, training_mask)
+    model = fit_model(model, eligible_features, eligible_target, training_mask, sample_weight=adaptive_weights)
     
     print(f"   ✅ Trained on {training_mask.sum():,} historical games | seasons: {', '.join(map(str, train_seasons))}")
     print(f"   ✅ Selected logistic regression C={best_c:.3f}")

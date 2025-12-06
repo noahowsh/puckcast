@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
 """
-V8.1 Comprehensive Metric Verification
+V8.2 Comprehensive Metric Verification
 
-This script performs rigorous backtesting to verify ALL V8.1 model metrics.
-Uses exact production configuration: 38 curated features, improved Elo.
+This script performs rigorous backtesting to verify ALL V8.2 model metrics.
+Uses exact production configuration: 39 curated features, improved Elo,
+adaptive sample weights, and league home win rate feature.
 
-V8.1 adds 3 new features over V8.0:
-- games_last_3d_home (schedule density)
-- shotsFor_roll_10_diff (shot volume trend)
-- rolling_faceoff_5_diff (possession indicator)
+V8.2 adds over V8.1:
+- league_hw_100 (rolling 100-game league home win rate)
+- Adaptive sample weights (down-weight unusual seasons like 2024-25)
 
 Output:
 - Overall accuracy, log loss, brier score
@@ -31,13 +31,20 @@ from sklearn.metrics import accuracy_score, log_loss, brier_score_loss
 from sklearn.linear_model import LogisticRegression
 from sklearn.preprocessing import StandardScaler
 from sklearn.pipeline import Pipeline
+from sklearn.model_selection import cross_val_score
 
 sys.path.insert(0, str(Path(__file__).parent.parent / 'src'))
 
 from nhl_prediction.pipeline import build_dataset
 
-# V8.1 Curated Features (38 features - V8.0 base + 3 new features)
-V81_FEATURES = [
+# Historical average home win rate (baseline for adaptive weighting)
+HISTORICAL_HOME_WIN_RATE = 0.535
+
+# V8.2 Curated Features (39 features - V8.1 base + league home win rate)
+V82_FEATURES = [
+    # League-wide home advantage (adaptive to structural shifts)
+    'league_hw_100',  # NEW in V8.2
+
     # Elo ratings (improved with season carryover)
     'elo_diff_pre', 'elo_expectation_home',
 
@@ -61,7 +68,7 @@ V81_FEATURES = [
     # Rest and schedule
     'rest_diff', 'is_b2b_home', 'is_b2b_away',
     'games_last_6d_home',
-    'games_last_3d_home',  # NEW in V8.1
+    'games_last_3d_home',  # V8.1
 
     # Goaltending (removed goalie_rest_days_diff)
     'rolling_save_pct_10_diff', 'rolling_save_pct_5_diff', 'rolling_save_pct_3_diff',
@@ -74,10 +81,39 @@ V81_FEATURES = [
     # High danger shots
     'rolling_high_danger_shots_5_diff', 'rolling_high_danger_shots_10_diff',
 
-    # NEW in V8.1: Shot volume and possession indicators
+    # V8.1: Shot volume and possession indicators
     'shotsFor_roll_10_diff',
     'rolling_faceoff_5_diff',
 ]
+
+
+def add_league_hw_feature(games: pd.DataFrame) -> pd.DataFrame:
+    """Add rolling 100-game league-wide home win rate as a feature."""
+    games = games.sort_values('gameDate').copy()
+    games['league_hw_100'] = games['home_win'].rolling(
+        window=100, min_periods=50
+    ).mean().shift(1)
+    games['league_hw_100'] = games['league_hw_100'].fillna(HISTORICAL_HOME_WIN_RATE)
+    return games
+
+
+def calculate_adaptive_weights(games: pd.DataFrame, target: pd.Series) -> np.ndarray:
+    """Calculate sample weights that down-weight seasons with unusual home advantage."""
+    weights = np.ones(len(target))
+    seasons = games['seasonId'].values
+
+    season_hw_rates = {}
+    for season in games['seasonId'].unique():
+        season_mask = games['seasonId'] == season
+        season_hw = target[season_mask].mean()
+        season_hw_rates[season] = season_hw
+
+    for i, season in enumerate(seasons):
+        season_hw = season_hw_rates[season]
+        deviation = abs(season_hw - HISTORICAL_HOME_WIN_RATE)
+        weights[i] = 1.0 / (1.0 + deviation * 5)
+
+    return weights
 
 
 def grade_from_edge(edge_value: float) -> str:
@@ -98,7 +134,7 @@ def grade_from_edge(edge_value: float) -> str:
 
 def run_verification():
     print("=" * 80)
-    print("V8.1 COMPREHENSIVE METRIC VERIFICATION")
+    print("V8.2 COMPREHENSIVE METRIC VERIFICATION")
     print("=" * 80)
 
     # Load all seasons for testing
@@ -110,14 +146,18 @@ def run_verification():
     features = dataset.features.copy()
     target = dataset.target.copy()
 
-    # Filter to V8.1 features
-    available_v81 = [f for f in V81_FEATURES if f in features.columns]
-    missing = set(V81_FEATURES) - set(available_v81)
+    # Add league_hw_100 feature (V8.2)
+    games = add_league_hw_feature(games)
+    features['league_hw_100'] = games['league_hw_100'].values
+
+    # Filter to V8.2 features
+    available_v82 = [f for f in V82_FEATURES if f in features.columns]
+    missing = set(V82_FEATURES) - set(available_v82)
     if missing:
         print(f"⚠️  Missing features: {missing}")
 
-    features = features[available_v81]
-    print(f"✅ Using {len(available_v81)} V8.1 features")
+    features = features[available_v82]
+    print(f"✅ Using {len(available_v82)} V8.2 features")
     print(f"✅ Total games: {len(games)}")
 
     # Leave-one-season-out validation to test ALL games
@@ -125,7 +165,7 @@ def run_verification():
     season_results = []
 
     unique_seasons = sorted(games['seasonId'].unique())
-    print(f"\n🔄 Running leave-one-season-out validation...")
+    print(f"\n🔄 Running leave-one-season-out validation with adaptive weights...")
     print(f"   Seasons: {unique_seasons}")
 
     for i, test_season in enumerate(unique_seasons):
@@ -143,16 +183,23 @@ def run_verification():
         if len(X_train) == 0 or len(X_test) == 0:
             continue
 
+        # Calculate adaptive weights for training data
+        train_games = games.loc[train_mask].copy()
+        adaptive_weights = calculate_adaptive_weights(train_games, y_train)
+
+        # Show weight info
+        season_hw = y_train.mean()
+        print(f"   {test_season}: training on {len(train_seasons)} seasons (train HW: {season_hw:.3f})")
+
         # Train model with C tuning (same as production)
-        best_c = 0.01  # Default
+        # Note: We skip weights during C tuning for simplicity, apply during final fit
+        best_c = 0.01
         best_score = 0
         for c in [0.005, 0.01, 0.02, 0.05, 0.1, 0.5, 1.0]:
             temp_model = Pipeline([
                 ('scaler', StandardScaler()),
                 ('clf', LogisticRegression(C=c, max_iter=1000, random_state=42))
             ])
-            # Simple cross-val on training data
-            from sklearn.model_selection import cross_val_score
             scores = cross_val_score(temp_model, X_train, y_train, cv=3, scoring='accuracy')
             if scores.mean() > best_score:
                 best_score = scores.mean()
@@ -162,7 +209,7 @@ def run_verification():
             ('scaler', StandardScaler()),
             ('clf', LogisticRegression(C=best_c, max_iter=1000, random_state=42))
         ])
-        model.fit(X_train, y_train)
+        model.fit(X_train, y_train, clf__sample_weight=adaptive_weights)
 
         # Predict
         y_pred = model.predict(X_test)
@@ -172,6 +219,7 @@ def run_verification():
         acc = accuracy_score(y_test, y_pred)
         ll = log_loss(y_test, y_prob)
         brier = brier_score_loss(y_test, y_prob)
+        baseline = y_test.mean()
 
         season_results.append({
             'season': test_season,
@@ -179,6 +227,7 @@ def run_verification():
             'accuracy': acc,
             'log_loss': ll,
             'brier': brier,
+            'baseline': baseline,
             'train_seasons': len(train_seasons)
         })
 
@@ -191,7 +240,7 @@ def run_verification():
         test_games['correct'] = (test_games['y_pred'] == test_games['y_true']).astype(int)
         all_predictions.append(test_games)
 
-        print(f"   {test_season}: {acc:.2%} ({len(y_test)} games, trained on {len(train_seasons)} seasons)")
+        print(f"            → {acc:.2%} accuracy (baseline: {baseline:.2%}, edge: +{(acc-baseline)*100:.1f}pp)")
 
     # Combine all predictions
     all_preds = pd.concat(all_predictions, ignore_index=True)
@@ -216,10 +265,11 @@ def run_verification():
     print("SEASON-BY-SEASON BREAKDOWN")
     print("=" * 80)
 
-    print(f"\n{'Season':<12} {'Games':<8} {'Accuracy':<12} {'Log Loss':<12} {'Brier':<10}")
-    print("-" * 54)
+    print(f"\n{'Season':<12} {'Games':<8} {'Accuracy':<12} {'Baseline':<12} {'Edge':<10} {'Log Loss':<12}")
+    print("-" * 66)
     for r in season_results:
-        print(f"{r['season']:<12} {r['games']:<8} {r['accuracy']:.2%}        {r['log_loss']:.4f}       {r['brier']:.4f}")
+        edge = (r['accuracy'] - r['baseline']) * 100
+        print(f"{r['season']:<12} {r['games']:<8} {r['accuracy']:.2%}        {r['baseline']:.2%}        +{edge:.1f}pp     {r['log_loss']:.4f}")
 
     print("\n" + "=" * 80)
     print("CONFIDENCE BUCKET PERFORMANCE")
@@ -281,7 +331,7 @@ def run_verification():
 
     print(f"""
 ┌─────────────────────────────────────────────────────────────┐
-│ V8.1 MODEL VERIFIED METRICS                                  │
+│ V8.2 MODEL VERIFIED METRICS                                  │
 ├─────────────────────────────────────────────────────────────┤
 │ Overall Accuracy:  {overall_acc:.4f} ({overall_acc*100:.2f}%)                          │
 │ Log Loss:          {overall_ll:.4f}                                     │
@@ -289,7 +339,11 @@ def run_verification():
 │ Baseline:          {home_win_rate:.4f} ({home_win_rate*100:.2f}%)                          │
 │ Edge vs Baseline:  +{(overall_acc - home_win_rate)*100:.2f} pp                                  │
 │ Total Games:       {len(all_preds)}                                       │
-│ Features:          {len(available_v81)}                                         │
+│ Features:          {len(available_v82)}                                         │
+├─────────────────────────────────────────────────────────────┤
+│ V8.2 ENHANCEMENTS                                            │
+│ • League home win rate feature (adaptive to shifts)          │
+│ • Adaptive sample weights (down-weight unusual seasons)      │
 ├─────────────────────────────────────────────────────────────┤
 │ CONFIDENCE BUCKETS                                           │
 """)

@@ -30,11 +30,11 @@ export default function PerformancePage() {
             <div>
               <div className="pill-row">
                 <span className="pill">Model Performance</span>
-                <span className="pill">V8.1</span>
+                <span className="pill">V8.2</span>
               </div>
               <h1 className="display-xl" style={{ marginBottom: '0.75rem' }}>Does the model work?</h1>
               <p className="lead" style={{ marginBottom: '1.5rem' }}>
-                Yes. We tested V8.1 on {overview.games.toLocaleString()} holdout games across 4 seasons —
+                Yes. We tested V8.2 on {overview.games.toLocaleString()} holdout games across 4 seasons —
                 games the model never saw during training. It correctly predicted {pct(overview.accuracy)} of outcomes,
                 beating the {pct(overview.baseline)} home-team baseline by <span style={{ color: 'var(--mint)' }}>+{edge} percentage points</span>.
               </p>
