@@ -143,6 +143,7 @@
     }
   ],
   "currentSeason": {
+    "hidden": true,
     "season": "2025-26",
     "games": 440,
     "accuracy": 0.543,

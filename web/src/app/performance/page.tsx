@@ -147,8 +147,8 @@ export default function PerformancePage() {
           </div>
         </section>
 
-        {/* Current Season - Highlighted */}
-        {currentSeason && (
+        {/* Current Season - Highlighted (set hidden: true in modelInsights.json to hide) */}
+        {currentSeason && !currentSeason.hidden && (
           <section className="nova-section">
             <div className="card-elevated" style={{
               borderColor: 'rgba(126, 227, 255, 0.5)',

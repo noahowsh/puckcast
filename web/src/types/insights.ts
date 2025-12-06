@@ -27,6 +27,7 @@ export type SeasonBreakdown = {
 };
 
 export type CurrentSeason = {
+  hidden?: boolean;
   season: string;
   games: number;
   accuracy: number;
@@ -35,6 +36,7 @@ export type CurrentSeason = {
   aGradeAccuracy: number;
   aGradeGames: number;
   asOf: string;
+  note?: string;
 };
 
 export type TeamPerformance = {
