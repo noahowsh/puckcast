@@ -18,88 +18,41 @@ export default function PerformancePage() {
   return (
     <div className="min-h-screen">
       <div className="container">
-        {/* Hero - Two Column Balanced */}
+        {/* Hero - Clean Single Column */}
         <section className="nova-hero nav-offset">
-          <div className="nova-hero__grid nova-hero__grid--balanced">
-            {/* Left Column */}
-            <div className="nova-hero__text">
-              <div className="pill-row">
-                <span className="pill">Model Performance</span>
-                <span className="pill">V7.9</span>
-              </div>
-              <h1 className="display-xl" style={{ marginBottom: '0.75rem' }}>Does the model work?</h1>
-              <p className="lead" style={{ marginBottom: '1.25rem' }}>
-                Yes, it works. We tested V7.9 across 4 full NHL seasons (2020-2024)
-                using holdout validation — training on older data, then predicting games
-                the model had never seen. The stats below are averages across all {overview.games.toLocaleString()} test games.
-              </p>
-
-              <div style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(2, 1fr)',
-                gap: '0.75rem'
-              }}>
-                <div className="stat-tile">
-                  <p className="stat-tile__label">Avg Accuracy</p>
-                  <p className="stat-tile__value" style={{ color: 'var(--aqua)' }}>{pct(overview.accuracy)}</p>
-                  <p className="stat-tile__detail">+{edge} pts vs baseline</p>
-                </div>
-                <div className="stat-tile">
-                  <p className="stat-tile__label">Baseline</p>
-                  <p className="stat-tile__value">{pct(overview.baseline)}</p>
-                  <p className="stat-tile__detail">Always pick home team</p>
-                </div>
-                <div className="stat-tile">
-                  <p className="stat-tile__label">Games Tested</p>
-                  <p className="stat-tile__value">{overview.games.toLocaleString()}</p>
-                  <p className="stat-tile__detail">Across 4 seasons</p>
-                </div>
-                <div className="stat-tile">
-                  <p className="stat-tile__label">Record</p>
-                  <p className="stat-tile__value" style={{ fontSize: '1.3rem' }}>{correct.toLocaleString()} - {incorrect.toLocaleString()}</p>
-                  <p className="stat-tile__detail">Correct - Incorrect</p>
-                </div>
-              </div>
+          <div style={{ maxWidth: '800px' }}>
+            <div className="pill-row">
+              <span className="pill">Model Performance</span>
+              <span className="pill">V7.9</span>
             </div>
+            <h1 className="display-xl" style={{ marginBottom: '0.75rem' }}>Does the model work?</h1>
+            <p className="lead" style={{ marginBottom: '1.5rem' }}>
+              Yes. We tested V7.9 on {overview.games.toLocaleString()} holdout games from the 2023-24 season —
+              games the model never saw during training. It correctly predicted {pct(overview.accuracy)} of outcomes,
+              beating the {pct(overview.baseline)} home-team baseline by <span style={{ color: 'var(--mint)' }}>+{edge} percentage points</span>.
+            </p>
 
-            {/* Right Column */}
-            <div className="nova-hero__panel">
-              <p className="micro-label" style={{ marginBottom: '0.5rem' }}>Calibration &amp; Quality</p>
-              <div style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(2, 1fr)',
-                gap: '0.75rem'
-              }}>
-                <div className="stat-tile">
-                  <p className="stat-tile__label">Log Loss</p>
-                  <p className="stat-tile__value">{overview.logLoss.toFixed(3)}</p>
-                  <p className="stat-tile__detail">Lower = better</p>
-                </div>
-                <div className="stat-tile">
-                  <p className="stat-tile__label">Brier Score</p>
-                  <p className="stat-tile__value">{overview.brier.toFixed(3)}</p>
-                  <p className="stat-tile__detail">Probability accuracy</p>
-                </div>
-                <div className="stat-tile">
-                  <p className="stat-tile__label">A+ Accuracy</p>
-                  <p className="stat-tile__value" style={{ color: 'var(--mint)' }}>{pct(confidenceBuckets[0]?.accuracy ?? 0)}</p>
-                  <p className="stat-tile__detail">{confidenceBuckets[0]?.count ?? 0} elite picks</p>
-                </div>
-                <div className="stat-tile">
-                  <p className="stat-tile__label">Avg Edge</p>
-                  <p className="stat-tile__value">{(overview.avgEdge * 100).toFixed(1)} pts</p>
-                  <p className="stat-tile__detail">Per prediction</p>
-                </div>
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(4, 1fr)',
+              gap: '1rem'
+            }}>
+              <div className="stat-tile">
+                <p className="stat-tile__label">Accuracy</p>
+                <p className="stat-tile__value" style={{ color: 'var(--aqua)' }}>{pct(overview.accuracy)}</p>
               </div>
-              <p style={{
-                fontSize: '0.85rem',
-                color: 'var(--text-tertiary)',
-                marginTop: '1rem',
-                paddingTop: '0.75rem',
-                borderTop: '1px solid var(--border-subtle)'
-              }}>
-                All metrics averaged from 2020-21, 2021-22, 2022-23, and 2023-24 seasons.
-              </p>
+              <div className="stat-tile">
+                <p className="stat-tile__label">Log Loss</p>
+                <p className="stat-tile__value">{overview.logLoss.toFixed(3)}</p>
+              </div>
+              <div className="stat-tile">
+                <p className="stat-tile__label">A+ Picks</p>
+                <p className="stat-tile__value" style={{ color: 'var(--mint)' }}>{pct(confidenceBuckets[0]?.accuracy ?? 0)}</p>
+              </div>
+              <div className="stat-tile">
+                <p className="stat-tile__label">Test Games</p>
+                <p className="stat-tile__value">{overview.games.toLocaleString()}</p>
+              </div>
             </div>
           </div>
         </section>
@@ -167,7 +120,7 @@ export default function PerformancePage() {
               <p className="lead-sm">
                 Every prediction gets a grade based on edge size. Higher grades = higher confidence = higher historical accuracy.
                 <span style={{ color: 'var(--text-tertiary)', display: 'block', marginTop: '0.3rem', fontSize: '0.85rem' }}>
-                  Based on 4 seasons of historical data (2020-2024)
+                  Based on 2023-24 season holdout testing
                 </span>
               </p>
             </div>
@@ -298,11 +251,11 @@ export default function PerformancePage() {
           <section className="nova-section">
             <div className="section-head">
               <div>
-                <p className="eyebrow">Historical Performance</p>
-                <h2>Accuracy by season</h2>
+                <p className="eyebrow">Backtest History</p>
+                <h2>Performance by season</h2>
                 <p className="lead-sm">
-                  How the model performed in past seasons. All numbers are from holdout testing —
-                  the model never saw these games during training.
+                  Holdout testing results across multiple seasons. Each season was tested
+                  using a model trained only on prior years.
                 </p>
               </div>
             </div>
@@ -434,8 +387,8 @@ export default function PerformancePage() {
               <p className="micro-label">Holdout Testing</p>
               <h3>{overview.games.toLocaleString()} games</h3>
               <p className="bento-copy">
-                <strong>What it is:</strong> Testing on games the model has never seen. We train on older data
-                and test on newer seasons.
+                <strong>What it is:</strong> Testing on games the model has never seen. We trained on 4 prior seasons
+                and tested on 2023-24 — a full season the model never touched during training.
               </p>
               <p className="bento-copy" style={{ marginTop: '0.5rem' }}>
                 <strong>Why it matters:</strong> Prevents overfitting. Results from holdout testing show real-world
@@ -454,7 +407,7 @@ export default function PerformancePage() {
               <p className="lead-sm">
                 Historical performance by confidence threshold.
                 <span style={{ color: 'var(--text-tertiary)', display: 'block', marginTop: '0.3rem', fontSize: '0.85rem' }}>
-                  Based on 4 seasons of historical data (2020-2024)
+                  Based on 2023-24 season holdout testing
                 </span>
               </p>
             </div>
@@ -526,10 +479,10 @@ export default function PerformancePage() {
             <h3 style={{ fontSize: '1.1rem', marginBottom: '0.75rem' }}>Understanding our data</h3>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1.5rem' }}>
               <div>
-                <p style={{ fontWeight: 700, color: 'var(--amber)', marginBottom: '0.35rem' }}>Historical metrics (this page)</p>
+                <p style={{ fontWeight: 700, color: 'var(--amber)', marginBottom: '0.35rem' }}>Holdout test results</p>
                 <p style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', lineHeight: 1.6 }}>
-                  All accuracy, log loss, and backtest numbers come from 4 seasons of holdout testing (2020-2024).
-                  The model was trained on earlier data and tested on these seasons to simulate real-world performance.
+                  The main accuracy and log loss numbers come from testing on the 2023-24 season (1,230 games).
+                  The model was trained on a rolling 4-season window of prior data and tested on games it never saw.
                 </p>
               </div>
               <div>

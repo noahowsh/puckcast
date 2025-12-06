@@ -2,19 +2,19 @@
   "generatedAt": "2025-12-06T12:00:00.000000+00:00",
   "modelVersion": "V7.9",
   "overall": {
-    "games": 4722,
-    "accuracy": 0.596,
-    "baseline": 0.535,
-    "homeWinRate": 0.535,
-    "brier": 0.238,
-    "logLoss": 0.665,
-    "avgEdge": 0.182
+    "games": 1230,
+    "accuracy": 0.6024,
+    "baseline": 0.5374,
+    "homeWinRate": 0.5374,
+    "brier": 0.234,
+    "logLoss": 0.6584,
+    "avgEdge": 0.185
   },
   "heroStats": [
     {
       "label": "Test accuracy",
-      "value": "59.6%",
-      "detail": "Avg across 4 seasons"
+      "value": "60.2%",
+      "detail": "2023-24 holdout season"
     },
     {
       "label": "Model version",
@@ -28,8 +28,8 @@
     },
     {
       "label": "Edge vs baseline",
-      "value": "+6.1 pts",
-      "detail": "vs 53.5% home win rate"
+      "value": "+6.5 pts",
+      "detail": "vs 53.7% home win rate"
     }
   ],
   "insights": [

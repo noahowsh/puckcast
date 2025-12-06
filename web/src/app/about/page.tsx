@@ -33,7 +33,7 @@ export default function AboutPage() {
             {[{ title: "Data collection", body: "Official NHL Stats API covering 8 seasons (2017-2025): play-by-play, player stats, team metrics, xG, Corsi, and situational splits." },
               { title: "Feature engineering", body: "~50 curated features (V7.9) including Elo ratings, rolling xG differential, goalie GSAx, fatigue index, comeback ability, travel distance, divisional matchups, and post-break performance." },
               { title: "Model training", body: "Logistic regression with isotonic calibration using a 4-season training window. Simple, interpretable, and optimized for probability calibration (LogLoss: 0.6584)." },
-              { title: "Validation & testing", body: "Forward validation across multiple seasons. V7.9 achieves 59.6% average accuracy with best-in-class calibration. 4-season window balances recency with data volume." }
+              { title: "Validation & testing", body: "Forward validation on holdout data. V7.9 achieves 60.2% accuracy on 1,230 test games (2023-24 season) with best-in-class calibration (log loss 0.6584). The model trains on a rolling 4-season window." }
             ].map((item) => (
               <div key={item.title} className="card">
                 <div className="flex items-center gap-3 mb-3">
@@ -99,7 +99,7 @@ export default function AboutPage() {
         <section className="mb-12">
           <h2 className="text-2xl font-bold text-white mb-6">Performance highlights (V7.9)</h2>
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
-            <StatCard label="Test accuracy" value="59.6%" change={{ value: "+6.1 pts vs baseline", isPositive: true }} />
+            <StatCard label="Test accuracy" value="60.2%" change={{ value: "+6.5 pts vs baseline", isPositive: true }} />
             <StatCard label="A+ confidence" value="71.5%" change={{ value: "20+ pt edges", isPositive: true }} />
             <StatCard label="Log loss" value="0.6584" change={{ value: "Best calibration", isPositive: true }} />
             <StatCard label="Training window" value="4 seasons" change={{ value: "2020-2024 data", isPositive: true }} />
