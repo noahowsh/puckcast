@@ -144,13 +144,14 @@
   ],
   "currentSeason": {
     "season": "2025-26",
-    "games": 347,
-    "accuracy": 0.589,
-    "logLoss": 0.661,
-    "baseline": 0.542,
-    "aGradeAccuracy": 0.724,
-    "aGradeGames": 52,
-    "asOf": "Dec 6, 2025"
+    "games": 440,
+    "accuracy": 0.543,
+    "logLoss": 0.6925,
+    "baseline": 0.520,
+    "aGradeAccuracy": 0.65,
+    "aGradeGames": 60,
+    "asOf": "Dec 6, 2025",
+    "note": "Early season (Oct-Nov) - model typically improves ~7pp by March/April"
   },
   "seasonBreakdown": [
     {
