@@ -103,6 +103,7 @@ Predict NHL game outcomes with calibrated, actionable win probabilities that out
 
 ## Conclusion
 The v6 system is production-stable, calibrated, and automated end-to-end. It meaningfully beats baseline pickers while staying explainable. With the current automation (web, API, and social), the product is user-facing and repeatable; further gains should focus on richer special-teams/goalie dynamics and postseason calibration rather than core pipeline rewrites.
+The live deployment is available at puckcast.ai, backed by the daily automation and validation flows described above.
 
 ## References
 - NHL Stats API (schedule, teams, results, plays)  
