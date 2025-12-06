@@ -354,7 +354,7 @@ export default function PerformancePage() {
             </div>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1rem' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1rem' }}>
             <div className="bento-card">
               <p className="micro-label">Accuracy</p>
               <h3 style={{ color: 'var(--aqua)' }}>{pct(overview.accuracy)}</h3>

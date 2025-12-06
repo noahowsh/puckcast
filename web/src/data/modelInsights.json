@@ -13,8 +13,8 @@
   "heroStats": [
     {
       "label": "Test accuracy",
-      "value": "60.2%",
-      "detail": "V7.9 - 4-season training"
+      "value": "59.6%",
+      "detail": "Avg across 4 seasons"
     },
     {
       "label": "Model version",
@@ -28,8 +28,8 @@
     },
     {
       "label": "Edge vs baseline",
-      "value": "+6.5 pts",
-      "detail": "vs 53.7% home win rate"
+      "value": "+6.1 pts",
+      "detail": "vs 53.5% home win rate"
     }
   ],
   "insights": [
@@ -48,22 +48,6 @@
   ],
   "strategies": [
     {
-      "name": "All predictions",
-      "bets": 4722,
-      "winRate": 0.596,
-      "units": 576,
-      "note": "Every game across 4 seasons",
-      "avgEdge": 0.182
-    },
-    {
-      "name": "A-tier only (≥20 pts)",
-      "bets": 1198,
-      "winRate": 0.699,
-      "units": 478,
-      "note": "A+ and A grades combined",
-      "avgEdge": 0.245
-    },
-    {
       "name": "A+ only (≥25 pts)",
       "bets": 684,
       "winRate": 0.715,
@@ -72,12 +56,28 @@
       "avgEdge": 0.285
     },
     {
+      "name": "A-tier (≥20 pts)",
+      "bets": 1198,
+      "winRate": 0.699,
+      "units": 478,
+      "note": "A+ and A grades combined",
+      "avgEdge": 0.245
+    },
+    {
       "name": "B+ or better (≥15 pts)",
       "bets": 1912,
       "winRate": 0.642,
       "units": 545,
       "note": "Good confidence threshold",
       "avgEdge": 0.208
+    },
+    {
+      "name": "All predictions",
+      "bets": 4722,
+      "winRate": 0.596,
+      "units": 576,
+      "note": "Every game across 4 seasons",
+      "avgEdge": 0.182
     }
   ],
   "confidenceBuckets": [
