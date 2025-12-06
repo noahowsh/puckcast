@@ -75,21 +75,26 @@ def format_start_times(start_time_utc: str):
 
 
 def grade_from_edge(edge_value: float) -> str:
-    """Map edge (probability delta) to letter grades used on the site."""
+    """Map edge (probability delta) to the 6 letter grades used on the site.
+
+    Grade bands:
+        A+  = ≥25 pts  (elite confidence)
+        A   = 20-25 pts (strong confidence)
+        B+  = 15-20 pts (good confidence)
+        B   = 10-15 pts (medium confidence)
+        C+  = 5-10 pts  (weak confidence)
+        C   = 0-5 pts   (coin flip)
+    """
     edge_pts = abs(edge_value) * 100
-    if edge_pts >= 20:
+    if edge_pts >= 25:
         return "A+"
-    if edge_pts >= 17:
+    if edge_pts >= 20:
         return "A"
-    if edge_pts >= 14:
-        return "A-"
-    if edge_pts >= 10:
+    if edge_pts >= 15:
         return "B+"
-    if edge_pts >= 7:
+    if edge_pts >= 10:
         return "B"
-    if edge_pts >= 4:
-        return "B-"
-    if edge_pts >= 2:
+    if edge_pts >= 5:
         return "C+"
     return "C"
 
