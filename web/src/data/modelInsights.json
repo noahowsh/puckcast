@@ -1,34 +1,34 @@
 {
-  "generatedAt": "2025-12-05T14:30:00.000000+00:00",
-  "modelVersion": "V7.3",
+  "generatedAt": "2025-12-06T12:00:00.000000+00:00",
+  "modelVersion": "V7.9",
   "overall": {
     "games": 1230,
-    "accuracy": 0.6049,
+    "accuracy": 0.6024,
     "baseline": 0.5373983739837398,
     "homeWinRate": 0.5373983739837398,
-    "brier": 0.2370,
-    "logLoss": 0.6702,
+    "brier": 0.2340,
+    "logLoss": 0.6584,
     "avgEdge": 0.18456
   },
   "heroStats": [
     {
       "label": "Test accuracy",
-      "value": "60.5%",
-      "detail": "V7.3 - 2023-24 holdout"
+      "value": "60.2%",
+      "detail": "V7.9 - 4-season training"
     },
     {
       "label": "Model version",
-      "value": "V7.3",
-      "detail": "Situational features"
+      "value": "V7.9",
+      "detail": "Enhanced calibration"
     },
     {
-      "label": "Features",
-      "value": "222",
-      "detail": "209 baseline + 13 situational"
+      "label": "Training window",
+      "value": "4 seasons",
+      "detail": "Optimal for calibration"
     },
     {
       "label": "Edge vs baseline",
-      "value": "+6.8 pts",
+      "value": "+6.5 pts",
       "detail": "vs 53.7% home win rate"
     }
   ],
@@ -42,8 +42,8 @@
       "detail": "62.0% accuracy across 121 games"
     },
     {
-      "title": "V7.3 vs V7.0",
-      "detail": "+0.25 pts improvement over baseline"
+      "title": "V7.9 calibration",
+      "detail": "Best log loss (0.6584) with 4-season window"
     }
   ],
   "strategies": [
@@ -52,7 +52,7 @@
       "bets": 1230,
       "winRate": 0.6049,
       "units": 258,
-      "note": "V7.3 model with situational features",
+      "note": "V7.9 model with 4-season training window",
       "avgEdge": 0.18456
     },
     {
@@ -157,31 +157,31 @@
       "feature": "fatigue_index_home",
       "coefficient": -0.0938,
       "absImportance": 0.0938,
-      "description": "V7.3: Rest/fatigue impact"
+      "description": "V7.9: Rest/fatigue impact"
     },
     {
       "feature": "fatigue_index_diff",
       "coefficient": -0.0586,
       "absImportance": 0.0586,
-      "description": "V7.3: Fatigue differential"
+      "description": "V7.9: Fatigue differential"
     },
     {
       "feature": "travel_burden_home",
       "coefficient": -0.0512,
       "absImportance": 0.0512,
-      "description": "V7.3: Travel burden"
+      "description": "V7.9: Travel burden"
     },
     {
       "feature": "third_period_trailing_perf_diff",
       "coefficient": -0.0388,
       "absImportance": 0.0388,
-      "description": "V7.3: Comeback ability"
+      "description": "V7.9: Comeback ability"
     },
     {
       "feature": "divisional_matchup",
       "coefficient": -0.0275,
       "absImportance": 0.0275,
-      "description": "V7.3: Division rivalry"
+      "description": "V7.9: Division rivalry"
     }
   ],
   "distributionFindings": [],
