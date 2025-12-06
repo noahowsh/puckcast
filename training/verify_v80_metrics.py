@@ -1,9 +1,14 @@
 #!/usr/bin/env python3
 """
-V8.0 Comprehensive Metric Verification
+V8.1 Comprehensive Metric Verification
 
-This script performs rigorous backtesting to verify ALL V8.0 model metrics.
-Uses exact production configuration: 35 curated features, improved Elo.
+This script performs rigorous backtesting to verify ALL V8.1 model metrics.
+Uses exact production configuration: 38 curated features, improved Elo.
+
+V8.1 adds 3 new features over V8.0:
+- games_last_3d_home (schedule density)
+- shotsFor_roll_10_diff (shot volume trend)
+- rolling_faceoff_5_diff (possession indicator)
 
 Output:
 - Overall accuracy, log loss, brier score
@@ -31,8 +36,8 @@ sys.path.insert(0, str(Path(__file__).parent.parent / 'src'))
 
 from nhl_prediction.pipeline import build_dataset
 
-# V8.0 Curated Features (35 features - removed goalie_rest_days_diff)
-V80_FEATURES = [
+# V8.1 Curated Features (38 features - V8.0 base + 3 new features)
+V81_FEATURES = [
     # Elo ratings (improved with season carryover)
     'elo_diff_pre', 'elo_expectation_home',
 
@@ -56,6 +61,7 @@ V80_FEATURES = [
     # Rest and schedule
     'rest_diff', 'is_b2b_home', 'is_b2b_away',
     'games_last_6d_home',
+    'games_last_3d_home',  # NEW in V8.1
 
     # Goaltending (removed goalie_rest_days_diff)
     'rolling_save_pct_10_diff', 'rolling_save_pct_5_diff', 'rolling_save_pct_3_diff',
@@ -67,6 +73,10 @@ V80_FEATURES = [
 
     # High danger shots
     'rolling_high_danger_shots_5_diff', 'rolling_high_danger_shots_10_diff',
+
+    # NEW in V8.1: Shot volume and possession indicators
+    'shotsFor_roll_10_diff',
+    'rolling_faceoff_5_diff',
 ]
 
 
@@ -88,7 +98,7 @@ def grade_from_edge(edge_value: float) -> str:
 
 def run_verification():
     print("=" * 80)
-    print("V8.0 COMPREHENSIVE METRIC VERIFICATION")
+    print("V8.1 COMPREHENSIVE METRIC VERIFICATION")
     print("=" * 80)
 
     # Load all seasons for testing
@@ -100,14 +110,14 @@ def run_verification():
     features = dataset.features.copy()
     target = dataset.target.copy()
 
-    # Filter to V8.0 features
-    available_v80 = [f for f in V80_FEATURES if f in features.columns]
-    missing = set(V80_FEATURES) - set(available_v80)
+    # Filter to V8.1 features
+    available_v81 = [f for f in V81_FEATURES if f in features.columns]
+    missing = set(V81_FEATURES) - set(available_v81)
     if missing:
         print(f"⚠️  Missing features: {missing}")
 
-    features = features[available_v80]
-    print(f"✅ Using {len(available_v80)} V8.0 features")
+    features = features[available_v81]
+    print(f"✅ Using {len(available_v81)} V8.1 features")
     print(f"✅ Total games: {len(games)}")
 
     # Leave-one-season-out validation to test ALL games
@@ -271,7 +281,7 @@ def run_verification():
 
     print(f"""
 ┌─────────────────────────────────────────────────────────────┐
-│ V8.0 MODEL VERIFIED METRICS                                  │
+│ V8.1 MODEL VERIFIED METRICS                                  │
 ├─────────────────────────────────────────────────────────────┤
 │ Overall Accuracy:  {overall_acc:.4f} ({overall_acc*100:.2f}%)                          │
 │ Log Loss:          {overall_ll:.4f}                                     │
@@ -279,7 +289,7 @@ def run_verification():
 │ Baseline:          {home_win_rate:.4f} ({home_win_rate*100:.2f}%)                          │
 │ Edge vs Baseline:  +{(overall_acc - home_win_rate)*100:.2f} pp                                  │
 │ Total Games:       {len(all_preds)}                                       │
-│ Features:          {len(available_v80)}                                         │
+│ Features:          {len(available_v81)}                                         │
 ├─────────────────────────────────────────────────────────────┤
 │ CONFIDENCE BUCKETS                                           │
 """)

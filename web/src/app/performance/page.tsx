@@ -30,11 +30,11 @@ export default function PerformancePage() {
             <div>
               <div className="pill-row">
                 <span className="pill">Model Performance</span>
-                <span className="pill">V8.0</span>
+                <span className="pill">V8.1</span>
               </div>
               <h1 className="display-xl" style={{ marginBottom: '0.75rem' }}>Does the model work?</h1>
               <p className="lead" style={{ marginBottom: '1.5rem' }}>
-                Yes. We tested V8.0 on {overview.games.toLocaleString()} holdout games across 4 seasons —
+                Yes. We tested V8.1 on {overview.games.toLocaleString()} holdout games across 4 seasons —
                 games the model never saw during training. It correctly predicted {pct(overview.accuracy)} of outcomes,
                 beating the {pct(overview.baseline)} home-team baseline by <span style={{ color: 'var(--mint)' }}>+{edge} percentage points</span>.
               </p>
@@ -294,7 +294,7 @@ export default function PerformancePage() {
                     <span style={{ fontSize: '0.8rem', color: 'var(--text-tertiary)' }}>≥20 pts edge</span>
                   </div>
                   <p style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', lineHeight: 1.5 }}>
-                    High confidence. Our best picks where the model sees a clear statistical advantage. A+ picks hit at ~79%.
+                    High confidence. Our best picks where the model sees a clear statistical advantage. A+ picks hit at ~78%.
                   </p>
                 </div>
                 <div>

@@ -6,7 +6,7 @@
 ╚═══════════════════════════════════════════════════════════╝
 
 FULL MODEL NHL PREDICTIONS
-Predict today's games using V8.0 (4-season training window, improved Elo with season carryover)
+Predict today's games using V8.1 (4-season training window, improved Elo with season carryover, enhanced features)
 
 Usage:
     python predict_full.py
@@ -43,8 +43,10 @@ warnings.filterwarnings('ignore', category=UserWarning)
 WEB_PREDICTIONS_PATH = Path(__file__).parent.parent / "web" / "src" / "data" / "todaysPredictions.json"
 ET_ZONE = ZoneInfo("America/New_York")
 
-# V8.0 Curated Features (35 base features - removed goalie_rest_days_diff which degraded 77%)
-V80_FEATURES = [
+# V8.1 Curated Features (38 features - V8.0 base + 3 new features for improved 2024-25 performance)
+# V8.1 improves overall accuracy from 60.94% to 61.16% (+0.22 pp)
+# V8.1 improves 2024-25 accuracy from 59.45% to 60.06% (+0.61 pp)
+V81_FEATURES = [
     # Elo ratings (improved with season carryover)
     'elo_diff_pre', 'elo_expectation_home',
 
@@ -68,6 +70,7 @@ V80_FEATURES = [
     # Rest and schedule (rest_diff improved +53%)
     'rest_diff', 'is_b2b_home', 'is_b2b_away',
     'games_last_6d_home',
+    'games_last_3d_home',  # NEW in V8.1: schedule density (+0.22 pp overall)
 
     # Goaltending (removed goalie_rest_days_diff - degraded 77%)
     'rolling_save_pct_10_diff', 'rolling_save_pct_5_diff', 'rolling_save_pct_3_diff',
@@ -79,6 +82,10 @@ V80_FEATURES = [
 
     # High danger shots
     'rolling_high_danger_shots_5_diff', 'rolling_high_danger_shots_10_diff',
+
+    # NEW in V8.1: Shot volume and possession indicators
+    'shotsFor_roll_10_diff',    # Shot volume trend (+0.16 pp overall)
+    'rolling_faceoff_5_diff',   # Possession indicator (+0.12 pp overall)
 ]
 
 def recent_seasons(anchor: datetime | date | None = None, count: int = 4) -> list[str]:
@@ -388,13 +395,13 @@ def predict_games(date=None, num_games=20):
     features_full = pd.concat([dataset.features, games_with_situational[available_situational]], axis=1)
     print(f"   ✅ {len(available_situational)} situational features added")
 
-    # Filter to V8.0 curated features only
-    available_v80 = [f for f in V80_FEATURES if f in features_full.columns]
-    missing_v80 = [f for f in V80_FEATURES if f not in features_full.columns]
-    if missing_v80:
-        print(f"   ⚠️  Missing {len(missing_v80)} V8.0 features: {missing_v80[:5]}...")
-    features_full = features_full[available_v80]
-    print(f"   ✅ Total: {features_full.shape[1]} curated features (V8.0 Model)")
+    # Filter to V8.1 curated features only
+    available_v81 = [f for f in V81_FEATURES if f in features_full.columns]
+    missing_v81 = [f for f in V81_FEATURES if f not in features_full.columns]
+    if missing_v81:
+        print(f"   ⚠️  Missing {len(missing_v81)} V8.1 features: {missing_v81[:5]}...")
+    features_full = features_full[available_v81]
+    print(f"   ✅ Total: {features_full.shape[1]} curated features (V8.1 Model)")
 
     # Step 3: Train calibrated model using only past games
     print("\n3️⃣  Training calibrated logistic regression model...")
