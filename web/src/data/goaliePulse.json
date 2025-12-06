@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2025-12-06T13:19:09.002849+00:00",
+  "updatedAt": "2025-12-06T23:11:11.862954+00:00",
   "notes": "Goalie performance metrics calculated from NHL Stats API data. GSAx estimates based on save percentage above league average.",
   "goalies": [
     {
@@ -132,14 +132,14 @@
       "name": "Mackenzie Blackwood",
       "team": "COL",
       "rollingGsa": 1.5,
-      "seasonGsa": 4.0,
+      "seasonGsa": 4.5,
       "restDays": 3,
-      "startLikelihood": 0.7,
-      "trend": "steady",
-      "note": "Consistent performance from Mackenzie Blackwood with a 2.28 GAA \u2014 reliable starter for COL.",
+      "startLikelihood": 0.85,
+      "trend": "surging",
+      "note": "Mackenzie Blackwood is playing at an elite level with a 0.920 save percentage, providing COL with a strong defensive anchor.",
       "strengths": [
-        "Exceptional goals against average",
-        "Strong rebound control"
+        "Elite save percentage",
+        "Exceptional goals against average"
       ],
       "watchouts": [
         "Limited recent data"
@@ -252,6 +252,23 @@
       "nextOpponent": "EDM"
     },
     {
+      "name": "Igor Shesterkin",
+      "team": "NYR",
+      "rollingGsa": 1.0,
+      "seasonGsa": 8.0,
+      "restDays": 1,
+      "startLikelihood": 0.9,
+      "trend": "steady",
+      "note": "Consistent performance from Igor Shesterkin with a 2.46 GAA \u2014 reliable starter for NYR.",
+      "strengths": [
+        "Proven winner"
+      ],
+      "watchouts": [
+        "Inconsistent results"
+      ],
+      "nextOpponent": "COL"
+    },
+    {
       "name": "Tristan Jarry",
       "team": "PIT",
       "rollingGsa": 1.0,
@@ -284,23 +301,6 @@
         "Limited recent data"
       ],
       "nextOpponent": "DAL"
-    },
-    {
-      "name": "Igor Shesterkin",
-      "team": "NYR",
-      "rollingGsa": 0.9,
-      "seasonGsa": 7.1,
-      "restDays": 1,
-      "startLikelihood": 0.9,
-      "trend": "steady",
-      "note": "Consistent performance from Igor Shesterkin with a 2.43 GAA \u2014 reliable starter for NYR.",
-      "strengths": [
-        "Proven winner"
-      ],
-      "watchouts": [
-        "Inconsistent results"
-      ],
-      "nextOpponent": "COL"
     },
     {
       "name": "Jake Allen",
