@@ -87,7 +87,6 @@ function PredictionRow({ game }: { game: Prediction }) {
       <EdgeMeter value={game.edge} />
 
       <div className="prediction-row__footer">
-        <span className="chip-soft">Confidence {game.confidenceScore.toFixed(2)}</span>
         <span className="chip-soft prediction-row__cta">
           View matchup details →
         </span>

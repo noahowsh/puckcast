@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo } from "react";
+import { use, useMemo } from "react";
 import { getPredictionsPayload } from "@/lib/data";
 import { getCurrentStandings, computeStandingsPowerScore } from "@/lib/current";
 import type { CurrentStanding } from "@/lib/current";
@@ -17,6 +17,10 @@ const standingsByAbbrev = new Map(standings.map((t) => [t.abbrev, t]));
 function getGameById(gameId: string): Prediction | undefined {
   return payload.games.find((g) => g.id === gameId);
 }
+
+type PageProps = {
+  params: Promise<{ gameId: string }>;
+};
 
 function getTeamStanding(abbrev: string): (CurrentStanding & { rank: number }) | undefined {
   return standingsByAbbrev.get(abbrev);
@@ -107,8 +111,9 @@ function WinProbCircle({ prob, team, isModelPick }: { prob: number; team: string
   );
 }
 
-export default function MatchupPage({ params }: { params: { gameId: string } }) {
-  const game = getGameById(params.gameId);
+export default function MatchupPage({ params }: PageProps) {
+  const { gameId } = use(params);
+  const game = getGameById(gameId);
 
   if (!game) {
     return (
