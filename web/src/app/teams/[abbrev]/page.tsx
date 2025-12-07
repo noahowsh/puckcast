@@ -197,20 +197,49 @@ export default async function TeamPage({ params }: { params: Promise<{ abbrev: s
 
             {/* Team Card Panel */}
             <div className="nova-hero__panel" style={{ padding: '1.5rem' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem', marginBottom: '1.25rem' }}>
-                <div style={{ position: 'relative' }}>
-                  <svg width="100" height="100" viewBox="0 0 100 100" style={{ transform: 'rotate(-90deg)' }}>
-                    <circle cx="50" cy="50" r="42" fill="none" stroke="rgba(255,255,255,0.1)" strokeWidth="8" />
-                    <circle cx="50" cy="50" r="42" fill="none" stroke={getRankColor(teamData.powerRank)} strokeWidth="8"
-                      strokeDasharray={`${((33 - teamData.powerRank) / 32) * 264} 264`} strokeLinecap="round" />
+              <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem', marginBottom: '1.25rem' }}>
+                <div style={{ position: 'relative', width: '120px', height: '120px' }}>
+                  {/* Outer glow */}
+                  <div style={{
+                    position: 'absolute',
+                    inset: '-4px',
+                    borderRadius: '50%',
+                    background: `conic-gradient(from 180deg, ${getRankColor(teamData.powerRank)}40 0deg, ${getRankColor(teamData.powerRank)}20 ${((33 - teamData.powerRank) / 32) * 360}deg, transparent ${((33 - teamData.powerRank) / 32) * 360}deg)`,
+                    filter: 'blur(8px)',
+                  }} />
+                  {/* Progress ring */}
+                  <svg width="120" height="120" viewBox="0 0 120 120" style={{ position: 'absolute', transform: 'rotate(-90deg)' }}>
+                    <defs>
+                      <linearGradient id={`ring-gradient-${teamData.abbrev}`} x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" stopColor={getRankColor(teamData.powerRank)} stopOpacity="1" />
+                        <stop offset="100%" stopColor={getRankColor(teamData.powerRank)} stopOpacity="0.5" />
+                      </linearGradient>
+                    </defs>
+                    <circle cx="60" cy="60" r="52" fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth="10" />
+                    <circle cx="60" cy="60" r="52" fill="none" stroke={`url(#ring-gradient-${teamData.abbrev})`} strokeWidth="10"
+                      strokeDasharray={`${((33 - teamData.powerRank) / 32) * 327} 327`} strokeLinecap="round" />
                   </svg>
-                  <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }}>
-                    <TeamCrest abbrev={teamData.abbrev} size={48} />
+                  {/* Inner circle with gradient */}
+                  <div style={{
+                    position: 'absolute',
+                    top: '50%',
+                    left: '50%',
+                    transform: 'translate(-50%, -50%)',
+                    width: '88px',
+                    height: '88px',
+                    borderRadius: '50%',
+                    background: 'linear-gradient(135deg, rgba(30,41,59,0.9) 0%, rgba(15,23,42,0.95) 100%)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    boxShadow: 'inset 0 2px 8px rgba(0,0,0,0.4), 0 4px 12px rgba(0,0,0,0.3)',
+                  }}>
+                    <TeamCrest abbrev={teamData.abbrev} size={56} />
                   </div>
                 </div>
                 <div style={{ flex: 1 }}>
-                  <p style={{ fontSize: '2.5rem', fontWeight: 800, color: 'white', lineHeight: 1 }}>#{teamData.powerRank}</p>
-                  <p style={{ fontSize: '0.75rem', color: 'var(--text-tertiary)', marginTop: '0.25rem' }}>Power Index</p>
+                  <p style={{ fontSize: '3rem', fontWeight: 800, color: 'white', lineHeight: 1, letterSpacing: '-0.02em' }}>#{teamData.powerRank}</p>
+                  <p style={{ fontSize: '0.8rem', color: 'var(--text-tertiary)', marginTop: '0.35rem', fontWeight: 500 }}>Power Index</p>
                 </div>
               </div>
 
@@ -421,9 +450,94 @@ export default async function TeamPage({ params }: { params: Promise<{ abbrev: s
           </div>
         </section>
 
-        {/* Upcoming Games - Improved */}
+        {/* Performance Radar Visual */}
         <section className="nova-section">
-          <h2 className="text-xl font-bold text-white mb-3">Upcoming Games</h2>
+          <h2 className="text-xl font-bold text-white mb-3">Performance Profile</h2>
+          <div className="card" style={{ padding: '1.5rem' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem', alignItems: 'center' }}>
+              {/* Offense/Defense Bars */}
+              <div>
+                <div style={{ marginBottom: '1.5rem' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
+                    <span style={{ fontSize: '0.8rem', fontWeight: 600, color: 'white' }}>Offense</span>
+                    <span style={{ fontSize: '0.8rem', color: getRankColor(ranks.offense) }}>#{ranks.offense}</span>
+                  </div>
+                  <div style={{ height: '12px', background: 'rgba(255,255,255,0.05)', borderRadius: '6px', overflow: 'hidden' }}>
+                    <div style={{
+                      height: '100%',
+                      width: `${((33 - ranks.offense) / 32) * 100}%`,
+                      background: `linear-gradient(90deg, ${getRankColor(ranks.offense)}80 0%, ${getRankColor(ranks.offense)} 100%)`,
+                      borderRadius: '6px',
+                      transition: 'width 0.5s ease'
+                    }} />
+                  </div>
+                  <p style={{ fontSize: '0.75rem', color: 'var(--text-tertiary)', marginTop: '0.25rem' }}>{teamData.goalsForPerGame?.toFixed(2)} goals per game</p>
+                </div>
+                <div style={{ marginBottom: '1.5rem' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
+                    <span style={{ fontSize: '0.8rem', fontWeight: 600, color: 'white' }}>Defense</span>
+                    <span style={{ fontSize: '0.8rem', color: getRankColor(ranks.defense) }}>#{ranks.defense}</span>
+                  </div>
+                  <div style={{ height: '12px', background: 'rgba(255,255,255,0.05)', borderRadius: '6px', overflow: 'hidden' }}>
+                    <div style={{
+                      height: '100%',
+                      width: `${((33 - ranks.defense) / 32) * 100}%`,
+                      background: `linear-gradient(90deg, ${getRankColor(ranks.defense)}80 0%, ${getRankColor(ranks.defense)} 100%)`,
+                      borderRadius: '6px',
+                      transition: 'width 0.5s ease'
+                    }} />
+                  </div>
+                  <p style={{ fontSize: '0.75rem', color: 'var(--text-tertiary)', marginTop: '0.25rem' }}>{teamData.goalsAgainstPerGame?.toFixed(2)} goals against per game</p>
+                </div>
+                <div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
+                    <span style={{ fontSize: '0.8rem', fontWeight: 600, color: 'white' }}>Possession</span>
+                    <span style={{ fontSize: '0.8rem', color: getRankColor(ranks.shotsFor) }}>#{ranks.shotsFor}</span>
+                  </div>
+                  <div style={{ height: '12px', background: 'rgba(255,255,255,0.05)', borderRadius: '6px', overflow: 'hidden' }}>
+                    <div style={{
+                      height: '100%',
+                      width: `${((33 - ranks.shotsFor) / 32) * 100}%`,
+                      background: `linear-gradient(90deg, ${getRankColor(ranks.shotsFor)}80 0%, ${getRankColor(ranks.shotsFor)} 100%)`,
+                      borderRadius: '6px',
+                      transition: 'width 0.5s ease'
+                    }} />
+                  </div>
+                  <p style={{ fontSize: '0.75rem', color: 'var(--text-tertiary)', marginTop: '0.25rem' }}>{teamData.shotsForPerGame?.toFixed(1)} shots per game</p>
+                </div>
+              </div>
+              {/* Summary Stats */}
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                <div style={{ padding: '1rem', background: 'rgba(255,255,255,0.03)', borderRadius: '0.75rem', textAlign: 'center' }}>
+                  <p style={{ fontSize: '1.75rem', fontWeight: 800, color: getRankColor(ranks.shootingPct) }}>{shootingPct.toFixed(1)}%</p>
+                  <p style={{ fontSize: '0.65rem', color: 'var(--text-tertiary)', textTransform: 'uppercase' }}>Shooting %</p>
+                  <p style={{ fontSize: '0.7rem', color: getRankColor(ranks.shootingPct), marginTop: '0.25rem' }}>#{ranks.shootingPct} in NHL</p>
+                </div>
+                <div style={{ padding: '1rem', background: 'rgba(255,255,255,0.03)', borderRadius: '0.75rem', textAlign: 'center' }}>
+                  <p style={{ fontSize: '1.75rem', fontWeight: 800, color: getRankColor(ranks.savePct) }}>{savePct.toFixed(1)}%</p>
+                  <p style={{ fontSize: '0.65rem', color: 'var(--text-tertiary)', textTransform: 'uppercase' }}>Save %</p>
+                  <p style={{ fontSize: '0.7rem', color: getRankColor(ranks.savePct), marginTop: '0.25rem' }}>#{ranks.savePct} in NHL</p>
+                </div>
+                <div style={{ padding: '1rem', background: 'rgba(255,255,255,0.03)', borderRadius: '0.75rem', textAlign: 'center' }}>
+                  <p style={{ fontSize: '1.75rem', fontWeight: 800, color: (teamData.goalDifferential ?? 0) >= 0 ? '#10b981' : '#ef4444' }}>
+                    {(teamData.goalDifferential ?? 0) >= 0 ? '+' : ''}{teamData.goalDifferential}
+                  </p>
+                  <p style={{ fontSize: '0.65rem', color: 'var(--text-tertiary)', textTransform: 'uppercase' }}>Goal Diff</p>
+                  <p style={{ fontSize: '0.7rem', color: getRankColor(ranks.goalDiff), marginTop: '0.25rem' }}>#{ranks.goalDiff} in NHL</p>
+                </div>
+                <div style={{ padding: '1rem', background: 'rgba(255,255,255,0.03)', borderRadius: '0.75rem', textAlign: 'center' }}>
+                  <p style={{ fontSize: '1.75rem', fontWeight: 800, color: 'white' }}>{(teamData.pointPctg * 100).toFixed(0)}%</p>
+                  <p style={{ fontSize: '0.65rem', color: 'var(--text-tertiary)', textTransform: 'uppercase' }}>Point %</p>
+                  <p style={{ fontSize: '0.7rem', color: getRankColor(ranks.pointPct), marginTop: '0.25rem' }}>#{ranks.pointPct} in NHL</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Today's Game Predictions */}
+        <section className="nova-section">
+          <h2 className="text-xl font-bold text-white mb-3">Today&apos;s Game Predictions</h2>
           {upcomingGames.length > 0 ? (
             <div className="grid gap-3">
               {upcomingGames.map((game) => {
@@ -431,40 +545,68 @@ export default async function TeamPage({ params }: { params: Promise<{ abbrev: s
                 const opponent = isHome ? game.awayTeam : game.homeTeam;
                 const winProb = isHome ? game.homeWinProb : game.awayWinProb;
                 const teamEdge = isHome ? game.edge : -game.edge;
+                const opponentData = powerRankMap.get(opponent.abbrev.toLowerCase());
                 return (
                   <div key={game.id} className="card" style={{ padding: '1.25rem' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                      <TeamCrest abbrev={opponent.abbrev} size={48} />
+                      <div style={{ position: 'relative' }}>
+                        <TeamCrest abbrev={opponent.abbrev} size={56} />
+                        {opponentData && (
+                          <div style={{
+                            position: 'absolute',
+                            bottom: '-4px',
+                            right: '-4px',
+                            background: getRankColor(opponentData.powerRank),
+                            borderRadius: '4px',
+                            padding: '2px 6px',
+                            fontSize: '0.65rem',
+                            fontWeight: 700,
+                            color: 'white',
+                          }}>#{opponentData.powerRank}</div>
+                        )}
+                      </div>
                       <div style={{ flex: 1 }}>
                         <p style={{ fontSize: '1.1rem', fontWeight: 600, color: 'white' }}>{isHome ? "vs" : "@"} {opponent.name}</p>
-                        <p style={{ fontSize: '0.8rem', color: 'var(--text-tertiary)', marginTop: '0.25rem' }}>{game.gameDate} • {game.startTimeEt ?? "TBD"}</p>
+                        <p style={{ fontSize: '0.8rem', color: 'var(--text-tertiary)', marginTop: '0.25rem' }}>{game.startTimeEt ?? "TBD"} • {game.venue}</p>
+                        {opponentData && (
+                          <p style={{ fontSize: '0.75rem', color: 'var(--text-tertiary)', marginTop: '0.25rem' }}>
+                            {opponentData.record} ({opponentData.points} pts)
+                          </p>
+                        )}
                       </div>
                       <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', alignItems: 'flex-end' }}>
                         <div style={{ display: 'flex', gap: '0.5rem' }}>
                           <div style={{
-                            padding: '0.35rem 0.6rem',
-                            borderRadius: '6px',
+                            padding: '0.5rem 0.75rem',
+                            borderRadius: '8px',
                             background: winProb >= 0.55 ? 'rgba(16,185,129,0.15)' : winProb >= 0.45 ? 'rgba(59,130,246,0.15)' : 'rgba(245,158,11,0.15)',
                             border: `1px solid ${winProb >= 0.55 ? 'rgba(16,185,129,0.3)' : winProb >= 0.45 ? 'rgba(59,130,246,0.3)' : 'rgba(245,158,11,0.3)'}`
                           }}>
-                            <p style={{ fontSize: '0.65rem', color: 'var(--text-tertiary)', textTransform: 'uppercase', marginBottom: '0.1rem' }}>Win Prob</p>
-                            <p style={{ fontSize: '1rem', fontWeight: 700, color: winProb >= 0.55 ? '#10b981' : winProb >= 0.45 ? '#3b82f6' : '#f59e0b' }}>
+                            <p style={{ fontSize: '0.6rem', color: 'var(--text-tertiary)', textTransform: 'uppercase', marginBottom: '0.15rem' }}>Win Prob</p>
+                            <p style={{ fontSize: '1.25rem', fontWeight: 700, color: winProb >= 0.55 ? '#10b981' : winProb >= 0.45 ? '#3b82f6' : '#f59e0b' }}>
                               {(winProb * 100).toFixed(0)}%
                             </p>
                           </div>
                           <div style={{
-                            padding: '0.35rem 0.6rem',
-                            borderRadius: '6px',
+                            padding: '0.5rem 0.75rem',
+                            borderRadius: '8px',
                             background: teamEdge >= 0 ? 'rgba(16,185,129,0.15)' : 'rgba(239,68,68,0.15)',
                             border: `1px solid ${teamEdge >= 0 ? 'rgba(16,185,129,0.3)' : 'rgba(239,68,68,0.3)'}`
                           }}>
-                            <p style={{ fontSize: '0.65rem', color: 'var(--text-tertiary)', textTransform: 'uppercase', marginBottom: '0.1rem' }}>Edge</p>
-                            <p style={{ fontSize: '1rem', fontWeight: 700, color: teamEdge >= 0 ? '#10b981' : '#ef4444' }}>
+                            <p style={{ fontSize: '0.6rem', color: 'var(--text-tertiary)', textTransform: 'uppercase', marginBottom: '0.15rem' }}>Model Edge</p>
+                            <p style={{ fontSize: '1.25rem', fontWeight: 700, color: teamEdge >= 0 ? '#10b981' : '#ef4444' }}>
                               {teamEdge >= 0 ? '+' : ''}{(teamEdge * 100).toFixed(1)}
                             </p>
                           </div>
                         </div>
-                        <p style={{ fontSize: '0.7rem', color: 'var(--text-tertiary)' }}>{game.confidenceGrade} confidence</p>
+                        <span style={{
+                          padding: '0.25rem 0.5rem',
+                          borderRadius: '4px',
+                          fontSize: '0.7rem',
+                          fontWeight: 600,
+                          background: game.confidenceGrade === 'A' ? 'rgba(16,185,129,0.2)' : game.confidenceGrade === 'B' ? 'rgba(59,130,246,0.2)' : 'rgba(245,158,11,0.2)',
+                          color: game.confidenceGrade === 'A' ? '#10b981' : game.confidenceGrade === 'B' ? '#3b82f6' : '#f59e0b',
+                        }}>{game.confidenceGrade}-tier confidence</span>
                       </div>
                     </div>
                   </div>
@@ -473,7 +615,8 @@ export default async function TeamPage({ params }: { params: Promise<{ abbrev: s
             </div>
           ) : (
             <div className="card" style={{ padding: '2rem', textAlign: 'center' }}>
-              <p style={{ color: 'var(--text-tertiary)' }}>No games in current prediction window</p>
+              <p style={{ fontSize: '1rem', color: 'var(--text-secondary)', marginBottom: '0.5rem' }}>No games scheduled for today</p>
+              <p style={{ fontSize: '0.8rem', color: 'var(--text-tertiary)' }}>Check back on game days for model predictions</p>
             </div>
           )}
         </section>
@@ -504,28 +647,6 @@ export default async function TeamPage({ params }: { params: Promise<{ abbrev: s
           </section>
         )}
 
-        {/* Season Totals */}
-        <section className="nova-section">
-          <h2 className="text-xl font-bold text-white mb-3">Season Totals</h2>
-          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-            <div className="card" style={{ padding: '1rem', textAlign: 'center' }}>
-              <p style={{ fontSize: '2rem', fontWeight: 800, color: 'white' }}>{teamData.gamesPlayed}</p>
-              <p style={{ fontSize: '0.7rem', color: 'var(--text-tertiary)', textTransform: 'uppercase' }}>Games Played</p>
-            </div>
-            <div className="card" style={{ padding: '1rem', textAlign: 'center' }}>
-              <p style={{ fontSize: '2rem', fontWeight: 800, color: '#10b981' }}>{teamData.wins}</p>
-              <p style={{ fontSize: '0.7rem', color: 'var(--text-tertiary)', textTransform: 'uppercase' }}>Wins</p>
-            </div>
-            <div className="card" style={{ padding: '1rem', textAlign: 'center' }}>
-              <p style={{ fontSize: '2rem', fontWeight: 800, color: '#ef4444' }}>{teamData.losses}</p>
-              <p style={{ fontSize: '0.7rem', color: 'var(--text-tertiary)', textTransform: 'uppercase' }}>Losses</p>
-            </div>
-            <div className="card" style={{ padding: '1rem', textAlign: 'center' }}>
-              <p style={{ fontSize: '2rem', fontWeight: 800, color: '#f59e0b' }}>{teamData.ot}</p>
-              <p style={{ fontSize: '0.7rem', color: 'var(--text-tertiary)', textTransform: 'uppercase' }}>OT Losses</p>
-            </div>
-          </div>
-        </section>
       </div>
     </div>
   );
