@@ -9,20 +9,20 @@
 ## Executive Summary (what changed vs. Report 2)
 - **Stronger delivery:** Automated slate summary at 8 AM ET, richer fun-facts (special teams, injuries, goalie rest), and clearer “why” signals on the slate.
 - **Production stability:** Hardened fallbacks for predictions API, no leading mentions, validation gates on every run.
-- **Model posture:** Calibrated logistic regression remains the primary engine (~60.9% accuracy vs 53.9% baseline multi-season; log loss ~0.655; Brier ~0.232) with isotonic calibration and enriched inputs (special teams, rest/travel, goalie/injury metadata).
+- **Model posture:** Calibrated logistic regression remains the primary engine (~60.9% accuracy vs 53.9% baseline over 5,002 games; log loss ~0.655; Brier ~0.232) with isotonic calibration and enriched inputs (special teams, rest/travel, goalie/injury metadata).
 
-### Quick Visuals
+### Quick Visuals (current model)
 - Pipeline overview: ![Pipeline](assets/presentation/pipeline_v6.svg)  
   *NHL API ingest + internal xG → features → calibrated logreg → JSON/API/site.*
-- Automation windows (ET): ![Automation](assets/automation_schedule.png)  
+- Automation windows (ET): ![Automation](assets/presentation/automation_v7.svg)  
   *Daily post cadence anchored at 08:00 ET; validations before publish.*
-- Accuracy vs baseline (multi-season): ![Accuracy](assets/accuracy_comparison.png)  
-  *Current model ~60.9% vs 53.9% home baseline over 5,002 games.*
-- Calibration curve: ![Calibration](assets/presentation/calibration_v6.svg)  
+- Accuracy vs baseline: ![Accuracy](assets/presentation/accuracy_baseline_v7.svg)  
+  *~60.9% vs 53.9% baseline on 5,002 games.*
+- Calibration: ![Calibration](assets/presentation/calibration_reliability_v7.svg)  
   *Probabilities track observed outcomes; low log loss/Brier.*
-- Confidence bands: ![Confidence](assets/presentation/feature_signals_v6.svg)  
-  *A+ edges win ~79% (≥25 pts); A edges ~72% (20–25 pts); B+ ~67% (15–20 pts).*
-- Slate card example: ![Prediction](assets/presentation/slate_card_v6.svg)  
+- Confidence bands: ![Confidence](assets/presentation/edge_accuracy_v7.svg)  
+  *A+ ~79.3% (≥25 pts), A ~72.0%, B+ ~67.3%, with coverage noted.*
+- Slate card example: ![Prediction](assets/presentation/slate_card_v7.svg)  
   *Clean matchup layout with updated time and minimal badges.*
 
 Key metrics table:
@@ -69,9 +69,9 @@ Predict NHL game outcomes with calibrated, actionable win probabilities that out
 | 18:30     | Upset watch            | X: High-frequency           |
 | 20:00     | Evening recap          | X: Core daily / High-frequency |
 
-## Key Results (current v6 snapshot)
-- Test accuracy: 59.3% vs 53.7% home baseline (2023-24 holdout); log loss 0.676, Brier 0.240.
-- Calibration by edge buckets (2023-24 holdout): 0–5 pts ~49% (n=198), 5–10 pts ~50.7% (n=221), 10–15 pts ~59.5% (n=195), 15–20 pts ~56.1% (n=180), 20+ pts ~69.5% (n=436).
+## Key Results (current snapshot, multi-season)
+- Accuracy: ~60.9% vs 53.9% home baseline (5,002 games); log loss ~0.655; Brier ~0.232.
+- Edge bands: A+ ~79.3% (n=333, ~6.7% coverage), A ~72.0% (n=404, ~8.1%), B+ ~67.3% (n=687, ~13.7%).
 - Model edges surfaced as grades (A–C) and used for site/API content.
 - Daily slate summary auto-publishes; API enriched with goalies, injuries, special teams; validation/fallbacks keep payload fresh.
 
