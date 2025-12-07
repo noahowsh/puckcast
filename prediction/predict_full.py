@@ -6,24 +6,22 @@
 ╚═══════════════════════════════════════════════════════════╝
 
 FULL MODEL NHL PREDICTIONS
-Predict today's games using V8.2 (optimized dynamic Elo + dynamic threshold)
+Predict today's games using V7.0 (adaptive weights + dynamic features)
 
-V8.2 improvements over V8.1:
-1. Optimized Dynamic Elo home advantage (pipeline.py):
-   - window=100: Slower adaptation reduces noise (was 50)
-   - scale=700: Less aggressive adjustment (was 1000)
-   - 4-season: +0.3pp (60.1% -> 60.4%)
-   - 2025-26: +0.2pp (51.8% -> 52.0%)
-   - Improves 21-22, 22-23, 24-25, 25-26; only 23-24 slightly worse (-0.4pp)
+V7.0 Production Model:
+1. Adaptive weights for evolving home advantage:
+   - window=100: Slower adaptation reduces noise
+   - scale=700: Less aggressive adjustment
+   - Robust across 4 seasons (60.9% accuracy on 5,002 games)
 
-2. Dynamic threshold (predict_full.py):
+2. Dynamic threshold:
    - Formula: threshold = 0.5 + (0.535 - rolling_hw_50) * 0.5
-   - Helps in seasons with abnormal home win rates
+   - Adapts to seasons with varying home win rates
 
-Performance vs V8.1 (fixed home_advantage=35):
-- 4-season average: +0.3pp improvement
-- 2025-26: +0.2pp improvement
-- Overall: More robust to structural changes in NHL home advantage
+3. 39 curated features + adaptive weights
+   - Tested on 4-season holdout (2021-25)
+   - Baseline: 53.9% (home win rate)
+   - Edge vs baseline: +6.9 pts
 
 Usage:
     python predict_full.py
@@ -62,7 +60,7 @@ WEB_PREDICTIONS_PATH = Path(__file__).parent.parent / "web" / "src" / "data" / "
 # Historical average home win rate (baseline for adaptive weighting)
 HISTORICAL_HOME_WIN_RATE = 0.535
 
-# V8.4: Dynamic threshold adjustment factor
+# Dynamic threshold adjustment factor
 # When league home win rate drops, raise threshold to pick home less often
 THRESHOLD_ADJUSTMENT_FACTOR = 0.5
 
@@ -87,7 +85,7 @@ def add_league_hw_feature(games: pd.DataFrame) -> pd.DataFrame:
     # Fill early games with historical average
     games['league_hw_100'] = games['league_hw_100'].fillna(HISTORICAL_HOME_WIN_RATE)
 
-    # V8.4: Add 50-game rolling average for dynamic threshold
+    # Add 50-game rolling average for dynamic threshold
     games['league_hw_50'] = games['home_win'].rolling(
         window=50, min_periods=25
     ).mean().shift(1)  # Shift to avoid leakage
@@ -99,10 +97,10 @@ def add_league_hw_feature(games: pd.DataFrame) -> pd.DataFrame:
 def calculate_dynamic_threshold(league_hw: float, k: float = THRESHOLD_ADJUSTMENT_FACTOR) -> float:
     """Calculate dynamic decision threshold based on current league home win rate.
 
-    V8.4 Innovation:
+    V7.0 Adaptive Feature:
     When league home win rate drops below historical norm (0.535), raise the
-    threshold to pick home less often. This adapts to structural shifts like
-    2025-26 where home advantage decreased.
+    threshold to pick home less often. This adapts to structural shifts in
+    NHL home advantage across seasons.
 
     Formula: threshold = 0.5 + (0.535 - league_hw) * k
 
@@ -154,15 +152,14 @@ def calculate_adaptive_weights(games: pd.DataFrame, target: pd.Series) -> np.nda
 
 ET_ZONE = ZoneInfo("America/New_York")
 
-# V8.5 Curated Features (39 features - V8.1 base + league home win rate for adaptive predictions)
-# V8.5 adds: 1) Dynamic Elo home advantage, 2) Dynamic threshold
-# V8.5 maintains 61%+ on original 4 seasons while improving 2025-26 by +1.3pp
-# Key improvements: dynamic Elo in pipeline.py, threshold = 0.5 + (0.535 - rolling_hw_50) * 0.5
-V85_FEATURES = [
+# V7.0 Curated Features (39 features + adaptive weights)
+# Production model with 60.9% accuracy on 4-season holdout (5,002 games)
+# Key features: 1) Adaptive Elo home advantage, 2) Dynamic threshold, 3) League home win rate
+V70_FEATURES = [
     # League-wide home advantage (adaptive to structural shifts)
-    'league_hw_100',  # NEW in V8.2: Rolling 100-game league home win rate
+    'league_hw_100',  # Rolling 100-game league home win rate
 
-    # Elo ratings (improved with season carryover)
+    # Elo ratings (with season carryover)
     'elo_diff_pre', 'elo_expectation_home',
 
     # Rolling win percentage
@@ -174,7 +171,7 @@ V85_FEATURES = [
     # Rolling xG differential
     'rolling_xg_diff_10_diff', 'rolling_xg_diff_5_diff', 'rolling_xg_diff_3_diff',
 
-    # Possession metrics (improving over time - up 26-32%)
+    # Possession metrics
     'rolling_corsi_10_diff', 'rolling_corsi_5_diff', 'rolling_corsi_3_diff',
     'rolling_fenwick_10_diff', 'rolling_fenwick_5_diff',
 
@@ -182,12 +179,12 @@ V85_FEATURES = [
     'season_win_pct_diff', 'season_goal_diff_avg_diff',
     'season_xg_diff_avg_diff', 'season_shot_margin_diff',
 
-    # Rest and schedule (rest_diff improved +53%)
+    # Rest and schedule
     'rest_diff', 'is_b2b_home', 'is_b2b_away',
     'games_last_6d_home',
-    'games_last_3d_home',  # V8.1: schedule density
+    'games_last_3d_home',  # Schedule density
 
-    # Goaltending (removed goalie_rest_days_diff - degraded 77%)
+    # Goaltending
     'rolling_save_pct_10_diff', 'rolling_save_pct_5_diff', 'rolling_save_pct_3_diff',
     'rolling_gsax_5_diff', 'rolling_gsax_10_diff',
     'goalie_trend_score_diff',
@@ -198,13 +195,13 @@ V85_FEATURES = [
     # High danger shots
     'rolling_high_danger_shots_5_diff', 'rolling_high_danger_shots_10_diff',
 
-    # V8.1: Shot volume and possession indicators
+    # Shot volume and possession indicators
     'shotsFor_roll_10_diff',    # Shot volume trend
     'rolling_faceoff_5_diff',   # Possession indicator
 ]
 
-# Keep V8.1 features for backwards compatibility
-V81_FEATURES = [
+# Legacy features for backwards compatibility
+V70_LEGACY_FEATURES = [
     # Elo ratings (improved with season carryover)
     'elo_diff_pre', 'elo_expectation_home',
 
@@ -228,7 +225,7 @@ V81_FEATURES = [
     # Rest and schedule (rest_diff improved +53%)
     'rest_diff', 'is_b2b_home', 'is_b2b_away',
     'games_last_6d_home',
-    'games_last_3d_home',  # NEW in V8.1: schedule density (+0.22 pp overall)
+    'games_last_3d_home',  # Schedule density
 
     # Goaltending (removed goalie_rest_days_diff - degraded 77%)
     'rolling_save_pct_10_diff', 'rolling_save_pct_5_diff', 'rolling_save_pct_3_diff',
@@ -241,7 +238,7 @@ V81_FEATURES = [
     # High danger shots
     'rolling_high_danger_shots_5_diff', 'rolling_high_danger_shots_10_diff',
 
-    # NEW in V8.1: Shot volume and possession indicators
+    # Shot volume and possession indicators
     'shotsFor_roll_10_diff',    # Shot volume trend (+0.16 pp overall)
     'rolling_faceoff_5_diff',   # Possession indicator (+0.12 pp overall)
 ]
@@ -542,9 +539,9 @@ def predict_games(date=None, num_games=20):
     print(f"   ✅ {len(dataset.games)} games loaded")
     print(f"   ✅ {dataset.features.shape[1]} baseline features engineered")
 
-    # Add league-wide home win rate feature (V8.2)
+    # Add league-wide home win rate feature (adaptive)
     games_with_hw = add_league_hw_feature(dataset.games)
-    print("   ✅ Added league home win rate feature (V8.2)")
+    print("   ✅ Added league home win rate feature (adaptive)")
 
     # Add situational features
     games_with_situational = add_situational_features(games_with_hw)
@@ -557,17 +554,17 @@ def predict_games(date=None, num_games=20):
     features_full = pd.concat([
         dataset.features,
         games_with_situational[available_situational],
-        games_with_situational[['league_hw_100']],  # V8.2 feature
+        games_with_situational[['league_hw_100']],  # Adaptive feature
     ], axis=1)
     print(f"   ✅ {len(available_situational)} situational features added")
 
-    # Filter to V8.5 curated features only
-    available_v85 = [f for f in V85_FEATURES if f in features_full.columns]
-    missing_v85 = [f for f in V85_FEATURES if f not in features_full.columns]
-    if missing_v85:
-        print(f"   ⚠️  Missing {len(missing_v85)} V8.5 features: {missing_v85[:5]}...")
-    features_full = features_full[available_v85]
-    print(f"   ✅ Total: {features_full.shape[1]} curated features (V8.5 Model)")
+    # Filter to V7.0 curated features only
+    available_v70 = [f for f in V70_FEATURES if f in features_full.columns]
+    missing_v70 = [f for f in V70_FEATURES if f not in features_full.columns]
+    if missing_v70:
+        print(f"   ⚠️  Missing {len(missing_v70)} V7.0 features: {missing_v70[:5]}...")
+    features_full = features_full[available_v70]
+    print(f"   ✅ Total: {features_full.shape[1]} curated features (V7.0 Model)")
 
     # Step 3: Train calibrated model using only past games
     print("\n3️⃣  Training calibrated logistic regression model...")
@@ -585,9 +582,9 @@ def predict_games(date=None, num_games=20):
     eligible_target = dataset.target.loc[eligible_mask].copy()
     train_seasons = sorted(eligible_games["seasonId"].unique().tolist())
 
-    # V8.2: Calculate adaptive sample weights to handle home advantage shifts
+    # Calculate adaptive sample weights to handle home advantage shifts
     adaptive_weights = calculate_adaptive_weights(eligible_games, eligible_target)
-    print("   ✅ Calculated adaptive sample weights (V8.2)")
+    print("   ✅ Calculated adaptive sample weights")
 
     candidate_cs = [0.005, 0.01, 0.02, 0.03, 0.05, 0.1, 0.3, 0.5, 1.0]
     best_c = tune_logreg_c(candidate_cs, eligible_features, eligible_target, eligible_games, train_seasons, sample_weights=adaptive_weights)
@@ -609,11 +606,11 @@ def predict_games(date=None, num_games=20):
     # Step 4: Predict
     print(f"\n4️⃣  Generating predictions for {min(num_games, len(games_for_model))} games...")
 
-    # V8.4: Calculate dynamic threshold based on recent league home win rate
+    # Calculate dynamic threshold based on recent league home win rate
     # Get the most recent rolling home win rate from training data
     recent_league_hw = eligible_games['league_hw_50'].iloc[-1] if 'league_hw_50' in eligible_games.columns else HISTORICAL_HOME_WIN_RATE
     dynamic_threshold = calculate_dynamic_threshold(recent_league_hw)
-    print(f"   ✅ V8.4 Dynamic threshold: {dynamic_threshold:.4f} (league HW: {recent_league_hw:.1%})")
+    print(f"   ✅ Dynamic threshold: {dynamic_threshold:.4f} (league HW: {recent_league_hw:.1%})")
 
     print("\n" + "="*80)
     print("PREDICTIONS")
@@ -665,12 +662,12 @@ def predict_games(date=None, num_games=20):
         prob_away_calibrated = 1 - prob_home_calibrated
 
         start_time_utc_iso, start_time_et = format_start_times(game.get('startTimeUTC', ''))
-        # V8.4: Use dynamic threshold for decision making
+        # Use dynamic threshold for decision making
         # Edge is still calculated from 0.5 for display purposes, but winner uses dynamic threshold
         edge = prob_home_display - 0.5
         confidence_score = abs(edge) * 2  # 0-1 scale
         confidence_grade = grade_from_edge(edge)
-        # V8.4: Use dynamic threshold instead of 0.5 for prediction decision
+        # Use dynamic threshold instead of 0.5 for prediction decision
         model_favorite = 'home' if prob_home_display >= dynamic_threshold else 'away'
         summary = build_summary(
             game.get('homeTeamName', home_abbrev),
@@ -701,7 +698,7 @@ def predict_games(date=None, num_games=20):
             'home_win_prob_calibrated': prob_home_calibrated,
             'away_win_prob_calibrated': prob_away_calibrated,
             'edge': edge,
-            'predicted_winner': home_abbrev if prob_home_display >= dynamic_threshold else away_abbrev,  # V8.4
+            'predicted_winner': home_abbrev if prob_home_display >= dynamic_threshold else away_abbrev,
             'model_favorite': model_favorite,
             'confidence': confidence_score,
             'confidence_grade': confidence_grade,
@@ -712,7 +709,7 @@ def predict_games(date=None, num_games=20):
         print(f"\n{i}. {away_abbrev} @ {home_abbrev}")
         print(f"   Home Win (raw): {prob_home_display:.1%}  |  Away Win (raw): {prob_away_raw:.1%}")
         
-        # Classify prediction strength (V8.4: uses dynamic threshold for favorites)
+        # Classify prediction strength (uses dynamic threshold for favorites)
         confidence_pct = confidence_score * 100
 
         if prob_home_display > 0.70:

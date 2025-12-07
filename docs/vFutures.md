@@ -11,7 +11,7 @@
 
 ---
 
-## v7.1 Candidates (short-cycle additions)
+## Future Candidates (short-cycle additions)
 - Goalie Page (starters + rest + basic GSAx)
 - Past Slate Archive (recent days)
 - Trend expansions for Power Index

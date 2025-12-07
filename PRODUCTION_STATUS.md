@@ -142,7 +142,7 @@
 ### **Analysis Scripts** (`analysis/`)
 
 #### Active Analysis:
-- `current/analyze_v7_3_errors.py` - Error analysis for V7.3
+- `current/analyze_errors.py` - Error analysis for V7.0
 - `current/analyze_b2b_weakness.py` - Back-to-back game analysis
 - `current/analyze_confidence_calibration.py` - Calibration analysis
 - `feature_importance_analysis.py` - Feature rankings
@@ -162,17 +162,17 @@
 
 ---
 
-## 🗑️ Recently Archived (December 4, 2024)
+## 🗑️ Recently Archived (December 2024)
 
-All archived to: `archive/2024-12-04-pre-v7.3-cleanup/`
+All archived to: `archive/2024-12-04-pre-cleanup/`
 
 ### Archived Experimental Features:
-- `head_to_head_features.py` - V7.4 experiment (60.00% accuracy ❌)
-- `interaction_features.py` - V7.5 experiment (60.08% accuracy ❌)
-- `team_calibration_features.py` - V7.6 experiment (60.73% accuracy ❌)
+- `head_to_head_features.py` - V7.0 Test: H2H (60.00% - rejected)
+- `interaction_features.py` - V7.0 Test: Interactions (60.08% - rejected)
+- `team_calibration_features.py` - V7.0 Test: Calibration (60.73% - rejected)
 
 ### Archived Training Scripts:
-- All V7.1, V7.2, V7.4, V7.5, V7.6 training scripts
+- All V7.0 development test training scripts
 - Old training experiments from `/training/archive/`
 - Experimental training scripts from `/training/experiments/`
 
@@ -212,8 +212,8 @@ All archived to: `archive/2024-12-04-pre-v7.3-cleanup/`
 ## 📝 Next Steps & Future Improvements
 
 ### Short Term (Week 1-2):
-1. ✅ **DONE**: V7.3 model deployed to production
-2. ✅ **DONE**: Frontend fully integrated with V7.3 stats
+1. ✅ **DONE**: V7.0 model deployed to production
+2. ✅ **DONE**: Frontend fully integrated with V7.0 stats
 3. ⏳ **TODO**: Set up automated daily prediction generation
 4. ⏳ **TODO**: Deploy to Vercel/Netlify with custom domain
 
@@ -224,8 +224,8 @@ All archived to: `archive/2024-12-04-pre-v7.3-cleanup/`
 4. Add historical prediction tracking
 
 ### Long Term (3+ months):
-1. Explore ensemble methods (V8.0)
-2. Add neural network models (V8.1)
+1. Explore ensemble methods (V8)
+2. Add neural network models
 3. Implement real-time updates during games
 4. Add user accounts and personalization
 
