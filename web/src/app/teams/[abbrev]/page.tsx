@@ -219,22 +219,14 @@ export default async function TeamPage({ params }: { params: Promise<{ abbrev: s
                     <circle cx="60" cy="60" r="52" fill="none" stroke={`url(#ring-gradient-${teamData.abbrev})`} strokeWidth="10"
                       strokeDasharray={`${((33 - teamData.powerRank) / 32) * 327} 327`} strokeLinecap="round" />
                   </svg>
-                  {/* Inner circle with gradient */}
+                  {/* Logo centered */}
                   <div style={{
                     position: 'absolute',
                     top: '50%',
                     left: '50%',
                     transform: 'translate(-50%, -50%)',
-                    width: '88px',
-                    height: '88px',
-                    borderRadius: '50%',
-                    background: 'linear-gradient(135deg, rgba(30,41,59,0.9) 0%, rgba(15,23,42,0.95) 100%)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    boxShadow: 'inset 0 2px 8px rgba(0,0,0,0.4), 0 4px 12px rgba(0,0,0,0.3)',
                   }}>
-                    <TeamCrest abbrev={teamData.abbrev} size={56} />
+                    <TeamCrest abbrev={teamData.abbrev} size={64} />
                   </div>
                 </div>
                 <div style={{ flex: 1 }}>
@@ -450,85 +442,241 @@ export default async function TeamPage({ params }: { params: Promise<{ abbrev: s
           </div>
         </section>
 
-        {/* Performance Radar Visual */}
+        {/* Points Pace Visual */}
         <section className="nova-section">
-          <h2 className="text-xl font-bold text-white mb-3">Performance Profile</h2>
+          <h2 className="text-xl font-bold text-white mb-3">Season Pace</h2>
           <div className="card" style={{ padding: '1.5rem' }}>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem', alignItems: 'center' }}>
-              {/* Offense/Defense Bars */}
-              <div>
-                <div style={{ marginBottom: '1.5rem' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
-                    <span style={{ fontSize: '0.8rem', fontWeight: 600, color: 'white' }}>Offense</span>
-                    <span style={{ fontSize: '0.8rem', color: getRankColor(ranks.offense) }}>#{ranks.offense}</span>
-                  </div>
-                  <div style={{ height: '12px', background: 'rgba(255,255,255,0.05)', borderRadius: '6px', overflow: 'hidden' }}>
-                    <div style={{
-                      height: '100%',
-                      width: `${((33 - ranks.offense) / 32) * 100}%`,
-                      background: `linear-gradient(90deg, ${getRankColor(ranks.offense)}80 0%, ${getRankColor(ranks.offense)} 100%)`,
-                      borderRadius: '6px',
-                      transition: 'width 0.5s ease'
-                    }} />
-                  </div>
-                  <p style={{ fontSize: '0.75rem', color: 'var(--text-tertiary)', marginTop: '0.25rem' }}>{teamData.goalsForPerGame?.toFixed(2)} goals per game</p>
-                </div>
-                <div style={{ marginBottom: '1.5rem' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
-                    <span style={{ fontSize: '0.8rem', fontWeight: 600, color: 'white' }}>Defense</span>
-                    <span style={{ fontSize: '0.8rem', color: getRankColor(ranks.defense) }}>#{ranks.defense}</span>
-                  </div>
-                  <div style={{ height: '12px', background: 'rgba(255,255,255,0.05)', borderRadius: '6px', overflow: 'hidden' }}>
-                    <div style={{
-                      height: '100%',
-                      width: `${((33 - ranks.defense) / 32) * 100}%`,
-                      background: `linear-gradient(90deg, ${getRankColor(ranks.defense)}80 0%, ${getRankColor(ranks.defense)} 100%)`,
-                      borderRadius: '6px',
-                      transition: 'width 0.5s ease'
-                    }} />
-                  </div>
-                  <p style={{ fontSize: '0.75rem', color: 'var(--text-tertiary)', marginTop: '0.25rem' }}>{teamData.goalsAgainstPerGame?.toFixed(2)} goals against per game</p>
-                </div>
+            {(() => {
+              // Calculate points above/below .500 pace
+              const expectedPoints = teamData.gamesPlayed; // .500 pace = 1 point per game
+              const actualPoints = teamData.points;
+              const paceDiff = actualPoints - expectedPoints;
+              const projectedPoints = Math.round((teamData.pointPctg) * 164); // 82 games * 2 max points
+              const playoffPace = 98; // typical playoff cutoff
+
+              return (
                 <div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
-                    <span style={{ fontSize: '0.8rem', fontWeight: 600, color: 'white' }}>Possession</span>
-                    <span style={{ fontSize: '0.8rem', color: getRankColor(ranks.shotsFor) }}>#{ranks.shotsFor}</span>
+                  {/* Points vs .500 pace bar */}
+                  <div style={{ marginBottom: '2rem' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '0.75rem' }}>
+                      <span style={{ fontSize: '0.8rem', color: 'var(--text-tertiary)', textTransform: 'uppercase' }}>Points vs .500 Pace</span>
+                      <span style={{
+                        fontSize: '1.5rem',
+                        fontWeight: 800,
+                        color: paceDiff >= 0 ? '#10b981' : '#ef4444'
+                      }}>
+                        {paceDiff >= 0 ? '+' : ''}{paceDiff}
+                      </span>
+                    </div>
+                    <div style={{ position: 'relative', height: '40px', background: 'rgba(255,255,255,0.05)', borderRadius: '8px', overflow: 'visible' }}>
+                      {/* Center line (.500) */}
+                      <div style={{
+                        position: 'absolute',
+                        left: '50%',
+                        top: 0,
+                        bottom: 0,
+                        width: '2px',
+                        background: 'rgba(255,255,255,0.3)',
+                        zIndex: 1
+                      }} />
+                      {/* Bar from center */}
+                      <div style={{
+                        position: 'absolute',
+                        top: '8px',
+                        bottom: '8px',
+                        left: paceDiff >= 0 ? '50%' : `${50 + (paceDiff / teamData.gamesPlayed) * 50}%`,
+                        width: `${Math.abs(paceDiff / teamData.gamesPlayed) * 50}%`,
+                        background: paceDiff >= 0
+                          ? 'linear-gradient(90deg, rgba(16,185,129,0.3) 0%, #10b981 100%)'
+                          : 'linear-gradient(90deg, #ef4444 0%, rgba(239,68,68,0.3) 100%)',
+                        borderRadius: '4px',
+                      }} />
+                      {/* Team logo at end of bar */}
+                      <div style={{
+                        position: 'absolute',
+                        top: '50%',
+                        left: `${50 + (paceDiff / teamData.gamesPlayed) * 50}%`,
+                        transform: 'translate(-50%, -50%)',
+                        zIndex: 2,
+                      }}>
+                        <div style={{
+                          background: 'var(--surface-secondary)',
+                          borderRadius: '50%',
+                          padding: '4px',
+                          border: `2px solid ${paceDiff >= 0 ? '#10b981' : '#ef4444'}`,
+                        }}>
+                          <TeamCrest abbrev={teamData.abbrev} size={28} />
+                        </div>
+                      </div>
+                    </div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '0.5rem' }}>
+                      <span style={{ fontSize: '0.7rem', color: 'var(--text-tertiary)' }}>Below .500</span>
+                      <span style={{ fontSize: '0.7rem', color: 'var(--text-tertiary)' }}>.500 pace</span>
+                      <span style={{ fontSize: '0.7rem', color: 'var(--text-tertiary)' }}>Above .500</span>
+                    </div>
                   </div>
-                  <div style={{ height: '12px', background: 'rgba(255,255,255,0.05)', borderRadius: '6px', overflow: 'hidden' }}>
-                    <div style={{
-                      height: '100%',
-                      width: `${((33 - ranks.shotsFor) / 32) * 100}%`,
-                      background: `linear-gradient(90deg, ${getRankColor(ranks.shotsFor)}80 0%, ${getRankColor(ranks.shotsFor)} 100%)`,
-                      borderRadius: '6px',
-                      transition: 'width 0.5s ease'
-                    }} />
+
+                  {/* Projected finish */}
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '1rem' }}>
+                    <div style={{ padding: '1rem', background: 'rgba(255,255,255,0.03)', borderRadius: '0.75rem', textAlign: 'center' }}>
+                      <p style={{ fontSize: '2rem', fontWeight: 800, color: 'white' }}>{projectedPoints}</p>
+                      <p style={{ fontSize: '0.65rem', color: 'var(--text-tertiary)', textTransform: 'uppercase' }}>Projected Points</p>
+                      <p style={{ fontSize: '0.7rem', color: projectedPoints >= playoffPace ? '#10b981' : '#f59e0b', marginTop: '0.25rem' }}>
+                        {projectedPoints >= playoffPace ? 'Playoff pace' : `${playoffPace - projectedPoints} pts below playoff pace`}
+                      </p>
+                    </div>
+                    <div style={{ padding: '1rem', background: 'rgba(255,255,255,0.03)', borderRadius: '0.75rem', textAlign: 'center' }}>
+                      <p style={{ fontSize: '2rem', fontWeight: 800, color: 'white' }}>{82 - teamData.gamesPlayed}</p>
+                      <p style={{ fontSize: '0.65rem', color: 'var(--text-tertiary)', textTransform: 'uppercase' }}>Games Left</p>
+                      <p style={{ fontSize: '0.7rem', color: 'var(--text-secondary)', marginTop: '0.25rem' }}>
+                        {(164 - teamData.points)} pts available
+                      </p>
+                    </div>
+                    <div style={{ padding: '1rem', background: 'rgba(255,255,255,0.03)', borderRadius: '0.75rem', textAlign: 'center' }}>
+                      <p style={{ fontSize: '2rem', fontWeight: 800, color: teamData.pointPctg >= 0.6 ? '#10b981' : teamData.pointPctg >= 0.5 ? '#3b82f6' : '#f59e0b' }}>
+                        {(teamData.pointPctg * 100).toFixed(0)}%
+                      </p>
+                      <p style={{ fontSize: '0.65rem', color: 'var(--text-tertiary)', textTransform: 'uppercase' }}>Point %</p>
+                      <p style={{ fontSize: '0.7rem', color: 'var(--text-secondary)', marginTop: '0.25rem' }}>
+                        {teamData.points} pts in {teamData.gamesPlayed} GP
+                      </p>
+                    </div>
                   </div>
-                  <p style={{ fontSize: '0.75rem', color: 'var(--text-tertiary)', marginTop: '0.25rem' }}>{teamData.shotsForPerGame?.toFixed(1)} shots per game</p>
+                </div>
+              );
+            })()}
+          </div>
+        </section>
+
+        {/* Power Index Spectrum */}
+        <section className="nova-section">
+          <h2 className="text-xl font-bold text-white mb-3">League Power Spectrum</h2>
+          <div className="card" style={{ padding: '1.5rem' }}>
+            <div style={{ position: 'relative', height: '60px', marginBottom: '1rem' }}>
+              {/* Gradient bar */}
+              <div style={{
+                position: 'absolute',
+                top: '20px',
+                left: 0,
+                right: 0,
+                height: '20px',
+                background: 'linear-gradient(90deg, #10b981 0%, #3b82f6 33%, #f59e0b 66%, #ef4444 100%)',
+                borderRadius: '10px',
+                opacity: 0.3,
+              }} />
+              {/* Team marker */}
+              <div style={{
+                position: 'absolute',
+                top: '0',
+                left: `${((teamData.powerRank - 1) / 31) * 100}%`,
+                transform: 'translateX(-50%)',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+              }}>
+                <div style={{
+                  background: 'var(--surface-secondary)',
+                  borderRadius: '50%',
+                  padding: '4px',
+                  border: `3px solid ${getRankColor(teamData.powerRank)}`,
+                  boxShadow: `0 0 12px ${getRankColor(teamData.powerRank)}60`,
+                }}>
+                  <TeamCrest abbrev={teamData.abbrev} size={32} />
+                </div>
+                <div style={{
+                  marginTop: '4px',
+                  padding: '2px 8px',
+                  background: getRankColor(teamData.powerRank),
+                  borderRadius: '4px',
+                  fontSize: '0.75rem',
+                  fontWeight: 700,
+                  color: 'white',
+                }}>#{teamData.powerRank}</div>
+              </div>
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.7rem', color: 'var(--text-tertiary)' }}>
+              <span>#1 Elite</span>
+              <span>#8 Contender</span>
+              <span>#16 Bubble</span>
+              <span>#24 Fringe</span>
+              <span>#32</span>
+            </div>
+          </div>
+        </section>
+
+        {/* Goals Breakdown Visual */}
+        <section className="nova-section">
+          <h2 className="text-xl font-bold text-white mb-3">Scoring Breakdown</h2>
+          <div className="card" style={{ padding: '1.5rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '2rem' }}>
+              {/* Goals For vs Against visual */}
+              <div style={{ flex: 1 }}>
+                <div style={{ display: 'flex', alignItems: 'center', marginBottom: '1rem' }}>
+                  <div style={{ flex: 1 }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.25rem' }}>
+                      <span style={{ fontSize: '0.75rem', color: '#10b981', fontWeight: 600 }}>Goals For</span>
+                      <span style={{ fontSize: '0.9rem', fontWeight: 700, color: '#10b981' }}>{Math.round((teamData.goalsForPerGame ?? 0) * teamData.gamesPlayed)}</span>
+                    </div>
+                    <div style={{ height: '24px', background: 'rgba(255,255,255,0.05)', borderRadius: '4px', overflow: 'hidden' }}>
+                      <div style={{
+                        height: '100%',
+                        width: `${((teamData.goalsForPerGame ?? 0) / 4.5) * 100}%`,
+                        background: 'linear-gradient(90deg, #10b98140 0%, #10b981 100%)',
+                        borderRadius: '4px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'flex-end',
+                        paddingRight: '8px',
+                      }}>
+                        <span style={{ fontSize: '0.75rem', fontWeight: 600, color: 'white' }}>{teamData.goalsForPerGame?.toFixed(2)}/G</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center' }}>
+                  <div style={{ flex: 1 }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.25rem' }}>
+                      <span style={{ fontSize: '0.75rem', color: '#ef4444', fontWeight: 600 }}>Goals Against</span>
+                      <span style={{ fontSize: '0.9rem', fontWeight: 700, color: '#ef4444' }}>{Math.round((teamData.goalsAgainstPerGame ?? 0) * teamData.gamesPlayed)}</span>
+                    </div>
+                    <div style={{ height: '24px', background: 'rgba(255,255,255,0.05)', borderRadius: '4px', overflow: 'hidden' }}>
+                      <div style={{
+                        height: '100%',
+                        width: `${((teamData.goalsAgainstPerGame ?? 0) / 4.5) * 100}%`,
+                        background: 'linear-gradient(90deg, #ef444440 0%, #ef4444 100%)',
+                        borderRadius: '4px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'flex-end',
+                        paddingRight: '8px',
+                      }}>
+                        <span style={{ fontSize: '0.75rem', fontWeight: 600, color: 'white' }}>{teamData.goalsAgainstPerGame?.toFixed(2)}/G</span>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
-              {/* Summary Stats */}
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
-                <div style={{ padding: '1rem', background: 'rgba(255,255,255,0.03)', borderRadius: '0.75rem', textAlign: 'center' }}>
-                  <p style={{ fontSize: '1.75rem', fontWeight: 800, color: getRankColor(ranks.shootingPct) }}>{shootingPct.toFixed(1)}%</p>
-                  <p style={{ fontSize: '0.65rem', color: 'var(--text-tertiary)', textTransform: 'uppercase' }}>Shooting %</p>
-                  <p style={{ fontSize: '0.7rem', color: getRankColor(ranks.shootingPct), marginTop: '0.25rem' }}>#{ranks.shootingPct} in NHL</p>
-                </div>
-                <div style={{ padding: '1rem', background: 'rgba(255,255,255,0.03)', borderRadius: '0.75rem', textAlign: 'center' }}>
-                  <p style={{ fontSize: '1.75rem', fontWeight: 800, color: getRankColor(ranks.savePct) }}>{savePct.toFixed(1)}%</p>
-                  <p style={{ fontSize: '0.65rem', color: 'var(--text-tertiary)', textTransform: 'uppercase' }}>Save %</p>
-                  <p style={{ fontSize: '0.7rem', color: getRankColor(ranks.savePct), marginTop: '0.25rem' }}>#{ranks.savePct} in NHL</p>
-                </div>
-                <div style={{ padding: '1rem', background: 'rgba(255,255,255,0.03)', borderRadius: '0.75rem', textAlign: 'center' }}>
-                  <p style={{ fontSize: '1.75rem', fontWeight: 800, color: (teamData.goalDifferential ?? 0) >= 0 ? '#10b981' : '#ef4444' }}>
-                    {(teamData.goalDifferential ?? 0) >= 0 ? '+' : ''}{teamData.goalDifferential}
+              {/* Net result */}
+              <div style={{
+                width: '120px',
+                height: '120px',
+                borderRadius: '50%',
+                background: `conic-gradient(${teamData.goalDifferential >= 0 ? '#10b981' : '#ef4444'} 0deg, rgba(255,255,255,0.05) 0deg)`,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                border: `4px solid ${teamData.goalDifferential >= 0 ? '#10b981' : '#ef4444'}`,
+              }}>
+                <div style={{ textAlign: 'center' }}>
+                  <p style={{
+                    fontSize: '2rem',
+                    fontWeight: 800,
+                    color: teamData.goalDifferential >= 0 ? '#10b981' : '#ef4444',
+                    lineHeight: 1,
+                  }}>
+                    {teamData.goalDifferential >= 0 ? '+' : ''}{teamData.goalDifferential}
                   </p>
-                  <p style={{ fontSize: '0.65rem', color: 'var(--text-tertiary)', textTransform: 'uppercase' }}>Goal Diff</p>
-                  <p style={{ fontSize: '0.7rem', color: getRankColor(ranks.goalDiff), marginTop: '0.25rem' }}>#{ranks.goalDiff} in NHL</p>
-                </div>
-                <div style={{ padding: '1rem', background: 'rgba(255,255,255,0.03)', borderRadius: '0.75rem', textAlign: 'center' }}>
-                  <p style={{ fontSize: '1.75rem', fontWeight: 800, color: 'white' }}>{(teamData.pointPctg * 100).toFixed(0)}%</p>
-                  <p style={{ fontSize: '0.65rem', color: 'var(--text-tertiary)', textTransform: 'uppercase' }}>Point %</p>
-                  <p style={{ fontSize: '0.7rem', color: getRankColor(ranks.pointPct), marginTop: '0.25rem' }}>#{ranks.pointPct} in NHL</p>
+                  <p style={{ fontSize: '0.6rem', color: 'var(--text-tertiary)', textTransform: 'uppercase', marginTop: '0.25rem' }}>Goal Diff</p>
                 </div>
               </div>
             </div>
