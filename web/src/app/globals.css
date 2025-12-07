@@ -2018,6 +2018,12 @@ p { line-height: 1.7; }
   border-style: solid !important;
 }
 
+/* Generic circular crest modifier */
+.crest--circular,
+.team-hero-crest .crest {
+  border-radius: 50% !important;
+}
+
 .matchup-header__info {
   display: flex;
   flex-direction: column;

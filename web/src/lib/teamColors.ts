@@ -126,17 +126,28 @@ export function getContrastingTeamColor(abbrev1: string, abbrev2: string): { tea
   const luma2 = luma(colors2.primary);
 
   // Helper to get a visible color for a team
+  // Colors need minimum luma of ~120 to be easily readable on dark backgrounds
   const getVisibleColor = (colors: { primary: string; secondary?: string }, teamLuma: number): string => {
-    // If primary is too dark (luma < 50), use secondary if it's lighter, otherwise lighten
+    const MIN_READABLE_LUMA = 100;
+
+    // Very dark colors (luma < 50) - use secondary if light enough, or heavily lighten
     if (teamLuma < 50) {
       const secondaryLuma = colors.secondary ? luma(colors.secondary) : 0;
-      if (secondaryLuma > 80) {
-        return hexToRgba(colors.secondary!, 0.9);
+      if (secondaryLuma >= MIN_READABLE_LUMA) {
+        return hexToRgba(colors.secondary!, 0.95);
       }
-      // Lighten the primary by using a lighter alpha blend
-      return lightenColor(colors.primary, 0.6);
+      return lightenColor(colors.primary, 0.65);
     }
-    return hexToRgba(colors.primary, 0.9);
+
+    // Medium-dark colors (luma 50-100) - lighten proportionally
+    if (teamLuma < MIN_READABLE_LUMA) {
+      // Calculate how much to lighten: darker = more lightening
+      const lightenAmount = ((MIN_READABLE_LUMA - teamLuma) / MIN_READABLE_LUMA) * 0.5;
+      return lightenColor(colors.primary, lightenAmount + 0.15);
+    }
+
+    // Bright enough colors - use as-is
+    return hexToRgba(colors.primary, 0.95);
   };
 
   let color1 = getVisibleColor(colors1, luma1);

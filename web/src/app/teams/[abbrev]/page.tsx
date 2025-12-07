@@ -206,7 +206,7 @@ export default async function TeamPage({ params }: { params: Promise<{ abbrev: s
                       strokeDasharray={`${((33 - teamData.powerRank) / 32) * 327} 327`} strokeLinecap="round" />
                   </svg>
                   {/* Logo centered */}
-                  <div style={{
+                  <div className="team-hero-crest" style={{
                     position: 'absolute',
                     top: '50%',
                     left: '50%',
