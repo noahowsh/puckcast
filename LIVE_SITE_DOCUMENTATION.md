@@ -1,7 +1,7 @@
 # 🏒 Puckcast.ai - Live Site Documentation
 
-> **Last Updated**: December 5, 2025
-> **Model Version**: V7.3 Situational Features (60.49% accuracy - Verified)
+> **Last Updated**: December 7, 2025
+> **Model Version**: V8.2 (60.9% accuracy - 4-season holdout)
 > **Deployment**: https://puckcast.ai
 > **Status**: ✅ Production Ready
 
@@ -13,22 +13,24 @@
 2. [Navigation & Global Layout](#navigation--global-layout)
 3. [Page 1: Overview (Homepage)](#page-1-overview-homepage)
 4. [Page 2: Predictions](#page-2-predictions)
-5. [Page 3: Power Rankings](#page-3-power-rankings)
-6. [Page 4: Performance](#page-4-performance)
-7. [Page 5: Teams](#page-5-teams)
-8. [Data Sources](#data-sources)
-9. [Calculations & Formulas](#calculations--formulas)
+5. [Page 2b: Matchup Detail (H2H)](#page-2b-matchup-detail-h2h)
+6. [Page 3: Power Rankings](#page-3-power-rankings)
+7. [Page 4: Performance](#page-4-performance)
+8. [Page 5: Teams](#page-5-teams)
+9. [Data Sources](#data-sources)
+10. [Calculations & Formulas](#calculations--formulas)
 
 ---
 
 ## Site Overview
 
-### Live Pages in Navigation (5 Total)
+### Live Pages in Navigation (5 Total + Matchup Detail)
 1. **Overview** (`/`) - Homepage with today's slate and power index preview
 2. **Predictions** (`/predictions`) - Full game board with sortable predictions
 3. **Power Rankings** (`/leaderboards`) - 32-team power index table
 4. **Performance** (`/performance`) - Model validation and accuracy metrics
 5. **Teams** (`/teams`) - Team index + individual team pages (`/teams/[abbrev]`)
+6. **Matchup Detail** (`/matchup/[gameId]`) - H2H comparison (linked from predictions)
 
 ### Technology Stack
 - **Framework**: Next.js 16 + React 19
@@ -63,7 +65,7 @@
 **Components**:
 - Fixed navigation bar (64px height)
 - Main content area with padding
-- Footer with v7.3 version indicator
+- Footer with V8.2 version indicator
 - Background gradient effects (cyan/emerald radials)
 
 **Meta Tags**:
@@ -325,6 +327,48 @@ powerScore = Math.round(
 **Display**: Only if upset games exist
 - Same filter as homepage
 - Top 3 away favorites
+
+---
+
+## Page 2b: Matchup Detail (H2H)
+
+**Route**: `/matchup/[gameId]`
+**File**: `web/src/app/matchup/[gameId]/page.tsx`
+
+### Access
+Click any prediction card on `/predictions` to view detailed matchup.
+
+### Section 1: Header
+- Away team vs Home team with circular crests
+- Win probability bar with team colors
+- Team records and standings ranks
+
+### Section 2: Model Pick Banner
+- Model favorite team logo and name
+- Grade (A+ through C)
+- Edge points
+- Win probability percentage
+- Summary text
+
+### Section 3: Team Comparison Stats
+8 comparison bars with team-colored fills:
+1. **Points** - League standings points
+2. **Point %** - Points percentage
+3. **Goal Diff** - Goal differential
+4. **Goals/Game** - Offensive output
+5. **Goals Against** - Defensive rating
+6. **Power Score** - Puckcast composite rating
+7. **Power Play %** - PP efficiency
+8. **Penalty Kill %** - PK efficiency
+
+Each stat shows leader highlighting and proportional bar widths.
+
+### Section 4: Projected Goalies
+- Goalie name, record, rest days (if available)
+- Team-colored card borders
+
+### Section 5: Team Links
+- Links to individual team pages for both teams
 
 ---
 
@@ -610,7 +654,15 @@ powerScore = Math.round(
 
 ---
 
-#### Section 5: Team Goalies (conditional)
+#### Section 5: Special Teams
+
+**Grid** (2 cards):
+1. **Power Play %** - PP efficiency with league rank (#1-32)
+2. **Penalty Kill %** - PK efficiency with league rank (#1-32)
+
+---
+
+#### Section 6: Team Goalies (conditional)
 
 **Display**: Only if team has goalies in `goaliePulse.json`
 
@@ -697,7 +749,9 @@ powerScore = Math.round(
     "pointPctg": 0.697,
     "goalDifferential": 32,
     "goalsForPerGame": 3.5,
-    "goalsAgainstPerGame": 2.6
+    "goalsAgainstPerGame": 2.6,
+    "powerPlayPct": 0.245,
+    "penaltyKillPct": 0.823
   }]
 }
 ```

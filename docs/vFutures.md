@@ -1,5 +1,16 @@
 # vFutures.md
 
+> **Last Updated**: December 7, 2025
+
+## Recently Completed (Dec 2025)
+- ✅ **H2H Matchup Pages** (`/matchup/[gameId]`) - Team comparison with colored stat bars, model pick banner, projected goalies
+- ✅ **PP/PK Stats** - Power Play % and Penalty Kill % on team pages and H2H matchup comparison
+- ✅ **Team Hub Pages** - Individual team pages with stats, special teams, next opponent
+- ✅ **Color Contrast System** - Automatic lightening for dark team colors (LAK, SEA, etc.)
+- ✅ **Circular Team Crests** - Consistent circular logos across matchup and team pages
+
+---
+
 ## v7.1 Candidates (short-cycle additions)
 - Goalie Page (starters + rest + basic GSAx)
 - Past Slate Archive (recent days)
@@ -124,10 +135,10 @@ The `fetch-results.yml` workflow already exists and runs daily at 8 AM UTC.
 ---
 
 ## v8 Core
-- Matchup Page (deep dive intelligence)
+- ~~Matchup Page (deep dive intelligence)~~ ✅ DONE (Dec 2025) - H2H comparison with team-colored stat bars
 - Explainability chips
-- Team hub pages
-- PP/PK dashboards
+- ~~Team hub pages~~ ✅ DONE - Individual team pages with stats, PP/PK, next game
+- ~~PP/PK dashboards~~ ✅ DONE (Dec 2025) - Added to team pages and H2H matchup comparison
 - Rink effects system
 - Ensemble exploration
 - Better forms of injury modeling

@@ -56,7 +56,7 @@
 
 ### H2H Matchup Pages (`/matchup/[gameId]`)
 - **NEW**: Click any prediction card to view detailed matchup
-- Team comparison with colored stat bars
+- Team comparison with colored stat bars (Points, Point%, Goal Diff, Goals/Game, Goals Against, Power Score, **PP%**, **PK%**)
 - Win probability display with team colors
 - Model pick banner with grade, edge, confidence
 - Projected goalies section
@@ -67,6 +67,7 @@
 - Power rank ring visualization
 - Season record bar (W/L/OT)
 - Point percentage and goal differential stats
+- **NEW**: Special Teams section with PP% and PK% ranks
 - Next opponent card with prediction
 
 ### Predictions Page (`/predictions`)
@@ -98,7 +99,7 @@
 ### Data Files
 | File | Updated | Description |
 |------|---------|-------------|
-| `currentStandings.json` | Daily | All 32 teams with stats |
+| `currentStandings.json` | Daily | All 32 teams with stats (incl. PP%, PK%) |
 | `todaysPredictions.json` | Daily | Today's game predictions |
 | `modelInsights.json` | Static | Model performance metrics |
 | `goaliePulse.json` | Daily | Starting goalie info |

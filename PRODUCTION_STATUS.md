@@ -1,9 +1,8 @@
 # 🏒 Puckcast.ai - Production Status & Active Files
 
-> **Last Updated**: December 4, 2024 18:20 UTC
-> **Model Version**: V7.3 Situational Features
+> **Last Updated**: December 7, 2025
+> **Model Version**: V8.2 (Adaptive Weights)
 > **Website**: https://puckcast.ai
-> **Branch**: `claude/v7-beta-01111xrERXjGtBfF6RaMBsNr`
 > **Status**: ✅ **PRODUCTION - LIVE**
 
 ---
@@ -12,13 +11,15 @@
 
 | Metric | Value |
 |--------|-------|
-| **Model** | V7.3 Situational Features |
-| **Accuracy** | 61.38% (755/1,230 games correct) |
-| **Features** | 220 total (213 baseline + 7 situational) |
-| **Test Set** | 2023-24 Season (1,230 games) |
-| **Training** | 2021-22, 2022-23 seasons |
-| **Algorithm** | Logistic Regression + Isotonic Calibration |
-| **Deployment** | December 4, 2024 |
+| **Model** | V8.2 Adaptive Weights |
+| **Accuracy** | 60.9% (4-season holdout) |
+| **Games Tested** | 5,002 |
+| **Features** | 39 + adaptive weights |
+| **Test Set** | 4-season holdout (2021-25) |
+| **Baseline** | 53.9% (home win rate) |
+| **Edge vs Baseline** | +6.9 pts |
+| **Brier Score** | 0.2317 |
+| **Log Loss** | 0.6554 |
 
 ---
 
@@ -114,16 +115,15 @@
 
 #### Pages (`web/src/app/`)
 - `/` - Home/Overview page
-- `/predictions` - Daily predictions slate
+- `/predictions` - Daily predictions slate (clickable cards)
+- `/matchup/[gameId]` - H2H matchup detail with team comparison
 - `/performance` - Model performance metrics
-- `/about` - Model explanation and features
-- `/betting` - Betting lab and strategy analysis
 - `/leaderboards` - Power rankings
-- `/goalies` - Goalie statistics (coming soon)
-- `/teams` - Team pages
+- `/teams` - Team index
+- `/teams/[abbrev]` - Individual team pages (with PP/PK stats)
 
 #### Components (`web/src/components/`)
-- `SiteFooter.tsx` - Footer with v7.3 version
+- `SiteFooter.tsx` - Footer with V8.2 version
 - `TeamCrest.tsx` - Team logos
 - `PageHeader.tsx` - Page headers
 - `StatCard.tsx` - Stat display cards
@@ -259,27 +259,26 @@ All archived to: `archive/2024-12-04-pre-v7.3-cleanup/`
 
 ## 📊 Performance Benchmarks
 
-### V7.3 Model Performance:
+### V8.2 Model Performance:
 ```
-Test Set: 2023-24 Season (1,230 games)
-Overall Accuracy: 61.38% (755/1,230)
-Baseline (Home Win Rate): 53.74%
-Improvement: +7.64 percentage points
+Test Set: 4-season holdout (5,002 games)
+Overall Accuracy: 60.9%
+Baseline (Home Win Rate): 53.9%
+Improvement: +6.9 percentage points
 
 Confidence Buckets:
-A+ (25+ pts): 70.2% accuracy (299 games)
-A  (20-25 pts): 62.2% accuracy (164 games)
-B+ (15-20 pts): 58.3% accuracy (168 games)
-B  (10-15 pts): 55.9% accuracy (211 games)
-C+ (5-10 pts): 56.1% accuracy (205 games)
-C  (0-5 pts): 53.6% accuracy (183 games)
+A+ (25+ pts): 79.3% accuracy (333 games)
+A  (20-25 pts): 72.0% accuracy (404 games)
+B+ (15-20 pts): 67.3% accuracy (687 games)
+B  (10-15 pts): 62.0% accuracy (975 games)
+C+ (5-10 pts): 57.8% accuracy (1,231 games)
+C  (0-5 pts): 51.9% accuracy (1,372 games)
 ```
 
 ### Calibration:
-- **Brier Score**: 0.243
-- **Log Loss**: 0.664
-- **ROC-AUC**: ~0.65
-- **Calibration**: Isotonic regression applied
+- **Brier Score**: 0.2317
+- **Log Loss**: 0.6554
+- **Features**: 39 + adaptive weights
 
 ---
 
@@ -293,6 +292,6 @@ C  (0-5 pts): 53.6% accuracy (183 games)
 
 ---
 
-**Document Version**: 1.0
-**Last Audit**: December 4, 2024 18:20 UTC
-**Next Review**: After V7.4 or major updates
+**Document Version**: 2.0
+**Last Audit**: December 7, 2025
+**Next Review**: After V9 or major updates
