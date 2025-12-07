@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2025-12-06T23:12:02.773244+00:00",
+  "generatedAt": "2025-12-07T03:28:18.211382+00:00",
   "seasonId": "20252026",
   "teams": [
     {
@@ -16,6 +16,8 @@
       "goalsAgainstPerGame": 2.17857,
       "shotsForPerGame": 34.21428,
       "shotsAgainstPerGame": 26.71428,
+      "powerPlayPct": 0.153061,
+      "penaltyKillPct": 0.86747,
       "seasonId": 20252026
     },
     {
@@ -32,6 +34,8 @@
       "goalsAgainstPerGame": 2.51724,
       "shotsForPerGame": 25.96551,
       "shotsAgainstPerGame": 27.5862,
+      "powerPlayPct": 0.319148,
+      "penaltyKillPct": 0.817205,
       "seasonId": 20252026
     },
     {
@@ -48,6 +52,8 @@
       "goalsAgainstPerGame": 2.48275,
       "shotsForPerGame": 29.31034,
       "shotsAgainstPerGame": 26.13793,
+      "powerPlayPct": 0.166666,
+      "penaltyKillPct": 0.744445,
       "seasonId": 20252026
     },
     {
@@ -64,6 +70,26 @@
       "goalsAgainstPerGame": 3.35714,
       "shotsForPerGame": 30.35714,
       "shotsAgainstPerGame": 29.03571,
+      "powerPlayPct": 0.177083,
+      "penaltyKillPct": 0.757895,
+      "seasonId": 20252026
+    },
+    {
+      "team": "New York Islanders",
+      "abbrev": "NYI",
+      "wins": 16,
+      "losses": 10,
+      "ot": 3,
+      "points": 35,
+      "gamesPlayed": 29,
+      "pointPctg": 0.60344,
+      "goalDifferential": 7,
+      "goalsForPerGame": 2.93103,
+      "goalsAgainstPerGame": 2.68965,
+      "shotsForPerGame": 29.34482,
+      "shotsAgainstPerGame": 27.65517,
+      "powerPlayPct": 0.144329,
+      "penaltyKillPct": 0.833334,
       "seasonId": 20252026
     },
     {
@@ -80,22 +106,44 @@
       "goalsAgainstPerGame": 2.67857,
       "shotsForPerGame": 27.82142,
       "shotsAgainstPerGame": 30.60714,
+      "powerPlayPct": 0.224489,
+      "penaltyKillPct": 0.803031,
+      "seasonId": 20252026
+    },
+    {
+      "team": "Boston Bruins",
+      "abbrev": "BOS",
+      "wins": 17,
+      "losses": 13,
+      "ot": 0,
+      "points": 34,
+      "gamesPlayed": 30,
+      "pointPctg": 0.56666,
+      "goalDifferential": 0,
+      "goalsForPerGame": 3.13333,
+      "goalsAgainstPerGame": 3.13333,
+      "shotsForPerGame": 26.9,
+      "shotsAgainstPerGame": 30.9,
+      "powerPlayPct": 0.25,
+      "penaltyKillPct": 0.830358,
       "seasonId": 20252026
     },
     {
       "team": "Tampa Bay Lightning",
       "abbrev": "TBL",
       "wins": 16,
-      "losses": 9,
+      "losses": 10,
       "ot": 2,
       "points": 34,
-      "gamesPlayed": 27,
-      "pointPctg": 0.62962,
-      "goalDifferential": 17,
-      "goalsForPerGame": 3.25925,
-      "goalsAgainstPerGame": 2.62962,
-      "shotsForPerGame": 27.18518,
-      "shotsAgainstPerGame": 27.51851,
+      "gamesPlayed": 28,
+      "pointPctg": 0.60714,
+      "goalDifferential": 15,
+      "goalsForPerGame": 3.14285,
+      "goalsAgainstPerGame": 2.60714,
+      "shotsForPerGame": 27.35714,
+      "shotsAgainstPerGame": 27.21428,
+      "powerPlayPct": 0.15909,
+      "penaltyKillPct": 0.866667,
       "seasonId": 20252026
     },
     {
@@ -112,6 +160,8 @@
       "goalsAgainstPerGame": 2.84615,
       "shotsForPerGame": 33.23076,
       "shotsAgainstPerGame": 24.46153,
+      "powerPlayPct": 0.131578,
+      "penaltyKillPct": 0.802632,
       "seasonId": 20252026
     },
     {
@@ -128,38 +178,26 @@
       "goalsAgainstPerGame": 2.85185,
       "shotsForPerGame": 29.66666,
       "shotsAgainstPerGame": 24.96296,
+      "powerPlayPct": 0.252873,
+      "penaltyKillPct": 0.816902,
       "seasonId": 20252026
     },
     {
       "team": "New Jersey Devils",
       "abbrev": "NJD",
       "wins": 16,
-      "losses": 11,
+      "losses": 12,
       "ot": 1,
       "points": 33,
-      "gamesPlayed": 28,
-      "pointPctg": 0.58928,
-      "goalDifferential": -4,
-      "goalsForPerGame": 2.89285,
-      "goalsAgainstPerGame": 3.03571,
-      "shotsForPerGame": 29.32142,
-      "shotsAgainstPerGame": 28.35714,
-      "seasonId": 20252026
-    },
-    {
-      "team": "New York Islanders",
-      "abbrev": "NYI",
-      "wins": 15,
-      "losses": 10,
-      "ot": 3,
-      "points": 33,
-      "gamesPlayed": 28,
-      "pointPctg": 0.58928,
-      "goalDifferential": 5,
-      "goalsForPerGame": 2.96428,
-      "goalsAgainstPerGame": 2.78571,
-      "shotsForPerGame": 29.71428,
-      "shotsAgainstPerGame": 27.5,
+      "gamesPlayed": 29,
+      "pointPctg": 0.56896,
+      "goalDifferential": -7,
+      "goalsForPerGame": 2.82758,
+      "goalsAgainstPerGame": 3.06896,
+      "shotsForPerGame": 29.34482,
+      "shotsAgainstPerGame": 28.10344,
+      "powerPlayPct": 0.232876,
+      "penaltyKillPct": 0.810127,
       "seasonId": 20252026
     },
     {
@@ -176,6 +214,8 @@
       "goalsAgainstPerGame": 2.6,
       "shotsForPerGame": 26.46666,
       "shotsAgainstPerGame": 28.9,
+      "powerPlayPct": 0.188405,
+      "penaltyKillPct": 0.8,
       "seasonId": 20252026
     },
     {
@@ -192,6 +232,8 @@
       "goalsAgainstPerGame": 2.84615,
       "shotsForPerGame": 25.23076,
       "shotsAgainstPerGame": 26.1923,
+      "powerPlayPct": 0.186666,
+      "penaltyKillPct": 0.821429,
       "seasonId": 20252026
     },
     {
@@ -208,22 +250,26 @@
       "goalsAgainstPerGame": 2.73076,
       "shotsForPerGame": 27.1923,
       "shotsAgainstPerGame": 28.76923,
+      "powerPlayPct": 0.34375,
+      "penaltyKillPct": 0.848102,
       "seasonId": 20252026
     },
     {
-      "team": "Boston Bruins",
-      "abbrev": "BOS",
-      "wins": 16,
-      "losses": 13,
-      "ot": 0,
+      "team": "Columbus Blue Jackets",
+      "abbrev": "CBJ",
+      "wins": 13,
+      "losses": 9,
+      "ot": 6,
       "points": 32,
-      "gamesPlayed": 29,
-      "pointPctg": 0.55172,
-      "goalDifferential": -3,
-      "goalsForPerGame": 3.10344,
-      "goalsAgainstPerGame": 3.20689,
-      "shotsForPerGame": 27.10344,
-      "shotsAgainstPerGame": 30.93103,
+      "gamesPlayed": 28,
+      "pointPctg": 0.57142,
+      "goalDifferential": -10,
+      "goalsForPerGame": 3.07142,
+      "goalsAgainstPerGame": 3.42857,
+      "shotsForPerGame": 30.42857,
+      "shotsAgainstPerGame": 31.28571,
+      "powerPlayPct": 0.191176,
+      "penaltyKillPct": 0.706667,
       "seasonId": 20252026
     },
     {
@@ -240,6 +286,8 @@
       "goalsAgainstPerGame": 2.89655,
       "shotsForPerGame": 28.65517,
       "shotsAgainstPerGame": 24.65517,
+      "powerPlayPct": 0.15,
+      "penaltyKillPct": 0.819278,
       "seasonId": 20252026
     },
     {
@@ -256,6 +304,8 @@
       "goalsAgainstPerGame": 3.53846,
       "shotsForPerGame": 24.92307,
       "shotsAgainstPerGame": 27.76923,
+      "powerPlayPct": 0.263888,
+      "penaltyKillPct": 0.77381,
       "seasonId": 20252026
     },
     {
@@ -272,22 +322,8 @@
       "goalsAgainstPerGame": 3.46428,
       "shotsForPerGame": 30.46428,
       "shotsAgainstPerGame": 26.96428,
-      "seasonId": 20252026
-    },
-    {
-      "team": "Columbus Blue Jackets",
-      "abbrev": "CBJ",
-      "wins": 13,
-      "losses": 9,
-      "ot": 5,
-      "points": 31,
-      "gamesPlayed": 27,
-      "pointPctg": 0.57407,
-      "goalDifferential": -9,
-      "goalsForPerGame": 2.96296,
-      "goalsAgainstPerGame": 3.29629,
-      "shotsForPerGame": 30.4074,
-      "shotsAgainstPerGame": 30.96296,
+      "powerPlayPct": 0.236559,
+      "penaltyKillPct": 0.776316,
       "seasonId": 20252026
     },
     {
@@ -304,6 +340,8 @@
       "goalsAgainstPerGame": 2.59259,
       "shotsForPerGame": 28.51851,
       "shotsAgainstPerGame": 26.37037,
+      "powerPlayPct": 0.129411,
+      "penaltyKillPct": 0.8,
       "seasonId": 20252026
     },
     {
@@ -320,6 +358,8 @@
       "goalsAgainstPerGame": 3.33333,
       "shotsForPerGame": 26.18518,
       "shotsAgainstPerGame": 25.55555,
+      "powerPlayPct": 0.228915,
+      "penaltyKillPct": 0.688312,
       "seasonId": 20252026
     },
     {
@@ -336,6 +376,8 @@
       "goalsAgainstPerGame": 2.81481,
       "shotsForPerGame": 25.74074,
       "shotsAgainstPerGame": 30.11111,
+      "powerPlayPct": 0.231707,
+      "penaltyKillPct": 0.852632,
       "seasonId": 20252026
     },
     {
@@ -352,6 +394,8 @@
       "goalsAgainstPerGame": 2.88888,
       "shotsForPerGame": 26.44444,
       "shotsAgainstPerGame": 29.51851,
+      "powerPlayPct": 0.215189,
+      "penaltyKillPct": 0.822223,
       "seasonId": 20252026
     },
     {
@@ -368,6 +412,8 @@
       "goalsAgainstPerGame": 3.37037,
       "shotsForPerGame": 27.22222,
       "shotsAgainstPerGame": 31.29629,
+      "powerPlayPct": 0.147058,
+      "penaltyKillPct": 0.818182,
       "seasonId": 20252026
     },
     {
@@ -384,6 +430,8 @@
       "goalsAgainstPerGame": 3.34482,
       "shotsForPerGame": 24.10344,
       "shotsAgainstPerGame": 31.44827,
+      "powerPlayPct": 0.185185,
+      "penaltyKillPct": 0.804124,
       "seasonId": 20252026
     },
     {
@@ -400,6 +448,26 @@
       "goalsAgainstPerGame": 3.5,
       "shotsForPerGame": 28.5,
       "shotsAgainstPerGame": 26.67857,
+      "powerPlayPct": 0.323943,
+      "penaltyKillPct": 0.805195,
+      "seasonId": 20252026
+    },
+    {
+      "team": "Florida Panthers",
+      "abbrev": "FLA",
+      "wins": 13,
+      "losses": 12,
+      "ot": 2,
+      "points": 28,
+      "gamesPlayed": 27,
+      "pointPctg": 0.51851,
+      "goalDifferential": -5,
+      "goalsForPerGame": 3.07407,
+      "goalsAgainstPerGame": 3.25925,
+      "shotsForPerGame": 29.44444,
+      "shotsAgainstPerGame": 26.48148,
+      "powerPlayPct": 0.191919,
+      "penaltyKillPct": 0.802198,
       "seasonId": 20252026
     },
     {
@@ -416,22 +484,8 @@
       "goalsAgainstPerGame": 2.88,
       "shotsForPerGame": 24.68,
       "shotsAgainstPerGame": 27.6,
-      "seasonId": 20252026
-    },
-    {
-      "team": "Florida Panthers",
-      "abbrev": "FLA",
-      "wins": 12,
-      "losses": 12,
-      "ot": 2,
-      "points": 26,
-      "gamesPlayed": 26,
-      "pointPctg": 0.5,
-      "goalDifferential": -6,
-      "goalsForPerGame": 2.92307,
-      "goalsAgainstPerGame": 3.15384,
-      "shotsForPerGame": 29.03846,
-      "shotsAgainstPerGame": 26.30769,
+      "powerPlayPct": 0.173333,
+      "penaltyKillPct": 0.657143,
       "seasonId": 20252026
     },
     {
@@ -448,6 +502,8 @@
       "goalsAgainstPerGame": 3.42857,
       "shotsForPerGame": 29.0,
       "shotsAgainstPerGame": 30.0,
+      "powerPlayPct": 0.180722,
+      "penaltyKillPct": 0.871795,
       "seasonId": 20252026
     },
     {
@@ -464,6 +520,8 @@
       "goalsAgainstPerGame": 3.5,
       "shotsForPerGame": 25.75,
       "shotsAgainstPerGame": 27.28571,
+      "powerPlayPct": 0.186666,
+      "penaltyKillPct": 0.757576,
       "seasonId": 20252026
     },
     {
@@ -480,6 +538,8 @@
       "goalsAgainstPerGame": 2.96551,
       "shotsForPerGame": 29.24137,
       "shotsAgainstPerGame": 28.41379,
+      "powerPlayPct": 0.138297,
+      "penaltyKillPct": 0.833334,
       "seasonId": 20252026
     },
     {
@@ -496,6 +556,8 @@
       "goalsAgainstPerGame": 3.48148,
       "shotsForPerGame": 27.85185,
       "shotsAgainstPerGame": 27.55555,
+      "powerPlayPct": 0.151162,
+      "penaltyKillPct": 0.821429,
       "seasonId": 20252026
     },
     {
@@ -512,6 +574,8 @@
       "goalsAgainstPerGame": 3.64285,
       "shotsForPerGame": 26.75,
       "shotsAgainstPerGame": 29.78571,
+      "powerPlayPct": 0.2,
+      "penaltyKillPct": 0.71579,
       "seasonId": 20252026
     }
   ]

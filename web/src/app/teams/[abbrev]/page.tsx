@@ -68,6 +68,20 @@ function getSavePctRank(abbrev: string) {
   return withPct.findIndex(t => t.abbrev === abbrev) + 1;
 }
 
+function getPowerPlayRank(abbrev: string) {
+  const sorted = [...standings]
+    .filter(t => t.powerPlayPct != null)
+    .sort((a, b) => (b.powerPlayPct ?? 0) - (a.powerPlayPct ?? 0));
+  return sorted.findIndex(t => t.abbrev === abbrev) + 1;
+}
+
+function getPenaltyKillRank(abbrev: string) {
+  const sorted = [...standings]
+    .filter(t => t.penaltyKillPct != null)
+    .sort((a, b) => (b.penaltyKillPct ?? 0) - (a.penaltyKillPct ?? 0));
+  return sorted.findIndex(t => t.abbrev === abbrev) + 1;
+}
+
 function buildStrengths(teamData: typeof powerRankings[number]) {
   const strengths: string[] = [];
   const offenseRank = getLeagueRank(teamData.abbrev, 'goalsForPerGame');
@@ -160,6 +174,8 @@ export default async function TeamPage({ params }: { params: Promise<{ abbrev: s
     pointPct: getLeagueRank(teamData.abbrev, 'pointPctg'),
     shootingPct: getShootingPctRank(teamData.abbrev),
     savePct: getSavePctRank(teamData.abbrev),
+    powerPlay: getPowerPlayRank(teamData.abbrev),
+    penaltyKill: getPenaltyKillRank(teamData.abbrev),
   };
 
   return (
@@ -397,6 +413,35 @@ export default async function TeamPage({ params }: { params: Promise<{ abbrev: s
                 <div style={{ height: '100%', width: `${((33 - ranks.savePct) / 32) * 100}%`, background: getRankColor(ranks.savePct), borderRadius: '3px' }} />
               </div>
               <p style={{ fontSize: '0.85rem', color: 'white', marginTop: '0.5rem', fontWeight: 600 }}>{savePct.toFixed(1)}%</p>
+            </div>
+          </div>
+
+          {/* Special Teams */}
+          <h3 className="text-lg font-semibold text-white mt-6 mb-3">Special Teams</h3>
+          <div className="grid gap-3 sm:grid-cols-2">
+            <div className="card" style={{ padding: '1rem' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
+                <span style={{ fontSize: '0.7rem', color: 'var(--text-tertiary)', textTransform: 'uppercase' }}>Power Play</span>
+                <span style={{ fontSize: '1.25rem', fontWeight: 700, color: getRankColor(ranks.powerPlay) }}>#{ranks.powerPlay}</span>
+              </div>
+              <div style={{ height: '6px', background: 'rgba(255,255,255,0.1)', borderRadius: '3px', overflow: 'hidden' }}>
+                <div style={{ height: '100%', width: `${((33 - ranks.powerPlay) / 32) * 100}%`, background: getRankColor(ranks.powerPlay), borderRadius: '3px' }} />
+              </div>
+              <p style={{ fontSize: '0.85rem', color: 'white', marginTop: '0.5rem', fontWeight: 600 }}>
+                {teamData.powerPlayPct != null ? `${(teamData.powerPlayPct * 100).toFixed(1)}%` : '—'}
+              </p>
+            </div>
+            <div className="card" style={{ padding: '1rem' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
+                <span style={{ fontSize: '0.7rem', color: 'var(--text-tertiary)', textTransform: 'uppercase' }}>Penalty Kill</span>
+                <span style={{ fontSize: '1.25rem', fontWeight: 700, color: getRankColor(ranks.penaltyKill) }}>#{ranks.penaltyKill}</span>
+              </div>
+              <div style={{ height: '6px', background: 'rgba(255,255,255,0.1)', borderRadius: '3px', overflow: 'hidden' }}>
+                <div style={{ height: '100%', width: `${((33 - ranks.penaltyKill) / 32) * 100}%`, background: getRankColor(ranks.penaltyKill), borderRadius: '3px' }} />
+              </div>
+              <p style={{ fontSize: '0.85rem', color: 'white', marginTop: '0.5rem', fontWeight: 600 }}>
+                {teamData.penaltyKillPct != null ? `${(teamData.penaltyKillPct * 100).toFixed(1)}%` : '—'}
+              </p>
             </div>
           </div>
         </section>

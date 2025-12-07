@@ -172,6 +172,22 @@ export default function MatchupPage({ params }: PageProps) {
         homeRaw: homePowerScore,
         higherIsBetter: true,
       },
+      {
+        label: "Power Play %",
+        away: awayStanding.powerPlayPct != null ? `${(awayStanding.powerPlayPct * 100).toFixed(1)}%` : "—",
+        home: homeStanding.powerPlayPct != null ? `${(homeStanding.powerPlayPct * 100).toFixed(1)}%` : "—",
+        awayRaw: awayStanding.powerPlayPct ?? 0,
+        homeRaw: homeStanding.powerPlayPct ?? 0,
+        higherIsBetter: true,
+      },
+      {
+        label: "Penalty Kill %",
+        away: awayStanding.penaltyKillPct != null ? `${(awayStanding.penaltyKillPct * 100).toFixed(1)}%` : "—",
+        home: homeStanding.penaltyKillPct != null ? `${(homeStanding.penaltyKillPct * 100).toFixed(1)}%` : "—",
+        awayRaw: awayStanding.penaltyKillPct ?? 0,
+        homeRaw: homeStanding.penaltyKillPct ?? 0,
+        higherIsBetter: true,
+      },
     ];
   }, [homeStanding, awayStanding, homePowerScore, awayPowerScore]);
 
