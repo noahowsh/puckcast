@@ -1,11 +1,11 @@
 # 🏒 Puckcast NHL Prediction Model - Complete Documentation
 
-> **Last Updated**: December 5, 2025 14:30 UTC
-> **Current Model**: V7.3 Situational Features
-> **Production Accuracy**: 60.49% on 2023-24 test set (1,230 games)
-> **Features**: 222 total (209 baseline + 13 situational)
-> **Branch**: `claude/general-session-01DHkFDbjDoSMauSZKsxY6vx`
-> **Status**: ✅ Production Ready - Verified metrics
+> **Last Updated**: December 7, 2025
+> **Current Model**: V7.0 (Adaptive Weights)
+> **Production Accuracy**: 60.9% on 4-season holdout (5,002 games)
+> **Features**: 39 + adaptive weights
+> **Website**: https://puckcast.ai
+> **Status**: ✅ Production Ready - Live
 
 ---
 
@@ -13,36 +13,36 @@
 
 | Metric | Value | Status |
 |--------|-------|--------|
-| **Production Model** | V7.3 | ✅ Active |
-| **Test Accuracy** | 60.49% | ✅ Verified |
-| **V7.0 Baseline** | 60.24% | ✅ Verified |
-| **Improvement** | +0.25pp | ✅ Confirmed |
-| **Model Type** | Logistic Regression + Isotonic Calibration | ✅ Production Ready |
-| **Features** | 222 (209 baseline + 13 situational) | ✅ Optimized |
+| **Production Model** | V7.0 | ✅ Active |
+| **Test Accuracy** | 60.9% | ✅ 4-season holdout |
+| **Games Tested** | 5,002 | ✅ 2021-25 seasons |
+| **Baseline** | 53.9% | Home win rate |
+| **Edge vs Baseline** | +6.9 pts | ✅ Significant |
+| **Features** | 39 + adaptive weights | ✅ Production |
 
 ---
 
 ## 🎯 Executive Summary
 
-After extensive experimentation across **7 model versions** and independent verification:
+After extensive experimentation across multiple model versions:
 
-> **V7.3 (Situational Features) at 60.49% represents the current production model with verified metrics.**
+> **V7.0 at 60.9% represents the current production model with 4-season holdout validation.**
 
-### Model Evolution
+### Model Performance
 
 ```
-V7.0  60.24%  ━━━━━━━━━━━━━━━━━━━━  Baseline (209 features)
-      +0.25pp  ↓
-V7.3  60.49%  ━━━━━━━━━━━━━━━━━━━━━  ✅ PRODUCTION MODEL
-                                      (222 features with situational)
+V7.0  60.9%   ━━━━━━━━━━━━━━━━━━━━━  ✅ PRODUCTION MODEL
+                                      (39 features + adaptive weights)
+                                      Tested on 5,002 games (2021-25)
 
-Previous experiments (relative to V7.0 baseline):
-V7.4  60.00%  ━━━━━━━━━━━━━━━━━━━   ❌ Head-to-head features
-V7.5  60.08%  ━━━━━━━━━━━━━━━━━━━   ❌ Feature interactions
-V7.6  60.73%  ━━━━━━━━━━━━━━━━━━━━  ❌ Team calibration
+Confidence Grades:
+A+   79.3%   ━━━━━━━━━━━━━━━━━━━━━━  333 games (≥25 pts edge)
+A    72.0%   ━━━━━━━━━━━━━━━━━━━━    404 games (20-25 pts edge)
+B+   67.3%   ━━━━━━━━━━━━━━━━━━      687 games (15-20 pts edge)
+B    62.0%   ━━━━━━━━━━━━━━━━        975 games (10-15 pts edge)
 ```
 
-Note: All metrics independently verified on December 5, 2025
+Note: Metrics validated on December 7, 2025
 
 ---
 
@@ -69,13 +69,13 @@ puckcast/
 ├── src/nhl_prediction/              # 🧠 Core Prediction Engine
 │   ├── pipeline.py                  # Feature engineering pipeline
 │   ├── model.py                     # Model training/prediction
-│   ├── situational_features.py      # ⭐ V7.3 situational features
+│   ├── situational_features.py      # ⭐ V7.0 situational features
 │   ├── head_to_head_features.py     # V7.4 H2H (not used)
 │   ├── interaction_features.py      # V7.5 interactions (not used)
 │   └── team_calibration_features.py # V7.6 calibration (not used)
 │
 ├── training/                        # 🎓 Training Scripts
-│   ├── train_v7_3_situational.py    # ✅ PRODUCTION TRAINING SCRIPT
+│   ├── train_v7_adaptive.py         # ✅ PRODUCTION TRAINING SCRIPT
 │   └── experiments/                 # Failed experiments
 │       ├── train_v7_4_head_to_head.py
 │       ├── train_v7_5_interactions.py
@@ -144,16 +144,17 @@ python training/fetch_historical_data.py --season 20172018 --force
 | 2019-20 | COVID-shortened (pause March 11, 2020) | ~1,082 |
 | 2020-21 | COVID-shortened 56-game season | ~868 |
 
-### 3. Train V7.3 (Production Model)
+### 3. Train V7.0 (Production Model)
 
 ```bash
-python training/train_v7_3_situational.py
+python training/train_v7_adaptive.py
 
 # Expected output:
-# Test Accuracy: 0.6049 (60.49%)
-# ROC-AUC: 0.6402
-# Log Loss: 0.6702
-# Model saved: model_v7_3_situational.pkl
+# Test Accuracy: 0.609 (60.9%)
+# ROC-AUC: 0.64
+# Log Loss: 0.6554
+# Brier Score: 0.2317
+# Model saved: model_v7_adaptive.pkl
 ```
 
 ### 4. Analyze Performance
@@ -171,60 +172,49 @@ python analysis/current/analyze_confidence_calibration.py
 
 ---
 
-## 📈 V7.3 Production Model - Detailed Performance
+## 📈 V7.0 Production Model - Detailed Performance
 
 ### Model Architecture
 
-- **Type**: Logistic Regression with Isotonic Calibration
-- **Features**: 222 total
-  - 209 V7.0 baseline features
-  - 13 V7.3 situational features
-- **Training**: 2021-22, 2022-23 seasons (2,460 games)
-- **Testing**: 2023-24 season (1,230 games)
-- **Optimization**: C=0.05, decay_factor=1.0
+- **Type**: Logistic Regression with Isotonic Calibration + Adaptive Weights
+- **Features**: 39 core features + adaptive weights
+- **Training**: Multi-season with adaptive home advantage modeling
+- **Testing**: 4-season holdout (2021-22 through 2024-25)
+- **Optimization**: Adaptive weights for evolving home advantage
 
-### Performance Metrics (Verified Dec 5, 2025)
+### Performance Metrics (Validated Dec 7, 2025)
 
 | Metric | Value | Interpretation |
 |--------|-------|----------------|
-| **Accuracy** | 60.49% | 744/1230 correct predictions |
-| **ROC-AUC** | 0.6402 | Good discrimination |
-| **Log Loss** | 0.6702 | Well-calibrated probabilities |
-| **Brier Score** | 0.2370 | Low calibration error |
+| **Accuracy** | 60.9% | 3,046/5,002 correct predictions |
+| **Brier Score** | 0.2317 | Excellent calibration |
+| **Log Loss** | 0.6554 | Well-calibrated probabilities |
+| **Baseline** | 53.9% | Home win rate |
+| **Edge** | +6.9 pts | Significant improvement |
 
-### Confidence Band Analysis
+### Confidence Grade Analysis
 
-| Confidence Level | Games | % of Total | Accuracy | Use Case |
-|-----------------|-------|------------|----------|----------|
-| **A+ (20+ pts)** | 249 | 20.2% | **71.5%** | High-stakes betting |
-| **A- (15-20 pts)** | 121 | 9.8% | **62.0%** | Strong confidence |
-| **B+ (10-15 pts)** | 94 | 7.6% | 55.3% | Moderate confidence |
-| **B- (5-10 pts)** | 123 | 10.0% | 58.5% | Low confidence |
-| **C (0-5 pts)** | 122 | 9.9% | 53.3% | Coin flips |
+| Grade | Edge | Games | Accuracy | Coverage |
+|-------|------|-------|----------|----------|
+| **A+** | ≥25 pts | 333 | **79.3%** | 6.7% |
+| **A** | 20-25 pts | 404 | **72.0%** | 8.1% |
+| **B+** | 15-20 pts | 687 | **67.3%** | 13.7% |
+| **B** | 10-15 pts | 975 | **62.0%** | 19.5% |
+| **C+** | 5-10 pts | 1,231 | 57.8% | 24.6% |
+| **C** | 0-5 pts | 1,372 | 51.9% | 27.4% |
 
 **Key Insight**:
-- Top A-tier predictions (20+ pts): **71.5% accuracy** on 249 games
-- High confidence picks show strong predictive value
+- A+ predictions (25+ pts): **79.3% accuracy** - elite tier
+- A-grade combined (20+ pts): **75%+ accuracy** on 737 games
 
-### V7.3 Situational Features (13 total)
+### V7.0 Adaptive Weights
 
-1. **fatigue_index_home/away/diff** - Weighted game count in last 7 days
-   - Captures cumulative fatigue better than simple B2B flag
+The V7.0 model introduces adaptive weighting that accounts for:
+- Evolving home ice advantage (diminishing post-COVID)
+- Season-specific calibration
+- Feature importance shifts across seasons
 
-2. **third_period_trailing_perf_home/away/diff** - Win% when behind entering 3rd period
-   - Measures comeback ability and resilience
-
-3. **travel_distance_home/away/diff** - Miles traveled since last game
-   - Great circle distance between game cities
-
-4. **travel_burden_home/away** - Combined travel impact
-
-5. **divisional_matchup** - Same division flag (0/1)
-   - Divisional games show different patterns (familiarity)
-
-6. **post_break_game_home/away/diff** - First game after 4+ days rest
-
-**Impact**: These 13 features added +0.25pp to baseline (60.24% → 60.49%)
+**Impact**: Robust 60.9% accuracy across 4 full seasons (5,002 games)
 
 ---
 
@@ -457,15 +447,15 @@ The 0.62pp gap to 62% consists of:
 
 ## 🔮 Future Directions - How to Exceed 62%
 
-### Option 1: Accept V7.3 at 60.49% ✅ RECOMMENDED
+### Option 1: Accept V7.0 at 60.9% ✅ CURRENT
 
 **Why**:
 - Well-calibrated, production-ready model
-- All feature engineering attempts made it worse
-- 0.62pp gap likely noise, not improvable signal
-- Focus on application layer (UI, betting integration, user experience)
+- 4-season holdout validation (5,002 games)
+- Adaptive weights handle evolving NHL patterns
+- Focus on application layer (UI, user experience)
 
-**Recommendation**: Use confidence bands to guide usage, focus on high-confidence predictions
+**Recommendation**: Use confidence grades to guide usage, focus on A-grade predictions
 
 ---
 
@@ -601,21 +591,21 @@ The 0.62pp gap to 62% consists of:
 
 ## 🧪 Reproducibility Guide
 
-### Reproduce V7.3 Training
+### Reproduce V7.0 Training
 
 ```bash
 cd /home/user/puckcast
-python training/train_v7_3_situational.py
+python training/train_v7_adaptive.py
 
 # Expected output:
 # ================================================================================
-# V7.3 RESULTS
+# V7.0 RESULTS
 # ================================================================================
-# Test Set Performance:
-#   Accuracy:  0.6138 (60.49%)
-#   ROC-AUC:   0.6432
-#   Log Loss:  0.6862
-# Model saved: model_v7_3_situational.pkl
+# Test Set Performance (4-season holdout):
+#   Accuracy:  0.609 (60.9%)
+#   Brier:     0.2317
+#   Log Loss:  0.6554
+# Model saved: model_v7_adaptive.pkl
 ```
 
 ### Reproduce Failed Experiments
@@ -646,35 +636,42 @@ python analysis/current/analyze_confidence_calibration.py
 
 ---
 
-## 📅 Complete Version History
+## 📅 Version History
 
-| Version | Date | Accuracy | Status | Key Changes |
-|---------|------|----------|--------|-------------|
-| V6.0 | Dec 2, 2024 | 59.92% | Superseded | Native NHL API, xG model |
-| V7.0 | Dec 2, 2024 | 60.24% | Superseded | 209 baseline features |
-| V7.1 | Dec 3, 2024 | 58.62% | ❌ Failed | Individual goalie tracking |
-| V7.2 | Dec 3, 2024 | 59.43% | ❌ Failed | LightGBM experiment |
-| **V7.3** | **Dec 3, 2024** | **60.49%** | ✅ **PRODUCTION** | **Situational features** |
-| V7.4 | Dec 4, 2024 | 60.00% | ❌ Failed | Head-to-head matchups |
-| V7.5 | Dec 4, 2024 | 60.08% | ❌ Failed | Feature interactions |
-| V7.6 | Dec 4, 2024 | 60.73% | ❌ Failed | Team-specific calibration |
-| V7.7 | Dec 4, 2024 | 62.71%* | ⚠️ Partial | Confidence filtering (*69% coverage) |
+| Version | Accuracy | Status | Key Changes |
+|---------|----------|--------|-------------|
+| **V7.0** | **60.9%** | ✅ **PRODUCTION** | **39 features + adaptive weights, 4-season holdout** |
+| V6.4 | ~59% | Superseded | Previous production model |
+| V6.x | 58-60% | Archived | Various experiments |
 
-**Conclusion**: V7.3 represents the ceiling for logistic regression with current features. To exceed 62%, need fundamentally different approach (advanced models or new data sources).
+### Development History (Internal)
+
+The V7.0 release represents the culmination of extensive experimentation:
+
+| Internal Version | Accuracy | Notes |
+|------------------|----------|-------|
+| V7.0-baseline | 60.24% | Initial 209-feature baseline |
+| V7.3-situational | 60.49% | Added situational features |
+| V7.4-h2h | 60.00% | Head-to-head experiments |
+| V7.5-interactions | 60.08% | Feature interactions |
+| V7.6-calibration | 60.73% | Team-specific calibration |
+| V8.x-adaptive | 60.9% | Adaptive weights (shipped as V7.0) |
+
+**Conclusion**: V7.0 with adaptive weights represents the best-performing model, validated across 5,002 games over 4 seasons.
 
 ---
 
 ## 🏆 Key Achievements
 
-✅ Built production-ready model at **60.49% accuracy** (best in class for logistic regression)
-✅ Comprehensive feature engineering (**216 optimized features**)
-✅ Proper train/test methodology (temporal ordering, no data leakage)
-✅ **Well-calibrated probability predictions** (Brier Score: 0.2428)
-✅ **Confidence band analysis** for user guidance (70% on high-confidence games)
-✅ Individual goalie tracking infrastructure (**future-ready for stats pages**)
-✅ **Exhaustive experimentation** (4 systematic attempts to close gap, all documented)
-✅ **Complete documentation** of all experiments, failures, and learnings
-✅ **Clear understanding of model limitations** and path forward
+✅ Built production-ready model at **60.9% accuracy** on 5,002-game holdout
+✅ Optimized feature set (**39 features + adaptive weights**)
+✅ Proper 4-season holdout validation (no data leakage)
+✅ **Well-calibrated probability predictions** (Brier Score: 0.2317)
+✅ **Confidence grade system** for user guidance (79.3% on A+ picks)
+✅ **Live website** at puckcast.ai with H2H matchup pages
+✅ **Team pages** with PP/PK stats and power rankings
+✅ **Daily predictions** sorted by edge strength
+✅ **Complete documentation** of model evolution and learnings
 
 ---
 
@@ -813,4 +810,4 @@ MIT License - See LICENSE file
 
 ---
 
-**🏒 V7.3 is production-ready at 60.49%. See [docs/current/V7.3_PRODUCTION_MODEL.md](docs/current/V7.3_PRODUCTION_MODEL.md) to get started!**
+**🏒 V7.0 is live at https://puckcast.ai with 60.9% accuracy. See [docs/INDEX.md](docs/INDEX.md) for documentation!**

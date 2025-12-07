@@ -1,7 +1,7 @@
 # 🏒 Puckcast.ai - Live Site Documentation
 
 > **Last Updated**: December 7, 2025
-> **Model Version**: V8.2 (60.9% accuracy - 4-season holdout)
+> **Model Version**: V7.0 (60.9% accuracy - 4-season holdout)
 > **Deployment**: https://puckcast.ai
 > **Status**: ✅ Production Ready
 
@@ -65,7 +65,7 @@
 **Components**:
 - Fixed navigation bar (64px height)
 - Main content area with padding
-- Footer with V8.2 version indicator
+- Footer with V7.0 version indicator
 - Background gradient effects (cyan/emerald radials)
 
 **Meta Tags**:
@@ -720,7 +720,7 @@ Each stat shows leader highlighting and proportional bar widths.
 #### 2. modelInsights.json
 - **Size**: ~22 KB
 - **Update**: Weekly (after retraining)
-- **Generator**: `training/train_v7_3_situational.py`
+- **Generator**: `training/train_v7_adaptive.py`
 - **Used on**: Overview, Predictions, Performance, Power Rankings
 
 **Key Fields**:
@@ -861,13 +861,13 @@ movement = standingsRank - powerRank
 **Overall**:
 ```typescript
 accuracy = correctPredictions / totalGames
-// V7.3: 755 / 1230 = 60.49%
+// V7.0: 3046 / 5002 = 60.9%
 ```
 
 **Edge Over Baseline**:
 ```typescript
 edge = (accuracy - baseline) * 100
-// V7.3: (0.6138 - 0.5374) * 100 = 7.64 pts
+// V7.0: (0.609 - 0.539) * 100 = 6.9 pts
 ```
 
 **Bucket Accuracy**:

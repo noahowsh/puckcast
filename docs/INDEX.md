@@ -1,7 +1,7 @@
 # 📚 Puckcast Documentation Index
 
 > **Last Updated**: December 7, 2025
-> **Production Model**: V8.2 (60.9% accuracy - 4 season holdout)
+> **Production Model**: V7.0 (60.9% accuracy - 4-season holdout)
 
 ---
 
@@ -14,7 +14,7 @@
 
 ---
 
-## 📊 Current Model: V8.2
+## 📊 Current Model: V7.0
 
 ### Key Metrics (4-Season Holdout Validation)
 | Metric | Value |
@@ -125,10 +125,18 @@ docs/
 
 | Version | Accuracy | Date | Status | Notes |
 |---------|----------|------|--------|-------|
-| V8.2 | 60.9% | Dec 2025 | ✅ PRODUCTION | Adaptive weights |
-| V8.1 | 60.8% | Dec 2025 | Superseded | Calibration fixes |
-| V8.0 | 60.5% | Dec 2025 | Superseded | 4-season training |
-| V7.x | 58-60% | Nov-Dec 2025 | Archived | Various experiments |
+| **V7.0** | **60.9%** | **Dec 2025** | ✅ **PRODUCTION** | **39 features + adaptive weights** |
+| V6.4 | ~59% | Nov 2025 | Superseded | Previous production |
+| V6.x | 58-60% | Oct-Nov 2025 | Archived | Various experiments |
+
+### Development History (Internal)
+The V7.0 release represents the culmination of extensive experimentation:
+- **V7.0-baseline**: 60.24% - Initial 209 feature baseline
+- **V7.3-situational**: 60.49% - Added situational features
+- **V7.4-h2h**: 60.00% - Head-to-head experiments
+- **V7.5-interactions**: 60.08% - Feature interactions
+- **V7.6-calibration**: 60.73% - Team-specific calibration
+- **V8.x-adaptive**: 60.9% - Adaptive weights (shipped as V7.0)
 
 ---
 

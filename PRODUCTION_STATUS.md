@@ -1,7 +1,7 @@
 # 🏒 Puckcast.ai - Production Status & Active Files
 
 > **Last Updated**: December 7, 2025
-> **Model Version**: V8.2 (Adaptive Weights)
+> **Model Version**: V7.0 (Adaptive Weights)
 > **Website**: https://puckcast.ai
 > **Status**: ✅ **PRODUCTION - LIVE**
 
@@ -11,7 +11,7 @@
 
 | Metric | Value |
 |--------|-------|
-| **Model** | V8.2 Adaptive Weights |
+| **Model** | V7.0 Adaptive Weights |
 | **Accuracy** | 60.9% (4-season holdout) |
 | **Games Tested** | 5,002 |
 | **Features** | 39 + adaptive weights |
@@ -29,9 +29,9 @@
 
 #### `prediction/predict_full.py`
 - **Status**: ✅ PRODUCTION
-- **Purpose**: Daily prediction generation with V7.3 model
-- **Updates**: December 4, 2024
-- **Features**: 220 (213 baseline + 7 situational)
+- **Purpose**: Daily prediction generation with V7.0 model
+- **Updates**: December 2025
+- **Features**: 39 + adaptive weights
 - **Output**: Generates `todaysPredictions.json` for frontend
 
 #### `prediction/predict_simple.py`
@@ -48,11 +48,11 @@
 
 ### **Model Training**
 
-#### `training/train_v7_3_situational.py`
+#### `training/train_v7_adaptive.py`
 - **Status**: ✅ PRODUCTION
-- **Last Updated**: December 4, 2024
-- **Purpose**: Training script for V7.3 model
-- **Results**: 61.38% accuracy on holdout
+- **Last Updated**: December 2025
+- **Purpose**: Training script for V7.0 model with adaptive weights
+- **Results**: 60.9% accuracy on 4-season holdout (5,002 games)
 - **Training Time**: ~5-10 minutes on local machine
 - **Output**: Trained model pickle file
 
@@ -67,16 +67,9 @@
 - **Last Updated**: December 2024
 
 #### `situational_features.py`
-- **Status**: ✅ Production - V7.3 Core
-- **Purpose**: V7.3 situational feature generation
-- **Features**: 7 situational features
-  - `fatigue_index_diff`
-  - `third_period_trailing_perf_diff`
-  - `travel_distance_diff`
-  - `divisional_matchup`
-  - `post_break_game_home`
-  - `post_break_game_away`
-  - `post_break_game_diff`
+- **Status**: ✅ Production - V7.0 Core
+- **Purpose**: V7.0 situational feature generation
+- **Features**: Part of 39-feature core set with adaptive weights
 
 #### `model.py`
 - **Status**: ✅ Production
@@ -105,7 +98,7 @@
 ### **Frontend** (`web/`)
 
 #### Data Files (`web/src/data/`)
-- `modelInsights.json` - V7.3 model statistics and confidence buckets
+- `modelInsights.json` - V7.0 model statistics and confidence buckets
 - `todaysPredictions.json` - Daily predictions (10 games on Dec 4)
 - `currentStandings.json` - NHL standings
 - `goaliePulse.json` - Goalie statistics
@@ -123,7 +116,7 @@
 - `/teams/[abbrev]` - Individual team pages (with PP/PK stats)
 
 #### Components (`web/src/components/`)
-- `SiteFooter.tsx` - Footer with V8.2 version
+- `SiteFooter.tsx` - Footer with V7.0 version
 - `TeamCrest.tsx` - Team logos
 - `PageHeader.tsx` - Page headers
 - `StatCard.tsx` - Stat display cards
@@ -201,7 +194,7 @@ All archived to: `archive/2024-12-04-pre-v7.3-cleanup/`
 - **Status**: ✅ Live
 - **Hosting**: [To be determined - Vercel/Netlify]
 - **Updates**: Manual - Copy predictions to `web/src/data/`
-- **Version**: v7.3 (shown in footer)
+- **Version**: v7.0 (shown in footer)
 
 ### Prediction Generation
 - **Status**: ✅ Manual
@@ -251,7 +244,7 @@ All archived to: `archive/2024-12-04-pre-v7.3-cleanup/`
 - Check injury updates: `python scripts/fetch_injuries.py`
 
 ### As-Needed Tasks:
-- Retrain model if new seasons available: `python training/train_v7_3_situational.py`
+- Retrain model if new seasons available: `python training/train_v7_adaptive.py`
 - Update frontend content (About page, etc.)
 - Validate prediction schemas: `python scripts/validate_predictions.py`
 
@@ -259,7 +252,7 @@ All archived to: `archive/2024-12-04-pre-v7.3-cleanup/`
 
 ## 📊 Performance Benchmarks
 
-### V8.2 Model Performance:
+### V7.0 Model Performance:
 ```
 Test Set: 4-season holdout (5,002 games)
 Overall Accuracy: 60.9%
@@ -294,4 +287,4 @@ C  (0-5 pts): 51.9% accuracy (1,372 games)
 
 **Document Version**: 2.0
 **Last Audit**: December 7, 2025
-**Next Review**: After V9 or major updates
+**Next Review**: After V8 or major updates
