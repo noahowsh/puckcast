@@ -8,7 +8,7 @@ import type { CurrentStanding } from "@/lib/current";
 import type { Prediction } from "@/types/prediction";
 import { getPredictionGrade } from "@/lib/prediction";
 import { TeamCrest } from "@/components/TeamCrest";
-import { teamGradient } from "@/lib/teamColors";
+import { teamPrimaryColor, getContrastingTeamColor } from "@/lib/teamColors";
 
 const payload = getPredictionsPayload();
 const standings = getCurrentStandings();
@@ -36,76 +36,47 @@ function formatRecord(standing: CurrentStanding & { rank: number }): string {
 
 type ComparisonStat = {
   label: string;
-  home: string | number;
   away: string | number;
-  homeRaw: number;
+  home: string | number;
   awayRaw: number;
+  homeRaw: number;
   higherIsBetter: boolean;
 };
 
-function StatBar({ stat }: { stat: ComparisonStat }) {
-  const total = stat.homeRaw + stat.awayRaw;
-  const homePct = total > 0 ? (stat.homeRaw / total) * 100 : 50;
-  const homeWins = stat.higherIsBetter ? stat.homeRaw > stat.awayRaw : stat.homeRaw < stat.awayRaw;
+function StatBar({
+  stat,
+  awayColor,
+  homeColor
+}: {
+  stat: ComparisonStat;
+  awayColor: string;
+  homeColor: string;
+}) {
+  const total = Math.abs(stat.awayRaw) + Math.abs(stat.homeRaw);
+  const awayPct = total > 0 ? (Math.abs(stat.awayRaw) / total) * 100 : 50;
   const awayWins = stat.higherIsBetter ? stat.awayRaw > stat.homeRaw : stat.awayRaw < stat.homeRaw;
+  const homeWins = stat.higherIsBetter ? stat.homeRaw > stat.awayRaw : stat.homeRaw < stat.awayRaw;
 
   return (
-    <div className="stat-comparison">
-      <div className="stat-comparison__row">
-        <span className={`stat-comparison__value ${homeWins ? "stat-comparison__value--leader" : ""}`}>
-          {stat.home}
-        </span>
-        <span className="stat-comparison__label">{stat.label}</span>
-        <span className={`stat-comparison__value ${awayWins ? "stat-comparison__value--leader" : ""}`}>
-          {stat.away}
-        </span>
+    <div className="stat-row">
+      <div className="stat-row__value" style={{ color: awayWins ? awayColor : undefined }}>
+        <span className={awayWins ? "stat-row__leader" : ""}>{stat.away}</span>
       </div>
-      <div className="stat-comparison__bar">
-        <div
-          className="stat-comparison__fill stat-comparison__fill--home"
-          style={{ width: `${homePct}%` }}
-        />
-        <div
-          className="stat-comparison__fill stat-comparison__fill--away"
-          style={{ width: `${100 - homePct}%` }}
-        />
+      <div className="stat-row__center">
+        <span className="stat-row__label">{stat.label}</span>
+        <div className="stat-row__bar">
+          <div
+            className="stat-row__fill stat-row__fill--away"
+            style={{ width: `${awayPct}%`, background: awayColor }}
+          />
+          <div
+            className="stat-row__fill stat-row__fill--home"
+            style={{ width: `${100 - awayPct}%`, background: homeColor }}
+          />
+        </div>
       </div>
-    </div>
-  );
-}
-
-function WinProbCircle({ prob, team, isModelPick }: { prob: number; team: string; isModelPick: boolean }) {
-  const circumference = 2 * Math.PI * 45;
-  const offset = circumference - prob * circumference;
-
-  return (
-    <div className="prob-circle">
-      <svg viewBox="0 0 100 100" className="prob-circle__svg">
-        <circle
-          cx="50"
-          cy="50"
-          r="45"
-          fill="none"
-          stroke="rgba(255,255,255,0.1)"
-          strokeWidth="8"
-        />
-        <circle
-          cx="50"
-          cy="50"
-          r="45"
-          fill="none"
-          stroke={isModelPick ? "var(--mint)" : "rgba(255,255,255,0.3)"}
-          strokeWidth="8"
-          strokeDasharray={circumference}
-          strokeDashoffset={offset}
-          strokeLinecap="round"
-          transform="rotate(-90 50 50)"
-          style={{ transition: "stroke-dashoffset 0.8s ease-out" }}
-        />
-      </svg>
-      <div className="prob-circle__content">
-        <span className="prob-circle__pct">{pct(prob)}</span>
-        <span className="prob-circle__team">{team}</span>
+      <div className="stat-row__value stat-row__value--right" style={{ color: homeWins ? homeColor : undefined }}>
+        <span className={homeWins ? "stat-row__leader" : ""}>{stat.home}</span>
       </div>
     </div>
   );
@@ -137,11 +108,17 @@ export default function MatchupPage({ params }: PageProps) {
   const awayStanding = getTeamStanding(game.awayTeam.abbrev);
   const grade = getPredictionGrade(game.edge);
   const favorite = game.modelFavorite === "home" ? game.homeTeam : game.awayTeam;
+  const underdog = game.modelFavorite === "home" ? game.awayTeam : game.homeTeam;
   const favoriteProb = game.modelFavorite === "home" ? game.homeWinProb : game.awayWinProb;
   const edgePts = Math.abs(game.edge * 100);
 
   const homePowerScore = homeStanding ? computeStandingsPowerScore(homeStanding) : 0;
   const awayPowerScore = awayStanding ? computeStandingsPowerScore(awayStanding) : 0;
+
+  // Get contrasting team colors for the bars
+  const teamColors = getContrastingTeamColor(game.awayTeam.abbrev, game.homeTeam.abbrev);
+  const awayColor = teamColors.team1;
+  const homeColor = teamColors.team2;
 
   const comparisonStats: ComparisonStat[] = useMemo(() => {
     if (!homeStanding || !awayStanding) return [];
@@ -149,50 +126,50 @@ export default function MatchupPage({ params }: PageProps) {
     return [
       {
         label: "Points",
-        home: homeStanding.points,
         away: awayStanding.points,
-        homeRaw: homeStanding.points,
+        home: homeStanding.points,
         awayRaw: awayStanding.points,
+        homeRaw: homeStanding.points,
         higherIsBetter: true,
       },
       {
         label: "Point %",
-        home: pct(homeStanding.pointPctg),
         away: pct(awayStanding.pointPctg),
-        homeRaw: homeStanding.pointPctg,
+        home: pct(homeStanding.pointPctg),
         awayRaw: awayStanding.pointPctg,
+        homeRaw: homeStanding.pointPctg,
         higherIsBetter: true,
       },
       {
         label: "Goal Diff",
-        home: homeStanding.goalDifferential >= 0 ? `+${homeStanding.goalDifferential}` : homeStanding.goalDifferential,
         away: awayStanding.goalDifferential >= 0 ? `+${awayStanding.goalDifferential}` : awayStanding.goalDifferential,
-        homeRaw: homeStanding.goalDifferential + 100,
+        home: homeStanding.goalDifferential >= 0 ? `+${homeStanding.goalDifferential}` : homeStanding.goalDifferential,
         awayRaw: awayStanding.goalDifferential + 100,
+        homeRaw: homeStanding.goalDifferential + 100,
         higherIsBetter: true,
       },
       {
         label: "Goals/Game",
-        home: (homeStanding.goalsForPerGame ?? 0).toFixed(2),
         away: (awayStanding.goalsForPerGame ?? 0).toFixed(2),
-        homeRaw: homeStanding.goalsForPerGame ?? 0,
+        home: (homeStanding.goalsForPerGame ?? 0).toFixed(2),
         awayRaw: awayStanding.goalsForPerGame ?? 0,
+        homeRaw: homeStanding.goalsForPerGame ?? 0,
         higherIsBetter: true,
       },
       {
-        label: "Goals Against/Game",
-        home: (homeStanding.goalsAgainstPerGame ?? 0).toFixed(2),
+        label: "Goals Against",
         away: (awayStanding.goalsAgainstPerGame ?? 0).toFixed(2),
-        homeRaw: homeStanding.goalsAgainstPerGame ?? 0,
+        home: (homeStanding.goalsAgainstPerGame ?? 0).toFixed(2),
         awayRaw: awayStanding.goalsAgainstPerGame ?? 0,
+        homeRaw: homeStanding.goalsAgainstPerGame ?? 0,
         higherIsBetter: false,
       },
       {
         label: "Power Score",
-        home: homePowerScore,
         away: awayPowerScore,
-        homeRaw: homePowerScore,
+        home: homePowerScore,
         awayRaw: awayPowerScore,
+        homeRaw: homePowerScore,
         higherIsBetter: true,
       },
     ];
@@ -200,217 +177,156 @@ export default function MatchupPage({ params }: PageProps) {
 
   const formatGameDate = (dateStr: string) => {
     const date = new Date(dateStr + "T12:00:00");
-    return new Intl.DateTimeFormat("en-US", { weekday: "long", month: "long", day: "numeric" }).format(date);
+    return new Intl.DateTimeFormat("en-US", { weekday: "short", month: "short", day: "numeric" }).format(date);
   };
 
   return (
     <div className="min-h-screen">
       <div className="container">
-        {/* Hero header with both teams */}
-        <section className="matchup-hero">
-          <div className="matchup-hero__bg">
-            <div className="matchup-hero__gradient matchup-hero__gradient--away" style={{ background: teamGradient(game.awayTeam.abbrev) }} />
-            <div className="matchup-hero__gradient matchup-hero__gradient--home" style={{ background: teamGradient(game.homeTeam.abbrev) }} />
+        {/* Back nav */}
+        <div className="matchup-nav">
+          <Link href="/predictions" className="matchup-nav__back">
+            ← Back to predictions
+          </Link>
+          <div className="matchup-nav__info">
+            <span>{formatGameDate(game.gameDate)}</span>
+            <span className="matchup-nav__dot">·</span>
+            <span>{game.startTimeEt ?? "TBD"}</span>
+            {game.venue && (
+              <>
+                <span className="matchup-nav__dot">·</span>
+                <span>{game.venue}</span>
+              </>
+            )}
+          </div>
+        </div>
+
+        {/* Main matchup header - clean side by side */}
+        <section className="matchup-header">
+          <div className="matchup-header__team">
+            <div className="matchup-header__crest" style={{ borderColor: awayColor }}>
+              <TeamCrest abbrev={game.awayTeam.abbrev} size={72} />
+            </div>
+            <div className="matchup-header__info">
+              <h1 className="matchup-header__name">{game.awayTeam.name}</h1>
+              {awayStanding && (
+                <p className="matchup-header__record">
+                  {formatRecord(awayStanding)} <span className="matchup-header__rank">#{awayStanding.rank}</span>
+                </p>
+              )}
+            </div>
           </div>
 
-          <div className="matchup-hero__content">
-            <div className="matchup-hero__meta">
-              <Link href="/predictions" className="breadcrumb">
-                ← Back to predictions
-              </Link>
-              <div className="pill-row">
-                <span className="pill">{formatGameDate(game.gameDate)}</span>
-                <span className="pill">{game.startTimeEt ?? "TBD"}</span>
-                {game.venue && <span className="pill">{game.venue}</span>}
-              </div>
+          <div className="matchup-header__center">
+            <div className="matchup-header__probs">
+              <span className="matchup-header__prob" style={{ color: awayColor }}>{pct(game.awayWinProb)}</span>
+              <span className="matchup-header__vs">vs</span>
+              <span className="matchup-header__prob" style={{ color: homeColor }}>{pct(game.homeWinProb)}</span>
             </div>
+            <div className="matchup-header__bar">
+              <div className="matchup-header__bar-fill" style={{ width: `${game.awayWinProb * 100}%`, background: awayColor }} />
+              <div className="matchup-header__bar-fill" style={{ width: `${game.homeWinProb * 100}%`, background: homeColor }} />
+            </div>
+          </div>
 
-            <div className="matchup-hero__versus">
-              <div className="matchup-hero__team matchup-hero__team--away">
-                <TeamCrest abbrev={game.awayTeam.abbrev} size={80} />
-                <div className="matchup-hero__team-info">
-                  <h2 className="matchup-hero__team-name">{game.awayTeam.name}</h2>
-                  {awayStanding && (
-                    <p className="matchup-hero__record">{formatRecord(awayStanding)} · #{awayStanding.rank} in standings</p>
-                  )}
-                </div>
-              </div>
-
-              <div className="matchup-hero__at">
-                <span>@</span>
-              </div>
-
-              <div className="matchup-hero__team matchup-hero__team--home">
-                <TeamCrest abbrev={game.homeTeam.abbrev} size={80} />
-                <div className="matchup-hero__team-info">
-                  <h2 className="matchup-hero__team-name">{game.homeTeam.name}</h2>
-                  {homeStanding && (
-                    <p className="matchup-hero__record">{formatRecord(homeStanding)} · #{homeStanding.rank} in standings</p>
-                  )}
-                </div>
-              </div>
+          <div className="matchup-header__team matchup-header__team--right">
+            <div className="matchup-header__info matchup-header__info--right">
+              <h1 className="matchup-header__name">{game.homeTeam.name}</h1>
+              {homeStanding && (
+                <p className="matchup-header__record">
+                  {formatRecord(homeStanding)} <span className="matchup-header__rank">#{homeStanding.rank}</span>
+                </p>
+              )}
+            </div>
+            <div className="matchup-header__crest" style={{ borderColor: homeColor }}>
+              <TeamCrest abbrev={game.homeTeam.abbrev} size={72} />
             </div>
           </div>
         </section>
 
-        {/* Model prediction section */}
-        <section className="nova-section">
-          <div className="matchup-grid">
-            {/* Win probabilities */}
-            <div className="bento-card matchup-probs">
-              <p className="micro-label">Win probabilities</p>
-              <div className="matchup-probs__circles">
-                <WinProbCircle
-                  prob={game.awayWinProb}
-                  team={game.awayTeam.abbrev}
-                  isModelPick={game.modelFavorite === "away"}
-                />
-                <WinProbCircle
-                  prob={game.homeWinProb}
-                  team={game.homeTeam.abbrev}
-                  isModelPick={game.modelFavorite === "home"}
-                />
+        {/* Model pick banner */}
+        <section className="matchup-pick-banner">
+          <div className="matchup-pick-banner__content">
+            <div className="matchup-pick-banner__pick">
+              <TeamCrest abbrev={favorite.abbrev} size={44} />
+              <div>
+                <p className="matchup-pick-banner__label">Model Pick</p>
+                <p className="matchup-pick-banner__team">{favorite.name}</p>
               </div>
             </div>
-
-            {/* Model pick card */}
-            <div className="bento-card matchup-pick">
-              <p className="micro-label">Model pick</p>
-              <div className="matchup-pick__content">
-                <TeamCrest abbrev={favorite.abbrev} size={50} />
-                <div>
-                  <h3 className="matchup-pick__team">{favorite.name}</h3>
-                  <p className="matchup-pick__prob">{pct(favoriteProb)} win probability</p>
-                </div>
+            <div className="matchup-pick-banner__stats">
+              <div className="matchup-pick-banner__stat">
+                <span className="matchup-pick-banner__stat-value">{grade.label}</span>
+                <span className="matchup-pick-banner__stat-label">Grade</span>
               </div>
-              <div className="matchup-pick__details">
-                <div className="matchup-pick__stat">
-                  <span className="matchup-pick__stat-value">{grade.label}</span>
-                  <span className="matchup-pick__stat-label">Grade</span>
-                </div>
-                <div className="matchup-pick__stat">
-                  <span className="matchup-pick__stat-value">{edgePts.toFixed(1)}</span>
-                  <span className="matchup-pick__stat-label">Edge pts</span>
-                </div>
-                <div className="matchup-pick__stat">
-                  <span className="matchup-pick__stat-value">{game.confidenceScore.toFixed(2)}</span>
-                  <span className="matchup-pick__stat-label">Confidence</span>
-                </div>
+              <div className="matchup-pick-banner__stat">
+                <span className="matchup-pick-banner__stat-value">{edgePts.toFixed(1)}</span>
+                <span className="matchup-pick-banner__stat-label">Edge</span>
               </div>
-              <p className="matchup-pick__summary">{game.summary}</p>
+              <div className="matchup-pick-banner__stat">
+                <span className="matchup-pick-banner__stat-value">{pct(favoriteProb)}</span>
+                <span className="matchup-pick-banner__stat-label">Win %</span>
+              </div>
             </div>
-
-            {/* Projected goalies */}
-            {game.projectedGoalies && (game.projectedGoalies.home || game.projectedGoalies.away) && (
-              <div className="bento-card matchup-goalies">
-                <p className="micro-label">Projected goalies</p>
-                <div className="matchup-goalies__grid">
-                  {game.projectedGoalies.away && (
-                    <div className="matchup-goalies__entry">
-                      <span className="matchup-goalies__team">{game.awayTeam.abbrev}</span>
-                      <span className="matchup-goalies__name">{game.projectedGoalies.away.name}</span>
-                      <span className="chip-soft">{game.projectedGoalies.away.record}</span>
-                      <span className="chip-soft">{game.projectedGoalies.away.restDays}d rest</span>
-                    </div>
-                  )}
-                  {game.projectedGoalies.home && (
-                    <div className="matchup-goalies__entry">
-                      <span className="matchup-goalies__team">{game.homeTeam.abbrev}</span>
-                      <span className="matchup-goalies__name">{game.projectedGoalies.home.name}</span>
-                      <span className="chip-soft">{game.projectedGoalies.home.record}</span>
-                      <span className="chip-soft">{game.projectedGoalies.home.restDays}d rest</span>
-                    </div>
-                  )}
-                </div>
-              </div>
-            )}
           </div>
+          <p className="matchup-pick-banner__summary">{game.summary}</p>
         </section>
 
         {/* Team comparison stats */}
         {comparisonStats.length > 0 && (
-          <section className="nova-section">
-            <div className="section-head">
-              <div>
-                <p className="eyebrow">Side by side</p>
-                <h2>Team comparison</h2>
-                <p className="lead-sm">Season stats for both teams heading into this matchup.</p>
+          <section className="matchup-comparison">
+            <div className="matchup-comparison__header">
+              <div className="matchup-comparison__team">
+                <TeamCrest abbrev={game.awayTeam.abbrev} size={32} />
+                <span style={{ color: awayColor }}>{game.awayTeam.abbrev}</span>
+              </div>
+              <h2 className="matchup-comparison__title">Team Comparison</h2>
+              <div className="matchup-comparison__team matchup-comparison__team--right">
+                <span style={{ color: homeColor }}>{game.homeTeam.abbrev}</span>
+                <TeamCrest abbrev={game.homeTeam.abbrev} size={32} />
               </div>
             </div>
-
-            <div className="bento-card matchup-stats">
-              <div className="matchup-stats__header">
-                <div className="matchup-stats__team">
-                  <TeamCrest abbrev={game.awayTeam.abbrev} />
-                  <span>{game.awayTeam.abbrev}</span>
-                </div>
-                <span className="matchup-stats__vs">vs</span>
-                <div className="matchup-stats__team">
-                  <TeamCrest abbrev={game.homeTeam.abbrev} />
-                  <span>{game.homeTeam.abbrev}</span>
-                </div>
-              </div>
-              <div className="matchup-stats__list">
-                {comparisonStats.map((stat) => (
-                  <StatBar key={stat.label} stat={stat} />
-                ))}
-              </div>
+            <div className="matchup-comparison__stats">
+              {comparisonStats.map((stat) => (
+                <StatBar
+                  key={stat.label}
+                  stat={stat}
+                  awayColor={awayColor}
+                  homeColor={homeColor}
+                />
+              ))}
             </div>
           </section>
         )}
 
-        {/* Special teams comparison */}
-        {game.specialTeams && (game.specialTeams.home || game.specialTeams.away) && (
-          <section className="nova-section">
-            <div className="section-head">
-              <div>
-                <p className="eyebrow">Special teams</p>
-                <h2>Power play & penalty kill</h2>
-              </div>
-            </div>
-
-            <div className="matchup-special-teams">
-              {game.specialTeams.away && (
-                <div className="bento-card">
-                  <div className="matchup-special__header">
-                    <TeamCrest abbrev={game.awayTeam.abbrev} />
-                    <span>{game.awayTeam.name}</span>
+        {/* Projected goalies */}
+        {game.projectedGoalies && (game.projectedGoalies.home || game.projectedGoalies.away) && (
+          <section className="matchup-goalies-section">
+            <h3 className="matchup-section-title">Projected Goalies</h3>
+            <div className="matchup-goalies-grid">
+              {game.projectedGoalies.away && (
+                <div className="matchup-goalie-card" style={{ borderColor: awayColor }}>
+                  <div className="matchup-goalie-card__header">
+                    <TeamCrest abbrev={game.awayTeam.abbrev} size={28} />
+                    <span className="matchup-goalie-card__team">{game.awayTeam.abbrev}</span>
                   </div>
-                  <div className="matchup-special__stats">
-                    {game.specialTeams.away.powerPlayPct != null && (
-                      <div className="matchup-special__stat">
-                        <span className="matchup-special__value">{pct(game.specialTeams.away.powerPlayPct)}</span>
-                        <span className="matchup-special__label">Power Play %</span>
-                      </div>
-                    )}
-                    {game.specialTeams.away.opponentPenaltyKillPct != null && (
-                      <div className="matchup-special__stat">
-                        <span className="matchup-special__value">{pct(game.specialTeams.away.opponentPenaltyKillPct)}</span>
-                        <span className="matchup-special__label">Opp PK %</span>
-                      </div>
-                    )}
+                  <p className="matchup-goalie-card__name">{game.projectedGoalies.away.name}</p>
+                  <div className="matchup-goalie-card__stats">
+                    <span>{game.projectedGoalies.away.record}</span>
+                    <span>{game.projectedGoalies.away.restDays}d rest</span>
                   </div>
                 </div>
               )}
-              {game.specialTeams.home && (
-                <div className="bento-card">
-                  <div className="matchup-special__header">
-                    <TeamCrest abbrev={game.homeTeam.abbrev} />
-                    <span>{game.homeTeam.name}</span>
+              {game.projectedGoalies.home && (
+                <div className="matchup-goalie-card" style={{ borderColor: homeColor }}>
+                  <div className="matchup-goalie-card__header">
+                    <TeamCrest abbrev={game.homeTeam.abbrev} size={28} />
+                    <span className="matchup-goalie-card__team">{game.homeTeam.abbrev}</span>
                   </div>
-                  <div className="matchup-special__stats">
-                    {game.specialTeams.home.powerPlayPct != null && (
-                      <div className="matchup-special__stat">
-                        <span className="matchup-special__value">{pct(game.specialTeams.home.powerPlayPct)}</span>
-                        <span className="matchup-special__label">Power Play %</span>
-                      </div>
-                    )}
-                    {game.specialTeams.home.opponentPenaltyKillPct != null && (
-                      <div className="matchup-special__stat">
-                        <span className="matchup-special__value">{pct(game.specialTeams.home.opponentPenaltyKillPct)}</span>
-                        <span className="matchup-special__label">Opp PK %</span>
-                      </div>
-                    )}
+                  <p className="matchup-goalie-card__name">{game.projectedGoalies.home.name}</p>
+                  <div className="matchup-goalie-card__stats">
+                    <span>{game.projectedGoalies.home.record}</span>
+                    <span>{game.projectedGoalies.home.restDays}d rest</span>
                   </div>
                 </div>
               )}
@@ -419,15 +335,15 @@ export default function MatchupPage({ params }: PageProps) {
         )}
 
         {/* Team page links */}
-        <section className="nova-section">
-          <div className="matchup-links">
-            <Link href={`/teams/${game.awayTeam.abbrev}`} className="cta cta-ghost">
-              View {game.awayTeam.name} page
-            </Link>
-            <Link href={`/teams/${game.homeTeam.abbrev}`} className="cta cta-ghost">
-              View {game.homeTeam.name} page
-            </Link>
-          </div>
+        <section className="matchup-links">
+          <Link href={`/teams/${game.awayTeam.abbrev}`} className="matchup-link" style={{ borderColor: awayColor }}>
+            <TeamCrest abbrev={game.awayTeam.abbrev} size={24} />
+            <span>View {game.awayTeam.name}</span>
+          </Link>
+          <Link href={`/teams/${game.homeTeam.abbrev}`} className="matchup-link" style={{ borderColor: homeColor }}>
+            <TeamCrest abbrev={game.homeTeam.abbrev} size={24} />
+            <span>View {game.homeTeam.name}</span>
+          </Link>
         </section>
       </div>
     </div>

@@ -96,3 +96,46 @@ export function teamLogoUrl(abbrev: string) {
   const safe = abbrev?.toUpperCase?.() ?? "";
   return `https://assets.nhle.com/logos/nhl/svg/${safe}_light.svg`;
 }
+
+export function teamPrimaryColor(abbrev: string, alpha = 1) {
+  const colors = TEAM_COLORS[abbrev?.toUpperCase?.() ?? ""];
+  if (!colors) return `rgba(126, 227, 255, ${alpha})`;
+  return hexToRgba(colors.primary, alpha);
+}
+
+export function teamSecondaryColor(abbrev: string, alpha = 1) {
+  const colors = TEAM_COLORS[abbrev?.toUpperCase?.() ?? ""];
+  if (!colors) return `rgba(110, 240, 194, ${alpha})`;
+  return hexToRgba(colors.secondary ?? colors.primary, alpha);
+}
+
+// Returns a contrasting color for teams with similar colors
+export function getContrastingTeamColor(abbrev1: string, abbrev2: string): { team1: string; team2: string } {
+  const colors1 = TEAM_COLORS[abbrev1?.toUpperCase?.() ?? ""];
+  const colors2 = TEAM_COLORS[abbrev2?.toUpperCase?.() ?? ""];
+
+  if (!colors1 || !colors2) {
+    return {
+      team1: hexToRgba(colors1?.primary ?? "#7ee3ff", 0.8),
+      team2: hexToRgba(colors2?.primary ?? "#6ef0c2", 0.8)
+    };
+  }
+
+  // Check if primary colors are too similar (within ~50 hue/luma difference)
+  const luma1 = luma(colors1.primary);
+  const luma2 = luma(colors2.primary);
+  const lumaDiff = Math.abs(luma1 - luma2);
+
+  // If colors are similar in brightness, use secondary for one team
+  if (lumaDiff < 40) {
+    return {
+      team1: hexToRgba(colors1.primary, 0.85),
+      team2: hexToRgba(colors2.secondary ?? colors2.primary, 0.85)
+    };
+  }
+
+  return {
+    team1: hexToRgba(colors1.primary, 0.85),
+    team2: hexToRgba(colors2.primary, 0.85)
+  };
+}
