@@ -2007,10 +2007,15 @@ p { line-height: 1.7; }
 }
 
 .matchup-header__crest {
-  border: 3px solid;
-  border-radius: 50%;
-  padding: 4px;
-  background: var(--panel-800);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.matchup-header__crest .crest {
+  border-radius: 50% !important;
+  border-width: 3px !important;
+  border-style: solid !important;
 }
 
 .matchup-header__info {

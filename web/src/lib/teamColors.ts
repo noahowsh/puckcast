@@ -110,32 +110,63 @@ export function teamSecondaryColor(abbrev: string, alpha = 1) {
 }
 
 // Returns a contrasting color for teams with similar colors
+// Also handles dark colors that are hard to see on dark backgrounds
 export function getContrastingTeamColor(abbrev1: string, abbrev2: string): { team1: string; team2: string } {
   const colors1 = TEAM_COLORS[abbrev1?.toUpperCase?.() ?? ""];
   const colors2 = TEAM_COLORS[abbrev2?.toUpperCase?.() ?? ""];
 
   if (!colors1 || !colors2) {
     return {
-      team1: hexToRgba(colors1?.primary ?? "#7ee3ff", 0.8),
-      team2: hexToRgba(colors2?.primary ?? "#6ef0c2", 0.8)
+      team1: hexToRgba(colors1?.primary ?? "#7ee3ff", 0.9),
+      team2: hexToRgba(colors2?.primary ?? "#6ef0c2", 0.9)
     };
   }
 
-  // Check if primary colors are too similar (within ~50 hue/luma difference)
   const luma1 = luma(colors1.primary);
   const luma2 = luma(colors2.primary);
-  const lumaDiff = Math.abs(luma1 - luma2);
 
-  // If colors are similar in brightness, use secondary for one team
-  if (lumaDiff < 40) {
-    return {
-      team1: hexToRgba(colors1.primary, 0.85),
-      team2: hexToRgba(colors2.secondary ?? colors2.primary, 0.85)
-    };
+  // Helper to get a visible color for a team
+  const getVisibleColor = (colors: { primary: string; secondary?: string }, teamLuma: number): string => {
+    // If primary is too dark (luma < 50), use secondary if it's lighter, otherwise lighten
+    if (teamLuma < 50) {
+      const secondaryLuma = colors.secondary ? luma(colors.secondary) : 0;
+      if (secondaryLuma > 80) {
+        return hexToRgba(colors.secondary!, 0.9);
+      }
+      // Lighten the primary by using a lighter alpha blend
+      return lightenColor(colors.primary, 0.6);
+    }
+    return hexToRgba(colors.primary, 0.9);
+  };
+
+  let color1 = getVisibleColor(colors1, luma1);
+  let color2 = getVisibleColor(colors2, luma2);
+
+  // Check if resulting colors are too similar
+  const lumaDiff = Math.abs(luma1 - luma2);
+  if (lumaDiff < 40 && luma1 >= 50 && luma2 >= 50) {
+    // Use secondary for team2 if available and different enough
+    const secondary2Luma = colors2.secondary ? luma(colors2.secondary) : luma2;
+    if (Math.abs(luma1 - secondary2Luma) > 40) {
+      color2 = hexToRgba(colors2.secondary ?? colors2.primary, 0.9);
+    }
   }
 
-  return {
-    team1: hexToRgba(colors1.primary, 0.85),
-    team2: hexToRgba(colors2.primary, 0.85)
-  };
+  return { team1: color1, team2: color2 };
+}
+
+// Lighten a hex color by blending with white
+function lightenColor(hex: string, amount: number): string {
+  const trimmed = hex.replace("#", "");
+  const bigint = parseInt(trimmed, 16);
+  let r = (bigint >> 16) & 255;
+  let g = (bigint >> 8) & 255;
+  let b = bigint & 255;
+
+  // Blend towards white
+  r = Math.round(r + (255 - r) * amount);
+  g = Math.round(g + (255 - g) * amount);
+  b = Math.round(b + (255 - b) * amount);
+
+  return `rgba(${r}, ${g}, ${b}, 0.9)`;
 }
