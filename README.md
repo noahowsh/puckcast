@@ -539,44 +539,50 @@ The gap to 62%+ consists of:
 
 ### 🎯 Start Here
 
-1. **[docs/current/V7_PRODUCTION_MODEL.md](docs/current/V7_PRODUCTION_MODEL.md)**
+1. **⚠️ [docs/V7_DEVELOPMENT_LESSONS.md](docs/V7_DEVELOPMENT_LESSONS.md)** - READ FIRST!
+   - What worked and what didn't in V7.0 development
+   - Why features failed (H2H, interactions, team calibration)
+   - Key principles and mistakes to avoid
+   - Don't repeat the same experiments!
+
+2. **[docs/current/V7_PRODUCTION_MODEL.md](docs/current/V7_PRODUCTION_MODEL.md)**
    - Complete production model guide
    - Features, training, deployment
    - Usage examples
 
-2. **[docs/current/CLOSING_GAP_ANALYSIS.md](docs/current/CLOSING_GAP_ANALYSIS.md)**
+3. **[docs/current/CLOSING_GAP_ANALYSIS.md](docs/current/CLOSING_GAP_ANALYSIS.md)**
    - Comprehensive analysis of model ceiling
    - Development test results
    - Technical deep dive into model limitations
 
-3. **[docs/current/PROJECT_STATUS.md](docs/current/PROJECT_STATUS.md)**
+4. **[docs/current/PROJECT_STATUS.md](docs/current/PROJECT_STATUS.md)**
    - Current state of project
    - Recommendations for next steps
    - Decision framework
 
 ### 🧪 V7.0 Development Tests
 
-4. **[docs/experiments/TEST_HEAD_TO_HEAD.md](docs/experiments/TEST_HEAD_TO_HEAD.md)**
+5. **[docs/experiments/TEST_HEAD_TO_HEAD.md](docs/experiments/TEST_HEAD_TO_HEAD.md)**
    - Head-to-head matchup features test
    - Data leakage bug discovered and fixed
    - Multicollinearity analysis
 
-5. **[docs/experiments/TEST_INTERACTIONS.md](docs/experiments/TEST_INTERACTIONS.md)**
+6. **[docs/experiments/TEST_INTERACTIONS.md](docs/experiments/TEST_INTERACTIONS.md)**
    - Feature interaction terms test
    - Overfitting analysis
    - Why more features ≠ better model
 
-6. **[docs/experiments/TEST_TEAM_CALIBRATION.md](docs/experiments/TEST_TEAM_CALIBRATION.md)**
+7. **[docs/experiments/TEST_TEAM_CALIBRATION.md](docs/experiments/TEST_TEAM_CALIBRATION.md)**
    - Team-specific bias adjustments test
    - Weak signal analysis
    - Sample size limitations
 
-7. **[docs/experiments/TEST_CONFIDENCE_FILTERING.md](docs/experiments/TEST_CONFIDENCE_FILTERING.md)**
+8. **[docs/experiments/TEST_CONFIDENCE_FILTERING.md](docs/experiments/TEST_CONFIDENCE_FILTERING.md)**
    - Calibration analysis test
    - Coverage vs accuracy tradeoffs
    - Optimal threshold search
 
-8. **[docs/experiments/TEST_GOALIE_TRACKING.md](docs/experiments/TEST_GOALIE_TRACKING.md)**
+9. **[docs/experiments/TEST_GOALIE_TRACKING.md](docs/experiments/TEST_GOALIE_TRACKING.md)**
    - Individual goalie tracking infrastructure
    - Why it underperformed team-level
    - Data quality fixes applied
@@ -584,8 +590,8 @@ The gap to 62%+ consists of:
 
 ### 📖 Additional Resources
 
-9. **[docs/INDEX.md](docs/INDEX.md)** - Complete documentation navigation
-10. **[error_analysis.csv](error_analysis.csv)** - Detailed error breakdown
+10. **[docs/INDEX.md](docs/INDEX.md)** - Complete documentation navigation
+11. **[error_analysis.csv](error_analysis.csv)** - Detailed error breakdown
 
 ---
 

@@ -9,8 +9,9 @@
 
 **New to the project?** Start here:
 1. **[../README.md](../README.md)** - Project overview and quick start
-2. **[vFutures.md](vFutures.md)** - Roadmap and future features
-3. **[MODEL_COMPARISON_V7.md](MODEL_COMPARISON_V7.md)** - Model evolution history
+2. **[V7_DEVELOPMENT_LESSONS.md](V7_DEVELOPMENT_LESSONS.md)** - ⚠️ What worked & what didn't (read before experimenting!)
+3. **[vFutures.md](vFutures.md)** - Roadmap and future features
+4. **[MODEL_COMPARISON_V7.md](MODEL_COMPARISON_V7.md)** - Model evolution history
 
 ---
 
