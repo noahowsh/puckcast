@@ -1,0 +1,32 @@
+<svg width="800" height="240" viewBox="0 0 800 240" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    .box { fill:#0f1f2f; stroke:#4ec0f0; stroke-width:2; rx:12; ry:12; }
+    .text { fill:#e6f4ff; font-family:'Helvetica Neue', Arial, sans-serif; font-size:16px; font-weight:700; }
+    .label { fill:#b8d4f5; font-family:'Helvetica Neue', Arial, sans-serif; font-size:13px; }
+    .arrow { stroke:#4ec0f0; stroke-width:2; marker-end:url(#arrowhead); }
+  </style>
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#4ec0f0" />
+    </marker>
+  </defs>
+  <rect class="box" x="40" y="60" width="160" height="120" />
+  <text class="text" x="120" y="105" text-anchor="middle">API ingest</text>
+  <text class="label" x="120" y="130" text-anchor="middle">Schedule, results, plays</text>
+
+  <rect class="box" x="230" y="60" width="160" height="120" />
+  <text class="text" x="310" y="105" text-anchor="middle">Processing</text>
+  <text class="label" x="310" y="130" text-anchor="middle">xG model, validation</text>
+
+  <rect class="box" x="420" y="60" width="140" height="120" />
+  <text class="text" x="490" y="105" text-anchor="middle">Model</text>
+  <text class="label" x="490" y="130" text-anchor="middle">Calibrated logreg</text>
+
+  <rect class="box" x="600" y="60" width="140" height="120" />
+  <text class="text" x="670" y="105" text-anchor="middle">Predictions</text>
+  <text class="label" x="670" y="130" text-anchor="middle">JSON / site / posts</text>
+
+  <line class="arrow" x1="200" y1="120" x2="230" y2="120" />
+  <line class="arrow" x1="390" y1="120" x2="420" y2="120" />
+  <line class="arrow" x1="560" y1="120" x2="600" y2="120" />
+</svg>
