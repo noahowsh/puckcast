@@ -18,8 +18,6 @@ const teamModelAccuracy = new Map<string, number>(
 export const dynamic = "force-dynamic";
 export const revalidate = 604800; // 7 days in seconds
 
-// Get movement reasons from snapshot
-const movementReasons = powerIndexSnapshot.movementReasons as Record<string, string>;
 const weekOf = powerIndexSnapshot.weekOf;
 
 const rankedRows: LeaderboardRow[] = standings
@@ -40,7 +38,6 @@ const rankedRows: LeaderboardRow[] = standings
       pointPctg: standing.pointPctg,
       powerScore: power,
       overlay: { avgProb: overlayAvg },
-      movementReason: movementReasons[standing.abbrev] ?? undefined,
     };
   })
   .sort((a, b) => b.powerScore - a.powerScore)
@@ -177,30 +174,24 @@ export default async function LeaderboardsPage() {
               {/* Movers Section */}
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
                 {biggestMover && (
-                  <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem', padding: '0.75rem', background: 'rgba(110, 240, 194, 0.1)', borderRadius: '0.5rem', border: '1px solid rgba(110, 240, 194, 0.2)' }}>
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" style={{ color: 'var(--mint)', flexShrink: 0, marginTop: '2px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.75rem', background: 'rgba(110, 240, 194, 0.1)', borderRadius: '0.5rem', border: '1px solid rgba(110, 240, 194, 0.2)' }}>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" style={{ color: 'var(--mint)', flexShrink: 0 }}>
                       <path d="M12 19V5M5 12l7-7 7 7" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
                     </svg>
                     <div>
                       <p style={{ fontSize: '0.7rem', textTransform: 'uppercase', color: 'var(--text-tertiary)', fontWeight: 600 }}>Rising</p>
                       <p style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--mint)' }}>{biggestMover.abbrev} +{biggestMover.movement}</p>
-                      {biggestMover.movementReason && (
-                        <p style={{ fontSize: '0.65rem', color: 'var(--text-tertiary)', marginTop: '0.25rem', lineHeight: 1.3 }}>{biggestMover.movementReason}</p>
-                      )}
                     </div>
                   </div>
                 )}
                 {biggestSlider && (
-                  <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem', padding: '0.75rem', background: 'rgba(255, 148, 168, 0.1)', borderRadius: '0.5rem', border: '1px solid rgba(255, 148, 168, 0.2)' }}>
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" style={{ color: 'var(--rose)', flexShrink: 0, marginTop: '2px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.75rem', background: 'rgba(255, 148, 168, 0.1)', borderRadius: '0.5rem', border: '1px solid rgba(255, 148, 168, 0.2)' }}>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" style={{ color: 'var(--rose)', flexShrink: 0 }}>
                       <path d="M12 5v14M5 12l7 7 7-7" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
                     </svg>
                     <div>
                       <p style={{ fontSize: '0.7rem', textTransform: 'uppercase', color: 'var(--text-tertiary)', fontWeight: 600 }}>Falling</p>
                       <p style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--rose)' }}>{biggestSlider.abbrev} {biggestSlider.movement}</p>
-                      {biggestSlider.movementReason && (
-                        <p style={{ fontSize: '0.65rem', color: 'var(--text-tertiary)', marginTop: '0.25rem', lineHeight: 1.3 }}>{biggestSlider.movementReason}</p>
-                      )}
                     </div>
                   </div>
                 )}

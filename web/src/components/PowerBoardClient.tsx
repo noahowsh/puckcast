@@ -16,7 +16,6 @@ export type LeaderboardRow = {
   pointPctg: number;
   powerScore: number;
   overlay?: { avgProb: number };
-  movementReason?: string;
 };
 
 function formatPct(value: number) {
@@ -80,11 +79,6 @@ export function PowerBoardClient({ rows, initialNextGames }: { rows: Leaderboard
           <div>
             <p className="power-name">{row.team}</p>
             <p className="micro-label">Standings #{row.standingsRank}</p>
-            {row.movementReason && (
-              <p style={{ fontSize: '0.7rem', color: 'var(--text-tertiary)', marginTop: '0.15rem', fontStyle: 'italic' }}>
-                {row.movementReason}
-              </p>
-            )}
           </div>
         </div>
         <span className={`movement movement--pillless ${movementTone}`}>{movementDisplay}</span>
