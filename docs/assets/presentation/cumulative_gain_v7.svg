@@ -1,0 +1,9 @@
+<svg width="520" height="300" viewBox="0 0 520 300" xmlns="http://www.w3.org/2000/svg">
+  <style>.bg{fill:#0f1f2f;stroke:#4ec0f0;stroke-width:2;rx:14;ry:14;}.title{fill:#e6f4ff;font-family:'Helvetica Neue',Arial,sans-serif;font-size:16px;font-weight:700;}.axis{stroke:#b8d4f5;stroke-width:1;}.line{stroke:#8de0a3;stroke-width:3;fill:none;}.label{fill:#b8d4f5;font-family:'Helvetica Neue',Arial,sans-serif;font-size:13px;}</style>
+  <rect class="bg" x="20" y="20" width="480" height="260" />
+  <text class="title" x="260" y="55" text-anchor="middle">Cumulative Gain (units)</text>
+  <line class="axis" x1="80" y1="230" x2="440" y2="230" />
+  <line class="axis" x1="80" y1="110" x2="80" y2="230" />
+  <path class="line" d="M80 220 L140 200 L200 185 L260 170 L320 150 L380 130 L440 110" />
+  <text class="label" x="440" y="105" text-anchor="end">Upward trend (multi-season)</text>
+</svg>

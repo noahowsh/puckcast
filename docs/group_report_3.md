@@ -127,6 +127,11 @@ Below are additional visuals you can select for the final deck/export (wide vari
 - Rest/B2B impact: ![Rest](assets/presentation/rest_impact_v7.svg)  
 - Special teams edge: ![Special teams](assets/presentation/special_teams_v7.svg)  
 - Travel/fatigue: ![Travel](assets/presentation/travel_fatigue_v7.svg)  
+- ROC curve: ![ROC](assets/presentation/roc_curve_v7.svg)  
+- Coverage by edge band: ![Coverage](assets/presentation/edge_coverage_v7.svg)  
+- Bucket counts: ![Buckets](assets/presentation/bucket_counts_v7.svg)  
+- Performance cards (summary): ![Cards](assets/presentation/performance_cards_v7.svg)  
+- Cumulative gain: ![Gain](assets/presentation/cumulative_gain_v7.svg)  
 
 ## Appendix — Visuals Sampler (v7.0-ready)
 Below are additional visuals you can select for the final deck/export.
