@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2025-12-07T13:17:57.642231+00:00",
+  "updatedAt": "2025-12-07T23:11:18.784015+00:00",
   "notes": "Goalie performance metrics calculated from NHL Stats API data. GSAx estimates based on save percentage above league average.",
   "goalies": [
     {
@@ -150,9 +150,9 @@
       "name": "Mackenzie Blackwood",
       "team": "COL",
       "rollingGsa": 1.5,
-      "seasonGsa": 4.5,
-      "restDays": 3,
-      "startLikelihood": 0.85,
+      "seasonGsa": 5.0,
+      "restDays": 2,
+      "startLikelihood": 0.95,
       "trend": "surging",
       "note": "Mackenzie Blackwood is playing at an elite level with a 0.920 save percentage, providing COL with a strong defensive anchor.",
       "strengths": [
