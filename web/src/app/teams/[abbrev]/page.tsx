@@ -428,90 +428,182 @@ export default async function TeamPage({ params }: { params: Promise<{ abbrev: s
           </div>
         </section>
 
-        {/* Season Pace Line Chart */}
-        <section className="nova-section">
-          <h2 className="text-xl font-bold text-white mb-3">Season Pace</h2>
-          <div className="card" style={{ padding: '1.5rem' }}>
-            {(() => {
-              // Calculate points above/below .500 pace
-              const gp = teamData.gamesPlayed;
-              const pts = teamData.points;
-              const paceDiff = pts - gp; // .500 = 1 pt per game
-              const chartHeight = 120;
-              const chartWidth = 400;
+        {/* Division Pace Comparison Chart */}
+        {teamDivision && (
+          <section className="nova-section">
+            <h2 className="text-xl font-bold text-white mb-3">{teamDivision.name} Division Pace</h2>
+            <div className="card" style={{ padding: '1.5rem' }}>
+              {(() => {
+                // Team color mapping for lines
+                const teamColors: Record<string, string> = {
+                  BOS: '#FFB81C', BUF: '#003087', DET: '#CE1126', FLA: '#C8102E',
+                  MTL: '#AF1E2D', OTT: '#C52032', TBL: '#002868', TOR: '#00205B',
+                  CAR: '#CE1126', CBJ: '#002654', NJD: '#CE1126', NYI: '#00539B',
+                  NYR: '#0038A8', PHI: '#F74902', PIT: '#FCB514', WSH: '#C8102E',
+                  CHI: '#CF0A2C', COL: '#6F263D', DAL: '#006847', MIN: '#154734',
+                  NSH: '#FFB81C', STL: '#002F87', UTA: '#69B3E7', WPG: '#041E42',
+                  ANA: '#F47A38', CGY: '#D2001C', EDM: '#041E42', LAK: '#A2AAAD',
+                  SEA: '#99D9D9', SJS: '#006D75', VAN: '#00205B', VGK: '#B4975A',
+                };
 
-              // Scale: X = games (0 to 82), Y = points diff from .500 (-30 to +30)
-              const maxDiff = 30;
-              const teamX = (gp / 82) * chartWidth;
-              const teamY = chartHeight / 2 - (paceDiff / maxDiff) * (chartHeight / 2);
+                // Get division teams with pace data
+                const divTeams = divisionStandings.map(t => ({
+                  ...t,
+                  paceDiff: t.points - t.gamesPlayed,
+                  color: teamColors[t.abbrev] || '#888',
+                })).sort((a, b) => b.paceDiff - a.paceDiff);
 
-              return (
-                <div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '2rem' }}>
-                    {/* Line Chart */}
-                    <div style={{ flex: 1, position: 'relative' }}>
-                      <svg width="100%" height={chartHeight} viewBox={`0 0 ${chartWidth} ${chartHeight}`} preserveAspectRatio="none">
-                        {/* Grid lines */}
-                        <line x1="0" y1={chartHeight/2} x2={chartWidth} y2={chartHeight/2} stroke="rgba(255,255,255,0.2)" strokeWidth="1" strokeDasharray="4,4" />
-                        <line x1="0" y1={chartHeight/4} x2={chartWidth} y2={chartHeight/4} stroke="rgba(255,255,255,0.05)" strokeWidth="1" />
-                        <line x1="0" y1={chartHeight*3/4} x2={chartWidth} y2={chartHeight*3/4} stroke="rgba(255,255,255,0.05)" strokeWidth="1" />
+                // Chart dimensions
+                const chartWidth = 600;
+                const chartHeight = 280;
+                const padding = { top: 20, right: 80, bottom: 40, left: 50 };
+                const plotWidth = chartWidth - padding.left - padding.right;
+                const plotHeight = chartHeight - padding.top - padding.bottom;
 
-                        {/* Team pace line from origin to current */}
-                        <line
-                          x1="0"
-                          y1={chartHeight/2}
-                          x2={teamX}
-                          y2={teamY}
-                          stroke={paceDiff >= 0 ? '#10b981' : '#ef4444'}
-                          strokeWidth="3"
-                          strokeLinecap="round"
-                        />
+                // Find max games played and pace range
+                const maxGames = Math.max(...divTeams.map(t => t.gamesPlayed), 30);
+                const maxPace = Math.max(Math.abs(Math.max(...divTeams.map(t => t.paceDiff))), Math.abs(Math.min(...divTeams.map(t => t.paceDiff))), 5);
+                const yRange = Math.ceil(maxPace / 5) * 5 + 5;
 
-                        {/* Dot at current position */}
-                        <circle cx={teamX} cy={teamY} r="6" fill={paceDiff >= 0 ? '#10b981' : '#ef4444'} />
-                      </svg>
+                // Scale functions
+                const xScale = (games: number) => padding.left + (games / maxGames) * plotWidth;
+                const yScale = (pace: number) => padding.top + plotHeight / 2 - (pace / yRange) * (plotHeight / 2);
 
-                      {/* Team logo at end of line */}
-                      <div style={{
-                        position: 'absolute',
-                        left: `${(gp / 82) * 100}%`,
-                        top: `${(teamY / chartHeight) * 100}%`,
-                        transform: 'translate(-50%, -50%)',
-                      }}>
-                        <TeamCrest abbrev={teamData.abbrev} size={36} />
-                      </div>
+                return (
+                  <div style={{ overflowX: 'auto' }}>
+                    <svg width={chartWidth} height={chartHeight} style={{ display: 'block', margin: '0 auto' }}>
+                      {/* Background */}
+                      <rect x={padding.left} y={padding.top} width={plotWidth} height={plotHeight} fill="rgba(255,255,255,0.02)" />
 
-                      {/* Labels */}
-                      <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '0.5rem' }}>
-                        <span style={{ fontSize: '0.65rem', color: 'var(--text-tertiary)' }}>Game 1</span>
-                        <span style={{ fontSize: '0.65rem', color: 'var(--text-tertiary)' }}>.500 pace</span>
-                        <span style={{ fontSize: '0.65rem', color: 'var(--text-tertiary)' }}>Game 82</span>
-                      </div>
+                      {/* Grid lines - horizontal */}
+                      {Array.from({ length: Math.floor(yRange / 5) * 2 + 1 }, (_, i) => {
+                        const value = yRange - i * 5;
+                        const y = yScale(value);
+                        return (
+                          <g key={`h-${i}`}>
+                            <line x1={padding.left} y1={y} x2={padding.left + plotWidth} y2={y}
+                              stroke={value === 0 ? 'rgba(255,255,255,0.3)' : 'rgba(255,255,255,0.08)'}
+                              strokeWidth={value === 0 ? 1.5 : 1} />
+                            <text x={padding.left - 8} y={y} textAnchor="end" dominantBaseline="middle"
+                              style={{ fontSize: '11px', fill: 'rgba(255,255,255,0.5)' }}>
+                              {value > 0 ? `+${value}` : value}
+                            </text>
+                          </g>
+                        );
+                      })}
+
+                      {/* Grid lines - vertical */}
+                      {Array.from({ length: Math.ceil(maxGames / 10) + 1 }, (_, i) => {
+                        const games = i * 10;
+                        if (games > maxGames) return null;
+                        const x = xScale(games);
+                        return (
+                          <g key={`v-${i}`}>
+                            <line x1={x} y1={padding.top} x2={x} y2={padding.top + plotHeight}
+                              stroke="rgba(255,255,255,0.08)" strokeWidth={1} />
+                            <text x={x} y={chartHeight - 10} textAnchor="middle"
+                              style={{ fontSize: '11px', fill: 'rgba(255,255,255,0.5)' }}>
+                              {games}
+                            </text>
+                          </g>
+                        );
+                      })}
+
+                      {/* Axis labels */}
+                      <text x={chartWidth / 2} y={chartHeight - 2} textAnchor="middle"
+                        style={{ fontSize: '12px', fill: 'rgba(255,255,255,0.6)' }}>
+                        Games Played
+                      </text>
+                      <text x={12} y={chartHeight / 2} textAnchor="middle" transform={`rotate(-90, 12, ${chartHeight / 2})`}
+                        style={{ fontSize: '12px', fill: 'rgba(255,255,255,0.6)' }}>
+                        Points Above .500 Pace
+                      </text>
+
+                      {/* Team lines */}
+                      {divTeams.map((team) => {
+                        const isCurrent = team.abbrev === teamData.abbrev;
+                        const x2 = xScale(team.gamesPlayed);
+                        const y2 = yScale(team.paceDiff);
+                        return (
+                          <line
+                            key={team.abbrev}
+                            x1={xScale(0)}
+                            y1={yScale(0)}
+                            x2={x2}
+                            y2={y2}
+                            stroke={team.color}
+                            strokeWidth={isCurrent ? 3 : 2}
+                            strokeOpacity={isCurrent ? 1 : 0.7}
+                            strokeLinecap="round"
+                          />
+                        );
+                      })}
+
+                      {/* Dots at endpoints */}
+                      {divTeams.map((team) => {
+                        const isCurrent = team.abbrev === teamData.abbrev;
+                        return (
+                          <circle
+                            key={`dot-${team.abbrev}`}
+                            cx={xScale(team.gamesPlayed)}
+                            cy={yScale(team.paceDiff)}
+                            r={isCurrent ? 5 : 4}
+                            fill={team.color}
+                          />
+                        );
+                      })}
+                    </svg>
+
+                    {/* Team logos positioned to the right */}
+                    <div style={{ position: 'relative', width: chartWidth, height: 0, margin: '0 auto' }}>
+                      {divTeams.map((team, idx) => {
+                        const isCurrent = team.abbrev === teamData.abbrev;
+                        const yPos = yScale(team.paceDiff) - chartHeight;
+                        return (
+                          <div
+                            key={`logo-${team.abbrev}`}
+                            style={{
+                              position: 'absolute',
+                              left: xScale(team.gamesPlayed) + 8,
+                              top: yPos - 14,
+                              display: 'flex',
+                              alignItems: 'center',
+                              gap: '4px',
+                              opacity: isCurrent ? 1 : 0.85,
+                              zIndex: isCurrent ? 10 : 1,
+                            }}
+                          >
+                            <TeamCrest abbrev={team.abbrev} size={28} />
+                          </div>
+                        );
+                      })}
                     </div>
 
-                    {/* Stats */}
-                    <div style={{ width: '140px', textAlign: 'center' }}>
-                      <p style={{
-                        fontSize: '3rem',
-                        fontWeight: 800,
-                        color: paceDiff >= 0 ? '#10b981' : '#ef4444',
-                        lineHeight: 1,
-                      }}>
-                        {paceDiff >= 0 ? '+' : ''}{paceDiff}
-                      </p>
-                      <p style={{ fontSize: '0.7rem', color: 'var(--text-tertiary)', marginTop: '0.5rem', textTransform: 'uppercase' }}>
-                        Points vs .500
-                      </p>
-                      <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', marginTop: '0.25rem' }}>
-                        {pts} pts in {gp} games
-                      </p>
+                    {/* Legend below chart */}
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.75rem', justifyContent: 'center', marginTop: '1rem', paddingTop: '0.75rem', borderTop: '1px solid rgba(255,255,255,0.1)' }}>
+                      {divTeams.map((team) => {
+                        const isCurrent = team.abbrev === teamData.abbrev;
+                        return (
+                          <div key={`leg-${team.abbrev}`} style={{
+                            display: 'flex', alignItems: 'center', gap: '0.4rem',
+                            padding: '0.25rem 0.5rem', borderRadius: '6px',
+                            background: isCurrent ? 'rgba(255,255,255,0.1)' : 'transparent',
+                          }}>
+                            <div style={{ width: 16, height: 3, background: team.color, borderRadius: 2 }} />
+                            <TeamCrest abbrev={team.abbrev} size={18} />
+                            <span style={{ fontSize: '0.75rem', color: isCurrent ? 'white' : 'var(--text-secondary)', fontWeight: isCurrent ? 600 : 400 }}>
+                              {team.paceDiff >= 0 ? '+' : ''}{team.paceDiff}
+                            </span>
+                          </div>
+                        );
+                      })}
                     </div>
                   </div>
-                </div>
-              );
-            })()}
-          </div>
-        </section>
+                );
+              })()}
+            </div>
+          </section>
+        )}
 
         {/* Power Index Spectrum */}
         <section className="nova-section">

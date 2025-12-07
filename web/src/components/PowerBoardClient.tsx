@@ -19,7 +19,7 @@ export type LeaderboardRow = {
 };
 
 function formatPct(value: number) {
-  return `${(value * 100).toFixed(1)}%`;
+  return `${(value * 100).toFixed(0)}%`;
 }
 
 const nameFallback: Record<string, string> = {};
@@ -63,7 +63,6 @@ export function PowerBoardClient({ rows, initialNextGames }: { rows: Leaderboard
   const renderRow = (row: LeaderboardRow) => {
     const movementDisplay = row.movement === 0 ? "Even" : row.movement > 0 ? `+${row.movement}` : row.movement;
     const movementTone = row.movement > 0 ? "movement--positive" : row.movement < 0 ? "movement--negative" : "movement--neutral";
-    const overlayProb = row.overlay && row.overlay.avgProb ? formatPct(row.overlay.avgProb) : "—";
     const next = nextGames[row.abbrev];
     const nextDate = formatDate(next?.date);
     const nextTime = formatTimeEt(next?.startTimeEt);
@@ -88,7 +87,6 @@ export function PowerBoardClient({ rows, initialNextGames }: { rows: Leaderboard
           {row.goalDifferential >= 0 ? "+" : ""}
           {row.goalDifferential}
         </span>
-        <span className="power-data">{overlayProb}</span>
         <span className="power-data">{nextDisplay}</span>
       </div>
     );
@@ -103,7 +101,6 @@ export function PowerBoardClient({ rows, initialNextGames }: { rows: Leaderboard
         <span>Record</span>
         <span>Point %</span>
         <span>Goal Diff</span>
-        <span>Strength</span>
         <span>Next</span>
       </div>
       {rows.map(renderRow)}
