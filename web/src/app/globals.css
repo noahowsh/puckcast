@@ -750,6 +750,13 @@ p { line-height: 1.7; }
   display: grid;
   gap: 0.7rem;
   margin-top: 1.2rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border-subtle);
+}
+
+/* Ensure CTA buttons show inside drawer on mobile */
+.nav-drawer__cta .nav-cta--ghost {
+  display: inline-flex;
 }
 
 /* Utility to push first section below fixed nav */
