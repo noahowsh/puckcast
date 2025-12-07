@@ -1,11 +1,8 @@
 import { notFound } from "next/navigation";
 import { computeStandingsPowerScore, getCurrentStandings, getCurrentPredictions } from "@/lib/current";
 import { TeamCrest } from "@/components/TeamCrest";
-import goaliePulseRaw from "@/data/goaliePulse.json";
 import powerIndexSnapshot from "@/data/powerIndexSnapshot.json";
-import type { GoaliePulse } from "@/types/goalie";
 
-const goaliePulse = goaliePulseRaw as GoaliePulse;
 const movementReasons = powerIndexSnapshot.movementReasons as Record<string, string>;
 const standings = getCurrentStandings();
 const predictions = getCurrentPredictions();
@@ -31,22 +28,11 @@ const divisions: Record<string, { name: string; conference: string; teams: strin
 };
 
 function getTeamDivision(abbrev: string) {
-  for (const [key, div] of Object.entries(divisions)) {
-    if (div.teams.includes(abbrev)) {
-      return { key, ...div };
-    }
+  for (const [, div] of Object.entries(divisions)) {
+    if (div.teams.includes(abbrev)) return div;
   }
   return null;
 }
-
-// Get league-wide stats for comparison
-const leagueStats = {
-  maxGoalsFor: Math.max(...standings.map(t => t.goalsForPerGame ?? 0)),
-  minGoalsFor: Math.min(...standings.map(t => t.goalsForPerGame ?? 0)),
-  avgGoalsFor: standings.reduce((sum, t) => sum + (t.goalsForPerGame ?? 0), 0) / standings.length,
-  avgGoalsAgainst: standings.reduce((sum, t) => sum + (t.goalsAgainstPerGame ?? 0), 0) / standings.length,
-  maxPointPctg: Math.max(...standings.map(t => t.pointPctg ?? 0)),
-};
 
 function getRankColor(rank: number, total: number = 32) {
   const pct = rank / total;
@@ -65,6 +51,23 @@ function getLeagueRank(abbrev: string, stat: 'goalsForPerGame' | 'goalsAgainstPe
   return sorted.findIndex(t => t.abbrev === abbrev) + 1;
 }
 
+// Calculate efficiency ranks
+function getShootingPctRank(abbrev: string) {
+  const withPct = standings.map(t => ({
+    abbrev: t.abbrev,
+    pct: t.goalsForPerGame && t.shotsForPerGame ? t.goalsForPerGame / t.shotsForPerGame : 0
+  })).sort((a, b) => b.pct - a.pct);
+  return withPct.findIndex(t => t.abbrev === abbrev) + 1;
+}
+
+function getSavePctRank(abbrev: string) {
+  const withPct = standings.map(t => ({
+    abbrev: t.abbrev,
+    pct: t.goalsAgainstPerGame && t.shotsAgainstPerGame ? 1 - t.goalsAgainstPerGame / t.shotsAgainstPerGame : 0
+  })).sort((a, b) => b.pct - a.pct);
+  return withPct.findIndex(t => t.abbrev === abbrev) + 1;
+}
+
 function buildStrengths(teamData: typeof powerRankings[number]) {
   const strengths: string[] = [];
   const offenseRank = getLeagueRank(teamData.abbrev, 'goalsForPerGame');
@@ -78,7 +81,6 @@ function buildStrengths(teamData: typeof powerRankings[number]) {
   else if (defenseRank <= 10) strengths.push(`Solid defense - #${defenseRank} in GA/game`);
 
   if (shotsForRank <= 5) strengths.push(`Shot generation machine - #${shotsForRank} in shots/game`);
-
   if ((teamData.goalDifferential ?? 0) > 20) strengths.push("Elite goal differential");
   if ((teamData.pointPctg ?? 0) > 0.65) strengths.push("Outstanding point percentage");
   if (teamData.powerRank <= 5) strengths.push(`Top 5 in Power Index (#${teamData.powerRank})`);
@@ -108,9 +110,7 @@ function buildWeaknesses(teamData: typeof powerRankings[number]) {
 }
 
 export function generateStaticParams() {
-  return standings.map((team) => ({
-    abbrev: team.abbrev.toLowerCase(),
-  }));
+  return standings.map((team) => ({ abbrev: team.abbrev.toLowerCase() }));
 }
 
 export default async function TeamPage({ params }: { params: Promise<{ abbrev: string }> }) {
@@ -139,13 +139,10 @@ export default async function TeamPage({ params }: { params: Promise<{ abbrev: s
   const conferenceStandings = powerRankings.filter(t => conferenceTeams.includes(t.abbrev)).sort((a, b) => b.points - a.points);
   const conferenceRank = conferenceStandings.findIndex(t => t.abbrev === teamData.abbrev) + 1;
 
-  // Get ALL upcoming games for this team from predictions
-  const upcomingGames = predictions.games.filter(
-    (game) => game.homeTeam.abbrev === teamData.abbrev || game.awayTeam.abbrev === teamData.abbrev
-  );
-
-  // Get team goalies
-  const teamGoalies = goaliePulse.goalies.filter((g) => g.team === teamData.abbrev);
+  // Get upcoming games (up to 3)
+  const upcomingGames = predictions.games
+    .filter((game) => game.homeTeam.abbrev === teamData.abbrev || game.awayTeam.abbrev === teamData.abbrev)
+    .slice(0, 3);
 
   // Calculate efficiency metrics
   const shootingPct = teamData.goalsForPerGame && teamData.shotsForPerGame
@@ -153,7 +150,7 @@ export default async function TeamPage({ params }: { params: Promise<{ abbrev: s
   const savePct = teamData.goalsAgainstPerGame && teamData.shotsAgainstPerGame
     ? ((1 - teamData.goalsAgainstPerGame / teamData.shotsAgainstPerGame) * 100) : 0;
 
-  // League ranks
+  // All league ranks
   const ranks = {
     offense: getLeagueRank(teamData.abbrev, 'goalsForPerGame'),
     defense: getLeagueRank(teamData.abbrev, 'goalsAgainstPerGame', true),
@@ -161,21 +158,21 @@ export default async function TeamPage({ params }: { params: Promise<{ abbrev: s
     shotsAgainst: getLeagueRank(teamData.abbrev, 'shotsAgainstPerGame', true),
     goalDiff: getLeagueRank(teamData.abbrev, 'goalDifferential'),
     pointPct: getLeagueRank(teamData.abbrev, 'pointPctg'),
+    shootingPct: getShootingPctRank(teamData.abbrev),
+    savePct: getSavePctRank(teamData.abbrev),
   };
 
   return (
     <div className="min-h-screen">
       <div className="container">
-        {/* Simplified Hero Section */}
+        {/* Hero Section */}
         <section className="nova-hero nav-offset">
           <div className="nova-hero__grid nova-hero__grid--balanced">
             <div className="nova-hero__text">
               <h1 className="display-xl">{teamData.team}</h1>
-              <p className="lead">
-                {teamDivision?.name} Division • {teamDivision?.conference} Conference
-              </p>
+              <p className="lead">{teamDivision?.name} Division • {teamDivision?.conference} Conference</p>
 
-              {/* Key Stats Row */}
+              {/* Key Stats */}
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '0.75rem', marginTop: '1.5rem' }}>
                 <div style={{ padding: '1rem', background: 'rgba(255,255,255,0.03)', borderRadius: '0.75rem', textAlign: 'center' }}>
                   <p style={{ fontSize: '2rem', fontWeight: 800, color: getRankColor(teamData.powerRank), lineHeight: 1 }}>#{teamData.powerRank}</p>
@@ -214,13 +211,10 @@ export default async function TeamPage({ params }: { params: Promise<{ abbrev: s
                 <div style={{ flex: 1 }}>
                   <p style={{ fontSize: '2.5rem', fontWeight: 800, color: 'white', lineHeight: 1 }}>#{teamData.powerRank}</p>
                   <p style={{ fontSize: '0.75rem', color: 'var(--text-tertiary)', marginTop: '0.25rem' }}>Power Index</p>
-                  <p style={{ fontSize: '0.8rem', color: movement > 0 ? '#10b981' : movement < 0 ? '#ef4444' : 'var(--text-tertiary)', marginTop: '0.25rem' }}>
-                    {movement > 0 ? `▲ ${movement} above` : movement < 0 ? `▼ ${Math.abs(movement)} below` : '● Even with'} standings (#{teamData.rank})
-                  </p>
                 </div>
               </div>
 
-              {/* Record Display */}
+              {/* Record Bar - Fixed OT issue */}
               <div style={{ background: 'rgba(255,255,255,0.03)', borderRadius: '0.75rem', padding: '1rem', marginBottom: '1rem' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
                   <span style={{ fontSize: '0.7rem', color: 'var(--text-tertiary)', textTransform: 'uppercase' }}>Season Record</span>
@@ -233,9 +227,11 @@ export default async function TeamPage({ params }: { params: Promise<{ abbrev: s
                   <div style={{ width: `${(teamData.losses / teamData.gamesPlayed) * 100}%`, background: '#ef4444', display: 'flex', alignItems: 'center', justifyContent: 'center', minWidth: '30px' }}>
                     <span style={{ fontSize: '0.7rem', fontWeight: 600, color: 'white' }}>{teamData.losses}L</span>
                   </div>
-                  <div style={{ width: `${(teamData.ot / teamData.gamesPlayed) * 100}%`, background: '#f59e0b', display: 'flex', alignItems: 'center', justifyContent: 'center', minWidth: teamData.ot > 0 ? '30px' : 0 }}>
-                    <span style={{ fontSize: '0.7rem', fontWeight: 600, color: 'white' }}>{teamData.ot}OT</span>
-                  </div>
+                  {teamData.ot > 0 && (
+                    <div style={{ width: `${(teamData.ot / teamData.gamesPlayed) * 100}%`, background: '#f59e0b', display: 'flex', alignItems: 'center', justifyContent: 'center', minWidth: '30px' }}>
+                      <span style={{ fontSize: '0.7rem', fontWeight: 600, color: 'white' }}>{teamData.ot}OT</span>
+                    </div>
+                  )}
                 </div>
               </div>
 
@@ -254,6 +250,45 @@ export default async function TeamPage({ params }: { params: Promise<{ abbrev: s
           </div>
         </section>
 
+        {/* Standings vs Power Index Comparison */}
+        <section className="nova-section">
+          <h2 className="text-xl font-bold text-white mb-3">Standings vs Power Index</h2>
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div className="card" style={{ padding: '1.25rem' }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem' }}>
+                <div>
+                  <p style={{ fontSize: '0.7rem', color: 'var(--text-tertiary)', textTransform: 'uppercase' }}>League Standings</p>
+                  <p style={{ fontSize: '2.5rem', fontWeight: 800, color: 'white', lineHeight: 1 }}>#{teamData.rank}</p>
+                </div>
+                <div style={{ textAlign: 'right' }}>
+                  <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>{teamData.points} points</p>
+                  <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>{teamData.record}</p>
+                </div>
+              </div>
+              <p style={{ fontSize: '0.8rem', color: 'var(--text-tertiary)' }}>Based on total points earned this season</p>
+            </div>
+            <div className="card" style={{ padding: '1.25rem', borderLeft: `4px solid ${getRankColor(teamData.powerRank)}` }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem' }}>
+                <div>
+                  <p style={{ fontSize: '0.7rem', color: 'var(--text-tertiary)', textTransform: 'uppercase' }}>Power Index</p>
+                  <p style={{ fontSize: '2.5rem', fontWeight: 800, color: getRankColor(teamData.powerRank), lineHeight: 1 }}>#{teamData.powerRank}</p>
+                </div>
+                <div style={{ textAlign: 'right' }}>
+                  <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>Score: {teamData.powerScore}</p>
+                  <p style={{
+                    fontSize: '0.75rem',
+                    color: movement > 0 ? '#10b981' : movement < 0 ? '#ef4444' : 'var(--text-tertiary)',
+                    fontWeight: 600
+                  }}>
+                    {movement > 0 ? `▲ ${movement} undervalued` : movement < 0 ? `▼ ${Math.abs(movement)} overvalued` : '● Fair value'}
+                  </p>
+                </div>
+              </div>
+              <p style={{ fontSize: '0.8rem', color: 'var(--text-tertiary)' }}>Model rank using points, goal diff, offense & defense metrics</p>
+            </div>
+          </div>
+        </section>
+
         {/* Weekly Insight */}
         {movementReasons[teamData.abbrev] && (
           <section className="nova-section">
@@ -266,7 +301,7 @@ export default async function TeamPage({ params }: { params: Promise<{ abbrev: s
           </section>
         )}
 
-        {/* League Rankings */}
+        {/* League Rankings - Expanded */}
         <section className="nova-section">
           <h2 className="text-xl font-bold text-white mb-3">League Rankings</h2>
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
@@ -292,6 +327,32 @@ export default async function TeamPage({ params }: { params: Promise<{ abbrev: s
             </div>
             <div className="card" style={{ padding: '1rem' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
+                <span style={{ fontSize: '0.7rem', color: 'var(--text-tertiary)', textTransform: 'uppercase' }}>Goal Diff</span>
+                <span style={{ fontSize: '1.25rem', fontWeight: 700, color: getRankColor(ranks.goalDiff) }}>#{ranks.goalDiff}</span>
+              </div>
+              <div style={{ height: '6px', background: 'rgba(255,255,255,0.1)', borderRadius: '3px', overflow: 'hidden' }}>
+                <div style={{ height: '100%', width: `${((33 - ranks.goalDiff) / 32) * 100}%`, background: getRankColor(ranks.goalDiff), borderRadius: '3px' }} />
+              </div>
+              <p style={{ fontSize: '0.85rem', color: teamData.goalDifferential >= 0 ? '#10b981' : '#ef4444', marginTop: '0.5rem', fontWeight: 600 }}>
+                {teamData.goalDifferential >= 0 ? '+' : ''}{teamData.goalDifferential}
+              </p>
+            </div>
+            <div className="card" style={{ padding: '1rem' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
+                <span style={{ fontSize: '0.7rem', color: 'var(--text-tertiary)', textTransform: 'uppercase' }}>Point %</span>
+                <span style={{ fontSize: '1.25rem', fontWeight: 700, color: getRankColor(ranks.pointPct) }}>#{ranks.pointPct}</span>
+              </div>
+              <div style={{ height: '6px', background: 'rgba(255,255,255,0.1)', borderRadius: '3px', overflow: 'hidden' }}>
+                <div style={{ height: '100%', width: `${((33 - ranks.pointPct) / 32) * 100}%`, background: getRankColor(ranks.pointPct), borderRadius: '3px' }} />
+              </div>
+              <p style={{ fontSize: '0.85rem', color: 'white', marginTop: '0.5rem', fontWeight: 600 }}>{(teamData.pointPctg * 100).toFixed(1)}%</p>
+            </div>
+          </div>
+
+          {/* Second row of rankings */}
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4 mt-3">
+            <div className="card" style={{ padding: '1rem' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
                 <span style={{ fontSize: '0.7rem', color: 'var(--text-tertiary)', textTransform: 'uppercase' }}>Shots For</span>
                 <span style={{ fontSize: '1.25rem', fontWeight: 700, color: getRankColor(ranks.shotsFor) }}>#{ranks.shotsFor}</span>
               </div>
@@ -310,40 +371,25 @@ export default async function TeamPage({ params }: { params: Promise<{ abbrev: s
               </div>
               <p style={{ fontSize: '0.85rem', color: 'white', marginTop: '0.5rem', fontWeight: 600 }}>{teamData.shotsAgainstPerGame?.toFixed(1)} SA/G</p>
             </div>
-          </div>
-        </section>
-
-        {/* Efficiency Cards */}
-        <section className="nova-section">
-          <h2 className="text-xl font-bold text-white mb-3">Efficiency</h2>
-          <div className="grid gap-4 sm:grid-cols-2">
-            <div className="card" style={{ padding: '1.25rem', background: 'linear-gradient(135deg, rgba(16,185,129,0.08), transparent)' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                <div style={{ width: '48px', height: '48px', borderRadius: '50%', background: 'rgba(16,185,129,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <span style={{ fontSize: '1.25rem' }}>🎯</span>
-                </div>
-                <div>
-                  <p style={{ fontSize: '0.7rem', color: 'var(--text-tertiary)', textTransform: 'uppercase' }}>Shooting %</p>
-                  <p style={{ fontSize: '1.75rem', fontWeight: 700, color: '#10b981', lineHeight: 1 }}>{shootingPct.toFixed(1)}%</p>
-                </div>
+            <div className="card" style={{ padding: '1rem' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
+                <span style={{ fontSize: '0.7rem', color: 'var(--text-tertiary)', textTransform: 'uppercase' }}>Shooting %</span>
+                <span style={{ fontSize: '1.25rem', fontWeight: 700, color: getRankColor(ranks.shootingPct) }}>#{ranks.shootingPct}</span>
               </div>
-              <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', marginTop: '0.75rem' }}>
-                {teamData.goalsForPerGame?.toFixed(2)} goals on {teamData.shotsForPerGame?.toFixed(1)} shots/game
-              </p>
+              <div style={{ height: '6px', background: 'rgba(255,255,255,0.1)', borderRadius: '3px', overflow: 'hidden' }}>
+                <div style={{ height: '100%', width: `${((33 - ranks.shootingPct) / 32) * 100}%`, background: getRankColor(ranks.shootingPct), borderRadius: '3px' }} />
+              </div>
+              <p style={{ fontSize: '0.85rem', color: 'white', marginTop: '0.5rem', fontWeight: 600 }}>{shootingPct.toFixed(1)}%</p>
             </div>
-            <div className="card" style={{ padding: '1.25rem', background: 'linear-gradient(135deg, rgba(59,130,246,0.08), transparent)' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                <div style={{ width: '48px', height: '48px', borderRadius: '50%', background: 'rgba(59,130,246,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <span style={{ fontSize: '1.25rem' }}>🧤</span>
-                </div>
-                <div>
-                  <p style={{ fontSize: '0.7rem', color: 'var(--text-tertiary)', textTransform: 'uppercase' }}>Team Save %</p>
-                  <p style={{ fontSize: '1.75rem', fontWeight: 700, color: '#3b82f6', lineHeight: 1 }}>{savePct.toFixed(1)}%</p>
-                </div>
+            <div className="card" style={{ padding: '1rem' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
+                <span style={{ fontSize: '0.7rem', color: 'var(--text-tertiary)', textTransform: 'uppercase' }}>Team Save %</span>
+                <span style={{ fontSize: '1.25rem', fontWeight: 700, color: getRankColor(ranks.savePct) }}>#{ranks.savePct}</span>
               </div>
-              <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', marginTop: '0.75rem' }}>
-                {teamData.goalsAgainstPerGame?.toFixed(2)} GA on {teamData.shotsAgainstPerGame?.toFixed(1)} shots faced
-              </p>
+              <div style={{ height: '6px', background: 'rgba(255,255,255,0.1)', borderRadius: '3px', overflow: 'hidden' }}>
+                <div style={{ height: '100%', width: `${((33 - ranks.savePct) / 32) * 100}%`, background: getRankColor(ranks.savePct), borderRadius: '3px' }} />
+              </div>
+              <p style={{ fontSize: '0.85rem', color: 'white', marginTop: '0.5rem', fontWeight: 600 }}>{savePct.toFixed(1)}%</p>
             </div>
           </div>
         </section>
@@ -375,75 +421,50 @@ export default async function TeamPage({ params }: { params: Promise<{ abbrev: s
           </div>
         </section>
 
-        {/* Goaltending */}
-        {teamGoalies.length > 0 && (
-          <section className="nova-section">
-            <h2 className="text-xl font-bold text-white mb-3">Goaltending</h2>
-            <div className="grid gap-3 sm:grid-cols-2">
-              {teamGoalies.map((goalie) => (
-                <div key={goalie.name} className="card" style={{ padding: '1.25rem' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.75rem' }}>
-                    <div style={{
-                      width: '48px', height: '48px', borderRadius: '50%',
-                      background: goalie.trend === 'surging' ? 'rgba(16,185,129,0.2)' : goalie.trend === 'steady' ? 'rgba(59,130,246,0.2)' : 'rgba(255,255,255,0.1)',
-                      border: `2px solid ${goalie.trend === 'surging' ? '#10b981' : goalie.trend === 'steady' ? '#3b82f6' : 'rgba(255,255,255,0.2)'}`,
-                      display: 'flex', alignItems: 'center', justifyContent: 'center'
-                    }}>
-                      <span style={{ fontSize: '1.25rem' }}>🥅</span>
-                    </div>
-                    <div style={{ flex: 1 }}>
-                      <h3 style={{ fontSize: '1rem', fontWeight: 600, color: 'white', margin: 0 }}>{goalie.name}</h3>
-                      <span style={{
-                        fontSize: '0.65rem', fontWeight: 600, textTransform: 'uppercase',
-                        color: goalie.trend === 'surging' ? '#10b981' : goalie.trend === 'steady' ? '#3b82f6' : 'var(--text-tertiary)'
-                      }}>{goalie.trend}</span>
-                    </div>
-                    <div style={{ textAlign: 'right' }}>
-                      <p style={{ fontSize: '1.25rem', fontWeight: 700, color: goalie.seasonGsa > 0 ? '#10b981' : goalie.seasonGsa < -5 ? '#ef4444' : 'white' }}>
-                        {goalie.seasonGsa > 0 ? '+' : ''}{goalie.seasonGsa.toFixed(1)}
-                      </p>
-                      <p style={{ fontSize: '0.6rem', color: 'var(--text-tertiary)', textTransform: 'uppercase' }}>GSAx</p>
-                    </div>
-                  </div>
-                  <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', lineHeight: 1.4 }}>{goalie.note}</p>
-                  <div style={{ display: 'flex', gap: '1rem', marginTop: '0.75rem' }}>
-                    <div><span style={{ fontSize: '0.65rem', color: 'var(--text-tertiary)' }}>Rolling:</span> <span style={{ fontWeight: 600, color: goalie.rollingGsa > 0 ? '#10b981' : 'white' }}>{goalie.rollingGsa > 0 ? '+' : ''}{goalie.rollingGsa.toFixed(1)}</span></div>
-                    <div><span style={{ fontSize: '0.65rem', color: 'var(--text-tertiary)' }}>Rest:</span> <span style={{ fontWeight: 600, color: 'white' }}>{goalie.restDays}d</span></div>
-                    <div><span style={{ fontSize: '0.65rem', color: 'var(--text-tertiary)' }}>Start:</span> <span style={{ fontWeight: 600, color: goalie.startLikelihood > 0.7 ? '#10b981' : 'white' }}>{(goalie.startLikelihood * 100).toFixed(0)}%</span></div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </section>
-        )}
-
-        {/* Upcoming Games */}
+        {/* Upcoming Games - Improved */}
         <section className="nova-section">
           <h2 className="text-xl font-bold text-white mb-3">Upcoming Games</h2>
           {upcomingGames.length > 0 ? (
-            <div className="grid gap-2">
+            <div className="grid gap-3">
               {upcomingGames.map((game) => {
                 const isHome = game.homeTeam.abbrev === teamData.abbrev;
                 const opponent = isHome ? game.awayTeam : game.homeTeam;
                 const winProb = isHome ? game.homeWinProb : game.awayWinProb;
                 const teamEdge = isHome ? game.edge : -game.edge;
                 return (
-                  <div key={game.id} className="card" style={{ padding: '1rem' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                      <TeamCrest abbrev={opponent.abbrev} size={40} />
+                  <div key={game.id} className="card" style={{ padding: '1.25rem' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                      <TeamCrest abbrev={opponent.abbrev} size={48} />
                       <div style={{ flex: 1 }}>
-                        <p style={{ fontSize: '0.95rem', fontWeight: 600, color: 'white' }}>{isHome ? "vs" : "@"} {opponent.name}</p>
-                        <p style={{ fontSize: '0.75rem', color: 'var(--text-tertiary)' }}>{game.gameDate} • {game.startTimeEt ?? "TBD"}</p>
+                        <p style={{ fontSize: '1.1rem', fontWeight: 600, color: 'white' }}>{isHome ? "vs" : "@"} {opponent.name}</p>
+                        <p style={{ fontSize: '0.8rem', color: 'var(--text-tertiary)', marginTop: '0.25rem' }}>{game.gameDate} • {game.startTimeEt ?? "TBD"}</p>
                       </div>
-                      <div style={{ display: 'flex', gap: '0.5rem' }}>
-                        <span style={{ padding: '0.25rem 0.5rem', borderRadius: '4px', fontSize: '0.7rem', fontWeight: 600,
-                          background: winProb >= 0.55 ? 'rgba(16,185,129,0.2)' : winProb >= 0.45 ? 'rgba(59,130,246,0.2)' : 'rgba(245,158,11,0.2)',
-                          color: winProb >= 0.55 ? '#10b981' : winProb >= 0.45 ? '#3b82f6' : '#f59e0b'
-                        }}>{(winProb * 100).toFixed(0)}%</span>
-                        <span style={{ padding: '0.25rem 0.5rem', borderRadius: '4px', fontSize: '0.7rem', fontWeight: 600,
-                          background: teamEdge >= 0 ? 'rgba(16,185,129,0.2)' : 'rgba(239,68,68,0.2)',
-                          color: teamEdge >= 0 ? '#10b981' : '#ef4444'
-                        }}>{teamEdge >= 0 ? '+' : ''}{(teamEdge * 100).toFixed(1)}</span>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', alignItems: 'flex-end' }}>
+                        <div style={{ display: 'flex', gap: '0.5rem' }}>
+                          <div style={{
+                            padding: '0.35rem 0.6rem',
+                            borderRadius: '6px',
+                            background: winProb >= 0.55 ? 'rgba(16,185,129,0.15)' : winProb >= 0.45 ? 'rgba(59,130,246,0.15)' : 'rgba(245,158,11,0.15)',
+                            border: `1px solid ${winProb >= 0.55 ? 'rgba(16,185,129,0.3)' : winProb >= 0.45 ? 'rgba(59,130,246,0.3)' : 'rgba(245,158,11,0.3)'}`
+                          }}>
+                            <p style={{ fontSize: '0.65rem', color: 'var(--text-tertiary)', textTransform: 'uppercase', marginBottom: '0.1rem' }}>Win Prob</p>
+                            <p style={{ fontSize: '1rem', fontWeight: 700, color: winProb >= 0.55 ? '#10b981' : winProb >= 0.45 ? '#3b82f6' : '#f59e0b' }}>
+                              {(winProb * 100).toFixed(0)}%
+                            </p>
+                          </div>
+                          <div style={{
+                            padding: '0.35rem 0.6rem',
+                            borderRadius: '6px',
+                            background: teamEdge >= 0 ? 'rgba(16,185,129,0.15)' : 'rgba(239,68,68,0.15)',
+                            border: `1px solid ${teamEdge >= 0 ? 'rgba(16,185,129,0.3)' : 'rgba(239,68,68,0.3)'}`
+                          }}>
+                            <p style={{ fontSize: '0.65rem', color: 'var(--text-tertiary)', textTransform: 'uppercase', marginBottom: '0.1rem' }}>Edge</p>
+                            <p style={{ fontSize: '1rem', fontWeight: 700, color: teamEdge >= 0 ? '#10b981' : '#ef4444' }}>
+                              {teamEdge >= 0 ? '+' : ''}{(teamEdge * 100).toFixed(1)}
+                            </p>
+                          </div>
+                        </div>
+                        <p style={{ fontSize: '0.7rem', color: 'var(--text-tertiary)' }}>{game.confidenceGrade} confidence</p>
                       </div>
                     </div>
                   </div>
@@ -457,7 +478,7 @@ export default async function TeamPage({ params }: { params: Promise<{ abbrev: s
           )}
         </section>
 
-        {/* Division Rivals */}
+        {/* Division Standings */}
         {teamDivision && (
           <section className="nova-section">
             <h2 className="text-xl font-bold text-white mb-3">{teamDivision.name} Division</h2>
@@ -466,21 +487,45 @@ export default async function TeamPage({ params }: { params: Promise<{ abbrev: s
                 const isCurrent = team.abbrev === teamData.abbrev;
                 return (
                   <div key={team.abbrev} style={{
-                    display: 'flex', alignItems: 'center', padding: '0.6rem 1rem',
+                    display: 'flex', alignItems: 'center', padding: '0.75rem 1rem',
                     background: isCurrent ? 'rgba(59,130,246,0.15)' : idx % 2 ? 'rgba(255,255,255,0.02)' : 'transparent',
                     borderLeft: isCurrent ? '3px solid #3b82f6' : '3px solid transparent'
                   }}>
-                    <span style={{ width: '20px', fontSize: '0.8rem', fontWeight: 600, color: 'var(--text-tertiary)' }}>{idx + 1}</span>
-                    <TeamCrest abbrev={team.abbrev} size={24} />
-                    <span style={{ marginLeft: '0.5rem', flex: 1, fontSize: '0.85rem', fontWeight: isCurrent ? 600 : 400, color: isCurrent ? 'white' : 'var(--text-secondary)' }}>{team.team}</span>
-                    <span style={{ fontSize: '0.8rem', color: 'var(--text-tertiary)', marginRight: '0.75rem' }}>{team.record}</span>
-                    <span style={{ fontSize: '0.85rem', fontWeight: 600, color: 'white', width: '30px', textAlign: 'right' }}>{team.points}</span>
+                    <span style={{ width: '24px', fontSize: '0.85rem', fontWeight: 600, color: 'var(--text-tertiary)' }}>{idx + 1}</span>
+                    <TeamCrest abbrev={team.abbrev} size={28} />
+                    <span style={{ marginLeft: '0.75rem', flex: 1, fontSize: '0.9rem', fontWeight: isCurrent ? 600 : 400, color: isCurrent ? 'white' : 'var(--text-secondary)' }}>{team.team}</span>
+                    <span style={{ fontSize: '0.8rem', color: 'var(--text-tertiary)', marginRight: '1rem' }}>{team.record}</span>
+                    <span style={{ fontSize: '0.75rem', color: getRankColor(team.powerRank), marginRight: '0.75rem' }}>#{team.powerRank}</span>
+                    <span style={{ fontSize: '0.9rem', fontWeight: 600, color: 'white', width: '35px', textAlign: 'right' }}>{team.points}</span>
                   </div>
                 );
               })}
             </div>
           </section>
         )}
+
+        {/* Season Totals */}
+        <section className="nova-section">
+          <h2 className="text-xl font-bold text-white mb-3">Season Totals</h2>
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="card" style={{ padding: '1rem', textAlign: 'center' }}>
+              <p style={{ fontSize: '2rem', fontWeight: 800, color: 'white' }}>{teamData.gamesPlayed}</p>
+              <p style={{ fontSize: '0.7rem', color: 'var(--text-tertiary)', textTransform: 'uppercase' }}>Games Played</p>
+            </div>
+            <div className="card" style={{ padding: '1rem', textAlign: 'center' }}>
+              <p style={{ fontSize: '2rem', fontWeight: 800, color: '#10b981' }}>{teamData.wins}</p>
+              <p style={{ fontSize: '0.7rem', color: 'var(--text-tertiary)', textTransform: 'uppercase' }}>Wins</p>
+            </div>
+            <div className="card" style={{ padding: '1rem', textAlign: 'center' }}>
+              <p style={{ fontSize: '2rem', fontWeight: 800, color: '#ef4444' }}>{teamData.losses}</p>
+              <p style={{ fontSize: '0.7rem', color: 'var(--text-tertiary)', textTransform: 'uppercase' }}>Losses</p>
+            </div>
+            <div className="card" style={{ padding: '1rem', textAlign: 'center' }}>
+              <p style={{ fontSize: '2rem', fontWeight: 800, color: '#f59e0b' }}>{teamData.ot}</p>
+              <p style={{ fontSize: '0.7rem', color: 'var(--text-tertiary)', textTransform: 'uppercase' }}>OT Losses</p>
+            </div>
+          </div>
+        </section>
       </div>
     </div>
   );
