@@ -1,0 +1,29 @@
+<svg width="720" height="360" viewBox="0 0 720 360" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    .bg { fill:#0f1f2f; stroke:#4ec0f0; stroke-width:2; rx:14; ry:14; }
+    .title { fill:#e6f4ff; font-family:'Helvetica Neue', Arial, sans-serif; font-size:16px; font-weight:700; }
+    .axis { stroke:#b8d4f5; stroke-width:1; }
+    .label { fill:#b8d4f5; font-family:'Helvetica Neue', Arial, sans-serif; font-size:13px; }
+    .point-win { fill:#8de0a3; opacity:0.8; }
+    .point-loss { fill:#e08d8d; opacity:0.6; }
+  </style>
+  <rect class="bg" x="20" y="20" width="680" height="320" />
+  <text class="title" x="360" y="55" text-anchor="middle">Predicted Edge vs Outcome (sample)</text>
+  <line class="axis" x1="80" y1="280" x2="620" y2="280" />
+  <line class="axis" x1="80" y1="100" x2="80" y2="280" />
+  <text class="label" x="350" y="305" text-anchor="middle">Predicted edge (%)</text>
+  <text class="label" transform="rotate(-90 50 190)" x="50" y="190" text-anchor="middle">Outcome</text>
+  <!-- Wins -->
+  <circle class="point-win" cx="150" cy="240" r="8" />
+  <circle class="point-win" cx="210" cy="230" r="8" />
+  <circle class="point-win" cx="280" cy="200" r="8" />
+  <circle class="point-win" cx="350" cy="170" r="8" />
+  <circle class="point-win" cx="430" cy="150" r="8" />
+  <circle class="point-win" cx="500" cy="130" r="8" />
+  <!-- Losses -->
+  <circle class="point-loss" cx="180" cy="260" r="8" />
+  <circle class="point-loss" cx="260" cy="240" r="8" />
+  <circle class="point-loss" cx="330" cy="220" r="8" />
+  <circle class="point-loss" cx="410" cy="200" r="8" />
+  <circle class="point-loss" cx="480" cy="190" r="8" />
+</svg>

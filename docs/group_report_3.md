@@ -103,3 +103,17 @@ The v6 system is production-stable, calibrated, and automated end-to-end. It mea
 - Internal xG/shot-quality model + derived team logs  
 - scikit-learn (logistic regression, calibration)  
 - Puckcast repository: data pipeline, model code, and automation workflows
+
+## Appendix — Visuals Sampler (v7.0-ready)
+Below are additional visuals you can select for the final deck/export.
+
+- Confusion matrix: ![Confusion](assets/presentation/confusion_matrix_v7.svg)  
+  *Correct home/away calls vs misses; overall accuracy ~60.9% (multi-season).* 
+- Accuracy by edge band: ![Edge bands](assets/presentation/edge_accuracy_v7.svg)  
+  *A+ ~79.3% (≥25 pts), A ~72.0%, B+ ~67.3% with coverage noted.*
+- Edge vs outcome scatter: ![Edge scatter](assets/presentation/scatter_edge_outcome_v7.svg)  
+  *Higher edges trend to wins; losses cluster at lower edges.*
+- Rolling accuracy over time: ![Rolling accuracy](assets/presentation/accuracy_over_time_v7.svg)  
+  *Stable ~60–61% over recent seasons.*
+- Confidence vs accuracy: ![Confidence scatter](assets/presentation/confidence_scatter_v7.svg)  
+  *Higher confidence grades map to higher accuracy.*
