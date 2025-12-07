@@ -54,16 +54,13 @@ puckcast/
 │
 ├── docs/                            # 📚 Documentation Hub
 │   ├── INDEX.md                     # Documentation navigation
+│   ├── V7_DEVELOPMENT_LESSONS.md    # ⚠️ What worked & didn't - READ FIRST
 │   ├── current/                     # Current model docs
-│   │   ├── V7_PRODUCTION_MODEL.md
-│   │   ├── CLOSING_GAP_ANALYSIS.md
-│   │   └── PROJECT_STATUS.md
-│   ├── experiments/                 # V7.0 Development Tests
-│   │   ├── TEST_HEAD_TO_HEAD.md
-│   │   ├── TEST_INTERACTIONS.md
-│   │   ├── TEST_TEAM_CALIBRATION.md
-│   │   ├── TEST_CONFIDENCE_FILTERING.md
-│   │   └── TEST_GOALIE_TRACKING.md
+│   │   └── CLOSING_GAP_ANALYSIS.md
+│   ├── experiments/                 # V7.0 Development Test Logs
+│   │   ├── V7.4_EXPERIMENTS.md      # H2H & ensemble tests
+│   │   ├── V7.5_EXPERIMENTS.md      # Feature interaction tests
+│   │   └── V7.6_EXPERIMENTS.md      # Feature selection tests
 │   └── archive/                     # Historical docs
 │
 ├── src/nhl_prediction/              # 🧠 Core Prediction Engine
@@ -75,11 +72,10 @@ puckcast/
 │   └── team_calibration_features.py # Test: calibration (not used)
 │
 ├── training/                        # 🎓 Training Scripts
-│   ├── train_v7_adaptive.py         # ✅ PRODUCTION TRAINING SCRIPT
-│   └── experiments/                 # V7.0 Development Tests
-│       ├── train_test_head_to_head.py
-│       ├── train_test_interactions.py
-│       └── train_test_team_calibration.py
+│   ├── README.md                    # Training documentation
+│   ├── build_feature_store.py       # Build feature dataset
+│   ├── fetch_historical_data.py     # Fetch NHL historical data
+│   └── retrain_xg_model.py          # Retrain xG model
 │
 ├── analysis/                        # 🔬 Analysis Scripts
 │   ├── current/                     # Current analysis
@@ -92,11 +88,6 @@ puckcast/
 │   ├── predict_tonight.py           # Daily predictions
 │   ├── predict_simple.py            # Simple CLI predictions
 │   └── predict_full.py              # Full analysis
-│
-├── goalie_system/                   # 🥅 Goalie Infrastructure
-│   ├── populate_starting_goalies_from_history.py
-│   ├── build_goalie_database_fixed.py
-│   └── ...                          # (Future-ready for stats pages)
 │
 ├── web/                             # 🌐 Next.js Frontend
 ├── data/                            # 💾 Data & Models
@@ -274,7 +265,7 @@ During V7.0 development, we tested several approaches that **did not improve** t
 
 **Lesson**: Error patterns (20+ problematic matchups) don't always suggest solutions - might just be noise
 
-📄 **Full Analysis**: [docs/experiments/TEST_HEAD_TO_HEAD.md](docs/experiments/TEST_HEAD_TO_HEAD.md)
+📄 **Full Analysis**: [docs/experiments/V7.4_EXPERIMENTS.md](docs/experiments/V7.4_EXPERIMENTS.md)
 
 ---
 
@@ -297,7 +288,7 @@ During V7.0 development, we tested several approaches that **did not improve** t
 
 **Lesson**: More features ≠ better model. Interactions add noise when base features suffice.
 
-📄 **Full Analysis**: [docs/experiments/TEST_INTERACTIONS.md](docs/experiments/TEST_INTERACTIONS.md)
+📄 **Full Analysis**: [docs/experiments/V7.5_EXPERIMENTS.md](docs/experiments/V7.5_EXPERIMENTS.md)
 
 ---
 
@@ -318,7 +309,7 @@ During V7.0 development, we tested several approaches that **did not improve** t
 
 **Lesson**: Team-specific effects already captured by existing team indicators. Additional bias terms redundant.
 
-📄 **Full Analysis**: [docs/experiments/TEST_TEAM_CALIBRATION.md](docs/experiments/TEST_TEAM_CALIBRATION.md)
+📄 **Full Analysis**: [docs/experiments/V7.6_EXPERIMENTS.md](docs/experiments/V7.6_EXPERIMENTS.md)
 
 ---
 
@@ -351,7 +342,7 @@ During V7.0 development, we tested several approaches that **did not improve** t
 
 **Lesson**: Model has good calibration. The 31% coin-flip games are fundamentally unpredictable, not fixable with better features.
 
-📄 **Full Analysis**: [docs/experiments/TEST_CONFIDENCE_FILTERING.md](docs/experiments/TEST_CONFIDENCE_FILTERING.md)
+📄 **Full Analysis**: [docs/V7_DEVELOPMENT_LESSONS.md](docs/V7_DEVELOPMENT_LESSONS.md)
 
 ---
 
@@ -380,7 +371,7 @@ During V7.0 development, we tested several approaches that **did not improve** t
 
 **Value Preserved**: Infrastructure useful for future stats pages and player analysis
 
-📄 **Full Analysis**: [docs/experiments/TEST_GOALIE_TRACKING.md](docs/experiments/TEST_GOALIE_TRACKING.md)
+📄 **Full Analysis**: [docs/V7_DEVELOPMENT_LESSONS.md](docs/V7_DEVELOPMENT_LESSONS.md)
 
 ---
 
@@ -545,53 +536,20 @@ The gap to 62%+ consists of:
    - Key principles and mistakes to avoid
    - Don't repeat the same experiments!
 
-2. **[docs/current/V7_PRODUCTION_MODEL.md](docs/current/V7_PRODUCTION_MODEL.md)**
-   - Complete production model guide
-   - Features, training, deployment
-   - Usage examples
-
-3. **[docs/current/CLOSING_GAP_ANALYSIS.md](docs/current/CLOSING_GAP_ANALYSIS.md)**
+2. **[docs/current/CLOSING_GAP_ANALYSIS.md](docs/current/CLOSING_GAP_ANALYSIS.md)**
    - Comprehensive analysis of model ceiling
    - Development test results
    - Technical deep dive into model limitations
 
-4. **[docs/current/PROJECT_STATUS.md](docs/current/PROJECT_STATUS.md)**
-   - Current state of project
-   - Recommendations for next steps
-   - Decision framework
+3. **[docs/INDEX.md](docs/INDEX.md)** - Documentation navigation and metrics
 
-### 🧪 V7.0 Development Tests
+### 🧪 V7.0 Development Test Logs
 
-5. **[docs/experiments/TEST_HEAD_TO_HEAD.md](docs/experiments/TEST_HEAD_TO_HEAD.md)**
-   - Head-to-head matchup features test
-   - Data leakage bug discovered and fixed
-   - Multicollinearity analysis
+Detailed experiment logs (for reference, summaries in V7_DEVELOPMENT_LESSONS.md):
 
-6. **[docs/experiments/TEST_INTERACTIONS.md](docs/experiments/TEST_INTERACTIONS.md)**
-   - Feature interaction terms test
-   - Overfitting analysis
-   - Why more features ≠ better model
-
-7. **[docs/experiments/TEST_TEAM_CALIBRATION.md](docs/experiments/TEST_TEAM_CALIBRATION.md)**
-   - Team-specific bias adjustments test
-   - Weak signal analysis
-   - Sample size limitations
-
-8. **[docs/experiments/TEST_CONFIDENCE_FILTERING.md](docs/experiments/TEST_CONFIDENCE_FILTERING.md)**
-   - Calibration analysis test
-   - Coverage vs accuracy tradeoffs
-   - Optimal threshold search
-
-9. **[docs/experiments/TEST_GOALIE_TRACKING.md](docs/experiments/TEST_GOALIE_TRACKING.md)**
-   - Individual goalie tracking infrastructure
-   - Why it underperformed team-level
-   - Data quality fixes applied
-   - Future value for stats pages
-
-### 📖 Additional Resources
-
-10. **[docs/INDEX.md](docs/INDEX.md)** - Complete documentation navigation
-11. **[error_analysis.csv](error_analysis.csv)** - Detailed error breakdown
+4. **[docs/experiments/V7.4_EXPERIMENTS.md](docs/experiments/V7.4_EXPERIMENTS.md)** - H2H & ensemble tests
+5. **[docs/experiments/V7.5_EXPERIMENTS.md](docs/experiments/V7.5_EXPERIMENTS.md)** - Feature interaction tests
+6. **[docs/experiments/V7.6_EXPERIMENTS.md](docs/experiments/V7.6_EXPERIMENTS.md)** - Feature selection & calibration
 
 ---
 
@@ -790,10 +748,9 @@ python training/train_v7_adaptive.py
 ## 📞 Support & Questions
 
 ### Documentation Questions
-- **Model usage**: See [docs/current/V7_PRODUCTION_MODEL.md](docs/current/V7_PRODUCTION_MODEL.md)
+- **What worked & didn't**: See [docs/V7_DEVELOPMENT_LESSONS.md](docs/V7_DEVELOPMENT_LESSONS.md)
 - **Model ceiling analysis**: See [docs/current/CLOSING_GAP_ANALYSIS.md](docs/current/CLOSING_GAP_ANALYSIS.md)
-- **Development tests**: See [docs/experiments/](docs/experiments/) for detailed test analyses
-- **Goalie tracking**: See [docs/experiments/TEST_GOALIE_TRACKING.md](docs/experiments/TEST_GOALIE_TRACKING.md)
+- **Development test logs**: See [docs/experiments/](docs/experiments/) for detailed experiment logs
 
 ### Technical Issues
 - **GitHub Issues**: (when public)
