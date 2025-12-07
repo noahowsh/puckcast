@@ -1,0 +1,11 @@
+<svg width="800" height="220" viewBox="0 0 800 220" xmlns="http://www.w3.org/2000/svg">
+  <style>.bg{fill:#0f1f2f;stroke:#4ec0f0;stroke-width:2;rx:14;ry:14;}.title{fill:#e6f4ff;font-family:'Helvetica Neue',Arial,sans-serif;font-size:16px;font-weight:700;}.label{fill:#b8d4f5;font-family:'Helvetica Neue',Arial,sans-serif;font-size:13px;}</style>
+  <rect class="bg" x="20" y="20" width="760" height="180" />
+  <text class="title" x="400" y="55" text-anchor="middle">Daily Automation Windows (ET)</text>
+  <text class="label" x="100" y="110">08:00 – Slate publish</text>
+  <text class="label" x="100" y="135">12:00 – Injuries/goalies refresh</text>
+  <text class="label" x="100" y="160">17:00 – Afternoon update</text>
+  <text class="label" x="480" y="110">20:00 – Evening recap</text>
+  <text class="label" x="480" y="135">22:30 – Results ingest</text>
+  <text class="label" x="480" y="160">23:30 – Tomorrow tease</text>
+</svg>

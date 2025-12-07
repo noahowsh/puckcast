@@ -9,7 +9,7 @@
 ## Executive Summary (what changed vs. Report 2)
 - **Stronger delivery:** Automated slate summary at 8 AM ET, richer fun-facts (special teams, injuries, goalie rest), and clearer “why” signals on the slate.
 - **Production stability:** Hardened fallbacks for predictions API, no leading mentions, validation gates on every run.
-- **Model posture:** Calibrated logistic regression remains the primary engine (59.3% accuracy vs 53.7% baseline; log loss 0.676; Brier 0.240) with isotonic calibration and enriched inputs (special teams, goalie/injury metadata).
+- **Model posture:** Calibrated logistic regression remains the primary engine (~60.9% accuracy vs 53.9% baseline multi-season; log loss ~0.655; Brier ~0.232) with isotonic calibration and enriched inputs (special teams, rest/travel, goalie/injury metadata).
 
 ### Quick Visuals
 - Pipeline overview: ![Pipeline](assets/presentation/pipeline_v6.svg)  
@@ -102,7 +102,31 @@ The v6 system is production-stable, calibrated, and automated end-to-end. It mea
 - NHL Stats API (schedule, teams, results, plays)  
 - Internal xG/shot-quality model + derived team logs  
 - scikit-learn (logistic regression, calibration)  
-- Puckcast repository: data pipeline, model code, and automation workflows
+- Puckcast repository: data pipeline, model code, and automation workflows  
+- Pandas/NumPy (data prep), validation scripts (schema/freshness), isotonic calibration toolkit  
+- Visualization assets in `docs/assets/` (pipeline, automation, accuracy, calibration, feature importance)
+
+## Appendix — Visuals Sampler (v7-ready)
+Below are additional visuals you can select for the final deck/export (wide variety for hand-picking).
+
+- Pipeline (v6): ![Pipeline](assets/presentation/pipeline_v6.svg)  
+- Automation timeline (v7): ![Automation](assets/presentation/automation_v7.svg)  
+- Accuracy vs baseline (v7): ![Accuracy baseline](assets/presentation/accuracy_baseline_v7.svg)  
+- Confusion matrix (v7 fixed): ![Confusion](assets/presentation/confusion_matrix_v7_fixed.svg)  
+- Calibration (v7 reliability): ![Calibration](assets/presentation/calibration_reliability_v7.svg)  
+- Edge bands accuracy: ![Edge bands](assets/presentation/edge_accuracy_v7.svg)  
+- Edge distribution: ![Edge distribution](assets/presentation/edge_distribution_v7.svg)  
+- Rolling accuracy: ![Rolling accuracy](assets/presentation/accuracy_trend_v7.svg)  
+- Bankroll curve: ![Bankroll](assets/presentation/bankroll_curve_v7.svg)  
+- Feature signals (v7 sample): ![Features](assets/presentation/feature_importance_v7.svg)  
+- Edge vs outcome (simple): ![Edge scatter](assets/presentation/edge_scatter_simple_v7.svg)  
+- Probability histogram: ![Histogram](assets/presentation/probability_histogram_v7.svg)  
+- Confidence vs accuracy: ![Confidence](assets/presentation/confidence_scatter_v7.svg)  
+- Slate card (v7): ![Slate](assets/presentation/slate_card_v7.svg)  
+- Team accuracy heatmap (sample): ![Teams](assets/presentation/team_accuracy_heatmap_v7.svg)  
+- Rest/B2B impact: ![Rest](assets/presentation/rest_impact_v7.svg)  
+- Special teams edge: ![Special teams](assets/presentation/special_teams_v7.svg)  
+- Travel/fatigue: ![Travel](assets/presentation/travel_fatigue_v7.svg)  
 
 ## Appendix — Visuals Sampler (v7.0-ready)
 Below are additional visuals you can select for the final deck/export.
