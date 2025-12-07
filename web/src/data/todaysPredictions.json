@@ -1,75 +1,6 @@
 {
-  "generatedAt": "2025-12-07T11:18:47.838534+00:00",
+  "generatedAt": "2025-12-07T23:10:12.070668+00:00",
   "games": [
-    {
-      "id": "2025020453",
-      "gameDate": "2025-12-07",
-      "startTimeEt": "1:00 PM ET",
-      "startTimeUtc": "2025-12-07T18:00:00+00:00",
-      "homeTeam": {
-        "name": "Flyers",
-        "abbrev": "PHI"
-      },
-      "awayTeam": {
-        "name": "Avalanche",
-        "abbrev": "COL"
-      },
-      "homeWinProb": 0.4654,
-      "awayWinProb": 0.5346,
-      "confidenceScore": 0.069,
-      "confidenceGrade": "C+",
-      "edge": -0.035,
-      "summary": "Avalanche project at 53% as the road lean \u2014 a C+-tier edge worth 3.5 pts over a coin flip.",
-      "modelFavorite": "away",
-      "venue": "Xfinity Mobile Arena",
-      "season": "20252026"
-    },
-    {
-      "id": "2025020454",
-      "gameDate": "2025-12-07",
-      "startTimeEt": "5:00 PM ET",
-      "startTimeUtc": "2025-12-07T22:00:00+00:00",
-      "homeTeam": {
-        "name": "Panthers",
-        "abbrev": "FLA"
-      },
-      "awayTeam": {
-        "name": "Islanders",
-        "abbrev": "NYI"
-      },
-      "homeWinProb": 0.6756,
-      "awayWinProb": 0.3244,
-      "confidenceScore": 0.351,
-      "confidenceGrade": "A",
-      "edge": 0.176,
-      "summary": "Panthers project at 68% as the home lean \u2014 an A-tier edge worth 17.6 pts over a coin flip.",
-      "modelFavorite": "home",
-      "venue": "Amerant Bank Arena",
-      "season": "20252026"
-    },
-    {
-      "id": "2025020455",
-      "gameDate": "2025-12-07",
-      "startTimeEt": "5:00 PM ET",
-      "startTimeUtc": "2025-12-07T22:00:00+00:00",
-      "homeTeam": {
-        "name": "Hurricanes",
-        "abbrev": "CAR"
-      },
-      "awayTeam": {
-        "name": "Sharks",
-        "abbrev": "SJS"
-      },
-      "homeWinProb": 0.7521,
-      "awayWinProb": 0.2479,
-      "confidenceScore": 0.504,
-      "confidenceGrade": "A+",
-      "edge": 0.252,
-      "summary": "Hurricanes project at 75% as the home lean \u2014 an A+-tier edge worth 25.2 pts over a coin flip.",
-      "modelFavorite": "home",
-      "venue": "Lenovo Center",
-      "season": "20252026"
-    },
     {
       "id": "2025020456",
       "gameDate": "2025-12-07",
@@ -83,9 +14,9 @@
         "name": "Penguins",
         "abbrev": "PIT"
       },
-      "homeWinProb": 0.71,
-      "awayWinProb": 0.29,
-      "confidenceScore": 0.42,
+      "homeWinProb": 0.7104,
+      "awayWinProb": 0.2896,
+      "confidenceScore": 0.421,
       "confidenceGrade": "A+",
       "edge": 0.21,
       "summary": "Stars project at 71% as the home lean \u2014 an A+-tier edge worth 21.0 pts over a coin flip.",
@@ -106,12 +37,12 @@
         "name": "Blues",
         "abbrev": "STL"
       },
-      "homeWinProb": 0.4487,
-      "awayWinProb": 0.5513,
-      "confidenceScore": 0.103,
+      "homeWinProb": 0.4482,
+      "awayWinProb": 0.5518,
+      "confidenceScore": 0.104,
       "confidenceGrade": "B-",
-      "edge": -0.051,
-      "summary": "Blues project at 55% as the road lean \u2014 a B--tier edge worth 5.1 pts over a coin flip.",
+      "edge": -0.052,
+      "summary": "Blues project at 55% as the road lean \u2014 a B--tier edge worth 5.2 pts over a coin flip.",
       "modelFavorite": "away",
       "venue": "Centre Bell",
       "season": "20252026"
@@ -129,8 +60,8 @@
         "name": "Golden Knights",
         "abbrev": "VGK"
       },
-      "homeWinProb": 0.4163,
-      "awayWinProb": 0.5837,
+      "homeWinProb": 0.4164,
+      "awayWinProb": 0.5836,
       "confidenceScore": 0.167,
       "confidenceGrade": "B",
       "edge": -0.084,
@@ -152,8 +83,8 @@
         "name": "Blue Jackets",
         "abbrev": "CBJ"
       },
-      "homeWinProb": 0.6387,
-      "awayWinProb": 0.3613,
+      "homeWinProb": 0.6385,
+      "awayWinProb": 0.3615,
       "confidenceScore": 0.277,
       "confidenceGrade": "B+",
       "edge": 0.139,
@@ -175,12 +106,12 @@
         "name": "Blackhawks",
         "abbrev": "CHI"
       },
-      "homeWinProb": 0.5736,
-      "awayWinProb": 0.4264,
-      "confidenceScore": 0.147,
+      "homeWinProb": 0.5749,
+      "awayWinProb": 0.4251,
+      "confidenceScore": 0.15,
       "confidenceGrade": "B",
-      "edge": 0.074,
-      "summary": "Ducks project at 57% as the home lean \u2014 a B-tier edge worth 7.4 pts over a coin flip.",
+      "edge": 0.075,
+      "summary": "Ducks project at 57% as the home lean \u2014 a B-tier edge worth 7.5 pts over a coin flip.",
       "modelFavorite": "home",
       "venue": "Honda Center",
       "season": "20252026"
