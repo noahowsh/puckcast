@@ -2,7 +2,7 @@
 """
 Confidence Calibration Analysis
 
-Analyze how well-calibrated V7.3's predicted probabilities are.
+Analyze how well-calibrated V7.0's predicted probabilities are.
 From error analysis: 15-20pt confidence has 47% error rate.
 
 Test if we can improve by:
@@ -148,8 +148,8 @@ def main():
     dataset = build_dataset(TRAIN_SEASONS + [TEST_SEASON])
     print(f"✓ Loaded {len(dataset.games)} games")
 
-    # Add V7.3 features
-    print("Adding V7.3 situational features...")
+    # Add V7.0 features
+    print("Adding V7.0 situational features...")
     games_with_situational = add_situational_features(dataset.games)
 
     v7_3_features = [
@@ -184,7 +184,7 @@ def main():
 
     train_mask_fit = dataset.games[train_mask]['games_played_prior_home'] > 10
 
-    print("Training V7.3 model...")
+    print("Training V7.0 model...")
     model = create_baseline_model(C=OPTIMAL_C)
     model = fit_model(model, X_train, y_train, train_mask_fit, sample_weight=train_weights)
     print("✓ Model trained")

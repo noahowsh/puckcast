@@ -81,7 +81,7 @@ export default function AboutPage() {
                 </div>
                 <div>
                   <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
-                    <span style={{ fontSize: '0.9rem', fontWeight: 600, color: 'var(--aqua)' }}>Puckcast V8.2</span>
+                    <span style={{ fontSize: '0.9rem', fontWeight: 600, color: 'var(--aqua)' }}>Puckcast V7.0</span>
                     <span style={{ fontSize: '0.9rem', fontWeight: 700, color: 'var(--mint)' }}>60.9%</span>
                   </div>
                   <div style={{ height: '2rem', background: 'rgba(255,255,255,0.1)', borderRadius: '0.5rem', overflow: 'hidden' }}>
@@ -112,7 +112,7 @@ export default function AboutPage() {
 
         {/* Key Features with Visual Breakdown */}
         <section className="mb-12">
-          <h2 className="text-2xl font-bold text-white mb-6">39 features explained (V8.2)</h2>
+          <h2 className="text-2xl font-bold text-white mb-6">39 features explained (V7.0)</h2>
           <div className="card-elevated">
             <div style={{ display: 'grid', gridTemplateColumns: '200px 1fr', gap: '2rem', alignItems: 'start' }}>
               {/* Donut Chart Visual */}
@@ -316,7 +316,7 @@ const faqItems = [
   {
     question: "How often do you update predictions?",
     answer:
-      "We generate fresh predictions daily at 10:00 AM and 10:00 PM UTC via automated GitHub Actions. The model pulls the latest stats from the NHL API and recalculates all 39 curated features (V8.2) before making predictions.",
+      "We generate fresh predictions daily at 10:00 AM and 10:00 PM UTC via automated GitHub Actions. The model pulls the latest stats from the NHL API and recalculates all 39 curated features (V7.0) before making predictions.",
   },
   {
     question: "Do you sell picks or betting advice?",

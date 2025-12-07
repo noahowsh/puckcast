@@ -2,7 +2,7 @@
 """
 Away Back-to-Back Weakness Analysis
 
-V7.3 error analysis showed:
+V7.0 error analysis showed:
 - Away B2B errors: 56
 - Home B2B errors: 14
 - 4x worse prediction for away B2B games

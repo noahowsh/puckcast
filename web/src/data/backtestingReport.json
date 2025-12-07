@@ -1,6 +1,6 @@
 {
   "generatedAt": "2025-12-06T23:00:00Z",
-  "modelVersion": "V8.2",
+  "modelVersion": "V7.0",
   "summary": {
     "fourSeasonAverage": 0.6104,
     "fiveSeasonAverage": 0.5970,
@@ -96,7 +96,8 @@
       "games": 1372
     }
   ],
-  "v82Improvements": [
+  "v70Features": [
+    "39 curated features with adaptive weights",
     "Dynamic Elo home advantage adapting to league trends (window=100, scale=700)",
     "Adaptive sample weights for training",
     "League home win rate as explicit feature",

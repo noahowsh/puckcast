@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
-V7.3 Error Analysis - Find patterns in incorrect predictions.
+V7.0 Error Analysis - Find patterns in incorrect predictions.
 
-Analyzes the 475 games (out of 1,230) that V7.3 gets wrong to identify:
+Analyzes the 475 games (out of 1,230) that V7.0 gets wrong to identify:
 - Which teams are hardest to predict
 - Situational patterns (B2B, rest, divisional, etc.)
 - Confidence distribution of errors
@@ -198,7 +198,7 @@ def analyze_head_to_head_errors(errors_df: pd.DataFrame):
 
 def main():
     print("="*80)
-    print("V7.3 Error Analysis")
+    print("V7.0 Error Analysis")
     print("="*80)
     print(f"Started: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
     print()
@@ -208,11 +208,11 @@ def main():
     dataset = build_dataset(TRAIN_SEASONS + [TEST_SEASON])
     print(f"✓ Loaded {len(dataset.games)} games")
 
-    # Add V7.3 situational features
-    print("Adding V7.3 situational features...")
+    # Add V7.0 situational features
+    print("Adding V7.0 situational features...")
     games_with_situational = add_situational_features(dataset.games)
 
-    # Identify available V7.3 features
+    # Identify available V7.0 features
     v7_3_features = [
         'fatigue_index_diff', 'third_period_trailing_diff',
         'travel_distance_diff', 'is_divisional_matchup',
@@ -250,7 +250,7 @@ def main():
     print()
 
     # Train model
-    print("Training V7.3 model...")
+    print("Training V7.0 model...")
     model = create_baseline_model(C=OPTIMAL_C)
     model = fit_model(model, X_train, y_train, train_mask_fit, sample_weight=train_weights)
     print("✓ Model trained")
