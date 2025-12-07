@@ -12,8 +12,8 @@
 - **Model posture:** Calibrated logistic regression remains the primary engine (~60.9% accuracy vs 53.9% baseline over 5,002 games; log loss ~0.655; Brier ~0.232) with isotonic calibration and enriched inputs (special teams, rest/travel, goalie/injury metadata).
 
 ### Quick Visuals (current model)
-- Pipeline overview: ![Pipeline](assets/presentation/pipeline_v6.svg)  
-  *NHL API ingest + internal xG → features → calibrated logreg → JSON/API/site.*
+- Data flow: ![Flow](assets/presentation/data_flow_v7.svg)  
+  *API ingest → processing (xG/validation) → calibrated model → predictions (JSON/site/posts).*
 - Automation windows (ET): ![Automation](assets/presentation/automation_v7.svg)  
   *Daily post cadence anchored at 08:00 ET; validations before publish.*
 - Accuracy vs baseline: ![Accuracy](assets/presentation/accuracy_baseline_v7.svg)  
