@@ -1,10 +1,13 @@
 import { notFound } from "next/navigation";
 import { buildTeamSnapshots, computeStandingsPowerScore, formatPowerScore, getCurrentStandings, getCurrentPredictions } from "@/lib/current";
 import { TeamLogo } from "@/components/TeamLogo";
+import { TeamCrest } from "@/components/TeamCrest";
 import goaliePulseRaw from "@/data/goaliePulse.json";
+import powerIndexSnapshot from "@/data/powerIndexSnapshot.json";
 import type { GoaliePulse } from "@/types/goalie";
 
 const goaliePulse = goaliePulseRaw as GoaliePulse;
+const movementReasons = powerIndexSnapshot.movementReasons as Record<string, string>;
 const snapshots = buildTeamSnapshots();
 const snapshotMap = new Map(
   snapshots.map((team, idx) => [team.abbrev.toLowerCase(), { ...team, powerRank: idx + 1, powerScore: formatPowerScore(team) }]),
@@ -12,6 +15,17 @@ const snapshotMap = new Map(
 const standings = getCurrentStandings();
 const standingsMap = new Map(standings.map((t) => [t.abbrev.toLowerCase(), { ...t, record: `${t.wins}-${t.losses}-${t.ot}` }]));
 const predictions = getCurrentPredictions();
+
+// Get league-wide stats for comparison
+const leagueStats = {
+  maxGoalsFor: Math.max(...standings.map(t => t.goalsForPerGame ?? 0)),
+  minGoalsFor: Math.min(...standings.map(t => t.goalsForPerGame ?? 0)),
+  maxGoalsAgainst: Math.max(...standings.map(t => t.goalsAgainstPerGame ?? 0)),
+  minGoalsAgainst: Math.min(...standings.map(t => t.goalsAgainstPerGame ?? 0)),
+  avgGoalsFor: standings.reduce((sum, t) => sum + (t.goalsForPerGame ?? 0), 0) / standings.length,
+  avgGoalsAgainst: standings.reduce((sum, t) => sum + (t.goalsAgainstPerGame ?? 0), 0) / standings.length,
+  maxPointPctg: Math.max(...standings.map(t => t.pointPctg ?? 0)),
+};
 
 function movementLabel(movement: number) {
   if (movement === 0) return "Even";
@@ -119,49 +133,209 @@ export default async function TeamPage({ params }: { params: Promise<{ abbrev: s
               </div>
             </div>
 
-            <div className="nova-hero__panel">
-              <div className="flex items-center gap-3 mb-4">
-                <TeamLogo teamAbbrev={snapshot.abbrev} size="sm" />
+            {/* Power Score Visual Panel */}
+            <div className="nova-hero__panel" style={{ padding: '1.5rem' }}>
+              {/* Team Crest + Power Ring */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem', marginBottom: '1.5rem' }}>
+                <div style={{ position: 'relative' }}>
+                  {/* Power Score Ring */}
+                  <svg width="120" height="120" viewBox="0 0 120 120" style={{ transform: 'rotate(-90deg)' }}>
+                    {/* Background ring */}
+                    <circle cx="60" cy="60" r="52" fill="none" stroke="rgba(255,255,255,0.1)" strokeWidth="8" />
+                    {/* Progress ring - based on power rank (1-32) */}
+                    <circle
+                      cx="60" cy="60" r="52"
+                      fill="none"
+                      stroke={snapshot.powerRank <= 8 ? '#10b981' : snapshot.powerRank <= 16 ? '#3b82f6' : snapshot.powerRank <= 24 ? '#f59e0b' : '#ef4444'}
+                      strokeWidth="8"
+                      strokeDasharray={`${((33 - snapshot.powerRank) / 32) * 327} 327`}
+                      strokeLinecap="round"
+                    />
+                  </svg>
+                  {/* Team crest in center */}
+                  <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }}>
+                    <TeamCrest abbrev={snapshot.abbrev} size={56} />
+                  </div>
+                </div>
                 <div>
-                  <p className="text-lg font-semibold text-white">{snapshot.team}</p>
-                  <p className="text-sm text-white/60">Power score {powerScore}</p>
+                  <p style={{ fontSize: '0.75rem', color: 'var(--text-tertiary)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Power Index</p>
+                  <p style={{ fontSize: '2.5rem', fontWeight: 700, color: 'white', lineHeight: 1 }}>#{snapshot.powerRank}</p>
+                  <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', marginTop: '0.25rem' }}>
+                    Score: {powerScore} pts
+                  </p>
                 </div>
               </div>
-              <div className="grid gap-3 sm:grid-cols-2">
-                <div className="card-flat">
-                  <p className="stat-label">Strengths</p>
-                  <ul className="space-y-2 text-sm text-white/80">
-                    {strengths.map((item, idx) => (
-                      <li key={idx}>• {item}</li>
-                    ))}
-                  </ul>
+
+              {/* Model Confidence Meter */}
+              <div style={{ marginBottom: '1.25rem' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
+                  <span style={{ fontSize: '0.75rem', color: 'var(--text-tertiary)', textTransform: 'uppercase' }}>Model Win Rate</span>
+                  <span style={{ fontSize: '1rem', fontWeight: 600, color: snapshot.avgProb >= 0.55 ? '#10b981' : snapshot.avgProb >= 0.45 ? '#3b82f6' : '#f59e0b' }}>
+                    {(snapshot.avgProb * 100).toFixed(1)}%
+                  </span>
                 </div>
-                <div className="card-flat">
-                  <p className="stat-label">Weaknesses</p>
-                  <ul className="space-y-2 text-sm text-white/80">
-                    {weaknesses.map((item, idx) => (
-                      <li key={idx}>• {item}</li>
-                    ))}
-                  </ul>
+                <div style={{ height: '8px', background: 'rgba(255,255,255,0.1)', borderRadius: '4px', overflow: 'hidden' }}>
+                  <div style={{
+                    height: '100%',
+                    width: `${snapshot.avgProb * 100}%`,
+                    background: snapshot.avgProb >= 0.55 ? 'linear-gradient(90deg, #10b981, #34d399)' : snapshot.avgProb >= 0.45 ? 'linear-gradient(90deg, #3b82f6, #60a5fa)' : 'linear-gradient(90deg, #f59e0b, #fbbf24)',
+                    borderRadius: '4px',
+                    transition: 'width 0.5s ease'
+                  }} />
                 </div>
-              </div>
-              <div className="mt-4 rounded-xl border border-white/10 bg-white/[0.03] p-4">
-                <p className="stat-label mb-1">Next game</p>
-                <p className="text-sm text-white/80">
-                  {snapshot.nextGame ? `vs ${snapshot.nextGame.opponent} on ${snapshot.nextGame.date}` : "TBD"}
+                <p style={{ fontSize: '0.7rem', color: 'var(--text-tertiary)', marginTop: '0.25rem' }}>
+                  Avg edge: {((snapshot.avgEdge ?? 0) * 100).toFixed(1)} pts • Favorite {((snapshot.favoriteRate ?? 0) * 100).toFixed(0)}% of games
                 </p>
+              </div>
+
+              {/* Quick Context - Movement Reason */}
+              {movementReasons[snapshot.abbrev] && (
+                <div style={{
+                  padding: '0.75rem',
+                  background: 'rgba(255,255,255,0.03)',
+                  borderRadius: '0.5rem',
+                  borderLeft: '3px solid var(--accent-primary)',
+                  marginBottom: '1rem'
+                }}>
+                  <p style={{ fontSize: '0.7rem', color: 'var(--text-tertiary)', textTransform: 'uppercase', marginBottom: '0.25rem' }}>This Week</p>
+                  <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', fontStyle: 'italic' }}>
+                    {movementReasons[snapshot.abbrev]}
+                  </p>
+                </div>
+              )}
+
+              {/* Offense vs Defense Bars */}
+              <div style={{ display: 'grid', gap: '0.75rem' }}>
+                <div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.25rem' }}>
+                    <span style={{ fontSize: '0.7rem', color: '#10b981' }}>OFFENSE</span>
+                    <span style={{ fontSize: '0.75rem', color: 'white', fontWeight: 500 }}>{standingsInfo?.goalsForPerGame?.toFixed(2)} GPG</span>
+                  </div>
+                  <div style={{ height: '6px', background: 'rgba(255,255,255,0.1)', borderRadius: '3px', overflow: 'hidden' }}>
+                    <div style={{
+                      height: '100%',
+                      width: `${((standingsInfo?.goalsForPerGame ?? 0) / leagueStats.maxGoalsFor) * 100}%`,
+                      background: 'linear-gradient(90deg, #10b981, #34d399)',
+                      borderRadius: '3px'
+                    }} />
+                  </div>
+                </div>
+                <div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.25rem' }}>
+                    <span style={{ fontSize: '0.7rem', color: '#3b82f6' }}>DEFENSE</span>
+                    <span style={{ fontSize: '0.75rem', color: 'white', fontWeight: 500 }}>{standingsInfo?.goalsAgainstPerGame?.toFixed(2)} GA/G</span>
+                  </div>
+                  <div style={{ height: '6px', background: 'rgba(255,255,255,0.1)', borderRadius: '3px', overflow: 'hidden' }}>
+                    {/* For defense, lower is better - invert the bar */}
+                    <div style={{
+                      height: '100%',
+                      width: `${(1 - ((standingsInfo?.goalsAgainstPerGame ?? leagueStats.avgGoalsAgainst) - leagueStats.minGoalsAgainst) / (leagueStats.maxGoalsAgainst - leagueStats.minGoalsAgainst)) * 100}%`,
+                      background: 'linear-gradient(90deg, #3b82f6, #60a5fa)',
+                      borderRadius: '3px'
+                    }} />
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </section>
 
+        {/* League Rankings Context */}
         <section className="nova-section">
-          <div className="card">
-            <h2 className="text-xl font-bold text-white mb-3">How the model sees this team</h2>
-            <p className="text-white/75 leading-relaxed">
-              {snapshot.team} rate as #{snapshot.powerRank} in the Puckcast power index. The model blends win probability, edge, and standings context
-              to size up each matchup. Edges tighten against elite opponents and expand versus teams the model flags as overrated.
-            </p>
+          <h2 className="text-2xl font-bold text-white mb-4">League standings context</h2>
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {/* Points Rank */}
+            <div className="card" style={{ position: 'relative', overflow: 'hidden' }}>
+              <div style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                height: '100%',
+                width: `${((33 - (standingsInfo?.rank ?? 16)) / 32) * 100}%`,
+                background: 'linear-gradient(90deg, rgba(16,185,129,0.15), transparent)',
+                zIndex: 0
+              }} />
+              <div style={{ position: 'relative', zIndex: 1 }}>
+                <p className="stat-label">League Rank</p>
+                <p className="stat-tile__value text-3xl">#{standingsInfo?.rank ?? 'N/A'}</p>
+                <p className="text-xs text-white/50 mt-1">of 32 teams</p>
+              </div>
+            </div>
+
+            {/* Power Index vs Standings */}
+            <div className="card">
+              <p className="stat-label">Power vs Standings</p>
+              <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.5rem' }}>
+                <p className="stat-tile__value text-2xl">{movement > 0 ? '+' : ''}{movement}</p>
+                <span style={{ fontSize: '0.75rem', color: movement > 0 ? '#10b981' : movement < 0 ? '#ef4444' : 'var(--text-tertiary)' }}>
+                  {movement > 0 ? 'undervalued' : movement < 0 ? 'overvalued' : 'fair value'}
+                </span>
+              </div>
+              <p className="text-xs text-white/50 mt-1">
+                Model #{snapshot.powerRank} vs Standings #{standingsInfo?.rank ?? 'N/A'}
+              </p>
+            </div>
+
+            {/* Point Percentage Rank */}
+            <div className="card">
+              <p className="stat-label">Point %</p>
+              <p className="stat-tile__value text-2xl">{standingsInfo?.pointPctg ? (standingsInfo.pointPctg * 100).toFixed(1) + '%' : 'N/A'}</p>
+              <div style={{ marginTop: '0.5rem', height: '4px', background: 'rgba(255,255,255,0.1)', borderRadius: '2px', overflow: 'hidden' }}>
+                <div style={{
+                  height: '100%',
+                  width: `${((standingsInfo?.pointPctg ?? 0) / leagueStats.maxPointPctg) * 100}%`,
+                  background: '#3b82f6',
+                  borderRadius: '2px'
+                }} />
+              </div>
+            </div>
+
+            {/* Goal Diff Rank */}
+            <div className="card">
+              <p className="stat-label">Goal Differential</p>
+              <p className={`stat-tile__value text-2xl ${(standingsInfo?.goalDifferential ?? 0) >= 0 ? 'text-emerald-400' : 'text-rose-400'}`}>
+                {(standingsInfo?.goalDifferential ?? 0) >= 0 ? '+' : ''}{standingsInfo?.goalDifferential ?? 'N/A'}
+              </p>
+              <p className="text-xs text-white/50 mt-1">
+                {(standingsInfo?.goalDifferential ?? 0) > 20 ? 'Elite run differential' :
+                 (standingsInfo?.goalDifferential ?? 0) > 0 ? 'Positive run diff' :
+                 (standingsInfo?.goalDifferential ?? 0) > -10 ? 'Slightly negative' : 'Struggling to outscore opponents'}
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* Strengths & Weaknesses Visual */}
+        <section className="nova-section">
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div className="card" style={{ borderLeft: '4px solid #10b981' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem' }}>
+                <span style={{ fontSize: '1.25rem' }}>💪</span>
+                <h3 className="text-lg font-bold text-white">Strengths</h3>
+              </div>
+              <ul className="space-y-3">
+                {strengths.map((item, idx) => (
+                  <li key={idx} style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem' }}>
+                    <span style={{ color: '#10b981', fontWeight: 700, fontSize: '0.875rem' }}>✓</span>
+                    <span className="text-sm text-white/80">{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div className="card" style={{ borderLeft: '4px solid #f59e0b' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem' }}>
+                <span style={{ fontSize: '1.25rem' }}>⚠️</span>
+                <h3 className="text-lg font-bold text-white">Watch Out For</h3>
+              </div>
+              <ul className="space-y-3">
+                {weaknesses.map((item, idx) => (
+                  <li key={idx} style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem' }}>
+                    <span style={{ color: '#f59e0b', fontWeight: 700, fontSize: '0.875rem' }}>!</span>
+                    <span className="text-sm text-white/80">{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
         </section>
 
@@ -212,71 +386,123 @@ export default async function TeamPage({ params }: { params: Promise<{ abbrev: s
           )}
         </section>
 
-        {/* Team Statistics Section */}
+        {/* Team Statistics Section - Visual */}
         <section className="nova-section">
-          <h2 className="text-2xl font-bold text-white mb-4">Team statistics</h2>
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            <div className="card">
-              <p className="stat-label">Goals per game</p>
-              <p className="stat-tile__value text-2xl">{standingsInfo?.goalsForPerGame?.toFixed(2) ?? "N/A"}</p>
-              <p className="text-xs text-white/50 mt-1">Offense</p>
+          <h2 className="text-2xl font-bold text-white mb-4">Team performance</h2>
+
+          {/* Visual Record Breakdown */}
+          <div className="card" style={{ marginBottom: '1rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1rem' }}>
+              <p className="stat-label" style={{ margin: 0 }}>Season Record</p>
+              <p style={{ fontSize: '1.5rem', fontWeight: 700, color: 'white' }}>{standingsInfo?.record ?? 'N/A'}</p>
             </div>
-            <div className="card">
-              <p className="stat-label">Goals against per game</p>
-              <p className="stat-tile__value text-2xl">{standingsInfo?.goalsAgainstPerGame?.toFixed(2) ?? "N/A"}</p>
-              <p className="text-xs text-white/50 mt-1">Defense</p>
-            </div>
-            <div className="card">
-              <p className="stat-label">Goal differential</p>
-              <p className={`stat-tile__value text-2xl ${(standingsInfo?.goalDifferential ?? 0) >= 0 ? 'text-emerald-400' : 'text-rose-400'}`}>
-                {standingsInfo?.goalDifferential ?? "N/A"}
-              </p>
-              <p className="text-xs text-white/50 mt-1">Season total</p>
-            </div>
-            <div className="card">
-              <p className="stat-label">Point percentage</p>
-              <p className="stat-tile__value text-2xl">{standingsInfo?.pointPctg ? (standingsInfo.pointPctg * 100).toFixed(1) + '%' : "N/A"}</p>
-              <p className="text-xs text-white/50 mt-1">Win rate</p>
-            </div>
+            {/* Visual record bar */}
+            {standingsInfo && (
+              <div style={{ display: 'flex', height: '32px', borderRadius: '8px', overflow: 'hidden' }}>
+                <div style={{
+                  width: `${(standingsInfo.wins / standingsInfo.gamesPlayed) * 100}%`,
+                  background: 'linear-gradient(135deg, #10b981, #34d399)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  minWidth: standingsInfo.wins > 0 ? '40px' : 0
+                }}>
+                  <span style={{ fontSize: '0.75rem', fontWeight: 600, color: 'white' }}>{standingsInfo.wins}W</span>
+                </div>
+                <div style={{
+                  width: `${(standingsInfo.losses / standingsInfo.gamesPlayed) * 100}%`,
+                  background: 'linear-gradient(135deg, #ef4444, #f87171)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  minWidth: standingsInfo.losses > 0 ? '40px' : 0
+                }}>
+                  <span style={{ fontSize: '0.75rem', fontWeight: 600, color: 'white' }}>{standingsInfo.losses}L</span>
+                </div>
+                <div style={{
+                  width: `${(standingsInfo.ot / standingsInfo.gamesPlayed) * 100}%`,
+                  background: 'linear-gradient(135deg, #f59e0b, #fbbf24)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  minWidth: standingsInfo.ot > 0 ? '40px' : 0
+                }}>
+                  <span style={{ fontSize: '0.75rem', fontWeight: 600, color: 'white' }}>{standingsInfo.ot}OT</span>
+                </div>
+              </div>
+            )}
           </div>
 
-          <div className="grid gap-4 sm:grid-cols-2 mt-4">
-            <div className="card">
-              <p className="stat-label mb-3">Shooting</p>
-              <div className="space-y-2">
-                <div className="flex justify-between">
-                  <span className="text-sm text-white/70">Shots for per game</span>
-                  <span className="text-white font-semibold">{standingsInfo?.shotsForPerGame?.toFixed(1) ?? "N/A"}</span>
+          {/* Offense vs Defense Visual Comparison */}
+          <div className="grid gap-4 sm:grid-cols-2">
+            {/* Offense Card */}
+            <div className="card" style={{ background: 'linear-gradient(135deg, rgba(16,185,129,0.1), rgba(16,185,129,0.02))' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1rem' }}>
+                <div style={{
+                  width: '40px',
+                  height: '40px',
+                  borderRadius: '50%',
+                  background: 'rgba(16,185,129,0.2)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}>
+                  <span style={{ fontSize: '1.25rem' }}>⚔️</span>
                 </div>
-                <div className="flex justify-between">
-                  <span className="text-sm text-white/70">Shots against per game</span>
-                  <span className="text-white font-semibold">{standingsInfo?.shotsAgainstPerGame?.toFixed(1) ?? "N/A"}</span>
+                <div>
+                  <p className="stat-label" style={{ margin: 0 }}>Offense</p>
+                  <p style={{ fontSize: '1.75rem', fontWeight: 700, color: '#10b981', lineHeight: 1 }}>
+                    {standingsInfo?.goalsForPerGame?.toFixed(2) ?? 'N/A'}
+                  </p>
                 </div>
-                {standingsInfo?.shotsForPerGame && standingsInfo?.shotsAgainstPerGame && (
-                  <div className="flex justify-between pt-2 border-t border-white/10">
-                    <span className="text-sm text-white/70">Shot differential</span>
-                    <span className={`font-semibold ${(standingsInfo.shotsForPerGame - standingsInfo.shotsAgainstPerGame) >= 0 ? 'text-emerald-400' : 'text-rose-400'}`}>
-                      {(standingsInfo.shotsForPerGame - standingsInfo.shotsAgainstPerGame) >= 0 ? '+' : ''}
-                      {(standingsInfo.shotsForPerGame - standingsInfo.shotsAgainstPerGame).toFixed(1)}
-                    </span>
-                  </div>
-                )}
+                <p style={{ marginLeft: 'auto', fontSize: '0.75rem', color: 'var(--text-tertiary)' }}>goals/game</p>
+              </div>
+              <div style={{ display: 'flex', gap: '1rem' }}>
+                <div style={{ flex: 1 }}>
+                  <p style={{ fontSize: '0.7rem', color: 'var(--text-tertiary)', marginBottom: '0.25rem' }}>Shots For</p>
+                  <p style={{ fontSize: '1.125rem', fontWeight: 600, color: 'white' }}>{standingsInfo?.shotsForPerGame?.toFixed(1) ?? 'N/A'}</p>
+                </div>
+                <div style={{ flex: 1 }}>
+                  <p style={{ fontSize: '0.7rem', color: 'var(--text-tertiary)', marginBottom: '0.25rem' }}>League Rank</p>
+                  <p style={{ fontSize: '1.125rem', fontWeight: 600, color: 'white' }}>
+                    #{standings.sort((a, b) => (b.goalsForPerGame ?? 0) - (a.goalsForPerGame ?? 0)).findIndex(t => t.abbrev === snapshot.abbrev) + 1}
+                  </p>
+                </div>
               </div>
             </div>
-            <div className="card">
-              <p className="stat-label mb-3">Record breakdown</p>
-              <div className="space-y-2">
-                <div className="flex justify-between">
-                  <span className="text-sm text-white/70">Wins</span>
-                  <span className="text-emerald-400 font-semibold">{standingsInfo?.wins ?? "N/A"}</span>
+
+            {/* Defense Card */}
+            <div className="card" style={{ background: 'linear-gradient(135deg, rgba(59,130,246,0.1), rgba(59,130,246,0.02))' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1rem' }}>
+                <div style={{
+                  width: '40px',
+                  height: '40px',
+                  borderRadius: '50%',
+                  background: 'rgba(59,130,246,0.2)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}>
+                  <span style={{ fontSize: '1.25rem' }}>🛡️</span>
                 </div>
-                <div className="flex justify-between">
-                  <span className="text-sm text-white/70">Losses</span>
-                  <span className="text-rose-400 font-semibold">{standingsInfo?.losses ?? "N/A"}</span>
+                <div>
+                  <p className="stat-label" style={{ margin: 0 }}>Defense</p>
+                  <p style={{ fontSize: '1.75rem', fontWeight: 700, color: '#3b82f6', lineHeight: 1 }}>
+                    {standingsInfo?.goalsAgainstPerGame?.toFixed(2) ?? 'N/A'}
+                  </p>
                 </div>
-                <div className="flex justify-between">
-                  <span className="text-sm text-white/70">Overtime/Shootout</span>
-                  <span className="text-amber-400 font-semibold">{standingsInfo?.ot ?? "N/A"}</span>
+                <p style={{ marginLeft: 'auto', fontSize: '0.75rem', color: 'var(--text-tertiary)' }}>goals against/game</p>
+              </div>
+              <div style={{ display: 'flex', gap: '1rem' }}>
+                <div style={{ flex: 1 }}>
+                  <p style={{ fontSize: '0.7rem', color: 'var(--text-tertiary)', marginBottom: '0.25rem' }}>Shots Against</p>
+                  <p style={{ fontSize: '1.125rem', fontWeight: 600, color: 'white' }}>{standingsInfo?.shotsAgainstPerGame?.toFixed(1) ?? 'N/A'}</p>
+                </div>
+                <div style={{ flex: 1 }}>
+                  <p style={{ fontSize: '0.7rem', color: 'var(--text-tertiary)', marginBottom: '0.25rem' }}>League Rank</p>
+                  <p style={{ fontSize: '1.125rem', fontWeight: 600, color: 'white' }}>
+                    #{standings.sort((a, b) => (a.goalsAgainstPerGame ?? 99) - (b.goalsAgainstPerGame ?? 99)).findIndex(t => t.abbrev === snapshot.abbrev) + 1}
+                  </p>
                 </div>
               </div>
             </div>
