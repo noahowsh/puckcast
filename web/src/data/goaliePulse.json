@@ -1,25 +1,7 @@
 {
-  "updatedAt": "2025-12-06T23:11:11.862954+00:00",
+  "updatedAt": "2025-12-07T13:17:57.642231+00:00",
   "notes": "Goalie performance metrics calculated from NHL Stats API data. GSAx estimates based on save percentage above league average.",
   "goalies": [
-    {
-      "name": "Jesper Wallstedt",
-      "team": "MIN",
-      "rollingGsa": 3.3,
-      "seasonGsa": 11.0,
-      "restDays": 2,
-      "startLikelihood": 0.95,
-      "trend": "surging",
-      "note": "Jesper Wallstedt is playing at an elite level with a 0.944 save percentage, providing MIN with a strong defensive anchor.",
-      "strengths": [
-        "Elite save percentage",
-        "Exceptional goals against average"
-      ],
-      "watchouts": [
-        "Limited recent data"
-      ],
-      "nextOpponent": "VAN"
-    },
     {
       "name": "Jonathan Quick",
       "team": "NYR",
@@ -36,7 +18,25 @@
       "watchouts": [
         "Limited recent data"
       ],
-      "nextOpponent": "COL"
+      "nextOpponent": "VGK"
+    },
+    {
+      "name": "Jesper Wallstedt",
+      "team": "MIN",
+      "rollingGsa": 2.7,
+      "seasonGsa": 9.8,
+      "restDays": 2,
+      "startLikelihood": 0.95,
+      "trend": "surging",
+      "note": "Jesper Wallstedt is playing at an elite level with a 0.936 save percentage, providing MIN with a strong defensive anchor.",
+      "strengths": [
+        "Elite save percentage",
+        "Exceptional goals against average"
+      ],
+      "watchouts": [
+        "Limited recent data"
+      ],
+      "nextOpponent": "SEA"
     },
     {
       "name": "Joseph Woll",
@@ -54,7 +54,25 @@
       "watchouts": [
         "Limited recent data"
       ],
-      "nextOpponent": "MTL"
+      "nextOpponent": "TBL"
+    },
+    {
+      "name": "Dennis Hildeby",
+      "team": "TOR",
+      "rollingGsa": 2.0,
+      "seasonGsa": 5.4,
+      "restDays": 3,
+      "startLikelihood": 0.75,
+      "trend": "steady",
+      "note": "Consistent performance from Dennis Hildeby with a 2.51 GAA \u2014 reliable starter for TOR.",
+      "strengths": [
+        "Elite save percentage",
+        "Strong rebound control"
+      ],
+      "watchouts": [
+        "Limited recent data"
+      ],
+      "nextOpponent": "TBL"
     },
     {
       "name": "Pyotr Kochetkov",
@@ -72,7 +90,7 @@
       "watchouts": [
         "Limited recent data"
       ],
-      "nextOpponent": "NSH"
+      "nextOpponent": "SJS"
     },
     {
       "name": "Matt Murray",
@@ -90,7 +108,7 @@
       "watchouts": [
         "Limited recent data"
       ],
-      "nextOpponent": "DET"
+      "nextOpponent": "MIN"
     },
     {
       "name": "Casey DeSmith",
@@ -126,7 +144,7 @@
       "watchouts": [
         "Limited recent data"
       ],
-      "nextOpponent": "NYR"
+      "nextOpponent": "PHI"
     },
     {
       "name": "Mackenzie Blackwood",
@@ -144,7 +162,7 @@
       "watchouts": [
         "Limited recent data"
       ],
-      "nextOpponent": "NYR"
+      "nextOpponent": "PHI"
     },
     {
       "name": "Devin Cooley",
@@ -162,24 +180,7 @@
       "watchouts": [
         "Limited recent data"
       ],
-      "nextOpponent": "UTA"
-    },
-    {
-      "name": "Spencer Knight",
-      "team": "CHI",
-      "rollingGsa": 1.4,
-      "seasonGsa": 9.1,
-      "restDays": 2,
-      "startLikelihood": 0.9,
-      "trend": "steady",
-      "note": "Consistent performance from Spencer Knight with a 2.44 GAA \u2014 reliable starter for CHI.",
-      "strengths": [
-        "Strong rebound control"
-      ],
-      "watchouts": [
-        "Inconsistent results"
-      ],
-      "nextOpponent": "LAK"
+      "nextOpponent": "BUF"
     },
     {
       "name": "Logan Thompson",
@@ -200,23 +201,6 @@
       "nextOpponent": "CBJ"
     },
     {
-      "name": "Dennis Hildeby",
-      "team": "TOR",
-      "rollingGsa": 1.4,
-      "seasonGsa": 3.3,
-      "restDays": 3,
-      "startLikelihood": 0.7,
-      "trend": "stable",
-      "note": "Dennis Hildeby showing promise with limited sample size \u2014 monitor progression closely.",
-      "strengths": [
-        "Strong rebound control"
-      ],
-      "watchouts": [
-        "Limited recent data"
-      ],
-      "nextOpponent": "MTL"
-    },
-    {
       "name": "Andrei Vasilevskiy",
       "team": "TBL",
       "rollingGsa": 1.3,
@@ -232,7 +216,41 @@
       "watchouts": [
         "Inconsistent results"
       ],
-      "nextOpponent": "NYI"
+      "nextOpponent": "TOR"
+    },
+    {
+      "name": "Darcy Kuemper",
+      "team": "LAK",
+      "rollingGsa": 1.1,
+      "seasonGsa": 7.1,
+      "restDays": 1,
+      "startLikelihood": 0.9,
+      "trend": "steady",
+      "note": "Consistent performance from Darcy Kuemper with a 2.24 GAA \u2014 reliable starter for LAK.",
+      "strengths": [
+        "Exceptional goals against average"
+      ],
+      "watchouts": [
+        "Inconsistent results"
+      ],
+      "nextOpponent": "UTA"
+    },
+    {
+      "name": "Spencer Knight",
+      "team": "CHI",
+      "rollingGsa": 1.0,
+      "seasonGsa": 6.8,
+      "restDays": 1,
+      "startLikelihood": 0.9,
+      "trend": "steady",
+      "note": "Consistent performance from Spencer Knight with a 2.62 GAA \u2014 reliable starter for CHI.",
+      "strengths": [
+        "Solid fundamentals"
+      ],
+      "watchouts": [
+        "Inconsistent results"
+      ],
+      "nextOpponent": "ANA"
     },
     {
       "name": "Connor Hellebuyck",
@@ -249,7 +267,7 @@
       "watchouts": [
         "Inconsistent results"
       ],
-      "nextOpponent": "EDM"
+      "nextOpponent": "DAL"
     },
     {
       "name": "Igor Shesterkin",
@@ -266,7 +284,7 @@
       "watchouts": [
         "Inconsistent results"
       ],
-      "nextOpponent": "COL"
+      "nextOpponent": "VGK"
     },
     {
       "name": "Tristan Jarry",
@@ -286,6 +304,23 @@
       "nextOpponent": "DAL"
     },
     {
+      "name": "Jeremy Swayman",
+      "team": "BOS",
+      "rollingGsa": 1.0,
+      "seasonGsa": 6.0,
+      "restDays": 2,
+      "startLikelihood": 0.9,
+      "trend": "steady",
+      "note": "Consistent performance from Jeremy Swayman with a 2.70 GAA \u2014 reliable starter for BOS.",
+      "strengths": [
+        "Proven winner"
+      ],
+      "watchouts": [
+        "Inconsistent results"
+      ],
+      "nextOpponent": "STL"
+    },
+    {
       "name": "Sergei Murashov",
       "team": "PIT",
       "rollingGsa": 0.9,
@@ -303,72 +338,38 @@
       "nextOpponent": "DAL"
     },
     {
-      "name": "Jake Allen",
-      "team": "NJD",
-      "rollingGsa": 0.8,
-      "seasonGsa": 3.9,
-      "restDays": 2,
-      "startLikelihood": 0.8,
-      "trend": "steady",
-      "note": "Consistent performance from Jake Allen with a 2.48 GAA \u2014 reliable starter for NJD.",
-      "strengths": [
-        "Solid fundamentals"
-      ],
-      "watchouts": [
-        "Inconsistent results"
-      ],
-      "nextOpponent": "BOS"
-    },
-    {
-      "name": "Darcy Kuemper",
-      "team": "LAK",
-      "rollingGsa": 0.8,
-      "seasonGsa": 4.8,
-      "restDays": 2,
+      "name": "Ilya Sorokin",
+      "team": "NYI",
+      "rollingGsa": 0.9,
+      "seasonGsa": 5.8,
+      "restDays": 1,
       "startLikelihood": 0.9,
       "trend": "steady",
-      "note": "Consistent performance from Darcy Kuemper with a 2.35 GAA \u2014 reliable starter for LAK.",
-      "strengths": [
-        "Solid fundamentals"
-      ],
-      "watchouts": [
-        "Inconsistent results"
-      ],
-      "nextOpponent": "CHI"
-    },
-    {
-      "name": "Jeremy Swayman",
-      "team": "BOS",
-      "rollingGsa": 0.7,
-      "seasonGsa": 4.4,
-      "restDays": 2,
-      "startLikelihood": 0.8,
-      "trend": "stable",
-      "note": "Jeremy Swayman showing promise with limited sample size \u2014 monitor progression closely.",
+      "note": "Consistent performance from Ilya Sorokin with a 2.47 GAA \u2014 reliable starter for NYI.",
       "strengths": [
         "Proven winner"
       ],
       "watchouts": [
         "Inconsistent results"
       ],
-      "nextOpponent": "NJD"
+      "nextOpponent": "FLA"
     },
     {
-      "name": "Brandon Bussi",
-      "team": "CAR",
+      "name": "Jake Allen",
+      "team": "NJD",
       "rollingGsa": 0.6,
-      "seasonGsa": 1.5,
-      "restDays": 3,
-      "startLikelihood": 0.6,
+      "seasonGsa": 3.1,
+      "restDays": 2,
+      "startLikelihood": 0.8,
       "trend": "stable",
-      "note": "Brandon Bussi showing promise with limited sample size \u2014 monitor progression closely.",
+      "note": "Jake Allen showing promise with limited sample size \u2014 monitor progression closely.",
       "strengths": [
-        "Exceptional goals against average"
+        "Solid fundamentals"
       ],
       "watchouts": [
-        "Limited recent data"
+        "Inconsistent results"
       ],
-      "nextOpponent": "NSH"
+      "nextOpponent": "OTT"
     },
     {
       "name": "Jake Oettinger",
@@ -402,7 +403,7 @@
       "watchouts": [
         "Limited recent data"
       ],
-      "nextOpponent": "CBJ"
+      "nextOpponent": "NYI"
     },
     {
       "name": "Dan Vladar",
@@ -422,23 +423,6 @@
       "nextOpponent": "COL"
     },
     {
-      "name": "Ilya Sorokin",
-      "team": "NYI",
-      "rollingGsa": 0.5,
-      "seasonGsa": 2.9,
-      "restDays": 2,
-      "startLikelihood": 0.8,
-      "trend": "stable",
-      "note": "Ilya Sorokin showing promise with limited sample size \u2014 monitor progression closely.",
-      "strengths": [
-        "Solid fundamentals"
-      ],
-      "watchouts": [
-        "Inconsistent results"
-      ],
-      "nextOpponent": "TBL"
-    },
-    {
       "name": "Filip Gustavsson",
       "team": "MIN",
       "rollingGsa": 0.4,
@@ -453,24 +437,24 @@
       "watchouts": [
         "Inconsistent results"
       ],
-      "nextOpponent": "VAN"
+      "nextOpponent": "SEA"
     },
     {
-      "name": "Eric Comrie",
-      "team": "WPG",
+      "name": "Nikita Tolopilo",
+      "team": "VAN",
       "rollingGsa": 0.4,
-      "seasonGsa": 1.5,
-      "restDays": 2,
-      "startLikelihood": 0.7,
+      "seasonGsa": 0.4,
+      "restDays": 3,
+      "startLikelihood": 0.6,
       "trend": "stable",
-      "note": "Eric Comrie showing promise with limited sample size \u2014 monitor progression closely.",
+      "note": "Nikita Tolopilo showing promise with limited sample size \u2014 monitor progression closely.",
       "strengths": [
         "Solid fundamentals"
       ],
       "watchouts": [
-        "Inconsistent results"
+        "High goals against"
       ],
-      "nextOpponent": "EDM"
+      "nextOpponent": "DET"
     },
     {
       "name": "Lukas Dostal",
@@ -522,7 +506,24 @@
       "watchouts": [
         "Limited recent data"
       ],
-      "nextOpponent": "MIN"
+      "nextOpponent": "DET"
+    },
+    {
+      "name": "Brandon Bussi",
+      "team": "CAR",
+      "rollingGsa": 0.2,
+      "seasonGsa": 0.7,
+      "restDays": 3,
+      "startLikelihood": 0.6,
+      "trend": "stable",
+      "note": "Brandon Bussi showing promise with limited sample size \u2014 monitor progression closely.",
+      "strengths": [
+        "Exceptional goals against average"
+      ],
+      "watchouts": [
+        "Limited recent data"
+      ],
+      "nextOpponent": "SJS"
     }
   ]
 }
