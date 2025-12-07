@@ -1,25 +1,26 @@
 import Link from "next/link";
-import { buildTeamSnapshots, computeStandingsPowerScore, formatPowerScore, getCurrentStandings } from "@/lib/current";
+import { computeStandingsPowerScore, getCurrentStandings } from "@/lib/current";
 import { TeamLogo } from "@/components/TeamLogo";
 import { TeamCrest } from "@/components/TeamCrest";
 
-const snapshots = buildTeamSnapshots();
 const standings = getCurrentStandings();
 
-const allTeams = standings
-  .map((team) => {
-    const snap = snapshots.find((s) => s.abbrev === team.abbrev);
-    const avgProb = snap?.avgProb ?? team.pointPctg ?? 0.5;
-    const powerScore = snap ? formatPowerScore(snap) : computeStandingsPowerScore({ ...team, rank: team.rank });
-    return {
-      team: team.team,
-      abbrev: team.abbrev,
-      record: `${team.wins}-${team.losses}-${team.ot}`,
-      points: team.points,
-      avgProb,
-      powerScore,
-    };
-  })
+// Build power rankings for all teams
+const powerRankings = [...standings]
+  .map(team => ({ ...team, powerScore: computeStandingsPowerScore(team) }))
+  .sort((a, b) => b.powerScore - a.powerScore)
+  .map((team, idx) => ({ ...team, powerRank: idx + 1 }));
+
+const allTeams = powerRankings
+  .map((team) => ({
+    team: team.team,
+    abbrev: team.abbrev,
+    record: `${team.wins}-${team.losses}-${team.ot}`,
+    points: team.points,
+    pointPctg: team.pointPctg,
+    powerRank: team.powerRank,
+    powerScore: team.powerScore,
+  }))
   .sort((a, b) => a.team.localeCompare(b.team)); // Sort alphabetically by team name
 
 // Get top 5 teams by points for the visual
@@ -97,7 +98,8 @@ export default function TeamsIndexPage() {
                     <p className="text-sm text-white/60">{team.record}</p>
                     <div className="flex items-center gap-2 mt-2">
                       <span className="chip-soft chip-soft--mini">{team.points} pts</span>
-                      <span className="chip-soft chip-soft--mini">{(team.avgProb * 100).toFixed(1)}%</span>
+                      <span className="chip-soft chip-soft--mini">{(team.pointPctg * 100).toFixed(0)}% pt pct</span>
+                      <span className="chip-soft chip-soft--mini">#{team.powerRank}</span>
                     </div>
                   </div>
                 </div>
