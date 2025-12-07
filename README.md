@@ -55,35 +55,35 @@ puckcast/
 ├── docs/                            # 📚 Documentation Hub
 │   ├── INDEX.md                     # Documentation navigation
 │   ├── current/                     # Current model docs
-│   │   ├── V7.3_PRODUCTION_MODEL.md
+│   │   ├── V7_PRODUCTION_MODEL.md
 │   │   ├── CLOSING_GAP_ANALYSIS.md
 │   │   └── PROJECT_STATUS.md
-│   ├── experiments/                 # Experiment documentation
-│   │   ├── V7.4_HEAD_TO_HEAD.md
-│   │   ├── V7.5_INTERACTIONS.md
-│   │   ├── V7.6_TEAM_CALIBRATION.md
-│   │   ├── V7.7_CONFIDENCE_FILTERING.md
-│   │   └── GOALIE_TRACKING.md
+│   ├── experiments/                 # V7.0 Development Tests
+│   │   ├── TEST_HEAD_TO_HEAD.md
+│   │   ├── TEST_INTERACTIONS.md
+│   │   ├── TEST_TEAM_CALIBRATION.md
+│   │   ├── TEST_CONFIDENCE_FILTERING.md
+│   │   └── TEST_GOALIE_TRACKING.md
 │   └── archive/                     # Historical docs
 │
 ├── src/nhl_prediction/              # 🧠 Core Prediction Engine
 │   ├── pipeline.py                  # Feature engineering pipeline
 │   ├── model.py                     # Model training/prediction
 │   ├── situational_features.py      # ⭐ V7.0 situational features
-│   ├── head_to_head_features.py     # V7.4 H2H (not used)
-│   ├── interaction_features.py      # V7.5 interactions (not used)
-│   └── team_calibration_features.py # V7.6 calibration (not used)
+│   ├── head_to_head_features.py     # Test: H2H (not used in production)
+│   ├── interaction_features.py      # Test: interactions (not used)
+│   └── team_calibration_features.py # Test: calibration (not used)
 │
 ├── training/                        # 🎓 Training Scripts
 │   ├── train_v7_adaptive.py         # ✅ PRODUCTION TRAINING SCRIPT
-│   └── experiments/                 # Failed experiments
-│       ├── train_v7_4_head_to_head.py
-│       ├── train_v7_5_interactions.py
-│       └── train_v7_6_team_calibration.py
+│   └── experiments/                 # V7.0 Development Tests
+│       ├── train_test_head_to_head.py
+│       ├── train_test_interactions.py
+│       └── train_test_team_calibration.py
 │
 ├── analysis/                        # 🔬 Analysis Scripts
 │   ├── current/                     # Current analysis
-│   │   ├── analyze_v7_3_errors.py
+│   │   ├── analyze_errors.py
 │   │   ├── analyze_b2b_weakness.py
 │   │   └── analyze_confidence_calibration.py
 │   └── archive/                     # Old analysis
@@ -161,7 +161,7 @@ python training/train_v7_adaptive.py
 
 ```bash
 # Comprehensive error analysis
-python analysis/current/analyze_v7_3_errors.py
+python analysis/current/analyze_errors.py
 
 # Back-to-back game analysis
 python analysis/current/analyze_b2b_weakness.py
@@ -222,7 +222,7 @@ The V7.0 model introduces adaptive weighting that accounts for:
 
 ### ✅ Successful Approaches
 
-#### V7.0 Baseline (60.24%)
+#### V7.0 Feature Engineering
 - **209 engineered features** from NHL API data
 - **Rolling statistics**: Goals, xG, shots, corsi, fenwick (3/5/10 game windows)
 - **Team indicators**: 32 team dummy variables
@@ -237,7 +237,7 @@ The V7.0 model introduces adaptive weighting that accounts for:
 4. `home_team_28` (-0.1709) [team dummy]
 5. `rolling_xg_for_5_diff` (0.1492)
 
-#### V7.3 Situational Features (+0.25pp to 60.49%)
+#### V7.0 Situational Features
 - **Fatigue modeling** beyond simple B2B
 - **Travel burden** (miles traveled)
 - **Divisional matchup** importance
@@ -248,11 +248,11 @@ The V7.0 model introduces adaptive weighting that accounts for:
 
 ---
 
-### ❌ Failed Approaches - Deep Dive
+### ❌ Failed Development Tests
 
-All 4 attempts to close the 0.62pp gap to 62% **made the model worse**:
+During V7.0 development, we tested several approaches that **did not improve** the model:
 
-#### V7.4: Head-to-Head Features (60.00%, -1.38pp)
+#### Test: Head-to-Head Features (60.00%)
 
 **Hypothesis**: Specific matchup history adds predictive value
 **Implementation**: 6 features:
@@ -274,11 +274,11 @@ All 4 attempts to close the 0.62pp gap to 62% **made the model worse**:
 
 **Lesson**: Error patterns (20+ problematic matchups) don't always suggest solutions - might just be noise
 
-📄 **Full Analysis**: [docs/experiments/V7.4_HEAD_TO_HEAD.md](docs/experiments/V7.4_HEAD_TO_HEAD.md)
+📄 **Full Analysis**: [docs/experiments/TEST_HEAD_TO_HEAD.md](docs/experiments/TEST_HEAD_TO_HEAD.md)
 
 ---
 
-#### V7.5: Feature Interactions (60.08%, -1.30pp)
+#### Test: Feature Interactions (60.08%)
 
 **Hypothesis**: Non-linear combinations of features add value
 **Implementation**: 12 interaction terms:
@@ -297,11 +297,11 @@ All 4 attempts to close the 0.62pp gap to 62% **made the model worse**:
 
 **Lesson**: More features ≠ better model. Interactions add noise when base features suffice.
 
-📄 **Full Analysis**: [docs/experiments/V7.5_INTERACTIONS.md](docs/experiments/V7.5_INTERACTIONS.md)
+📄 **Full Analysis**: [docs/experiments/TEST_INTERACTIONS.md](docs/experiments/TEST_INTERACTIONS.md)
 
 ---
 
-#### V7.6: Team-Specific Calibration (60.73%, -0.65pp)
+#### Test: Team-Specific Calibration (60.73%)
 
 **Hypothesis**: Teams with high error rates need bias adjustments
 **Implementation**: 15 team-specific features for VGK, PHI, NYI, WSH, PIT:
@@ -318,11 +318,11 @@ All 4 attempts to close the 0.62pp gap to 62% **made the model worse**:
 
 **Lesson**: Team-specific effects already captured by existing team indicators. Additional bias terms redundant.
 
-📄 **Full Analysis**: [docs/experiments/V7.6_TEAM_CALIBRATION.md](docs/experiments/V7.6_TEAM_CALIBRATION.md)
+📄 **Full Analysis**: [docs/experiments/TEST_TEAM_CALIBRATION.md](docs/experiments/TEST_TEAM_CALIBRATION.md)
 
 ---
 
-#### V7.7: Confidence-Based Filtering (62.71%*, +1.33pp BUT 69% coverage)
+#### Test: Confidence-Based Filtering (62.71%* at 69% coverage)
 
 **Hypothesis**: Exclude low-confidence predictions to improve accuracy
 **Implementation**: Analyze calibration and coverage tradeoffs
@@ -351,11 +351,11 @@ All 4 attempts to close the 0.62pp gap to 62% **made the model worse**:
 
 **Lesson**: Model has good calibration. The 31% coin-flip games are fundamentally unpredictable, not fixable with better features.
 
-📄 **Full Analysis**: [docs/experiments/V7.7_CONFIDENCE_FILTERING.md](docs/experiments/V7.7_CONFIDENCE_FILTERING.md)
+📄 **Full Analysis**: [docs/experiments/TEST_CONFIDENCE_FILTERING.md](docs/experiments/TEST_CONFIDENCE_FILTERING.md)
 
 ---
 
-### 🥅 Goalie Tracking Experiment (V7.1)
+### 🥅 Test: Goalie Tracking (58.62%)
 
 **Hypothesis**: Individual goalie performance more predictive than team-level aggregates
 **Implementation**: Complete infrastructure built:
@@ -364,8 +364,8 @@ All 4 attempts to close the 0.62pp gap to 62% **made the model worse**:
 - 8 goalie features: `goalie_gsa_last5_home/away`, `goalie_save_pct_last5_home/away`, etc.
 
 **Results**:
-- **V7.1 Individual Tracking**: 58.62% (-2.76pp vs V7.3)
-- **V7.3 Team-Level**: 60.49% ✅ BETTER
+- **Individual Tracking**: 58.62% ❌
+- **Team-Level**: 60.9% ✅ BETTER
 
 **Why Individual Failed**:
 1. **Coverage gap**: 93.9% vs 100% for team-level
@@ -380,15 +380,15 @@ All 4 attempts to close the 0.62pp gap to 62% **made the model worse**:
 
 **Value Preserved**: Infrastructure useful for future stats pages and player analysis
 
-📄 **Full Analysis**: [docs/experiments/GOALIE_TRACKING.md](docs/experiments/GOALIE_TRACKING.md)
+📄 **Full Analysis**: [docs/experiments/TEST_GOALIE_TRACKING.md](docs/experiments/TEST_GOALIE_TRACKING.md)
 
 ---
 
 ## 🧠 Technical Insights - Why We Hit a Ceiling
 
-### Root Cause Analysis: Why 60.49% is the Ceiling
+### Root Cause Analysis: Why 60.9% is the Practical Ceiling
 
-The 0.62pp gap to 62% consists of:
+The gap to 62%+ consists of:
 - **~70%**: Inherent randomness (low-confidence games are true coin flips)
 - **~20%**: Logistic regression model limitations
 - **~10%**: Potentially improvable with new data sources
@@ -441,7 +441,7 @@ The 0.62pp gap to 62% consists of:
 - Reality: **69.5% accuracy** on away B2B (53 errors out of 174 games)
 - Confused absolute count with error rate
 
-📄 **Full Error Analysis**: [v7_3_error_analysis.csv](v7_3_error_analysis.csv)
+📄 **Full Error Analysis**: [error_analysis.csv](error_analysis.csv)
 
 ---
 
@@ -539,14 +539,14 @@ The 0.62pp gap to 62% consists of:
 
 ### 🎯 Start Here
 
-1. **[docs/current/V7.3_PRODUCTION_MODEL.md](docs/current/V7.3_PRODUCTION_MODEL.md)**
+1. **[docs/current/V7_PRODUCTION_MODEL.md](docs/current/V7_PRODUCTION_MODEL.md)**
    - Complete production model guide
    - Features, training, deployment
    - Usage examples
 
 2. **[docs/current/CLOSING_GAP_ANALYSIS.md](docs/current/CLOSING_GAP_ANALYSIS.md)**
-   - Comprehensive analysis of why we can't reach 62%
-   - All 4 failed attempts explained in detail
+   - Comprehensive analysis of model ceiling
+   - Development test results
    - Technical deep dive into model limitations
 
 3. **[docs/current/PROJECT_STATUS.md](docs/current/PROJECT_STATUS.md)**
@@ -554,29 +554,29 @@ The 0.62pp gap to 62% consists of:
    - Recommendations for next steps
    - Decision framework
 
-### 🧪 Experiment Documentation
+### 🧪 V7.0 Development Tests
 
-4. **[docs/experiments/V7.4_HEAD_TO_HEAD.md](docs/experiments/V7.4_HEAD_TO_HEAD.md)**
-   - Head-to-head matchup features
+4. **[docs/experiments/TEST_HEAD_TO_HEAD.md](docs/experiments/TEST_HEAD_TO_HEAD.md)**
+   - Head-to-head matchup features test
    - Data leakage bug discovered and fixed
    - Multicollinearity analysis
 
-5. **[docs/experiments/V7.5_INTERACTIONS.md](docs/experiments/V7.5_INTERACTIONS.md)**
-   - Feature interaction terms
+5. **[docs/experiments/TEST_INTERACTIONS.md](docs/experiments/TEST_INTERACTIONS.md)**
+   - Feature interaction terms test
    - Overfitting analysis
    - Why more features ≠ better model
 
-6. **[docs/experiments/V7.6_TEAM_CALIBRATION.md](docs/experiments/V7.6_TEAM_CALIBRATION.md)**
-   - Team-specific bias adjustments
+6. **[docs/experiments/TEST_TEAM_CALIBRATION.md](docs/experiments/TEST_TEAM_CALIBRATION.md)**
+   - Team-specific bias adjustments test
    - Weak signal analysis
    - Sample size limitations
 
-7. **[docs/experiments/V7.7_CONFIDENCE_FILTERING.md](docs/experiments/V7.7_CONFIDENCE_FILTERING.md)**
-   - Calibration analysis
+7. **[docs/experiments/TEST_CONFIDENCE_FILTERING.md](docs/experiments/TEST_CONFIDENCE_FILTERING.md)**
+   - Calibration analysis test
    - Coverage vs accuracy tradeoffs
    - Optimal threshold search
 
-8. **[docs/experiments/GOALIE_TRACKING.md](docs/experiments/GOALIE_TRACKING.md)**
+8. **[docs/experiments/TEST_GOALIE_TRACKING.md](docs/experiments/TEST_GOALIE_TRACKING.md)**
    - Individual goalie tracking infrastructure
    - Why it underperformed team-level
    - Data quality fixes applied
@@ -585,7 +585,7 @@ The 0.62pp gap to 62% consists of:
 ### 📖 Additional Resources
 
 9. **[docs/INDEX.md](docs/INDEX.md)** - Complete documentation navigation
-10. **[v7_3_error_analysis.csv](v7_3_error_analysis.csv)** - Detailed error breakdown
+10. **[error_analysis.csv](error_analysis.csv)** - Detailed error breakdown
 
 ---
 
@@ -608,24 +608,24 @@ python training/train_v7_adaptive.py
 # Model saved: model_v7_adaptive.pkl
 ```
 
-### Reproduce Failed Experiments
+### Reproduce Development Tests
 
 ```bash
-# V7.4 Head-to-head (expect 60.00%)
-python training/experiments/train_v7_4_head_to_head.py
+# Test: Head-to-head (expect 60.00%)
+python training/experiments/train_test_head_to_head.py
 
-# V7.5 Interactions (expect 60.08%)
-python training/experiments/train_v7_5_interactions.py
+# Test: Interactions (expect 60.08%)
+python training/experiments/train_test_interactions.py
 
-# V7.6 Team calibration (expect 60.73%)
-python training/experiments/train_v7_6_team_calibration.py
+# Test: Team calibration (expect 60.73%)
+python training/experiments/train_test_team_calibration.py
 ```
 
 ### Run Analysis Scripts
 
 ```bash
-# Error analysis (generates v7_3_error_analysis.csv)
-python analysis/current/analyze_v7_3_errors.py
+# Error analysis (generates error_analysis.csv)
+python analysis/current/analyze_errors.py
 
 # B2B analysis (shows away B2B is EASIER, not harder!)
 python analysis/current/analyze_b2b_weakness.py
@@ -644,18 +644,18 @@ python analysis/current/analyze_confidence_calibration.py
 | V6.4 | ~59% | Superseded | Previous production model |
 | V6.x | 58-60% | Archived | Various experiments |
 
-### Development History (Internal)
+### V7.0 Development Tests Summary
 
 The V7.0 release represents the culmination of extensive experimentation:
 
-| Internal Version | Accuracy | Notes |
-|------------------|----------|-------|
-| V7.0-baseline | 60.24% | Initial 209-feature baseline |
-| V7.3-situational | 60.49% | Added situational features |
-| V7.4-h2h | 60.00% | Head-to-head experiments |
-| V7.5-interactions | 60.08% | Feature interactions |
-| V7.6-calibration | 60.73% | Team-specific calibration |
-| V8.x-adaptive | 60.9% | Adaptive weights (shipped as V7.0) |
+| Test | Accuracy | Result | Notes |
+|------|----------|--------|-------|
+| Baseline features | 60.24% | ✅ Included | Initial 209-feature baseline |
+| Situational features | 60.49% | ✅ Included | Fatigue, travel, divisional |
+| Head-to-head | 60.00% | ❌ Rejected | Multicollinearity issues |
+| Feature interactions | 60.08% | ❌ Rejected | Overfitting |
+| Team calibration | 60.73% | ❌ Rejected | Weak signal |
+| Adaptive weights | 60.9% | ✅ Production | Handles evolving patterns |
 
 **Conclusion**: V7.0 with adaptive weights represents the best-performing model, validated across 5,002 games over 4 seasons.
 
@@ -732,7 +732,7 @@ The V7.0 release represents the culmination of extensive experimentation:
    - Feature saturation is real
 
 3. **Know when to stop**
-   - 60.49% might be the ceiling
+   - 60.9% is the practical ceiling with current approach
    - Accepting limits is valid strategy
 
 4. **Document failures thoroughly**
@@ -772,10 +772,10 @@ python prediction/predict_simple.py TOR BOS
 ### Train the Model
 
 ```bash
-# Train V7.3 from scratch
-python training/train_v7_3_situational.py
+# Train V7.0 from scratch
+python training/train_v7_adaptive.py
 
-# Model saved to: model_v7_3_situational.pkl
+# Model saved to: model_v7_adaptive.pkl
 # Training time: ~2-3 minutes
 ```
 
@@ -784,10 +784,10 @@ python training/train_v7_3_situational.py
 ## 📞 Support & Questions
 
 ### Documentation Questions
-- **Model usage**: See [docs/current/V7.3_PRODUCTION_MODEL.md](docs/current/V7.3_PRODUCTION_MODEL.md)
-- **Why we're stuck at 60.49%**: See [docs/current/CLOSING_GAP_ANALYSIS.md](docs/current/CLOSING_GAP_ANALYSIS.md)
-- **Specific experiments**: See [docs/experiments/](docs/experiments/) for detailed analyses
-- **Goalie tracking**: See [docs/experiments/GOALIE_TRACKING.md](docs/experiments/GOALIE_TRACKING.md)
+- **Model usage**: See [docs/current/V7_PRODUCTION_MODEL.md](docs/current/V7_PRODUCTION_MODEL.md)
+- **Model ceiling analysis**: See [docs/current/CLOSING_GAP_ANALYSIS.md](docs/current/CLOSING_GAP_ANALYSIS.md)
+- **Development tests**: See [docs/experiments/](docs/experiments/) for detailed test analyses
+- **Goalie tracking**: See [docs/experiments/TEST_GOALIE_TRACKING.md](docs/experiments/TEST_GOALIE_TRACKING.md)
 
 ### Technical Issues
 - **GitHub Issues**: (when public)

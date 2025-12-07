@@ -129,14 +129,17 @@ docs/
 | V6.4 | ~59% | Nov 2025 | Superseded | Previous production |
 | V6.x | 58-60% | Oct-Nov 2025 | Archived | Various experiments |
 
-### Development History (Internal)
+### V7.0 Development Tests
 The V7.0 release represents the culmination of extensive experimentation:
-- **V7.0-baseline**: 60.24% - Initial 209 feature baseline
-- **V7.3-situational**: 60.49% - Added situational features
-- **V7.4-h2h**: 60.00% - Head-to-head experiments
-- **V7.5-interactions**: 60.08% - Feature interactions
-- **V7.6-calibration**: 60.73% - Team-specific calibration
-- **V8.x-adaptive**: 60.9% - Adaptive weights (shipped as V7.0)
+
+| Test | Accuracy | Result | Notes |
+|------|----------|--------|-------|
+| Baseline features | 60.24% | ✅ Included | Initial 209-feature set |
+| Situational features | 60.49% | ✅ Included | Fatigue, travel, divisional |
+| Head-to-head | 60.00% | ❌ Rejected | Multicollinearity issues |
+| Feature interactions | 60.08% | ❌ Rejected | Overfitting |
+| Team calibration | 60.73% | ❌ Rejected | Weak signal |
+| Adaptive weights | 60.9% | ✅ Production | Handles evolving patterns |
 
 ---
 
