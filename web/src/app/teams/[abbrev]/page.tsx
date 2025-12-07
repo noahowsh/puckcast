@@ -2,6 +2,29 @@ import { notFound } from "next/navigation";
 import { computeStandingsPowerScore, getCurrentStandings, getCurrentPredictions } from "@/lib/current";
 import { TeamCrest } from "@/components/TeamCrest";
 import powerIndexSnapshot from "@/data/powerIndexSnapshot.json";
+import goaliePulseData from "@/data/goaliePulse.json";
+import modelInsights from "@/data/modelInsights.json";
+
+type ConfidenceBucket = {
+  label: string;
+  grade: string;
+  accuracy: number;
+  count: number;
+};
+
+type GoalieInfo = {
+  name: string;
+  team: string;
+  rollingGsa: number;
+  seasonGsa: number;
+  restDays: number;
+  startLikelihood: number;
+  trend: string;
+  note: string;
+  strengths: string[];
+  watchouts: string[];
+  nextOpponent: string;
+};
 
 const movementReasons = powerIndexSnapshot.movementReasons as Record<string, string>;
 const standings = getCurrentStandings();
@@ -605,6 +628,57 @@ export default async function TeamPage({ params }: { params: Promise<{ abbrev: s
           </section>
         )}
 
+        {/* Model Confidence Calibration */}
+        <section className="nova-section">
+          <h2 className="text-xl font-bold text-white mb-3">How Our Model Works</h2>
+          <div className="card" style={{ padding: '1.5rem' }}>
+            <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '1.25rem', lineHeight: 1.5 }}>
+              Our model assigns confidence grades to each prediction. Higher grades = higher accuracy.
+            </p>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+              {(modelInsights.confidenceBuckets as ConfidenceBucket[]).slice(0, 4).map((bucket) => {
+                const getGradeColor = (grade: string) => {
+                  if (grade === 'A+' || grade === 'A') return '#10b981';
+                  if (grade === 'B+' || grade === 'B') return '#3b82f6';
+                  return '#f59e0b';
+                };
+                return (
+                  <div key={bucket.grade} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                    <span style={{
+                      width: '36px',
+                      padding: '0.25rem',
+                      borderRadius: '4px',
+                      fontSize: '0.8rem',
+                      fontWeight: 700,
+                      textAlign: 'center',
+                      background: `${getGradeColor(bucket.grade)}20`,
+                      color: getGradeColor(bucket.grade),
+                    }}>{bucket.grade}</span>
+                    <div style={{ flex: 1, height: '20px', background: 'rgba(255,255,255,0.05)', borderRadius: '4px', overflow: 'hidden' }}>
+                      <div style={{
+                        height: '100%',
+                        width: `${bucket.accuracy * 100}%`,
+                        background: `linear-gradient(90deg, ${getGradeColor(bucket.grade)}40, ${getGradeColor(bucket.grade)})`,
+                        borderRadius: '4px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'flex-end',
+                        paddingRight: '8px',
+                      }}>
+                        <span style={{ fontSize: '0.75rem', fontWeight: 600, color: 'white' }}>{(bucket.accuracy * 100).toFixed(0)}%</span>
+                      </div>
+                    </div>
+                    <span style={{ fontSize: '0.7rem', color: 'var(--text-tertiary)', width: '60px', textAlign: 'right' }}>{bucket.count} games</span>
+                  </div>
+                );
+              })}
+            </div>
+            <p style={{ fontSize: '0.7rem', color: 'var(--text-tertiary)', marginTop: '1rem', fontStyle: 'italic' }}>
+              Based on 4-season holdout validation ({modelInsights.overall.games.toLocaleString()} total games)
+            </p>
+          </div>
+        </section>
+
         {/* Power Index Spectrum */}
         <section className="nova-section">
           <h2 className="text-xl font-bold text-white mb-3">League Power Spectrum</h2>
@@ -824,6 +898,97 @@ export default async function TeamPage({ params }: { params: Promise<{ abbrev: s
             </div>
           )}
         </section>
+
+        {/* Goaltending */}
+        {(() => {
+          const teamGoalies = (goaliePulseData.goalies as GoalieInfo[]).filter(g => g.team === teamData.abbrev);
+          if (teamGoalies.length === 0) return null;
+
+          const getTrendColor = (trend: string) => {
+            if (trend === 'surging') return '#10b981';
+            if (trend === 'steady') return '#3b82f6';
+            if (trend === 'slumping') return '#ef4444';
+            return '#f59e0b';
+          };
+
+          const getTrendIcon = (trend: string) => {
+            if (trend === 'surging') return '↑';
+            if (trend === 'slumping') return '↓';
+            return '→';
+          };
+
+          return (
+            <section className="nova-section">
+              <h2 className="text-xl font-bold text-white mb-3">Goaltending</h2>
+              <div className="grid gap-4 sm:grid-cols-2">
+                {teamGoalies.slice(0, 2).map((goalie) => (
+                  <div key={goalie.name} className="card" style={{ padding: '1.25rem' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1rem' }}>
+                      <div>
+                        <p style={{ fontSize: '1.1rem', fontWeight: 700, color: 'white' }}>{goalie.name}</p>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginTop: '0.25rem' }}>
+                          <span style={{
+                            padding: '0.15rem 0.5rem',
+                            borderRadius: '4px',
+                            fontSize: '0.7rem',
+                            fontWeight: 600,
+                            background: `${getTrendColor(goalie.trend)}20`,
+                            color: getTrendColor(goalie.trend),
+                          }}>
+                            {getTrendIcon(goalie.trend)} {goalie.trend}
+                          </span>
+                          {goalie.startLikelihood >= 0.7 && (
+                            <span style={{ fontSize: '0.7rem', color: 'var(--text-tertiary)' }}>Likely starter</span>
+                          )}
+                        </div>
+                      </div>
+                      <div style={{ textAlign: 'right' }}>
+                        <p style={{ fontSize: '1.5rem', fontWeight: 800, color: goalie.seasonGsa >= 0 ? '#10b981' : '#ef4444', lineHeight: 1 }}>
+                          {goalie.seasonGsa >= 0 ? '+' : ''}{goalie.seasonGsa.toFixed(1)}
+                        </p>
+                        <p style={{ fontSize: '0.65rem', color: 'var(--text-tertiary)', textTransform: 'uppercase' }}>GSAx</p>
+                      </div>
+                    </div>
+
+                    {/* Stats row */}
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '0.5rem', marginBottom: '1rem' }}>
+                      <div style={{ padding: '0.5rem', background: 'rgba(255,255,255,0.03)', borderRadius: '6px', textAlign: 'center' }}>
+                        <p style={{ fontSize: '1rem', fontWeight: 700, color: goalie.rollingGsa >= 0 ? '#10b981' : '#ef4444' }}>
+                          {goalie.rollingGsa >= 0 ? '+' : ''}{goalie.rollingGsa.toFixed(1)}
+                        </p>
+                        <p style={{ fontSize: '0.6rem', color: 'var(--text-tertiary)', textTransform: 'uppercase' }}>Rolling GSAx</p>
+                      </div>
+                      <div style={{ padding: '0.5rem', background: 'rgba(255,255,255,0.03)', borderRadius: '6px', textAlign: 'center' }}>
+                        <p style={{ fontSize: '1rem', fontWeight: 700, color: 'white' }}>{goalie.restDays}d</p>
+                        <p style={{ fontSize: '0.6rem', color: 'var(--text-tertiary)', textTransform: 'uppercase' }}>Rest</p>
+                      </div>
+                      <div style={{ padding: '0.5rem', background: 'rgba(255,255,255,0.03)', borderRadius: '6px', textAlign: 'center' }}>
+                        <p style={{ fontSize: '1rem', fontWeight: 700, color: 'white' }}>{(goalie.startLikelihood * 100).toFixed(0)}%</p>
+                        <p style={{ fontSize: '0.6rem', color: 'var(--text-tertiary)', textTransform: 'uppercase' }}>Start %</p>
+                      </div>
+                    </div>
+
+                    {/* Strengths */}
+                    {goalie.strengths.length > 0 && (
+                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.35rem' }}>
+                        {goalie.strengths.slice(0, 3).map((s, i) => (
+                          <span key={i} style={{
+                            padding: '0.2rem 0.5rem',
+                            borderRadius: '4px',
+                            fontSize: '0.65rem',
+                            background: 'rgba(16,185,129,0.1)',
+                            color: '#10b981',
+                            border: '1px solid rgba(16,185,129,0.2)',
+                          }}>{s}</span>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </section>
+          );
+        })()}
 
         {/* Division Standings */}
         {teamDivision && (

@@ -63,6 +63,12 @@ export function PowerBoardClient({ rows, initialNextGames }: { rows: Leaderboard
   const renderRow = (row: LeaderboardRow) => {
     const movementDisplay = row.movement === 0 ? "Even" : row.movement > 0 ? `+${row.movement}` : row.movement;
     const movementTone = row.movement > 0 ? "movement--positive" : row.movement < 0 ? "movement--negative" : "movement--neutral";
+    const modelWinPct = row.overlay?.avgProb ? formatPct(row.overlay.avgProb) : "—";
+    const winPctColor = row.overlay?.avgProb
+      ? row.overlay.avgProb >= 0.55 ? "text-up"
+      : row.overlay.avgProb <= 0.45 ? "text-down"
+      : ""
+      : "";
     const next = nextGames[row.abbrev];
     const nextDate = formatDate(next?.date);
     const nextTime = formatTimeEt(next?.startTimeEt);
@@ -87,6 +93,7 @@ export function PowerBoardClient({ rows, initialNextGames }: { rows: Leaderboard
           {row.goalDifferential >= 0 ? "+" : ""}
           {row.goalDifferential}
         </span>
+        <span className={`power-data ${winPctColor}`}>{modelWinPct}</span>
         <span className="power-data">{nextDisplay}</span>
       </div>
     );
@@ -101,6 +108,7 @@ export function PowerBoardClient({ rows, initialNextGames }: { rows: Leaderboard
         <span>Record</span>
         <span>Point %</span>
         <span>Goal Diff</span>
+        <span>Model Win %</span>
         <span>Next</span>
       </div>
       {rows.map(renderRow)}
