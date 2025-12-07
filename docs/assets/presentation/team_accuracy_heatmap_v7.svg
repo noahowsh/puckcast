@@ -1,17 +1,18 @@
-<svg width="720" height="320" viewBox="0 0 720 320" xmlns="http://www.w3.org/2000/svg">
+<svg width="640" height="320" viewBox="0 0 640 320" xmlns="http://www.w3.org/2000/svg">
   <style>.bg{fill:#0f1f2f;stroke:#4ec0f0;stroke-width:2;rx:14;ry:14;}.title{fill:#e6f4ff;font-family:'Helvetica Neue',Arial,sans-serif;font-size:16px;font-weight:700;}.cell{stroke:#0f1f2f;stroke-width:1;}.hi{fill:#8de0a3;}.mid{fill:#244b77;}.label{fill:#b8d4f5;font-family:'Helvetica Neue',Arial,sans-serif;font-size:12px;}</style>
-  <rect class="bg" x="20" y="20" width="680" height="280" />
-  <text class="title" x="360" y="55" text-anchor="middle">Team Accuracy Snapshot (sample)</text>
-  <g transform="translate(80,90)">
+  <rect class="bg" x="20" y="20" width="600" height="280" />
+  <text class="title" x="320" y="55" text-anchor="middle">Team Accuracy Snapshot (illustrative)</text>
+  <g transform="translate(120,90)">
     <rect class="cell hi" x="0" y="0" width="60" height="40" />
-    <rect class="cell mid" x="70" y="0" width="60" height="40" />
-    <rect class="cell hi" x="140" y="0" width="60" height="40" />
-    <rect class="cell mid" x="210" y="0" width="60" height="40" />
-    <rect class="cell hi" x="280" y="0" width="60" height="40" />
+    <rect class="cell hi" x="70" y="0" width="60" height="40" />
+    <rect class="cell mid" x="140" y="0" width="60" height="40" />
+    <rect class="cell hi" x="210" y="0" width="60" height="40" />
+    <rect class="cell mid" x="280" y="0" width="60" height="40" />
   </g>
-  <text class="label" x="110" y="150">DAL</text>
-  <text class="label" x="180" y="150">NYR</text>
-  <text class="label" x="250" y="150">VAN</text>
-  <text class="label" x="320" y="150">TOR</text>
-  <text class="label" x="390" y="150">MTL</text>
+  <text class="label" x="150" y="150">DAL</text>
+  <text class="label" x="220" y="150">NYR</text>
+  <text class="label" x="290" y="150">VAN</text>
+  <text class="label" x="360" y="150">TOR</text>
+  <text class="label" x="430" y="150">MTL</text>
+  <text class="label" x="320" y="180" text-anchor="middle">Green = higher hit rate; Blue = lower</text>
 </svg>
