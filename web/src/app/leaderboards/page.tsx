@@ -1,5 +1,4 @@
-import { buildTeamSnapshots, computeStandingsPowerScore, getCurrentStandings, type TeamSnapshot } from "@/lib/current";
-import modelInsightsRaw from "@/data/modelInsights.json";
+import { buildTeamSnapshots, computeStandingsPowerScore, getCurrentStandings } from "@/lib/current";
 import powerIndexSnapshot from "@/data/powerIndexSnapshot.json";
 import { TeamCrest } from "@/components/TeamCrest";
 import { PowerBoardClient, type LeaderboardRow } from "@/components/PowerBoardClient";
@@ -9,10 +8,20 @@ const snapshots = buildTeamSnapshots();
 const snapshotMap = new Map(snapshots.map((team) => [team.abbrev, team]));
 const standings = getCurrentStandings();
 const nameToAbbrev = new Map<string, string>(standings.map((team) => [team.team, team.abbrev]));
-const modelInsights = modelInsightsRaw as any;
-const teamModelAccuracy = new Map<string, number>(
-  (modelInsights?.teamPerformance || []).map((t: any) => [t.abbrev, t.modelAccuracy]),
-);
+
+// Calculate expected win rates for all teams based on power score
+// This provides a meaningful "model strength" metric even when team isn't playing today
+const allPowerScores = standings.map(s => computeStandingsPowerScore(s));
+const avgPowerScore = allPowerScores.reduce((a, b) => a + b, 0) / allPowerScores.length;
+const maxPowerScore = Math.max(...allPowerScores);
+const minPowerScore = Math.min(...allPowerScores);
+
+function getExpectedWinRate(powerScore: number): number {
+  // Convert power score to expected win rate (0.35 to 0.65 range)
+  // Teams at avg power score get ~0.50, best teams ~0.65, worst ~0.35
+  const normalized = (powerScore - minPowerScore) / (maxPowerScore - minPowerScore);
+  return 0.35 + normalized * 0.30;
+}
 
 // Weekly update schedule - only revalidate once per week
 export const dynamic = "force-dynamic";
@@ -25,7 +34,8 @@ const rankedRows: LeaderboardRow[] = standings
     const snap = snapshotMap.get(standing.abbrev);
     const power = computeStandingsPowerScore(standing);
     const record = `${standing.wins}-${standing.losses}-${standing.ot}`;
-    const overlayAvg = snap?.avgProb ?? teamModelAccuracy.get(standing.abbrev) ?? 0;
+    // Use today's game win prob if available, otherwise use expected win rate based on power score
+    const overlayAvg = snap?.avgProb || getExpectedWinRate(power);
     return {
       powerRank: 0,
       standingsRank: standing.rank,

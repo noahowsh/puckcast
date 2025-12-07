@@ -103,7 +103,7 @@ export function PowerBoardClient({ rows, initialNextGames }: { rows: Leaderboard
         <span>Record</span>
         <span>Point %</span>
         <span>Goal Diff</span>
-        <span>Model Win%</span>
+        <span>Strength</span>
         <span>Next</span>
       </div>
       {rows.map(renderRow)}

@@ -199,24 +199,10 @@ export default async function TeamPage({ params }: { params: Promise<{ abbrev: s
             <div className="nova-hero__panel" style={{ padding: '1.5rem' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem', marginBottom: '1.25rem' }}>
                 <div style={{ position: 'relative', width: '120px', height: '120px' }}>
-                  {/* Outer glow */}
-                  <div style={{
-                    position: 'absolute',
-                    inset: '-4px',
-                    borderRadius: '50%',
-                    background: `conic-gradient(from 180deg, ${getRankColor(teamData.powerRank)}40 0deg, ${getRankColor(teamData.powerRank)}20 ${((33 - teamData.powerRank) / 32) * 360}deg, transparent ${((33 - teamData.powerRank) / 32) * 360}deg)`,
-                    filter: 'blur(8px)',
-                  }} />
                   {/* Progress ring */}
                   <svg width="120" height="120" viewBox="0 0 120 120" style={{ position: 'absolute', transform: 'rotate(-90deg)' }}>
-                    <defs>
-                      <linearGradient id={`ring-gradient-${teamData.abbrev}`} x1="0%" y1="0%" x2="100%" y2="0%">
-                        <stop offset="0%" stopColor={getRankColor(teamData.powerRank)} stopOpacity="1" />
-                        <stop offset="100%" stopColor={getRankColor(teamData.powerRank)} stopOpacity="0.5" />
-                      </linearGradient>
-                    </defs>
-                    <circle cx="60" cy="60" r="52" fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth="10" />
-                    <circle cx="60" cy="60" r="52" fill="none" stroke={`url(#ring-gradient-${teamData.abbrev})`} strokeWidth="10"
+                    <circle cx="60" cy="60" r="52" fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth="8" />
+                    <circle cx="60" cy="60" r="52" fill="none" stroke={getRankColor(teamData.powerRank)} strokeWidth="8"
                       strokeDasharray={`${((33 - teamData.powerRank) / 32) * 327} 327`} strokeLinecap="round" />
                   </svg>
                   {/* Logo centered */}
@@ -442,103 +428,82 @@ export default async function TeamPage({ params }: { params: Promise<{ abbrev: s
           </div>
         </section>
 
-        {/* Points Pace Visual */}
+        {/* Season Pace Line Chart */}
         <section className="nova-section">
           <h2 className="text-xl font-bold text-white mb-3">Season Pace</h2>
           <div className="card" style={{ padding: '1.5rem' }}>
             {(() => {
               // Calculate points above/below .500 pace
-              const expectedPoints = teamData.gamesPlayed; // .500 pace = 1 point per game
-              const actualPoints = teamData.points;
-              const paceDiff = actualPoints - expectedPoints;
-              const projectedPoints = Math.round((teamData.pointPctg) * 164); // 82 games * 2 max points
-              const playoffPace = 98; // typical playoff cutoff
+              const gp = teamData.gamesPlayed;
+              const pts = teamData.points;
+              const paceDiff = pts - gp; // .500 = 1 pt per game
+              const chartHeight = 120;
+              const chartWidth = 400;
+
+              // Scale: X = games (0 to 82), Y = points diff from .500 (-30 to +30)
+              const maxDiff = 30;
+              const teamX = (gp / 82) * chartWidth;
+              const teamY = chartHeight / 2 - (paceDiff / maxDiff) * (chartHeight / 2);
 
               return (
                 <div>
-                  {/* Points vs .500 pace bar */}
-                  <div style={{ marginBottom: '2rem' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '0.75rem' }}>
-                      <span style={{ fontSize: '0.8rem', color: 'var(--text-tertiary)', textTransform: 'uppercase' }}>Points vs .500 Pace</span>
-                      <span style={{
-                        fontSize: '1.5rem',
-                        fontWeight: 800,
-                        color: paceDiff >= 0 ? '#10b981' : '#ef4444'
-                      }}>
-                        {paceDiff >= 0 ? '+' : ''}{paceDiff}
-                      </span>
-                    </div>
-                    <div style={{ position: 'relative', height: '40px', background: 'rgba(255,255,255,0.05)', borderRadius: '8px', overflow: 'visible' }}>
-                      {/* Center line (.500) */}
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '2rem' }}>
+                    {/* Line Chart */}
+                    <div style={{ flex: 1, position: 'relative' }}>
+                      <svg width="100%" height={chartHeight} viewBox={`0 0 ${chartWidth} ${chartHeight}`} preserveAspectRatio="none">
+                        {/* Grid lines */}
+                        <line x1="0" y1={chartHeight/2} x2={chartWidth} y2={chartHeight/2} stroke="rgba(255,255,255,0.2)" strokeWidth="1" strokeDasharray="4,4" />
+                        <line x1="0" y1={chartHeight/4} x2={chartWidth} y2={chartHeight/4} stroke="rgba(255,255,255,0.05)" strokeWidth="1" />
+                        <line x1="0" y1={chartHeight*3/4} x2={chartWidth} y2={chartHeight*3/4} stroke="rgba(255,255,255,0.05)" strokeWidth="1" />
+
+                        {/* Team pace line from origin to current */}
+                        <line
+                          x1="0"
+                          y1={chartHeight/2}
+                          x2={teamX}
+                          y2={teamY}
+                          stroke={paceDiff >= 0 ? '#10b981' : '#ef4444'}
+                          strokeWidth="3"
+                          strokeLinecap="round"
+                        />
+
+                        {/* Dot at current position */}
+                        <circle cx={teamX} cy={teamY} r="6" fill={paceDiff >= 0 ? '#10b981' : '#ef4444'} />
+                      </svg>
+
+                      {/* Team logo at end of line */}
                       <div style={{
                         position: 'absolute',
-                        left: '50%',
-                        top: 0,
-                        bottom: 0,
-                        width: '2px',
-                        background: 'rgba(255,255,255,0.3)',
-                        zIndex: 1
-                      }} />
-                      {/* Bar from center */}
-                      <div style={{
-                        position: 'absolute',
-                        top: '8px',
-                        bottom: '8px',
-                        left: paceDiff >= 0 ? '50%' : `${50 + (paceDiff / teamData.gamesPlayed) * 50}%`,
-                        width: `${Math.abs(paceDiff / teamData.gamesPlayed) * 50}%`,
-                        background: paceDiff >= 0
-                          ? 'linear-gradient(90deg, rgba(16,185,129,0.3) 0%, #10b981 100%)'
-                          : 'linear-gradient(90deg, #ef4444 0%, rgba(239,68,68,0.3) 100%)',
-                        borderRadius: '4px',
-                      }} />
-                      {/* Team logo at end of bar */}
-                      <div style={{
-                        position: 'absolute',
-                        top: '50%',
-                        left: `${50 + (paceDiff / teamData.gamesPlayed) * 50}%`,
+                        left: `${(gp / 82) * 100}%`,
+                        top: `${(teamY / chartHeight) * 100}%`,
                         transform: 'translate(-50%, -50%)',
-                        zIndex: 2,
                       }}>
-                        <div style={{
-                          background: 'var(--surface-secondary)',
-                          borderRadius: '50%',
-                          padding: '4px',
-                          border: `2px solid ${paceDiff >= 0 ? '#10b981' : '#ef4444'}`,
-                        }}>
-                          <TeamCrest abbrev={teamData.abbrev} size={28} />
-                        </div>
+                        <TeamCrest abbrev={teamData.abbrev} size={36} />
+                      </div>
+
+                      {/* Labels */}
+                      <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '0.5rem' }}>
+                        <span style={{ fontSize: '0.65rem', color: 'var(--text-tertiary)' }}>Game 1</span>
+                        <span style={{ fontSize: '0.65rem', color: 'var(--text-tertiary)' }}>.500 pace</span>
+                        <span style={{ fontSize: '0.65rem', color: 'var(--text-tertiary)' }}>Game 82</span>
                       </div>
                     </div>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '0.5rem' }}>
-                      <span style={{ fontSize: '0.7rem', color: 'var(--text-tertiary)' }}>Below .500</span>
-                      <span style={{ fontSize: '0.7rem', color: 'var(--text-tertiary)' }}>.500 pace</span>
-                      <span style={{ fontSize: '0.7rem', color: 'var(--text-tertiary)' }}>Above .500</span>
-                    </div>
-                  </div>
 
-                  {/* Projected finish */}
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '1rem' }}>
-                    <div style={{ padding: '1rem', background: 'rgba(255,255,255,0.03)', borderRadius: '0.75rem', textAlign: 'center' }}>
-                      <p style={{ fontSize: '2rem', fontWeight: 800, color: 'white' }}>{projectedPoints}</p>
-                      <p style={{ fontSize: '0.65rem', color: 'var(--text-tertiary)', textTransform: 'uppercase' }}>Projected Points</p>
-                      <p style={{ fontSize: '0.7rem', color: projectedPoints >= playoffPace ? '#10b981' : '#f59e0b', marginTop: '0.25rem' }}>
-                        {projectedPoints >= playoffPace ? 'Playoff pace' : `${playoffPace - projectedPoints} pts below playoff pace`}
+                    {/* Stats */}
+                    <div style={{ width: '140px', textAlign: 'center' }}>
+                      <p style={{
+                        fontSize: '3rem',
+                        fontWeight: 800,
+                        color: paceDiff >= 0 ? '#10b981' : '#ef4444',
+                        lineHeight: 1,
+                      }}>
+                        {paceDiff >= 0 ? '+' : ''}{paceDiff}
                       </p>
-                    </div>
-                    <div style={{ padding: '1rem', background: 'rgba(255,255,255,0.03)', borderRadius: '0.75rem', textAlign: 'center' }}>
-                      <p style={{ fontSize: '2rem', fontWeight: 800, color: 'white' }}>{82 - teamData.gamesPlayed}</p>
-                      <p style={{ fontSize: '0.65rem', color: 'var(--text-tertiary)', textTransform: 'uppercase' }}>Games Left</p>
-                      <p style={{ fontSize: '0.7rem', color: 'var(--text-secondary)', marginTop: '0.25rem' }}>
-                        {(164 - teamData.points)} pts available
+                      <p style={{ fontSize: '0.7rem', color: 'var(--text-tertiary)', marginTop: '0.5rem', textTransform: 'uppercase' }}>
+                        Points vs .500
                       </p>
-                    </div>
-                    <div style={{ padding: '1rem', background: 'rgba(255,255,255,0.03)', borderRadius: '0.75rem', textAlign: 'center' }}>
-                      <p style={{ fontSize: '2rem', fontWeight: 800, color: teamData.pointPctg >= 0.6 ? '#10b981' : teamData.pointPctg >= 0.5 ? '#3b82f6' : '#f59e0b' }}>
-                        {(teamData.pointPctg * 100).toFixed(0)}%
-                      </p>
-                      <p style={{ fontSize: '0.65rem', color: 'var(--text-tertiary)', textTransform: 'uppercase' }}>Point %</p>
-                      <p style={{ fontSize: '0.7rem', color: 'var(--text-secondary)', marginTop: '0.25rem' }}>
-                        {teamData.points} pts in {teamData.gamesPlayed} GP
+                      <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', marginTop: '0.25rem' }}>
+                        {pts} pts in {gp} games
                       </p>
                     </div>
                   </div>
@@ -578,8 +543,7 @@ export default async function TeamPage({ params }: { params: Promise<{ abbrev: s
                   background: 'var(--surface-secondary)',
                   borderRadius: '50%',
                   padding: '4px',
-                  border: `3px solid ${getRankColor(teamData.powerRank)}`,
-                  boxShadow: `0 0 12px ${getRankColor(teamData.powerRank)}60`,
+                  border: `2px solid ${getRankColor(teamData.powerRank)}`,
                 }}>
                   <TeamCrest abbrev={teamData.abbrev} size={32} />
                 </div>
