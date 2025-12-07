@@ -417,7 +417,7 @@ export default async function TeamPage({ params }: { params: Promise<{ abbrev: s
           </div>
 
           {/* Special Teams */}
-          <h3 className="text-lg font-semibold text-white mt-6 mb-3">Special Teams</h3>
+          <h3 className="text-lg font-semibold text-white mt-8 mb-3" style={{ paddingTop: '0.5rem' }}>Special Teams</h3>
           <div className="grid gap-3 sm:grid-cols-2">
             <div className="card" style={{ padding: '1rem' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
@@ -499,7 +499,7 @@ export default async function TeamPage({ params }: { params: Promise<{ abbrev: s
                 flexDirection: 'column',
                 alignItems: 'center',
               }}>
-                <div style={{
+                <div className="power-spectrum-crest" style={{
                   background: 'var(--surface-secondary)',
                   borderRadius: '50%',
                   padding: '4px',

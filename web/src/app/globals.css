@@ -2020,7 +2020,8 @@ p { line-height: 1.7; }
 
 /* Generic circular crest modifier */
 .crest--circular,
-.team-hero-crest .crest {
+.team-hero-crest .crest,
+.power-spectrum-crest .crest {
   border-radius: 50% !important;
 }
 

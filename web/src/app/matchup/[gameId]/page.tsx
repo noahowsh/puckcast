@@ -221,7 +221,7 @@ export default function MatchupPage({ params }: PageProps) {
         <section className="matchup-header">
           <div className="matchup-header__team">
             <div className="matchup-header__crest" style={{ borderColor: awayColor }}>
-              <TeamCrest abbrev={game.awayTeam.abbrev} size={72} />
+              <TeamCrest abbrev={game.awayTeam.abbrev} size={88} />
             </div>
             <div className="matchup-header__info">
               <h1 className="matchup-header__name">{game.awayTeam.name}</h1>
@@ -255,7 +255,7 @@ export default function MatchupPage({ params }: PageProps) {
               )}
             </div>
             <div className="matchup-header__crest" style={{ borderColor: homeColor }}>
-              <TeamCrest abbrev={game.homeTeam.abbrev} size={72} />
+              <TeamCrest abbrev={game.homeTeam.abbrev} size={88} />
             </div>
           </div>
         </section>
@@ -264,7 +264,7 @@ export default function MatchupPage({ params }: PageProps) {
         <section className="matchup-pick-banner">
           <div className="matchup-pick-banner__content">
             <div className="matchup-pick-banner__pick">
-              <TeamCrest abbrev={favorite.abbrev} size={44} />
+              <TeamCrest abbrev={favorite.abbrev} size={52} />
               <div>
                 <p className="matchup-pick-banner__label">Model Pick</p>
                 <p className="matchup-pick-banner__team">{favorite.name}</p>
@@ -293,13 +293,13 @@ export default function MatchupPage({ params }: PageProps) {
           <section className="matchup-comparison">
             <div className="matchup-comparison__header">
               <div className="matchup-comparison__team">
-                <TeamCrest abbrev={game.awayTeam.abbrev} size={32} />
+                <TeamCrest abbrev={game.awayTeam.abbrev} size={40} />
                 <span style={{ color: awayColor }}>{game.awayTeam.abbrev}</span>
               </div>
               <h2 className="matchup-comparison__title">Team Comparison</h2>
               <div className="matchup-comparison__team matchup-comparison__team--right">
                 <span style={{ color: homeColor }}>{game.homeTeam.abbrev}</span>
-                <TeamCrest abbrev={game.homeTeam.abbrev} size={32} />
+                <TeamCrest abbrev={game.homeTeam.abbrev} size={40} />
               </div>
             </div>
             <div className="matchup-comparison__stats">
@@ -323,7 +323,7 @@ export default function MatchupPage({ params }: PageProps) {
               {game.projectedGoalies.away && (
                 <div className="matchup-goalie-card" style={{ borderColor: awayColor }}>
                   <div className="matchup-goalie-card__header">
-                    <TeamCrest abbrev={game.awayTeam.abbrev} size={28} />
+                    <TeamCrest abbrev={game.awayTeam.abbrev} size={36} />
                     <span className="matchup-goalie-card__team">{game.awayTeam.abbrev}</span>
                   </div>
                   <p className="matchup-goalie-card__name">{game.projectedGoalies.away.name}</p>
@@ -336,7 +336,7 @@ export default function MatchupPage({ params }: PageProps) {
               {game.projectedGoalies.home && (
                 <div className="matchup-goalie-card" style={{ borderColor: homeColor }}>
                   <div className="matchup-goalie-card__header">
-                    <TeamCrest abbrev={game.homeTeam.abbrev} size={28} />
+                    <TeamCrest abbrev={game.homeTeam.abbrev} size={36} />
                     <span className="matchup-goalie-card__team">{game.homeTeam.abbrev}</span>
                   </div>
                   <p className="matchup-goalie-card__name">{game.projectedGoalies.home.name}</p>
@@ -353,11 +353,11 @@ export default function MatchupPage({ params }: PageProps) {
         {/* Team page links */}
         <section className="matchup-links">
           <Link href={`/teams/${game.awayTeam.abbrev}`} className="matchup-link" style={{ borderColor: awayColor }}>
-            <TeamCrest abbrev={game.awayTeam.abbrev} size={24} />
+            <TeamCrest abbrev={game.awayTeam.abbrev} size={32} />
             <span>View {game.awayTeam.name}</span>
           </Link>
           <Link href={`/teams/${game.homeTeam.abbrev}`} className="matchup-link" style={{ borderColor: homeColor }}>
-            <TeamCrest abbrev={game.homeTeam.abbrev} size={24} />
+            <TeamCrest abbrev={game.homeTeam.abbrev} size={32} />
             <span>View {game.homeTeam.name}</span>
           </Link>
         </section>
