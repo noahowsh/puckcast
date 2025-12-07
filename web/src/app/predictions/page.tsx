@@ -59,7 +59,7 @@ function PredictionRow({ game }: { game: Prediction }) {
   const grade = getPredictionGrade(game.edge);
   const edgePts = Math.abs(game.edge * 100);
   return (
-    <div className="prediction-row">
+    <Link href={`/matchup/${game.id}`} className="prediction-row prediction-row--clickable">
           <div className="prediction-row__teams">
             <div className="versus">
               <TeamCrest abbrev={game.awayTeam.abbrev} />
@@ -88,11 +88,11 @@ function PredictionRow({ game }: { game: Prediction }) {
 
       <div className="prediction-row__footer">
         <span className="chip-soft">Confidence {game.confidenceScore.toFixed(2)}</span>
-        <span className="chip-soft">
-          {game.homeTeam.name} @ {game.awayTeam.name}
+        <span className="chip-soft prediction-row__cta">
+          View matchup details →
         </span>
       </div>
-    </div>
+    </Link>
   );
 }
 
