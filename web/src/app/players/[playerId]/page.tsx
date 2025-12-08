@@ -4,6 +4,14 @@ import Link from "next/link";
 import { fetchSkaterById, fetchSkaterStats } from "@/lib/playerHub";
 import { TeamLogo } from "@/components/TeamLogo";
 import { TeamCrest } from "@/components/TeamCrest";
+import { SeasonProjectionCard } from "@/components/SeasonProjectionCard";
+import { SkillProfileCard } from "@/components/SkillProfileCard";
+import { OnIceImpactCard } from "@/components/OnIceImpactCard";
+import {
+  generateSeasonProjection,
+  generateSkillProfile,
+  generateOnIceImpact,
+} from "@/lib/playerProjections";
 
 export const revalidate = 3600; // Revalidate every hour
 
@@ -35,6 +43,14 @@ export default async function PlayerDetailPage({ params }: { params: Promise<{ p
   const pointsRank = allSkaters.findIndex((p) => p.bio.playerId === bio.playerId) + 1;
   const goalsRank = [...allSkaters].sort((a, b) => b.stats.goals - a.stats.goals).findIndex((p) => p.bio.playerId === bio.playerId) + 1;
   const assistsRank = [...allSkaters].sort((a, b) => b.stats.assists - a.stats.assists).findIndex((p) => p.bio.playerId === bio.playerId) + 1;
+
+  // Generate advanced analytics data
+  const seasonProjection = generateSeasonProjection(player, allSkaters);
+  const skillProfile = generateSkillProfile(player, allSkaters);
+  const onIceImpact = generateOnIceImpact(player, allSkaters);
+
+  // Calculate player age
+  const playerAge = bio.birthDate ? calculateAge(bio.birthDate) : undefined;
 
   const positionLabels: Record<string, string> = {
     C: "Center",
@@ -278,6 +294,39 @@ export default async function PlayerDetailPage({ params }: { params: Promise<{ p
                 <p className="text-xs text-white/50 uppercase mt-1">Shots/Game</p>
               </div>
             </div>
+          </div>
+        </section>
+
+        {/* Advanced Analytics Section */}
+        <section className="nova-section">
+          <div className="flex items-center gap-3 mb-6">
+            <h2 className="text-xl font-bold text-white">Advanced Analytics</h2>
+            <span className="text-xs text-white/40 bg-white/[0.05] px-2 py-1 rounded">Beta</span>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {/* Season Projection Card */}
+            <SeasonProjectionCard
+              projection={seasonProjection}
+              playerName={bio.fullName}
+            />
+
+            {/* Skill Profile Card */}
+            <SkillProfileCard
+              profile={skillProfile}
+              playerName={bio.fullName}
+              age={playerAge}
+              evTOI={stats.timeOnIcePerGame}
+            />
+          </div>
+
+          {/* On-Ice Impact Card - Full Width */}
+          <div className="mt-6">
+            <OnIceImpactCard
+              impact={onIceImpact}
+              playerName={bio.fullName}
+              age={playerAge}
+            />
           </div>
         </section>
 

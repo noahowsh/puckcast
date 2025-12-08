@@ -372,3 +372,123 @@ export const GOALIE_STAT_CONFIGS: StatDisplayConfig[] = [
   { key: "saves", label: "SV", format: "number", higherIsBetter: true },
   { key: "shotsAgainst", label: "SA", format: "number" },
 ];
+
+// =============================================================================
+// Season Projection Types (Inspired by Production Card)
+// =============================================================================
+
+export type StatProjection = {
+  average: number;
+  median: number;
+  mode: number;
+  min: number;
+  max: number;
+  current: number;
+};
+
+export type SeasonProjection = {
+  playerId: number;
+  season: string;
+  gamesRemaining: number;
+  goals: StatProjection;
+  assists: StatProjection;
+  points: StatProjection;
+  shots?: StatProjection;
+  powerPlayPoints?: StatProjection;
+  // Award probabilities (0-100%)
+  awardProbabilities: {
+    mostPoints: number; // Art Ross
+    mostGoals: number; // Rocket Richard
+    mostAssists: number;
+    hartTrophy?: number;
+    selkeTrophy?: number;
+    norrisTrophy?: number;
+  };
+  // Milestone probabilities (probability of reaching each threshold)
+  milestoneProbabilities: {
+    goals: Record<number, number>; // e.g., { 20: 95.5, 30: 78.2, 40: 45.1, 50: 12.3 }
+    assists: Record<number, number>;
+    points: Record<number, number>;
+  };
+  // Distribution description
+  distributionSummary: string;
+};
+
+// =============================================================================
+// Skill Profile Types (GOA%-Style Card)
+// =============================================================================
+
+export type PercentileRating = {
+  value: number; // 0-100 percentile
+  tier: "elite" | "above-average" | "average" | "below-average" | "replacement";
+};
+
+export type SkillProfile = {
+  playerId: number;
+  season: string;
+  position: PlayerPosition;
+  // Overall skill score (like GOA%)
+  overallRating: PercentileRating;
+  // Even-strength percentiles
+  evenStrength: {
+    offensive: PercentileRating;
+    defensive: PercentileRating;
+    overall: PercentileRating;
+  };
+  // Special teams percentiles
+  specialTeams: {
+    powerPlayOffense: PercentileRating;
+    penaltyKillDefense: PercentileRating | null; // null if player doesn't PK
+    combinedPPEV: PercentileRating;
+  };
+  // Talent/skill percentiles
+  talents: {
+    finishing: PercentileRating; // Goal scoring ability
+    playmaking: PercentileRating; // Assist/setup ability
+    penaltyImpact: PercentileRating; // Penalties drawn vs taken
+    versatility: PercentileRating; // All-situations contribution
+  };
+  // Text summary of player's skill shape
+  skillSummary: string;
+};
+
+// =============================================================================
+// On-Ice Impact / RAPM Types
+// =============================================================================
+
+export type ImpactMetric = {
+  percentile: number; // 0-100
+  tier: "elite" | "above-average" | "average" | "below-average" | "poor";
+};
+
+export type OnIceImpact = {
+  playerId: number;
+  season: string;
+  position: PlayerPosition;
+  evTimeOnIce: number; // minutes
+  // FOR metrics (offensive impact)
+  forMetrics: {
+    goals: ImpactMetric;
+    shots: ImpactMetric;
+    expectedGoals: ImpactMetric;
+    corsi: ImpactMetric;
+    shotQuality: ImpactMetric;
+  };
+  // AGAINST metrics (defensive impact)
+  againstMetrics: {
+    goals: ImpactMetric;
+    shots: ImpactMetric;
+    expectedGoals: ImpactMetric;
+    corsi: ImpactMetric;
+    shotQuality: ImpactMetric;
+  };
+  // General advanced metrics
+  general: {
+    netExpectedGoals: ImpactMetric;
+    netCorsi: ImpactMetric;
+    finishing: ImpactMetric;
+    shotBlocking: ImpactMetric;
+  };
+  // Summary description
+  impactSummary: string;
+};
