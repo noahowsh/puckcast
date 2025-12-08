@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2025-12-08T11:25:30.408905+00:00",
+  "generatedAt": "2025-12-08T23:11:25.847845+00:00",
   "games": [
     {
       "id": "2025020461",
@@ -14,9 +14,9 @@
         "name": "Lightning",
         "abbrev": "TBL"
       },
-      "homeWinProb": 0.5283,
-      "awayWinProb": 0.4717,
-      "confidenceScore": 0.057,
+      "homeWinProb": 0.5281,
+      "awayWinProb": 0.4719,
+      "confidenceScore": 0.056,
       "confidenceGrade": "C+",
       "edge": 0.028,
       "summary": "Maple Leafs project at 53% as the home lean \u2014 a C+-tier edge worth 2.8 pts over a coin flip.",
@@ -60,12 +60,12 @@
         "name": "Sabres",
         "abbrev": "BUF"
       },
-      "homeWinProb": 0.6932,
-      "awayWinProb": 0.3068,
-      "confidenceScore": 0.386,
+      "homeWinProb": 0.6921,
+      "awayWinProb": 0.3079,
+      "confidenceScore": 0.384,
       "confidenceGrade": "A",
-      "edge": 0.193,
-      "summary": "Flames project at 69% as the home lean \u2014 an A-tier edge worth 19.3 pts over a coin flip.",
+      "edge": 0.192,
+      "summary": "Flames project at 69% as the home lean \u2014 an A-tier edge worth 19.2 pts over a coin flip.",
       "modelFavorite": "home",
       "venue": "Scotiabank Saddledome",
       "season": "20252026"
@@ -83,9 +83,9 @@
         "name": "Red Wings",
         "abbrev": "DET"
       },
-      "homeWinProb": 0.4393,
-      "awayWinProb": 0.5607,
-      "confidenceScore": 0.121,
+      "homeWinProb": 0.4388,
+      "awayWinProb": 0.5612,
+      "confidenceScore": 0.122,
       "confidenceGrade": "B-",
       "edge": -0.061,
       "summary": "Red Wings project at 56% as the road lean \u2014 a B--tier edge worth 6.1 pts over a coin flip.",
@@ -106,9 +106,9 @@
         "name": "Wild",
         "abbrev": "MIN"
       },
-      "homeWinProb": 0.4393,
-      "awayWinProb": 0.5607,
-      "confidenceScore": 0.121,
+      "homeWinProb": 0.4388,
+      "awayWinProb": 0.5612,
+      "confidenceScore": 0.122,
       "confidenceGrade": "B-",
       "edge": -0.061,
       "summary": "Wild project at 56% as the road lean \u2014 a B--tier edge worth 6.1 pts over a coin flip.",
