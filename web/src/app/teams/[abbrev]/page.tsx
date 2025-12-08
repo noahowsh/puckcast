@@ -741,7 +741,6 @@ export default async function TeamPage({ params }: { params: Promise<{ abbrev: s
                       width={48}
                       height={48}
                       style={{ width: '48px', height: '48px', borderRadius: '50%', objectFit: 'cover' }}
-                      onError={(e) => { e.currentTarget.style.display = 'none'; }}
                     />
                     <div style={{ flex: 1 }}>
                       <p style={{ fontSize: '0.65rem', color: 'var(--text-tertiary)', textTransform: 'uppercase' }}>Points Leader</p>
@@ -765,7 +764,6 @@ export default async function TeamPage({ params }: { params: Promise<{ abbrev: s
                         width={48}
                         height={48}
                         style={{ width: '48px', height: '48px', borderRadius: '50%', objectFit: 'cover' }}
-                        onError={(e) => { e.currentTarget.style.display = 'none'; }}
                       />
                       <div style={{ flex: 1 }}>
                         <p style={{ fontSize: '0.65rem', color: 'var(--text-tertiary)', textTransform: 'uppercase' }}>Goals Leader</p>
@@ -790,7 +788,6 @@ export default async function TeamPage({ params }: { params: Promise<{ abbrev: s
                         width={48}
                         height={48}
                         style={{ width: '48px', height: '48px', borderRadius: '50%', objectFit: 'cover' }}
-                        onError={(e) => { e.currentTarget.style.display = 'none'; }}
                       />
                       <div style={{ flex: 1 }}>
                         <p style={{ fontSize: '0.65rem', color: 'var(--text-tertiary)', textTransform: 'uppercase' }}>Best +/-</p>
