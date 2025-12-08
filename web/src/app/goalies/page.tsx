@@ -213,9 +213,7 @@ export default async function GoaliePage() {
           <div style={{ marginBottom: '1rem' }}>
             <p className="chip-soft">Minimum 3 games played</p>
           </div>
-          <div className="table-container" style={{ borderRadius: '20px' }}>
-            <GoalieStatsTable goalies={allGoalies} maxRows={30} />
-          </div>
+          <GoalieStatsTable goalies={allGoalies} maxRows={30} />
         </section>
       </div>
     </div>

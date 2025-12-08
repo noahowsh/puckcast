@@ -37,6 +37,9 @@ export default async function PlayersPage() {
                 updated hourly from official league data.
               </p>
               <div className="cta-row">
+                <Link href="/skaters" className="cta cta-ghost">
+                  Skater Deep Dive →
+                </Link>
                 <Link href="/goalies" className="cta cta-ghost">
                   Goalie Deep Dive →
                 </Link>
@@ -357,16 +360,17 @@ export default async function PlayersPage() {
           </div>
 
           {/* Skaters Table */}
-          <div style={{ marginBottom: '2rem' }}>
+          <div style={{ marginBottom: '2.5rem' }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem' }}>
               <div>
                 <h3 style={{ fontSize: '1.25rem', fontWeight: 700 }}>Top Skaters</h3>
                 <p className="chip-soft" style={{ marginTop: '0.25rem' }}>Top 25 by points • Min 5 GP</p>
               </div>
+              <Link href="/skaters" className="cta cta-ghost" style={{ fontSize: '0.875rem' }}>
+                View All Skaters →
+              </Link>
             </div>
-            <div className="table-container" style={{ borderRadius: '20px' }}>
-              <SkaterStatsTable players={allSkaters} maxRows={25} />
-            </div>
+            <SkaterStatsTable players={allSkaters} maxRows={25} />
           </div>
 
           {/* Goalies Table */}
@@ -376,10 +380,11 @@ export default async function PlayersPage() {
                 <h3 style={{ fontSize: '1.25rem', fontWeight: 700 }}>Top Goalies</h3>
                 <p className="chip-soft" style={{ marginTop: '0.25rem' }}>Top 15 by wins • Min 3 GP</p>
               </div>
+              <Link href="/goalies" className="cta cta-ghost" style={{ fontSize: '0.875rem' }}>
+                View All Goalies →
+              </Link>
             </div>
-            <div className="table-container" style={{ borderRadius: '20px' }}>
-              <GoalieStatsTable goalies={allGoalies} maxRows={15} />
-            </div>
+            <GoalieStatsTable goalies={allGoalies} maxRows={15} />
           </div>
         </section>
       </div>

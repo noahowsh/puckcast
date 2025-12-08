@@ -725,46 +725,104 @@ export default async function TeamPage({ params }: { params: Promise<{ abbrev: s
           <ProjectedLineupDisplay lineup={projectedLineup} />
         </section>
 
-        {/* Player Statistics */}
+        {/* Top Performers */}
         {allSkaters.length > 0 && (
           <section className="nova-section">
-            <div className="flex items-center justify-between mb-4">
+            <div className="section-head">
               <div>
-                <h2 className="text-xl font-bold text-white">Skater Statistics</h2>
-                <p className="text-sm text-white/50 mt-1">Current season stats for team skaters</p>
+                <p className="eyebrow">Team Leaders</p>
+                <h2>Top Performers</h2>
+                <p className="lead-sm">Leading scorers and key contributors this season.</p>
               </div>
-              <Link href="/players" className="text-sm text-sky-400 hover:text-sky-300 transition-colors font-medium">
+              <Link href="/skaters" className="cta cta-ghost">
                 League Leaders →
               </Link>
             </div>
-            <div className="rounded-xl border border-white/[0.06] bg-gradient-to-b from-white/[0.02] to-transparent overflow-hidden">
-              <SkaterStatsTable
-                players={allSkaters}
-                showTeam={false}
-                maxRows={15}
-                linkToProfile={true}
-              />
+
+            <div className="bento-grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', marginBottom: '1.5rem' }}>
+              {/* Points Leader */}
+              {allSkaters[0] && (
+                <div className="bento-card">
+                  <p className="micro-label">Points Leader</p>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginTop: '0.5rem' }}>
+                    <div style={{ width: '48px', height: '48px', borderRadius: '50%', background: 'linear-gradient(135deg, rgba(126, 227, 255, 0.2), rgba(110, 240, 194, 0.2))', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, fontSize: '1.25rem', color: 'var(--aqua)' }}>
+                      {allSkaters[0].stats.points}
+                    </div>
+                    <div>
+                      <p style={{ fontSize: '1rem', fontWeight: 700, color: 'white' }}>{allSkaters[0].bio.fullName}</p>
+                      <p style={{ fontSize: '0.75rem', color: 'var(--text-tertiary)' }}>{allSkaters[0].stats.goals}G • {allSkaters[0].stats.assists}A</p>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Goals Leader */}
+              {(() => {
+                const goalsLeader = [...allSkaters].sort((a, b) => b.stats.goals - a.stats.goals)[0];
+                return goalsLeader && (
+                  <div className="bento-card">
+                    <p className="micro-label">Goals Leader</p>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginTop: '0.5rem' }}>
+                      <div style={{ width: '48px', height: '48px', borderRadius: '50%', background: 'linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(110, 240, 194, 0.2))', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, fontSize: '1.25rem', color: 'var(--mint)' }}>
+                        {goalsLeader.stats.goals}
+                      </div>
+                      <div>
+                        <p style={{ fontSize: '1rem', fontWeight: 700, color: 'white' }}>{goalsLeader.bio.fullName}</p>
+                        <p style={{ fontSize: '0.75rem', color: 'var(--text-tertiary)' }}>{goalsLeader.stats.gamesPlayed} GP</p>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })()}
+
+              {/* Plus/Minus Leader */}
+              {(() => {
+                const pmLeader = [...allSkaters].sort((a, b) => b.stats.plusMinus - a.stats.plusMinus)[0];
+                return pmLeader && (
+                  <div className="bento-card">
+                    <p className="micro-label">Best +/-</p>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginTop: '0.5rem' }}>
+                      <div style={{ width: '48px', height: '48px', borderRadius: '50%', background: pmLeader.stats.plusMinus >= 0 ? 'rgba(16, 185, 129, 0.2)' : 'rgba(239, 68, 68, 0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, fontSize: '1rem', color: pmLeader.stats.plusMinus >= 0 ? '#10b981' : '#ef4444' }}>
+                        {pmLeader.stats.plusMinus > 0 ? '+' : ''}{pmLeader.stats.plusMinus}
+                      </div>
+                      <div>
+                        <p style={{ fontSize: '1rem', fontWeight: 700, color: 'white' }}>{pmLeader.bio.fullName}</p>
+                        <p style={{ fontSize: '0.75rem', color: 'var(--text-tertiary)' }}>{pmLeader.bio.position}</p>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })()}
             </div>
+
+            <SkaterStatsTable
+              players={allSkaters}
+              showTeam={false}
+              maxRows={15}
+              linkToProfile={true}
+            />
           </section>
         )}
 
         {/* Goalie Statistics */}
         {roster.goalies.length > 0 && (
           <section className="nova-section">
-            <div className="flex items-center justify-between mb-4">
+            <div className="section-head">
               <div>
-                <h2 className="text-xl font-bold text-white">Goalie Statistics</h2>
-                <p className="text-sm text-white/50 mt-1">Current season stats for team goalies</p>
+                <p className="eyebrow">Netminders</p>
+                <h2>Goalie Statistics</h2>
+                <p className="lead-sm">Current season stats for team goalies.</p>
               </div>
+              <Link href="/goalies" className="cta cta-ghost">
+                All Goalies →
+              </Link>
             </div>
-            <div className="rounded-xl border border-white/[0.06] bg-gradient-to-b from-white/[0.02] to-transparent overflow-hidden">
-              <GoalieStatsTable
-                goalies={roster.goalies}
-                showTeam={false}
-                showRank={false}
-                linkToProfile={true}
-              />
-            </div>
+            <GoalieStatsTable
+              goalies={roster.goalies}
+              showTeam={false}
+              showRank={false}
+              linkToProfile={true}
+            />
           </section>
         )}
 
