@@ -57,9 +57,34 @@ export async function buildProjectedLineup(teamAbbrev: string): Promise<TeamLine
   );
 
   // Convert roster to lineup players and mark injuries
-  const forwards = roster.forwards.map(p => skaterToLineupPlayer(p, injuredNames));
-  const defensemen = roster.defensemen.map(p => skaterToLineupPlayer(p, injuredNames));
-  const goalies = roster.goalies.map(g => goalieToLineupGoalie(g, injuredNames, goaliePulse, teamAbbrev));
+  let forwards = roster.forwards.map(p => skaterToLineupPlayer(p, injuredNames));
+  let defensemen = roster.defensemen.map(p => skaterToLineupPlayer(p, injuredNames));
+  let goalies = roster.goalies.map(g => goalieToLineupGoalie(g, injuredNames, goaliePulse, teamAbbrev));
+
+  // Add IR/injured players who aren't on the active roster
+  if (injuries?.injuries) {
+    const forwardNames = new Set(forwards.map(f => f.playerName.toLowerCase()));
+    const defenseNames = new Set(defensemen.map(d => d.playerName.toLowerCase()));
+    const goalieNames = new Set(goalies.map(g => g.playerName.toLowerCase()));
+
+    for (const injury of injuries.injuries) {
+      if (!injury.isOut) continue;
+      const lowerName = injury.playerName.toLowerCase();
+
+      // Check if player is already in roster
+      const isForward = ['C', 'L', 'R', 'LW', 'RW', 'W', 'F'].includes(injury.position.toUpperCase());
+      const isDefense = injury.position.toUpperCase() === 'D';
+      const isGoalie = injury.position.toUpperCase() === 'G';
+
+      if (isForward && !forwardNames.has(lowerName)) {
+        forwards.push(injuryToLineupPlayer(injury));
+      } else if (isDefense && !defenseNames.has(lowerName)) {
+        defensemen.push(injuryToLineupPlayer(injury));
+      } else if (isGoalie && !goalieNames.has(lowerName)) {
+        goalies.push(injuryToGoalieLineup(injury));
+      }
+    }
+  }
 
   // Rank players by performance
   const rankedForwards = rankPlayers(forwards);
@@ -174,6 +199,44 @@ function goalieToLineupGoalie(
   };
 }
 
+// Convert an injury record to a lineup player (for IR players not on active roster)
+function injuryToLineupPlayer(injury: { playerId: number; playerName: string; position: string; teamAbbrev: string }): LineupPlayer {
+  return {
+    playerId: injury.playerId,
+    playerName: injury.playerName,
+    position: injury.position,
+    jerseyNumber: null,
+    gamesPlayed: 0,
+    timeOnIcePerGame: 0,
+    goals: 0,
+    assists: 0,
+    points: 0,
+    plusMinus: 0,
+    rankingScore: 0, // IR players have no ranking since they can't play
+    isHealthy: false,
+    injuryStatus: "IR",
+  };
+}
+
+// Convert an injury record to a goalie lineup entry
+function injuryToGoalieLineup(injury: { playerId: number; playerName: string; teamAbbrev: string }): GoalieLineup {
+  return {
+    playerId: injury.playerId,
+    playerName: injury.playerName,
+    jerseyNumber: null,
+    gamesPlayed: 0,
+    gamesStarted: 0,
+    wins: 0,
+    savePct: 0,
+    goalsAgainstAverage: 0,
+    rankingScore: 0,
+    isHealthy: false,
+    isProjectedStarter: false,
+    startLikelihood: 0,
+    restDays: 0,
+  };
+}
+
 // =============================================================================
 // Ranking Functions
 // =============================================================================
@@ -250,23 +313,33 @@ function calculateLineupStrength(
   allDefensemen: LineupPlayer[],
   allGoalies: GoalieLineup[]
 ): LineupStrengthMetrics {
-  // Calculate offensive strength from forwards
+  // Calculate offensive strength from forwards using normalized ranking scores
   const avgForwardPoints = projectedForwards.length > 0
     ? projectedForwards.reduce((sum, p) => sum + p.points, 0) / projectedForwards.length
     : 0;
   const avgForwardTOI = projectedForwards.length > 0
     ? projectedForwards.reduce((sum, p) => sum + p.timeOnIcePerGame, 0) / projectedForwards.length
     : 0;
-  const topLineStrength = projectedForwards.slice(0, 3).reduce((sum, p) => sum + p.rankingScore, 0) / 3;
+  const avgForwardRankingScore = projectedForwards.length > 0
+    ? projectedForwards.reduce((sum, p) => sum + p.rankingScore, 0) / projectedForwards.length
+    : 0;
+  const topLineStrength = projectedForwards.slice(0, 3).length > 0
+    ? projectedForwards.slice(0, 3).reduce((sum, p) => sum + p.rankingScore, 0) / Math.min(3, projectedForwards.length)
+    : 0;
 
-  // Calculate defensive strength
+  // Calculate defensive strength using normalized ranking scores
   const avgDefensemanPoints = projectedDefensemen.length > 0
     ? projectedDefensemen.reduce((sum, p) => sum + p.points, 0) / projectedDefensemen.length
     : 0;
   const avgDefensemanTOI = projectedDefensemen.length > 0
     ? projectedDefensemen.reduce((sum, p) => sum + p.timeOnIcePerGame, 0) / projectedDefensemen.length
     : 0;
-  const topPairStrength = projectedDefensemen.slice(0, 2).reduce((sum, p) => sum + p.rankingScore, 0) / 2;
+  const avgDefensemanRankingScore = projectedDefensemen.length > 0
+    ? projectedDefensemen.reduce((sum, p) => sum + p.rankingScore, 0) / projectedDefensemen.length
+    : 0;
+  const topPairStrength = projectedDefensemen.slice(0, 2).length > 0
+    ? projectedDefensemen.slice(0, 2).reduce((sum, p) => sum + p.rankingScore, 0) / Math.min(2, projectedDefensemen.length)
+    : 0;
 
   // Calculate goalie strength
   const starter = projectedGoalies.find(g => g.isProjectedStarter);
@@ -328,9 +401,10 @@ function calculateLineupStrength(
   // Calculate injury impact
   const injuryImpact = -missingPlayers.reduce((sum, p) => sum + p.impactScore, 0);
 
-  // Calculate overall strength scores (0-100)
-  const offensiveStrength = Math.min(100, (avgForwardPoints * 2 + topLineStrength) / 3 * 10);
-  const defensiveStrength = Math.min(100, (avgDefensemanPoints * 2 + topPairStrength) / 3 * 10);
+  // Calculate overall strength scores (0-100) using normalized ranking scores
+  // avgForwardRankingScore and topLineStrength are both 0-100 scales
+  const offensiveStrength = Math.min(100, Math.max(0, (avgForwardRankingScore * 0.6 + topLineStrength * 0.4)));
+  const defensiveStrength = Math.min(100, Math.max(0, (avgDefensemanRankingScore * 0.6 + topPairStrength * 0.4)));
 
   // Overall quality combines all factors
   const overallQuality = Math.min(100, Math.max(0,

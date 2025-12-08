@@ -149,45 +149,47 @@ function PlayerRow({ player, rank, showRankingScore = true }: {
       style={{
         display: 'flex',
         alignItems: 'center',
-        padding: '0.5rem 0.75rem',
+        padding: '0.75rem 1rem',
         background: rank % 2 === 0 ? 'rgba(255,255,255,0.02)' : 'transparent',
         opacity: isInjured ? 0.5 : 1,
         textDecoration: 'none',
-        transition: 'background 0.15s ease',
+        transition: 'all 0.15s ease',
+        cursor: 'pointer',
+        borderLeft: '3px solid transparent',
       }}
-      className="hover:bg-white/5"
+      className="hover:bg-white/[0.08] hover:border-l-sky-500"
     >
       <span style={{
-        width: '24px',
-        fontSize: '0.8rem',
+        width: '28px',
+        fontSize: '0.85rem',
         fontWeight: 600,
         color: rank <= 3 ? '#10b981' : 'var(--text-tertiary)',
       }}>{rank}</span>
       <span style={{
-        width: '28px',
-        fontSize: '0.75rem',
+        width: '32px',
+        fontSize: '0.8rem',
         color: 'var(--text-tertiary)',
         fontFamily: 'monospace',
       }}>{player.jerseyNumber || '—'}</span>
-      <span style={{ flex: 1, fontSize: '0.85rem', color: 'white', fontWeight: 500 }}>
+      <span style={{ flex: 1, fontSize: '0.9rem', color: 'white', fontWeight: 500 }}>
         {player.playerName}
         {isInjured && (
           <span style={{ marginLeft: '0.5rem', fontSize: '0.65rem', color: '#ef4444', fontWeight: 600 }}>INJ</span>
         )}
       </span>
-      <span style={{ width: '30px', fontSize: '0.8rem', color: 'var(--text-secondary)', textAlign: 'center' }}>{player.position}</span>
-      <span style={{ width: '35px', fontSize: '0.8rem', color: 'var(--text-secondary)', textAlign: 'right' }}>{player.gamesPlayed}</span>
-      <span style={{ width: '35px', fontSize: '0.8rem', color: '#10b981', textAlign: 'right', fontWeight: 600 }}>{player.points}</span>
+      <span style={{ width: '35px', fontSize: '0.85rem', color: 'var(--text-secondary)', textAlign: 'center' }}>{player.position}</span>
+      <span style={{ width: '40px', fontSize: '0.85rem', color: 'var(--text-secondary)', textAlign: 'right' }}>{player.gamesPlayed}</span>
+      <span style={{ width: '40px', fontSize: '0.85rem', color: '#10b981', textAlign: 'right', fontWeight: 600 }}>{player.points}</span>
       <span style={{
-        width: '35px',
-        fontSize: '0.8rem',
+        width: '40px',
+        fontSize: '0.85rem',
         color: player.plusMinus >= 0 ? '#10b981' : '#ef4444',
         textAlign: 'right',
       }}>{player.plusMinus >= 0 ? '+' : ''}{player.plusMinus}</span>
       {showRankingScore && (
         <span style={{
-          width: '45px',
-          fontSize: '0.75rem',
+          width: '50px',
+          fontSize: '0.8rem',
           color: getStrengthColor(player.rankingScore),
           textAlign: 'right',
           fontWeight: 600,
@@ -206,27 +208,29 @@ function GoalieRow({ goalie, rank }: { goalie: GoalieLineup; rank: number }) {
       style={{
         display: 'flex',
         alignItems: 'center',
-        padding: '0.5rem 0.75rem',
+        padding: '0.75rem 1rem',
         background: rank % 2 === 0 ? 'rgba(255,255,255,0.02)' : 'transparent',
         opacity: isInjured ? 0.5 : 1,
         textDecoration: 'none',
-        transition: 'background 0.15s ease',
+        transition: 'all 0.15s ease',
+        cursor: 'pointer',
+        borderLeft: '3px solid transparent',
       }}
-      className="hover:bg-white/5"
+      className="hover:bg-white/[0.08] hover:border-l-sky-500"
     >
       <span style={{
-        width: '24px',
-        fontSize: '0.8rem',
+        width: '28px',
+        fontSize: '0.85rem',
         fontWeight: 600,
         color: goalie.isProjectedStarter ? '#10b981' : 'var(--text-tertiary)',
       }}>{goalie.isProjectedStarter ? '★' : rank}</span>
       <span style={{
-        width: '28px',
-        fontSize: '0.75rem',
+        width: '32px',
+        fontSize: '0.8rem',
         color: 'var(--text-tertiary)',
         fontFamily: 'monospace',
       }}>{goalie.jerseyNumber || '—'}</span>
-      <span style={{ flex: 1, fontSize: '0.85rem', color: 'white', fontWeight: 500 }}>
+      <span style={{ flex: 1, fontSize: '0.9rem', color: 'white', fontWeight: 500 }}>
         {goalie.playerName}
         {goalie.isProjectedStarter && (
           <span style={{ marginLeft: '0.5rem', fontSize: '0.6rem', color: '#10b981', fontWeight: 600 }}>STARTER</span>
@@ -235,17 +239,17 @@ function GoalieRow({ goalie, rank }: { goalie: GoalieLineup; rank: number }) {
           <span style={{ marginLeft: '0.5rem', fontSize: '0.65rem', color: '#ef4444', fontWeight: 600 }}>INJ</span>
         )}
       </span>
-      <span style={{ width: '35px', fontSize: '0.8rem', color: 'var(--text-secondary)', textAlign: 'right' }}>{goalie.gamesPlayed}</span>
-      <span style={{ width: '35px', fontSize: '0.8rem', color: '#10b981', textAlign: 'right', fontWeight: 600 }}>{goalie.wins}</span>
-      <span style={{ width: '45px', fontSize: '0.8rem', color: 'var(--text-secondary)', textAlign: 'right' }}>
+      <span style={{ width: '40px', fontSize: '0.85rem', color: 'var(--text-secondary)', textAlign: 'right' }}>{goalie.gamesPlayed}</span>
+      <span style={{ width: '40px', fontSize: '0.85rem', color: '#10b981', textAlign: 'right', fontWeight: 600 }}>{goalie.wins}</span>
+      <span style={{ width: '50px', fontSize: '0.85rem', color: 'var(--text-secondary)', textAlign: 'right' }}>
         .{Math.round(goalie.savePct * 1000)}
       </span>
-      <span style={{ width: '45px', fontSize: '0.8rem', color: 'var(--text-secondary)', textAlign: 'right' }}>
+      <span style={{ width: '50px', fontSize: '0.85rem', color: 'var(--text-secondary)', textAlign: 'right' }}>
         {goalie.goalsAgainstAverage.toFixed(2)}
       </span>
       <span style={{
-        width: '45px',
-        fontSize: '0.75rem',
+        width: '50px',
+        fontSize: '0.8rem',
         color: getStrengthColor(goalie.rankingScore),
         textAlign: 'right',
         fontWeight: 600,
@@ -300,20 +304,20 @@ export function ProjectedLineupDisplay({ lineup }: { lineup: TeamLineup }) {
           </div>
           <div style={{
             display: 'flex',
-            padding: '0.35rem 0.75rem',
+            padding: '0.5rem 1rem',
             fontSize: '0.65rem',
             color: 'var(--text-tertiary)',
             textTransform: 'uppercase',
             borderBottom: '1px solid rgba(255,255,255,0.03)',
           }}>
-            <span style={{ width: '24px' }}>#</span>
-            <span style={{ width: '28px' }}>NO</span>
+            <span style={{ width: '28px' }}>#</span>
+            <span style={{ width: '32px' }}>NO</span>
             <span style={{ flex: 1 }}>Player</span>
-            <span style={{ width: '30px', textAlign: 'center' }}>Pos</span>
-            <span style={{ width: '35px', textAlign: 'right' }}>GP</span>
-            <span style={{ width: '35px', textAlign: 'right' }}>Pts</span>
-            <span style={{ width: '35px', textAlign: 'right' }}>+/-</span>
-            <span style={{ width: '45px', textAlign: 'right' }}>Score</span>
+            <span style={{ width: '35px', textAlign: 'center' }}>Pos</span>
+            <span style={{ width: '40px', textAlign: 'right' }}>GP</span>
+            <span style={{ width: '40px', textAlign: 'right' }}>Pts</span>
+            <span style={{ width: '40px', textAlign: 'right' }}>+/-</span>
+            <span style={{ width: '50px', textAlign: 'right' }}>OVR</span>
           </div>
           {lineup.forwards.slice(0, 14).map((player, idx) => (
             <PlayerRow key={player.playerId} player={player} rank={idx + 1} />
@@ -329,20 +333,20 @@ export function ProjectedLineupDisplay({ lineup }: { lineup: TeamLineup }) {
           </div>
           <div style={{
             display: 'flex',
-            padding: '0.35rem 0.75rem',
+            padding: '0.5rem 1rem',
             fontSize: '0.65rem',
             color: 'var(--text-tertiary)',
             textTransform: 'uppercase',
             borderBottom: '1px solid rgba(255,255,255,0.03)',
           }}>
-            <span style={{ width: '24px' }}>#</span>
-            <span style={{ width: '28px' }}>NO</span>
+            <span style={{ width: '28px' }}>#</span>
+            <span style={{ width: '32px' }}>NO</span>
             <span style={{ flex: 1 }}>Player</span>
-            <span style={{ width: '30px', textAlign: 'center' }}>Pos</span>
-            <span style={{ width: '35px', textAlign: 'right' }}>GP</span>
-            <span style={{ width: '35px', textAlign: 'right' }}>Pts</span>
-            <span style={{ width: '35px', textAlign: 'right' }}>+/-</span>
-            <span style={{ width: '45px', textAlign: 'right' }}>Score</span>
+            <span style={{ width: '35px', textAlign: 'center' }}>Pos</span>
+            <span style={{ width: '40px', textAlign: 'right' }}>GP</span>
+            <span style={{ width: '40px', textAlign: 'right' }}>Pts</span>
+            <span style={{ width: '40px', textAlign: 'right' }}>+/-</span>
+            <span style={{ width: '50px', textAlign: 'right' }}>OVR</span>
           </div>
           {lineup.defensemen.slice(0, 8).map((player, idx) => (
             <PlayerRow key={player.playerId} player={player} rank={idx + 1} />
@@ -358,20 +362,20 @@ export function ProjectedLineupDisplay({ lineup }: { lineup: TeamLineup }) {
           </div>
           <div style={{
             display: 'flex',
-            padding: '0.35rem 0.75rem',
+            padding: '0.5rem 1rem',
             fontSize: '0.65rem',
             color: 'var(--text-tertiary)',
             textTransform: 'uppercase',
             borderBottom: '1px solid rgba(255,255,255,0.03)',
           }}>
-            <span style={{ width: '24px' }}>#</span>
-            <span style={{ width: '28px' }}>NO</span>
+            <span style={{ width: '28px' }}>#</span>
+            <span style={{ width: '32px' }}>NO</span>
             <span style={{ flex: 1 }}>Player</span>
-            <span style={{ width: '35px', textAlign: 'right' }}>GP</span>
-            <span style={{ width: '35px', textAlign: 'right' }}>W</span>
-            <span style={{ width: '45px', textAlign: 'right' }}>SV%</span>
-            <span style={{ width: '45px', textAlign: 'right' }}>GAA</span>
-            <span style={{ width: '45px', textAlign: 'right' }}>Score</span>
+            <span style={{ width: '40px', textAlign: 'right' }}>GP</span>
+            <span style={{ width: '40px', textAlign: 'right' }}>W</span>
+            <span style={{ width: '50px', textAlign: 'right' }}>SV%</span>
+            <span style={{ width: '50px', textAlign: 'right' }}>GAA</span>
+            <span style={{ width: '50px', textAlign: 'right' }}>OVR</span>
           </div>
           {lineup.goalies.map((goalie, idx) => (
             <GoalieRow key={goalie.playerId} goalie={goalie} rank={idx + 1} />

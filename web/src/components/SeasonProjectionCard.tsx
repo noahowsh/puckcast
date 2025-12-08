@@ -28,6 +28,7 @@ export function SeasonProjectionCard({ projection, playerName }: SeasonProjectio
   // - Only milestones above current value
   // - Exclude 100% probability (already guaranteed)
   // - Extend range until probability drops below 3%
+  // - Always show at least 4 milestones if available
   const filterMilestones = (milestones: Record<number, number>, current: number, projected: number) => {
     const entries = Object.entries(milestones)
       .map(([k, v]) => [parseInt(k), v] as [number, number])
@@ -42,6 +43,13 @@ export function SeasonProjectionCard({ projection, playerName }: SeasonProjectio
       if (threshold <= projected * 1.3 && prob >= 1) return true;
       return false;
     });
+
+    // Ensure minimum of 4 buckets if available
+    const minBuckets = 4;
+    if (meaningful.length < minBuckets && entries.length >= minBuckets) {
+      // Take the first minBuckets entries to ensure we have at least 4
+      return Object.fromEntries(entries.slice(0, Math.min(6, Math.max(minBuckets, meaningful.length))));
+    }
 
     return Object.fromEntries(meaningful.slice(0, 6));
   };
