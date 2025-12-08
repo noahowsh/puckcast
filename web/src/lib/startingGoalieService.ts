@@ -32,9 +32,22 @@ type StartingGoaliesPayload = {
     awayTeam: string;
     homeGoalie: string | null;
     awayGoalie: string | null;
+    homeStatus?: string;  // "confirmed", "expected", "probable", "unconfirmed", "predicted"
+    awayStatus?: string;  // Optional for backwards compatibility with old JSON
     source: string;
     confidence: number;
   }[];
+};
+
+// Map Daily Faceoff status to confidence
+const STATUS_TO_CONFIDENCE: Record<string, number> = {
+  confirmed: 0.99,
+  expected: 0.85,
+  likely: 0.75,
+  probable: 0.65,
+  unconfirmed: 0.40,
+  predicted: 0.60,
+  unknown: 0.30,
 };
 
 type GoaliePulsePayload = {
@@ -75,88 +88,10 @@ async function loadStartingGoalies(): Promise<StartingGoaliesPayload | null> {
 }
 
 // =============================================================================
-// Daily Faceoff Integration
+// NOTE: Daily Faceoff scraping is handled by the Python scraper
+// (src/nhl_prediction/starting_goalie_scraper.py)
+// The scraped data is stored in startingGoalies.json with status fields
 // =============================================================================
-
-const DAILY_FACEOFF_URL = "https://www.dailyfaceoff.com/starting-goalies/";
-
-/**
- * Fetch and parse Daily Faceoff starting goalies
- * This provides earlier confirmation than NHL API
- */
-export async function fetchDailyFaceoffStarters(): Promise<Map<string, { goalie: string; status: string }>> {
-  const starters = new Map<string, { goalie: string; status: string }>();
-
-  try {
-    // In production, this would fetch and parse Daily Faceoff
-    // For now, we'll use the pattern-based approach
-    // Daily Faceoff structure: Team abbreviation -> Goalie name + status
-
-    const response = await fetch(DAILY_FACEOFF_URL, {
-      headers: {
-        "User-Agent": "Mozilla/5.0 (compatible; Puckcast/1.0)",
-      },
-      cache: "no-store",
-    });
-
-    if (!response.ok) {
-      console.warn(`Daily Faceoff fetch failed: ${response.status}`);
-      return starters;
-    }
-
-    const html = await response.text();
-    return parseDailyFaceoffHTML(html);
-  } catch (error) {
-    console.warn("Daily Faceoff fetch error:", error);
-    return starters;
-  }
-}
-
-/**
- * Parse Daily Faceoff HTML to extract starters
- */
-function parseDailyFaceoffHTML(html: string): Map<string, { goalie: string; status: string }> {
-  const starters = new Map<string, { goalie: string; status: string }>();
-
-  // Daily Faceoff uses specific CSS classes for status:
-  // - "confirmed" (green checkmark)
-  // - "expected" (likely to start)
-  // - "probable"
-  // - "unconfirmed"
-
-  // Match team and goalie sections
-  // Pattern varies by site structure - this is a simplified approach
-  const teamRegex = /data-team="([A-Z]{3})"[^>]*>[\s\S]*?class="goalie-name"[^>]*>([^<]+)<[\s\S]*?class="status-([^"]+)"/gi;
-  let match;
-
-  while ((match = teamRegex.exec(html)) !== null) {
-    const team = match[1];
-    const goalieName = match[2].trim();
-    const status = match[3].toLowerCase();
-
-    starters.set(team, { goalie: goalieName, status });
-  }
-
-  // Fallback: simpler parsing if structured differently
-  if (starters.size === 0) {
-    // Try alternative parsing patterns
-    const altRegex = /<div[^>]*class="[^"]*team-([A-Z]{3})[^"]*"[^>]*>[\s\S]*?<span[^>]*class="[^"]*goalie[^"]*"[^>]*>([^<]+)<[\s\S]*?<span[^>]*class="[^"]*status[^"]*"[^>]*>([^<]+)</gi;
-    while ((match = altRegex.exec(html)) !== null) {
-      const team = match[1];
-      const goalieName = match[2].trim();
-      const statusText = match[3].trim().toLowerCase();
-
-      const status = statusText.includes("confirmed") ? "confirmed"
-        : statusText.includes("expected") ? "expected"
-        : statusText.includes("probable") ? "probable"
-        : "unconfirmed";
-
-      starters.set(team, { goalie: goalieName, status });
-    }
-  }
-
-  return starters;
-}
 
 // =============================================================================
 // Goalie Info Building
@@ -164,15 +99,18 @@ function parseDailyFaceoffHTML(html: string): Map<string, { goalie: string; stat
 
 /**
  * Build comprehensive goalie info from multiple sources
+ *
+ * The Python scraper (starting_goalie_scraper.py) handles Daily Faceoff scraping
+ * and stores the status in startingGoalies.json. We just need to use that data.
  */
 function buildGoalieInfo(
   teamAbbrev: string,
   goalieName: string | null,
+  status: string,  // From Daily Faceoff: "confirmed", "expected", "probable", etc.
   pulseData: GoaliePulseEntry[],
-  startingData: { source: string; confidence: number } | null,
-  dailyFaceoffData: { goalie: string; status: string } | undefined
+  source: string
 ): StartingGoalieInfo {
-  // Find in goalie pulse
+  // Find in goalie pulse for additional metrics
   const pulseEntry = pulseData.find(
     g => g.team === teamAbbrev && (
       goalieName
@@ -182,52 +120,37 @@ function buildGoalieInfo(
   );
 
   // Determine best goalie name
-  const resolvedName = goalieName
-    || dailyFaceoffData?.goalie
-    || pulseEntry?.name
-    || null;
+  const resolvedName = goalieName || pulseEntry?.name || null;
 
-  // Aggregate confidence from multiple sources
-  const sources: { source: GoalieSource; confidence: number }[] = [];
+  // Use status from Daily Faceoff (via Python scraper) to determine confidence
+  const statusConfidence = STATUS_TO_CONFIDENCE[status.toLowerCase()] ?? 0.5;
 
-  if (startingData && goalieName) {
-    sources.push({
-      source: startingData.source as GoalieSource,
-      confidence: startingData.confidence,
-    });
+  // Combine with pulse data if available
+  let combinedConfidence = statusConfidence;
+  if (pulseEntry && source !== "daily_faceoff") {
+    // Weight pulse data more if we don't have Daily Faceoff confirmation
+    combinedConfidence = (statusConfidence * 0.7) + (pulseEntry.startLikelihood * 0.3);
   }
 
-  if (dailyFaceoffData) {
-    const dfConfidence = dailyFaceoffData.status === "confirmed" ? 0.95
-      : dailyFaceoffData.status === "expected" ? 0.8
-      : dailyFaceoffData.status === "probable" ? 0.6
-      : 0.4;
-    sources.push({ source: "daily_faceoff", confidence: dfConfidence });
-  }
+  // Determine if this is a confirmed starter
+  const isConfirmed = status.toLowerCase() === "confirmed" ||
+    (source === "nhl_api" && statusConfidence >= 0.95);
 
-  if (pulseEntry) {
-    sources.push({
-      source: "goalie_pulse",
-      confidence: pulseEntry.startLikelihood,
-    });
-  }
-
-  const combinedConfidence = sources.length > 0 ? combineConfidence(sources) : 0;
-  const isNHLConfirmed = startingData?.source === "nhl_api" && startingData.confidence >= 0.95;
-
-  // Determine primary and alternate sources
-  const primarySource = sources.sort((a, b) => getSourceWeight(b.source) - getSourceWeight(a.source))[0]?.source || "pattern";
-  const alternateSource = sources[1]?.source || null;
+  // Map status string to GoalieStatus type
+  const goalieStatus = isConfirmed ? "confirmed_starter"
+    : status.toLowerCase() === "expected" ? "expected_starter"
+    : status.toLowerCase() === "probable" || status.toLowerCase() === "likely" ? "projected_starter"
+    : "unknown";
 
   return {
-    playerId: null, // Would need lookup
+    playerId: null,
     playerName: resolvedName,
     teamAbbrev,
-    status: getGoalieStatus(combinedConfidence, isNHLConfirmed),
+    status: goalieStatus as StartingGoalieInfo["status"],
     confidence: combinedConfidence,
     confidenceLevel: getConfidenceLevel(combinedConfidence),
-    source: primarySource,
-    alternateSource,
+    source: source as GoalieSource,
+    alternateSource: pulseEntry ? "goalie_pulse" : null,
     // Performance metrics from pulse
     seasonRecord: null,
     seasonGAA: null,
@@ -242,7 +165,7 @@ function buildGoalieInfo(
     // Trend
     trend: (pulseEntry?.trend as StartingGoalieInfo["trend"]) ?? "unknown",
     // Timing
-    confirmedAt: isNHLConfirmed ? new Date().toISOString() : null,
+    confirmedAt: isConfirmed ? new Date().toISOString() : null,
     updatedAt: new Date().toISOString(),
   };
 }
@@ -253,6 +176,9 @@ function buildGoalieInfo(
 
 /**
  * Get starting goalie report for a specific game
+ *
+ * Uses pre-scraped data from startingGoalies.json (populated by Python scraper
+ * which fetches from Daily Faceoff).
  */
 export async function getGameGoalieReport(gameId: string): Promise<GameGoalieReport | null> {
   const [startingData, pulseData] = await Promise.all([
@@ -263,28 +189,21 @@ export async function getGameGoalieReport(gameId: string): Promise<GameGoalieRep
   const gameData = startingData?.games.find(g => g.gameId === gameId);
   if (!gameData) return null;
 
-  // Try to get Daily Faceoff data
-  let dailyFaceoffData: Map<string, { goalie: string; status: string }>;
-  try {
-    dailyFaceoffData = await fetchDailyFaceoffStarters();
-  } catch {
-    dailyFaceoffData = new Map();
-  }
-
+  // Build goalie info using status from JSON (pre-scraped from Daily Faceoff)
   const homeGoalie = buildGoalieInfo(
     gameData.homeTeam,
     gameData.homeGoalie,
+    gameData.homeStatus || "unknown",
     pulseData,
-    { source: gameData.source, confidence: gameData.confidence },
-    dailyFaceoffData.get(gameData.homeTeam)
+    gameData.source
   );
 
   const awayGoalie = buildGoalieInfo(
     gameData.awayTeam,
     gameData.awayGoalie,
+    gameData.awayStatus || "unknown",
     pulseData,
-    { source: gameData.source, confidence: gameData.confidence },
-    dailyFaceoffData.get(gameData.awayTeam)
+    gameData.source
   );
 
   const overallConfidence = (homeGoalie.confidence + awayGoalie.confidence) / 2;
@@ -319,6 +238,9 @@ export async function getGameGoalieReport(gameId: string): Promise<GameGoalieRep
 
 /**
  * Get daily goalie report for all games
+ *
+ * Uses pre-scraped data from startingGoalies.json (populated by Python scraper
+ * which fetches from Daily Faceoff).
  */
 export async function getDailyGoalieReport(date?: string): Promise<DailyGoalieReport> {
   const targetDate = date || new Date().toISOString().split("T")[0];
@@ -328,31 +250,23 @@ export async function getDailyGoalieReport(date?: string): Promise<DailyGoalieRe
     loadGoaliePulse(),
   ]);
 
-  // Try Daily Faceoff
-  let dailyFaceoffData: Map<string, { goalie: string; status: string }>;
-  try {
-    dailyFaceoffData = await fetchDailyFaceoffStarters();
-  } catch {
-    dailyFaceoffData = new Map();
-  }
-
   const games: GameGoalieReport[] = [];
 
   for (const gameData of startingData?.games || []) {
     const homeGoalie = buildGoalieInfo(
       gameData.homeTeam,
       gameData.homeGoalie,
+      gameData.homeStatus || "unknown",
       pulseData,
-      { source: gameData.source, confidence: gameData.confidence },
-      dailyFaceoffData.get(gameData.homeTeam)
+      gameData.source
     );
 
     const awayGoalie = buildGoalieInfo(
       gameData.awayTeam,
       gameData.awayGoalie,
+      gameData.awayStatus || "unknown",
       pulseData,
-      { source: gameData.source, confidence: gameData.confidence },
-      dailyFaceoffData.get(gameData.awayTeam)
+      gameData.source
     );
 
     const overallConfidence = (homeGoalie.confidence + awayGoalie.confidence) / 2;
@@ -383,6 +297,9 @@ export async function getDailyGoalieReport(date?: string): Promise<DailyGoalieRe
   const likelyCount = games.filter(g => !g.bothConfirmed && g.overallConfidence >= 0.7).length;
   const uncertainCount = games.filter(g => g.overallConfidence < 0.5).length;
 
+  // Check if data source is Daily Faceoff
+  const hasDailyFaceoffData = startingData?.games.some(g => g.source === "daily_faceoff") ?? false;
+
   return {
     date: targetDate,
     updatedAt: new Date().toISOString(),
@@ -391,7 +308,7 @@ export async function getDailyGoalieReport(date?: string): Promise<DailyGoalieRe
     likelyCount,
     uncertainCount,
     lastNHLCheck: startingData?.generatedAt || null,
-    lastDailyFaceoffCheck: dailyFaceoffData.size > 0 ? new Date().toISOString() : null,
+    lastDailyFaceoffCheck: hasDailyFaceoffData ? startingData?.generatedAt || null : null,
     nextRefresh: null,
   };
 }

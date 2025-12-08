@@ -1,10 +1,10 @@
 """
-Starting Goalie Scraper - V7.6 Enhancement
+Starting Goalie Scraper - V7.7 Enhancement
 
 Real-time starting goalie information with multi-source fallback:
-1. NHL API (confirmed starters 1-2 hours before game) - PRIMARY
-2. goaliePulse.json (predicted starters with likelihood) - FALLBACK
-3. Daily Faceoff / Team announcements (future enhancement) - FUTURE
+1. Daily Faceoff (earliest confirmations, industry standard) - PRIMARY
+2. NHL API (confirmed starters 1-2 hours before game) - SECONDARY
+3. goaliePulse.json (predicted starters with likelihood) - FALLBACK
 
 DATA LEAKAGE PROTECTION:
 - Only uses pre-game information (gameState must be 'FUT' or 'PRE')
@@ -12,8 +12,8 @@ DATA LEAKAGE PROTECTION:
 - For historical backtesting, uses starting goalie database (post-game verified)
 
 USAGE:
-- Run 1-2 hours before games for confirmed starters
-- Run earlier in day for probability-based predictions
+- Run throughout the day for Daily Faceoff updates
+- Run 1-2 hours before games for NHL API confirmed starters
 - Updates multiple times daily as more info becomes available
 """
 
@@ -21,6 +21,7 @@ from __future__ import annotations
 
 import json
 import logging
+import re
 import sqlite3
 from datetime import datetime, timedelta
 from pathlib import Path
@@ -28,6 +29,7 @@ from typing import Dict, List, Optional, Tuple
 
 import pandas as pd
 import requests
+from bs4 import BeautifulSoup
 
 LOGGER = logging.getLogger(__name__)
 
@@ -40,6 +42,34 @@ STARTING_GOALIES_DB = PROJECT_ROOT / "data" / "starting_goalies.db"
 # NHL API endpoints
 SCHEDULE_API = "https://api-web.nhle.com/v1/schedule"
 GAME_API = "https://api-web.nhle.com/v1/gamecenter"
+
+# Daily Faceoff (primary source for goalie confirmations)
+DAILY_FACEOFF_URL = "https://www.dailyfaceoff.com/starting-goalies/"
+
+# Team name to abbreviation mapping (Daily Faceoff uses full names)
+TEAM_NAME_TO_ABBREV = {
+    "Anaheim Ducks": "ANA", "Arizona Coyotes": "ARI", "Boston Bruins": "BOS",
+    "Buffalo Sabres": "BUF", "Calgary Flames": "CGY", "Carolina Hurricanes": "CAR",
+    "Chicago Blackhawks": "CHI", "Colorado Avalanche": "COL", "Columbus Blue Jackets": "CBJ",
+    "Dallas Stars": "DAL", "Detroit Red Wings": "DET", "Edmonton Oilers": "EDM",
+    "Florida Panthers": "FLA", "Los Angeles Kings": "LAK", "Minnesota Wild": "MIN",
+    "Montreal Canadiens": "MTL", "Nashville Predators": "NSH", "New Jersey Devils": "NJD",
+    "New York Islanders": "NYI", "New York Rangers": "NYR", "Ottawa Senators": "OTT",
+    "Philadelphia Flyers": "PHI", "Pittsburgh Penguins": "PIT", "San Jose Sharks": "SJS",
+    "Seattle Kraken": "SEA", "St. Louis Blues": "STL", "Tampa Bay Lightning": "TBL",
+    "Toronto Maple Leafs": "TOR", "Utah Hockey Club": "UTA", "Vancouver Canucks": "VAN",
+    "Vegas Golden Knights": "VGK", "Washington Capitals": "WSH", "Winnipeg Jets": "WPG",
+}
+
+# Status to confidence mapping for Daily Faceoff
+DF_STATUS_CONFIDENCE = {
+    "confirmed": 0.99,
+    "expected": 0.85,
+    "likely": 0.75,
+    "probable": 0.65,
+    "unconfirmed": 0.40,
+    "unknown": 0.30,
+}
 
 # Rate limiting
 _LAST_REQUEST_TIME = 0
@@ -228,6 +258,218 @@ class StartingGoalieScraper:
             LOGGER.warning(f"Could not fetch goalies for game {game_id}: {e}")
             return None
 
+    def fetch_daily_faceoff_starters(self, date: Optional[str] = None) -> Dict[str, Dict]:
+        """
+        Fetch starting goalie confirmations from Daily Faceoff.
+
+        Daily Faceoff is the industry standard for goalie confirmations.
+        They track confirmations throughout the day and provide status levels:
+        - Confirmed: Officially announced by team
+        - Expected: Very likely based on patterns
+        - Likely/Probable: Good chance
+        - Unconfirmed: Not yet known
+
+        Args:
+            date: Date in 'YYYY-MM-DD' format, or None for today
+
+        Returns:
+            Dict mapping team abbreviation to goalie info:
+                {
+                    'TOR': {
+                        'goalie': 'Joseph Woll',
+                        'status': 'confirmed',  # confirmed/expected/probable/unconfirmed
+                        'confidence': 0.99,
+                        'record': '8-3-1',
+                        'gaa': 2.15,
+                        'sv_pct': 0.912,
+                        'opponent': 'BOS'
+                    }
+                }
+        """
+        _rate_limit()
+
+        url = DAILY_FACEOFF_URL
+        if date:
+            url = f"{DAILY_FACEOFF_URL}{date}"
+
+        LOGGER.info(f"Fetching Daily Faceoff starters from {url}")
+
+        try:
+            headers = {
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+                'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+                'Accept-Language': 'en-US,en;q=0.5',
+            }
+            response = requests.get(url, headers=headers, timeout=15)
+            response.raise_for_status()
+
+            return self._parse_daily_faceoff_html(response.text)
+
+        except requests.exceptions.RequestException as e:
+            LOGGER.warning(f"Failed to fetch Daily Faceoff: {e}")
+            return {}
+
+    def _parse_daily_faceoff_html(self, html: str) -> Dict[str, Dict]:
+        """
+        Parse Daily Faceoff HTML to extract goalie data.
+
+        The page embeds JSON data with fields like:
+        - homeGoalieName / awayGoalieName
+        - homeNewsStrengthName / awayNewsStrengthName (status)
+        - homeTeamName / awayTeamName
+        - Stats: wins, losses, GAA, SV%, etc.
+        """
+        starters = {}
+
+        try:
+            soup = BeautifulSoup(html, 'html.parser')
+
+            # Method 1: Look for __NEXT_DATA__ JSON (Next.js apps)
+            next_data = soup.find('script', id='__NEXT_DATA__')
+            if next_data:
+                try:
+                    data = json.loads(next_data.string)
+                    games = self._extract_from_next_data(data)
+                    if games:
+                        return games
+                except json.JSONDecodeError:
+                    pass
+
+            # Method 2: Look for embedded JSON in script tags
+            for script in soup.find_all('script'):
+                if script.string and 'homeGoalieName' in script.string:
+                    # Try to extract JSON objects from script
+                    json_matches = re.findall(r'\{[^{}]*"homeGoalieName"[^{}]*\}', script.string)
+                    for match in json_matches:
+                        try:
+                            game_data = json.loads(match)
+                            self._process_game_json(game_data, starters)
+                        except json.JSONDecodeError:
+                            continue
+
+            # Method 3: Parse HTML structure directly
+            if not starters:
+                starters = self._parse_html_structure(soup)
+
+        except Exception as e:
+            LOGGER.warning(f"Error parsing Daily Faceoff HTML: {e}")
+
+        LOGGER.info(f"Parsed {len(starters)} goalie confirmations from Daily Faceoff")
+        return starters
+
+    def _extract_from_next_data(self, data: Dict) -> Dict[str, Dict]:
+        """Extract goalie data from Next.js __NEXT_DATA__ structure."""
+        starters = {}
+
+        try:
+            # Navigate to the props containing game data
+            props = data.get('props', {}).get('pageProps', {})
+            games = props.get('games', props.get('matchups', []))
+
+            if not isinstance(games, list):
+                games = [games] if games else []
+
+            for game in games:
+                self._process_game_json(game, starters)
+
+        except Exception as e:
+            LOGGER.debug(f"Could not extract from __NEXT_DATA__: {e}")
+
+        return starters
+
+    def _process_game_json(self, game: Dict, starters: Dict):
+        """Process a single game JSON object from Daily Faceoff."""
+        try:
+            home_team_name = game.get('homeTeamName', '')
+            away_team_name = game.get('awayTeamName', '')
+
+            home_abbrev = TEAM_NAME_TO_ABBREV.get(home_team_name)
+            away_abbrev = TEAM_NAME_TO_ABBREV.get(away_team_name)
+
+            # Home goalie
+            if home_abbrev and game.get('homeGoalieName'):
+                status = (game.get('homeNewsStrengthName', 'unknown') or 'unknown').lower()
+                starters[home_abbrev] = {
+                    'goalie': game['homeGoalieName'],
+                    'status': status,
+                    'confidence': DF_STATUS_CONFIDENCE.get(status, 0.5),
+                    'record': f"{game.get('homeGoalieWins', 0)}-{game.get('homeGoalieLosses', 0)}-{game.get('homeGoalieOvertimeLosses', 0)}",
+                    'gaa': float(game.get('homeGoalieGoalsAgainstAvg', 0) or 0),
+                    'sv_pct': float(game.get('homeGoalieSavePercentage', 0) or 0),
+                    'opponent': away_abbrev,
+                    'rating': game.get('homeGoalieRating'),
+                }
+
+            # Away goalie
+            if away_abbrev and game.get('awayGoalieName'):
+                status = (game.get('awayNewsStrengthName', 'unknown') or 'unknown').lower()
+                starters[away_abbrev] = {
+                    'goalie': game['awayGoalieName'],
+                    'status': status,
+                    'confidence': DF_STATUS_CONFIDENCE.get(status, 0.5),
+                    'record': f"{game.get('awayGoalieWins', 0)}-{game.get('awayGoalieLosses', 0)}-{game.get('awayGoalieOvertimeLosses', 0)}",
+                    'gaa': float(game.get('awayGoalieGoalsAgainstAvg', 0) or 0),
+                    'sv_pct': float(game.get('awayGoalieSavePercentage', 0) or 0),
+                    'opponent': home_abbrev,
+                    'rating': game.get('awayGoalieRating'),
+                }
+
+        except Exception as e:
+            LOGGER.debug(f"Could not process game JSON: {e}")
+
+    def _parse_html_structure(self, soup: BeautifulSoup) -> Dict[str, Dict]:
+        """Fallback: Parse HTML structure directly for goalie info."""
+        starters = {}
+
+        # Look for common patterns in goalie cards
+        # This is a fallback if JSON extraction fails
+        goalie_cards = soup.find_all(['div', 'article'], class_=re.compile(r'goalie|starter|matchup', re.I))
+
+        for card in goalie_cards:
+            try:
+                # Look for team name
+                team_elem = card.find(class_=re.compile(r'team', re.I))
+                if not team_elem:
+                    continue
+
+                team_text = team_elem.get_text(strip=True)
+                team_abbrev = None
+                for name, abbrev in TEAM_NAME_TO_ABBREV.items():
+                    if name.lower() in team_text.lower() or abbrev.lower() in team_text.lower():
+                        team_abbrev = abbrev
+                        break
+
+                if not team_abbrev:
+                    continue
+
+                # Look for goalie name
+                name_elem = card.find(class_=re.compile(r'name|player', re.I))
+                if not name_elem:
+                    continue
+
+                goalie_name = name_elem.get_text(strip=True)
+
+                # Look for status
+                status_elem = card.find(class_=re.compile(r'status|confirm', re.I))
+                status = 'unknown'
+                if status_elem:
+                    status_text = status_elem.get_text(strip=True).lower()
+                    for key in DF_STATUS_CONFIDENCE:
+                        if key in status_text:
+                            status = key
+                            break
+
+                starters[team_abbrev] = {
+                    'goalie': goalie_name,
+                    'status': status,
+                    'confidence': DF_STATUS_CONFIDENCE.get(status, 0.5),
+                }
+
+            except Exception:
+                continue
+
+        return starters
+
     def load_goalie_pulse_predictions(self) -> Dict[str, Dict]:
         """
         Load predicted starters from goaliePulse.json.
@@ -288,9 +530,10 @@ class StartingGoalieScraper:
         """
         Scrape starting goalies for a specific date.
 
-        Uses multi-source fallback:
-        1. NHL API for confirmed starters (if available)
-        2. goaliePulse for predicted starters (fallback)
+        Uses multi-source fallback (priority order):
+        1. Daily Faceoff (earliest confirmations, industry standard)
+        2. NHL API (confirmed starters 1-2 hours before game)
+        3. goaliePulse for predicted starters (fallback)
 
         Args:
             date: Date in 'YYYY-MM-DD' format, or None for today
@@ -304,15 +547,18 @@ class StartingGoalieScraper:
                         'awayTeam': 'BOS',
                         'homeGoalie': {'playerId': 8477974, 'name': 'Joseph Woll'},
                         'awayGoalie': {'playerId': 8476792, 'name': 'Jeremy Swayman'},
-                        'source': 'nhl_api',  # or 'goalie_pulse'
-                        'confidence': 1.0  # 1.0 for confirmed, 0.3-0.95 for predicted
+                        'source': 'daily_faceoff',  # or 'nhl_api', 'goalie_pulse'
+                        'confidence': 0.99,
+                        'homeStatus': 'confirmed',  # Daily Faceoff status
+                        'awayStatus': 'confirmed'
                     }
                 }
         """
         # Get today's games
         games = self.fetch_todays_games(date)
 
-        # Load goaliePulse predictions as fallback
+        # Fetch from all sources
+        df_starters = self.fetch_daily_faceoff_starters(date)
         pulse_predictions = self.load_goalie_pulse_predictions()
 
         starters = {}
@@ -322,11 +568,54 @@ class StartingGoalieScraper:
             home_team = game['homeTeamAbbrev']
             away_team = game['awayTeamAbbrev']
 
-            # Try to get confirmed starters from NHL API
+            # SOURCE 1: Daily Faceoff (primary - they do the hard work of tracking confirmations)
+            df_home = df_starters.get(home_team)
+            df_away = df_starters.get(away_team)
+
+            if df_home or df_away:
+                home_goalie = None
+                away_goalie = None
+                home_status = 'unknown'
+                away_status = 'unknown'
+                home_conf = 0.0
+                away_conf = 0.0
+
+                if df_home:
+                    home_goalie = {'playerId': None, 'name': df_home['goalie']}
+                    home_status = df_home['status']
+                    home_conf = df_home['confidence']
+
+                if df_away:
+                    away_goalie = {'playerId': None, 'name': df_away['goalie']}
+                    away_status = df_away['status']
+                    away_conf = df_away['confidence']
+
+                avg_confidence = (home_conf + away_conf) / 2.0 if df_home and df_away else max(home_conf, away_conf)
+
+                starters[game_id] = {
+                    'gameId': game_id,
+                    'gameDate': game['gameDate'],
+                    'homeTeam': home_team,
+                    'awayTeam': away_team,
+                    'homeGoalie': home_goalie,
+                    'awayGoalie': away_goalie,
+                    'source': 'daily_faceoff',
+                    'confidence': avg_confidence,
+                    'homeStatus': home_status,
+                    'awayStatus': away_status,
+                    'gameState': game['gameState']
+                }
+
+                status_emoji = '✓' if home_status == 'confirmed' and away_status == 'confirmed' else '◐'
+                LOGGER.info(f"{status_emoji} Daily Faceoff: {away_team} @ {home_team} - "
+                          f"{df_away.get('goalie', 'TBD') if df_away else 'TBD'} ({away_status}) vs "
+                          f"{df_home.get('goalie', 'TBD') if df_home else 'TBD'} ({home_status})")
+                continue
+
+            # SOURCE 2: NHL API (backup for games close to start)
             confirmed = self.fetch_confirmed_starter(game_id)
 
             if confirmed and (confirmed.get('homeGoalie') or confirmed.get('awayGoalie')):
-                # We have confirmed starters
                 starters[game_id] = {
                     'gameId': game_id,
                     'gameDate': game['gameDate'],
@@ -335,47 +624,51 @@ class StartingGoalieScraper:
                     'homeGoalie': confirmed.get('homeGoalie'),
                     'awayGoalie': confirmed.get('awayGoalie'),
                     'source': 'nhl_api',
-                    'confidence': 1.0,  # Confirmed
+                    'confidence': 1.0,
+                    'homeStatus': 'confirmed',
+                    'awayStatus': 'confirmed',
                     'gameState': confirmed.get('gameState')
                 }
-                LOGGER.info(f"✓ Confirmed starters for {home_team} vs {away_team}")
+                LOGGER.info(f"✓ NHL API confirmed: {away_team} @ {home_team}")
+                continue
+
+            # SOURCE 3: goaliePulse predictions (fallback)
+            home_prediction = pulse_predictions.get(home_team)
+            away_prediction = pulse_predictions.get(away_team)
+
+            if home_prediction or away_prediction:
+                home_goalie = {
+                    'playerId': None,
+                    'name': home_prediction['name']
+                } if home_prediction else None
+
+                away_goalie = {
+                    'playerId': None,
+                    'name': away_prediction['name']
+                } if away_prediction else None
+
+                avg_confidence = (
+                    (home_prediction['startLikelihood'] if home_prediction else 0.0) +
+                    (away_prediction['startLikelihood'] if away_prediction else 0.0)
+                ) / 2.0
+
+                starters[game_id] = {
+                    'gameId': game_id,
+                    'gameDate': game['gameDate'],
+                    'homeTeam': home_team,
+                    'awayTeam': away_team,
+                    'homeGoalie': home_goalie,
+                    'awayGoalie': away_goalie,
+                    'source': 'goalie_pulse',
+                    'confidence': avg_confidence,
+                    'homeStatus': 'predicted',
+                    'awayStatus': 'predicted',
+                    'gameState': game['gameState']
+                }
+                LOGGER.info(f"⚠ goaliePulse fallback: {away_team} @ {home_team} (confidence: {avg_confidence:.1%})")
 
             else:
-                # Fall back to goaliePulse predictions
-                home_prediction = pulse_predictions.get(home_team)
-                away_prediction = pulse_predictions.get(away_team)
-
-                if home_prediction or away_prediction:
-                    home_goalie = {
-                        'playerId': None,  # Don't have ID from pulse
-                        'name': home_prediction['name']
-                    } if home_prediction else None
-
-                    away_goalie = {
-                        'playerId': None,
-                        'name': away_prediction['name']
-                    } if away_prediction else None
-
-                    avg_confidence = (
-                        (home_prediction['startLikelihood'] if home_prediction else 0.0) +
-                        (away_prediction['startLikelihood'] if away_prediction else 0.0)
-                    ) / 2.0
-
-                    starters[game_id] = {
-                        'gameId': game_id,
-                        'gameDate': game['gameDate'],
-                        'homeTeam': home_team,
-                        'awayTeam': away_team,
-                        'homeGoalie': home_goalie,
-                        'awayGoalie': away_goalie,
-                        'source': 'goalie_pulse',
-                        'confidence': avg_confidence,
-                        'gameState': game['gameState']
-                    }
-                    LOGGER.info(f"⚠ Using predicted starters for {home_team} vs {away_team} (confidence: {avg_confidence:.1%})")
-
-                else:
-                    LOGGER.warning(f"✗ No starter info available for {home_team} vs {away_team}")
+                LOGGER.warning(f"✗ No starter info available for {away_team} @ {home_team}")
 
         return starters
 
@@ -434,6 +727,8 @@ class StartingGoalieScraper:
                     'awayTeam': info['awayTeam'],
                     'homeGoalie': info.get('homeGoalie', {}).get('name') if info.get('homeGoalie') else None,
                     'awayGoalie': info.get('awayGoalie', {}).get('name') if info.get('awayGoalie') else None,
+                    'homeStatus': info.get('homeStatus', 'unknown'),
+                    'awayStatus': info.get('awayStatus', 'unknown'),
                     'source': info['source'],
                     'confidence': info['confidence']
                 }
@@ -455,7 +750,7 @@ def main():
 
     # Scrape starters for today
     LOGGER.info("="*80)
-    LOGGER.info("Starting Goalie Scraper - V7.6")
+    LOGGER.info("Starting Goalie Scraper - V7.7 (Daily Faceoff Integration)")
     LOGGER.info("="*80)
 
     starters = scraper.scrape_starters_for_date()
