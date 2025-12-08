@@ -253,13 +253,16 @@ function TalentBar({ label, rating }: { label: string; rating: PercentileRating 
   const { value, tier } = rating;
 
   return (
-    <div className="p-3 bg-white/[0.03] rounded-lg">
-      <div className="flex justify-between items-center mb-2">
+    <div className="py-3 px-4 bg-white/[0.03] rounded-lg">
+      <div className="flex justify-between items-center mb-2.5">
         <span className="text-[11px] text-white/60">{label}</span>
         <span className={`text-sm font-bold ${getTierTextColor(tier)}`}>{value}%</span>
       </div>
-      <div className="h-2 bg-white/[0.06] rounded-full overflow-hidden">
-        <div className={`h-full ${getTierBarColor(tier)} rounded-full`} style={{ width: `${value}%` }} />
+      <div className="h-2.5 bg-white/[0.08] rounded-full">
+        <div
+          className={`h-full ${getTierBarColor(tier)} rounded-full`}
+          style={{ width: `${Math.min(value, 100)}%` }}
+        />
       </div>
     </div>
   );

@@ -264,7 +264,7 @@ export default async function PlayerDetailPage({ params }: { params: Promise<{ p
             <SkillProfileCard profile={skillProfile} playerName={bio.fullName} age={playerAge} evTOI={stats.timeOnIcePerGame} />
           </div>
 
-          <div className="mt-14">
+          <div style={{ marginTop: '3rem' }}>
             <OnIceImpactCard impact={onIceImpact} playerName={bio.fullName} age={playerAge} />
           </div>
         </section>
