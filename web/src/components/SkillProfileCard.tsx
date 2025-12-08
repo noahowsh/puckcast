@@ -35,16 +35,16 @@ export function SkillProfileCard({ profile, playerName, age, evTOI }: SkillProfi
   ];
 
   return (
-    <div className="card p-0 overflow-hidden">
+    <div className="card overflow-hidden" style={{ padding: 0 }}>
       {/* Header - Full width gradient */}
-      <div className="relative px-5 py-4 border-b border-white/[0.06]">
-        <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/15 via-emerald-500/5 to-transparent" />
-        <div className="relative flex items-center justify-between">
+      <div className="relative border-b border-white/[0.06]">
+        <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/20 via-emerald-500/8 to-transparent" />
+        <div className="relative flex items-center justify-between px-6 py-5">
           <div>
             <h3 className="text-lg font-bold text-white">Skill Profile</h3>
-            <p className="text-xs text-white/50">Percentile Rankings vs. NHL {positionLabel}s</p>
+            <p className="text-xs text-white/50 mt-0.5">Percentile Rankings vs. NHL {positionLabel}s</p>
           </div>
-          <div className="flex items-center gap-4 text-right">
+          <div className="flex items-center gap-5 text-right">
             {age && (
               <div>
                 <span className="text-[10px] text-white/40 block">Age</span>
@@ -61,17 +61,16 @@ export function SkillProfileCard({ profile, playerName, age, evTOI }: SkillProfi
         </div>
       </div>
 
-      <div className="p-5 space-y-6">
+      <div className="px-6 py-6 space-y-7">
         {/* Overall Rating + Radar Chart Row */}
-        <div className="flex items-start gap-6">
-          {/* Overall Rating */}
+        <div className="flex items-center gap-8">
+          {/* Overall Rating - Redesigned */}
           <div className="flex flex-col items-center flex-shrink-0">
-            <OverallRatingBadge rating={overallRating} />
-            <p className="text-[10px] text-white/50 mt-2 text-center">Overall Rating</p>
+            <OverallRatingDisplay rating={overallRating} />
           </div>
 
-          {/* Radar Chart */}
-          <div className="flex-1 flex flex-col items-center">
+          {/* Radar Chart - Larger */}
+          <div className="flex-1 flex flex-col items-center justify-center min-h-[200px]">
             <SkillRadarChart data={radarData} />
           </div>
         </div>
@@ -81,7 +80,7 @@ export function SkillProfileCard({ profile, playerName, age, evTOI }: SkillProfi
 
         {/* Even Strength Impact */}
         <div>
-          <h4 className="text-xs font-semibold text-white/60 uppercase tracking-wide mb-3">
+          <h4 className="text-xs font-semibold text-white/60 uppercase tracking-wide mb-4">
             Even Strength Impact
           </h4>
           <div className="grid grid-cols-3 gap-3">
@@ -93,7 +92,7 @@ export function SkillProfileCard({ profile, playerName, age, evTOI }: SkillProfi
 
         {/* Special Teams Impact */}
         <div>
-          <h4 className="text-xs font-semibold text-white/60 uppercase tracking-wide mb-3">
+          <h4 className="text-xs font-semibold text-white/60 uppercase tracking-wide mb-4">
             Special Teams Impact
           </h4>
           <div className="grid grid-cols-3 gap-3">
@@ -105,10 +104,10 @@ export function SkillProfileCard({ profile, playerName, age, evTOI }: SkillProfi
 
         {/* Talent Profile */}
         <div>
-          <h4 className="text-xs font-semibold text-white/60 uppercase tracking-wide mb-3">
+          <h4 className="text-xs font-semibold text-white/60 uppercase tracking-wide mb-4">
             Talent Profile
           </h4>
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-2 gap-4">
             <TalentBar label="Finishing" rating={talents.finishing} />
             <TalentBar label="Playmaking" rating={talents.playmaking} />
             <TalentBar label="Penalty Impact" rating={talents.penaltyImpact} />
@@ -117,7 +116,7 @@ export function SkillProfileCard({ profile, playerName, age, evTOI }: SkillProfi
         </div>
 
         {/* Legend */}
-        <div className="flex items-center justify-center gap-2 pt-4 border-t border-white/[0.04]">
+        <div className="flex items-center justify-center gap-2 pt-5 border-t border-white/[0.06]">
           <LegendItem color="bg-rose-500/50" label="Replacement" />
           <LegendItem color="bg-amber-500/40" label="Below Avg" />
           <LegendItem color="bg-white/25" label="Average" />
@@ -139,9 +138,9 @@ interface RadarDataPoint {
 }
 
 function SkillRadarChart({ data }: { data: RadarDataPoint[] }) {
-  const size = 160;
+  const size = 200;
   const center = size / 2;
-  const maxRadius = size / 2 - 24;
+  const maxRadius = size / 2 - 30;
   const levels = [25, 50, 75, 100];
   const angleStep = (2 * Math.PI) / data.length;
   const startAngle = -Math.PI / 2;
@@ -164,23 +163,28 @@ function SkillRadarChart({ data }: { data: RadarDataPoint[] }) {
     <svg width={size} height={size} className="overflow-visible">
       {/* Background circles */}
       {levels.map((level) => (
-        <circle key={level} cx={center} cy={center} r={(level / 100) * maxRadius} fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth="1" />
+        <circle key={level} cx={center} cy={center} r={(level / 100) * maxRadius} fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth="1" />
       ))}
 
       {/* Axis lines */}
       {data.map((_, i) => {
         const angle = startAngle + i * angleStep;
-        return <line key={i} x1={center} y1={center} x2={center + maxRadius * Math.cos(angle)} y2={center + maxRadius * Math.sin(angle)} stroke="rgba(255,255,255,0.06)" strokeWidth="1" />;
+        return <line key={i} x1={center} y1={center} x2={center + maxRadius * Math.cos(angle)} y2={center + maxRadius * Math.sin(angle)} stroke="rgba(255,255,255,0.08)" strokeWidth="1" />;
       })}
 
       {/* Data polygon */}
-      <path d={dataPath} fill="rgba(110, 240, 194, 0.2)" stroke="rgb(110, 240, 194)" strokeWidth="2" strokeLinejoin="round" />
+      <path d={dataPath} fill="rgba(110, 240, 194, 0.25)" stroke="rgb(110, 240, 194)" strokeWidth="2.5" strokeLinejoin="round" />
 
-      {/* Axis labels */}
+      {/* Data points */}
+      {dataPoints.map((p, i) => (
+        <circle key={`point-${i}`} cx={p.x} cy={p.y} r="3" fill="rgb(110, 240, 194)" />
+      ))}
+
+      {/* Axis labels with values */}
       {dataPoints.map((p, i) => {
-        const labelRadius = maxRadius + 14;
+        const labelRadius = maxRadius + 20;
         return (
-          <text key={i} x={center + labelRadius * Math.cos(p.angle)} y={center + labelRadius * Math.sin(p.angle)} fill="rgba(255,255,255,0.5)" fontSize="8" fontWeight="500" textAnchor="middle" dominantBaseline="middle">
+          <text key={i} x={center + labelRadius * Math.cos(p.angle)} y={center + labelRadius * Math.sin(p.angle)} fill="rgba(255,255,255,0.6)" fontSize="9" fontWeight="600" textAnchor="middle" dominantBaseline="middle">
             {p.label}
           </text>
         );
@@ -193,23 +197,29 @@ function SkillRadarChart({ data }: { data: RadarDataPoint[] }) {
 // Helper Components
 // =============================================================================
 
-function OverallRatingBadge({ rating }: { rating: PercentileRating }) {
+function OverallRatingDisplay({ rating }: { rating: PercentileRating }) {
   const { value, tier } = rating;
 
-  const tierStyles = {
-    elite: "from-sky-400 to-sky-600 shadow-sky-500/40",
-    "above-average": "from-emerald-400 to-emerald-600 shadow-emerald-500/40",
-    average: "from-white/20 to-white/10 shadow-white/10",
-    "below-average": "from-amber-400 to-amber-600 shadow-amber-500/40",
-    replacement: "from-rose-400 to-rose-600 shadow-rose-500/40",
+  const tierColors = {
+    elite: { ring: "ring-sky-400/40", text: "text-sky-300", bg: "bg-sky-500/10", label: "Elite" },
+    "above-average": { ring: "ring-emerald-400/40", text: "text-emerald-400", bg: "bg-emerald-500/10", label: "Above Avg" },
+    average: { ring: "ring-white/20", text: "text-white/70", bg: "bg-white/[0.04]", label: "Average" },
+    "below-average": { ring: "ring-amber-400/40", text: "text-amber-400", bg: "bg-amber-500/10", label: "Below Avg" },
+    replacement: { ring: "ring-rose-400/40", text: "text-rose-400", bg: "bg-rose-500/10", label: "Replacement" },
   };
 
+  const colors = tierColors[tier];
+
   return (
-    <div className={`w-20 h-20 rounded-xl bg-gradient-to-br ${tierStyles[tier]} flex flex-col items-center justify-center shadow-lg`}>
-      <span className="text-2xl font-black text-white">{value}%</span>
-      <span className="text-[8px] uppercase tracking-wide text-white/80 font-semibold">
-        {tier.replace("-", " ")}
-      </span>
+    <div className="flex flex-col items-center gap-2">
+      <div className={`w-24 h-24 rounded-full ${colors.bg} ring-2 ${colors.ring} flex flex-col items-center justify-center`}>
+        <span className={`text-3xl font-black ${colors.text}`}>{value}</span>
+        <span className="text-[10px] text-white/40 -mt-0.5">percentile</span>
+      </div>
+      <div className="text-center">
+        <p className={`text-xs font-semibold ${colors.text}`}>{colors.label}</p>
+        <p className="text-[10px] text-white/40">Overall</p>
+      </div>
     </div>
   );
 }

@@ -38,14 +38,14 @@ export function SeasonProjectionCard({ projection, playerName }: SeasonProjectio
   const filteredPointMilestones = filterMilestones(milestoneProbabilities.points, points.current);
 
   return (
-    <div className="card p-0 overflow-hidden">
+    <div className="card overflow-hidden" style={{ padding: 0 }}>
       {/* Header - Full width gradient */}
-      <div className="relative px-5 py-4 border-b border-white/[0.06]">
-        <div className="absolute inset-0 bg-gradient-to-r from-sky-500/15 via-sky-500/5 to-transparent" />
-        <div className="relative flex items-center justify-between">
+      <div className="relative border-b border-white/[0.06]">
+        <div className="absolute inset-0 bg-gradient-to-r from-sky-500/20 via-sky-500/8 to-transparent" />
+        <div className="relative flex items-center justify-between px-6 py-5">
           <div>
             <h3 className="text-lg font-bold text-white">Season Projection</h3>
-            <p className="text-xs text-white/50">End of Season Statistical Forecast</p>
+            <p className="text-xs text-white/50 mt-0.5">End of Season Statistical Forecast</p>
           </div>
           <div className="text-right">
             <p className="text-xl font-bold text-sky-300">{gamesRemaining}</p>
@@ -54,58 +54,58 @@ export function SeasonProjectionCard({ projection, playerName }: SeasonProjectio
         </div>
       </div>
 
-      <div className="p-5 space-y-6">
+      <div className="px-6 py-6 space-y-7">
         {/* End of Season Projections Table */}
         <div>
-          <h4 className="text-xs font-semibold text-white/60 uppercase tracking-wide mb-3">
+          <h4 className="text-xs font-semibold text-white/60 uppercase tracking-wide mb-4">
             End of Season Projections
           </h4>
-          <div className="bg-white/[0.02] rounded-lg overflow-hidden">
+          <div className="border border-white/[0.06] rounded-lg">
             <table className="w-full text-sm">
               <thead>
-                <tr className="text-white/40 text-[10px] uppercase tracking-wider border-b border-white/[0.04]">
-                  <th className="text-left py-2 px-3"></th>
-                  <th className="text-center py-2 px-2 w-16">Goals</th>
-                  <th className="text-center py-2 px-2 w-16">Assists</th>
-                  <th className="text-center py-2 px-2 w-16">Points</th>
+                <tr className="text-white/40 text-[10px] uppercase tracking-wider border-b border-white/[0.06]">
+                  <th className="text-left py-2.5 px-4"></th>
+                  <th className="text-center py-2.5 px-3 w-16">Goals</th>
+                  <th className="text-center py-2.5 px-3 w-16">Assists</th>
+                  <th className="text-center py-2.5 px-3 w-16">Points</th>
                 </tr>
               </thead>
               <tbody className="text-xs">
                 <tr className="bg-white/[0.02]">
-                  <td className="py-1.5 px-3 text-white font-medium">Average</td>
-                  <td className="text-center py-1.5 px-2 text-white">{goals.average}</td>
-                  <td className="text-center py-1.5 px-2 text-white">{assists.average}</td>
-                  <td className="text-center py-1.5 px-2 text-sky-300 font-bold">{points.average}</td>
+                  <td className="py-2 px-4 text-white font-medium">Average</td>
+                  <td className="text-center py-2 px-3 text-white">{goals.average}</td>
+                  <td className="text-center py-2 px-3 text-white">{assists.average}</td>
+                  <td className="text-center py-2 px-3 text-sky-300 font-bold">{points.average}</td>
                 </tr>
                 <tr>
-                  <td className="py-1.5 px-3 text-white/60">Median</td>
-                  <td className="text-center py-1.5 px-2 text-white/70">{goals.median}</td>
-                  <td className="text-center py-1.5 px-2 text-white/70">{assists.median}</td>
-                  <td className="text-center py-1.5 px-2 text-white/80">{points.median}</td>
+                  <td className="py-2 px-4 text-white/60">Median</td>
+                  <td className="text-center py-2 px-3 text-white/70">{goals.median}</td>
+                  <td className="text-center py-2 px-3 text-white/70">{assists.median}</td>
+                  <td className="text-center py-2 px-3 text-white/80">{points.median}</td>
                 </tr>
                 <tr>
-                  <td className="py-1.5 px-3 text-white/60">Mode</td>
-                  <td className="text-center py-1.5 px-2 text-white/70">{goals.mode}</td>
-                  <td className="text-center py-1.5 px-2 text-white/70">{assists.mode}</td>
-                  <td className="text-center py-1.5 px-2 text-white/80">{points.mode}</td>
+                  <td className="py-2 px-4 text-white/60">Mode</td>
+                  <td className="text-center py-2 px-3 text-white/70">{goals.mode}</td>
+                  <td className="text-center py-2 px-3 text-white/70">{assists.mode}</td>
+                  <td className="text-center py-2 px-3 text-white/80">{points.mode}</td>
                 </tr>
                 <tr>
-                  <td className="py-1.5 px-3 text-white/40">Min</td>
-                  <td className="text-center py-1.5 px-2 text-white/40">{goals.min}</td>
-                  <td className="text-center py-1.5 px-2 text-white/40">{assists.min}</td>
-                  <td className="text-center py-1.5 px-2 text-white/50">{points.min}</td>
+                  <td className="py-2 px-4 text-white/40">Min</td>
+                  <td className="text-center py-2 px-3 text-white/40">{goals.min}</td>
+                  <td className="text-center py-2 px-3 text-white/40">{assists.min}</td>
+                  <td className="text-center py-2 px-3 text-white/50">{points.min}</td>
                 </tr>
                 <tr>
-                  <td className="py-1.5 px-3 text-white/40">Max</td>
-                  <td className="text-center py-1.5 px-2 text-white/40">{goals.max}</td>
-                  <td className="text-center py-1.5 px-2 text-white/40">{assists.max}</td>
-                  <td className="text-center py-1.5 px-2 text-white/50">{points.max}</td>
+                  <td className="py-2 px-4 text-white/40">Max</td>
+                  <td className="text-center py-2 px-3 text-white/40">{goals.max}</td>
+                  <td className="text-center py-2 px-3 text-white/40">{assists.max}</td>
+                  <td className="text-center py-2 px-3 text-white/50">{points.max}</td>
                 </tr>
-                <tr className="border-t border-white/[0.06]">
-                  <td className="py-1.5 px-3 text-white/50 italic text-[10px]">Current</td>
-                  <td className="text-center py-1.5 px-2 text-emerald-400 font-medium">{goals.current}</td>
-                  <td className="text-center py-1.5 px-2 text-amber-400 font-medium">{assists.current}</td>
-                  <td className="text-center py-1.5 px-2 text-sky-300 font-bold">{points.current}</td>
+                <tr className="border-t border-white/[0.06] bg-white/[0.01]">
+                  <td className="py-2 px-4 text-white/50 italic text-[10px]">Current</td>
+                  <td className="text-center py-2 px-3 text-emerald-400 font-medium">{goals.current}</td>
+                  <td className="text-center py-2 px-3 text-amber-400 font-medium">{assists.current}</td>
+                  <td className="text-center py-2 px-3 text-sky-300 font-bold">{points.current}</td>
                 </tr>
               </tbody>
             </table>
@@ -173,7 +173,7 @@ export function SeasonProjectionCard({ projection, playerName }: SeasonProjectio
         )}
 
         {/* Footer */}
-        <p className="text-[10px] text-white/30 leading-relaxed pt-3 border-t border-white/[0.04]">
+        <p className="text-[10px] text-white/30 leading-relaxed pt-4 border-t border-white/[0.06]">
           Projections based on current pace extrapolated to 82 games with variance modeling.
         </p>
       </div>

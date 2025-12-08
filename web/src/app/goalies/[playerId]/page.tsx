@@ -5,6 +5,7 @@ import { fetchGoalieById, fetchGoalieStats } from "@/lib/playerHub";
 import { getGoaliePulse } from "@/lib/data";
 import { TeamLogo } from "@/components/TeamLogo";
 import { TeamCrest } from "@/components/TeamCrest";
+import { GoaliePerformanceCard } from "@/components/GoaliePerformanceCard";
 import type { GoalieCard } from "@/types/goalie";
 import { parsePlayerSlug, generatePlayerSlug } from "@/lib/playerSlug";
 
@@ -229,9 +230,33 @@ export default async function GoalieDetailPage({ params }: { params: Promise<{ p
           </section>
         )}
 
+        {/* Advanced Analytics Section */}
+        <section className="nova-section" style={{ paddingTop: "0.5rem" }}>
+          <div className="section-head mb-8">
+            <div>
+              <div className="flex items-center gap-2">
+                <p className="eyebrow">Goalie Intelligence</p>
+                <span className="text-[10px] text-white/40 bg-white/[0.06] px-2 py-0.5 rounded-full">Beta</span>
+              </div>
+              <h2>Advanced Analytics</h2>
+              <p className="lead-sm">Performance metrics, save analysis, and league comparisons.</p>
+            </div>
+          </div>
+
+          <GoaliePerformanceCard
+            stats={stats}
+            playerName={bio.fullName}
+            allGoalies={allGoalies}
+            pulseData={pulseData}
+          />
+        </section>
+
         {/* Season Stats */}
         <section className="nova-section">
-          <h2 className="text-xl font-bold text-white mb-4">2024-25 Season Stats</h2>
+          <div className="flex items-baseline gap-3 mb-4">
+            <h2 className="text-xl font-bold text-white">Season Stats</h2>
+            <span className="text-sm font-medium text-sky-400/80">2024-25</span>
+          </div>
           <div className="card p-0 overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full">

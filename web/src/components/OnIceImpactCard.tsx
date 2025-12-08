@@ -17,16 +17,16 @@ export function OnIceImpactCard({ impact, playerName, age }: OnIceImpactCardProp
   const positionLabel = position === "D" ? "Defenseman" : "Forward";
 
   return (
-    <div className="card p-0 overflow-hidden">
+    <div className="card overflow-hidden" style={{ padding: 0 }}>
       {/* Header - Full width gradient */}
-      <div className="relative px-5 py-4 border-b border-white/[0.06]">
-        <div className="absolute inset-0 bg-gradient-to-r from-amber-500/15 via-amber-500/5 to-transparent" />
-        <div className="relative flex items-center justify-between">
+      <div className="relative border-b border-white/[0.06]">
+        <div className="absolute inset-0 bg-gradient-to-r from-amber-500/20 via-amber-500/8 to-transparent" />
+        <div className="relative flex items-center justify-between px-6 py-5">
           <div>
             <h3 className="text-lg font-bold text-white">On-Ice Impact</h3>
-            <p className="text-xs text-white/50">Even-Strength RAPM Analysis</p>
+            <p className="text-xs text-white/50 mt-0.5">Even-Strength RAPM Analysis</p>
           </div>
-          <div className="flex items-center gap-4 text-right">
+          <div className="flex items-center gap-5 text-right">
             {age && (
               <div>
                 <span className="text-[10px] text-white/40 block">Age</span>
@@ -45,7 +45,7 @@ export function OnIceImpactCard({ impact, playerName, age }: OnIceImpactCardProp
         </div>
       </div>
 
-      <div className="p-5 space-y-6">
+      <div className="px-6 py-6 space-y-7">
         {/* FOR vs AGAINST Metrics Table */}
         <div className="bg-white/[0.02] rounded-lg overflow-hidden">
           {/* Header */}
@@ -68,8 +68,8 @@ export function OnIceImpactCard({ impact, playerName, age }: OnIceImpactCardProp
 
         {/* General Metrics */}
         <div>
-          <h4 className="text-xs font-semibold text-white/60 uppercase tracking-wide mb-3">General</h4>
-          <div className="grid grid-cols-4 gap-2">
+          <h4 className="text-xs font-semibold text-white/60 uppercase tracking-wide mb-4">General</h4>
+          <div className="grid grid-cols-4 gap-3">
             <GeneralMetric label="Net xGoals" metric={general.netExpectedGoals} />
             <GeneralMetric label="Net Corsi" metric={general.netCorsi} />
             <GeneralMetric label="Finishing" metric={general.finishing} />
@@ -81,7 +81,7 @@ export function OnIceImpactCard({ impact, playerName, age }: OnIceImpactCardProp
         <p className="text-xs text-white/60 leading-relaxed">{impactSummary}</p>
 
         {/* Legend & Notes */}
-        <div className="pt-3 border-t border-white/[0.04] space-y-2">
+        <div className="pt-5 border-t border-white/[0.06] space-y-3">
           <div className="flex items-center justify-center gap-2">
             <LegendItem color="bg-rose-500/50" label="Poor" />
             <LegendItem color="bg-amber-500/40" label="Below Avg" />

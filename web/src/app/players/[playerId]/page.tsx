@@ -164,7 +164,10 @@ export default async function PlayerDetailPage({ params }: { params: Promise<{ p
 
         {/* Season Stats Table */}
         <section className="nova-section">
-          <h2 className="text-lg font-bold text-white mb-4">2024-25 Season Stats</h2>
+          <div className="flex items-baseline gap-3 mb-4">
+            <h2 className="text-lg font-bold text-white">Season Stats</h2>
+            <span className="text-sm font-medium text-sky-400/80">2024-25</span>
+          </div>
           <div className="card p-0 overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
@@ -214,22 +217,22 @@ export default async function PlayerDetailPage({ params }: { params: Promise<{ p
         {/* Scoring Breakdown */}
         <section className="nova-section" style={{ paddingTop: 0 }}>
           <h2 className="text-lg font-bold text-white mb-4">Scoring Breakdown</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="card p-4">
-              <h3 className="text-xs font-semibold text-white/60 mb-3 uppercase tracking-wide">Goals by Situation</h3>
-              <div className="space-y-2">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="card p-5">
+              <h3 className="text-xs font-semibold text-white/60 mb-4 uppercase tracking-wide">Goals by Situation</h3>
+              <div className="space-y-4">
                 <ProgressBar label="Even Strength" value={stats.goals - stats.powerPlayGoals - stats.shorthandedGoals} total={stats.goals} />
                 <ProgressBar label="Power Play" value={stats.powerPlayGoals} total={stats.goals} color="amber" />
                 <ProgressBar label="Shorthanded" value={stats.shorthandedGoals} total={stats.goals} color="rose" />
               </div>
             </div>
-            <div className="card p-4">
-              <h3 className="text-xs font-semibold text-white/60 mb-3 uppercase tracking-wide">Points Distribution</h3>
-              <div className="space-y-2">
+            <div className="card p-5">
+              <h3 className="text-xs font-semibold text-white/60 mb-4 uppercase tracking-wide">Points Distribution</h3>
+              <div className="space-y-4">
                 <ProgressBar label="Goals" value={stats.goals} total={stats.points} color="emerald" />
                 <ProgressBar label="Assists" value={stats.assists} total={stats.points} color="sky" />
               </div>
-              <div className="mt-3 pt-3 border-t border-white/[0.06] flex gap-4 text-xs">
+              <div className="mt-4 pt-4 border-t border-white/[0.06] flex gap-6 text-xs">
                 <div>
                   <span className="text-white/50">GWG: </span>
                   <span className="text-white font-medium">{stats.gameWinningGoals}</span>
@@ -244,8 +247,8 @@ export default async function PlayerDetailPage({ params }: { params: Promise<{ p
         </section>
 
         {/* Advanced Analytics Section */}
-        <section className="nova-section" style={{ paddingTop: 0 }}>
-          <div className="section-head mb-6">
+        <section className="nova-section" style={{ paddingTop: "0.5rem" }}>
+          <div className="section-head mb-8">
             <div>
               <div className="flex items-center gap-2">
                 <p className="eyebrow">Player Intelligence</p>
@@ -256,12 +259,12 @@ export default async function PlayerDetailPage({ params }: { params: Promise<{ p
             </div>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             <SeasonProjectionCard projection={seasonProjection} playerName={bio.fullName} />
             <SkillProfileCard profile={skillProfile} playerName={bio.fullName} age={playerAge} evTOI={stats.timeOnIcePerGame} />
           </div>
 
-          <div className="mt-6">
+          <div className="mt-8">
             <OnIceImpactCard impact={onIceImpact} playerName={bio.fullName} age={playerAge} />
           </div>
         </section>
