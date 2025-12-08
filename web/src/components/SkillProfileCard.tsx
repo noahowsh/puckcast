@@ -61,24 +61,20 @@ export function SkillProfileCard({ profile, playerName, age, evTOI }: SkillProfi
         </div>
       </div>
 
-      <div className="p-6 space-y-6">
-        {/* Overall Rating + Radar Chart Row */}
-        <div className="flex gap-4">
-          {/* Left side: Overall Rating */}
-          <div className="flex flex-col items-center justify-center w-28 flex-shrink-0 py-2">
+      <div className="p-8 space-y-6">
+        {/* Overall Rating centered with chart below */}
+        <div className="flex flex-col items-center">
+          {/* Overall Rating - Centered at top */}
+          <div className="flex items-center gap-4 mb-6">
             <OverallRatingDisplay rating={overallRating} />
+            <div className="max-w-xs">
+              <p className="text-xs text-white/60 leading-relaxed">{skillSummary}</p>
+            </div>
           </div>
 
-          {/* Right side: Radar Chart */}
-          <div className="flex-1 flex items-center justify-center">
-            <SkillRadarChart data={radarData} />
-          </div>
+          {/* Radar Chart - Centered */}
+          <SkillRadarChart data={radarData} />
         </div>
-
-        {/* Skill Summary */}
-        <p className="text-xs text-white/60 leading-relaxed border-t border-white/[0.06] pt-4">
-          {skillSummary}
-        </p>
 
         {/* Even Strength Impact */}
         <div>
@@ -140,9 +136,9 @@ interface RadarDataPoint {
 }
 
 function SkillRadarChart({ data }: { data: RadarDataPoint[] }) {
-  const size = 260;
+  const size = 220;
   const center = size / 2;
-  const maxRadius = size / 2 - 35;
+  const maxRadius = size / 2 - 32;
   const levels = [25, 50, 75, 100];
   const angleStep = (2 * Math.PI) / data.length;
   const startAngle = -Math.PI / 2;

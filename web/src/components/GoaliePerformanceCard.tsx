@@ -71,7 +71,7 @@ export function GoaliePerformanceCard({ stats, playerName, allGoalies, pulseData
         </div>
       </div>
 
-      <div className="p-6 space-y-6">
+      <div className="p-8 space-y-6">
         {/* Overall Rating + Key Metrics */}
         <div className="flex gap-6">
           {/* Overall Rating Circle */}

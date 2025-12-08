@@ -54,7 +54,7 @@ export function SeasonProjectionCard({ projection, playerName }: SeasonProjectio
         </div>
       </div>
 
-      <div className="p-6 space-y-8">
+      <div className="p-8 space-y-8">
         {/* End of Season Projections Table */}
         <div>
           <h4 className="text-xs font-semibold text-white/60 uppercase tracking-wide mb-4">
