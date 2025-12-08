@@ -23,19 +23,29 @@ import {
 let cachedGoaliePulse: GoaliePulseEntry[] | null = null;
 let cachedStartingGoalies: StartingGoaliesPayload | null = null;
 
+type GoalieEntry = {
+  team: string;
+  playerId: number | null;
+  goalieName: string | null;
+  confirmedStart: boolean;
+  statusCode: string;
+  statusDescription: string;
+  lastUpdated: string;
+};
+
 type StartingGoaliesPayload = {
   generatedAt: string;
+  source: string;
   date: string;
+  teams: Record<string, GoalieEntry>;
   games: {
     gameId: string;
+    gameDate: string;
+    startTimeUTC: string;
     homeTeam: string;
     awayTeam: string;
-    homeGoalie: string | null;
-    awayGoalie: string | null;
-    homeStatus?: string;  // "confirmed", "expected", "probable", "unconfirmed", "predicted"
-    awayStatus?: string;  // Optional for backwards compatibility with old JSON
-    source: string;
-    confidence: number;
+    homeGoalie: GoalieEntry;
+    awayGoalie: GoalieEntry;
   }[];
 };
 
@@ -192,18 +202,18 @@ export async function getGameGoalieReport(gameId: string): Promise<GameGoalieRep
   // Build goalie info using status from JSON (pre-scraped from Daily Faceoff)
   const homeGoalie = buildGoalieInfo(
     gameData.homeTeam,
-    gameData.homeGoalie,
-    gameData.homeStatus || "unknown",
+    gameData.homeGoalie.goalieName,
+    gameData.homeGoalie.statusCode || "unknown",
     pulseData,
-    gameData.source
+    startingData?.source || "nhl_api"
   );
 
   const awayGoalie = buildGoalieInfo(
     gameData.awayTeam,
-    gameData.awayGoalie,
-    gameData.awayStatus || "unknown",
+    gameData.awayGoalie.goalieName,
+    gameData.awayGoalie.statusCode || "unknown",
     pulseData,
-    gameData.source
+    startingData?.source || "nhl_api"
   );
 
   const overallConfidence = (homeGoalie.confidence + awayGoalie.confidence) / 2;
@@ -255,18 +265,18 @@ export async function getDailyGoalieReport(date?: string): Promise<DailyGoalieRe
   for (const gameData of startingData?.games || []) {
     const homeGoalie = buildGoalieInfo(
       gameData.homeTeam,
-      gameData.homeGoalie,
-      gameData.homeStatus || "unknown",
+      gameData.homeGoalie.goalieName,
+      gameData.homeGoalie.statusCode || "unknown",
       pulseData,
-      gameData.source
+      startingData?.source || "nhl_api"
     );
 
     const awayGoalie = buildGoalieInfo(
       gameData.awayTeam,
-      gameData.awayGoalie,
-      gameData.awayStatus || "unknown",
+      gameData.awayGoalie.goalieName,
+      gameData.awayGoalie.statusCode || "unknown",
       pulseData,
-      gameData.source
+      startingData?.source || "nhl_api"
     );
 
     const overallConfidence = (homeGoalie.confidence + awayGoalie.confidence) / 2;
@@ -298,7 +308,7 @@ export async function getDailyGoalieReport(date?: string): Promise<DailyGoalieRe
   const uncertainCount = games.filter(g => g.overallConfidence < 0.5).length;
 
   // Check if data source is Daily Faceoff
-  const hasDailyFaceoffData = startingData?.games.some(g => g.source === "daily_faceoff") ?? false;
+  const hasDailyFaceoffData = startingData?.source === "daily_faceoff";
 
   return {
     date: targetDate,
