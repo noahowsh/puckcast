@@ -164,10 +164,10 @@ export function generateSeasonProjection(
     return Math.max(0, 2 - (rank - 10) * 0.2);
   };
 
-  // Milestone thresholds
-  const goalMilestones = [10, 15, 20, 25, 30, 35, 40, 45, 50, 60];
-  const assistMilestones = [10, 20, 30, 40, 50, 60, 70, 80];
-  const pointMilestones = [20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120];
+  // Milestone thresholds - granular for better visualization
+  const goalMilestones = [15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70];
+  const assistMilestones = [20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85];
+  const pointMilestones = [30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140];
 
   return {
     playerId: bio.playerId,

@@ -49,12 +49,12 @@ export function OnIceImpactCard({ impact, playerName, age }: OnIceImpactCardProp
         {/* FOR vs AGAINST Metrics Table */}
         <div className="bg-white/[0.02] rounded-lg overflow-hidden">
           {/* Header */}
-          <div className="grid grid-cols-[100px_1fr_1fr] border-b border-white/[0.06]">
-            <div className="py-3 px-4"></div>
-            <div className="py-3 px-3 text-center">
+          <div style={{ display: 'grid', gridTemplateColumns: '90px 1fr 1fr' }} className="border-b border-white/[0.06]">
+            <div style={{ padding: '0.75rem' }}></div>
+            <div style={{ padding: '0.75rem', textAlign: 'center' }}>
               <span className="text-[11px] font-bold text-emerald-400 uppercase tracking-wide">FOR</span>
             </div>
-            <div className="py-3 px-3 text-center">
+            <div style={{ padding: '0.75rem', textAlign: 'center' }}>
               <span className="text-[11px] font-bold text-white/40 uppercase tracking-wide">AGAINST</span>
             </div>
           </div>
@@ -104,12 +104,15 @@ export function OnIceImpactCard({ impact, playerName, age }: OnIceImpactCardProp
 
 function MetricRow({ label, forMetric, againstMetric, isLast = false }: { label: string; forMetric: ImpactMetric; againstMetric: ImpactMetric; isLast?: boolean }) {
   return (
-    <div className={`grid grid-cols-[100px_1fr_1fr] ${!isLast ? "border-b border-white/[0.04]" : ""}`}>
-      <div className="py-2.5 px-4 text-xs text-white/60">{label}</div>
-      <div className="py-2 px-3">
+    <div
+      style={{ display: 'grid', gridTemplateColumns: '90px 1fr 1fr' }}
+      className={!isLast ? "border-b border-white/[0.04]" : ""}
+    >
+      <div style={{ padding: '0.625rem 0.75rem', fontSize: '0.75rem' }} className="text-white/60">{label}</div>
+      <div style={{ padding: '0.5rem 0.75rem' }}>
         <MetricBadge metric={forMetric} variant="for" />
       </div>
-      <div className="py-2 px-3">
+      <div style={{ padding: '0.5rem 0.75rem' }}>
         <MetricBadge metric={againstMetric} variant="against" />
       </div>
     </div>

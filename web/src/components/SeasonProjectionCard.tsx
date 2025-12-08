@@ -70,64 +70,64 @@ export function SeasonProjectionCard({ projection, playerName }: SeasonProjectio
       <div style={{ padding: '2rem' }}>
         {/* End of Season Projections Table */}
         <div>
-          <h4 className="text-xs font-semibold text-white/60 uppercase tracking-wide mb-4">
+          <h4 style={{ marginBottom: '1rem' }} className="text-xs font-semibold text-white/60 uppercase tracking-wide">
             End of Season Projections
           </h4>
-          <div className="bg-white/[0.02] rounded-lg overflow-hidden text-xs">
+          <div className="bg-white/[0.02] rounded-lg overflow-hidden" style={{ fontSize: '0.75rem' }}>
             {/* Header */}
-            <div className="grid grid-cols-[80px_1fr_1fr_1fr] border-b border-white/[0.06]">
-              <div className="py-3 px-4"></div>
-              <div className="py-3 px-2 text-center">
+            <div style={{ display: 'grid', gridTemplateColumns: '70px 1fr 1fr 1fr' }} className="border-b border-white/[0.06]">
+              <div style={{ padding: '0.75rem 0.5rem' }}></div>
+              <div style={{ padding: '0.75rem 0.5rem', textAlign: 'center' }}>
                 <span className="text-[10px] font-bold text-white/40 uppercase tracking-wide">Goals</span>
               </div>
-              <div className="py-3 px-2 text-center">
+              <div style={{ padding: '0.75rem 0.5rem', textAlign: 'center' }}>
                 <span className="text-[10px] font-bold text-white/40 uppercase tracking-wide">Assists</span>
               </div>
-              <div className="py-3 px-2 text-center">
+              <div style={{ padding: '0.75rem 0.5rem', textAlign: 'center' }}>
                 <span className="text-[10px] font-bold text-white/40 uppercase tracking-wide">Points</span>
               </div>
             </div>
             {/* Average Row */}
-            <div className="grid grid-cols-[80px_1fr_1fr_1fr] border-b border-white/[0.04] bg-white/[0.02]">
-              <div className="py-2.5 px-4 text-white font-medium">Average</div>
-              <div className="py-2.5 px-2 text-center text-white">{goals.average}</div>
-              <div className="py-2.5 px-2 text-center text-white">{assists.average}</div>
-              <div className="py-2.5 px-2 text-center text-sky-300 font-bold">{points.average}</div>
+            <div style={{ display: 'grid', gridTemplateColumns: '70px 1fr 1fr 1fr' }} className="border-b border-white/[0.04] bg-white/[0.02]">
+              <div style={{ padding: '0.625rem 0.5rem' }} className="text-white font-medium">Average</div>
+              <div style={{ padding: '0.625rem 0.5rem', textAlign: 'center' }} className="text-white">{goals.average}</div>
+              <div style={{ padding: '0.625rem 0.5rem', textAlign: 'center' }} className="text-white">{assists.average}</div>
+              <div style={{ padding: '0.625rem 0.5rem', textAlign: 'center' }} className="text-sky-300 font-bold">{points.average}</div>
             </div>
             {/* Median Row */}
-            <div className="grid grid-cols-[80px_1fr_1fr_1fr] border-b border-white/[0.04]">
-              <div className="py-2.5 px-4 text-white/60">Median</div>
-              <div className="py-2.5 px-2 text-center text-white/70">{goals.median}</div>
-              <div className="py-2.5 px-2 text-center text-white/70">{assists.median}</div>
-              <div className="py-2.5 px-2 text-center text-white/80">{points.median}</div>
+            <div style={{ display: 'grid', gridTemplateColumns: '70px 1fr 1fr 1fr' }} className="border-b border-white/[0.04]">
+              <div style={{ padding: '0.625rem 0.5rem' }} className="text-white/60">Median</div>
+              <div style={{ padding: '0.625rem 0.5rem', textAlign: 'center' }} className="text-white/70">{goals.median}</div>
+              <div style={{ padding: '0.625rem 0.5rem', textAlign: 'center' }} className="text-white/70">{assists.median}</div>
+              <div style={{ padding: '0.625rem 0.5rem', textAlign: 'center' }} className="text-white/80">{points.median}</div>
             </div>
             {/* Mode Row */}
-            <div className="grid grid-cols-[80px_1fr_1fr_1fr] border-b border-white/[0.04]">
-              <div className="py-2.5 px-4 text-white/60">Mode</div>
-              <div className="py-2.5 px-2 text-center text-white/70">{goals.mode}</div>
-              <div className="py-2.5 px-2 text-center text-white/70">{assists.mode}</div>
-              <div className="py-2.5 px-2 text-center text-white/80">{points.mode}</div>
+            <div style={{ display: 'grid', gridTemplateColumns: '70px 1fr 1fr 1fr' }} className="border-b border-white/[0.04]">
+              <div style={{ padding: '0.625rem 0.5rem' }} className="text-white/60">Mode</div>
+              <div style={{ padding: '0.625rem 0.5rem', textAlign: 'center' }} className="text-white/70">{goals.mode}</div>
+              <div style={{ padding: '0.625rem 0.5rem', textAlign: 'center' }} className="text-white/70">{assists.mode}</div>
+              <div style={{ padding: '0.625rem 0.5rem', textAlign: 'center' }} className="text-white/80">{points.mode}</div>
             </div>
             {/* Min Row */}
-            <div className="grid grid-cols-[80px_1fr_1fr_1fr] border-b border-white/[0.04]">
-              <div className="py-2.5 px-4 text-white/40">Min</div>
-              <div className="py-2.5 px-2 text-center text-white/40">{goals.min}</div>
-              <div className="py-2.5 px-2 text-center text-white/40">{assists.min}</div>
-              <div className="py-2.5 px-2 text-center text-white/50">{points.min}</div>
+            <div style={{ display: 'grid', gridTemplateColumns: '70px 1fr 1fr 1fr' }} className="border-b border-white/[0.04]">
+              <div style={{ padding: '0.625rem 0.5rem' }} className="text-white/40">Min</div>
+              <div style={{ padding: '0.625rem 0.5rem', textAlign: 'center' }} className="text-white/40">{goals.min}</div>
+              <div style={{ padding: '0.625rem 0.5rem', textAlign: 'center' }} className="text-white/40">{assists.min}</div>
+              <div style={{ padding: '0.625rem 0.5rem', textAlign: 'center' }} className="text-white/50">{points.min}</div>
             </div>
             {/* Max Row */}
-            <div className="grid grid-cols-[80px_1fr_1fr_1fr] border-b border-white/[0.04]">
-              <div className="py-2.5 px-4 text-white/40">Max</div>
-              <div className="py-2.5 px-2 text-center text-white/40">{goals.max}</div>
-              <div className="py-2.5 px-2 text-center text-white/40">{assists.max}</div>
-              <div className="py-2.5 px-2 text-center text-white/50">{points.max}</div>
+            <div style={{ display: 'grid', gridTemplateColumns: '70px 1fr 1fr 1fr' }} className="border-b border-white/[0.04]">
+              <div style={{ padding: '0.625rem 0.5rem' }} className="text-white/40">Max</div>
+              <div style={{ padding: '0.625rem 0.5rem', textAlign: 'center' }} className="text-white/40">{goals.max}</div>
+              <div style={{ padding: '0.625rem 0.5rem', textAlign: 'center' }} className="text-white/40">{assists.max}</div>
+              <div style={{ padding: '0.625rem 0.5rem', textAlign: 'center' }} className="text-white/50">{points.max}</div>
             </div>
             {/* Current Row */}
-            <div className="grid grid-cols-[80px_1fr_1fr_1fr] bg-white/[0.01]">
-              <div className="py-2.5 px-4 text-white/50 italic text-[10px]">Current</div>
-              <div className="py-2.5 px-2 text-center text-emerald-400 font-medium">{goals.current}</div>
-              <div className="py-2.5 px-2 text-center text-amber-400 font-medium">{assists.current}</div>
-              <div className="py-2.5 px-2 text-center text-sky-300 font-bold">{points.current}</div>
+            <div style={{ display: 'grid', gridTemplateColumns: '70px 1fr 1fr 1fr' }} className="bg-white/[0.01]">
+              <div style={{ padding: '0.625rem 0.5rem', fontSize: '0.625rem', fontStyle: 'italic' }} className="text-white/50">Current</div>
+              <div style={{ padding: '0.625rem 0.5rem', textAlign: 'center' }} className="text-emerald-400 font-medium">{goals.current}</div>
+              <div style={{ padding: '0.625rem 0.5rem', textAlign: 'center' }} className="text-amber-400 font-medium">{assists.current}</div>
+              <div style={{ padding: '0.625rem 0.5rem', textAlign: 'center' }} className="text-sky-300 font-bold">{points.current}</div>
             </div>
           </div>
         </div>
