@@ -1,12 +1,12 @@
 {
-  "updatedAt": "2025-12-08T13:28:02.345583+00:00",
+  "updatedAt": "2025-12-08T23:12:35.293635+00:00",
   "notes": "Goalie performance metrics calculated from NHL Stats API data. GSAx estimates based on save percentage above league average.",
   "goalies": [
     {
       "name": "Jonathan Quick",
       "team": "NYR",
-      "rollingGsa": 2.8,
-      "seasonGsa": 6.5,
+      "rollingGsa": 2.7,
+      "seasonGsa": 6.4,
       "restDays": 3,
       "startLikelihood": 0.85,
       "trend": "surging",
@@ -24,7 +24,7 @@
       "name": "Jesper Wallstedt",
       "team": "MIN",
       "rollingGsa": 2.7,
-      "seasonGsa": 9.8,
+      "seasonGsa": 9.9,
       "restDays": 2,
       "startLikelihood": 0.95,
       "trend": "surging",
@@ -129,14 +129,14 @@
       "nextOpponent": "WPG"
     },
     {
-      "name": "Scott Wedgewood",
+      "name": "Mackenzie Blackwood",
       "team": "COL",
       "rollingGsa": 1.5,
-      "seasonGsa": 9.7,
+      "seasonGsa": 5.1,
       "restDays": 2,
       "startLikelihood": 0.95,
       "trend": "surging",
-      "note": "Scott Wedgewood is playing at an elite level with a 0.920 save percentage, providing COL with a strong defensive anchor.",
+      "note": "Mackenzie Blackwood is playing at an elite level with a 0.920 save percentage, providing COL with a strong defensive anchor.",
       "strengths": [
         "Elite save percentage",
         "Exceptional goals against average"
@@ -147,14 +147,14 @@
       "nextOpponent": "NSH"
     },
     {
-      "name": "Mackenzie Blackwood",
+      "name": "Scott Wedgewood",
       "team": "COL",
       "rollingGsa": 1.5,
-      "seasonGsa": 5.0,
+      "seasonGsa": 9.7,
       "restDays": 2,
       "startLikelihood": 0.95,
       "trend": "surging",
-      "note": "Mackenzie Blackwood is playing at an elite level with a 0.920 save percentage, providing COL with a strong defensive anchor.",
+      "note": "Scott Wedgewood is playing at an elite level with a 0.920 save percentage, providing COL with a strong defensive anchor.",
       "strengths": [
         "Elite save percentage",
         "Exceptional goals against average"
@@ -201,6 +201,23 @@
       "nextOpponent": "TOR"
     },
     {
+      "name": "Pyotr Kochetkov",
+      "team": "CAR",
+      "rollingGsa": 1.1,
+      "seasonGsa": 2.2,
+      "restDays": 3,
+      "startLikelihood": 0.7,
+      "trend": "steady",
+      "note": "Consistent performance from Pyotr Kochetkov with a 1.96 GAA \u2014 reliable starter for CAR.",
+      "strengths": [
+        "Exceptional goals against average"
+      ],
+      "watchouts": [
+        "Limited recent data"
+      ],
+      "nextOpponent": "CBJ"
+    },
+    {
       "name": "Darcy Kuemper",
       "team": "LAK",
       "rollingGsa": 1.1,
@@ -216,23 +233,6 @@
         "Inconsistent results"
       ],
       "nextOpponent": "UTA"
-    },
-    {
-      "name": "Pyotr Kochetkov",
-      "team": "CAR",
-      "rollingGsa": 1.0,
-      "seasonGsa": 2.1,
-      "restDays": 3,
-      "startLikelihood": 0.7,
-      "trend": "steady",
-      "note": "Consistent performance from Pyotr Kochetkov with a 1.96 GAA \u2014 reliable starter for CAR.",
-      "strengths": [
-        "Exceptional goals against average"
-      ],
-      "watchouts": [
-        "Limited recent data"
-      ],
-      "nextOpponent": "CBJ"
     },
     {
       "name": "Spencer Knight",
@@ -391,7 +391,7 @@
       "name": "Jake Allen",
       "team": "NJD",
       "rollingGsa": 0.6,
-      "seasonGsa": 3.1,
+      "seasonGsa": 3.2,
       "restDays": 2,
       "startLikelihood": 0.8,
       "trend": "stable",
