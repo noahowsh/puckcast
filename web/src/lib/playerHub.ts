@@ -94,7 +94,17 @@ async function sleep(ms: number): Promise<void> {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-async function fetchWithRetry<T>(url: string, options: RequestInit = {}, retries = 5): Promise<T | null> {
+// Track if we've been rate limited to add delays on subsequent requests
+let lastRateLimitTime = 0;
+
+async function fetchWithRetry<T>(url: string, options: RequestInit = {}, retries = 8): Promise<T | null> {
+  // If we were rate limited recently, add initial delay
+  const timeSinceRateLimit = Date.now() - lastRateLimitTime;
+  if (lastRateLimitTime > 0 && timeSinceRateLimit < 30000) {
+    const initialDelay = Math.max(3000 - timeSinceRateLimit, 500);
+    await sleep(initialDelay);
+  }
+
   for (let i = 0; i < retries; i++) {
     try {
       const res = await fetch(url, {
@@ -110,9 +120,10 @@ async function fetchWithRetry<T>(url: string, options: RequestInit = {}, retries
         }
       }
 
-      // Handle rate limiting (429) with exponential backoff
+      // Handle rate limiting (429) with aggressive exponential backoff
       if (res.status === 429) {
-        const backoffMs = Math.min(1000 * Math.pow(2, i), 10000); // 1s, 2s, 4s, 8s, 10s max
+        lastRateLimitTime = Date.now();
+        const backoffMs = Math.min(3000 * Math.pow(2, i), 30000); // 3s, 6s, 12s, 24s, 30s max
         console.log(`Rate limited, waiting ${backoffMs}ms before retry ${i + 1}/${retries}`);
         await sleep(backoffMs);
         continue;
@@ -121,14 +132,14 @@ async function fetchWithRetry<T>(url: string, options: RequestInit = {}, retries
       if (!res.ok) {
         console.error(`API request failed: ${url} - ${res.status}`);
         if (i === retries - 1) return null;
-        await sleep(500); // Small delay before retry
+        await sleep(1000); // Delay before retry
         continue;
       }
       return (await res.json()) as T;
     } catch (err) {
       console.error(`API request error: ${url}`, err);
       if (i === retries - 1) return null;
-      await sleep(500);
+      await sleep(1000);
     }
   }
   return null;
@@ -179,16 +190,12 @@ async function fetchTeamRosterFromAPI(teamAbbrev: string): Promise<NHLRosterResp
 async function buildPlayerTeamLookupInternal(): Promise<Map<number, { teamAbbrev: string; headshot: string }>> {
   const lookup = new Map<number, { teamAbbrev: string; headshot: string }>();
 
-  // Fetch all rosters in batches to avoid overwhelming the API
-  const BATCH_SIZE = 8;
-  for (let i = 0; i < NHL_TEAMS.length; i += BATCH_SIZE) {
-    const batch = NHL_TEAMS.slice(i, i + BATCH_SIZE);
-    const rosters = await Promise.all(batch.map(team => fetchTeamRosterFromAPI(team)));
+  // Fetch all rosters sequentially to avoid rate limiting
+  // The roster API is different from stats API but we want to be conservative
+  for (const teamAbbrev of NHL_TEAMS) {
+    const roster = await fetchTeamRosterFromAPI(teamAbbrev);
 
-    rosters.forEach((roster, idx) => {
-      if (!roster) return;
-      const teamAbbrev = batch[idx];
-
+    if (roster) {
       // Add all players from this roster to the lookup
       [...roster.forwards, ...roster.defensemen, ...roster.goalies].forEach(player => {
         lookup.set(player.id, {
@@ -196,12 +203,10 @@ async function buildPlayerTeamLookupInternal(): Promise<Map<number, { teamAbbrev
           headshot: player.headshot,
         });
       });
-    });
-
-    // Small delay between batches to avoid rate limiting
-    if (i + BATCH_SIZE < NHL_TEAMS.length) {
-      await sleep(100);
     }
+
+    // Delay between requests to avoid rate limiting
+    await sleep(200);
   }
 
   return lookup;
