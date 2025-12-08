@@ -10,6 +10,7 @@ import type {
   LineupFeatures,
   TeamLineupPattern,
   PositionGroup,
+  InjuryStatus,
 } from "@/types/lineup";
 import type { SkaterCard, GoalieDetailCard } from "@/types/player";
 import { fetchTeamRoster } from "./playerHub";
@@ -49,17 +50,22 @@ export async function buildProjectedLineup(teamAbbrev: string): Promise<TeamLine
     Promise.resolve(getGoaliePulse()),
   ]);
 
-  // Get injury names for filtering
-  const injuredNames = new Set(
-    injuries?.injuries
-      .filter(i => i.isOut)
-      .map(i => i.playerName.toLowerCase()) || []
-  );
+  // Get injury info for filtering (includes both OUT and DTD players)
+  // Map player name to their injury status
+  const injuryMap = new Map<string, { status: string; isOut: boolean }>();
+  if (injuries?.injuries) {
+    for (const injury of injuries.injuries) {
+      injuryMap.set(injury.playerName.toLowerCase(), {
+        status: injury.status,
+        isOut: injury.isOut,
+      });
+    }
+  }
 
   // Convert roster to lineup players and mark injuries
-  let forwards = roster.forwards.map(p => skaterToLineupPlayer(p, injuredNames));
-  let defensemen = roster.defensemen.map(p => skaterToLineupPlayer(p, injuredNames));
-  let goalies = roster.goalies.map(g => goalieToLineupGoalie(g, injuredNames, goaliePulse, teamAbbrev));
+  let forwards = roster.forwards.map(p => skaterToLineupPlayer(p, injuryMap));
+  let defensemen = roster.defensemen.map(p => skaterToLineupPlayer(p, injuryMap));
+  let goalies = roster.goalies.map(g => goalieToLineupGoalie(g, injuryMap, goaliePulse, teamAbbrev));
 
   // Add IR/injured players who aren't on the active roster
   if (injuries?.injuries) {
@@ -143,8 +149,13 @@ export async function buildProjectedLineup(teamAbbrev: string): Promise<TeamLine
 // Player Conversion Functions
 // =============================================================================
 
-function skaterToLineupPlayer(skater: SkaterCard, injuredNames: Set<string>): LineupPlayer {
-  const isHealthy = !injuredNames.has(skater.bio.fullName.toLowerCase());
+function skaterToLineupPlayer(
+  skater: SkaterCard,
+  injuryMap: Map<string, { status: string; isOut: boolean }>
+): LineupPlayer {
+  const injuryInfo = injuryMap.get(skater.bio.fullName.toLowerCase());
+  // Player is "healthy" (available to play) only if not in injury list or marked as DTD/GTD
+  const isHealthy = !injuryInfo || !injuryInfo.isOut;
 
   // Calculate TOI in seconds from "MM:SS" format
   const toiParts = skater.stats.timeOnIcePerGame.split(":");
@@ -165,17 +176,18 @@ function skaterToLineupPlayer(skater: SkaterCard, injuredNames: Set<string>): Li
     plusMinus: skater.stats.plusMinus,
     rankingScore: 0, // Will be calculated
     isHealthy,
-    injuryStatus: isHealthy ? null : "out",
+    injuryStatus: injuryInfo ? (injuryInfo.status as InjuryStatus) : null,
   };
 }
 
 function goalieToLineupGoalie(
   goalie: GoalieDetailCard,
-  injuredNames: Set<string>,
+  injuryMap: Map<string, { status: string; isOut: boolean }>,
   goaliePulse: ReturnType<typeof getGoaliePulse>,
   teamAbbrev: string
 ): GoalieLineup {
-  const isHealthy = !injuredNames.has(goalie.bio.fullName.toLowerCase());
+  const injuryInfo = injuryMap.get(goalie.bio.fullName.toLowerCase());
+  const isHealthy = !injuryInfo || !injuryInfo.isOut;
 
   // Find goalie in pulse data
   const pulseData = goaliePulse.goalies.find(
@@ -200,7 +212,7 @@ function goalieToLineupGoalie(
 }
 
 // Convert an injury record to a lineup player (for IR players not on active roster)
-function injuryToLineupPlayer(injury: { playerId: number; playerName: string; position: string; teamAbbrev: string }): LineupPlayer {
+function injuryToLineupPlayer(injury: { playerId: number; playerName: string; position: string; teamAbbrev: string; status?: string }): LineupPlayer {
   return {
     playerId: injury.playerId,
     playerName: injury.playerName,
@@ -214,7 +226,7 @@ function injuryToLineupPlayer(injury: { playerId: number; playerName: string; po
     plusMinus: 0,
     rankingScore: 0, // IR players have no ranking since they can't play
     isHealthy: false,
-    injuryStatus: "IR",
+    injuryStatus: (injury.status || "IR") as InjuryStatus,
   };
 }
 

@@ -24,7 +24,7 @@ import type {
 // Constants & Configuration
 // =============================================================================
 
-const CURRENT_SEASON = "20252026";
+const CURRENT_SEASON = "20242025";
 const MIN_SKATER_GAMES = 1;  // Show all players with at least 1 game (includes AHL call-ups)
 const MIN_GOALIE_GAMES = 1;  // Show all goalies with at least 1 game
 const LEADERS_LIMIT = 10;
@@ -323,8 +323,9 @@ async function fetchAllSkaterStatsMapInternal(): Promise<Map<number, NHLApiSkate
     return map;
   }
 
-  // Fetch from API
-  const url = `${NHL_STATS_API}/skater/summary?isAggregate=true&isGame=false&limit=-1&cayenneExp=seasonId=${CURRENT_SEASON}`;
+  // Fetch from API - use isAggregate=false to get team info for each player
+  // This allows us to identify AHL call-ups by their team affiliation
+  const url = `${NHL_STATS_API}/skater/summary?isAggregate=false&isGame=false&limit=-1&cayenneExp=seasonId=${CURRENT_SEASON}`;
   const data = await fetchWithRetry<{ data: NHLApiSkaterStats[] }>(url);
 
   const map = new Map<number, NHLApiSkaterStats>();
@@ -345,8 +346,8 @@ async function fetchAllGoalieStatsMapInternal(): Promise<Map<number, NHLApiGoali
     return map;
   }
 
-  // Fetch from API
-  const url = `${NHL_STATS_API}/goalie/summary?isAggregate=true&isGame=false&limit=-1&cayenneExp=seasonId=${CURRENT_SEASON}`;
+  // Fetch from API - use isAggregate=false to get team info for each goalie
+  const url = `${NHL_STATS_API}/goalie/summary?isAggregate=false&isGame=false&limit=-1&cayenneExp=seasonId=${CURRENT_SEASON}`;
   const data = await fetchWithRetry<{ data: NHLApiGoalieStats[] }>(url);
 
   const map = new Map<number, NHLApiGoalieStats>();
@@ -1011,7 +1012,7 @@ function parseTimeOnIce(timeStr: string): number {
 // =============================================================================
 
 async function fetchSkaterRealTimeStatsInternal(): Promise<Map<number, { hits: number; blockedShots: number }>> {
-  const url = `${NHL_STATS_API}/skater/realtime?isAggregate=true&isGame=false&limit=-1&cayenneExp=seasonId=${CURRENT_SEASON}`;
+  const url = `${NHL_STATS_API}/skater/realtime?isAggregate=false&isGame=false&limit=-1&cayenneExp=seasonId=${CURRENT_SEASON}`;
 
   const data = await fetchWithRetry<{ data: any[] }>(url);
   const map = new Map<number, { hits: number; blockedShots: number }>();

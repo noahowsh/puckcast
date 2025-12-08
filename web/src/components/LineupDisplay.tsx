@@ -3,6 +3,7 @@
 // Lineup Display Components
 // Visual components for showing projected lineups and strength metrics
 
+import { useState } from "react";
 import Link from "next/link";
 import { TeamCrest } from "./TeamCrest";
 import type { TeamLineup, LineupPlayer, GoalieLineup, LineupStrengthMetrics } from "@/types/lineup";
@@ -140,18 +141,21 @@ export function LineupStrengthCard({ strength }: { strength: LineupStrengthMetri
 
 // Helper to get player headshot URL
 function getHeadshotUrl(playerId: number, teamAbbrev?: string): string {
-  // NHL headshot URL format
-  return `https://assets.nhle.com/mugs/nhl/20242025/${teamAbbrev || 'NHL'}/${playerId}.png`;
+  // NHL headshot URL format - uses current season
+  const season = "20242025";
+  return `https://assets.nhle.com/mugs/nhl/${season}/${teamAbbrev || 'NHL'}/${playerId}.png`;
 }
 
-// Fallback headshot component with initials
+// Fallback headshot component with initials and proper loading state
 function PlayerHeadshot({ playerId, playerName, teamAbbrev, size = 40 }: {
   playerId: number;
   playerName: string;
   teamAbbrev?: string;
   size?: number;
 }) {
-  const initials = playerName.split(' ').map(n => n[0]).join('').slice(0, 2);
+  const [hasError, setHasError] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(false);
+  const initials = playerName.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase();
 
   return (
     <div style={{
@@ -164,22 +168,38 @@ function PlayerHeadshot({ playerId, playerName, teamAbbrev, size = 40 }: {
       alignItems: 'center',
       justifyContent: 'center',
       flexShrink: 0,
+      position: 'relative',
     }}>
-      <img
-        src={getHeadshotUrl(playerId, teamAbbrev)}
-        alt={playerName}
-        width={size}
-        height={size}
-        style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-        onError={(e) => {
-          // Hide broken image and show initials
-          e.currentTarget.style.display = 'none';
-          const parent = e.currentTarget.parentElement;
-          if (parent) {
-            parent.innerHTML = `<span style="font-size: ${size * 0.35}px; font-weight: 700; color: rgba(255,255,255,0.7)">${initials}</span>`;
-          }
-        }}
-      />
+      {/* Show initials as fallback or while loading */}
+      {(hasError || !isLoaded) && (
+        <span style={{
+          fontSize: `${size * 0.35}px`,
+          fontWeight: 700,
+          color: 'rgba(255,255,255,0.7)',
+        }}>
+          {initials}
+        </span>
+      )}
+      {/* Only render image if no error */}
+      {!hasError && (
+        <img
+          src={getHeadshotUrl(playerId, teamAbbrev)}
+          alt={playerName}
+          width={size}
+          height={size}
+          style={{
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover',
+            opacity: isLoaded ? 1 : 0,
+            position: 'absolute',
+            top: 0,
+            left: 0,
+          }}
+          onLoad={() => setIsLoaded(true)}
+          onError={() => setHasError(true)}
+        />
+      )}
     </div>
   );
 }
@@ -418,11 +438,20 @@ function GoalieRow({ goalie, rank, teamAbbrev }: { goalie: GoalieLineup; rank: n
 // =============================================================================
 
 export function ProjectedLineupDisplay({ lineup }: { lineup: TeamLineup }) {
-  const injuredPlayers = [
-    ...lineup.forwards.filter(p => !p.isHealthy),
-    ...lineup.defensemen.filter(p => !p.isHealthy),
+  // Collect all players with injury status (both out and day-to-day)
+  const allPlayersWithInjury = [
+    ...lineup.forwards.filter(p => p.injuryStatus),
+    ...lineup.defensemen.filter(p => p.injuryStatus),
     ...lineup.goalies.filter(g => !g.isHealthy),
   ];
+
+  // Split into IR/OUT (definitely out) and DTD/GTD (uncertain)
+  const outPlayers = allPlayersWithInjury.filter(p =>
+    !p.isHealthy || ['IR', 'IR-LT', 'IR-NR', 'OUT', 'suspended'].includes((p as any).injuryStatus?.toUpperCase() || '')
+  );
+  const dtdPlayers = allPlayersWithInjury.filter(p =>
+    p.isHealthy && ['DTD', 'GTD', 'questionable', 'probable'].includes((p as any).injuryStatus?.toLowerCase() || '')
+  );
 
   return (
     <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '1.5rem' }} className="lg:grid-cols-[1fr_2fr]">
@@ -493,14 +522,14 @@ export function ProjectedLineupDisplay({ lineup }: { lineup: TeamLineup }) {
           ))}
         </div>
 
-        {/* Injured/IR Players - Now under goalies */}
-        {injuredPlayers.length > 0 && (
+        {/* IR/OUT Players */}
+        {outPlayers.length > 0 && (
           <div className="card" style={{ padding: '1rem', borderLeft: '3px solid #ef4444' }}>
             <h4 style={{ fontSize: '0.8rem', fontWeight: 600, color: '#ef4444', marginBottom: '0.75rem', textTransform: 'uppercase' }}>
-              Injured Reserve / IR ({injuredPlayers.length})
+              Injured Reserve / Out ({outPlayers.length})
             </h4>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-              {injuredPlayers.map((player) => (
+              {outPlayers.map((player) => (
                 <div key={player.playerId} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
                   <PlayerHeadshot
                     playerId={player.playerId}
@@ -510,12 +539,58 @@ export function ProjectedLineupDisplay({ lineup }: { lineup: TeamLineup }) {
                   />
                   <div style={{ flex: 1 }}>
                     <span style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>{player.playerName}</span>
-                    <span style={{ marginLeft: '0.5rem', fontSize: '0.65rem', color: '#ef4444', fontWeight: 600 }}>
-                      {'injuryStatus' in player ? player.injuryStatus : 'INJ'}
+                    <span style={{
+                      marginLeft: '0.5rem',
+                      fontSize: '0.65rem',
+                      fontWeight: 600,
+                      color: ((player as any).injuryStatus === 'IR-LT') ? '#dc2626' : '#ef4444',
+                      background: ((player as any).injuryStatus === 'IR-LT') ? 'rgba(220,38,38,0.15)' : 'rgba(239,68,68,0.1)',
+                      padding: '0.1rem 0.3rem',
+                      borderRadius: '3px',
+                    }}>
+                      {(player as any).injuryStatus || 'INJ'}
                     </span>
                   </div>
                   <span style={{ fontSize: '0.7rem', color: 'var(--text-tertiary)' }}>
-                    {'position' in player ? player.position : 'G'}
+                    {'position' in player ? (player as any).position : 'G'}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Day-to-Day / Game Time Decision Players */}
+        {dtdPlayers.length > 0 && (
+          <div className="card" style={{ padding: '1rem', borderLeft: '3px solid #f59e0b' }}>
+            <h4 style={{ fontSize: '0.8rem', fontWeight: 600, color: '#f59e0b', marginBottom: '0.75rem', textTransform: 'uppercase' }}>
+              Day-to-Day / Questionable ({dtdPlayers.length})
+            </h4>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+              {dtdPlayers.map((player) => (
+                <div key={player.playerId} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                  <PlayerHeadshot
+                    playerId={player.playerId}
+                    playerName={player.playerName}
+                    teamAbbrev={lineup.teamAbbrev}
+                    size={28}
+                  />
+                  <div style={{ flex: 1 }}>
+                    <span style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>{player.playerName}</span>
+                    <span style={{
+                      marginLeft: '0.5rem',
+                      fontSize: '0.65rem',
+                      fontWeight: 600,
+                      color: '#f59e0b',
+                      background: 'rgba(245,158,11,0.15)',
+                      padding: '0.1rem 0.3rem',
+                      borderRadius: '3px',
+                    }}>
+                      {(player as any).injuryStatus || 'DTD'}
+                    </span>
+                  </div>
+                  <span style={{ fontSize: '0.7rem', color: 'var(--text-tertiary)' }}>
+                    {'position' in player ? (player as any).position : 'G'}
                   </span>
                 </div>
               ))}

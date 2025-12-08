@@ -125,17 +125,27 @@ def get_team_abbrev(team_name: str) -> str | None:
 
 
 def parse_status(status_text: str) -> tuple[str, bool]:
-    """Parse injury status text into status code and isOut flag."""
+    """Parse injury status text into status code and isOut flag.
+
+    Returns (status, isOut) where:
+    - isOut=True means definitely not playing (IR, OUT, suspended)
+    - isOut=False means might play (DTD, GTD, questionable, probable)
+    """
     lower = status_text.lower().strip()
 
-    if "day-to-day" in lower or "dtd" in lower:
-        return "day-to-day", False
+    # Day-to-day / Game-time decision - uncertain, might play
+    if "day-to-day" in lower or "dtd" in lower or "d2d" in lower:
+        return "DTD", False
+    if "gtd" in lower or "game time" in lower or "game-time" in lower:
+        return "GTD", False
     if "questionable" in lower:
         return "questionable", False
     if "probable" in lower:
         return "probable", False
+
+    # Definitely out
     if "out" in lower and "day-to-day" not in lower:
-        return "out", True
+        return "OUT", True
     if "ir-lt" in lower or "long-term" in lower or "ltir" in lower:
         return "IR-LT", True
     if "ir-nr" in lower:
@@ -146,9 +156,11 @@ def parse_status(status_text: str) -> tuple[str, bool]:
         return "suspended", True
     if "personal" in lower:
         return "personal", True
+    if "inj" in lower:
+        return "INJ", True
 
     # Default: if they're listed, assume they're out
-    return "out", True
+    return "OUT", True
 
 
 def parse_injury_type(description: str) -> str:
@@ -251,8 +263,8 @@ def scrape_dailyfaceoff_team(team_abbrev: str, slug: str, timeout: float) -> lis
             injury_section = injury_heading.find_parent("section") or injury_heading.find_parent("div")
 
     # Method 2: Look for player cards with injury status anywhere on page
-    # DailyFaceoff uses status badges like "IR", "DTD", "OUT"
-    status_badges = soup.find_all(string=re.compile(r"^\s*(IR|DTD|OUT|IR-LT|IR-NR)\s*$", re.I))
+    # DailyFaceoff uses status badges like "IR", "DTD", "OUT", "GTD" (Game Time Decision)
+    status_badges = soup.find_all(string=re.compile(r"^\s*(IR|DTD|D2D|OUT|IR-LT|IR-NR|LTIR|GTD|INJURED|INJ)\s*$", re.I))
 
     for badge in status_badges:
         # Find the parent player card
@@ -336,7 +348,7 @@ def scrape_dailyfaceoff_team(team_abbrev: str, slug: str, timeout: float) -> lis
         for _ in range(3):
             if parent is None:
                 break
-            status_elem = parent.find(string=re.compile(r"^\s*(IR|DTD|OUT|IR-LT|IR-NR)\s*$", re.I))
+            status_elem = parent.find(string=re.compile(r"^\s*(IR|DTD|D2D|OUT|IR-LT|IR-NR|LTIR|GTD|INJURED|INJ)\s*$", re.I))
             if status_elem:
                 status_text = status_elem.strip().upper()
                 status, is_out = parse_status(status_text)

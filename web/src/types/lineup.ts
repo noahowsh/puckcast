@@ -7,10 +7,16 @@
 
 export type InjuryStatus =
   | "day-to-day"
+  | "DTD"           // Day-to-day (alternate format)
+  | "GTD"           // Game-time decision
+  | "questionable"
+  | "probable"
   | "out"
-  | "IR"           // Injured Reserve (minimum 7 days)
-  | "IR-LT"        // Long-Term Injured Reserve (minimum 24 days)
-  | "IR-NR"        // Injured Reserve - Non-Roster
+  | "OUT"           // Out (alternate format)
+  | "IR"            // Injured Reserve (minimum 7 days)
+  | "IR-LT"         // Long-Term Injured Reserve (minimum 24 days)
+  | "IR-NR"         // Injured Reserve - Non-Roster
+  | "INJ"           // Generic injured
   | "suspended"
   | "personal"
   | "healthy";
