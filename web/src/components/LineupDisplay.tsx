@@ -427,7 +427,7 @@ export function ProjectedLineupDisplay({ lineup }: { lineup: TeamLineup }) {
               Injured / IR ({injuredPlayers.length})
             </h4>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-              {injuredPlayers.slice(0, 8).map((player) => (
+              {injuredPlayers.map((player) => (
                 <div key={player.playerId} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
                   <PlayerHeadshot
                     playerId={player.playerId}
@@ -454,10 +454,10 @@ export function ProjectedLineupDisplay({ lineup }: { lineup: TeamLineup }) {
       {/* Right Column: Roster Lists */}
       <div>
         {/* Forwards */}
-        <div className="card mb-4" style={{ padding: 0, overflow: 'hidden' }}>
+        <div className="card" style={{ padding: 0, overflow: 'hidden', marginBottom: '1.5rem' }}>
           <div style={{ padding: '0.75rem 1rem', background: 'rgba(255,255,255,0.03)', borderBottom: '1px solid rgba(255,255,255,0.05)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <h4 style={{ fontSize: '0.8rem', fontWeight: 600, color: 'white', textTransform: 'uppercase' }}>
-              Forwards ({lineup.projectedForwards.length}/{lineup.typicalForwards})
+              Forwards ({lineup.forwards.length})
             </h4>
             <div style={{ display: 'flex', gap: '0.5rem', fontSize: '0.6rem', color: 'var(--text-tertiary)', textTransform: 'uppercase' }}>
               <span style={{ width: '48px', textAlign: 'center' }}>G</span>
@@ -467,16 +467,16 @@ export function ProjectedLineupDisplay({ lineup }: { lineup: TeamLineup }) {
               <span style={{ width: '48px', textAlign: 'center' }}>OVR</span>
             </div>
           </div>
-          {lineup.forwards.slice(0, 14).map((player, idx) => (
+          {lineup.forwards.map((player, idx) => (
             <PlayerRow key={player.playerId} player={player} rank={idx + 1} teamAbbrev={lineup.teamAbbrev} />
           ))}
         </div>
 
         {/* Defensemen */}
-        <div className="card mb-4" style={{ padding: 0, overflow: 'hidden' }}>
+        <div className="card" style={{ padding: 0, overflow: 'hidden', marginBottom: '1.5rem' }}>
           <div style={{ padding: '0.75rem 1rem', background: 'rgba(255,255,255,0.03)', borderBottom: '1px solid rgba(255,255,255,0.05)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <h4 style={{ fontSize: '0.8rem', fontWeight: 600, color: 'white', textTransform: 'uppercase' }}>
-              Defensemen ({lineup.projectedDefensemen.length}/{lineup.typicalDefensemen})
+              Defensemen ({lineup.defensemen.length})
             </h4>
             <div style={{ display: 'flex', gap: '0.5rem', fontSize: '0.6rem', color: 'var(--text-tertiary)', textTransform: 'uppercase' }}>
               <span style={{ width: '48px', textAlign: 'center' }}>G</span>
@@ -486,7 +486,7 @@ export function ProjectedLineupDisplay({ lineup }: { lineup: TeamLineup }) {
               <span style={{ width: '48px', textAlign: 'center' }}>OVR</span>
             </div>
           </div>
-          {lineup.defensemen.slice(0, 8).map((player, idx) => (
+          {lineup.defensemen.map((player, idx) => (
             <PlayerRow key={player.playerId} player={player} rank={idx + 1} teamAbbrev={lineup.teamAbbrev} />
           ))}
         </div>
@@ -495,7 +495,7 @@ export function ProjectedLineupDisplay({ lineup }: { lineup: TeamLineup }) {
         <div className="card" style={{ padding: 0, overflow: 'hidden' }}>
           <div style={{ padding: '0.75rem 1rem', background: 'rgba(255,255,255,0.03)', borderBottom: '1px solid rgba(255,255,255,0.05)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <h4 style={{ fontSize: '0.8rem', fontWeight: 600, color: 'white', textTransform: 'uppercase' }}>
-              Goalies ({lineup.projectedGoalies.length}/{lineup.typicalGoalies})
+              Goalies ({lineup.goalies.length})
             </h4>
             <div style={{ display: 'flex', gap: '0.5rem', fontSize: '0.6rem', color: 'var(--text-tertiary)', textTransform: 'uppercase' }}>
               <span style={{ width: '48px', textAlign: 'center' }}>W</span>

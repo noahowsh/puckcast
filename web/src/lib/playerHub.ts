@@ -111,9 +111,10 @@ const rosterCachePromise: Map<string, Promise<NHLRosterResponse | null>> = new M
 let playerTeamLookup: Map<number, { teamAbbrev: string; headshot: string }> | null = null;
 let playerTeamLookupPromise: Promise<Map<number, { teamAbbrev: string; headshot: string }>> | null = null;
 
-// All NHL teams for building player lookup
+// All NHL teams for building player lookup (32 teams as of 2024-25 season)
+// Note: ARI (Arizona Coyotes) relocated to Utah Hockey Club (UTA) in 2024
 const NHL_TEAMS = [
-  "ANA", "ARI", "BOS", "BUF", "CAR", "CBJ", "CGY", "CHI", "COL", "DAL",
+  "ANA", "BOS", "BUF", "CAR", "CBJ", "CGY", "CHI", "COL", "DAL",
   "DET", "EDM", "FLA", "LAK", "MIN", "MTL", "NJD", "NSH", "NYI", "NYR",
   "OTT", "PHI", "PIT", "SEA", "SJS", "STL", "TBL", "TOR", "UTA", "VAN",
   "VGK", "WPG", "WSH"

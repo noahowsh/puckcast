@@ -5,7 +5,6 @@ import { fetchTeamRoster } from "@/lib/playerHub";
 import { buildProjectedLineup } from "@/lib/lineupService";
 import { getTeamGoalies } from "@/lib/startingGoalieService";
 import { TeamCrest } from "@/components/TeamCrest";
-import { GoalieStatsTable } from "@/components/PlayerStatsTable";
 import { ProjectedLineupDisplay } from "@/components/LineupDisplay";
 import { TeamGoalieSituationCard } from "@/components/StartingGoalieDisplay";
 import powerIndexSnapshot from "@/data/powerIndexSnapshot.json";
@@ -706,26 +705,6 @@ export default async function TeamPage({ params }: { params: Promise<{ abbrev: s
           )}
         </section>
 
-        {/* Projected Roster */}
-        <section className="nova-section">
-          <div className="section-head" style={{ marginBottom: '1.5rem' }}>
-            <div>
-              <p className="eyebrow">Active Roster</p>
-              <h2>Projected Roster</h2>
-              <p className="lead-sm">Players ranked by points, +/-, ice time, and performance. OVR score indicates overall value.</p>
-            </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-              <span className="text-xs text-white/40">
-                Updated: {new Date(projectedLineup.lastUpdated).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
-              </span>
-              <Link href="/players" className="cta cta-ghost">
-                All Players →
-              </Link>
-            </div>
-          </div>
-          <ProjectedLineupDisplay lineup={projectedLineup} />
-        </section>
-
         {/* Season Leaders - compact version */}
         {allSkaters.length > 0 && (
           <section className="nova-section">
@@ -805,27 +784,25 @@ export default async function TeamPage({ params }: { params: Promise<{ abbrev: s
           </section>
         )}
 
-        {/* Goalie Statistics */}
-        {roster.goalies.length > 0 && (
-          <section className="nova-section">
-            <div className="section-head">
-              <div>
-                <p className="eyebrow">Netminders</p>
-                <h2>Goalie Statistics</h2>
-                <p className="lead-sm">Current season stats for team goalies.</p>
-              </div>
-              <Link href="/goalies" className="cta cta-ghost">
-                All Goalies →
+        {/* Projected Roster */}
+        <section className="nova-section">
+          <div className="section-head" style={{ marginBottom: '1.5rem' }}>
+            <div>
+              <p className="eyebrow">Active Roster</p>
+              <h2>Projected Roster</h2>
+              <p className="lead-sm">Players ranked by points, +/-, ice time, and performance. OVR score indicates overall value.</p>
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+              <span className="text-xs text-white/40">
+                Updated: {new Date(projectedLineup.lastUpdated).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+              </span>
+              <Link href="/players" className="cta cta-ghost">
+                All Players →
               </Link>
             </div>
-            <GoalieStatsTable
-              goalies={roster.goalies}
-              showTeam={false}
-              showRank={false}
-              linkToProfile={true}
-            />
-          </section>
-        )}
+          </div>
+          <ProjectedLineupDisplay lineup={projectedLineup} />
+        </section>
 
         {/* Division Standings */}
         {teamDivision && (
