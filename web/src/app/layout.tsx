@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
-import { Epilogue, Plus_Jakarta_Sans } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 import { SiteNav } from "@/components/SiteNav";
 import { SiteFooter } from "@/components/SiteFooter";
@@ -8,17 +8,17 @@ import { PageTransition } from "@/components/PageTransition";
 import { Analytics } from "@/components/Analytics";
 import Script from "next/script";
 
-const display = Epilogue({
-  subsets: ["latin"],
-  weight: ["600", "700", "800"],
-  variable: "--font-display",
+const geistSans = localFont({
+  src: "../fonts/geist-latin.woff2",
+  variable: "--font-geist-sans",
+  weight: "100 900",
   display: "swap",
 });
 
-const body = Plus_Jakarta_Sans({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-  variable: "--font-body",
+const geistMono = localFont({
+  src: "../fonts/geist-mono-latin.woff2",
+  variable: "--font-geist-mono",
+  weight: "100 900",
   display: "swap",
 });
 
@@ -61,7 +61,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${display.variable} ${body.variable} antialiased`}>
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-ZSYWJKWQM3"
           strategy="afterInteractive"
