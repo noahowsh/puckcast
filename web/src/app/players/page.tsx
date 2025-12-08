@@ -24,14 +24,11 @@ export default async function PlayersPage() {
         </div>
 
         {/* Navigation Links */}
-        <div className="flex gap-3 mb-8">
+        <div className="flex gap-3 mb-10">
           <Link href="/players" className="px-4 py-2 rounded-lg bg-sky-500/20 text-sky-400 text-sm font-medium">
             All Players
           </Link>
-          <Link href="/player-intelligence" className="px-4 py-2 rounded-lg bg-white/[0.04] text-white/60 text-sm font-medium hover:bg-white/[0.06] transition-colors">
-            Skater Intelligence
-          </Link>
-          <Link href="/goalie-intelligence" className="px-4 py-2 rounded-lg bg-white/[0.04] text-white/60 text-sm font-medium hover:bg-white/[0.06] transition-colors">
+          <Link href="/goalies" className="px-4 py-2 rounded-lg bg-white/[0.04] text-white/60 text-sm font-medium hover:bg-white/[0.06] transition-colors">
             Goalie Intelligence
           </Link>
         </div>

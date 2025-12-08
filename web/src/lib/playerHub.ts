@@ -525,50 +525,22 @@ function mergeGoalieRosterWithStats(
 // =============================================================================
 
 export async function fetchSkaterStats(minGames = MIN_SKATER_GAMES): Promise<SkaterCard[]> {
-  // Use cached stats map and player team lookup to get accurate team info
-  const [statsMap, teamLookup] = await Promise.all([
-    fetchAllSkaterStatsMap(),
-    getPlayerTeamLookup(),
-  ]);
+  // Use cached stats map - avoid fetching all rosters for league-wide stats
+  const statsMap = await fetchAllSkaterStatsMap();
 
   return Array.from(statsMap.values())
     .filter((p) => p.gamesPlayed >= minGames)
-    .map((p) => {
-      const card = mapNHLSkaterToCard(p);
-      // Enrich with team info from roster lookup
-      const teamInfo = teamLookup.get(p.playerId);
-      if (teamInfo) {
-        card.bio.teamAbbrev = teamInfo.teamAbbrev;
-        card.bio.teamName = teamInfo.teamAbbrev;
-        card.bio.headshot = teamInfo.headshot;
-        card.stats.teamAbbrev = teamInfo.teamAbbrev;
-      }
-      return card;
-    })
+    .map((p) => mapNHLSkaterToCard(p))
     .sort((a, b) => b.stats.points - a.stats.points);
 }
 
 export async function fetchGoalieStats(minGames = MIN_GOALIE_GAMES): Promise<GoalieDetailCard[]> {
-  // Use cached stats map and player team lookup to get accurate team info
-  const [statsMap, teamLookup] = await Promise.all([
-    fetchAllGoalieStatsMap(),
-    getPlayerTeamLookup(),
-  ]);
+  // Use cached stats map - avoid fetching all rosters for league-wide stats
+  const statsMap = await fetchAllGoalieStatsMap();
 
   return Array.from(statsMap.values())
     .filter((g) => g.gamesPlayed >= minGames)
-    .map((g) => {
-      const card = mapNHLGoalieToCard(g);
-      // Enrich with team info from roster lookup
-      const teamInfo = teamLookup.get(g.playerId);
-      if (teamInfo) {
-        card.bio.teamAbbrev = teamInfo.teamAbbrev;
-        card.bio.teamName = teamInfo.teamAbbrev;
-        card.bio.headshot = teamInfo.headshot;
-        card.stats.teamAbbrev = teamInfo.teamAbbrev;
-      }
-      return card;
-    })
+    .map((g) => mapNHLGoalieToCard(g))
     .sort((a, b) => b.stats.wins - a.stats.wins);
 }
 
