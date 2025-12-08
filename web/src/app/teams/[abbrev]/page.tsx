@@ -715,7 +715,7 @@ export default async function TeamPage({ params }: { params: Promise<{ abbrev: s
                 <Link href={`/players/${allSkaters[0].bio.playerId}`} className="card" style={{ padding: '1rem', textDecoration: 'none' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
                     <img
-                      src={`https://assets.nhle.com/mugs/nhl/20242025/${teamData.abbrev}/${allSkaters[0].bio.playerId}.png`}
+                      src={`https://assets.nhle.com/mugs/nhl/20252026/${teamData.abbrev}/${allSkaters[0].bio.playerId}.png`}
                       alt={allSkaters[0].bio.fullName}
                       width={48}
                       height={48}
@@ -738,7 +738,7 @@ export default async function TeamPage({ params }: { params: Promise<{ abbrev: s
                   <Link href={`/players/${goalsLeader.bio.playerId}`} className="card" style={{ padding: '1rem', textDecoration: 'none' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
                       <img
-                        src={`https://assets.nhle.com/mugs/nhl/20242025/${teamData.abbrev}/${goalsLeader.bio.playerId}.png`}
+                        src={`https://assets.nhle.com/mugs/nhl/20252026/${teamData.abbrev}/${goalsLeader.bio.playerId}.png`}
                         alt={goalsLeader.bio.fullName}
                         width={48}
                         height={48}
@@ -762,7 +762,7 @@ export default async function TeamPage({ params }: { params: Promise<{ abbrev: s
                   <Link href={`/players/${pmLeader.bio.playerId}`} className="card" style={{ padding: '1rem', textDecoration: 'none' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
                       <img
-                        src={`https://assets.nhle.com/mugs/nhl/20242025/${teamData.abbrev}/${pmLeader.bio.playerId}.png`}
+                        src={`https://assets.nhle.com/mugs/nhl/20252026/${teamData.abbrev}/${pmLeader.bio.playerId}.png`}
                         alt={pmLeader.bio.fullName}
                         width={48}
                         height={48}
