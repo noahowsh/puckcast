@@ -1,13 +1,16 @@
 import type { GoalieCard } from "@/types/goalie";
 import { getGoaliePulse } from "@/lib/data";
+import { fetchGoalieLeaders, fetchGoalieStats } from "@/lib/playerHub";
 import { GoalieTicker } from "@/components/GoalieTicker";
 import { PageHeader } from "@/components/PageHeader";
-import { StatCard } from "@/components/StatCard";
 import { TeamLogo } from "@/components/TeamLogo";
+import { GoalieStatsTable, LeaderRow } from "@/components/PlayerStatsTable";
+import { GoalieCardView } from "@/components/PlayerCard";
+
+export const revalidate = 3600; // Revalidate every hour
 
 const pulse = getGoaliePulse();
 const updatedAt = pulse.updatedAt ? new Date(pulse.updatedAt) : null;
-const GOALIE_SUMMARY_ENDPOINT = "https://api.nhle.com/stats/rest/en/goalie/summary?isAggregate=true&limit=-1&cayenneExp=seasonId=20252026";
 
 const trendConfig: Record<string, { color: string; icon: string }> = {
   surging: { color: "text-emerald-300", icon: "UP" },
@@ -18,41 +21,15 @@ const trendConfig: Record<string, { color: string; icon: string }> = {
 
 const formatPercent = (value: number) => `${(value * 100).toFixed(0)}%`;
 
-type GoalieSeasonLeader = {
-  name: string;
-  gamesPlayed: number;
-  wins: number;
-  savePct: number;
-  gaa: number;
-};
-
-async function fetchGoalieSeasonLeaders(): Promise<GoalieSeasonLeader[]> {
-  try {
-    const res = await fetch(GOALIE_SUMMARY_ENDPOINT, { next: { revalidate: 3600 } });
-    if (!res.ok) return [];
-    const payload = (await res.json()) as { data: any[] };
-    return payload.data
-      .filter((entry) => entry.gamesPlayed >= 5 && typeof entry.savePct === "number")
-      .sort((a, b) => b.savePct - a.savePct)
-      .slice(0, 4)
-      .map((entry) => ({
-        name: entry.goalieFullName as string,
-        gamesPlayed: entry.gamesPlayed as number,
-        wins: entry.wins as number,
-        savePct: entry.savePct as number,
-        gaa: entry.goalsAgainstAverage as number,
-      }));
-  } catch (err) {
-    console.error("Failed to fetch goalie summary", err);
-    return [];
-  }
-}
-
 export default async function GoaliePage() {
-  const seasonLeaders = await fetchGoalieSeasonLeaders();
+  const [goalieLeaders, allGoalies] = await Promise.all([
+    fetchGoalieLeaders(),
+    fetchGoalieStats(3),
+  ]);
+
   const updatedDisplay = updatedAt
     ? updatedAt.toLocaleString("en-US", { timeZone: "America/New_York" })
-    : null;
+    : new Date().toLocaleString("en-US", { timeZone: "America/New_York" });
 
   return (
     <div className="min-h-screen">
@@ -82,23 +59,121 @@ export default async function GoaliePage() {
           </section>
         )}
 
-        {/* Season Leaders */}
-        {seasonLeaders.length > 0 && (
-          <section className="mb-12">
-            <h2 className="text-2xl font-bold text-white mb-6">Season leaders</h2>
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-              {seasonLeaders.map((leader, idx) => (
-                <StatCard
-                  key={leader.name}
-                  label={`Top Save % #${idx + 1}`}
-                  value={formatPercent(leader.savePct)}
-                  change={{ value: `${leader.gamesPlayed} GP | ${leader.wins} W`, isPositive: true }}
-                  className="bg-white/[0.03] border-white/10"
-                />
-              ))}
+        {/* League Leaders Grid */}
+        <section className="mb-12">
+          <h2 className="text-2xl font-bold text-white mb-6">League Leaders</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {/* Wins */}
+            <div className="card p-4">
+              <h3 className="text-sm font-semibold text-white/70 mb-3 uppercase tracking-wide flex items-center gap-2">
+                <span className="w-6 h-6 rounded bg-emerald-500/20 flex items-center justify-center">
+                  <svg className="w-3 h-3 text-emerald-400" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                  </svg>
+                </span>
+                Wins
+              </h3>
+              <div className="space-y-1">
+                {goalieLeaders.wins.slice(0, 5).map((goalie, idx) => (
+                  <LeaderRow
+                    key={goalie.bio.playerId}
+                    rank={idx + 1}
+                    name={goalie.bio.lastName}
+                    team={goalie.bio.teamAbbrev}
+                    value={goalie.stats.wins}
+                    playerId={goalie.bio.playerId}
+                    isGoalie
+                  />
+                ))}
+              </div>
             </div>
-          </section>
-        )}
+
+            {/* Save Percentage */}
+            <div className="card p-4">
+              <h3 className="text-sm font-semibold text-white/70 mb-3 uppercase tracking-wide flex items-center gap-2">
+                <span className="w-6 h-6 rounded bg-sky-500/20 flex items-center justify-center">
+                  <svg className="w-3 h-3 text-sky-400" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                  </svg>
+                </span>
+                Save %
+              </h3>
+              <div className="space-y-1">
+                {goalieLeaders.savePct.slice(0, 5).map((goalie, idx) => (
+                  <LeaderRow
+                    key={goalie.bio.playerId}
+                    rank={idx + 1}
+                    name={goalie.bio.lastName}
+                    team={goalie.bio.teamAbbrev}
+                    value={`.${Math.round(goalie.stats.savePct * 1000)}`}
+                    playerId={goalie.bio.playerId}
+                    isGoalie
+                  />
+                ))}
+              </div>
+            </div>
+
+            {/* GAA */}
+            <div className="card p-4">
+              <h3 className="text-sm font-semibold text-white/70 mb-3 uppercase tracking-wide flex items-center gap-2">
+                <span className="w-6 h-6 rounded bg-amber-500/20 flex items-center justify-center">
+                  <svg className="w-3 h-3 text-amber-400" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M3 3a1 1 0 000 2v8a2 2 0 002 2h2.586l-1.293 1.293a1 1 0 101.414 1.414L10 15.414l2.293 2.293a1 1 0 001.414-1.414L12.414 15H15a2 2 0 002-2V5a1 1 0 100-2H3zm11.707 4.707a1 1 0 00-1.414-1.414L10 9.586 8.707 8.293a1 1 0 00-1.414 0l-2 2a1 1 0 101.414 1.414L8 10.414l1.293 1.293a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                  </svg>
+                </span>
+                GAA
+              </h3>
+              <div className="space-y-1">
+                {goalieLeaders.goalsAgainstAverage.slice(0, 5).map((goalie, idx) => (
+                  <LeaderRow
+                    key={goalie.bio.playerId}
+                    rank={idx + 1}
+                    name={goalie.bio.lastName}
+                    team={goalie.bio.teamAbbrev}
+                    value={goalie.stats.goalsAgainstAverage.toFixed(2)}
+                    playerId={goalie.bio.playerId}
+                    isGoalie
+                  />
+                ))}
+              </div>
+            </div>
+
+            {/* Shutouts */}
+            <div className="card p-4">
+              <h3 className="text-sm font-semibold text-white/70 mb-3 uppercase tracking-wide flex items-center gap-2">
+                <span className="w-6 h-6 rounded bg-rose-500/20 flex items-center justify-center">
+                  <svg className="w-3 h-3 text-rose-400" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M13.477 14.89A6 6 0 015.11 6.524l8.367 8.368zm1.414-1.414L6.524 5.11a6 6 0 018.367 8.367zM18 10a8 8 0 11-16 0 8 8 0 0116 0z" clipRule="evenodd" />
+                  </svg>
+                </span>
+                Shutouts
+              </h3>
+              <div className="space-y-1">
+                {goalieLeaders.shutouts.slice(0, 5).map((goalie, idx) => (
+                  <LeaderRow
+                    key={goalie.bio.playerId}
+                    rank={idx + 1}
+                    name={goalie.bio.lastName}
+                    team={goalie.bio.teamAbbrev}
+                    value={goalie.stats.shutouts}
+                    playerId={goalie.bio.playerId}
+                    isGoalie
+                  />
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Top Goalies Cards */}
+        <section className="mb-12">
+          <h2 className="text-2xl font-bold text-white mb-6">Top Performers</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {goalieLeaders.wins.slice(0, 4).map((goalie, idx) => (
+              <GoalieCardView key={goalie.bio.playerId} goalie={goalie} rank={idx + 1} />
+            ))}
+          </div>
+        </section>
 
         {/* Live Ticker */}
         <section className="mb-12">
@@ -106,13 +181,24 @@ export default async function GoaliePage() {
           <GoalieTicker initial={pulse} />
         </section>
 
-        {/* Goalie Cards */}
+        {/* Goalie Intelligence Cards */}
         <section className="mb-12">
           <h2 className="text-2xl font-bold text-white mb-6">Detailed analysis</h2>
           <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
             {pulse.goalies.map((goalie) => (
-              <GoalieCardView key={goalie.name} goalie={goalie} />
+              <GoalieIntelCard key={goalie.name} goalie={goalie} />
             ))}
+          </div>
+        </section>
+
+        {/* Full Stats Table */}
+        <section className="mb-12">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-2xl font-bold text-white">All Goalies</h2>
+            <span className="text-sm text-white/50">Minimum 3 games played</span>
+          </div>
+          <div className="card p-0 overflow-hidden">
+            <GoalieStatsTable goalies={allGoalies} maxRows={40} />
           </div>
         </section>
       </div>
@@ -120,13 +206,13 @@ export default async function GoaliePage() {
   );
 }
 
-function GoalieCardView({ goalie }: { goalie: GoalieCard }) {
+function GoalieIntelCard({ goalie }: { goalie: GoalieCard }) {
   const startLikelihood = formatPercent(goalie.startLikelihood);
   const trendStyle = trendConfig[goalie.trend] || { color: "text-white", icon: "" };
   const gsaxPositive = goalie.rollingGsa > 0;
 
   return (
-    <article className="card">
+    <article className="card hover:border-white/20 transition-all duration-200">
       <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between mb-4">
             <div className="flex items-center gap-3">
               <TeamLogo teamAbbrev={goalie.team} size="md" />
