@@ -54,7 +54,7 @@ export function SeasonProjectionCard({ projection, playerName }: SeasonProjectio
         </div>
       </div>
 
-      <div style={{ padding: '2rem' }} className="space-y-8">
+      <div style={{ padding: '2rem' }} className="space-y-10">
         {/* End of Season Projections Table */}
         <div>
           <h4 className="text-xs font-semibold text-white/60 uppercase tracking-wide mb-4">
@@ -113,7 +113,7 @@ export function SeasonProjectionCard({ projection, playerName }: SeasonProjectio
         </div>
 
         {/* Distribution Chart */}
-        <div className="pt-2">
+        <div className="pt-4">
           <div className="flex items-center justify-between mb-3">
             <h4 className="text-xs font-semibold text-white/60 uppercase tracking-wide">
               Projection Distribution
@@ -139,7 +139,7 @@ export function SeasonProjectionCard({ projection, playerName }: SeasonProjectio
         <p className="text-xs text-white/60 leading-relaxed">{distributionSummary}</p>
 
         {/* Awards Watch */}
-        <div className="pt-2">
+        <div className="pt-4">
           <h4 className="text-xs font-semibold text-white/60 uppercase tracking-wide mb-4">
             Awards Watch
           </h4>
@@ -154,9 +154,9 @@ export function SeasonProjectionCard({ projection, playerName }: SeasonProjectio
         {(Object.keys(filteredGoalMilestones).length > 0 ||
           Object.keys(filteredAssistMilestones).length > 0 ||
           Object.keys(filteredPointMilestones).length > 0) && (
-          <div className="pt-2">
+          <div className="pt-4">
             <h4 className="text-xs font-semibold text-white/60 uppercase tracking-wide mb-4">
-              Probability of Reaching...
+              Milestone Tracker
             </h4>
             <div className="space-y-4">
               {Object.keys(filteredGoalMilestones).length > 0 && (

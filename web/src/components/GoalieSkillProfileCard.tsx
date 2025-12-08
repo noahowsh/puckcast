@@ -93,16 +93,16 @@ export function GoalieSkillProfileCard({ stats, playerName, allGoalies, age }: G
       </div>
 
       <div style={{ padding: '2rem' }} className="space-y-6">
-        {/* Two Column Layout: Left (rating + legend + description) | Right (chart) */}
-        <div className="grid grid-cols-[1fr_1.4fr] gap-6">
-          {/* Left Column: Rating, Legend, Description */}
-          <div className="flex flex-col gap-5">
+        {/* Two Column Layout: Left (rating + key) | Right (chart + description) */}
+        <div className="grid grid-cols-[140px_1fr] gap-8">
+          {/* Left Column: Rating + Legend Key */}
+          <div className="flex flex-col items-center gap-6">
             {/* Overall Rating */}
             <OverallRatingDisplay percentile={overallPercentile} tier={overallTier} />
 
             {/* Legend/Key */}
-            <div className="space-y-1.5">
-              <p className="text-[10px] text-white/40 uppercase tracking-wide">Percentile Key</p>
+            <div className="space-y-1.5 w-full">
+              <p className="text-[10px] text-white/40 uppercase tracking-wide text-center">Percentile Key</p>
               <div className="space-y-1">
                 <LegendItem color="bg-sky-500/60" label="Elite (85+)" />
                 <LegendItem color="bg-emerald-500/50" label="Above Avg (65-84)" />
@@ -111,14 +111,12 @@ export function GoalieSkillProfileCard({ stats, playerName, allGoalies, age }: G
                 <LegendItem color="bg-rose-500/50" label="Poor (<15)" />
               </div>
             </div>
-
-            {/* Skill Summary */}
-            <p className="text-xs text-white/60 leading-relaxed">{skillSummary}</p>
           </div>
 
-          {/* Right Column: Radar Chart */}
-          <div className="flex items-center justify-center">
+          {/* Right Column: Chart + Description */}
+          <div className="flex flex-col items-center gap-4">
             <GoalieRadarChart data={radarData} />
+            <p className="text-xs text-white/60 leading-relaxed text-center">{skillSummary}</p>
           </div>
         </div>
 
@@ -161,9 +159,9 @@ interface RadarDataPoint {
 }
 
 function GoalieRadarChart({ data }: { data: RadarDataPoint[] }) {
-  const size = 220;
+  const size = 260;
   const center = size / 2;
-  const maxRadius = size / 2 - 35;
+  const maxRadius = size / 2 - 36;
   const levels = [25, 50, 75, 100];
   const angleStep = (2 * Math.PI) / data.length;
   const startAngle = -Math.PI / 2;
