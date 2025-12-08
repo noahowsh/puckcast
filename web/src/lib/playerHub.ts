@@ -2,6 +2,8 @@
 // Fetches and processes player data from NHL APIs
 // Uses roster endpoint for team info + stats endpoint for performance data
 
+import fs from "fs";
+import path from "path";
 import type {
   SkaterCard,
   GoalieDetailCard,
@@ -27,10 +29,66 @@ const MIN_SKATER_GAMES = 5;
 const MIN_GOALIE_GAMES = 3;
 const LEADERS_LIMIT = 10;
 const ROSTER_CACHE_TTL = 3600; // 1 hour
+const FILE_CACHE_TTL = 3600 * 1000; // 1 hour in milliseconds
 
 // NHL API Endpoints
 const NHL_STATS_API = "https://api.nhle.com/stats/rest/en";
 const NHL_WEB_API = "https://api-web.nhle.com/v1";
+
+// File cache directory
+const CACHE_DIR = path.join(process.cwd(), ".next", "cache", "player-stats");
+
+// =============================================================================
+// File-Based Cache System (persists between builds for faster deployment)
+// =============================================================================
+
+function ensureCacheDir(): void {
+  try {
+    if (!fs.existsSync(CACHE_DIR)) {
+      fs.mkdirSync(CACHE_DIR, { recursive: true });
+    }
+  } catch {
+    // Cache dir creation failed, will fetch fresh data
+  }
+}
+
+function getCacheFilePath(key: string): string {
+  return path.join(CACHE_DIR, `${key}.json`);
+}
+
+function readFromFileCache<T>(key: string): T | null {
+  try {
+    const filePath = getCacheFilePath(key);
+    if (!fs.existsSync(filePath)) return null;
+
+    const stat = fs.statSync(filePath);
+    const age = Date.now() - stat.mtimeMs;
+
+    // Cache expired
+    if (age > FILE_CACHE_TTL) {
+      console.log(`File cache expired for ${key} (age: ${Math.round(age / 1000)}s)`);
+      return null;
+    }
+
+    const data = fs.readFileSync(filePath, "utf-8");
+    console.log(`File cache hit for ${key} (age: ${Math.round(age / 1000)}s)`);
+    return JSON.parse(data) as T;
+  } catch (err) {
+    console.log(`File cache read error for ${key}:`, err);
+    return null;
+  }
+}
+
+function writeToFileCache<T>(key: string, data: T): void {
+  try {
+    ensureCacheDir();
+    const filePath = getCacheFilePath(key);
+    fs.writeFileSync(filePath, JSON.stringify(data));
+    console.log(`File cache written for ${key}`);
+  } catch (err) {
+    console.log(`File cache write error for ${key}:`, err);
+  }
+}
 
 // =============================================================================
 // In-Memory Cache for Stats (prevents rate limiting during static generation)
@@ -188,6 +246,16 @@ async function fetchTeamRosterFromAPI(teamAbbrev: string): Promise<NHLRosterResp
 // =============================================================================
 
 async function buildPlayerTeamLookupInternal(): Promise<Map<number, { teamAbbrev: string; headshot: string }>> {
+  // Try file cache first
+  type LookupEntry = { playerId: number; teamAbbrev: string; headshot: string };
+  const cachedData = readFromFileCache<LookupEntry[]>("player-team-lookup");
+  if (cachedData) {
+    const lookup = new Map<number, { teamAbbrev: string; headshot: string }>();
+    cachedData.forEach(entry => lookup.set(entry.playerId, { teamAbbrev: entry.teamAbbrev, headshot: entry.headshot }));
+    console.log(`Player lookup loaded from cache with ${lookup.size} players`);
+    return lookup;
+  }
+
   const lookup = new Map<number, { teamAbbrev: string; headshot: string }>();
 
   // Fetch all rosters in true parallel - no delays needed for roster API
@@ -207,6 +275,14 @@ async function buildPlayerTeamLookupInternal(): Promise<Map<number, { teamAbbrev
   });
 
   console.log(`Player lookup built with ${lookup.size} players`);
+
+  // Write to file cache
+  if (lookup.size > 0) {
+    const cacheData: LookupEntry[] = [];
+    lookup.forEach((value, key) => cacheData.push({ playerId: key, ...value }));
+    writeToFileCache("player-team-lookup", cacheData);
+  }
+
   return lookup;
 }
 
@@ -234,34 +310,56 @@ async function getPlayerTeamLookup(): Promise<Map<number, { teamAbbrev: string; 
 
 // =============================================================================
 // Stats Fetching (Secondary source for performance data)
-// Uses in-memory caching to prevent rate limiting during static generation
+// Uses file + in-memory caching for faster builds
 // =============================================================================
 
 async function fetchAllSkaterStatsMapInternal(): Promise<Map<number, NHLApiSkaterStats>> {
+  // Try file cache first
+  const cachedData = readFromFileCache<NHLApiSkaterStats[]>("skater-stats");
+  if (cachedData) {
+    const map = new Map<number, NHLApiSkaterStats>();
+    cachedData.forEach(p => map.set(p.playerId, p));
+    return map;
+  }
+
+  // Fetch from API
   const url = `${NHL_STATS_API}/skater/summary?isAggregate=true&isGame=false&limit=-1&cayenneExp=seasonId=${CURRENT_SEASON}`;
   const data = await fetchWithRetry<{ data: NHLApiSkaterStats[] }>(url);
 
   const map = new Map<number, NHLApiSkaterStats>();
   if (data?.data) {
     data.data.forEach(p => map.set(p.playerId, p));
+    // Write to file cache
+    writeToFileCache("skater-stats", data.data);
   }
   return map;
 }
 
 async function fetchAllGoalieStatsMapInternal(): Promise<Map<number, NHLApiGoalieStats>> {
+  // Try file cache first
+  const cachedData = readFromFileCache<NHLApiGoalieStats[]>("goalie-stats");
+  if (cachedData) {
+    const map = new Map<number, NHLApiGoalieStats>();
+    cachedData.forEach(g => map.set(g.playerId, g));
+    return map;
+  }
+
+  // Fetch from API
   const url = `${NHL_STATS_API}/goalie/summary?isAggregate=true&isGame=false&limit=-1&cayenneExp=seasonId=${CURRENT_SEASON}`;
   const data = await fetchWithRetry<{ data: NHLApiGoalieStats[] }>(url);
 
   const map = new Map<number, NHLApiGoalieStats>();
   if (data?.data) {
     data.data.forEach(g => map.set(g.playerId, g));
+    // Write to file cache
+    writeToFileCache("goalie-stats", data.data);
   }
   return map;
 }
 
 // Cached versions - ensures only one API call even with concurrent requests
 async function fetchAllSkaterStatsMap(): Promise<Map<number, NHLApiSkaterStats>> {
-  // Return from cache if available
+  // Return from memory cache if available
   if (skaterStatsCache) {
     return skaterStatsCache;
   }
@@ -284,7 +382,7 @@ async function fetchAllSkaterStatsMap(): Promise<Map<number, NHLApiSkaterStats>>
 }
 
 async function fetchAllGoalieStatsMap(): Promise<Map<number, NHLApiGoalieStats>> {
-  // Return from cache if available
+  // Return from memory cache if available
   if (goalieStatsCache) {
     return goalieStatsCache;
   }

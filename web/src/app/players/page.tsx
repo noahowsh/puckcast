@@ -28,7 +28,7 @@ export default async function PlayersPage() {
           <div className="nova-hero__grid">
             <div className="nova-hero__text">
               <div className="pill-row">
-                <span className="pill">2024-25 Season</span>
+                <span className="pill">2025-26 Season</span>
                 <span className="pill">Updated {updatedAt} ET</span>
               </div>
               <h1 className="display-xl">Player intelligence, distilled.</h1>
@@ -364,7 +364,7 @@ export default async function PlayersPage() {
                 <p className="chip-soft" style={{ marginTop: '0.25rem' }}>Top 25 by points • Min 5 GP</p>
               </div>
             </div>
-            <div className="power-board" style={{ borderRadius: '20px' }}>
+            <div className="table-container" style={{ borderRadius: '20px' }}>
               <SkaterStatsTable players={allSkaters} maxRows={25} />
             </div>
           </div>
@@ -377,7 +377,7 @@ export default async function PlayersPage() {
                 <p className="chip-soft" style={{ marginTop: '0.25rem' }}>Top 15 by wins • Min 3 GP</p>
               </div>
             </div>
-            <div className="power-board" style={{ borderRadius: '20px' }}>
+            <div className="table-container" style={{ borderRadius: '20px' }}>
               <GoalieStatsTable goalies={allGoalies} maxRows={15} />
             </div>
           </div>

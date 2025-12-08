@@ -26,7 +26,7 @@ export default async function GoaliePage() {
           <div className="nova-hero__grid">
             <div className="nova-hero__text">
               <div className="pill-row">
-                <span className="pill">2024-25 Season</span>
+                <span className="pill">2025-26 Season</span>
                 <span className="pill">Updated {updatedAt} ET</span>
               </div>
               <h1 className="display-xl">Goaltending breakdown.</h1>
@@ -213,7 +213,7 @@ export default async function GoaliePage() {
           <div style={{ marginBottom: '1rem' }}>
             <p className="chip-soft">Minimum 3 games played</p>
           </div>
-          <div className="power-board" style={{ borderRadius: '20px' }}>
+          <div className="table-container" style={{ borderRadius: '20px' }}>
             <GoalieStatsTable goalies={allGoalies} maxRows={30} />
           </div>
         </section>
