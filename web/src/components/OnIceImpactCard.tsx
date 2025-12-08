@@ -45,7 +45,7 @@ export function OnIceImpactCard({ impact, playerName, age }: OnIceImpactCardProp
         </div>
       </div>
 
-      <div className="p-8 space-y-8">
+      <div style={{ padding: '2rem' }} className="space-y-8">
         {/* FOR vs AGAINST Metrics Table */}
         <div className="bg-white/[0.02] rounded-lg overflow-hidden">
           {/* Header */}

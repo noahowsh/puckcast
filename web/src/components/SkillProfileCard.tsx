@@ -61,20 +61,22 @@ export function SkillProfileCard({ profile, playerName, age, evTOI }: SkillProfi
         </div>
       </div>
 
-      <div className="p-8 space-y-6">
-        {/* Overall Rating centered with chart below */}
-        <div className="flex flex-col items-center">
-          {/* Overall Rating - Centered at top */}
-          <div className="flex items-center gap-4 mb-6">
+      <div style={{ padding: '2rem' }} className="space-y-6">
+        {/* Overall Rating + Radar Chart Side by Side */}
+        <div className="flex items-start gap-8">
+          {/* Left: Overall Rating */}
+          <div className="flex-shrink-0">
             <OverallRatingDisplay rating={overallRating} />
-            <div className="max-w-xs">
-              <p className="text-xs text-white/60 leading-relaxed">{skillSummary}</p>
-            </div>
           </div>
 
-          {/* Radar Chart - Centered */}
-          <SkillRadarChart data={radarData} />
+          {/* Center: Radar Chart */}
+          <div className="flex-1 flex justify-center">
+            <SkillRadarChart data={radarData} />
+          </div>
         </div>
+
+        {/* Skill Summary */}
+        <p className="text-xs text-white/60 leading-relaxed">{skillSummary}</p>
 
         {/* Even Strength Impact */}
         <div>

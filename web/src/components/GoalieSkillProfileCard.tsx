@@ -92,20 +92,22 @@ export function GoalieSkillProfileCard({ stats, playerName, allGoalies, age }: G
         </div>
       </div>
 
-      <div className="p-8 space-y-6">
-        {/* Overall Rating + Radar Chart */}
-        <div className="flex flex-col items-center">
-          {/* Overall Rating - Centered at top */}
-          <div className="flex items-center gap-4 mb-6">
+      <div style={{ padding: '2rem' }} className="space-y-6">
+        {/* Overall Rating + Radar Chart Side by Side */}
+        <div className="flex items-start gap-8">
+          {/* Left: Overall Rating */}
+          <div className="flex-shrink-0">
             <OverallRatingDisplay percentile={overallPercentile} tier={overallTier} />
-            <div className="max-w-xs">
-              <p className="text-xs text-white/60 leading-relaxed">{skillSummary}</p>
-            </div>
           </div>
 
-          {/* Radar Chart - Centered */}
-          <GoalieRadarChart data={radarData} />
+          {/* Center: Radar Chart */}
+          <div className="flex-1 flex justify-center">
+            <GoalieRadarChart data={radarData} />
+          </div>
         </div>
+
+        {/* Skill Summary */}
+        <p className="text-xs text-white/60 leading-relaxed">{skillSummary}</p>
 
         {/* Core Metrics */}
         <div>
