@@ -1,0 +1,388 @@
+{
+  "updatedAt": "2025-12-08T12:00:00.000Z",
+  "source": "ESPN",
+  "teams": {
+    "TOR": {
+      "teamAbbrev": "TOR",
+      "teamName": "Toronto Maple Leafs",
+      "injuries": [
+        {
+          "playerId": 8478483,
+          "playerName": "Auston Matthews",
+          "teamAbbrev": "TOR",
+          "position": "C",
+          "status": "day-to-day",
+          "injuryType": "upper-body",
+          "injuryDescription": "Upper-body injury",
+          "dateInjured": "2025-12-01",
+          "expectedReturn": null,
+          "lastUpdated": "2025-12-08T12:00:00.000Z",
+          "isOut": false
+        }
+      ],
+      "totalOut": 0,
+      "forwardsOut": 0,
+      "defensemenOut": 0,
+      "goaliesOut": 0,
+      "impactRating": 5,
+      "lastUpdated": "2025-12-08T12:00:00.000Z"
+    },
+    "EDM": {
+      "teamAbbrev": "EDM",
+      "teamName": "Edmonton Oilers",
+      "injuries": [
+        {
+          "playerId": 8479318,
+          "playerName": "Evander Kane",
+          "teamAbbrev": "EDM",
+          "position": "L",
+          "status": "IR",
+          "injuryType": "lower-body",
+          "injuryDescription": "Lower-body injury, placed on IR",
+          "dateInjured": "2025-11-20",
+          "expectedReturn": "2025-12-20",
+          "lastUpdated": "2025-12-08T12:00:00.000Z",
+          "isOut": true
+        }
+      ],
+      "totalOut": 1,
+      "forwardsOut": 1,
+      "defensemenOut": 0,
+      "goaliesOut": 0,
+      "impactRating": 15,
+      "lastUpdated": "2025-12-08T12:00:00.000Z"
+    },
+    "BOS": {
+      "teamAbbrev": "BOS",
+      "teamName": "Boston Bruins",
+      "injuries": [],
+      "totalOut": 0,
+      "forwardsOut": 0,
+      "defensemenOut": 0,
+      "goaliesOut": 0,
+      "impactRating": 0,
+      "lastUpdated": "2025-12-08T12:00:00.000Z"
+    },
+    "NYR": {
+      "teamAbbrev": "NYR",
+      "teamName": "New York Rangers",
+      "injuries": [],
+      "totalOut": 0,
+      "forwardsOut": 0,
+      "defensemenOut": 0,
+      "goaliesOut": 0,
+      "impactRating": 0,
+      "lastUpdated": "2025-12-08T12:00:00.000Z"
+    },
+    "WPG": {
+      "teamAbbrev": "WPG",
+      "teamName": "Winnipeg Jets",
+      "injuries": [],
+      "totalOut": 0,
+      "forwardsOut": 0,
+      "defensemenOut": 0,
+      "goaliesOut": 0,
+      "impactRating": 0,
+      "lastUpdated": "2025-12-08T12:00:00.000Z"
+    },
+    "VGK": {
+      "teamAbbrev": "VGK",
+      "teamName": "Vegas Golden Knights",
+      "injuries": [],
+      "totalOut": 0,
+      "forwardsOut": 0,
+      "defensemenOut": 0,
+      "goaliesOut": 0,
+      "impactRating": 0,
+      "lastUpdated": "2025-12-08T12:00:00.000Z"
+    },
+    "FLA": {
+      "teamAbbrev": "FLA",
+      "teamName": "Florida Panthers",
+      "injuries": [],
+      "totalOut": 0,
+      "forwardsOut": 0,
+      "defensemenOut": 0,
+      "goaliesOut": 0,
+      "impactRating": 0,
+      "lastUpdated": "2025-12-08T12:00:00.000Z"
+    },
+    "DAL": {
+      "teamAbbrev": "DAL",
+      "teamName": "Dallas Stars",
+      "injuries": [],
+      "totalOut": 0,
+      "forwardsOut": 0,
+      "defensemenOut": 0,
+      "goaliesOut": 0,
+      "impactRating": 0,
+      "lastUpdated": "2025-12-08T12:00:00.000Z"
+    },
+    "COL": {
+      "teamAbbrev": "COL",
+      "teamName": "Colorado Avalanche",
+      "injuries": [],
+      "totalOut": 0,
+      "forwardsOut": 0,
+      "defensemenOut": 0,
+      "goaliesOut": 0,
+      "impactRating": 0,
+      "lastUpdated": "2025-12-08T12:00:00.000Z"
+    },
+    "CAR": {
+      "teamAbbrev": "CAR",
+      "teamName": "Carolina Hurricanes",
+      "injuries": [],
+      "totalOut": 0,
+      "forwardsOut": 0,
+      "defensemenOut": 0,
+      "goaliesOut": 0,
+      "impactRating": 0,
+      "lastUpdated": "2025-12-08T12:00:00.000Z"
+    },
+    "MIN": {
+      "teamAbbrev": "MIN",
+      "teamName": "Minnesota Wild",
+      "injuries": [],
+      "totalOut": 0,
+      "forwardsOut": 0,
+      "defensemenOut": 0,
+      "goaliesOut": 0,
+      "impactRating": 0,
+      "lastUpdated": "2025-12-08T12:00:00.000Z"
+    },
+    "NJD": {
+      "teamAbbrev": "NJD",
+      "teamName": "New Jersey Devils",
+      "injuries": [],
+      "totalOut": 0,
+      "forwardsOut": 0,
+      "defensemenOut": 0,
+      "goaliesOut": 0,
+      "impactRating": 0,
+      "lastUpdated": "2025-12-08T12:00:00.000Z"
+    },
+    "TBL": {
+      "teamAbbrev": "TBL",
+      "teamName": "Tampa Bay Lightning",
+      "injuries": [],
+      "totalOut": 0,
+      "forwardsOut": 0,
+      "defensemenOut": 0,
+      "goaliesOut": 0,
+      "impactRating": 0,
+      "lastUpdated": "2025-12-08T12:00:00.000Z"
+    },
+    "LAK": {
+      "teamAbbrev": "LAK",
+      "teamName": "Los Angeles Kings",
+      "injuries": [],
+      "totalOut": 0,
+      "forwardsOut": 0,
+      "defensemenOut": 0,
+      "goaliesOut": 0,
+      "impactRating": 0,
+      "lastUpdated": "2025-12-08T12:00:00.000Z"
+    },
+    "WSH": {
+      "teamAbbrev": "WSH",
+      "teamName": "Washington Capitals",
+      "injuries": [],
+      "totalOut": 0,
+      "forwardsOut": 0,
+      "defensemenOut": 0,
+      "goaliesOut": 0,
+      "impactRating": 0,
+      "lastUpdated": "2025-12-08T12:00:00.000Z"
+    },
+    "OTT": {
+      "teamAbbrev": "OTT",
+      "teamName": "Ottawa Senators",
+      "injuries": [],
+      "totalOut": 0,
+      "forwardsOut": 0,
+      "defensemenOut": 0,
+      "goaliesOut": 0,
+      "impactRating": 0,
+      "lastUpdated": "2025-12-08T12:00:00.000Z"
+    },
+    "VAN": {
+      "teamAbbrev": "VAN",
+      "teamName": "Vancouver Canucks",
+      "injuries": [],
+      "totalOut": 0,
+      "forwardsOut": 0,
+      "defensemenOut": 0,
+      "goaliesOut": 0,
+      "impactRating": 0,
+      "lastUpdated": "2025-12-08T12:00:00.000Z"
+    },
+    "CGY": {
+      "teamAbbrev": "CGY",
+      "teamName": "Calgary Flames",
+      "injuries": [],
+      "totalOut": 0,
+      "forwardsOut": 0,
+      "defensemenOut": 0,
+      "goaliesOut": 0,
+      "impactRating": 0,
+      "lastUpdated": "2025-12-08T12:00:00.000Z"
+    },
+    "SEA": {
+      "teamAbbrev": "SEA",
+      "teamName": "Seattle Kraken",
+      "injuries": [],
+      "totalOut": 0,
+      "forwardsOut": 0,
+      "defensemenOut": 0,
+      "goaliesOut": 0,
+      "impactRating": 0,
+      "lastUpdated": "2025-12-08T12:00:00.000Z"
+    },
+    "STL": {
+      "teamAbbrev": "STL",
+      "teamName": "St. Louis Blues",
+      "injuries": [],
+      "totalOut": 0,
+      "forwardsOut": 0,
+      "defensemenOut": 0,
+      "goaliesOut": 0,
+      "impactRating": 0,
+      "lastUpdated": "2025-12-08T12:00:00.000Z"
+    },
+    "MTL": {
+      "teamAbbrev": "MTL",
+      "teamName": "Montreal Canadiens",
+      "injuries": [],
+      "totalOut": 0,
+      "forwardsOut": 0,
+      "defensemenOut": 0,
+      "goaliesOut": 0,
+      "impactRating": 0,
+      "lastUpdated": "2025-12-08T12:00:00.000Z"
+    },
+    "PIT": {
+      "teamAbbrev": "PIT",
+      "teamName": "Pittsburgh Penguins",
+      "injuries": [],
+      "totalOut": 0,
+      "forwardsOut": 0,
+      "defensemenOut": 0,
+      "goaliesOut": 0,
+      "impactRating": 0,
+      "lastUpdated": "2025-12-08T12:00:00.000Z"
+    },
+    "NSH": {
+      "teamAbbrev": "NSH",
+      "teamName": "Nashville Predators",
+      "injuries": [],
+      "totalOut": 0,
+      "forwardsOut": 0,
+      "defensemenOut": 0,
+      "goaliesOut": 0,
+      "impactRating": 0,
+      "lastUpdated": "2025-12-08T12:00:00.000Z"
+    },
+    "DET": {
+      "teamAbbrev": "DET",
+      "teamName": "Detroit Red Wings",
+      "injuries": [],
+      "totalOut": 0,
+      "forwardsOut": 0,
+      "defensemenOut": 0,
+      "goaliesOut": 0,
+      "impactRating": 0,
+      "lastUpdated": "2025-12-08T12:00:00.000Z"
+    },
+    "PHI": {
+      "teamAbbrev": "PHI",
+      "teamName": "Philadelphia Flyers",
+      "injuries": [],
+      "totalOut": 0,
+      "forwardsOut": 0,
+      "defensemenOut": 0,
+      "goaliesOut": 0,
+      "impactRating": 0,
+      "lastUpdated": "2025-12-08T12:00:00.000Z"
+    },
+    "CBJ": {
+      "teamAbbrev": "CBJ",
+      "teamName": "Columbus Blue Jackets",
+      "injuries": [],
+      "totalOut": 0,
+      "forwardsOut": 0,
+      "defensemenOut": 0,
+      "goaliesOut": 0,
+      "impactRating": 0,
+      "lastUpdated": "2025-12-08T12:00:00.000Z"
+    },
+    "NYI": {
+      "teamAbbrev": "NYI",
+      "teamName": "New York Islanders",
+      "injuries": [],
+      "totalOut": 0,
+      "forwardsOut": 0,
+      "defensemenOut": 0,
+      "goaliesOut": 0,
+      "impactRating": 0,
+      "lastUpdated": "2025-12-08T12:00:00.000Z"
+    },
+    "ANA": {
+      "teamAbbrev": "ANA",
+      "teamName": "Anaheim Ducks",
+      "injuries": [],
+      "totalOut": 0,
+      "forwardsOut": 0,
+      "defensemenOut": 0,
+      "goaliesOut": 0,
+      "impactRating": 0,
+      "lastUpdated": "2025-12-08T12:00:00.000Z"
+    },
+    "BUF": {
+      "teamAbbrev": "BUF",
+      "teamName": "Buffalo Sabres",
+      "injuries": [],
+      "totalOut": 0,
+      "forwardsOut": 0,
+      "defensemenOut": 0,
+      "goaliesOut": 0,
+      "impactRating": 0,
+      "lastUpdated": "2025-12-08T12:00:00.000Z"
+    },
+    "SJS": {
+      "teamAbbrev": "SJS",
+      "teamName": "San Jose Sharks",
+      "injuries": [],
+      "totalOut": 0,
+      "forwardsOut": 0,
+      "defensemenOut": 0,
+      "goaliesOut": 0,
+      "impactRating": 0,
+      "lastUpdated": "2025-12-08T12:00:00.000Z"
+    },
+    "CHI": {
+      "teamAbbrev": "CHI",
+      "teamName": "Chicago Blackhawks",
+      "injuries": [],
+      "totalOut": 0,
+      "forwardsOut": 0,
+      "defensemenOut": 0,
+      "goaliesOut": 0,
+      "impactRating": 0,
+      "lastUpdated": "2025-12-08T12:00:00.000Z"
+    },
+    "UTA": {
+      "teamAbbrev": "UTA",
+      "teamName": "Utah Hockey Club",
+      "injuries": [],
+      "totalOut": 0,
+      "forwardsOut": 0,
+      "defensemenOut": 0,
+      "goaliesOut": 0,
+      "impactRating": 0,
+      "lastUpdated": "2025-12-08T12:00:00.000Z"
+    }
+  },
+  "totalInjuries": 2,
+  "recentChanges": []
+}

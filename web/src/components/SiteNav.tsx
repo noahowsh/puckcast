@@ -9,9 +9,8 @@ const links = [
   { href: "/", label: "Overview" },
   { href: "/predictions", label: "Predictions" },
   { href: "/leaderboards", label: "Power Rankings" },
-  { href: "/players", label: "Players" },
-  { href: "/goalies", label: "Goalies" },
   { href: "/teams", label: "Teams" },
+  { href: "/performance", label: "Performance" },
 ];
 
 export function SiteNav() {

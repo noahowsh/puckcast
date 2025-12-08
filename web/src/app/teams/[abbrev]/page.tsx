@@ -2,8 +2,10 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { computeStandingsPowerScore, getCurrentStandings, getCurrentPredictions } from "@/lib/current";
 import { fetchTeamRoster } from "@/lib/playerHub";
+import { buildProjectedLineup } from "@/lib/lineupService";
 import { TeamCrest } from "@/components/TeamCrest";
 import { SkaterStatsTable, GoalieStatsTable } from "@/components/PlayerStatsTable";
+import { ProjectedLineupDisplay, LineupStrengthCard } from "@/components/LineupDisplay";
 import powerIndexSnapshot from "@/data/powerIndexSnapshot.json";
 
 const movementReasons = powerIndexSnapshot.movementReasons as Record<string, string>;
@@ -161,8 +163,11 @@ export default async function TeamPage({ params }: { params: Promise<{ abbrev: s
     .filter((game) => game.homeTeam.abbrev === teamData.abbrev || game.awayTeam.abbrev === teamData.abbrev)
     .slice(0, 3);
 
-  // Fetch team roster
-  const roster = await fetchTeamRoster(teamData.abbrev);
+  // Fetch team roster and projected lineup in parallel
+  const [roster, projectedLineup] = await Promise.all([
+    fetchTeamRoster(teamData.abbrev),
+    buildProjectedLineup(teamData.abbrev),
+  ]);
   const allSkaters = [...roster.forwards, ...roster.defensemen].sort((a, b) => b.stats.points - a.stats.points);
 
   // Calculate efficiency metrics
@@ -700,35 +705,24 @@ export default async function TeamPage({ params }: { params: Promise<{ abbrev: s
           )}
         </section>
 
-        {/* Team Roster */}
-        {allSkaters.length > 0 && (
-          <section className="nova-section">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-xl font-bold text-white">Team Roster</h2>
+        {/* Projected Lineup */}
+        <section className="nova-section">
+          <div className="flex items-center justify-between mb-4">
+            <div>
+              <h2 className="text-xl font-bold text-white">Projected Lineup</h2>
+              <p className="text-sm text-white/50 mt-1">Players ranked by TOI, points, and performance metrics</p>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-xs text-white/40">
+                Updated: {new Date(projectedLineup.lastUpdated).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+              </span>
               <Link href="/players" className="text-sm text-sky-400 hover:text-sky-300 transition-colors">
-                View All Players →
+                All Players →
               </Link>
             </div>
-
-            {/* Skaters */}
-            <div className="mb-6">
-              <h3 className="text-sm font-semibold text-white/70 mb-3 uppercase tracking-wide">Skaters ({allSkaters.length})</h3>
-              <div className="card p-0 overflow-hidden">
-                <SkaterStatsTable players={allSkaters} showTeam={false} showRank={false} compact maxRows={15} />
-              </div>
-            </div>
-
-            {/* Goalies */}
-            {roster.goalies.length > 0 && (
-              <div>
-                <h3 className="text-sm font-semibold text-white/70 mb-3 uppercase tracking-wide">Goalies ({roster.goalies.length})</h3>
-                <div className="card p-0 overflow-hidden">
-                  <GoalieStatsTable goalies={roster.goalies} showTeam={false} showRank={false} compact />
-                </div>
-              </div>
-            )}
-          </section>
-        )}
+          </div>
+          <ProjectedLineupDisplay lineup={projectedLineup} />
+        </section>
 
         {/* Division Standings */}
         {teamDivision && (
