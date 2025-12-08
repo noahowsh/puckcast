@@ -49,8 +49,8 @@ export function OnIceImpactCard({ impact, playerName, age }: OnIceImpactCardProp
         {/* FOR vs AGAINST Metrics Table */}
         <div className="bg-white/[0.02] rounded-lg overflow-hidden">
           {/* Header */}
-          <div className="grid grid-cols-[120px_1fr_1fr] border-b border-white/[0.06]">
-            <div className="py-3 pl-6 pr-3"></div>
+          <div className="grid grid-cols-[130px_1fr_1fr] border-b border-white/[0.06]">
+            <div style={{ paddingLeft: '1.5rem' }} className="py-3 pr-3"></div>
             <div className="py-3 px-3 text-center">
               <span className="text-[11px] font-bold text-emerald-400 uppercase tracking-wide">FOR</span>
             </div>
@@ -104,8 +104,8 @@ export function OnIceImpactCard({ impact, playerName, age }: OnIceImpactCardProp
 
 function MetricRow({ label, forMetric, againstMetric, isLast = false }: { label: string; forMetric: ImpactMetric; againstMetric: ImpactMetric; isLast?: boolean }) {
   return (
-    <div className={`grid grid-cols-[120px_1fr_1fr] ${!isLast ? "border-b border-white/[0.04]" : ""}`}>
-      <div className="py-2.5 pl-6 pr-3 text-xs text-white/60">{label}</div>
+    <div className={`grid grid-cols-[130px_1fr_1fr] ${!isLast ? "border-b border-white/[0.04]" : ""}`}>
+      <div style={{ paddingLeft: '1.5rem' }} className="py-2.5 pr-3 text-xs text-white/60">{label}</div>
       <div className="py-2 px-3">
         <MetricBadge metric={forMetric} variant="for" />
       </div>

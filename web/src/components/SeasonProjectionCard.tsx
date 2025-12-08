@@ -24,13 +24,18 @@ export function SeasonProjectionCard({ projection, playerName }: SeasonProjectio
   // Generate histogram data from projection
   const histogramData = generateHistogramData(statProjection);
 
-  // Filter milestones to only show ones not yet achieved (below 100%)
+  // Filter milestones - show relevant range based on player's production
   const filterMilestones = (milestones: Record<number, number>, current: number) => {
-    return Object.fromEntries(
-      Object.entries(milestones)
-        .filter(([threshold, prob]) => parseInt(threshold) > current || prob < 99.9)
-        .slice(0, 6) // Show max 6 milestones
-    );
+    const entries = Object.entries(milestones)
+      .map(([k, v]) => [parseInt(k), v] as [number, number])
+      .filter(([threshold, prob]) => threshold > current && prob > 0.5) // Show thresholds above current with >0.5% chance
+      .sort((a, b) => a[0] - b[0]);
+
+    // For elite players, make sure we show milestones until probability drops below 10%
+    const lastHighProbIndex = entries.findIndex(([, prob]) => prob < 10);
+    const minMilestones = lastHighProbIndex > 0 ? Math.min(lastHighProbIndex + 2, entries.length) : 4;
+
+    return Object.fromEntries(entries.slice(0, Math.max(minMilestones, 8))); // Show 8 milestones or enough to cover high-prob ones
   };
 
   const filteredGoalMilestones = filterMilestones(milestoneProbabilities.goals, goals.current);
@@ -60,52 +65,52 @@ export function SeasonProjectionCard({ projection, playerName }: SeasonProjectio
           <h4 className="text-xs font-semibold text-white/60 uppercase tracking-wide mb-4">
             End of Season Projections
           </h4>
-          <div className="border border-white/[0.06] rounded-lg">
+          <div className="border border-white/[0.06] rounded-lg overflow-hidden">
             <table className="w-full text-sm">
               <thead>
                 <tr className="text-white/40 text-[10px] uppercase tracking-wider border-b border-white/[0.06]">
-                  <th className="text-left py-2.5 px-4"></th>
-                  <th className="text-center py-2.5 px-3 w-16">Goals</th>
-                  <th className="text-center py-2.5 px-3 w-16">Assists</th>
-                  <th className="text-center py-2.5 px-3 w-16">Points</th>
+                  <th style={{ paddingLeft: '1.25rem' }} className="text-left py-3 pr-4 w-24"></th>
+                  <th className="text-center py-3 px-4">Goals</th>
+                  <th className="text-center py-3 px-4">Assists</th>
+                  <th style={{ paddingRight: '1.25rem' }} className="text-center py-3 pl-4">Points</th>
                 </tr>
               </thead>
               <tbody className="text-xs">
                 <tr className="bg-white/[0.02]">
-                  <td className="py-2 px-4 text-white font-medium">Average</td>
-                  <td className="text-center py-2 px-3 text-white">{goals.average}</td>
-                  <td className="text-center py-2 px-3 text-white">{assists.average}</td>
-                  <td className="text-center py-2 px-3 text-sky-300 font-bold">{points.average}</td>
+                  <td style={{ paddingLeft: '1.25rem' }} className="py-2.5 pr-4 text-white font-medium">Average</td>
+                  <td className="text-center py-2.5 px-4 text-white">{goals.average}</td>
+                  <td className="text-center py-2.5 px-4 text-white">{assists.average}</td>
+                  <td style={{ paddingRight: '1.25rem' }} className="text-center py-2.5 pl-4 text-sky-300 font-bold">{points.average}</td>
                 </tr>
                 <tr>
-                  <td className="py-2 px-4 text-white/60">Median</td>
-                  <td className="text-center py-2 px-3 text-white/70">{goals.median}</td>
-                  <td className="text-center py-2 px-3 text-white/70">{assists.median}</td>
-                  <td className="text-center py-2 px-3 text-white/80">{points.median}</td>
+                  <td style={{ paddingLeft: '1.25rem' }} className="py-2.5 pr-4 text-white/60">Median</td>
+                  <td className="text-center py-2.5 px-4 text-white/70">{goals.median}</td>
+                  <td className="text-center py-2.5 px-4 text-white/70">{assists.median}</td>
+                  <td style={{ paddingRight: '1.25rem' }} className="text-center py-2.5 pl-4 text-white/80">{points.median}</td>
                 </tr>
                 <tr>
-                  <td className="py-2 px-4 text-white/60">Mode</td>
-                  <td className="text-center py-2 px-3 text-white/70">{goals.mode}</td>
-                  <td className="text-center py-2 px-3 text-white/70">{assists.mode}</td>
-                  <td className="text-center py-2 px-3 text-white/80">{points.mode}</td>
+                  <td style={{ paddingLeft: '1.25rem' }} className="py-2.5 pr-4 text-white/60">Mode</td>
+                  <td className="text-center py-2.5 px-4 text-white/70">{goals.mode}</td>
+                  <td className="text-center py-2.5 px-4 text-white/70">{assists.mode}</td>
+                  <td style={{ paddingRight: '1.25rem' }} className="text-center py-2.5 pl-4 text-white/80">{points.mode}</td>
                 </tr>
                 <tr>
-                  <td className="py-2 px-4 text-white/40">Min</td>
-                  <td className="text-center py-2 px-3 text-white/40">{goals.min}</td>
-                  <td className="text-center py-2 px-3 text-white/40">{assists.min}</td>
-                  <td className="text-center py-2 px-3 text-white/50">{points.min}</td>
+                  <td style={{ paddingLeft: '1.25rem' }} className="py-2.5 pr-4 text-white/40">Min</td>
+                  <td className="text-center py-2.5 px-4 text-white/40">{goals.min}</td>
+                  <td className="text-center py-2.5 px-4 text-white/40">{assists.min}</td>
+                  <td style={{ paddingRight: '1.25rem' }} className="text-center py-2.5 pl-4 text-white/50">{points.min}</td>
                 </tr>
                 <tr>
-                  <td className="py-2 px-4 text-white/40">Max</td>
-                  <td className="text-center py-2 px-3 text-white/40">{goals.max}</td>
-                  <td className="text-center py-2 px-3 text-white/40">{assists.max}</td>
-                  <td className="text-center py-2 px-3 text-white/50">{points.max}</td>
+                  <td style={{ paddingLeft: '1.25rem' }} className="py-2.5 pr-4 text-white/40">Max</td>
+                  <td className="text-center py-2.5 px-4 text-white/40">{goals.max}</td>
+                  <td className="text-center py-2.5 px-4 text-white/40">{assists.max}</td>
+                  <td style={{ paddingRight: '1.25rem' }} className="text-center py-2.5 pl-4 text-white/50">{points.max}</td>
                 </tr>
                 <tr className="border-t border-white/[0.06] bg-white/[0.01]">
-                  <td className="py-2 px-4 text-white/50 italic text-[10px]">Current</td>
-                  <td className="text-center py-2 px-3 text-emerald-400 font-medium">{goals.current}</td>
-                  <td className="text-center py-2 px-3 text-amber-400 font-medium">{assists.current}</td>
-                  <td className="text-center py-2 px-3 text-sky-300 font-bold">{points.current}</td>
+                  <td style={{ paddingLeft: '1.25rem' }} className="py-2.5 pr-4 text-white/50 italic text-[10px]">Current</td>
+                  <td className="text-center py-2.5 px-4 text-emerald-400 font-medium">{goals.current}</td>
+                  <td className="text-center py-2.5 px-4 text-amber-400 font-medium">{assists.current}</td>
+                  <td style={{ paddingRight: '1.25rem' }} className="text-center py-2.5 pl-4 text-sky-300 font-bold">{points.current}</td>
                 </tr>
               </tbody>
             </table>
@@ -324,11 +329,11 @@ function MilestoneRow({
   };
 
   return (
-    <div className="flex items-center gap-3">
-      <span className="text-[11px] font-medium text-white/50 w-14">{label}</span>
-      <div className="flex-1 flex gap-2 overflow-x-auto">
+    <div className="flex items-center gap-4">
+      <span className="text-[11px] font-medium text-white/50 w-14 flex-shrink-0">{label}</span>
+      <div className="flex-1 grid gap-2" style={{ gridTemplateColumns: `repeat(${entries.length}, 1fr)` }}>
         {entries.map(([milestone, probability]) => (
-          <div key={milestone} className={`flex-shrink-0 px-2.5 py-1.5 rounded text-center min-w-[48px] ${getColorClass(probability)}`}>
+          <div key={milestone} className={`py-2 px-2 rounded text-center ${getColorClass(probability)}`}>
             <p className="text-[10px] font-medium opacity-80">{milestone}</p>
             <p className="text-[11px] font-bold">{probability.toFixed(0)}%</p>
           </div>
