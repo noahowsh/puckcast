@@ -1,11 +1,10 @@
 #!/usr/bin/env python3
-"""Fetch NHL injury data from ESPN and write to injuries.json.
+"""Fetch NHL injury data from DailyFaceoff and ESPN.
 
-This script scrapes ESPN's NHL injuries page and creates a structured
-JSON file for use by the web frontend.
+This script scrapes DailyFaceoff's team line combination pages which include
+comprehensive injury data for each team. Falls back to ESPN if needed.
 
-Note: Rotowire was considered but requires JavaScript rendering.
-ESPN provides reliable HTML that can be scraped directly.
+DailyFaceoff provides more complete IR data than ESPN alone.
 """
 
 from __future__ import annotations
@@ -13,6 +12,7 @@ from __future__ import annotations
 import argparse
 import json
 import re
+import time
 from datetime import datetime
 from pathlib import Path
 from typing import Any
@@ -21,7 +21,44 @@ import requests
 from bs4 import BeautifulSoup
 
 ESPN_INJURIES_URL = "https://www.espn.com/nhl/injuries"
+DAILYFACEOFF_BASE_URL = "https://www.dailyfaceoff.com/teams"
 OUTPUT_PATH = Path(__file__).resolve().parents[1] / "web" / "src" / "data" / "injuries.json"
+
+# DailyFaceoff team slugs
+TEAM_SLUGS = {
+    "ANA": "anaheim-ducks",
+    "BOS": "boston-bruins",
+    "BUF": "buffalo-sabres",
+    "CGY": "calgary-flames",
+    "CAR": "carolina-hurricanes",
+    "CHI": "chicago-blackhawks",
+    "COL": "colorado-avalanche",
+    "CBJ": "columbus-blue-jackets",
+    "DAL": "dallas-stars",
+    "DET": "detroit-red-wings",
+    "EDM": "edmonton-oilers",
+    "FLA": "florida-panthers",
+    "LAK": "los-angeles-kings",
+    "MIN": "minnesota-wild",
+    "MTL": "montreal-canadiens",
+    "NSH": "nashville-predators",
+    "NJD": "new-jersey-devils",
+    "NYI": "new-york-islanders",
+    "NYR": "new-york-rangers",
+    "OTT": "ottawa-senators",
+    "PHI": "philadelphia-flyers",
+    "PIT": "pittsburgh-penguins",
+    "SJS": "san-jose-sharks",
+    "SEA": "seattle-kraken",
+    "STL": "st-louis-blues",
+    "TBL": "tampa-bay-lightning",
+    "TOR": "toronto-maple-leafs",
+    "UTA": "utah-hockey-club",
+    "VAN": "vancouver-canucks",
+    "VGK": "vegas-golden-knights",
+    "WSH": "washington-capitals",
+    "WPG": "winnipeg-jets",
+}
 
 # Team name to abbreviation mapping
 TEAM_NAME_TO_ABBREV = {
@@ -179,6 +216,195 @@ def generate_player_id(name: str, team: str) -> int:
 def is_forward(position: str) -> bool:
     """Check if position is a forward position."""
     return position.upper() in ("C", "L", "R", "LW", "RW", "W", "F")
+
+
+def scrape_dailyfaceoff_team(team_abbrev: str, slug: str, timeout: float) -> list[dict[str, Any]]:
+    """Scrape injuries for a single team from DailyFaceoff."""
+    url = f"{DAILYFACEOFF_BASE_URL}/{slug}/line-combinations/"
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+        "Accept-Language": "en-US,en;q=0.5",
+        "Connection": "keep-alive",
+    }
+
+    try:
+        response = requests.get(url, headers=headers, timeout=timeout)
+        response.raise_for_status()
+    except requests.RequestException as e:
+        print(f"  ⚠️  Failed to fetch {team_abbrev}: {e}")
+        return []
+
+    soup = BeautifulSoup(response.text, "html.parser")
+    injuries = []
+    now = datetime.utcnow().isoformat() + "Z"
+
+    # DailyFaceoff structure: Look for injury cards/sections
+    # They have player cards with injury status badges (IR, DTD, OUT)
+
+    # Method 1: Look for injury section
+    injury_section = soup.find("section", class_=re.compile(r"injur", re.I))
+    if not injury_section:
+        # Try finding by heading
+        injury_heading = soup.find(string=re.compile(r"injur", re.I))
+        if injury_heading:
+            injury_section = injury_heading.find_parent("section") or injury_heading.find_parent("div")
+
+    # Method 2: Look for player cards with injury status anywhere on page
+    # DailyFaceoff uses status badges like "IR", "DTD", "OUT"
+    status_badges = soup.find_all(string=re.compile(r"^\s*(IR|DTD|OUT|IR-LT|IR-NR)\s*$", re.I))
+
+    for badge in status_badges:
+        # Find the parent player card
+        player_card = badge.find_parent(class_=re.compile(r"player|card", re.I))
+        if not player_card:
+            # Try going up a few levels
+            parent = badge.parent
+            for _ in range(5):
+                if parent is None:
+                    break
+                if parent.name in ("a", "div", "li") and parent.get("href") or parent.find("a"):
+                    player_card = parent
+                    break
+                parent = parent.parent
+
+        if not player_card:
+            continue
+
+        # Extract player name
+        player_name = None
+        # Look for player name in links or specific elements
+        name_link = player_card.find("a", href=re.compile(r"/players/"))
+        if name_link:
+            player_name = name_link.get_text(strip=True)
+        else:
+            # Try finding any text that looks like a name
+            text_elements = player_card.find_all(text=True)
+            for text in text_elements:
+                text = text.strip()
+                # Skip status badges and empty text
+                if text and text.upper() not in ("IR", "DTD", "OUT", "IR-LT", "IR-NR", ""):
+                    # Check if it looks like a name (has space, reasonable length)
+                    if " " in text and 5 < len(text) < 50:
+                        player_name = text
+                        break
+
+        if not player_name:
+            continue
+
+        # Get status
+        status_text = badge.strip().upper()
+        status, is_out = parse_status(status_text)
+
+        # Try to determine position from context
+        position = "L"  # Default to forward
+        pos_match = player_card.find(string=re.compile(r"^\s*(C|LW|RW|D|G|F|W)\s*$", re.I))
+        if pos_match:
+            position = normalize_position(pos_match.strip())
+
+        # Look for injury description in nearby text or tooltips
+        injury_desc = ""
+        tooltip = player_card.get("title") or player_card.get("data-tooltip")
+        if tooltip:
+            injury_desc = tooltip
+
+        injury = {
+            "playerId": generate_player_id(player_name, team_abbrev),
+            "playerName": player_name,
+            "teamAbbrev": team_abbrev,
+            "position": position,
+            "status": status,
+            "injuryType": parse_injury_type(injury_desc or status_text),
+            "injuryDescription": injury_desc or status_text,
+            "dateInjured": None,
+            "expectedReturn": None,
+            "lastUpdated": now,
+            "isOut": is_out,
+        }
+        injuries.append(injury)
+
+    # Method 3: Parse the full page for any player with injury status
+    # Look for elements containing both a player name link and status badge
+    all_player_links = soup.find_all("a", href=re.compile(r"/players/"))
+    for link in all_player_links:
+        player_name = link.get_text(strip=True)
+        if not player_name or len(player_name) < 3:
+            continue
+
+        # Check nearby elements for status
+        parent = link.parent
+        for _ in range(3):
+            if parent is None:
+                break
+            status_elem = parent.find(string=re.compile(r"^\s*(IR|DTD|OUT|IR-LT|IR-NR)\s*$", re.I))
+            if status_elem:
+                status_text = status_elem.strip().upper()
+                status, is_out = parse_status(status_text)
+
+                # Check if we already have this player
+                if any(i["playerName"] == player_name for i in injuries):
+                    break
+
+                # Try to get position
+                position = "L"
+                pos_elem = parent.find(string=re.compile(r"^\s*(C|LW|RW|D|G)\s*$", re.I))
+                if pos_elem:
+                    position = normalize_position(pos_elem.strip())
+
+                injury = {
+                    "playerId": generate_player_id(player_name, team_abbrev),
+                    "playerName": player_name,
+                    "teamAbbrev": team_abbrev,
+                    "position": position,
+                    "status": status,
+                    "injuryType": parse_injury_type(status_text),
+                    "injuryDescription": status_text,
+                    "dateInjured": None,
+                    "expectedReturn": None,
+                    "lastUpdated": now,
+                    "isOut": is_out,
+                }
+                injuries.append(injury)
+                break
+            parent = parent.parent
+
+    return injuries
+
+
+def scrape_dailyfaceoff_all(timeout: float) -> dict[str, Any]:
+    """Scrape injuries from DailyFaceoff for all teams."""
+    teams: dict[str, Any] = {}
+    now = datetime.utcnow().isoformat() + "Z"
+
+    print("📋 Scraping DailyFaceoff for all teams...")
+
+    for team_abbrev, slug in TEAM_SLUGS.items():
+        print(f"  Fetching {team_abbrev}...")
+        injuries = scrape_dailyfaceoff_team(team_abbrev, slug, timeout)
+
+        # Get team name from slug
+        team_name = slug.replace("-", " ").title()
+
+        forwards_out = sum(1 for i in injuries if i["isOut"] and is_forward(i["position"]))
+        defensemen_out = sum(1 for i in injuries if i["isOut"] and i["position"] == "D")
+        goalies_out = sum(1 for i in injuries if i["isOut"] and i["position"] == "G")
+
+        teams[team_abbrev] = {
+            "teamAbbrev": team_abbrev,
+            "teamName": team_name,
+            "injuries": injuries,
+            "totalOut": sum(1 for i in injuries if i["isOut"]),
+            "forwardsOut": forwards_out,
+            "defensemenOut": defensemen_out,
+            "goaliesOut": goalies_out,
+            "impactRating": 0,  # Will calculate later
+            "lastUpdated": now,
+        }
+
+        # Be polite - don't hammer the server
+        time.sleep(0.5)
+
+    return teams
 
 
 def scrape_espn_injuries(timeout: float) -> dict[str, Any]:
@@ -339,14 +565,75 @@ def ensure_all_teams(teams: dict[str, Any]) -> dict[str, Any]:
     return teams
 
 
-def build_report(teams: dict[str, Any]) -> dict[str, Any]:
+def merge_injury_data(primary: dict[str, Any], secondary: dict[str, Any]) -> dict[str, Any]:
+    """Merge injury data from two sources, preferring primary but adding unique entries from secondary."""
+    merged = {}
+    now = datetime.utcnow().isoformat() + "Z"
+
+    all_abbrevs = set(primary.keys()) | set(secondary.keys())
+
+    for abbrev in all_abbrevs:
+        primary_team = primary.get(abbrev, {})
+        secondary_team = secondary.get(abbrev, {})
+
+        # Start with primary injuries
+        injuries = list(primary_team.get("injuries", []))
+        existing_names = {i["playerName"].lower() for i in injuries}
+
+        # Add unique injuries from secondary source
+        for injury in secondary_team.get("injuries", []):
+            if injury["playerName"].lower() not in existing_names:
+                injuries.append(injury)
+                existing_names.add(injury["playerName"].lower())
+
+        # Recalculate stats
+        forwards_out = sum(1 for i in injuries if i["isOut"] and is_forward(i["position"]))
+        defensemen_out = sum(1 for i in injuries if i["isOut"] and i["position"] == "D")
+        goalies_out = sum(1 for i in injuries if i["isOut"] and i["position"] == "G")
+        total_out = sum(1 for i in injuries if i["isOut"])
+
+        # Calculate impact
+        impact = 0
+        for inj in injuries:
+            if not inj["isOut"]:
+                continue
+            pos = inj["position"]
+            if pos == "G":
+                impact += 25
+            elif pos == "D":
+                impact += 15
+            else:
+                impact += 10
+            if inj["status"] == "IR-LT":
+                impact += 5
+            elif inj["status"] == "IR":
+                impact += 3
+
+        team_name = primary_team.get("teamName") or secondary_team.get("teamName") or abbrev
+
+        merged[abbrev] = {
+            "teamAbbrev": abbrev,
+            "teamName": team_name,
+            "injuries": injuries,
+            "totalOut": total_out,
+            "forwardsOut": forwards_out,
+            "defensemenOut": defensemen_out,
+            "goaliesOut": goalies_out,
+            "impactRating": min(100, impact),
+            "lastUpdated": now,
+        }
+
+    return merged
+
+
+def build_report(teams: dict[str, Any], source: str = "ESPN") -> dict[str, Any]:
     """Build the final injury report."""
     now = datetime.utcnow().isoformat() + "Z"
     total_injuries = sum(len(t.get("injuries", [])) for t in teams.values())
 
     return {
         "updatedAt": now,
-        "source": "ESPN",
+        "source": source,
         "teams": teams,
         "totalInjuries": total_injuries,
         "recentChanges": [],
@@ -356,16 +643,38 @@ def build_report(teams: dict[str, Any]) -> dict[str, Any]:
 def main() -> None:
     args = parse_args()
 
-    print(f"🏒 Fetching NHL injuries from ESPN...")
+    print(f"🏒 Fetching NHL injuries...")
 
-    teams = scrape_espn_injuries(args.timeout)
+    # Try DailyFaceoff first (more complete data)
+    df_teams = {}
+    try:
+        df_teams = scrape_dailyfaceoff_all(args.timeout)
+        df_count = sum(len(t.get("injuries", [])) for t in df_teams.values())
+        print(f"  ✅ DailyFaceoff: {df_count} injuries found")
+    except Exception as e:
+        print(f"  ⚠️  DailyFaceoff scraping failed: {e}")
+
+    # Also get ESPN data (has return dates)
+    print("\n📋 Scraping ESPN for additional data...")
+    espn_teams = scrape_espn_injuries(args.timeout)
+    espn_count = sum(len(t.get("injuries", [])) for t in espn_teams.values())
+    print(f"  ✅ ESPN: {espn_count} injuries found")
+
+    # Merge the data, preferring DailyFaceoff but adding ESPN's return dates
+    if df_teams:
+        # Use DailyFaceoff as primary, ESPN as secondary
+        teams = merge_injury_data(df_teams, espn_teams)
+        source = "DailyFaceoff + ESPN"
+    else:
+        teams = espn_teams
+        source = "ESPN"
 
     if not teams:
-        print("⚠️  No injury data scraped, ESPN might have changed their page structure.")
+        print("⚠️  No injury data scraped from any source.")
         print("    Generating empty template for all teams...")
 
     teams = ensure_all_teams(teams)
-    report = build_report(teams)
+    report = build_report(teams, source)
 
     # Write output
     args.output.parent.mkdir(parents=True, exist_ok=True)

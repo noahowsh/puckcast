@@ -25,8 +25,8 @@ import type {
 // =============================================================================
 
 const CURRENT_SEASON = "20252026";
-const MIN_SKATER_GAMES = 5;
-const MIN_GOALIE_GAMES = 3;
+const MIN_SKATER_GAMES = 1;  // Show all players with at least 1 game (includes AHL call-ups)
+const MIN_GOALIE_GAMES = 1;  // Show all goalies with at least 1 game
 const LEADERS_LIMIT = 10;
 const ROSTER_CACHE_TTL = 3600; // 1 hour
 const FILE_CACHE_TTL = 3600 * 1000; // 1 hour in milliseconds
@@ -428,27 +428,74 @@ export async function fetchTeamRoster(teamAbbrev: string): Promise<TeamRoster> {
     };
   }
 
-  // Convert forwards
+  // Track player IDs we've already added from the roster
+  const rosterPlayerIds = new Set<number>([
+    ...roster.forwards.map(p => p.id),
+    ...roster.defensemen.map(p => p.id),
+    ...roster.goalies.map(p => p.id),
+  ]);
+
+  // Convert forwards from roster
   const forwards: SkaterCard[] = roster.forwards
     .map(player => mergeRosterWithStats(player, skaterStatsMap.get(player.id), teamAbbrev))
-    .filter((p): p is SkaterCard => p !== null)
-    .sort((a, b) => b.stats.points - a.stats.points);
+    .filter((p): p is SkaterCard => p !== null);
 
-  // Convert defensemen
+  // Convert defensemen from roster
   const defensemen: SkaterCard[] = roster.defensemen
     .map(player => mergeRosterWithStats(player, skaterStatsMap.get(player.id), teamAbbrev))
-    .filter((p): p is SkaterCard => p !== null)
-    .sort((a, b) => b.stats.points - a.stats.points);
+    .filter((p): p is SkaterCard => p !== null);
 
-  // Convert goalies
+  // Convert goalies from roster
   const goalies: GoalieDetailCard[] = roster.goalies
     .map(player => mergeGoalieRosterWithStats(player, goalieStatsMap.get(player.id), teamAbbrev))
-    .filter((g): g is GoalieDetailCard => g !== null)
-    .sort((a, b) => b.stats.wins - a.stats.wins);
+    .filter((g): g is GoalieDetailCard => g !== null);
+
+  // Add players from stats API who played for this team but aren't on current roster (AHL call-ups)
+  for (const [playerId, statsData] of skaterStatsMap) {
+    if (rosterPlayerIds.has(playerId)) continue;
+
+    // Check if this player played for this team
+    const playerTeams = (statsData.teamAbbrevs || "").split(",").map(t => t.trim().toUpperCase());
+    if (!playerTeams.includes(teamAbbrev)) continue;
+
+    // Only include if they have played at least 1 game
+    if (statsData.gamesPlayed < 1) continue;
+
+    const card = mapNHLSkaterToCard(statsData);
+    card.bio.teamAbbrev = teamAbbrev;
+    card.stats.teamAbbrev = teamAbbrev;
+
+    const position = statsData.positionCode?.toUpperCase() || "C";
+    if (["C", "L", "R", "LW", "RW", "W", "F"].includes(position)) {
+      forwards.push(card);
+    } else if (position === "D") {
+      defensemen.push(card);
+    }
+  }
+
+  // Add goalies from stats API who played for this team but aren't on current roster
+  for (const [playerId, statsData] of goalieStatsMap) {
+    if (rosterPlayerIds.has(playerId)) continue;
+
+    const playerTeams = (statsData.teamAbbrevs || "").split(",").map(t => t.trim().toUpperCase());
+    if (!playerTeams.includes(teamAbbrev)) continue;
+
+    if (statsData.gamesPlayed < 1) continue;
+
+    const card = mapNHLGoalieToCard(statsData);
+    card.bio.teamAbbrev = teamAbbrev;
+    card.stats.teamAbbrev = teamAbbrev;
+    goalies.push(card);
+  }
+
+  // Sort all by points/wins
+  forwards.sort((a, b) => b.stats.points - a.stats.points);
+  defensemen.sort((a, b) => b.stats.points - a.stats.points);
+  goalies.sort((a, b) => b.stats.wins - a.stats.wins);
 
   return {
     teamAbbrev,
-    teamName: teamAbbrev, // Could be enhanced to get full team name
+    teamName: teamAbbrev,
     forwards,
     defensemen,
     goalies,
