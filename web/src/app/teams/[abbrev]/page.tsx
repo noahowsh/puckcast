@@ -786,13 +786,13 @@ export default async function TeamPage({ params }: { params: Promise<{ abbrev: s
             <div className="flex items-center justify-between mb-4">
               <div>
                 <h2 className="text-xl font-bold text-white">Skater Statistics</h2>
-                <p className="text-sm text-white/50 mt-1">Current season stats for all skaters</p>
+                <p className="text-sm text-white/50 mt-1">Current season stats for team skaters</p>
               </div>
-              <Link href="/players" className="text-sm text-sky-400 hover:text-sky-300 transition-colors">
+              <Link href="/players" className="text-sm text-sky-400 hover:text-sky-300 transition-colors font-medium">
                 League Leaders →
               </Link>
             </div>
-            <div className="card" style={{ padding: 0, overflow: 'hidden' }}>
+            <div className="rounded-xl border border-white/[0.06] bg-gradient-to-b from-white/[0.02] to-transparent overflow-hidden">
               <SkaterStatsTable
                 players={allSkaters}
                 showTeam={false}
@@ -812,7 +812,7 @@ export default async function TeamPage({ params }: { params: Promise<{ abbrev: s
                 <p className="text-sm text-white/50 mt-1">Current season stats for team goalies</p>
               </div>
             </div>
-            <div className="card" style={{ padding: 0, overflow: 'hidden' }}>
+            <div className="rounded-xl border border-white/[0.06] bg-gradient-to-b from-white/[0.02] to-transparent overflow-hidden">
               <GoalieStatsTable
                 goalies={roster.goalies}
                 showTeam={false}
