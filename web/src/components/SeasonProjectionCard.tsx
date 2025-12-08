@@ -54,7 +54,7 @@ export function SeasonProjectionCard({ projection, playerName }: SeasonProjectio
         </div>
       </div>
 
-      <div style={{ padding: '2rem' }} className="space-y-10">
+      <div style={{ padding: '2rem' }}>
         {/* End of Season Projections Table */}
         <div>
           <h4 className="text-xs font-semibold text-white/60 uppercase tracking-wide mb-4">
@@ -113,7 +113,7 @@ export function SeasonProjectionCard({ projection, playerName }: SeasonProjectio
         </div>
 
         {/* Distribution Chart */}
-        <div className="pt-4">
+        <div style={{ marginTop: '2.5rem' }}>
           <div className="flex items-center justify-between mb-3">
             <h4 className="text-xs font-semibold text-white/60 uppercase tracking-wide">
               Projection Distribution
@@ -136,10 +136,10 @@ export function SeasonProjectionCard({ projection, playerName }: SeasonProjectio
         </div>
 
         {/* Distribution Summary */}
-        <p className="text-xs text-white/60 leading-relaxed">{distributionSummary}</p>
+        <p style={{ marginTop: '2rem' }} className="text-xs text-white/60 leading-relaxed">{distributionSummary}</p>
 
         {/* Awards Watch */}
-        <div className="pt-4">
+        <div style={{ marginTop: '2.5rem' }}>
           <h4 className="text-xs font-semibold text-white/60 uppercase tracking-wide mb-4">
             Awards Watch
           </h4>
@@ -154,7 +154,7 @@ export function SeasonProjectionCard({ projection, playerName }: SeasonProjectio
         {(Object.keys(filteredGoalMilestones).length > 0 ||
           Object.keys(filteredAssistMilestones).length > 0 ||
           Object.keys(filteredPointMilestones).length > 0) && (
-          <div className="pt-4">
+          <div style={{ marginTop: '2.5rem' }}>
             <h4 className="text-xs font-semibold text-white/60 uppercase tracking-wide mb-4">
               Milestone Tracker
             </h4>
@@ -173,7 +173,7 @@ export function SeasonProjectionCard({ projection, playerName }: SeasonProjectio
         )}
 
         {/* Footer */}
-        <p className="text-[10px] text-white/30 leading-relaxed pt-6 border-t border-white/[0.06]">
+        <p style={{ marginTop: '2.5rem', paddingTop: '1.5rem' }} className="text-[10px] text-white/30 leading-relaxed border-t border-white/[0.06]">
           Projections based on current pace extrapolated to 82 games with variance modeling.
         </p>
       </div>

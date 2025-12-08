@@ -61,11 +61,11 @@ export function SkillProfileCard({ profile, playerName, age, evTOI }: SkillProfi
         </div>
       </div>
 
-      <div style={{ padding: '2rem' }} className="space-y-6">
+      <div style={{ padding: '2rem' }}>
         {/* Two Column Layout: Left (rating + key) | Right (chart + description) */}
-        <div className="grid grid-cols-[140px_1fr] gap-8">
+        <div className="grid grid-cols-[150px_1fr] gap-6 items-center">
           {/* Left Column: Rating + Legend Key */}
-          <div className="flex flex-col items-center gap-6">
+          <div className="flex flex-col items-center gap-5">
             {/* Overall Rating */}
             <OverallRatingDisplay rating={overallRating} />
 
@@ -83,14 +83,14 @@ export function SkillProfileCard({ profile, playerName, age, evTOI }: SkillProfi
           </div>
 
           {/* Right Column: Chart + Description */}
-          <div className="flex flex-col items-center gap-4">
+          <div className="flex flex-col items-center gap-3">
             <SkillRadarChart data={radarData} />
-            <p className="text-xs text-white/60 leading-relaxed text-center">{skillSummary}</p>
+            <p className="text-xs text-white/60 leading-relaxed text-center max-w-sm">{skillSummary}</p>
           </div>
         </div>
 
         {/* Even Strength Impact */}
-        <div className="pt-2">
+        <div style={{ marginTop: '2rem' }}>
           <h4 className="text-xs font-semibold text-white/60 uppercase tracking-wide mb-4">
             Even Strength Impact
           </h4>
@@ -102,7 +102,7 @@ export function SkillProfileCard({ profile, playerName, age, evTOI }: SkillProfi
         </div>
 
         {/* Special Teams Impact */}
-        <div className="pt-2">
+        <div style={{ marginTop: '2rem' }}>
           <h4 className="text-xs font-semibold text-white/60 uppercase tracking-wide mb-4">
             Special Teams Impact
           </h4>
@@ -114,7 +114,7 @@ export function SkillProfileCard({ profile, playerName, age, evTOI }: SkillProfi
         </div>
 
         {/* Talent Profile */}
-        <div className="pt-2">
+        <div style={{ marginTop: '2rem' }}>
           <h4 className="text-xs font-semibold text-white/60 uppercase tracking-wide mb-4">
             Talent Profile
           </h4>

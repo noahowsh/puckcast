@@ -45,12 +45,12 @@ export function OnIceImpactCard({ impact, playerName, age }: OnIceImpactCardProp
         </div>
       </div>
 
-      <div style={{ padding: '2rem' }} className="space-y-8">
+      <div style={{ padding: '2rem' }}>
         {/* FOR vs AGAINST Metrics Table */}
         <div className="bg-white/[0.02] rounded-lg overflow-hidden">
           {/* Header */}
-          <div className="grid grid-cols-[110px_1fr_1fr] border-b border-white/[0.06]">
-            <div className="py-3 px-4"></div>
+          <div className="grid grid-cols-[120px_1fr_1fr] border-b border-white/[0.06]">
+            <div className="py-3 pl-6 pr-3"></div>
             <div className="py-3 px-3 text-center">
               <span className="text-[11px] font-bold text-emerald-400 uppercase tracking-wide">FOR</span>
             </div>
@@ -67,7 +67,7 @@ export function OnIceImpactCard({ impact, playerName, age }: OnIceImpactCardProp
         </div>
 
         {/* General Metrics */}
-        <div className="pt-2">
+        <div style={{ marginTop: '2rem' }}>
           <h4 className="text-xs font-semibold text-white/60 uppercase tracking-wide mb-4">General</h4>
           <div className="grid grid-cols-4 gap-4">
             <GeneralMetric label="Net xGoals" metric={general.netExpectedGoals} />
@@ -78,10 +78,10 @@ export function OnIceImpactCard({ impact, playerName, age }: OnIceImpactCardProp
         </div>
 
         {/* Impact Summary */}
-        <p className="text-xs text-white/60 leading-relaxed">{impactSummary}</p>
+        <p style={{ marginTop: '1.5rem' }} className="text-xs text-white/60 leading-relaxed">{impactSummary}</p>
 
         {/* Legend & Notes */}
-        <div className="pt-6 border-t border-white/[0.06] space-y-3">
+        <div style={{ marginTop: '2rem', paddingTop: '1.5rem' }} className="border-t border-white/[0.06] space-y-3">
           <div className="flex items-center justify-center gap-3">
             <LegendItem color="bg-rose-500/50" label="Poor" />
             <LegendItem color="bg-amber-500/40" label="Below Avg" />
@@ -104,8 +104,8 @@ export function OnIceImpactCard({ impact, playerName, age }: OnIceImpactCardProp
 
 function MetricRow({ label, forMetric, againstMetric, isLast = false }: { label: string; forMetric: ImpactMetric; againstMetric: ImpactMetric; isLast?: boolean }) {
   return (
-    <div className={`grid grid-cols-[110px_1fr_1fr] ${!isLast ? "border-b border-white/[0.04]" : ""}`}>
-      <div className="py-2.5 px-4 text-xs text-white/60">{label}</div>
+    <div className={`grid grid-cols-[120px_1fr_1fr] ${!isLast ? "border-b border-white/[0.04]" : ""}`}>
+      <div className="py-2.5 pl-6 pr-3 text-xs text-white/60">{label}</div>
       <div className="py-2 px-3">
         <MetricBadge metric={forMetric} variant="for" />
       </div>
