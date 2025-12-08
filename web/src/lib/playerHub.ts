@@ -49,6 +49,18 @@ let realtimeStatsCachePromise: Promise<Map<number, { hits: number; blockedShots:
 const rosterCache: Map<string, NHLRosterResponse> = new Map();
 const rosterCachePromise: Map<string, Promise<NHLRosterResponse | null>> = new Map();
 
+// Player-to-team lookup cache (built from all rosters)
+let playerTeamLookup: Map<number, { teamAbbrev: string; headshot: string }> | null = null;
+let playerTeamLookupPromise: Promise<Map<number, { teamAbbrev: string; headshot: string }>> | null = null;
+
+// All NHL teams for building player lookup
+const NHL_TEAMS = [
+  "ANA", "ARI", "BOS", "BUF", "CAR", "CBJ", "CGY", "CHI", "COL", "DAL",
+  "DET", "EDM", "FLA", "LAK", "MIN", "MTL", "NJD", "NSH", "NYI", "NYR",
+  "OTT", "PHI", "PIT", "SEA", "SJS", "STL", "TBL", "TOR", "UTA", "VAN",
+  "VGK", "WPG", "WSH"
+];
+
 // =============================================================================
 // Type Definitions for NHL Web API
 // =============================================================================
@@ -157,6 +169,63 @@ async function fetchTeamRosterFromAPI(teamAbbrev: string): Promise<NHLRosterResp
     return result;
   } finally {
     rosterCachePromise.delete(teamAbbrev);
+  }
+}
+
+// =============================================================================
+// Player-to-Team Lookup (built from all rosters for league-wide stats enrichment)
+// =============================================================================
+
+async function buildPlayerTeamLookupInternal(): Promise<Map<number, { teamAbbrev: string; headshot: string }>> {
+  const lookup = new Map<number, { teamAbbrev: string; headshot: string }>();
+
+  // Fetch all rosters in batches to avoid overwhelming the API
+  const BATCH_SIZE = 8;
+  for (let i = 0; i < NHL_TEAMS.length; i += BATCH_SIZE) {
+    const batch = NHL_TEAMS.slice(i, i + BATCH_SIZE);
+    const rosters = await Promise.all(batch.map(team => fetchTeamRosterFromAPI(team)));
+
+    rosters.forEach((roster, idx) => {
+      if (!roster) return;
+      const teamAbbrev = batch[idx];
+
+      // Add all players from this roster to the lookup
+      [...roster.forwards, ...roster.defensemen, ...roster.goalies].forEach(player => {
+        lookup.set(player.id, {
+          teamAbbrev,
+          headshot: player.headshot,
+        });
+      });
+    });
+
+    // Small delay between batches to avoid rate limiting
+    if (i + BATCH_SIZE < NHL_TEAMS.length) {
+      await sleep(100);
+    }
+  }
+
+  return lookup;
+}
+
+async function getPlayerTeamLookup(): Promise<Map<number, { teamAbbrev: string; headshot: string }>> {
+  // Return from cache if available
+  if (playerTeamLookup) {
+    return playerTeamLookup;
+  }
+
+  // If fetch is in progress, wait for it
+  if (playerTeamLookupPromise) {
+    return playerTeamLookupPromise;
+  }
+
+  // Start building the lookup and cache the promise
+  playerTeamLookupPromise = buildPlayerTeamLookupInternal();
+
+  try {
+    playerTeamLookup = await playerTeamLookupPromise;
+    return playerTeamLookup;
+  } finally {
+    playerTeamLookupPromise = null;
   }
 }
 
@@ -446,22 +515,50 @@ function mergeGoalieRosterWithStats(
 // =============================================================================
 
 export async function fetchSkaterStats(minGames = MIN_SKATER_GAMES): Promise<SkaterCard[]> {
-  // Use cached stats map to prevent rate limiting
-  const statsMap = await fetchAllSkaterStatsMap();
+  // Use cached stats map and player team lookup to get accurate team info
+  const [statsMap, teamLookup] = await Promise.all([
+    fetchAllSkaterStatsMap(),
+    getPlayerTeamLookup(),
+  ]);
 
   return Array.from(statsMap.values())
     .filter((p) => p.gamesPlayed >= minGames)
-    .map((p) => mapNHLSkaterToCard(p))
+    .map((p) => {
+      const card = mapNHLSkaterToCard(p);
+      // Enrich with team info from roster lookup
+      const teamInfo = teamLookup.get(p.playerId);
+      if (teamInfo) {
+        card.bio.teamAbbrev = teamInfo.teamAbbrev;
+        card.bio.teamName = teamInfo.teamAbbrev;
+        card.bio.headshot = teamInfo.headshot;
+        card.stats.teamAbbrev = teamInfo.teamAbbrev;
+      }
+      return card;
+    })
     .sort((a, b) => b.stats.points - a.stats.points);
 }
 
 export async function fetchGoalieStats(minGames = MIN_GOALIE_GAMES): Promise<GoalieDetailCard[]> {
-  // Use cached stats map to prevent rate limiting
-  const statsMap = await fetchAllGoalieStatsMap();
+  // Use cached stats map and player team lookup to get accurate team info
+  const [statsMap, teamLookup] = await Promise.all([
+    fetchAllGoalieStatsMap(),
+    getPlayerTeamLookup(),
+  ]);
 
   return Array.from(statsMap.values())
     .filter((g) => g.gamesPlayed >= minGames)
-    .map((g) => mapNHLGoalieToCard(g))
+    .map((g) => {
+      const card = mapNHLGoalieToCard(g);
+      // Enrich with team info from roster lookup
+      const teamInfo = teamLookup.get(g.playerId);
+      if (teamInfo) {
+        card.bio.teamAbbrev = teamInfo.teamAbbrev;
+        card.bio.teamName = teamInfo.teamAbbrev;
+        card.bio.headshot = teamInfo.headshot;
+        card.stats.teamAbbrev = teamInfo.teamAbbrev;
+      }
+      return card;
+    })
     .sort((a, b) => b.stats.wins - a.stats.wins);
 }
 
