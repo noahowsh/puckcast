@@ -33,6 +33,23 @@ const NHL_STATS_API = "https://api.nhle.com/stats/rest/en";
 const NHL_WEB_API = "https://api-web.nhle.com/v1";
 
 // =============================================================================
+// In-Memory Cache for Stats (prevents rate limiting during static generation)
+// =============================================================================
+
+let skaterStatsCache: Map<number, NHLApiSkaterStats> | null = null;
+let goalieStatsCache: Map<number, NHLApiGoalieStats> | null = null;
+let skaterStatsCachePromise: Promise<Map<number, NHLApiSkaterStats>> | null = null;
+let goalieStatsCachePromise: Promise<Map<number, NHLApiGoalieStats>> | null = null;
+
+// Realtime stats cache (hits, blocks, etc.)
+let realtimeStatsCache: Map<number, { hits: number; blockedShots: number }> | null = null;
+let realtimeStatsCachePromise: Promise<Map<number, { hits: number; blockedShots: number }>> | null = null;
+
+// Roster cache by team
+const rosterCache: Map<string, NHLRosterResponse> = new Map();
+const rosterCachePromise: Map<string, Promise<NHLRosterResponse | null>> = new Map();
+
+// =============================================================================
 // Type Definitions for NHL Web API
 // =============================================================================
 
@@ -61,7 +78,11 @@ interface NHLRosterResponse {
 // API Fetching Functions
 // =============================================================================
 
-async function fetchWithRetry<T>(url: string, options: RequestInit = {}, retries = 3): Promise<T | null> {
+async function sleep(ms: number): Promise<void> {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+async function fetchWithRetry<T>(url: string, options: RequestInit = {}, retries = 5): Promise<T | null> {
   for (let i = 0; i < retries; i++) {
     try {
       const res = await fetch(url, {
@@ -77,15 +98,25 @@ async function fetchWithRetry<T>(url: string, options: RequestInit = {}, retries
         }
       }
 
+      // Handle rate limiting (429) with exponential backoff
+      if (res.status === 429) {
+        const backoffMs = Math.min(1000 * Math.pow(2, i), 10000); // 1s, 2s, 4s, 8s, 10s max
+        console.log(`Rate limited, waiting ${backoffMs}ms before retry ${i + 1}/${retries}`);
+        await sleep(backoffMs);
+        continue;
+      }
+
       if (!res.ok) {
         console.error(`API request failed: ${url} - ${res.status}`);
         if (i === retries - 1) return null;
+        await sleep(500); // Small delay before retry
         continue;
       }
       return (await res.json()) as T;
     } catch (err) {
       console.error(`API request error: ${url}`, err);
       if (i === retries - 1) return null;
+      await sleep(500);
     }
   }
   return null;
@@ -93,19 +124,48 @@ async function fetchWithRetry<T>(url: string, options: RequestInit = {}, retries
 
 // =============================================================================
 // Roster Fetching (Primary source for team players)
+// Uses caching to prevent rate limiting during static generation
 // =============================================================================
 
-async function fetchTeamRosterFromAPI(teamAbbrev: string): Promise<NHLRosterResponse | null> {
-  // First try with redirect following
+async function fetchTeamRosterFromAPIInternal(teamAbbrev: string): Promise<NHLRosterResponse | null> {
   const url = `${NHL_WEB_API}/roster/${teamAbbrev}/${CURRENT_SEASON}`;
   return fetchWithRetry<NHLRosterResponse>(url);
 }
 
+async function fetchTeamRosterFromAPI(teamAbbrev: string): Promise<NHLRosterResponse | null> {
+  // Return from cache if available
+  const cached = rosterCache.get(teamAbbrev);
+  if (cached) {
+    return cached;
+  }
+
+  // If fetch is in progress, wait for it
+  const existingPromise = rosterCachePromise.get(teamAbbrev);
+  if (existingPromise) {
+    return existingPromise;
+  }
+
+  // Start the fetch and cache the promise
+  const promise = fetchTeamRosterFromAPIInternal(teamAbbrev);
+  rosterCachePromise.set(teamAbbrev, promise);
+
+  try {
+    const result = await promise;
+    if (result) {
+      rosterCache.set(teamAbbrev, result);
+    }
+    return result;
+  } finally {
+    rosterCachePromise.delete(teamAbbrev);
+  }
+}
+
 // =============================================================================
 // Stats Fetching (Secondary source for performance data)
+// Uses in-memory caching to prevent rate limiting during static generation
 // =============================================================================
 
-async function fetchAllSkaterStatsMap(): Promise<Map<number, NHLApiSkaterStats>> {
+async function fetchAllSkaterStatsMapInternal(): Promise<Map<number, NHLApiSkaterStats>> {
   const url = `${NHL_STATS_API}/skater/summary?isAggregate=true&isGame=false&limit=-1&cayenneExp=seasonId=${CURRENT_SEASON}`;
   const data = await fetchWithRetry<{ data: NHLApiSkaterStats[] }>(url);
 
@@ -116,7 +176,7 @@ async function fetchAllSkaterStatsMap(): Promise<Map<number, NHLApiSkaterStats>>
   return map;
 }
 
-async function fetchAllGoalieStatsMap(): Promise<Map<number, NHLApiGoalieStats>> {
+async function fetchAllGoalieStatsMapInternal(): Promise<Map<number, NHLApiGoalieStats>> {
   const url = `${NHL_STATS_API}/goalie/summary?isAggregate=true&isGame=false&limit=-1&cayenneExp=seasonId=${CURRENT_SEASON}`;
   const data = await fetchWithRetry<{ data: NHLApiGoalieStats[] }>(url);
 
@@ -125,6 +185,53 @@ async function fetchAllGoalieStatsMap(): Promise<Map<number, NHLApiGoalieStats>>
     data.data.forEach(g => map.set(g.playerId, g));
   }
   return map;
+}
+
+// Cached versions - ensures only one API call even with concurrent requests
+async function fetchAllSkaterStatsMap(): Promise<Map<number, NHLApiSkaterStats>> {
+  // Return from cache if available
+  if (skaterStatsCache) {
+    return skaterStatsCache;
+  }
+
+  // If fetch is in progress, wait for it
+  if (skaterStatsCachePromise) {
+    return skaterStatsCachePromise;
+  }
+
+  // Start the fetch and cache the promise
+  skaterStatsCachePromise = fetchAllSkaterStatsMapInternal();
+
+  try {
+    skaterStatsCache = await skaterStatsCachePromise;
+    return skaterStatsCache;
+  } finally {
+    // Clear the promise (but keep the cache)
+    skaterStatsCachePromise = null;
+  }
+}
+
+async function fetchAllGoalieStatsMap(): Promise<Map<number, NHLApiGoalieStats>> {
+  // Return from cache if available
+  if (goalieStatsCache) {
+    return goalieStatsCache;
+  }
+
+  // If fetch is in progress, wait for it
+  if (goalieStatsCachePromise) {
+    return goalieStatsCachePromise;
+  }
+
+  // Start the fetch and cache the promise
+  goalieStatsCachePromise = fetchAllGoalieStatsMapInternal();
+
+  try {
+    goalieStatsCache = await goalieStatsCachePromise;
+    return goalieStatsCache;
+  } finally {
+    // Clear the promise (but keep the cache)
+    goalieStatsCachePromise = null;
+  }
 }
 
 // =============================================================================
@@ -335,27 +442,24 @@ function mergeGoalieRosterWithStats(
 
 // =============================================================================
 // League-Wide Stats Functions (for leaders, search, etc.)
+// Uses cached maps to prevent rate limiting during static generation
 // =============================================================================
 
 export async function fetchSkaterStats(minGames = MIN_SKATER_GAMES): Promise<SkaterCard[]> {
-  const url = `${NHL_STATS_API}/skater/summary?isAggregate=true&isGame=false&limit=-1&cayenneExp=seasonId=${CURRENT_SEASON}`;
+  // Use cached stats map to prevent rate limiting
+  const statsMap = await fetchAllSkaterStatsMap();
 
-  const data = await fetchWithRetry<{ data: NHLApiSkaterStats[] }>(url);
-  if (!data?.data) return [];
-
-  return data.data
+  return Array.from(statsMap.values())
     .filter((p) => p.gamesPlayed >= minGames)
     .map((p) => mapNHLSkaterToCard(p))
     .sort((a, b) => b.stats.points - a.stats.points);
 }
 
 export async function fetchGoalieStats(minGames = MIN_GOALIE_GAMES): Promise<GoalieDetailCard[]> {
-  const url = `${NHL_STATS_API}/goalie/summary?isAggregate=true&isGame=false&limit=-1&cayenneExp=seasonId=${CURRENT_SEASON}`;
+  // Use cached stats map to prevent rate limiting
+  const statsMap = await fetchAllGoalieStatsMap();
 
-  const data = await fetchWithRetry<{ data: NHLApiGoalieStats[] }>(url);
-  if (!data?.data) return [];
-
-  return data.data
+  return Array.from(statsMap.values())
     .filter((g) => g.gamesPlayed >= minGames)
     .map((g) => mapNHLGoalieToCard(g))
     .sort((a, b) => b.stats.wins - a.stats.wins);
@@ -411,13 +515,12 @@ export async function fetchGoalieLeaders(): Promise<LeagueGoalieLeaders> {
 // =============================================================================
 
 export async function fetchSkaterById(playerId: number): Promise<SkaterCard | null> {
-  // First try to get from summary stats
-  const url = `${NHL_STATS_API}/skater/summary?isAggregate=true&isGame=false&limit=1&cayenneExp=seasonId=${CURRENT_SEASON} and playerId=${playerId}`;
+  // Use cached stats map for better performance
+  const statsMap = await fetchAllSkaterStatsMap();
+  const statsData = statsMap.get(playerId);
+  if (!statsData) return null;
 
-  const data = await fetchWithRetry<{ data: NHLApiSkaterStats[] }>(url);
-  if (!data?.data?.[0]) return null;
-
-  const card = mapNHLSkaterToCard(data.data[0]);
+  const card = mapNHLSkaterToCard(statsData);
 
   // Try to enrich with player landing page data
   try {
@@ -444,12 +547,12 @@ export async function fetchSkaterById(playerId: number): Promise<SkaterCard | nu
 }
 
 export async function fetchGoalieById(playerId: number): Promise<GoalieDetailCard | null> {
-  const url = `${NHL_STATS_API}/goalie/summary?isAggregate=true&isGame=false&limit=1&cayenneExp=seasonId=${CURRENT_SEASON} and playerId=${playerId}`;
+  // Use cached stats map for better performance
+  const statsMap = await fetchAllGoalieStatsMap();
+  const statsData = statsMap.get(playerId);
+  if (!statsData) return null;
 
-  const data = await fetchWithRetry<{ data: NHLApiGoalieStats[] }>(url);
-  if (!data?.data?.[0]) return null;
-
-  const card = mapNHLGoalieToCard(data.data[0]);
+  const card = mapNHLGoalieToCard(statsData);
 
   // Try to enrich with player landing page data
   try {
@@ -654,22 +757,46 @@ function parseTimeOnIce(timeStr: string): number {
 
 // =============================================================================
 // Enhanced Stats Fetching (Hits, Blocks, etc.)
+// Uses caching to prevent rate limiting during static generation
 // =============================================================================
 
-export async function fetchSkaterRealTimeStats(): Promise<Map<number, { hits: number; blockedShots: number }>> {
+async function fetchSkaterRealTimeStatsInternal(): Promise<Map<number, { hits: number; blockedShots: number }>> {
   const url = `${NHL_STATS_API}/skater/realtime?isAggregate=true&isGame=false&limit=-1&cayenneExp=seasonId=${CURRENT_SEASON}`;
 
   const data = await fetchWithRetry<{ data: any[] }>(url);
-  if (!data?.data) return new Map();
-
   const map = new Map<number, { hits: number; blockedShots: number }>();
-  data.data.forEach((p) => {
-    map.set(p.playerId, {
-      hits: p.hits || 0,
-      blockedShots: p.blockedShots || 0,
+
+  if (data?.data) {
+    data.data.forEach((p) => {
+      map.set(p.playerId, {
+        hits: p.hits || 0,
+        blockedShots: p.blockedShots || 0,
+      });
     });
-  });
+  }
   return map;
+}
+
+export async function fetchSkaterRealTimeStats(): Promise<Map<number, { hits: number; blockedShots: number }>> {
+  // Return from cache if available
+  if (realtimeStatsCache) {
+    return realtimeStatsCache;
+  }
+
+  // If fetch is in progress, wait for it
+  if (realtimeStatsCachePromise) {
+    return realtimeStatsCachePromise;
+  }
+
+  // Start the fetch and cache the promise
+  realtimeStatsCachePromise = fetchSkaterRealTimeStatsInternal();
+
+  try {
+    realtimeStatsCache = await realtimeStatsCachePromise;
+    return realtimeStatsCache;
+  } finally {
+    realtimeStatsCachePromise = null;
+  }
 }
 
 export async function fetchEnrichedSkaterStats(minGames = MIN_SKATER_GAMES): Promise<SkaterCard[]> {
