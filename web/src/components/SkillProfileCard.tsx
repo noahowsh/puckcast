@@ -36,9 +36,10 @@ export function SkillProfileCard({ profile, playerName, age, evTOI }: SkillProfi
 
   return (
     <div className="card p-0 overflow-hidden">
-      {/* Header */}
-      <div className="px-5 py-4 border-b border-white/[0.06] bg-gradient-to-r from-emerald-500/10 to-transparent">
-        <div className="flex items-center justify-between">
+      {/* Header - Full width gradient */}
+      <div className="relative px-5 py-4 border-b border-white/[0.06]">
+        <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/15 via-emerald-500/5 to-transparent" />
+        <div className="relative flex items-center justify-between">
           <div>
             <h3 className="text-lg font-bold text-white">Skill Profile</h3>
             <p className="text-xs text-white/50">Percentile Rankings vs. NHL {positionLabel}s</p>
@@ -60,20 +61,17 @@ export function SkillProfileCard({ profile, playerName, age, evTOI }: SkillProfi
         </div>
       </div>
 
-      <div className="p-5 space-y-5">
+      <div className="p-5 space-y-6">
         {/* Overall Rating + Radar Chart Row */}
-        <div className="grid grid-cols-2 gap-4">
+        <div className="flex items-start gap-6">
           {/* Overall Rating */}
-          <div className="flex flex-col items-center justify-center py-2">
+          <div className="flex flex-col items-center flex-shrink-0">
             <OverallRatingBadge rating={overallRating} />
-            <p className="text-[10px] text-white/50 mt-3">Overall Skill Rating</p>
+            <p className="text-[10px] text-white/50 mt-2 text-center">Overall Rating</p>
           </div>
 
           {/* Radar Chart */}
-          <div className="flex flex-col items-center">
-            <h4 className="text-[10px] font-semibold text-white/50 uppercase tracking-wide mb-2">
-              Relative Skill Chart
-            </h4>
+          <div className="flex-1 flex flex-col items-center">
             <SkillRadarChart data={radarData} />
           </div>
         </div>
@@ -86,7 +84,7 @@ export function SkillProfileCard({ profile, playerName, age, evTOI }: SkillProfi
           <h4 className="text-xs font-semibold text-white/60 uppercase tracking-wide mb-3">
             Even Strength Impact
           </h4>
-          <div className="grid grid-cols-3 gap-2">
+          <div className="grid grid-cols-3 gap-3">
             <PercentileBox label="EV OFF" sublabel="Offensive" rating={evenStrength.offensive} />
             <PercentileBox label="EV DEF" sublabel="Defensive" rating={evenStrength.defensive} />
             <PercentileBox label="EV +/-" sublabel="Overall" rating={evenStrength.overall} />
@@ -98,7 +96,7 @@ export function SkillProfileCard({ profile, playerName, age, evTOI }: SkillProfi
           <h4 className="text-xs font-semibold text-white/60 uppercase tracking-wide mb-3">
             Special Teams Impact
           </h4>
-          <div className="grid grid-cols-3 gap-2">
+          <div className="grid grid-cols-3 gap-3">
             <PercentileBox label="PP OFF" sublabel="Power Play" rating={specialTeams.powerPlayOffense} />
             <PercentileBox label="PK DEF" sublabel="Penalty Kill" rating={specialTeams.penaltyKillDefense} showNA={!specialTeams.penaltyKillDefense} />
             <PercentileBox label="PP/EV" sublabel="Combined" rating={specialTeams.combinedPPEV} />
@@ -110,7 +108,7 @@ export function SkillProfileCard({ profile, playerName, age, evTOI }: SkillProfi
           <h4 className="text-xs font-semibold text-white/60 uppercase tracking-wide mb-3">
             Talent Profile
           </h4>
-          <div className="grid grid-cols-2 gap-2">
+          <div className="grid grid-cols-2 gap-3">
             <TalentBar label="Finishing" rating={talents.finishing} />
             <TalentBar label="Playmaking" rating={talents.playmaking} />
             <TalentBar label="Penalty Impact" rating={talents.penaltyImpact} />
@@ -119,7 +117,7 @@ export function SkillProfileCard({ profile, playerName, age, evTOI }: SkillProfi
         </div>
 
         {/* Legend */}
-        <div className="flex items-center justify-center gap-2 pt-3 border-t border-white/[0.04]">
+        <div className="flex items-center justify-center gap-2 pt-4 border-t border-white/[0.04]">
           <LegendItem color="bg-rose-500/50" label="Replacement" />
           <LegendItem color="bg-amber-500/40" label="Below Avg" />
           <LegendItem color="bg-white/25" label="Average" />

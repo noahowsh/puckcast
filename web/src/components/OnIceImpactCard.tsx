@@ -18,9 +18,10 @@ export function OnIceImpactCard({ impact, playerName, age }: OnIceImpactCardProp
 
   return (
     <div className="card p-0 overflow-hidden">
-      {/* Header */}
-      <div className="px-5 py-4 border-b border-white/[0.06] bg-gradient-to-r from-amber-500/10 to-transparent">
-        <div className="flex items-center justify-between">
+      {/* Header - Full width gradient */}
+      <div className="relative px-5 py-4 border-b border-white/[0.06]">
+        <div className="absolute inset-0 bg-gradient-to-r from-amber-500/15 via-amber-500/5 to-transparent" />
+        <div className="relative flex items-center justify-between">
           <div>
             <h3 className="text-lg font-bold text-white">On-Ice Impact</h3>
             <p className="text-xs text-white/50">Even-Strength RAPM Analysis</p>
@@ -44,7 +45,7 @@ export function OnIceImpactCard({ impact, playerName, age }: OnIceImpactCardProp
         </div>
       </div>
 
-      <div className="p-5 space-y-5">
+      <div className="p-5 space-y-6">
         {/* FOR vs AGAINST Metrics Table */}
         <div className="bg-white/[0.02] rounded-lg overflow-hidden">
           {/* Header */}

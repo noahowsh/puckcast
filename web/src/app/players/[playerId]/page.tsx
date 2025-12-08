@@ -77,74 +77,85 @@ export default async function PlayerDetailPage({ params }: { params: Promise<{ p
           </Link>
         </div>
 
-        {/* Hero Section - Redesigned */}
-        <section className="card p-0 overflow-hidden mb-6">
-          <div className="flex flex-col lg:flex-row">
-            {/* Left - Player Photo & Basic Info */}
-            <div className="flex items-center gap-5 p-5 lg:p-6 lg:border-r border-white/[0.06] lg:w-[320px]">
-              {bio.headshot ? (
-                <Image
-                  src={bio.headshot}
-                  alt={bio.fullName}
-                  width={88}
-                  height={88}
-                  className="rounded-full bg-white/[0.03] flex-shrink-0"
-                />
-              ) : (
-                <div className="w-[88px] h-[88px] rounded-full bg-white/[0.06] flex items-center justify-center flex-shrink-0">
-                  <TeamCrest abbrev={bio.teamAbbrev} size={56} />
-                </div>
-              )}
-              <div className="min-w-0">
-                <h1 className="text-xl lg:text-2xl font-bold text-white truncate">{bio.fullName}</h1>
-                <div className="flex items-center gap-2 mt-1">
-                  <TeamLogo teamAbbrev={bio.teamAbbrev} size="sm" />
-                  <span className="text-sm text-white/60">{positionLabel}</span>
-                  {bio.jerseyNumber && (
-                    <>
-                      <span className="text-white/30">•</span>
-                      <span className="text-sm text-white/60">#{bio.jerseyNumber}</span>
-                    </>
-                  )}
-                </div>
-                {/* Bio row */}
-                <div className="flex items-center gap-3 mt-2 text-xs text-white/50">
-                  {playerAge && <span>{playerAge} yrs</span>}
-                  {bio.heightInInches && <span>{formatHeight(bio.heightInInches)}</span>}
-                  {bio.weightInPounds && <span>{bio.weightInPounds} lbs</span>}
+        {/* Hero Section */}
+        <section className="nova-hero mb-8">
+          <div className="nova-hero__grid nova-hero__grid--balanced">
+            <div className="nova-hero__text">
+              <div className="flex items-center gap-4 mb-4">
+                {bio.headshot ? (
+                  <Image
+                    src={bio.headshot}
+                    alt={bio.fullName}
+                    width={80}
+                    height={80}
+                    className="rounded-full bg-white/[0.03] flex-shrink-0"
+                  />
+                ) : (
+                  <div className="w-20 h-20 rounded-full bg-white/[0.06] flex items-center justify-center flex-shrink-0">
+                    <TeamCrest abbrev={bio.teamAbbrev} size={48} />
+                  </div>
+                )}
+                <div>
+                  <h1 className="display-lg">{bio.fullName}</h1>
+                  <div className="flex items-center gap-2 mt-1">
+                    <TeamLogo teamAbbrev={bio.teamAbbrev} size="sm" />
+                    <span className="text-white/60">{positionLabel}</span>
+                    {bio.jerseyNumber && (
+                      <>
+                        <span className="text-white/30">•</span>
+                        <span className="text-white/60">#{bio.jerseyNumber}</span>
+                      </>
+                    )}
+                  </div>
                 </div>
               </div>
-            </div>
 
-            {/* Right - Key Stats */}
-            <div className="flex-1 p-5 lg:p-6 bg-white/[0.01]">
-              <div className="grid grid-cols-4 gap-3 lg:gap-4">
+              {/* Bio details */}
+              <div className="flex items-center gap-4 text-sm text-white/50 mb-6">
+                {playerAge && <span>{playerAge} years old</span>}
+                {bio.heightInInches && <span>{formatHeight(bio.heightInInches)}</span>}
+                {bio.weightInPounds && <span>{bio.weightInPounds} lbs</span>}
+                {bio.birthCity && bio.birthCountry && (
+                  <span>{bio.birthCity}, {bio.birthCountry}</span>
+                )}
+              </div>
+
+              {/* Key Stats Grid */}
+              <div className="grid grid-cols-4 gap-4">
                 <KeyStat label="Points" value={stats.points} rank={pointsRank > 0 ? pointsRank : undefined} color="sky" />
                 <KeyStat label="Goals" value={stats.goals} rank={goalsRank > 0 ? goalsRank : undefined} color="emerald" />
                 <KeyStat label="Assists" value={stats.assists} rank={assistsRank > 0 ? assistsRank : undefined} color="amber" />
                 <KeyStat label="+/-" value={stats.plusMinus} plusMinus />
               </div>
-              {/* Per-game row */}
-              <div className="flex items-center gap-6 mt-4 pt-4 border-t border-white/[0.06]">
-                <div className="text-center">
-                  <p className="text-lg font-bold text-sky-300">{pointsPerGame}</p>
-                  <p className="text-[10px] text-white/40 uppercase">P/G</p>
+            </div>
+
+            {/* Right Panel - Per Game Stats */}
+            <div className="nova-hero__panel" style={{ padding: "1.5rem" }}>
+              <p className="text-xs font-semibold text-white/50 uppercase tracking-wide mb-4">Per Game Averages</p>
+
+              <div className="grid grid-cols-2 gap-4 mb-6">
+                <div className="text-center p-3 bg-white/[0.03] rounded-lg">
+                  <p className="text-2xl font-bold text-sky-300">{pointsPerGame}</p>
+                  <p className="text-xs text-white/50">Points/Game</p>
                 </div>
-                <div className="text-center">
-                  <p className="text-lg font-bold text-emerald-400">{goalsPerGame}</p>
-                  <p className="text-[10px] text-white/40 uppercase">G/G</p>
+                <div className="text-center p-3 bg-white/[0.03] rounded-lg">
+                  <p className="text-2xl font-bold text-emerald-400">{goalsPerGame}</p>
+                  <p className="text-xs text-white/50">Goals/Game</p>
                 </div>
-                <div className="text-center">
-                  <p className="text-lg font-bold text-white/80">{shotsPerGame}</p>
-                  <p className="text-[10px] text-white/40 uppercase">S/G</p>
+              </div>
+
+              <div className="space-y-3">
+                <div className="flex justify-between items-center">
+                  <span className="text-sm text-white/50">Shots/Game</span>
+                  <span className="text-sm font-semibold text-white">{shotsPerGame}</span>
                 </div>
-                <div className="text-center">
-                  <p className="text-lg font-bold text-white/80">{stats.timeOnIcePerGame}</p>
-                  <p className="text-[10px] text-white/40 uppercase">TOI/G</p>
+                <div className="flex justify-between items-center">
+                  <span className="text-sm text-white/50">TOI/Game</span>
+                  <span className="text-sm font-semibold text-white">{stats.timeOnIcePerGame}</span>
                 </div>
-                <div className="text-center">
-                  <p className="text-lg font-bold text-white/80">{stats.gamesPlayed}</p>
-                  <p className="text-[10px] text-white/40 uppercase">GP</p>
+                <div className="flex justify-between items-center">
+                  <span className="text-sm text-white/50">Games Played</span>
+                  <span className="text-sm font-semibold text-white">{stats.gamesPlayed}</span>
                 </div>
               </div>
             </div>
@@ -152,8 +163,8 @@ export default async function PlayerDetailPage({ params }: { params: Promise<{ p
         </section>
 
         {/* Season Stats Table */}
-        <section className="mb-5">
-          <h2 className="text-base font-bold text-white mb-3">2024-25 Season Stats</h2>
+        <section className="nova-section">
+          <h2 className="text-lg font-bold text-white mb-4">2024-25 Season Stats</h2>
           <div className="card p-0 overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
@@ -201,8 +212,8 @@ export default async function PlayerDetailPage({ params }: { params: Promise<{ p
         </section>
 
         {/* Scoring Breakdown */}
-        <section className="mb-5">
-          <h2 className="text-base font-bold text-white mb-3">Scoring Breakdown</h2>
+        <section className="nova-section" style={{ paddingTop: 0 }}>
+          <h2 className="text-lg font-bold text-white mb-4">Scoring Breakdown</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="card p-4">
               <h3 className="text-xs font-semibold text-white/60 mb-3 uppercase tracking-wide">Goals by Situation</h3>
@@ -233,18 +244,24 @@ export default async function PlayerDetailPage({ params }: { params: Promise<{ p
         </section>
 
         {/* Advanced Analytics Section */}
-        <section className="mb-5">
-          <div className="flex items-center gap-2 mb-4">
-            <h2 className="text-base font-bold text-white">Advanced Analytics</h2>
-            <span className="text-[10px] text-white/40 bg-white/[0.05] px-1.5 py-0.5 rounded">Beta</span>
+        <section className="nova-section" style={{ paddingTop: 0 }}>
+          <div className="section-head mb-6">
+            <div>
+              <div className="flex items-center gap-2">
+                <p className="eyebrow">Player Intelligence</p>
+                <span className="text-[10px] text-white/40 bg-white/[0.06] px-2 py-0.5 rounded-full">Beta</span>
+              </div>
+              <h2>Advanced Analytics</h2>
+              <p className="lead-sm">Projections, skill profile, and on-ice impact metrics.</p>
+            </div>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <SeasonProjectionCard projection={seasonProjection} playerName={bio.fullName} />
             <SkillProfileCard profile={skillProfile} playerName={bio.fullName} age={playerAge} evTOI={stats.timeOnIcePerGame} />
           </div>
 
-          <div className="mt-4">
+          <div className="mt-6">
             <OnIceImpactCard impact={onIceImpact} playerName={bio.fullName} age={playerAge} />
           </div>
         </section>

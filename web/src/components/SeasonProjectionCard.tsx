@@ -39,9 +39,10 @@ export function SeasonProjectionCard({ projection, playerName }: SeasonProjectio
 
   return (
     <div className="card p-0 overflow-hidden">
-      {/* Header */}
-      <div className="px-5 py-4 border-b border-white/[0.06] bg-gradient-to-r from-sky-500/10 to-transparent">
-        <div className="flex items-center justify-between">
+      {/* Header - Full width gradient */}
+      <div className="relative px-5 py-4 border-b border-white/[0.06]">
+        <div className="absolute inset-0 bg-gradient-to-r from-sky-500/15 via-sky-500/5 to-transparent" />
+        <div className="relative flex items-center justify-between">
           <div>
             <h3 className="text-lg font-bold text-white">Season Projection</h3>
             <p className="text-xs text-white/50">End of Season Statistical Forecast</p>
@@ -53,7 +54,7 @@ export function SeasonProjectionCard({ projection, playerName }: SeasonProjectio
         </div>
       </div>
 
-      <div className="p-5 space-y-5">
+      <div className="p-5 space-y-6">
         {/* End of Season Projections Table */}
         <div>
           <h4 className="text-xs font-semibold text-white/60 uppercase tracking-wide mb-3">
