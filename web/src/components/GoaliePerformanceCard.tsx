@@ -53,7 +53,7 @@ export function GoaliePerformanceCard({ stats, playerName, allGoalies, pulseData
       {/* Header - Full width gradient */}
       <div className="relative border-b border-white/[0.06]">
         <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/20 via-cyan-500/8 to-transparent" />
-        <div className="relative flex items-center justify-between px-6 py-5">
+        <div className="relative flex items-center justify-between" style={{ padding: '1.25rem 2rem' }}>
           <div>
             <h3 className="text-lg font-bold text-white">Goalie Performance</h3>
             <p className="text-xs text-white/50 mt-0.5">Advanced Goaltending Analytics</p>
@@ -106,7 +106,7 @@ export function GoaliePerformanceCard({ stats, playerName, allGoalies, pulseData
         </div>
 
         {/* Performance Breakdown */}
-        <div>
+        <div className="pt-2">
           <h4 className="text-xs font-semibold text-white/60 uppercase tracking-wide mb-4">
             Performance Breakdown
           </h4>
@@ -119,7 +119,7 @@ export function GoaliePerformanceCard({ stats, playerName, allGoalies, pulseData
         </div>
 
         {/* Workload & Consistency */}
-        <div>
+        <div className="pt-2">
           <h4 className="text-xs font-semibold text-white/60 uppercase tracking-wide mb-4">
             Workload & Consistency
           </h4>

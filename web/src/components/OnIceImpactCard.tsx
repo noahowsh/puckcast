@@ -21,7 +21,7 @@ export function OnIceImpactCard({ impact, playerName, age }: OnIceImpactCardProp
       {/* Header - Full width gradient */}
       <div className="relative border-b border-white/[0.06]">
         <div className="absolute inset-0 bg-gradient-to-r from-amber-500/20 via-amber-500/8 to-transparent" />
-        <div className="relative flex items-center justify-between px-6 py-5">
+        <div className="relative flex items-center justify-between" style={{ padding: '1.25rem 2rem' }}>
           <div>
             <h3 className="text-lg font-bold text-white">On-Ice Impact</h3>
             <p className="text-xs text-white/50 mt-0.5">Even-Strength RAPM Analysis</p>
@@ -67,7 +67,7 @@ export function OnIceImpactCard({ impact, playerName, age }: OnIceImpactCardProp
         </div>
 
         {/* General Metrics */}
-        <div>
+        <div className="pt-2">
           <h4 className="text-xs font-semibold text-white/60 uppercase tracking-wide mb-4">General</h4>
           <div className="grid grid-cols-4 gap-4">
             <GeneralMetric label="Net xGoals" metric={general.netExpectedGoals} />

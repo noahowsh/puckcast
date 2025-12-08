@@ -39,7 +39,7 @@ export function SkillProfileCard({ profile, playerName, age, evTOI }: SkillProfi
       {/* Header - Full width gradient */}
       <div className="relative border-b border-white/[0.06]">
         <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/20 via-emerald-500/8 to-transparent" />
-        <div className="relative flex items-center justify-between px-6 py-5">
+        <div className="relative flex items-center justify-between" style={{ padding: '1.25rem 2rem' }}>
           <div>
             <h3 className="text-lg font-bold text-white">Skill Profile</h3>
             <p className="text-xs text-white/50 mt-0.5">Percentile Rankings vs. NHL {positionLabel}s</p>
@@ -62,24 +62,37 @@ export function SkillProfileCard({ profile, playerName, age, evTOI }: SkillProfi
       </div>
 
       <div style={{ padding: '2rem' }} className="space-y-6">
-        {/* Overall Rating + Radar Chart Side by Side */}
-        <div className="flex items-start gap-8">
-          {/* Left: Overall Rating */}
-          <div className="flex-shrink-0">
+        {/* Two Column Layout: Left (rating + legend + description) | Right (chart) */}
+        <div className="grid grid-cols-[1fr_1.4fr] gap-6">
+          {/* Left Column: Rating, Legend, Description */}
+          <div className="flex flex-col gap-5">
+            {/* Overall Rating */}
             <OverallRatingDisplay rating={overallRating} />
+
+            {/* Legend/Key */}
+            <div className="space-y-1.5">
+              <p className="text-[10px] text-white/40 uppercase tracking-wide">Percentile Key</p>
+              <div className="space-y-1">
+                <LegendItem color="bg-sky-500/60" label="Elite (85+)" />
+                <LegendItem color="bg-emerald-500/50" label="Above Avg (65-84)" />
+                <LegendItem color="bg-white/25" label="Average (35-64)" />
+                <LegendItem color="bg-amber-500/40" label="Below Avg (15-34)" />
+                <LegendItem color="bg-rose-500/50" label="Replacement (<15)" />
+              </div>
+            </div>
+
+            {/* Skill Summary */}
+            <p className="text-xs text-white/60 leading-relaxed">{skillSummary}</p>
           </div>
 
-          {/* Center: Radar Chart */}
-          <div className="flex-1 flex justify-center">
+          {/* Right Column: Radar Chart */}
+          <div className="flex items-center justify-center">
             <SkillRadarChart data={radarData} />
           </div>
         </div>
 
-        {/* Skill Summary */}
-        <p className="text-xs text-white/60 leading-relaxed">{skillSummary}</p>
-
         {/* Even Strength Impact */}
-        <div>
+        <div className="pt-2">
           <h4 className="text-xs font-semibold text-white/60 uppercase tracking-wide mb-4">
             Even Strength Impact
           </h4>
@@ -91,7 +104,7 @@ export function SkillProfileCard({ profile, playerName, age, evTOI }: SkillProfi
         </div>
 
         {/* Special Teams Impact */}
-        <div>
+        <div className="pt-2">
           <h4 className="text-xs font-semibold text-white/60 uppercase tracking-wide mb-4">
             Special Teams Impact
           </h4>
@@ -103,7 +116,7 @@ export function SkillProfileCard({ profile, playerName, age, evTOI }: SkillProfi
         </div>
 
         {/* Talent Profile */}
-        <div>
+        <div className="pt-2">
           <h4 className="text-xs font-semibold text-white/60 uppercase tracking-wide mb-4">
             Talent Profile
           </h4>
@@ -115,14 +128,6 @@ export function SkillProfileCard({ profile, playerName, age, evTOI }: SkillProfi
           </div>
         </div>
 
-        {/* Legend */}
-        <div className="flex items-center justify-center gap-3 pt-6 border-t border-white/[0.06]">
-          <LegendItem color="bg-rose-500/50" label="Replacement" />
-          <LegendItem color="bg-amber-500/40" label="Below Avg" />
-          <LegendItem color="bg-white/25" label="Average" />
-          <LegendItem color="bg-emerald-500/50" label="Above Avg" />
-          <LegendItem color="bg-sky-500/60" label="Elite" />
-        </div>
       </div>
     </div>
   );
