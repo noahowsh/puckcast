@@ -24,7 +24,7 @@ import type {
 // Constants & Configuration
 // =============================================================================
 
-const CURRENT_SEASON = "20242025";
+const CURRENT_SEASON = "20252026";
 const MIN_SKATER_GAMES = 1;  // Show all players with at least 1 game (includes AHL call-ups)
 const MIN_GOALIE_GAMES = 1;  // Show all goalies with at least 1 game
 const LEADERS_LIMIT = 10;

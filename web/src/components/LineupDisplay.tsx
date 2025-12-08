@@ -141,8 +141,8 @@ export function LineupStrengthCard({ strength }: { strength: LineupStrengthMetri
 
 // Helper to get player headshot URL
 function getHeadshotUrl(playerId: number, teamAbbrev?: string): string {
-  // NHL headshot URL format - uses current season
-  const season = "20242025";
+  // NHL headshot URL format - uses current season (2025-26)
+  const season = "20252026";
   return `https://assets.nhle.com/mugs/nhl/${season}/${teamAbbrev || 'NHL'}/${playerId}.png`;
 }
 
@@ -447,10 +447,10 @@ export function ProjectedLineupDisplay({ lineup }: { lineup: TeamLineup }) {
 
   // Split into IR/OUT (definitely out) and DTD/GTD (uncertain)
   const outPlayers = allPlayersWithInjury.filter(p =>
-    !p.isHealthy || ['IR', 'IR-LT', 'IR-NR', 'OUT', 'suspended'].includes((p as any).injuryStatus?.toUpperCase() || '')
+    !p.isHealthy || ['IR', 'IR-LT', 'IR-NR', 'OUT', 'SUSPENDED', 'INJ'].includes((p as any).injuryStatus?.toUpperCase() || '')
   );
   const dtdPlayers = allPlayersWithInjury.filter(p =>
-    p.isHealthy && ['DTD', 'GTD', 'questionable', 'probable'].includes((p as any).injuryStatus?.toLowerCase() || '')
+    p.isHealthy && ['dtd', 'gtd', 'questionable', 'probable', 'day-to-day'].includes((p as any).injuryStatus?.toLowerCase() || '')
   );
 
   return (
