@@ -27,45 +27,45 @@ export function OnIceImpactCard({ impact, playerName, age }: OnIceImpactCardProp
   return (
     <div className="card p-0 overflow-hidden">
       {/* Header */}
-      <div className="px-5 py-4 border-b border-white/[0.06] bg-gradient-to-r from-amber-500/10 to-transparent">
+      <div className="px-6 py-5 border-b border-white/[0.06] bg-gradient-to-r from-amber-500/10 to-transparent">
         <div className="flex items-center justify-between">
           <div>
-            <h3 className="text-lg font-bold text-white">On-Ice Impact</h3>
-            <p className="text-xs text-white/50 mt-0.5">Even-Strength RAPM Analysis</p>
+            <h3 className="text-xl font-bold text-white">On-Ice Impact</h3>
+            <p className="text-sm text-white/50 mt-1">Even-Strength RAPM Analysis</p>
           </div>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-6">
             {age && (
               <div className="text-right">
                 <span className="text-xs text-white/40">Age</span>
-                <p className="text-sm font-semibold text-white">{age}</p>
+                <p className="text-lg font-semibold text-white">{age}</p>
               </div>
             )}
             <div className="text-right">
               <span className="text-xs text-white/40">Pos</span>
-              <p className="text-sm font-semibold text-white">{position}</p>
+              <p className="text-lg font-semibold text-white">{position}</p>
             </div>
             <div className="text-right">
               <span className="text-xs text-white/40">EV TOI</span>
-              <p className="text-sm font-semibold text-white">{evTimeOnIce} min</p>
+              <p className="text-lg font-semibold text-white">{evTimeOnIce} min</p>
             </div>
           </div>
         </div>
       </div>
 
-      <div className="p-5 space-y-6">
+      <div className="p-6 space-y-8">
         {/* FOR vs AGAINST Metrics */}
         <div>
-          <div className="grid grid-cols-3 gap-2 mb-3">
+          <div className="grid grid-cols-[120px_1fr_1fr] gap-4 mb-4">
             <div></div>
             <div className="text-center">
-              <span className="text-xs font-semibold text-emerald-400 uppercase tracking-wider">FOR</span>
+              <span className="text-sm font-bold text-emerald-400 uppercase tracking-wider">FOR</span>
             </div>
             <div className="text-center">
-              <span className="text-xs font-semibold text-white/50 uppercase tracking-wider">AGAINST</span>
+              <span className="text-sm font-bold text-white/40 uppercase tracking-wider">AGAINST</span>
             </div>
           </div>
 
-          <div className="space-y-2">
+          <div className="space-y-3">
             <MetricRow
               label="Goals"
               forMetric={forMetrics.goals}
@@ -96,10 +96,10 @@ export function OnIceImpactCard({ impact, playerName, age }: OnIceImpactCardProp
 
         {/* General Advanced Metrics */}
         <div>
-          <h4 className="text-sm font-semibold text-white/70 uppercase tracking-wide mb-3">
+          <h4 className="text-sm font-semibold text-white/70 uppercase tracking-wide mb-4">
             General
           </h4>
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
             <GeneralMetricBox
               label="Net xGoals"
               metric={general.netExpectedGoals}
@@ -120,20 +120,20 @@ export function OnIceImpactCard({ impact, playerName, age }: OnIceImpactCardProp
         </div>
 
         {/* Impact Summary */}
-        <div className="p-4 bg-white/[0.02] rounded-lg border border-white/[0.04]">
+        <div className="p-5 bg-white/[0.02] rounded-xl border border-white/[0.06]">
           <p className="text-sm text-white/70 leading-relaxed">{impactSummary}</p>
         </div>
 
         {/* Legend & Notes */}
-        <div className="pt-4 border-t border-white/[0.06] space-y-3">
-          <div className="flex items-center justify-center gap-2 flex-wrap">
+        <div className="pt-5 border-t border-white/[0.06] space-y-4">
+          <div className="flex items-center justify-center gap-3 flex-wrap">
             <LegendItem color="bg-rose-500/50" label="Poor" />
             <LegendItem color="bg-amber-500/40" label="Below Avg" />
             <LegendItem color="bg-white/30" label="Average" />
             <LegendItem color="bg-emerald-500/50" label="Above Avg" />
             <LegendItem color="bg-sky-500/60" label="Elite" />
           </div>
-          <p className="text-[10px] text-white/30 leading-relaxed text-center">
+          <p className="text-xs text-white/30 leading-relaxed text-center">
             RAPM (Regularized Adjusted Plus-Minus) quantifies on-ice contributions. Against metrics shown in muted colors to indicate dependency on goalie performance. Percentiles compared among {positionLabel}s.
           </p>
         </div>
@@ -156,7 +156,7 @@ function MetricRow({
   againstMetric: ImpactMetric;
 }) {
   return (
-    <div className="grid grid-cols-3 gap-2 items-center">
+    <div className="grid grid-cols-[120px_1fr_1fr] gap-4 items-center">
       <div className="text-sm text-white/70 font-medium">{label}</div>
       <MetricBadge metric={forMetric} variant="for" />
       <MetricBadge metric={againstMetric} variant="against" />
@@ -176,8 +176,8 @@ function MetricBadge({
   const textClass = variant === "against" ? getTierTextMuted(tier) : getTierText(tier);
 
   return (
-    <div className={`py-2 px-3 rounded-lg text-center ${bgClass}`}>
-      <span className={`text-sm font-bold ${textClass}`}>{percentile}%</span>
+    <div className={`py-3 px-4 rounded-xl text-center ${bgClass}`}>
+      <span className={`text-lg font-bold ${textClass}`}>{percentile}%</span>
     </div>
   );
 }
@@ -194,10 +194,10 @@ function GeneralMetricBox({
   const textClass = getTierText(tier);
 
   return (
-    <div className={`p-3 rounded-lg ${bgClass}`}>
-      <div className="flex items-center justify-between">
+    <div className={`p-4 rounded-xl ${bgClass}`}>
+      <div className="flex flex-col items-center justify-center gap-1">
+        <span className={`text-2xl font-bold ${textClass}`}>{percentile}%</span>
         <span className="text-xs text-white/60 font-medium">{label}</span>
-        <span className={`text-lg font-bold ${textClass}`}>{percentile}%</span>
       </div>
     </div>
   );
@@ -205,9 +205,9 @@ function GeneralMetricBox({
 
 function LegendItem({ color, label }: { color: string; label: string }) {
   return (
-    <div className="flex items-center gap-1.5">
-      <div className={`w-3 h-3 rounded ${color}`} />
-      <span className="text-[10px] text-white/50">{label}</span>
+    <div className="flex items-center gap-2">
+      <div className={`w-4 h-4 rounded ${color}`} />
+      <span className="text-xs text-white/50">{label}</span>
     </div>
   );
 }
