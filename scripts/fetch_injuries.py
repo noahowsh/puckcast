@@ -3,6 +3,9 @@
 
 This script scrapes ESPN's NHL injuries page and creates a structured
 JSON file for use by the web frontend.
+
+Note: Rotowire was considered but requires JavaScript rendering.
+ESPN provides reliable HTML that can be scraped directly.
 """
 
 from __future__ import annotations
@@ -59,7 +62,7 @@ TEAM_NAME_TO_ABBREV = {
 }
 
 # All 32 NHL teams
-ALL_TEAMS = list(TEAM_NAME_TO_ABBREV.values())
+ALL_TEAMS = list(set(TEAM_NAME_TO_ABBREV.values()))
 
 
 def parse_args() -> argparse.Namespace:
@@ -90,10 +93,16 @@ def parse_status(status_text: str) -> tuple[str, bool]:
 
     if "day-to-day" in lower or "dtd" in lower:
         return "day-to-day", False
-    if "out" in lower:
+    if "questionable" in lower:
+        return "questionable", False
+    if "probable" in lower:
+        return "probable", False
+    if "out" in lower and "day-to-day" not in lower:
         return "out", True
     if "ir-lt" in lower or "long-term" in lower or "ltir" in lower:
         return "IR-LT", True
+    if "ir-nr" in lower:
+        return "IR-NR", True
     if "ir" in lower or "injured reserve" in lower:
         return "IR", True
     if "suspended" in lower:
@@ -135,6 +144,10 @@ def parse_injury_type(description: str) -> str:
         return "hip"
     if "foot" in lower:
         return "foot"
+    if "leg" in lower:
+        return "leg"
+    if "arm" in lower:
+        return "arm"
     if "illness" in lower or "flu" in lower or "sick" in lower:
         return "illness"
     if "undisclosed" in lower:
@@ -187,84 +200,94 @@ def scrape_espn_injuries(timeout: float) -> dict[str, Any]:
     teams: dict[str, Any] = {}
     now = datetime.utcnow().isoformat() + "Z"
 
-    # Find all team sections
-    # ESPN uses different structures - try multiple selectors
-    team_sections = soup.find_all("div", class_=re.compile(r"Table__Title|ResponsiveTable"))
+    # ESPN structure: each team has a ResponsiveTable div with:
+    # - div.Table__Title containing team name
+    # - table with player rows
+    # Find all tables and look for their associated team title
 
-    if not team_sections:
-        # Try alternate structure
-        team_sections = soup.find_all("section", class_=re.compile(r"Card"))
+    all_tables = soup.find_all("table")
 
-    current_team_name = None
-    current_team_abbrev = None
+    for table in all_tables:
+        # Find the team name from Table__Title sibling
+        responsive_table = table.find_parent(class_="ResponsiveTable")
+        if not responsive_table:
+            continue
 
-    for section in soup.find_all(["h2", "div", "tr", "section"]):
-        # Look for team headers
-        if section.name == "h2" or (section.get("class") and any("Title" in c for c in section.get("class", []))):
-            team_text = section.get_text(strip=True)
-            abbrev = get_team_abbrev(team_text)
-            if abbrev:
-                current_team_name = team_text
-                current_team_abbrev = abbrev
-                if abbrev not in teams:
-                    teams[abbrev] = {
-                        "teamAbbrev": abbrev,
-                        "teamName": team_text,
-                        "injuries": [],
-                        "totalOut": 0,
-                        "forwardsOut": 0,
-                        "defensemenOut": 0,
-                        "goaliesOut": 0,
-                        "impactRating": 0,
-                        "lastUpdated": now,
-                    }
+        title_div = responsive_table.find(class_="Table__Title")
+        if not title_div:
+            continue
 
-        # Look for player rows
-        elif section.name == "tr" and current_team_abbrev:
-            cells = section.find_all("td")
-            if len(cells) >= 3:
-                name_cell = cells[0].get_text(strip=True)
-                # Skip header rows
-                if name_cell.lower() in ("name", "player", ""):
-                    continue
+        team_name = title_div.get_text(strip=True)
+        team_abbrev = get_team_abbrev(team_name)
 
-                pos_text = cells[1].get_text(strip=True) if len(cells) > 1 else ""
-                status_text = cells[2].get_text(strip=True) if len(cells) > 2 else ""
-                comment_text = cells[3].get_text(strip=True) if len(cells) > 3 else ""
+        if not team_abbrev:
+            continue
 
-                if not name_cell or not status_text:
-                    continue
+        # Initialize team entry if needed
+        if team_abbrev not in teams:
+            teams[team_abbrev] = {
+                "teamAbbrev": team_abbrev,
+                "teamName": team_name,
+                "injuries": [],
+                "totalOut": 0,
+                "forwardsOut": 0,
+                "defensemenOut": 0,
+                "goaliesOut": 0,
+                "impactRating": 0,
+                "lastUpdated": now,
+            }
 
-                # Check both status column and comment column for status info
-                combined_status = f"{status_text} {comment_text}".strip()
-                status, is_out = parse_status(combined_status)
-                position = normalize_position(pos_text)
-                injury_type = parse_injury_type(comment_text or status_text)
+        # Parse player rows from this table
+        rows = table.find_all("tr")
+        for row in rows:
+            cells = row.find_all("td")
+            if len(cells) < 3:
+                continue
 
-                injury = {
-                    "playerId": generate_player_id(name_cell, current_team_abbrev),
-                    "playerName": name_cell,
-                    "teamAbbrev": current_team_abbrev,
-                    "position": position,
-                    "status": status,
-                    "injuryType": injury_type,
-                    "injuryDescription": comment_text or status_text,
-                    "dateInjured": None,
-                    "expectedReturn": None,
-                    "lastUpdated": now,
-                    "isOut": is_out,
-                }
+            name_cell = cells[0].get_text(strip=True)
+            # Skip header rows
+            if name_cell.lower() in ("name", "player", ""):
+                continue
 
-                teams[current_team_abbrev]["injuries"].append(injury)
+            pos_text = cells[1].get_text(strip=True) if len(cells) > 1 else ""
+            # Column 2 is typically "Est. Return Date"
+            return_date = cells[2].get_text(strip=True) if len(cells) > 2 else ""
+            # Column 3 is "Status"
+            status_text = cells[3].get_text(strip=True) if len(cells) > 3 else ""
 
-                if is_out:
-                    teams[current_team_abbrev]["totalOut"] += 1
-                    if is_forward(position):
-                        teams[current_team_abbrev]["forwardsOut"] += 1
-                    elif position == "D":
-                        teams[current_team_abbrev]["defensemenOut"] += 1
-                    elif position == "G":
-                        teams[current_team_abbrev]["goaliesOut"] += 1
+            if not name_cell:
+                continue
+
+            # Combine return date and status for parsing
+            combined_status = f"{status_text} {return_date}".strip()
+            status, is_out = parse_status(combined_status)
+            position = normalize_position(pos_text)
+            injury_type = parse_injury_type(status_text or return_date)
+
+            injury = {
+                "playerId": generate_player_id(name_cell, team_abbrev),
+                "playerName": name_cell,
+                "teamAbbrev": team_abbrev,
+                "position": position,
+                "status": status,
+                "injuryType": injury_type,
+                "injuryDescription": status_text or return_date,
+                "dateInjured": None,
+                "expectedReturn": return_date if return_date and return_date.lower() not in ("out", "day-to-day") else None,
+                "lastUpdated": now,
+                "isOut": is_out,
+            }
+
+            teams[team_abbrev]["injuries"].append(injury)
+
+            if is_out:
+                teams[team_abbrev]["totalOut"] += 1
+                if is_forward(position):
+                    teams[team_abbrev]["forwardsOut"] += 1
+                elif position == "D":
+                    teams[team_abbrev]["defensemenOut"] += 1
+                elif position == "G":
+                    teams[team_abbrev]["goaliesOut"] += 1
 
     # Calculate impact ratings
     for team_data in teams.values():
