@@ -6,6 +6,7 @@ import { getGoaliePulse } from "@/lib/data";
 import { TeamLogo } from "@/components/TeamLogo";
 import { TeamCrest } from "@/components/TeamCrest";
 import { GoaliePerformanceCard } from "@/components/GoaliePerformanceCard";
+import { GoalieSkillProfileCard } from "@/components/GoalieSkillProfileCard";
 import type { GoalieCard } from "@/types/goalie";
 import { parsePlayerSlug, generatePlayerSlug } from "@/lib/playerSlug";
 
@@ -239,16 +240,24 @@ export default async function GoalieDetailPage({ params }: { params: Promise<{ p
                 <span className="text-[10px] text-white/40 bg-white/[0.06] px-2 py-0.5 rounded-full">Beta</span>
               </div>
               <h2>Advanced Analytics</h2>
-              <p className="lead-sm">Performance metrics, save analysis, and league comparisons.</p>
+              <p className="lead-sm">Performance metrics, skill profile, and league comparisons.</p>
             </div>
           </div>
 
-          <GoaliePerformanceCard
-            stats={stats}
-            playerName={bio.fullName}
-            allGoalies={allGoalies}
-            pulseData={pulseData}
-          />
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <GoaliePerformanceCard
+              stats={stats}
+              playerName={bio.fullName}
+              allGoalies={allGoalies}
+              pulseData={pulseData}
+            />
+            <GoalieSkillProfileCard
+              stats={stats}
+              playerName={bio.fullName}
+              allGoalies={allGoalies}
+              age={bio.birthDate ? calculateAge(bio.birthDate) : undefined}
+            />
+          </div>
         </section>
 
         {/* Season Stats */}

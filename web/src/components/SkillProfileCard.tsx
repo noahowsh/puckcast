@@ -35,7 +35,7 @@ export function SkillProfileCard({ profile, playerName, age, evTOI }: SkillProfi
   ];
 
   return (
-    <div className="card overflow-hidden" style={{ padding: 0 }}>
+    <div className="relative bg-gradient-to-b from-[#1a1f2e] to-[#151922] border border-white/[0.06] rounded-xl overflow-hidden">
       {/* Header - Full width gradient */}
       <div className="relative border-b border-white/[0.06]">
         <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/20 via-emerald-500/8 to-transparent" />
@@ -61,22 +61,24 @@ export function SkillProfileCard({ profile, playerName, age, evTOI }: SkillProfi
         </div>
       </div>
 
-      <div className="p-6 space-y-8">
+      <div className="p-6 space-y-6">
         {/* Overall Rating + Radar Chart Row */}
-        <div className="flex items-start gap-6">
-          {/* Left side: Overall Rating + Summary */}
-          <div className="flex flex-col items-center w-32 flex-shrink-0">
+        <div className="flex gap-4">
+          {/* Left side: Overall Rating */}
+          <div className="flex flex-col items-center justify-center w-28 flex-shrink-0 py-2">
             <OverallRatingDisplay rating={overallRating} />
-            <p className="text-[10px] text-white/50 leading-relaxed mt-4 text-center">
-              {skillSummary.split('.')[0]}.
-            </p>
           </div>
 
-          {/* Right side: Radar Chart - Larger */}
-          <div className="flex-1 flex flex-col items-center justify-center">
+          {/* Right side: Radar Chart */}
+          <div className="flex-1 flex items-center justify-center">
             <SkillRadarChart data={radarData} />
           </div>
         </div>
+
+        {/* Skill Summary */}
+        <p className="text-xs text-white/60 leading-relaxed border-t border-white/[0.06] pt-4">
+          {skillSummary}
+        </p>
 
         {/* Even Strength Impact */}
         <div>
@@ -227,10 +229,10 @@ function OverallRatingDisplay({ rating }: { rating: PercentileRating }) {
 function PercentileBox({ label, sublabel, rating, showNA = false }: { label: string; sublabel: string; rating: PercentileRating | null; showNA?: boolean }) {
   if (showNA || !rating) {
     return (
-      <div className="p-2.5 bg-white/[0.03] rounded-lg text-center">
-        <p className="text-lg font-bold text-white/30">N/A</p>
-        <p className="text-[10px] text-white/50 font-medium">{label}</p>
-        <p className="text-[9px] text-white/30">{sublabel}</p>
+      <div className="p-4 bg-white/[0.03] rounded-lg text-center">
+        <p className="text-xl font-bold text-white/30">N/A</p>
+        <p className="text-[11px] text-white/50 font-medium mt-1">{label}</p>
+        <p className="text-[10px] text-white/30">{sublabel}</p>
       </div>
     );
   }
@@ -238,10 +240,10 @@ function PercentileBox({ label, sublabel, rating, showNA = false }: { label: str
   const { value, tier } = rating;
 
   return (
-    <div className={`p-2.5 rounded-lg text-center ${getTierBackground(tier)}`}>
-      <p className={`text-lg font-bold ${getTierTextColor(tier)}`}>{value}%</p>
-      <p className="text-[10px] text-white/50 font-medium">{label}</p>
-      <p className="text-[9px] text-white/30">{sublabel}</p>
+    <div className={`p-4 rounded-lg text-center ${getTierBackground(tier)}`}>
+      <p className={`text-xl font-bold ${getTierTextColor(tier)}`}>{value}%</p>
+      <p className="text-[11px] text-white/50 font-medium mt-1">{label}</p>
+      <p className="text-[10px] text-white/30">{sublabel}</p>
     </div>
   );
 }
@@ -250,12 +252,12 @@ function TalentBar({ label, rating }: { label: string; rating: PercentileRating 
   const { value, tier } = rating;
 
   return (
-    <div className="p-2.5 bg-white/[0.03] rounded-lg">
-      <div className="flex justify-between items-center mb-1.5">
-        <span className="text-[10px] text-white/60">{label}</span>
-        <span className={`text-xs font-bold ${getTierTextColor(tier)}`}>{value}%</span>
+    <div className="p-3 bg-white/[0.03] rounded-lg">
+      <div className="flex justify-between items-center mb-2">
+        <span className="text-[11px] text-white/60">{label}</span>
+        <span className={`text-sm font-bold ${getTierTextColor(tier)}`}>{value}%</span>
       </div>
-      <div className="h-1.5 bg-white/[0.06] rounded-full overflow-hidden">
+      <div className="h-2 bg-white/[0.06] rounded-full overflow-hidden">
         <div className={`h-full ${getTierBarColor(tier)} rounded-full`} style={{ width: `${value}%` }} />
       </div>
     </div>

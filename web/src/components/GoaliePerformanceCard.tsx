@@ -49,7 +49,7 @@ export function GoaliePerformanceCard({ stats, playerName, allGoalies, pulseData
   const consistencyRating = getConsistencyRating(stats);
 
   return (
-    <div className="card overflow-hidden" style={{ padding: 0 }}>
+    <div className="relative bg-gradient-to-b from-[#1a1f2e] to-[#151922] border border-white/[0.06] rounded-xl overflow-hidden">
       {/* Header - Full width gradient */}
       <div className="relative border-b border-white/[0.06]">
         <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/20 via-cyan-500/8 to-transparent" />
@@ -71,11 +71,11 @@ export function GoaliePerformanceCard({ stats, playerName, allGoalies, pulseData
         </div>
       </div>
 
-      <div className="px-6 py-6 space-y-7">
+      <div className="p-6 space-y-6">
         {/* Overall Rating + Key Metrics */}
-        <div className="flex items-start gap-8">
+        <div className="flex gap-6">
           {/* Overall Rating Circle */}
-          <div className="flex flex-col items-center flex-shrink-0">
+          <div className="flex flex-col items-center justify-center w-28 flex-shrink-0">
             <OverallRating percentile={overallPercentile} tier={overallTier} />
           </div>
 

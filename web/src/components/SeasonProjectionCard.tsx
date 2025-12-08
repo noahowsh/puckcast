@@ -38,7 +38,7 @@ export function SeasonProjectionCard({ projection, playerName }: SeasonProjectio
   const filteredPointMilestones = filterMilestones(milestoneProbabilities.points, points.current);
 
   return (
-    <div className="card overflow-hidden" style={{ padding: 0 }}>
+    <div className="relative bg-gradient-to-b from-[#1a1f2e] to-[#151922] border border-white/[0.06] rounded-xl overflow-hidden">
       {/* Header - Full width gradient */}
       <div className="relative border-b border-white/[0.06]">
         <div className="absolute inset-0 bg-gradient-to-r from-sky-500/20 via-sky-500/8 to-transparent" />
