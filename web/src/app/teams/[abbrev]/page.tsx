@@ -541,61 +541,6 @@ export default async function TeamPage({ params }: { params: Promise<{ abbrev: s
           </section>
         )}
 
-        {/* Power Index Spectrum */}
-        <section className="nova-section">
-          <h2 className="text-xl font-bold text-white mb-3">League Power Spectrum</h2>
-          <div className="card" style={{ padding: '1.5rem' }}>
-            <div style={{ position: 'relative', height: '60px', marginBottom: '1rem' }}>
-              {/* Gradient bar */}
-              <div style={{
-                position: 'absolute',
-                top: '20px',
-                left: 0,
-                right: 0,
-                height: '20px',
-                background: 'linear-gradient(90deg, #10b981 0%, #3b82f6 33%, #f59e0b 66%, #ef4444 100%)',
-                borderRadius: '10px',
-                opacity: 0.3,
-              }} />
-              {/* Team marker */}
-              <div style={{
-                position: 'absolute',
-                top: '0',
-                left: `${((teamData.powerRank - 1) / 31) * 100}%`,
-                transform: 'translateX(-50%)',
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-              }}>
-                <div className="power-spectrum-crest" style={{
-                  background: 'var(--surface-secondary)',
-                  borderRadius: '50%',
-                  padding: '4px',
-                  border: `2px solid ${getRankColor(teamData.powerRank)}`,
-                }}>
-                  <TeamCrest abbrev={teamData.abbrev} size={32} />
-                </div>
-                <div style={{
-                  marginTop: '4px',
-                  padding: '2px 8px',
-                  background: getRankColor(teamData.powerRank),
-                  borderRadius: '4px',
-                  fontSize: '0.75rem',
-                  fontWeight: 700,
-                  color: 'white',
-                }}>#{teamData.powerRank}</div>
-              </div>
-            </div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.7rem', color: 'var(--text-tertiary)' }}>
-              <span>#1 Elite</span>
-              <span>#8 Contender</span>
-              <span>#16 Bubble</span>
-              <span>#24 Fringe</span>
-              <span>#32</span>
-            </div>
-          </div>
-        </section>
-
         {/* Goals Breakdown Visual */}
         <section className="nova-section">
           <h2 className="text-xl font-bold text-white mb-3">Scoring Breakdown</h2>

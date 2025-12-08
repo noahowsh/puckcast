@@ -190,23 +190,28 @@ async function fetchTeamRosterFromAPI(teamAbbrev: string): Promise<NHLRosterResp
 async function buildPlayerTeamLookupInternal(): Promise<Map<number, { teamAbbrev: string; headshot: string }>> {
   const lookup = new Map<number, { teamAbbrev: string; headshot: string }>();
 
-  // Fetch all rosters sequentially to avoid rate limiting
-  // The roster API is different from stats API but we want to be conservative
-  for (const teamAbbrev of NHL_TEAMS) {
-    const roster = await fetchTeamRosterFromAPI(teamAbbrev);
+  // Fetch all rosters in parallel batches for faster builds
+  // The roster API (api-web.nhle.com) has different rate limits than stats API
+  const BATCH_SIZE = 6;
+  for (let i = 0; i < NHL_TEAMS.length; i += BATCH_SIZE) {
+    const batch = NHL_TEAMS.slice(i, i + BATCH_SIZE);
+    const rosters = await Promise.all(batch.map(team => fetchTeamRosterFromAPI(team)));
 
-    if (roster) {
-      // Add all players from this roster to the lookup
+    rosters.forEach((roster, idx) => {
+      if (!roster) return;
+      const teamAbbrev = batch[idx];
       [...roster.forwards, ...roster.defensemen, ...roster.goalies].forEach(player => {
         lookup.set(player.id, {
           teamAbbrev,
           headshot: player.headshot,
         });
       });
-    }
+    });
 
-    // Delay between requests to avoid rate limiting
-    await sleep(200);
+    // Small delay between batches
+    if (i + BATCH_SIZE < NHL_TEAMS.length) {
+      await sleep(50);
+    }
   }
 
   return lookup;

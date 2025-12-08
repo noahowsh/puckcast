@@ -1,4 +1,4 @@
-import { PageHeader } from "@/components/PageHeader";
+import Link from "next/link";
 import { SkaterStatsTable, GoalieStatsTable, LeaderRow } from "@/components/PlayerStatsTable";
 import { fetchSkaterLeaders, fetchGoalieLeaders, fetchEnrichedSkaterStats, fetchGoalieStats } from "@/lib/playerHub";
 
@@ -16,23 +16,24 @@ export default async function PlayersPage() {
 
   return (
     <div className="min-h-screen">
-      <div className="container" style={{ paddingTop: "8rem" }}>
-        <PageHeader
-          title="Player Stats"
-          description="NHL league leaders and player statistics for the 2025-26 season."
-          icon={
-            <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-            </svg>
-          }
-        />
+      <div className="container pt-24 pb-12">
+        {/* Header */}
+        <div className="mb-6">
+          <h1 className="text-3xl font-bold text-white mb-2">Player Stats</h1>
+          <p className="text-sm text-white/50">2025-26 Season • Updated {updatedAt} ET</p>
+        </div>
 
-        <div className="mb-8 flex items-center gap-3">
-          <span className="text-xs font-medium text-white/40">Updated {updatedAt} ET</span>
-          <span className="text-white/20">•</span>
-          <span className="text-xs font-medium text-white/40">{allSkaters.length} skaters</span>
-          <span className="text-white/20">•</span>
-          <span className="text-xs font-medium text-white/40">{allGoalies.length} goalies</span>
+        {/* Navigation Links */}
+        <div className="flex gap-3 mb-8">
+          <Link href="/players" className="px-4 py-2 rounded-lg bg-sky-500/20 text-sky-400 text-sm font-medium">
+            All Players
+          </Link>
+          <Link href="/player-intelligence" className="px-4 py-2 rounded-lg bg-white/[0.04] text-white/60 text-sm font-medium hover:bg-white/[0.06] transition-colors">
+            Skater Intelligence
+          </Link>
+          <Link href="/goalie-intelligence" className="px-4 py-2 rounded-lg bg-white/[0.04] text-white/60 text-sm font-medium hover:bg-white/[0.06] transition-colors">
+            Goalie Intelligence
+          </Link>
         </div>
 
         {/* Scoring Leaders Grid */}
@@ -275,12 +276,12 @@ export default async function PlayersPage() {
         <section className="mb-12">
           <div className="flex items-center justify-between mb-4">
             <div>
-              <h2 className="text-xl font-bold text-white">All Skaters</h2>
-              <p className="text-sm text-white/40 mt-1">Minimum 5 games played</p>
+              <h2 className="text-xl font-bold text-white">Top Skaters</h2>
+              <p className="text-sm text-white/40 mt-1">Top 25 by points • Min 5 GP</p>
             </div>
           </div>
           <div className="rounded-xl border border-white/[0.06] bg-gradient-to-b from-white/[0.02] to-transparent overflow-hidden">
-            <SkaterStatsTable players={allSkaters} maxRows={50} />
+            <SkaterStatsTable players={allSkaters} maxRows={25} />
           </div>
         </section>
 
@@ -288,12 +289,12 @@ export default async function PlayersPage() {
         <section className="mb-12">
           <div className="flex items-center justify-between mb-4">
             <div>
-              <h2 className="text-xl font-bold text-white">All Goalies</h2>
-              <p className="text-sm text-white/40 mt-1">Minimum 3 games played</p>
+              <h2 className="text-xl font-bold text-white">Top Goalies</h2>
+              <p className="text-sm text-white/40 mt-1">Top 15 by wins • Min 3 GP</p>
             </div>
           </div>
           <div className="rounded-xl border border-white/[0.06] bg-gradient-to-b from-white/[0.02] to-transparent overflow-hidden">
-            <GoalieStatsTable goalies={allGoalies} maxRows={30} />
+            <GoalieStatsTable goalies={allGoalies} maxRows={15} />
           </div>
         </section>
       </div>
