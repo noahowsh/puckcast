@@ -1,5 +1,6 @@
 // Player Hub - NHL API Integration for Player & Goalie Statistics
-// Fetches and processes player data from NHL Stats API
+// Fetches and processes player data from NHL APIs
+// Uses roster endpoint for team info + stats endpoint for performance data
 
 import type {
   SkaterCard,
@@ -32,6 +33,31 @@ const NHL_STATS_API = "https://api.nhle.com/stats/rest/en";
 const NHL_WEB_API = "https://api-web.nhle.com/v1";
 
 // =============================================================================
+// Type Definitions for NHL Web API
+// =============================================================================
+
+interface NHLRosterPlayer {
+  id: number;
+  headshot: string;
+  firstName: { default: string };
+  lastName: { default: string };
+  sweaterNumber: number;
+  positionCode: string;
+  shootsCatches: string;
+  heightInInches: number;
+  weightInPounds: number;
+  birthDate: string;
+  birthCity: { default: string };
+  birthCountry: string;
+}
+
+interface NHLRosterResponse {
+  forwards: NHLRosterPlayer[];
+  defensemen: NHLRosterPlayer[];
+  goalies: NHLRosterPlayer[];
+}
+
+// =============================================================================
 // API Fetching Functions
 // =============================================================================
 
@@ -42,6 +68,15 @@ async function fetchWithRetry<T>(url: string, options: RequestInit = {}, retries
         ...options,
         next: { revalidate: ROSTER_CACHE_TTL },
       });
+
+      // Handle redirects (NHL API sometimes returns 307)
+      if (res.status === 307) {
+        const redirectUrl = res.headers.get('location');
+        if (redirectUrl) {
+          return fetchWithRetry<T>(redirectUrl, options, retries - i);
+        }
+      }
+
       if (!res.ok) {
         console.error(`API request failed: ${url} - ${res.status}`);
         if (i === retries - 1) return null;
@@ -57,7 +92,249 @@ async function fetchWithRetry<T>(url: string, options: RequestInit = {}, retries
 }
 
 // =============================================================================
-// Skater Stats Functions
+// Roster Fetching (Primary source for team players)
+// =============================================================================
+
+async function fetchTeamRosterFromAPI(teamAbbrev: string): Promise<NHLRosterResponse | null> {
+  // First try with redirect following
+  const url = `${NHL_WEB_API}/roster/${teamAbbrev}/${CURRENT_SEASON}`;
+  return fetchWithRetry<NHLRosterResponse>(url);
+}
+
+// =============================================================================
+// Stats Fetching (Secondary source for performance data)
+// =============================================================================
+
+async function fetchAllSkaterStatsMap(): Promise<Map<number, NHLApiSkaterStats>> {
+  const url = `${NHL_STATS_API}/skater/summary?isAggregate=true&isGame=false&limit=-1&cayenneExp=seasonId=${CURRENT_SEASON}`;
+  const data = await fetchWithRetry<{ data: NHLApiSkaterStats[] }>(url);
+
+  const map = new Map<number, NHLApiSkaterStats>();
+  if (data?.data) {
+    data.data.forEach(p => map.set(p.playerId, p));
+  }
+  return map;
+}
+
+async function fetchAllGoalieStatsMap(): Promise<Map<number, NHLApiGoalieStats>> {
+  const url = `${NHL_STATS_API}/goalie/summary?isAggregate=true&isGame=false&limit=-1&cayenneExp=seasonId=${CURRENT_SEASON}`;
+  const data = await fetchWithRetry<{ data: NHLApiGoalieStats[] }>(url);
+
+  const map = new Map<number, NHLApiGoalieStats>();
+  if (data?.data) {
+    data.data.forEach(g => map.set(g.playerId, g));
+  }
+  return map;
+}
+
+// =============================================================================
+// Team-Specific Functions (NEW APPROACH)
+// =============================================================================
+
+export async function fetchTeamRoster(teamAbbrev: string): Promise<TeamRoster> {
+  // Fetch roster and stats in parallel
+  const [roster, skaterStatsMap, goalieStatsMap] = await Promise.all([
+    fetchTeamRosterFromAPI(teamAbbrev),
+    fetchAllSkaterStatsMap(),
+    fetchAllGoalieStatsMap(),
+  ]);
+
+  if (!roster) {
+    console.error(`Failed to fetch roster for ${teamAbbrev}`);
+    return {
+      teamAbbrev,
+      teamName: teamAbbrev,
+      forwards: [],
+      defensemen: [],
+      goalies: [],
+    };
+  }
+
+  // Convert forwards
+  const forwards: SkaterCard[] = roster.forwards
+    .map(player => mergeRosterWithStats(player, skaterStatsMap.get(player.id), teamAbbrev))
+    .filter((p): p is SkaterCard => p !== null)
+    .sort((a, b) => b.stats.points - a.stats.points);
+
+  // Convert defensemen
+  const defensemen: SkaterCard[] = roster.defensemen
+    .map(player => mergeRosterWithStats(player, skaterStatsMap.get(player.id), teamAbbrev))
+    .filter((p): p is SkaterCard => p !== null)
+    .sort((a, b) => b.stats.points - a.stats.points);
+
+  // Convert goalies
+  const goalies: GoalieDetailCard[] = roster.goalies
+    .map(player => mergeGoalieRosterWithStats(player, goalieStatsMap.get(player.id), teamAbbrev))
+    .filter((g): g is GoalieDetailCard => g !== null)
+    .sort((a, b) => b.stats.wins - a.stats.wins);
+
+  return {
+    teamAbbrev,
+    teamName: teamAbbrev, // Could be enhanced to get full team name
+    forwards,
+    defensemen,
+    goalies,
+  };
+}
+
+function mergeRosterWithStats(
+  rosterPlayer: NHLRosterPlayer,
+  statsData: NHLApiSkaterStats | undefined,
+  teamAbbrev: string
+): SkaterCard | null {
+  const position = rosterPlayer.positionCode as PlayerPosition;
+  const positionType = getPositionType(position);
+  const fullName = `${rosterPlayer.firstName.default} ${rosterPlayer.lastName.default}`;
+
+  const bio: PlayerBio = {
+    playerId: rosterPlayer.id,
+    firstName: rosterPlayer.firstName.default,
+    lastName: rosterPlayer.lastName.default,
+    fullName,
+    teamAbbrev,
+    teamName: teamAbbrev,
+    position,
+    positionType,
+    jerseyNumber: rosterPlayer.sweaterNumber,
+    shootsCatches: (rosterPlayer.shootsCatches === "L" ? "L" : "R") as "L" | "R",
+    heightInInches: rosterPlayer.heightInInches,
+    weightInPounds: rosterPlayer.weightInPounds,
+    birthDate: rosterPlayer.birthDate,
+    birthCity: rosterPlayer.birthCity?.default || null,
+    birthCountry: rosterPlayer.birthCountry,
+    nationality: rosterPlayer.birthCountry,
+    isActive: true,
+    isRookie: false,
+    headshot: rosterPlayer.headshot,
+  };
+
+  // Use stats data if available, otherwise create empty stats
+  const stats: SkaterSeasonStats = statsData ? {
+    playerId: rosterPlayer.id,
+    season: CURRENT_SEASON,
+    teamAbbrev,
+    gamesPlayed: statsData.gamesPlayed,
+    goals: statsData.goals,
+    assists: statsData.assists,
+    points: statsData.points,
+    plusMinus: statsData.plusMinus,
+    penaltyMinutes: statsData.penaltyMinutes,
+    powerPlayGoals: statsData.ppGoals,
+    powerPlayPoints: statsData.ppPoints,
+    shorthandedGoals: statsData.shGoals,
+    shorthandedPoints: statsData.shPoints,
+    gameWinningGoals: statsData.gameWinningGoals,
+    overtimeGoals: statsData.otGoals,
+    shots: statsData.shots,
+    shootingPct: statsData.shootingPct || 0,
+    timeOnIcePerGame: formatSecondsToTime(statsData.timeOnIcePerGame),
+    faceoffWinPct: statsData.faceoffWinPct || 0,
+    blockedShots: 0,
+    hits: 0,
+    takeaways: 0,
+    giveaways: 0,
+  } : {
+    playerId: rosterPlayer.id,
+    season: CURRENT_SEASON,
+    teamAbbrev,
+    gamesPlayed: 0,
+    goals: 0,
+    assists: 0,
+    points: 0,
+    plusMinus: 0,
+    penaltyMinutes: 0,
+    powerPlayGoals: 0,
+    powerPlayPoints: 0,
+    shorthandedGoals: 0,
+    shorthandedPoints: 0,
+    gameWinningGoals: 0,
+    overtimeGoals: 0,
+    shots: 0,
+    shootingPct: 0,
+    timeOnIcePerGame: "0:00",
+    faceoffWinPct: 0,
+    blockedShots: 0,
+    hits: 0,
+    takeaways: 0,
+    giveaways: 0,
+  };
+
+  return { bio, stats };
+}
+
+function mergeGoalieRosterWithStats(
+  rosterPlayer: NHLRosterPlayer,
+  statsData: NHLApiGoalieStats | undefined,
+  teamAbbrev: string
+): GoalieDetailCard | null {
+  const fullName = `${rosterPlayer.firstName.default} ${rosterPlayer.lastName.default}`;
+
+  const bio: PlayerBio = {
+    playerId: rosterPlayer.id,
+    firstName: rosterPlayer.firstName.default,
+    lastName: rosterPlayer.lastName.default,
+    fullName,
+    teamAbbrev,
+    teamName: teamAbbrev,
+    position: "G",
+    positionType: "goalie",
+    jerseyNumber: rosterPlayer.sweaterNumber,
+    shootsCatches: (rosterPlayer.shootsCatches === "R" ? "R" : "L") as "L" | "R",
+    heightInInches: rosterPlayer.heightInInches,
+    weightInPounds: rosterPlayer.weightInPounds,
+    birthDate: rosterPlayer.birthDate,
+    birthCity: rosterPlayer.birthCity?.default || null,
+    birthCountry: rosterPlayer.birthCountry,
+    nationality: rosterPlayer.birthCountry,
+    isActive: true,
+    isRookie: false,
+    headshot: rosterPlayer.headshot,
+  };
+
+  // Use stats data if available, otherwise create empty stats
+  const stats: GoalieSeasonStats = statsData ? {
+    playerId: rosterPlayer.id,
+    season: CURRENT_SEASON,
+    teamAbbrev,
+    gamesPlayed: statsData.gamesPlayed,
+    gamesStarted: statsData.gamesStarted,
+    wins: statsData.wins,
+    losses: statsData.losses,
+    otLosses: statsData.otLosses,
+    shotsAgainst: statsData.shotsAgainst,
+    goalsAgainst: statsData.goalsAgainst,
+    saves: statsData.saves,
+    savePct: statsData.savePct,
+    goalsAgainstAverage: statsData.goalsAgainstAverage,
+    shutouts: statsData.shutouts,
+    timeOnIce: formatSecondsToTime(statsData.timeOnIce),
+    qualityStarts: null,
+    qualityStartsPct: null,
+  } : {
+    playerId: rosterPlayer.id,
+    season: CURRENT_SEASON,
+    teamAbbrev,
+    gamesPlayed: 0,
+    gamesStarted: 0,
+    wins: 0,
+    losses: 0,
+    otLosses: 0,
+    shotsAgainst: 0,
+    goalsAgainst: 0,
+    saves: 0,
+    savePct: 0,
+    goalsAgainstAverage: 0,
+    shutouts: 0,
+    timeOnIce: "0:00",
+    qualityStarts: null,
+    qualityStartsPct: null,
+  };
+
+  return { bio, stats };
+}
+
+// =============================================================================
+// League-Wide Stats Functions (for leaders, search, etc.)
 // =============================================================================
 
 export async function fetchSkaterStats(minGames = MIN_SKATER_GAMES): Promise<SkaterCard[]> {
@@ -70,6 +347,18 @@ export async function fetchSkaterStats(minGames = MIN_SKATER_GAMES): Promise<Ska
     .filter((p) => p.gamesPlayed >= minGames)
     .map((p) => mapNHLSkaterToCard(p))
     .sort((a, b) => b.stats.points - a.stats.points);
+}
+
+export async function fetchGoalieStats(minGames = MIN_GOALIE_GAMES): Promise<GoalieDetailCard[]> {
+  const url = `${NHL_STATS_API}/goalie/summary?isAggregate=true&isGame=false&limit=-1&cayenneExp=seasonId=${CURRENT_SEASON}`;
+
+  const data = await fetchWithRetry<{ data: NHLApiGoalieStats[] }>(url);
+  if (!data?.data) return [];
+
+  return data.data
+    .filter((g) => g.gamesPlayed >= minGames)
+    .map((g) => mapNHLGoalieToCard(g))
+    .sort((a, b) => b.stats.wins - a.stats.wins);
 }
 
 export async function fetchSkaterLeaders(): Promise<LeagueSkaterLeaders> {
@@ -98,58 +387,6 @@ export async function fetchSkaterLeaders(): Promise<LeagueSkaterLeaders> {
   };
 }
 
-export async function fetchSkaterById(playerId: number): Promise<SkaterCard | null> {
-  // First try to get from summary stats
-  const url = `${NHL_STATS_API}/skater/summary?isAggregate=true&isGame=false&limit=1&cayenneExp=seasonId=${CURRENT_SEASON} and playerId=${playerId}`;
-
-  const data = await fetchWithRetry<{ data: NHLApiSkaterStats[] }>(url);
-  if (!data?.data?.[0]) return null;
-
-  const card = mapNHLSkaterToCard(data.data[0]);
-
-  // Try to enrich with player landing page data
-  try {
-    const landingUrl = `${NHL_WEB_API}/player/${playerId}/landing`;
-    const landingData = await fetchWithRetry<any>(landingUrl);
-    if (landingData) {
-      card.bio.headshot = landingData.headshot || null;
-      card.bio.heightInInches = landingData.heightInInches || null;
-      card.bio.weightInPounds = landingData.weightInPounds || null;
-      card.bio.birthDate = landingData.birthDate || null;
-      card.bio.birthCity = landingData.birthCity?.default || null;
-      card.bio.birthCountry = landingData.birthCountry || null;
-      card.bio.jerseyNumber = landingData.sweaterNumber || null;
-      card.bio.shootsCatches = landingData.shootsCatches || "R";
-      card.bio.isRookie = landingData.isRookie || false;
-    }
-  } catch {
-    // Landing data optional
-  }
-
-  return card;
-}
-
-export async function fetchTeamSkaters(teamAbbrev: string): Promise<SkaterCard[]> {
-  const allSkaters = await fetchSkaterStats(1);
-  return allSkaters.filter((p) => p.bio.teamAbbrev === teamAbbrev);
-}
-
-// =============================================================================
-// Goalie Stats Functions
-// =============================================================================
-
-export async function fetchGoalieStats(minGames = MIN_GOALIE_GAMES): Promise<GoalieDetailCard[]> {
-  const url = `${NHL_STATS_API}/goalie/summary?isAggregate=true&isGame=false&limit=-1&cayenneExp=seasonId=${CURRENT_SEASON}`;
-
-  const data = await fetchWithRetry<{ data: NHLApiGoalieStats[] }>(url);
-  if (!data?.data) return [];
-
-  return data.data
-    .filter((g) => g.gamesPlayed >= minGames)
-    .map((g) => mapNHLGoalieToCard(g))
-    .sort((a, b) => b.stats.wins - a.stats.wins);
-}
-
 export async function fetchGoalieLeaders(): Promise<LeagueGoalieLeaders> {
   const allGoalies = await fetchGoalieStats(MIN_GOALIE_GAMES);
 
@@ -169,6 +406,43 @@ export async function fetchGoalieLeaders(): Promise<LeagueGoalieLeaders> {
   };
 }
 
+// =============================================================================
+// Individual Player Functions
+// =============================================================================
+
+export async function fetchSkaterById(playerId: number): Promise<SkaterCard | null> {
+  // First try to get from summary stats
+  const url = `${NHL_STATS_API}/skater/summary?isAggregate=true&isGame=false&limit=1&cayenneExp=seasonId=${CURRENT_SEASON} and playerId=${playerId}`;
+
+  const data = await fetchWithRetry<{ data: NHLApiSkaterStats[] }>(url);
+  if (!data?.data?.[0]) return null;
+
+  const card = mapNHLSkaterToCard(data.data[0]);
+
+  // Try to enrich with player landing page data
+  try {
+    const landingUrl = `${NHL_WEB_API}/player/${playerId}/landing`;
+    const landingData = await fetchWithRetry<any>(landingUrl);
+    if (landingData) {
+      card.bio.headshot = landingData.headshot || card.bio.headshot;
+      card.bio.heightInInches = landingData.heightInInches || null;
+      card.bio.weightInPounds = landingData.weightInPounds || null;
+      card.bio.birthDate = landingData.birthDate || null;
+      card.bio.birthCity = landingData.birthCity?.default || null;
+      card.bio.birthCountry = landingData.birthCountry || null;
+      card.bio.jerseyNumber = landingData.sweaterNumber || null;
+      card.bio.shootsCatches = landingData.shootsCatches || "R";
+      card.bio.isRookie = landingData.isRookie || false;
+      card.bio.teamAbbrev = landingData.currentTeamAbbrev || card.bio.teamAbbrev;
+      card.bio.teamName = landingData.fullTeamName?.default || card.bio.teamName;
+    }
+  } catch {
+    // Landing data optional
+  }
+
+  return card;
+}
+
 export async function fetchGoalieById(playerId: number): Promise<GoalieDetailCard | null> {
   const url = `${NHL_STATS_API}/goalie/summary?isAggregate=true&isGame=false&limit=1&cayenneExp=seasonId=${CURRENT_SEASON} and playerId=${playerId}`;
 
@@ -182,7 +456,7 @@ export async function fetchGoalieById(playerId: number): Promise<GoalieDetailCar
     const landingUrl = `${NHL_WEB_API}/player/${playerId}/landing`;
     const landingData = await fetchWithRetry<any>(landingUrl);
     if (landingData) {
-      card.bio.headshot = landingData.headshot || null;
+      card.bio.headshot = landingData.headshot || card.bio.headshot;
       card.bio.heightInInches = landingData.heightInInches || null;
       card.bio.weightInPounds = landingData.weightInPounds || null;
       card.bio.birthDate = landingData.birthDate || null;
@@ -190,6 +464,8 @@ export async function fetchGoalieById(playerId: number): Promise<GoalieDetailCar
       card.bio.birthCountry = landingData.birthCountry || null;
       card.bio.jerseyNumber = landingData.sweaterNumber || null;
       card.bio.shootsCatches = landingData.shootsCatches || "L";
+      card.bio.teamAbbrev = landingData.currentTeamAbbrev || card.bio.teamAbbrev;
+      card.bio.teamName = landingData.fullTeamName?.default || card.bio.teamName;
     }
   } catch {
     // Landing data optional
@@ -198,34 +474,16 @@ export async function fetchGoalieById(playerId: number): Promise<GoalieDetailCar
   return card;
 }
 
-export async function fetchTeamGoalies(teamAbbrev: string): Promise<GoalieDetailCard[]> {
-  const allGoalies = await fetchGoalieStats(1);
-  return allGoalies.filter((g) => g.bio.teamAbbrev === teamAbbrev);
+// Deprecated: Use fetchTeamRoster instead
+export async function fetchTeamSkaters(teamAbbrev: string): Promise<SkaterCard[]> {
+  const roster = await fetchTeamRoster(teamAbbrev);
+  return [...roster.forwards, ...roster.defensemen];
 }
 
-// =============================================================================
-// Team Functions
-// =============================================================================
-
-export async function fetchTeamRoster(teamAbbrev: string): Promise<TeamRoster> {
-  const [skaters, goalies] = await Promise.all([
-    fetchTeamSkaters(teamAbbrev),
-    fetchTeamGoalies(teamAbbrev),
-  ]);
-
-  const forwards = skaters.filter((p) => p.bio.positionType === "forward");
-  const defensemen = skaters.filter((p) => p.bio.positionType === "defenseman");
-
-  // Try to get team name from first player
-  const teamName = skaters[0]?.bio.teamName || goalies[0]?.bio.teamName || teamAbbrev;
-
-  return {
-    teamAbbrev,
-    teamName,
-    forwards: forwards.sort((a, b) => b.stats.points - a.stats.points),
-    defensemen: defensemen.sort((a, b) => b.stats.points - a.stats.points),
-    goalies: goalies.sort((a, b) => b.stats.wins - a.stats.wins),
-  };
+// Deprecated: Use fetchTeamRoster instead
+export async function fetchTeamGoalies(teamAbbrev: string): Promise<GoalieDetailCard[]> {
+  const roster = await fetchTeamRoster(teamAbbrev);
+  return roster.goalies;
 }
 
 export async function fetchTeamLeaders(teamAbbrev: string): Promise<TeamLeaders> {
@@ -244,15 +502,15 @@ export async function fetchTeamLeaders(teamAbbrev: string): Promise<TeamLeaders>
 }
 
 // =============================================================================
-// Mapping Functions
+// Mapping Functions (for league-wide stats without team info)
 // =============================================================================
 
 function mapNHLSkaterToCard(data: NHLApiSkaterStats): SkaterCard {
   const position = data.positionCode as PlayerPosition;
   const positionType = getPositionType(position);
 
-  // Parse team abbreviation (API sometimes returns multiple like "TOR, MTL")
-  const teamAbbrev = (data.teamAbbrevs || "").split(",")[0].trim().toUpperCase();
+  // teamAbbrevs may be null in new API - use empty string as fallback
+  const teamAbbrev = (data.teamAbbrevs || "").split(",")[0].trim().toUpperCase() || "NHL";
 
   const bio: PlayerBio = {
     playerId: data.playerId,
@@ -260,7 +518,7 @@ function mapNHLSkaterToCard(data: NHLApiSkaterStats): SkaterCard {
     lastName: data.lastName,
     fullName: data.skaterFullName,
     teamAbbrev,
-    teamName: teamAbbrev, // Will be enriched later if needed
+    teamName: teamAbbrev,
     position,
     positionType,
     jerseyNumber: null,
@@ -293,11 +551,11 @@ function mapNHLSkaterToCard(data: NHLApiSkaterStats): SkaterCard {
     gameWinningGoals: data.gameWinningGoals,
     overtimeGoals: data.otGoals,
     shots: data.shots,
-    shootingPct: data.shootingPct,
+    shootingPct: data.shootingPct || 0,
     timeOnIcePerGame: formatSecondsToTime(data.timeOnIcePerGame),
-    faceoffWinPct: data.faceoffWinPct,
-    blockedShots: 0, // Not in summary endpoint
-    hits: 0, // Not in summary endpoint
+    faceoffWinPct: data.faceoffWinPct || 0,
+    blockedShots: 0,
+    hits: 0,
     takeaways: 0,
     giveaways: 0,
   };
@@ -306,7 +564,8 @@ function mapNHLSkaterToCard(data: NHLApiSkaterStats): SkaterCard {
 }
 
 function mapNHLGoalieToCard(data: NHLApiGoalieStats): GoalieDetailCard {
-  const teamAbbrev = (data.teamAbbrevs || "").split(",")[0].trim().toUpperCase();
+  // teamAbbrevs may be null in new API - use empty string as fallback
+  const teamAbbrev = (data.teamAbbrevs || "").split(",")[0].trim().toUpperCase() || "NHL";
 
   const bio: PlayerBio = {
     playerId: data.playerId,
@@ -458,14 +717,12 @@ export async function searchPlayers(query: string): Promise<{ skaters: SkaterCar
 
   const matchingSkaters = allSkaters.filter((p) =>
     p.bio.fullName.toLowerCase().includes(normalizedQuery) ||
-    p.bio.lastName.toLowerCase().includes(normalizedQuery) ||
-    p.bio.teamAbbrev.toLowerCase() === normalizedQuery
+    p.bio.lastName.toLowerCase().includes(normalizedQuery)
   ).slice(0, 20);
 
   const matchingGoalies = allGoalies.filter((g) =>
     g.bio.fullName.toLowerCase().includes(normalizedQuery) ||
-    g.bio.lastName.toLowerCase().includes(normalizedQuery) ||
-    g.bio.teamAbbrev.toLowerCase() === normalizedQuery
+    g.bio.lastName.toLowerCase().includes(normalizedQuery)
   ).slice(0, 10);
 
   return { skaters: matchingSkaters, goalies: matchingGoalies };

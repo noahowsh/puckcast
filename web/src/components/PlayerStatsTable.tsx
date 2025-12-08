@@ -1,8 +1,51 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
+import { useState } from "react";
 import type { SkaterCard, GoalieDetailCard } from "@/types/player";
 import { TeamLogo } from "./TeamLogo";
+
+// =============================================================================
+// Player Avatar Component
+// =============================================================================
+
+function PlayerAvatar({ headshot, name, teamAbbrev, size = 32 }: {
+  headshot: string | null;
+  name: string;
+  teamAbbrev: string;
+  size?: number;
+}) {
+  const [imgError, setImgError] = useState(false);
+
+  if (!headshot || imgError) {
+    // Fallback to team logo
+    return (
+      <div
+        className="rounded-full bg-white/[0.05] flex items-center justify-center overflow-hidden"
+        style={{ width: size, height: size }}
+      >
+        <TeamLogo teamAbbrev={teamAbbrev} size="xs" />
+      </div>
+    );
+  }
+
+  return (
+    <div
+      className="rounded-full bg-white/[0.05] overflow-hidden flex-shrink-0"
+      style={{ width: size, height: size }}
+    >
+      <Image
+        src={headshot}
+        alt={name}
+        width={size}
+        height={size}
+        className="object-cover"
+        onError={() => setImgError(true)}
+      />
+    </div>
+  );
+}
 
 // =============================================================================
 // Skater Stats Table
@@ -82,8 +125,14 @@ export function SkaterStatsTable({
                   <td className="py-3 px-2 text-sm text-white/50 font-medium">{idx + 1}</td>
                 )}
                 <td className="py-3 px-2">
-                  <div className="flex items-center gap-2">
-                    <span className="font-medium text-white text-sm">{bio.fullName}</span>
+                  <div className="flex items-center gap-2.5">
+                    <PlayerAvatar headshot={bio.headshot} name={bio.fullName} teamAbbrev={bio.teamAbbrev} size={28} />
+                    <div className="flex flex-col">
+                      <span className="font-medium text-white text-sm leading-tight">{bio.fullName}</span>
+                      {bio.jerseyNumber && (
+                        <span className="text-[10px] text-white/40">#{bio.jerseyNumber}</span>
+                      )}
+                    </div>
                   </div>
                 </td>
                 {showTeam && (
@@ -208,8 +257,14 @@ export function GoalieStatsTable({
                   <td className="py-3 px-2 text-sm text-white/50 font-medium">{idx + 1}</td>
                 )}
                 <td className="py-3 px-2">
-                  <div className="flex items-center gap-2">
-                    <span className="font-medium text-white text-sm">{bio.fullName}</span>
+                  <div className="flex items-center gap-2.5">
+                    <PlayerAvatar headshot={bio.headshot} name={bio.fullName} teamAbbrev={bio.teamAbbrev} size={28} />
+                    <div className="flex flex-col">
+                      <span className="font-medium text-white text-sm leading-tight">{bio.fullName}</span>
+                      {bio.jerseyNumber && (
+                        <span className="text-[10px] text-white/40">#{bio.jerseyNumber}</span>
+                      )}
+                    </div>
                   </div>
                 </td>
                 {showTeam && (
