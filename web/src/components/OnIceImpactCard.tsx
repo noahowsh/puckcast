@@ -45,17 +45,17 @@ export function OnIceImpactCard({ impact, playerName, age }: OnIceImpactCardProp
         </div>
       </div>
 
-      <div className="px-6 py-6 space-y-7">
+      <div className="p-6 space-y-8">
         {/* FOR vs AGAINST Metrics Table */}
         <div className="bg-white/[0.02] rounded-lg overflow-hidden">
           {/* Header */}
-          <div className="grid grid-cols-[100px_1fr_1fr] border-b border-white/[0.04]">
-            <div className="py-2 px-3"></div>
-            <div className="py-2 px-2 text-center">
-              <span className="text-[10px] font-bold text-emerald-400 uppercase tracking-wide">FOR</span>
+          <div className="grid grid-cols-[110px_1fr_1fr] border-b border-white/[0.06]">
+            <div className="py-3 px-4"></div>
+            <div className="py-3 px-3 text-center">
+              <span className="text-[11px] font-bold text-emerald-400 uppercase tracking-wide">FOR</span>
             </div>
-            <div className="py-2 px-2 text-center">
-              <span className="text-[10px] font-bold text-white/40 uppercase tracking-wide">AGAINST</span>
+            <div className="py-3 px-3 text-center">
+              <span className="text-[11px] font-bold text-white/40 uppercase tracking-wide">AGAINST</span>
             </div>
           </div>
           {/* Rows */}
@@ -69,7 +69,7 @@ export function OnIceImpactCard({ impact, playerName, age }: OnIceImpactCardProp
         {/* General Metrics */}
         <div>
           <h4 className="text-xs font-semibold text-white/60 uppercase tracking-wide mb-4">General</h4>
-          <div className="grid grid-cols-4 gap-3">
+          <div className="grid grid-cols-4 gap-4">
             <GeneralMetric label="Net xGoals" metric={general.netExpectedGoals} />
             <GeneralMetric label="Net Corsi" metric={general.netCorsi} />
             <GeneralMetric label="Finishing" metric={general.finishing} />
@@ -81,8 +81,8 @@ export function OnIceImpactCard({ impact, playerName, age }: OnIceImpactCardProp
         <p className="text-xs text-white/60 leading-relaxed">{impactSummary}</p>
 
         {/* Legend & Notes */}
-        <div className="pt-5 border-t border-white/[0.06] space-y-3">
-          <div className="flex items-center justify-center gap-2">
+        <div className="pt-6 border-t border-white/[0.06] space-y-3">
+          <div className="flex items-center justify-center gap-3">
             <LegendItem color="bg-rose-500/50" label="Poor" />
             <LegendItem color="bg-amber-500/40" label="Below Avg" />
             <LegendItem color="bg-white/25" label="Average" />
@@ -104,12 +104,12 @@ export function OnIceImpactCard({ impact, playerName, age }: OnIceImpactCardProp
 
 function MetricRow({ label, forMetric, againstMetric, isLast = false }: { label: string; forMetric: ImpactMetric; againstMetric: ImpactMetric; isLast?: boolean }) {
   return (
-    <div className={`grid grid-cols-[100px_1fr_1fr] ${!isLast ? "border-b border-white/[0.02]" : ""}`}>
-      <div className="py-2 px-3 text-xs text-white/60">{label}</div>
-      <div className="py-1.5 px-2">
+    <div className={`grid grid-cols-[110px_1fr_1fr] ${!isLast ? "border-b border-white/[0.04]" : ""}`}>
+      <div className="py-2.5 px-4 text-xs text-white/60">{label}</div>
+      <div className="py-2 px-3">
         <MetricBadge metric={forMetric} variant="for" />
       </div>
-      <div className="py-1.5 px-2">
+      <div className="py-2 px-3">
         <MetricBadge metric={againstMetric} variant="against" />
       </div>
     </div>
@@ -132,9 +132,9 @@ function GeneralMetric({ label, metric }: { label: string; metric: ImpactMetric 
   const { percentile, tier } = metric;
 
   return (
-    <div className={`p-2.5 rounded-lg text-center ${getTierBackground(tier)}`}>
-      <p className={`text-lg font-bold ${getTierText(tier)}`}>{percentile}%</p>
-      <p className="text-[9px] text-white/50">{label}</p>
+    <div className={`p-3 rounded-lg text-center ${getTierBackground(tier)}`}>
+      <p className={`text-xl font-bold ${getTierText(tier)}`}>{percentile}%</p>
+      <p className="text-[10px] text-white/50 mt-0.5">{label}</p>
     </div>
   );
 }

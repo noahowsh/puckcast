@@ -54,7 +54,7 @@ export function SeasonProjectionCard({ projection, playerName }: SeasonProjectio
         </div>
       </div>
 
-      <div className="px-6 py-6 space-y-7">
+      <div className="p-6 space-y-8">
         {/* End of Season Projections Table */}
         <div>
           <h4 className="text-xs font-semibold text-white/60 uppercase tracking-wide mb-4">
@@ -140,10 +140,10 @@ export function SeasonProjectionCard({ projection, playerName }: SeasonProjectio
 
         {/* Awards Watch */}
         <div>
-          <h4 className="text-xs font-semibold text-white/60 uppercase tracking-wide mb-3">
+          <h4 className="text-xs font-semibold text-white/60 uppercase tracking-wide mb-4">
             Awards Watch
           </h4>
-          <div className="grid grid-cols-3 gap-2">
+          <div className="grid grid-cols-3 gap-4">
             <AwardProbability label="Art Ross" sublabel="Most Points" probability={awardProbabilities.mostPoints} />
             <AwardProbability label="Rocket" sublabel="Most Goals" probability={awardProbabilities.mostGoals} />
             <AwardProbability label="Playmaker" sublabel="Most Assists" probability={awardProbabilities.mostAssists} />
@@ -155,10 +155,10 @@ export function SeasonProjectionCard({ projection, playerName }: SeasonProjectio
           Object.keys(filteredAssistMilestones).length > 0 ||
           Object.keys(filteredPointMilestones).length > 0) && (
           <div>
-            <h4 className="text-xs font-semibold text-white/60 uppercase tracking-wide mb-3">
+            <h4 className="text-xs font-semibold text-white/60 uppercase tracking-wide mb-4">
               Probability of Reaching...
             </h4>
-            <div className="space-y-3">
+            <div className="space-y-4">
               {Object.keys(filteredGoalMilestones).length > 0 && (
                 <MilestoneRow label="Goals" milestones={filteredGoalMilestones} color="emerald" />
               )}
@@ -173,7 +173,7 @@ export function SeasonProjectionCard({ projection, playerName }: SeasonProjectio
         )}
 
         {/* Footer */}
-        <p className="text-[10px] text-white/30 leading-relaxed pt-4 border-t border-white/[0.06]">
+        <p className="text-[10px] text-white/30 leading-relaxed pt-6 border-t border-white/[0.06]">
           Projections based on current pace extrapolated to 82 games with variance modeling.
         </p>
       </div>
@@ -238,9 +238,9 @@ function ProjectionHistogram({
   const maxProb = Math.max(...data.map((d) => d.probability));
 
   return (
-    <div className="bg-white/[0.02] rounded-lg p-4">
+    <div className="bg-white/[0.02] rounded-lg p-5">
       {/* Bars */}
-      <div className="flex items-end justify-between gap-1.5 h-28 mb-2">
+      <div className="flex items-end justify-between gap-2 h-32 mb-3">
         {data.map((bar, i) => {
           const height = (bar.probability / maxProb) * 100;
           const containsAverage = bar.rangeStart <= average && bar.rangeEnd >= average;
@@ -288,12 +288,12 @@ function AwardProbability({ label, sublabel, probability }: { label: string; sub
   };
 
   return (
-    <div className="p-3 bg-white/[0.03] rounded-lg text-center">
-      <p className={`text-lg font-bold ${getColorClass(probability)}`}>
+    <div className="p-4 bg-white/[0.03] rounded-lg text-center">
+      <p className={`text-xl font-bold ${getColorClass(probability)}`}>
         {probability.toFixed(1)}%
       </p>
-      <p className="text-[10px] text-white/60 font-medium mt-1">{label}</p>
-      <p className="text-[9px] text-white/40">{sublabel}</p>
+      <p className="text-[11px] text-white/60 font-medium mt-1.5">{label}</p>
+      <p className="text-[10px] text-white/40">{sublabel}</p>
     </div>
   );
 }
@@ -324,13 +324,13 @@ function MilestoneRow({
   };
 
   return (
-    <div className="flex items-center gap-2">
-      <span className="text-[10px] font-medium text-white/50 w-12">{label}</span>
-      <div className="flex-1 flex gap-1.5 overflow-x-auto">
+    <div className="flex items-center gap-3">
+      <span className="text-[11px] font-medium text-white/50 w-14">{label}</span>
+      <div className="flex-1 flex gap-2 overflow-x-auto">
         {entries.map(([milestone, probability]) => (
-          <div key={milestone} className={`flex-shrink-0 px-2 py-1 rounded text-center min-w-[44px] ${getColorClass(probability)}`}>
-            <p className="text-[9px] font-medium opacity-80">{milestone}</p>
-            <p className="text-[10px] font-bold">{probability.toFixed(0)}%</p>
+          <div key={milestone} className={`flex-shrink-0 px-2.5 py-1.5 rounded text-center min-w-[48px] ${getColorClass(probability)}`}>
+            <p className="text-[10px] font-medium opacity-80">{milestone}</p>
+            <p className="text-[11px] font-bold">{probability.toFixed(0)}%</p>
           </div>
         ))}
       </div>

@@ -61,29 +61,29 @@ export function SkillProfileCard({ profile, playerName, age, evTOI }: SkillProfi
         </div>
       </div>
 
-      <div className="px-6 py-6 space-y-7">
+      <div className="p-6 space-y-8">
         {/* Overall Rating + Radar Chart Row */}
-        <div className="flex items-center gap-8">
-          {/* Overall Rating - Redesigned */}
-          <div className="flex flex-col items-center flex-shrink-0">
+        <div className="flex items-start gap-6">
+          {/* Left side: Overall Rating + Summary */}
+          <div className="flex flex-col items-center w-32 flex-shrink-0">
             <OverallRatingDisplay rating={overallRating} />
+            <p className="text-[10px] text-white/50 leading-relaxed mt-4 text-center">
+              {skillSummary.split('.')[0]}.
+            </p>
           </div>
 
-          {/* Radar Chart - Larger */}
-          <div className="flex-1 flex flex-col items-center justify-center min-h-[200px]">
+          {/* Right side: Radar Chart - Larger */}
+          <div className="flex-1 flex flex-col items-center justify-center">
             <SkillRadarChart data={radarData} />
           </div>
         </div>
-
-        {/* Skill Summary */}
-        <p className="text-xs text-white/60 leading-relaxed">{skillSummary}</p>
 
         {/* Even Strength Impact */}
         <div>
           <h4 className="text-xs font-semibold text-white/60 uppercase tracking-wide mb-4">
             Even Strength Impact
           </h4>
-          <div className="grid grid-cols-3 gap-3">
+          <div className="grid grid-cols-3 gap-4">
             <PercentileBox label="EV OFF" sublabel="Offensive" rating={evenStrength.offensive} />
             <PercentileBox label="EV DEF" sublabel="Defensive" rating={evenStrength.defensive} />
             <PercentileBox label="EV +/-" sublabel="Overall" rating={evenStrength.overall} />
@@ -95,7 +95,7 @@ export function SkillProfileCard({ profile, playerName, age, evTOI }: SkillProfi
           <h4 className="text-xs font-semibold text-white/60 uppercase tracking-wide mb-4">
             Special Teams Impact
           </h4>
-          <div className="grid grid-cols-3 gap-3">
+          <div className="grid grid-cols-3 gap-4">
             <PercentileBox label="PP OFF" sublabel="Power Play" rating={specialTeams.powerPlayOffense} />
             <PercentileBox label="PK DEF" sublabel="Penalty Kill" rating={specialTeams.penaltyKillDefense} showNA={!specialTeams.penaltyKillDefense} />
             <PercentileBox label="PP/EV" sublabel="Combined" rating={specialTeams.combinedPPEV} />
@@ -107,7 +107,7 @@ export function SkillProfileCard({ profile, playerName, age, evTOI }: SkillProfi
           <h4 className="text-xs font-semibold text-white/60 uppercase tracking-wide mb-4">
             Talent Profile
           </h4>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-2 gap-5">
             <TalentBar label="Finishing" rating={talents.finishing} />
             <TalentBar label="Playmaking" rating={talents.playmaking} />
             <TalentBar label="Penalty Impact" rating={talents.penaltyImpact} />
@@ -116,7 +116,7 @@ export function SkillProfileCard({ profile, playerName, age, evTOI }: SkillProfi
         </div>
 
         {/* Legend */}
-        <div className="flex items-center justify-center gap-2 pt-5 border-t border-white/[0.06]">
+        <div className="flex items-center justify-center gap-3 pt-6 border-t border-white/[0.06]">
           <LegendItem color="bg-rose-500/50" label="Replacement" />
           <LegendItem color="bg-amber-500/40" label="Below Avg" />
           <LegendItem color="bg-white/25" label="Average" />
@@ -138,9 +138,9 @@ interface RadarDataPoint {
 }
 
 function SkillRadarChart({ data }: { data: RadarDataPoint[] }) {
-  const size = 200;
+  const size = 260;
   const center = size / 2;
-  const maxRadius = size / 2 - 30;
+  const maxRadius = size / 2 - 35;
   const levels = [25, 50, 75, 100];
   const angleStep = (2 * Math.PI) / data.length;
   const startAngle = -Math.PI / 2;
@@ -182,9 +182,9 @@ function SkillRadarChart({ data }: { data: RadarDataPoint[] }) {
 
       {/* Axis labels with values */}
       {dataPoints.map((p, i) => {
-        const labelRadius = maxRadius + 20;
+        const labelRadius = maxRadius + 24;
         return (
-          <text key={i} x={center + labelRadius * Math.cos(p.angle)} y={center + labelRadius * Math.sin(p.angle)} fill="rgba(255,255,255,0.6)" fontSize="9" fontWeight="600" textAnchor="middle" dominantBaseline="middle">
+          <text key={i} x={center + labelRadius * Math.cos(p.angle)} y={center + labelRadius * Math.sin(p.angle)} fill="rgba(255,255,255,0.7)" fontSize="10" fontWeight="600" textAnchor="middle" dominantBaseline="middle">
             {p.label}
           </text>
         );
