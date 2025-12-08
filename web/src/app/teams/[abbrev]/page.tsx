@@ -5,8 +5,8 @@ import { fetchTeamRoster } from "@/lib/playerHub";
 import { buildProjectedLineup } from "@/lib/lineupService";
 import { getTeamGoalies } from "@/lib/startingGoalieService";
 import { TeamCrest } from "@/components/TeamCrest";
-import { SkaterStatsTable, GoalieStatsTable } from "@/components/PlayerStatsTable";
-import { ProjectedLineupDisplay, LineupStrengthCard } from "@/components/LineupDisplay";
+import { GoalieStatsTable } from "@/components/PlayerStatsTable";
+import { ProjectedLineupDisplay } from "@/components/LineupDisplay";
 import { TeamGoalieSituationCard } from "@/components/StartingGoalieDisplay";
 import powerIndexSnapshot from "@/data/powerIndexSnapshot.json";
 
@@ -726,53 +726,55 @@ export default async function TeamPage({ params }: { params: Promise<{ abbrev: s
           <ProjectedLineupDisplay lineup={projectedLineup} />
         </section>
 
-        {/* Top Performers */}
+        {/* Season Leaders - compact version */}
         {allSkaters.length > 0 && (
-          <section className="nova-section" style={{ background: 'rgba(255,255,255,0.02)', borderRadius: '1rem', padding: '2rem', marginTop: '2rem' }}>
-            <div className="section-head">
-              <div>
-                <p className="eyebrow">Season Highlights</p>
-                <h2>Top Performers</h2>
-                <p className="lead-sm">Leading scorers and key contributors this season.</p>
-              </div>
-              <Link href="/skaters" className="cta cta-ghost">
-                League Leaders →
-              </Link>
-            </div>
-
-            <div className="bento-grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', marginBottom: '1.5rem' }}>
+          <section className="nova-section">
+            <h2 className="text-xl font-bold text-white mb-3">Season Leaders</h2>
+            <div className="grid gap-3 sm:grid-cols-3">
               {/* Points Leader */}
               {allSkaters[0] && (
-                <div className="bento-card">
-                  <p className="micro-label">Points Leader</p>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginTop: '0.5rem' }}>
-                    <div style={{ width: '48px', height: '48px', borderRadius: '50%', background: 'linear-gradient(135deg, rgba(126, 227, 255, 0.2), rgba(110, 240, 194, 0.2))', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, fontSize: '1.25rem', color: 'var(--aqua)' }}>
-                      {allSkaters[0].stats.points}
+                <Link href={`/players/${allSkaters[0].bio.playerId}`} className="card" style={{ padding: '1rem', textDecoration: 'none' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                    <img
+                      src={`https://assets.nhle.com/mugs/nhl/20242025/${teamData.abbrev}/${allSkaters[0].bio.playerId}.png`}
+                      alt={allSkaters[0].bio.fullName}
+                      width={48}
+                      height={48}
+                      style={{ width: '48px', height: '48px', borderRadius: '50%', objectFit: 'cover' }}
+                      onError={(e) => { e.currentTarget.style.display = 'none'; }}
+                    />
+                    <div style={{ flex: 1 }}>
+                      <p style={{ fontSize: '0.65rem', color: 'var(--text-tertiary)', textTransform: 'uppercase' }}>Points Leader</p>
+                      <p style={{ fontSize: '0.95rem', fontWeight: 600, color: 'white' }}>{allSkaters[0].bio.fullName}</p>
+                      <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>{allSkaters[0].stats.goals}G • {allSkaters[0].stats.assists}A</p>
                     </div>
-                    <div>
-                      <p style={{ fontSize: '1rem', fontWeight: 700, color: 'white' }}>{allSkaters[0].bio.fullName}</p>
-                      <p style={{ fontSize: '0.75rem', color: 'var(--text-tertiary)' }}>{allSkaters[0].stats.goals}G • {allSkaters[0].stats.assists}A</p>
-                    </div>
+                    <span style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--aqua)' }}>{allSkaters[0].stats.points}</span>
                   </div>
-                </div>
+                </Link>
               )}
 
               {/* Goals Leader */}
               {(() => {
                 const goalsLeader = [...allSkaters].sort((a, b) => b.stats.goals - a.stats.goals)[0];
                 return goalsLeader && (
-                  <div className="bento-card">
-                    <p className="micro-label">Goals Leader</p>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginTop: '0.5rem' }}>
-                      <div style={{ width: '48px', height: '48px', borderRadius: '50%', background: 'linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(110, 240, 194, 0.2))', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, fontSize: '1.25rem', color: 'var(--mint)' }}>
-                        {goalsLeader.stats.goals}
+                  <Link href={`/players/${goalsLeader.bio.playerId}`} className="card" style={{ padding: '1rem', textDecoration: 'none' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                      <img
+                        src={`https://assets.nhle.com/mugs/nhl/20242025/${teamData.abbrev}/${goalsLeader.bio.playerId}.png`}
+                        alt={goalsLeader.bio.fullName}
+                        width={48}
+                        height={48}
+                        style={{ width: '48px', height: '48px', borderRadius: '50%', objectFit: 'cover' }}
+                        onError={(e) => { e.currentTarget.style.display = 'none'; }}
+                      />
+                      <div style={{ flex: 1 }}>
+                        <p style={{ fontSize: '0.65rem', color: 'var(--text-tertiary)', textTransform: 'uppercase' }}>Goals Leader</p>
+                        <p style={{ fontSize: '0.95rem', fontWeight: 600, color: 'white' }}>{goalsLeader.bio.fullName}</p>
+                        <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>{goalsLeader.stats.gamesPlayed} GP</p>
                       </div>
-                      <div>
-                        <p style={{ fontSize: '1rem', fontWeight: 700, color: 'white' }}>{goalsLeader.bio.fullName}</p>
-                        <p style={{ fontSize: '0.75rem', color: 'var(--text-tertiary)' }}>{goalsLeader.stats.gamesPlayed} GP</p>
-                      </div>
+                      <span style={{ fontSize: '1.75rem', fontWeight: 800, color: '#10b981' }}>{goalsLeader.stats.goals}</span>
                     </div>
-                  </div>
+                  </Link>
                 );
               })()}
 
@@ -780,28 +782,29 @@ export default async function TeamPage({ params }: { params: Promise<{ abbrev: s
               {(() => {
                 const pmLeader = [...allSkaters].sort((a, b) => b.stats.plusMinus - a.stats.plusMinus)[0];
                 return pmLeader && (
-                  <div className="bento-card">
-                    <p className="micro-label">Best +/-</p>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginTop: '0.5rem' }}>
-                      <div style={{ width: '48px', height: '48px', borderRadius: '50%', background: pmLeader.stats.plusMinus >= 0 ? 'rgba(16, 185, 129, 0.2)' : 'rgba(239, 68, 68, 0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, fontSize: '1rem', color: pmLeader.stats.plusMinus >= 0 ? '#10b981' : '#ef4444' }}>
+                  <Link href={`/players/${pmLeader.bio.playerId}`} className="card" style={{ padding: '1rem', textDecoration: 'none' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                      <img
+                        src={`https://assets.nhle.com/mugs/nhl/20242025/${teamData.abbrev}/${pmLeader.bio.playerId}.png`}
+                        alt={pmLeader.bio.fullName}
+                        width={48}
+                        height={48}
+                        style={{ width: '48px', height: '48px', borderRadius: '50%', objectFit: 'cover' }}
+                        onError={(e) => { e.currentTarget.style.display = 'none'; }}
+                      />
+                      <div style={{ flex: 1 }}>
+                        <p style={{ fontSize: '0.65rem', color: 'var(--text-tertiary)', textTransform: 'uppercase' }}>Best +/-</p>
+                        <p style={{ fontSize: '0.95rem', fontWeight: 600, color: 'white' }}>{pmLeader.bio.fullName}</p>
+                        <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>{pmLeader.bio.position}</p>
+                      </div>
+                      <span style={{ fontSize: '1.75rem', fontWeight: 800, color: pmLeader.stats.plusMinus >= 0 ? '#10b981' : '#ef4444' }}>
                         {pmLeader.stats.plusMinus > 0 ? '+' : ''}{pmLeader.stats.plusMinus}
-                      </div>
-                      <div>
-                        <p style={{ fontSize: '1rem', fontWeight: 700, color: 'white' }}>{pmLeader.bio.fullName}</p>
-                        <p style={{ fontSize: '0.75rem', color: 'var(--text-tertiary)' }}>{pmLeader.bio.position}</p>
-                      </div>
+                      </span>
                     </div>
-                  </div>
+                  </Link>
                 );
               })()}
             </div>
-
-            <SkaterStatsTable
-              players={allSkaters}
-              showTeam={false}
-              maxRows={15}
-              linkToProfile={true}
-            />
           </section>
         )}
 
