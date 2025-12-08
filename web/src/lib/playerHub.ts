@@ -21,7 +21,7 @@ import type {
 // Constants & Configuration
 // =============================================================================
 
-const CURRENT_SEASON = "20242025";
+const CURRENT_SEASON = "20252026";
 const MIN_SKATER_GAMES = 5;
 const MIN_GOALIE_GAMES = 3;
 const LEADERS_LIMIT = 10;
@@ -273,7 +273,7 @@ function mapNHLSkaterToCard(data: NHLApiSkaterStats): SkaterCard {
     nationality: null,
     isActive: true,
     isRookie: false,
-    headshot: null,
+    headshot: getHeadshotUrl(data.playerId),
   };
 
   const stats: SkaterSeasonStats = {
@@ -327,7 +327,7 @@ function mapNHLGoalieToCard(data: NHLApiGoalieStats): GoalieDetailCard {
     nationality: null,
     isActive: true,
     isRookie: false,
-    headshot: null,
+    headshot: getHeadshotUrl(data.playerId),
   };
 
   const stats: GoalieSeasonStats = {
@@ -373,6 +373,11 @@ function formatSecondsToTime(seconds: number): string {
   const mins = Math.floor(seconds / 60);
   const secs = Math.floor(seconds % 60);
   return `${mins}:${secs.toString().padStart(2, "0")}`;
+}
+
+function getHeadshotUrl(playerId: number): string {
+  // NHL API standard headshot URL format
+  return `https://assets.nhle.com/headshots/current/168x168/${playerId}.png`;
 }
 
 function parseTimeOnIce(timeStr: string): number {

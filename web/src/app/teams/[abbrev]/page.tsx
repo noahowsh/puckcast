@@ -780,6 +780,49 @@ export default async function TeamPage({ params }: { params: Promise<{ abbrev: s
           <ProjectedLineupDisplay lineup={projectedLineup} />
         </section>
 
+        {/* Player Statistics */}
+        {allSkaters.length > 0 && (
+          <section className="nova-section">
+            <div className="flex items-center justify-between mb-4">
+              <div>
+                <h2 className="text-xl font-bold text-white">Skater Statistics</h2>
+                <p className="text-sm text-white/50 mt-1">Current season stats for all skaters</p>
+              </div>
+              <Link href="/players" className="text-sm text-sky-400 hover:text-sky-300 transition-colors">
+                League Leaders →
+              </Link>
+            </div>
+            <div className="card" style={{ padding: 0, overflow: 'hidden' }}>
+              <SkaterStatsTable
+                players={allSkaters}
+                showTeam={false}
+                maxRows={15}
+                linkToProfile={true}
+              />
+            </div>
+          </section>
+        )}
+
+        {/* Goalie Statistics */}
+        {roster.goalies.length > 0 && (
+          <section className="nova-section">
+            <div className="flex items-center justify-between mb-4">
+              <div>
+                <h2 className="text-xl font-bold text-white">Goalie Statistics</h2>
+                <p className="text-sm text-white/50 mt-1">Current season stats for team goalies</p>
+              </div>
+            </div>
+            <div className="card" style={{ padding: 0, overflow: 'hidden' }}>
+              <GoalieStatsTable
+                goalies={roster.goalies}
+                showTeam={false}
+                showRank={false}
+                linkToProfile={true}
+              />
+            </div>
+          </section>
+        )}
+
         {/* Division Standings */}
         {teamDivision && (
           <section className="nova-section">
