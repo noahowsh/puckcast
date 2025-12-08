@@ -1,3 +1,5 @@
+"use client";
+
 // Lineup Display Components
 // Visual components for showing projected lineups and strength metrics
 
