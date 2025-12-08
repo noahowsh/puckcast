@@ -3,9 +3,11 @@ import Link from "next/link";
 import { computeStandingsPowerScore, getCurrentStandings, getCurrentPredictions } from "@/lib/current";
 import { fetchTeamRoster } from "@/lib/playerHub";
 import { buildProjectedLineup } from "@/lib/lineupService";
+import { getTeamGoalies } from "@/lib/startingGoalieService";
 import { TeamCrest } from "@/components/TeamCrest";
 import { SkaterStatsTable, GoalieStatsTable } from "@/components/PlayerStatsTable";
 import { ProjectedLineupDisplay, LineupStrengthCard } from "@/components/LineupDisplay";
+import { TeamGoalieSituationCard } from "@/components/StartingGoalieDisplay";
 import powerIndexSnapshot from "@/data/powerIndexSnapshot.json";
 
 const movementReasons = powerIndexSnapshot.movementReasons as Record<string, string>;
@@ -163,10 +165,11 @@ export default async function TeamPage({ params }: { params: Promise<{ abbrev: s
     .filter((game) => game.homeTeam.abbrev === teamData.abbrev || game.awayTeam.abbrev === teamData.abbrev)
     .slice(0, 3);
 
-  // Fetch team roster and projected lineup in parallel
-  const [roster, projectedLineup] = await Promise.all([
+  // Fetch team roster, projected lineup, and goalie info in parallel
+  const [roster, projectedLineup, goalieInfo] = await Promise.all([
     fetchTeamRoster(teamData.abbrev),
     buildProjectedLineup(teamData.abbrev),
+    getTeamGoalies(teamData.abbrev),
   ]);
   const allSkaters = [...roster.forwards, ...roster.defensemen].sort((a, b) => b.stats.points - a.stats.points);
 
@@ -484,6 +487,59 @@ export default async function TeamPage({ params }: { params: Promise<{ abbrev: s
             </div>
           </div>
         </section>
+
+        {/* Goaltending Situation */}
+        {(goalieInfo.starter || goalieInfo.backup) && (
+          <section className="nova-section">
+            <h2 className="text-xl font-bold text-white mb-3">Goaltending Situation</h2>
+            <div className="grid gap-4 sm:grid-cols-2">
+              <TeamGoalieSituationCard
+                starter={goalieInfo.starter}
+                backup={goalieInfo.backup}
+                teamAbbrev={teamData.abbrev}
+              />
+              {/* Next start projection */}
+              {goalieInfo.starter && (
+                <div className="card" style={{ padding: '1.25rem' }}>
+                  <h3 style={{ fontSize: '0.9rem', fontWeight: 600, color: 'white', marginBottom: '1rem' }}>Next Start Analysis</h3>
+                  <div style={{ marginBottom: '1rem' }}>
+                    <p style={{ fontSize: '0.7rem', color: 'var(--text-tertiary)', textTransform: 'uppercase', marginBottom: '0.25rem' }}>
+                      Start Confidence
+                    </p>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                      <div style={{ flex: 1, height: '8px', background: 'rgba(255,255,255,0.1)', borderRadius: '4px', overflow: 'hidden' }}>
+                        <div style={{
+                          width: `${goalieInfo.starter.confidence * 100}%`,
+                          height: '100%',
+                          background: goalieInfo.starter.confidence > 0.7 ? '#10b981' : goalieInfo.starter.confidence > 0.4 ? '#f59e0b' : '#ef4444',
+                          borderRadius: '4px',
+                        }} />
+                      </div>
+                      <span style={{ fontSize: '1rem', fontWeight: 700, color: 'white' }}>
+                        {Math.round(goalieInfo.starter.confidence * 100)}%
+                      </span>
+                    </div>
+                  </div>
+                  <div style={{ padding: '0.75rem', background: 'rgba(255,255,255,0.03)', borderRadius: '0.5rem' }}>
+                    <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', lineHeight: 1.5 }}>
+                      {goalieInfo.starter.restDays !== null && goalieInfo.starter.restDays >= 2
+                        ? `Well-rested with ${goalieInfo.starter.restDays} days off. Strong candidate for next start.`
+                        : goalieInfo.starter.restDays === 1
+                        ? "One day rest. May start depending on schedule."
+                        : goalieInfo.starter.restDays === 0
+                        ? "Started last game. Backup may get the call."
+                        : "Start projection based on season patterns."}
+                    </p>
+                  </div>
+                  <div style={{ marginTop: '1rem', fontSize: '0.7rem', color: 'var(--text-tertiary)' }}>
+                    <p>Source: {goalieInfo.starter.source.replace(/_/g, ' ')}</p>
+                    <p style={{ marginTop: '0.25rem' }}>Updated: {new Date(goalieInfo.starter.updatedAt).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })}</p>
+                  </div>
+                </div>
+              )}
+            </div>
+          </section>
+        )}
 
         {/* Power Index Spectrum */}
         <section className="nova-section">
