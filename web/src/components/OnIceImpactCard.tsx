@@ -68,7 +68,7 @@ export function OnIceImpactCard({ impact, playerName, age }: OnIceImpactCardProp
 
         {/* General Metrics */}
         <div style={{ marginTop: '2rem' }}>
-          <h4 className="text-xs font-semibold text-white/60 uppercase tracking-wide mb-4">General</h4>
+          <h4 style={{ marginBottom: '1rem' }} className="text-xs font-semibold text-white/60 uppercase tracking-wide">General</h4>
           <div className="grid grid-cols-4 gap-4">
             <GeneralMetric label="Net xGoals" metric={general.netExpectedGoals} />
             <GeneralMetric label="Net Corsi" metric={general.netCorsi} />

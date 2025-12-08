@@ -63,16 +63,16 @@ export function SkillProfileCard({ profile, playerName, age, evTOI }: SkillProfi
 
       <div style={{ padding: '2rem' }}>
         {/* Two Column Layout: Left (rating + key) | Right (chart + description) */}
-        <div className="grid grid-cols-[150px_1fr] gap-6 items-center">
+        <div style={{ display: 'grid', gridTemplateColumns: '140px 1fr', gap: '2rem', alignItems: 'center' }}>
           {/* Left Column: Rating + Legend Key */}
-          <div className="flex flex-col items-center gap-5">
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '1.5rem' }}>
             {/* Overall Rating */}
             <OverallRatingDisplay rating={overallRating} />
 
             {/* Legend/Key */}
-            <div className="space-y-1.5 w-full">
-              <p className="text-[10px] text-white/40 uppercase tracking-wide text-center">Percentile Key</p>
-              <div className="space-y-1">
+            <div style={{ width: '100%' }}>
+              <p style={{ fontSize: '10px', textAlign: 'center', marginBottom: '0.5rem' }} className="text-white/40 uppercase tracking-wide">Percentile Key</p>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.375rem' }}>
                 <LegendItem color="bg-sky-500/60" label="Elite (85+)" />
                 <LegendItem color="bg-emerald-500/50" label="Above Avg (65-84)" />
                 <LegendItem color="bg-white/25" label="Average (35-64)" />
@@ -83,15 +83,15 @@ export function SkillProfileCard({ profile, playerName, age, evTOI }: SkillProfi
           </div>
 
           {/* Right Column: Chart + Description */}
-          <div className="flex flex-col items-center gap-3">
-            <SkillRadarChart data={radarData} />
-            <p className="text-xs text-white/60 leading-relaxed text-center max-w-sm">{skillSummary}</p>
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1rem' }}>
+            <SkillRadarChart data={radarData} size={290} />
+            <p style={{ fontSize: '0.75rem', lineHeight: '1.625', textAlign: 'center', maxWidth: '26rem' }} className="text-white/60">{skillSummary}</p>
           </div>
         </div>
 
         {/* Even Strength Impact */}
         <div style={{ marginTop: '2rem' }}>
-          <h4 className="text-xs font-semibold text-white/60 uppercase tracking-wide mb-4">
+          <h4 style={{ marginBottom: '1rem' }} className="text-xs font-semibold text-white/60 uppercase tracking-wide">
             Even Strength Impact
           </h4>
           <div className="grid grid-cols-3 gap-4">
@@ -103,7 +103,7 @@ export function SkillProfileCard({ profile, playerName, age, evTOI }: SkillProfi
 
         {/* Special Teams Impact */}
         <div style={{ marginTop: '2rem' }}>
-          <h4 className="text-xs font-semibold text-white/60 uppercase tracking-wide mb-4">
+          <h4 style={{ marginBottom: '1rem' }} className="text-xs font-semibold text-white/60 uppercase tracking-wide">
             Special Teams Impact
           </h4>
           <div className="grid grid-cols-3 gap-4">
@@ -115,7 +115,7 @@ export function SkillProfileCard({ profile, playerName, age, evTOI }: SkillProfi
 
         {/* Talent Profile */}
         <div style={{ marginTop: '2rem' }}>
-          <h4 className="text-xs font-semibold text-white/60 uppercase tracking-wide mb-4">
+          <h4 style={{ marginBottom: '1rem' }} className="text-xs font-semibold text-white/60 uppercase tracking-wide">
             Talent Profile
           </h4>
           <div className="grid grid-cols-2 gap-5">
@@ -140,8 +140,7 @@ interface RadarDataPoint {
   value: number;
 }
 
-function SkillRadarChart({ data }: { data: RadarDataPoint[] }) {
-  const size = 260;
+function SkillRadarChart({ data, size = 260 }: { data: RadarDataPoint[]; size?: number }) {
   const center = size / 2;
   const maxRadius = size / 2 - 36;
   const levels = [25, 50, 75, 100];

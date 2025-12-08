@@ -39,6 +39,14 @@ export default async function PlayerDetailPage({ params }: { params: Promise<{ p
 
   const { bio, stats } = player;
 
+  // Calculate current NHL season (season runs Oct-June, so Jul-Dec is year-year+1, Jan-Jun is year-1-year)
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = now.getMonth() + 1; // 1-12
+  const seasonStart = month >= 7 ? year : year - 1;
+  const seasonEnd = (seasonStart + 1) % 100; // Get last 2 digits
+  const currentSeason = `${seasonStart}-${seasonEnd.toString().padStart(2, '0')}`;
+
   // Calculate league ranks
   const allSkaters = await fetchSkaterStats(5);
   const pointsRank = allSkaters.findIndex((p) => p.bio.playerId === bio.playerId) + 1;
@@ -166,7 +174,7 @@ export default async function PlayerDetailPage({ params }: { params: Promise<{ p
         <section className="nova-section">
           <div className="flex items-baseline gap-3 mb-4">
             <h2 className="text-lg font-bold text-white">Season Stats</h2>
-            <span className="text-sm font-medium text-sky-400/80">2024-25</span>
+            <span className="text-sm font-medium text-sky-400/80">{currentSeason}</span>
           </div>
           <div className="card p-0 overflow-hidden">
             <div className="overflow-x-auto">
@@ -216,23 +224,23 @@ export default async function PlayerDetailPage({ params }: { params: Promise<{ p
 
         {/* Scoring Breakdown */}
         <section className="nova-section" style={{ paddingTop: 0 }}>
-          <h2 className="text-lg font-bold text-white mb-4">Scoring Breakdown</h2>
+          <h2 style={{ marginBottom: '1.25rem' }} className="text-lg font-bold text-white">Scoring Breakdown</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="card p-5">
-              <h3 className="text-xs font-semibold text-white/60 mb-4 uppercase tracking-wide">Goals by Situation</h3>
-              <div className="space-y-4">
+            <div className="card" style={{ padding: '1.5rem' }}>
+              <h3 style={{ marginBottom: '1.25rem' }} className="text-xs font-semibold text-white/60 uppercase tracking-wide">Goals by Situation</h3>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
                 <ProgressBar label="Even Strength" value={stats.goals - stats.powerPlayGoals - stats.shorthandedGoals} total={stats.goals} />
                 <ProgressBar label="Power Play" value={stats.powerPlayGoals} total={stats.goals} color="amber" />
                 <ProgressBar label="Shorthanded" value={stats.shorthandedGoals} total={stats.goals} color="rose" />
               </div>
             </div>
-            <div className="card p-5">
-              <h3 className="text-xs font-semibold text-white/60 mb-4 uppercase tracking-wide">Points Distribution</h3>
-              <div className="space-y-4">
+            <div className="card" style={{ padding: '1.5rem' }}>
+              <h3 style={{ marginBottom: '1.25rem' }} className="text-xs font-semibold text-white/60 uppercase tracking-wide">Points Distribution</h3>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
                 <ProgressBar label="Goals" value={stats.goals} total={stats.points} color="emerald" />
                 <ProgressBar label="Assists" value={stats.assists} total={stats.points} color="sky" />
               </div>
-              <div className="mt-4 pt-4 border-t border-white/[0.06] flex gap-6 text-xs">
+              <div style={{ marginTop: '1.25rem', paddingTop: '1.25rem', display: 'flex', gap: '1.5rem', fontSize: '0.75rem' }} className="border-t border-white/[0.06]">
                 <div>
                   <span className="text-white/50">GWG: </span>
                   <span className="text-white font-medium">{stats.gameWinningGoals}</span>

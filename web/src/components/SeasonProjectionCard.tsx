@@ -134,7 +134,7 @@ export function SeasonProjectionCard({ projection, playerName }: SeasonProjectio
 
         {/* Distribution Chart */}
         <div style={{ marginTop: '2.5rem' }}>
-          <div className="flex items-center justify-between mb-3">
+          <div className="flex items-center justify-between" style={{ marginBottom: '1rem' }}>
             <h4 className="text-xs font-semibold text-white/60 uppercase tracking-wide">
               Projection Distribution
             </h4>
@@ -160,7 +160,7 @@ export function SeasonProjectionCard({ projection, playerName }: SeasonProjectio
 
         {/* Awards Watch */}
         <div style={{ marginTop: '2.5rem' }}>
-          <h4 className="text-xs font-semibold text-white/60 uppercase tracking-wide mb-4">
+          <h4 style={{ marginBottom: '1rem' }} className="text-xs font-semibold text-white/60 uppercase tracking-wide">
             Awards Watch
           </h4>
           <div className="grid grid-cols-3 gap-4">
@@ -175,7 +175,7 @@ export function SeasonProjectionCard({ projection, playerName }: SeasonProjectio
           Object.keys(filteredAssistMilestones).length > 0 ||
           Object.keys(filteredPointMilestones).length > 0) && (
           <div style={{ marginTop: '2.5rem' }}>
-            <h4 className="text-xs font-semibold text-white/60 uppercase tracking-wide mb-4">
+            <h4 style={{ marginBottom: '1rem' }} className="text-xs font-semibold text-white/60 uppercase tracking-wide">
               Milestone Tracker
             </h4>
             <div className="space-y-4">
