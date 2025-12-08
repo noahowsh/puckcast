@@ -21,7 +21,7 @@ export default async function PlayersPage() {
       <div className="container" style={{ paddingTop: "8rem" }}>
         <PageHeader
           title="Player Stats"
-          description="Complete NHL player statistics, league leaders, and individual performance metrics for the 2024-25 season."
+          description="Complete NHL player statistics, league leaders, and individual performance metrics for the 2025-26 season."
           icon={
             <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
@@ -46,6 +46,11 @@ export default async function PlayersPage() {
         {/* Scoring Leaders Grid */}
         <section className="mb-12">
           <h2 className="text-2xl font-bold text-white mb-6">Scoring Leaders</h2>
+          {skaterLeaders.points.length === 0 ? (
+            <div className="card p-6 text-center">
+              <p className="text-white/60">Skater statistics are being loaded. Please refresh the page.</p>
+            </div>
+          ) : (
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* Points Leaders */}
             <div className="card p-4">
@@ -119,6 +124,7 @@ export default async function PlayersPage() {
               </div>
             </div>
           </div>
+          )}
         </section>
 
         {/* Secondary Leaders */}

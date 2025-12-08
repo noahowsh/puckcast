@@ -531,7 +531,8 @@ function mapNHLSkaterToCard(data: NHLApiSkaterStats): SkaterCard {
     nationality: null,
     isActive: true,
     isRookie: false,
-    headshot: getHeadshotUrl(data.playerId),
+    // League stats API doesn't have team info, so headshot will be null (fallback to team logo)
+    headshot: getHeadshotUrl(data.playerId, teamAbbrev),
   };
 
   const stats: SkaterSeasonStats = {
@@ -586,7 +587,8 @@ function mapNHLGoalieToCard(data: NHLApiGoalieStats): GoalieDetailCard {
     nationality: null,
     isActive: true,
     isRookie: false,
-    headshot: getHeadshotUrl(data.playerId),
+    // League stats API doesn't have team info, so headshot will be null (fallback to team logo)
+    headshot: getHeadshotUrl(data.playerId, teamAbbrev),
   };
 
   const stats: GoalieSeasonStats = {
@@ -634,9 +636,13 @@ function formatSecondsToTime(seconds: number): string {
   return `${mins}:${secs.toString().padStart(2, "0")}`;
 }
 
-function getHeadshotUrl(playerId: number): string {
-  // NHL API standard headshot URL format
-  return `https://assets.nhle.com/headshots/current/168x168/${playerId}.png`;
+function getHeadshotUrl(playerId: number, teamAbbrev?: string): string | null {
+  // NHL headshot URLs require both player ID and team abbreviation
+  // Format: https://assets.nhle.com/mugs/nhl/{SEASON}/{TEAM}/{PLAYER_ID}.png
+  if (!teamAbbrev || teamAbbrev === "NHL" || teamAbbrev === "") {
+    return null; // Will fallback to team logo in UI
+  }
+  return `https://assets.nhle.com/mugs/nhl/${CURRENT_SEASON}/${teamAbbrev}/${playerId}.png`;
 }
 
 function parseTimeOnIce(timeStr: string): number {
