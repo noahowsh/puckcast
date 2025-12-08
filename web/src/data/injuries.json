@@ -1,47 +1,263 @@
 {
-  "updatedAt": "2025-12-08T12:00:00.000Z",
+  "updatedAt": "2025-12-08T21:00:01.402371Z",
   "source": "ESPN",
   "teams": {
-    "TOR": {
-      "teamAbbrev": "TOR",
-      "teamName": "Toronto Maple Leafs",
+    "ANA": {
+      "teamAbbrev": "ANA",
+      "teamName": "Anaheim Ducks",
       "injuries": [
         {
-          "playerId": 8478483,
-          "playerName": "Auston Matthews",
-          "teamAbbrev": "TOR",
-          "position": "C",
-          "status": "day-to-day",
-          "injuryType": "upper-body",
-          "injuryDescription": "Upper-body injury",
-          "dateInjured": "2025-12-01",
+          "playerId": 3196925123,
+          "playerName": "Petr Mrazek",
+          "teamAbbrev": "ANA",
+          "position": "G",
+          "status": "IR",
+          "injuryType": "other",
+          "injuryDescription": "Injured Reserve",
+          "dateInjured": null,
           "expectedReturn": null,
-          "lastUpdated": "2025-12-08T12:00:00.000Z",
-          "isOut": false
+          "lastUpdated": "2025-12-08T21:00:01.394717Z",
+          "isOut": true
+        },
+        {
+          "playerId": 3929421649,
+          "playerName": "Lukas Dostal",
+          "teamAbbrev": "ANA",
+          "position": "G",
+          "status": "IR",
+          "injuryType": "other",
+          "injuryDescription": "Injured Reserve",
+          "dateInjured": null,
+          "expectedReturn": null,
+          "lastUpdated": "2025-12-08T21:00:01.394717Z",
+          "isOut": true
         }
       ],
-      "totalOut": 0,
+      "totalOut": 2,
       "forwardsOut": 0,
       "defensemenOut": 0,
-      "goaliesOut": 0,
-      "impactRating": 5,
-      "lastUpdated": "2025-12-08T12:00:00.000Z"
+      "goaliesOut": 2,
+      "impactRating": 56,
+      "lastUpdated": "2025-12-08T21:00:01.394717Z"
     },
-    "EDM": {
-      "teamAbbrev": "EDM",
-      "teamName": "Edmonton Oilers",
+    "BOS": {
+      "teamAbbrev": "BOS",
+      "teamName": "Boston Bruins",
       "injuries": [
         {
-          "playerId": 8479318,
-          "playerName": "Evander Kane",
-          "teamAbbrev": "EDM",
+          "playerId": 1912167043,
+          "playerName": "Charlie McAvoy",
+          "teamAbbrev": "BOS",
+          "position": "D",
+          "status": "IR",
+          "injuryType": "other",
+          "injuryDescription": "Injured Reserve",
+          "dateInjured": null,
+          "expectedReturn": null,
+          "lastUpdated": "2025-12-08T21:00:01.394717Z",
+          "isOut": true
+        },
+        {
+          "playerId": 699915330,
+          "playerName": "David Pastrnak",
+          "teamAbbrev": "BOS",
+          "position": "L",
+          "status": "day-to-day",
+          "injuryType": "other",
+          "injuryDescription": "Day-To-Day",
+          "dateInjured": null,
+          "expectedReturn": null,
+          "lastUpdated": "2025-12-08T21:00:01.394717Z",
+          "isOut": false
+        },
+        {
+          "playerId": 3102876091,
+          "playerName": "Michael Callahan",
+          "teamAbbrev": "BOS",
+          "position": "D",
+          "status": "IR",
+          "injuryType": "other",
+          "injuryDescription": "Injured Reserve",
+          "dateInjured": null,
+          "expectedReturn": null,
+          "lastUpdated": "2025-12-08T21:00:01.394717Z",
+          "isOut": true
+        },
+        {
+          "playerId": 995723325,
+          "playerName": "Henri Jokiharju",
+          "teamAbbrev": "BOS",
+          "position": "D",
+          "status": "IR",
+          "injuryType": "other",
+          "injuryDescription": "Injured Reserve",
+          "dateInjured": null,
+          "expectedReturn": null,
+          "lastUpdated": "2025-12-08T21:00:01.394717Z",
+          "isOut": true
+        },
+        {
+          "playerId": 3791384546,
+          "playerName": "Matej Blumel",
+          "teamAbbrev": "BOS",
           "position": "L",
           "status": "IR",
-          "injuryType": "lower-body",
-          "injuryDescription": "Lower-body injury, placed on IR",
-          "dateInjured": "2025-11-20",
-          "expectedReturn": "2025-12-20",
-          "lastUpdated": "2025-12-08T12:00:00.000Z",
+          "injuryType": "other",
+          "injuryDescription": "Injured Reserve",
+          "dateInjured": null,
+          "expectedReturn": null,
+          "lastUpdated": "2025-12-08T21:00:01.394717Z",
+          "isOut": true
+        }
+      ],
+      "totalOut": 4,
+      "forwardsOut": 1,
+      "defensemenOut": 3,
+      "goaliesOut": 0,
+      "impactRating": 67,
+      "lastUpdated": "2025-12-08T21:00:01.394717Z"
+    },
+    "BUF": {
+      "teamAbbrev": "BUF",
+      "teamName": "Buffalo Sabres",
+      "injuries": [
+        {
+          "playerId": 2437620262,
+          "playerName": "Tyson Kozak",
+          "teamAbbrev": "BUF",
+          "position": "C",
+          "status": "day-to-day",
+          "injuryType": "other",
+          "injuryDescription": "Day-To-Day",
+          "dateInjured": null,
+          "expectedReturn": null,
+          "lastUpdated": "2025-12-08T21:00:01.394717Z",
+          "isOut": false
+        },
+        {
+          "playerId": 98649385,
+          "playerName": "Michael Kesselring",
+          "teamAbbrev": "BUF",
+          "position": "D",
+          "status": "IR",
+          "injuryType": "other",
+          "injuryDescription": "Injured Reserve",
+          "dateInjured": null,
+          "expectedReturn": null,
+          "lastUpdated": "2025-12-08T21:00:01.394717Z",
+          "isOut": true
+        }
+      ],
+      "totalOut": 1,
+      "forwardsOut": 0,
+      "defensemenOut": 1,
+      "goaliesOut": 0,
+      "impactRating": 18,
+      "lastUpdated": "2025-12-08T21:00:01.394717Z"
+    },
+    "CGY": {
+      "teamAbbrev": "CGY",
+      "teamName": "Calgary Flames",
+      "injuries": [
+        {
+          "playerId": 2400707190,
+          "playerName": "Jake Bean",
+          "teamAbbrev": "CGY",
+          "position": "D",
+          "status": "out",
+          "injuryType": "other",
+          "injuryDescription": "Out",
+          "dateInjured": null,
+          "expectedReturn": null,
+          "lastUpdated": "2025-12-08T21:00:01.394717Z",
+          "isOut": true
+        }
+      ],
+      "totalOut": 1,
+      "forwardsOut": 0,
+      "defensemenOut": 1,
+      "goaliesOut": 0,
+      "impactRating": 15,
+      "lastUpdated": "2025-12-08T21:00:01.394717Z"
+    },
+    "CAR": {
+      "teamAbbrev": "CAR",
+      "teamName": "Carolina Hurricanes",
+      "injuries": [
+        {
+          "playerId": 1950418987,
+          "playerName": "Jaccob Slavin",
+          "teamAbbrev": "CAR",
+          "position": "D",
+          "status": "IR",
+          "injuryType": "other",
+          "injuryDescription": "Injured Reserve",
+          "dateInjured": null,
+          "expectedReturn": null,
+          "lastUpdated": "2025-12-08T21:00:01.394717Z",
+          "isOut": true
+        }
+      ],
+      "totalOut": 1,
+      "forwardsOut": 0,
+      "defensemenOut": 1,
+      "goaliesOut": 0,
+      "impactRating": 18,
+      "lastUpdated": "2025-12-08T21:00:01.394717Z"
+    },
+    "CHI": {
+      "teamAbbrev": "CHI",
+      "teamName": "Chicago Blackhawks",
+      "injuries": [
+        {
+          "playerId": 188076258,
+          "playerName": "Laurent Brossoit",
+          "teamAbbrev": "CHI",
+          "position": "G",
+          "status": "out",
+          "injuryType": "other",
+          "injuryDescription": "Out",
+          "dateInjured": null,
+          "expectedReturn": null,
+          "lastUpdated": "2025-12-08T21:00:01.394717Z",
+          "isOut": true
+        },
+        {
+          "playerId": 614283122,
+          "playerName": "Shea Weber",
+          "teamAbbrev": "CHI",
+          "position": "D",
+          "status": "IR",
+          "injuryType": "other",
+          "injuryDescription": "Injured Reserve",
+          "dateInjured": null,
+          "expectedReturn": null,
+          "lastUpdated": "2025-12-08T21:00:01.394717Z",
+          "isOut": true
+        }
+      ],
+      "totalOut": 2,
+      "forwardsOut": 0,
+      "defensemenOut": 1,
+      "goaliesOut": 1,
+      "impactRating": 43,
+      "lastUpdated": "2025-12-08T21:00:01.394717Z"
+    },
+    "COL": {
+      "teamAbbrev": "COL",
+      "teamName": "Colorado Avalanche",
+      "injuries": [
+        {
+          "playerId": 1602019504,
+          "playerName": "Gavin Brindley",
+          "teamAbbrev": "COL",
+          "position": "C",
+          "status": "IR",
+          "injuryType": "other",
+          "injuryDescription": "Injured Reserve",
+          "dateInjured": null,
+          "expectedReturn": null,
+          "lastUpdated": "2025-12-08T21:00:01.394717Z",
           "isOut": true
         }
       ],
@@ -49,129 +265,1205 @@
       "forwardsOut": 1,
       "defensemenOut": 0,
       "goaliesOut": 0,
-      "impactRating": 15,
-      "lastUpdated": "2025-12-08T12:00:00.000Z"
+      "impactRating": 13,
+      "lastUpdated": "2025-12-08T21:00:01.394717Z"
     },
-    "BOS": {
-      "teamAbbrev": "BOS",
-      "teamName": "Boston Bruins",
-      "injuries": [],
-      "totalOut": 0,
-      "forwardsOut": 0,
+    "CBJ": {
+      "teamAbbrev": "CBJ",
+      "teamName": "Columbus Blue Jackets",
+      "injuries": [
+        {
+          "playerId": 3957223022,
+          "playerName": "Mathieu Olivier",
+          "teamAbbrev": "CBJ",
+          "position": "L",
+          "status": "IR",
+          "injuryType": "other",
+          "injuryDescription": "Injured Reserve",
+          "dateInjured": null,
+          "expectedReturn": null,
+          "lastUpdated": "2025-12-08T21:00:01.394717Z",
+          "isOut": true
+        }
+      ],
+      "totalOut": 1,
+      "forwardsOut": 1,
       "defensemenOut": 0,
       "goaliesOut": 0,
-      "impactRating": 0,
-      "lastUpdated": "2025-12-08T12:00:00.000Z"
-    },
-    "NYR": {
-      "teamAbbrev": "NYR",
-      "teamName": "New York Rangers",
-      "injuries": [],
-      "totalOut": 0,
-      "forwardsOut": 0,
-      "defensemenOut": 0,
-      "goaliesOut": 0,
-      "impactRating": 0,
-      "lastUpdated": "2025-12-08T12:00:00.000Z"
-    },
-    "WPG": {
-      "teamAbbrev": "WPG",
-      "teamName": "Winnipeg Jets",
-      "injuries": [],
-      "totalOut": 0,
-      "forwardsOut": 0,
-      "defensemenOut": 0,
-      "goaliesOut": 0,
-      "impactRating": 0,
-      "lastUpdated": "2025-12-08T12:00:00.000Z"
-    },
-    "VGK": {
-      "teamAbbrev": "VGK",
-      "teamName": "Vegas Golden Knights",
-      "injuries": [],
-      "totalOut": 0,
-      "forwardsOut": 0,
-      "defensemenOut": 0,
-      "goaliesOut": 0,
-      "impactRating": 0,
-      "lastUpdated": "2025-12-08T12:00:00.000Z"
-    },
-    "FLA": {
-      "teamAbbrev": "FLA",
-      "teamName": "Florida Panthers",
-      "injuries": [],
-      "totalOut": 0,
-      "forwardsOut": 0,
-      "defensemenOut": 0,
-      "goaliesOut": 0,
-      "impactRating": 0,
-      "lastUpdated": "2025-12-08T12:00:00.000Z"
+      "impactRating": 13,
+      "lastUpdated": "2025-12-08T21:00:01.394717Z"
     },
     "DAL": {
       "teamAbbrev": "DAL",
       "teamName": "Dallas Stars",
-      "injuries": [],
-      "totalOut": 0,
-      "forwardsOut": 0,
-      "defensemenOut": 0,
+      "injuries": [
+        {
+          "playerId": 3025702668,
+          "playerName": "Thomas Harley",
+          "teamAbbrev": "DAL",
+          "position": "D",
+          "status": "day-to-day",
+          "injuryType": "other",
+          "injuryDescription": "Day-To-Day",
+          "dateInjured": null,
+          "expectedReturn": null,
+          "lastUpdated": "2025-12-08T21:00:01.394717Z",
+          "isOut": false
+        },
+        {
+          "playerId": 2769861914,
+          "playerName": "Ilya Lyubushkin",
+          "teamAbbrev": "DAL",
+          "position": "D",
+          "status": "out",
+          "injuryType": "other",
+          "injuryDescription": "Out",
+          "dateInjured": null,
+          "expectedReturn": null,
+          "lastUpdated": "2025-12-08T21:00:01.394717Z",
+          "isOut": true
+        },
+        {
+          "playerId": 3662147127,
+          "playerName": "Lian Bichsel",
+          "teamAbbrev": "DAL",
+          "position": "D",
+          "status": "IR",
+          "injuryType": "other",
+          "injuryDescription": "Injured Reserve",
+          "dateInjured": null,
+          "expectedReturn": null,
+          "lastUpdated": "2025-12-08T21:00:01.394717Z",
+          "isOut": true
+        },
+        {
+          "playerId": 3783268734,
+          "playerName": "Tyler Seguin",
+          "teamAbbrev": "DAL",
+          "position": "C",
+          "status": "IR",
+          "injuryType": "other",
+          "injuryDescription": "Injured Reserve",
+          "dateInjured": null,
+          "expectedReturn": null,
+          "lastUpdated": "2025-12-08T21:00:01.394717Z",
+          "isOut": true
+        }
+      ],
+      "totalOut": 3,
+      "forwardsOut": 1,
+      "defensemenOut": 2,
       "goaliesOut": 0,
-      "impactRating": 0,
-      "lastUpdated": "2025-12-08T12:00:00.000Z"
+      "impactRating": 46,
+      "lastUpdated": "2025-12-08T21:00:01.394717Z"
     },
-    "COL": {
-      "teamAbbrev": "COL",
-      "teamName": "Colorado Avalanche",
-      "injuries": [],
-      "totalOut": 0,
-      "forwardsOut": 0,
+    "DET": {
+      "teamAbbrev": "DET",
+      "teamName": "Detroit Red Wings",
+      "injuries": [
+        {
+          "playerId": 2228393912,
+          "playerName": "Mason Appleton",
+          "teamAbbrev": "DET",
+          "position": "C",
+          "status": "out",
+          "injuryType": "other",
+          "injuryDescription": "Out",
+          "dateInjured": null,
+          "expectedReturn": null,
+          "lastUpdated": "2025-12-08T21:00:01.394717Z",
+          "isOut": true
+        }
+      ],
+      "totalOut": 1,
+      "forwardsOut": 1,
       "defensemenOut": 0,
       "goaliesOut": 0,
-      "impactRating": 0,
-      "lastUpdated": "2025-12-08T12:00:00.000Z"
+      "impactRating": 10,
+      "lastUpdated": "2025-12-08T21:00:01.394717Z"
     },
-    "CAR": {
-      "teamAbbrev": "CAR",
-      "teamName": "Carolina Hurricanes",
-      "injuries": [],
-      "totalOut": 0,
-      "forwardsOut": 0,
+    "EDM": {
+      "teamAbbrev": "EDM",
+      "teamName": "Edmonton Oilers",
+      "injuries": [
+        {
+          "playerId": 168170966,
+          "playerName": "Jack Roslovic",
+          "teamAbbrev": "EDM",
+          "position": "C",
+          "status": "out",
+          "injuryType": "other",
+          "injuryDescription": "Out",
+          "dateInjured": null,
+          "expectedReturn": null,
+          "lastUpdated": "2025-12-08T21:00:01.394717Z",
+          "isOut": true
+        },
+        {
+          "playerId": 3761705009,
+          "playerName": "Noah Philp",
+          "teamAbbrev": "EDM",
+          "position": "C",
+          "status": "IR",
+          "injuryType": "other",
+          "injuryDescription": "Injured Reserve",
+          "dateInjured": null,
+          "expectedReturn": null,
+          "lastUpdated": "2025-12-08T21:00:01.394717Z",
+          "isOut": true
+        },
+        {
+          "playerId": 4171854023,
+          "playerName": "Jake Walman",
+          "teamAbbrev": "EDM",
+          "position": "D",
+          "status": "out",
+          "injuryType": "other",
+          "injuryDescription": "Out",
+          "dateInjured": null,
+          "expectedReturn": null,
+          "lastUpdated": "2025-12-08T21:00:01.394717Z",
+          "isOut": true
+        },
+        {
+          "playerId": 950942614,
+          "playerName": "Connor Clattenburg",
+          "teamAbbrev": "EDM",
+          "position": "C",
+          "status": "out",
+          "injuryType": "other",
+          "injuryDescription": "Out",
+          "dateInjured": null,
+          "expectedReturn": null,
+          "lastUpdated": "2025-12-08T21:00:01.394717Z",
+          "isOut": true
+        },
+        {
+          "playerId": 3784692117,
+          "playerName": "Kasperi Kapanen",
+          "teamAbbrev": "EDM",
+          "position": "L",
+          "status": "IR",
+          "injuryType": "other",
+          "injuryDescription": "Injured Reserve",
+          "dateInjured": null,
+          "expectedReturn": null,
+          "lastUpdated": "2025-12-08T21:00:01.394717Z",
+          "isOut": true
+        }
+      ],
+      "totalOut": 5,
+      "forwardsOut": 4,
+      "defensemenOut": 1,
+      "goaliesOut": 0,
+      "impactRating": 61,
+      "lastUpdated": "2025-12-08T21:00:01.394717Z"
+    },
+    "FLA": {
+      "teamAbbrev": "FLA",
+      "teamName": "Florida Panthers",
+      "injuries": [
+        {
+          "playerId": 279409324,
+          "playerName": "Cole Schwindt",
+          "teamAbbrev": "FLA",
+          "position": "C",
+          "status": "IR",
+          "injuryType": "other",
+          "injuryDescription": "Injured Reserve",
+          "dateInjured": null,
+          "expectedReturn": null,
+          "lastUpdated": "2025-12-08T21:00:01.394717Z",
+          "isOut": true
+        },
+        {
+          "playerId": 1407279536,
+          "playerName": "Matthew Tkachuk",
+          "teamAbbrev": "FLA",
+          "position": "L",
+          "status": "IR",
+          "injuryType": "other",
+          "injuryDescription": "Injured Reserve",
+          "dateInjured": null,
+          "expectedReturn": null,
+          "lastUpdated": "2025-12-08T21:00:01.394717Z",
+          "isOut": true
+        }
+      ],
+      "totalOut": 2,
+      "forwardsOut": 2,
       "defensemenOut": 0,
       "goaliesOut": 0,
-      "impactRating": 0,
-      "lastUpdated": "2025-12-08T12:00:00.000Z"
+      "impactRating": 26,
+      "lastUpdated": "2025-12-08T21:00:01.394717Z"
     },
     "MIN": {
       "teamAbbrev": "MIN",
       "teamName": "Minnesota Wild",
-      "injuries": [],
+      "injuries": [
+        {
+          "playerId": 3322192220,
+          "playerName": "Marco Rossi",
+          "teamAbbrev": "MIN",
+          "position": "C",
+          "status": "IR",
+          "injuryType": "other",
+          "injuryDescription": "Injured Reserve",
+          "dateInjured": null,
+          "expectedReturn": null,
+          "lastUpdated": "2025-12-08T21:00:01.394717Z",
+          "isOut": true
+        },
+        {
+          "playerId": 2085611629,
+          "playerName": "Marcus Foligno",
+          "teamAbbrev": "MIN",
+          "position": "L",
+          "status": "IR",
+          "injuryType": "other",
+          "injuryDescription": "Injured Reserve",
+          "dateInjured": null,
+          "expectedReturn": null,
+          "lastUpdated": "2025-12-08T21:00:01.394717Z",
+          "isOut": true
+        },
+        {
+          "playerId": 2709079418,
+          "playerName": "Vinnie Hinostroza",
+          "teamAbbrev": "MIN",
+          "position": "C",
+          "status": "IR",
+          "injuryType": "other",
+          "injuryDescription": "Injured Reserve",
+          "dateInjured": null,
+          "expectedReturn": null,
+          "lastUpdated": "2025-12-08T21:00:01.394717Z",
+          "isOut": true
+        }
+      ],
+      "totalOut": 3,
+      "forwardsOut": 3,
+      "defensemenOut": 0,
+      "goaliesOut": 0,
+      "impactRating": 39,
+      "lastUpdated": "2025-12-08T21:00:01.394717Z"
+    },
+    "MTL": {
+      "teamAbbrev": "MTL",
+      "teamName": "Montreal Canadiens",
+      "injuries": [
+        {
+          "playerId": 4221363605,
+          "playerName": "Sam Montembeault",
+          "teamAbbrev": "MTL",
+          "position": "G",
+          "status": "day-to-day",
+          "injuryType": "other",
+          "injuryDescription": "Day-To-Day",
+          "dateInjured": null,
+          "expectedReturn": null,
+          "lastUpdated": "2025-12-08T21:00:01.394717Z",
+          "isOut": false
+        }
+      ],
       "totalOut": 0,
       "forwardsOut": 0,
       "defensemenOut": 0,
       "goaliesOut": 0,
       "impactRating": 0,
-      "lastUpdated": "2025-12-08T12:00:00.000Z"
+      "lastUpdated": "2025-12-08T21:00:01.394717Z"
+    },
+    "NSH": {
+      "teamAbbrev": "NSH",
+      "teamName": "Nashville Predators",
+      "injuries": [
+        {
+          "playerId": 4039310162,
+          "playerName": "Nick Perbix",
+          "teamAbbrev": "NSH",
+          "position": "D",
+          "status": "day-to-day",
+          "injuryType": "other",
+          "injuryDescription": "Day-To-Day",
+          "dateInjured": null,
+          "expectedReturn": null,
+          "lastUpdated": "2025-12-08T21:00:01.394717Z",
+          "isOut": false
+        },
+        {
+          "playerId": 889967266,
+          "playerName": "Ozzy Wiesblatt",
+          "teamAbbrev": "NSH",
+          "position": "C",
+          "status": "IR",
+          "injuryType": "other",
+          "injuryDescription": "Injured Reserve",
+          "dateInjured": null,
+          "expectedReturn": null,
+          "lastUpdated": "2025-12-08T21:00:01.394717Z",
+          "isOut": true
+        },
+        {
+          "playerId": 448679316,
+          "playerName": "Zachary L'Heureux",
+          "teamAbbrev": "NSH",
+          "position": "L",
+          "status": "IR",
+          "injuryType": "other",
+          "injuryDescription": "Injured Reserve",
+          "dateInjured": null,
+          "expectedReturn": null,
+          "lastUpdated": "2025-12-08T21:00:01.394717Z",
+          "isOut": true
+        }
+      ],
+      "totalOut": 2,
+      "forwardsOut": 2,
+      "defensemenOut": 0,
+      "goaliesOut": 0,
+      "impactRating": 26,
+      "lastUpdated": "2025-12-08T21:00:01.394717Z"
     },
     "NJD": {
       "teamAbbrev": "NJD",
       "teamName": "New Jersey Devils",
-      "injuries": [],
-      "totalOut": 0,
-      "forwardsOut": 0,
+      "injuries": [
+        {
+          "playerId": 1537104764,
+          "playerName": "Evgenii Dadonov",
+          "teamAbbrev": "NJD",
+          "position": "L",
+          "status": "out",
+          "injuryType": "other",
+          "injuryDescription": "Out",
+          "dateInjured": null,
+          "expectedReturn": null,
+          "lastUpdated": "2025-12-08T21:00:01.394717Z",
+          "isOut": true
+        }
+      ],
+      "totalOut": 1,
+      "forwardsOut": 1,
       "defensemenOut": 0,
       "goaliesOut": 0,
-      "impactRating": 0,
-      "lastUpdated": "2025-12-08T12:00:00.000Z"
+      "impactRating": 10,
+      "lastUpdated": "2025-12-08T21:00:01.394717Z"
+    },
+    "NYI": {
+      "teamAbbrev": "NYI",
+      "teamName": "New York Islanders",
+      "injuries": [
+        {
+          "playerId": 3523793438,
+          "playerName": "Jonathan Drouin",
+          "teamAbbrev": "NYI",
+          "position": "L",
+          "status": "day-to-day",
+          "injuryType": "other",
+          "injuryDescription": "Day-To-Day",
+          "dateInjured": null,
+          "expectedReturn": null,
+          "lastUpdated": "2025-12-08T21:00:01.394717Z",
+          "isOut": false
+        },
+        {
+          "playerId": 1091345980,
+          "playerName": "Jean-Gabriel Pageau",
+          "teamAbbrev": "NYI",
+          "position": "C",
+          "status": "day-to-day",
+          "injuryType": "other",
+          "injuryDescription": "Day-To-Day",
+          "dateInjured": null,
+          "expectedReturn": null,
+          "lastUpdated": "2025-12-08T21:00:01.394717Z",
+          "isOut": false
+        },
+        {
+          "playerId": 741495808,
+          "playerName": "Kyle Palmieri",
+          "teamAbbrev": "NYI",
+          "position": "C",
+          "status": "IR",
+          "injuryType": "other",
+          "injuryDescription": "Injured Reserve",
+          "dateInjured": null,
+          "expectedReturn": null,
+          "lastUpdated": "2025-12-08T21:00:01.394717Z",
+          "isOut": true
+        }
+      ],
+      "totalOut": 1,
+      "forwardsOut": 1,
+      "defensemenOut": 0,
+      "goaliesOut": 0,
+      "impactRating": 13,
+      "lastUpdated": "2025-12-08T21:00:01.394717Z"
+    },
+    "NYR": {
+      "teamAbbrev": "NYR",
+      "teamName": "New York Rangers",
+      "injuries": [
+        {
+          "playerId": 2081436808,
+          "playerName": "Adam Edstrom",
+          "teamAbbrev": "NYR",
+          "position": "C",
+          "status": "day-to-day",
+          "injuryType": "other",
+          "injuryDescription": "Day-To-Day",
+          "dateInjured": null,
+          "expectedReturn": null,
+          "lastUpdated": "2025-12-08T21:00:01.394717Z",
+          "isOut": false
+        },
+        {
+          "playerId": 3189657193,
+          "playerName": "Adam Fox",
+          "teamAbbrev": "NYR",
+          "position": "D",
+          "status": "IR",
+          "injuryType": "other",
+          "injuryDescription": "Injured Reserve",
+          "dateInjured": null,
+          "expectedReturn": null,
+          "lastUpdated": "2025-12-08T21:00:01.394717Z",
+          "isOut": true
+        }
+      ],
+      "totalOut": 1,
+      "forwardsOut": 0,
+      "defensemenOut": 1,
+      "goaliesOut": 0,
+      "impactRating": 18,
+      "lastUpdated": "2025-12-08T21:00:01.394717Z"
+    },
+    "OTT": {
+      "teamAbbrev": "OTT",
+      "teamName": "Ottawa Senators",
+      "injuries": [
+        {
+          "playerId": 1534765095,
+          "playerName": "Lars Eller",
+          "teamAbbrev": "OTT",
+          "position": "C",
+          "status": "day-to-day",
+          "injuryType": "other",
+          "injuryDescription": "Day-To-Day",
+          "dateInjured": null,
+          "expectedReturn": null,
+          "lastUpdated": "2025-12-08T21:00:01.394717Z",
+          "isOut": false
+        },
+        {
+          "playerId": 3646337692,
+          "playerName": "Shane Pinto",
+          "teamAbbrev": "OTT",
+          "position": "C",
+          "status": "IR",
+          "injuryType": "other",
+          "injuryDescription": "Injured Reserve",
+          "dateInjured": null,
+          "expectedReturn": null,
+          "lastUpdated": "2025-12-08T21:00:01.394717Z",
+          "isOut": true
+        },
+        {
+          "playerId": 307956072,
+          "playerName": "Thomas Chabot",
+          "teamAbbrev": "OTT",
+          "position": "D",
+          "status": "IR",
+          "injuryType": "other",
+          "injuryDescription": "Injured Reserve",
+          "dateInjured": null,
+          "expectedReturn": null,
+          "lastUpdated": "2025-12-08T21:00:01.394717Z",
+          "isOut": true
+        }
+      ],
+      "totalOut": 2,
+      "forwardsOut": 1,
+      "defensemenOut": 1,
+      "goaliesOut": 0,
+      "impactRating": 31,
+      "lastUpdated": "2025-12-08T21:00:01.394717Z"
+    },
+    "PHI": {
+      "teamAbbrev": "PHI",
+      "teamName": "Philadelphia Flyers",
+      "injuries": [
+        {
+          "playerId": 3437517713,
+          "playerName": "Cam York",
+          "teamAbbrev": "PHI",
+          "position": "D",
+          "status": "day-to-day",
+          "injuryType": "other",
+          "injuryDescription": "Day-To-Day",
+          "dateInjured": null,
+          "expectedReturn": null,
+          "lastUpdated": "2025-12-08T21:00:01.394717Z",
+          "isOut": false
+        },
+        {
+          "playerId": 2998124624,
+          "playerName": "Rasmus Ristolainen",
+          "teamAbbrev": "PHI",
+          "position": "D",
+          "status": "IR",
+          "injuryType": "other",
+          "injuryDescription": "Injured Reserve",
+          "dateInjured": null,
+          "expectedReturn": null,
+          "lastUpdated": "2025-12-08T21:00:01.394717Z",
+          "isOut": true
+        },
+        {
+          "playerId": 3350535386,
+          "playerName": "Tyson Foerster",
+          "teamAbbrev": "PHI",
+          "position": "L",
+          "status": "IR",
+          "injuryType": "other",
+          "injuryDescription": "Injured Reserve",
+          "dateInjured": null,
+          "expectedReturn": null,
+          "lastUpdated": "2025-12-08T21:00:01.394717Z",
+          "isOut": true
+        }
+      ],
+      "totalOut": 2,
+      "forwardsOut": 1,
+      "defensemenOut": 1,
+      "goaliesOut": 0,
+      "impactRating": 31,
+      "lastUpdated": "2025-12-08T21:00:01.394717Z"
+    },
+    "PIT": {
+      "teamAbbrev": "PIT",
+      "teamName": "Pittsburgh Penguins",
+      "injuries": [
+        {
+          "playerId": 491504301,
+          "playerName": "Evgeni Malkin",
+          "teamAbbrev": "PIT",
+          "position": "C",
+          "status": "day-to-day",
+          "injuryType": "other",
+          "injuryDescription": "Day-To-Day",
+          "dateInjured": null,
+          "expectedReturn": null,
+          "lastUpdated": "2025-12-08T21:00:01.394717Z",
+          "isOut": false
+        },
+        {
+          "playerId": 3530078992,
+          "playerName": "Jack St. Ivany",
+          "teamAbbrev": "PIT",
+          "position": "D",
+          "status": "IR",
+          "injuryType": "other",
+          "injuryDescription": "Injured Reserve",
+          "dateInjured": null,
+          "expectedReturn": null,
+          "lastUpdated": "2025-12-08T21:00:01.394717Z",
+          "isOut": true
+        },
+        {
+          "playerId": 2869267846,
+          "playerName": "Rickard Rakell",
+          "teamAbbrev": "PIT",
+          "position": "L",
+          "status": "IR",
+          "injuryType": "other",
+          "injuryDescription": "Injured Reserve",
+          "dateInjured": null,
+          "expectedReturn": null,
+          "lastUpdated": "2025-12-08T21:00:01.394717Z",
+          "isOut": true
+        },
+        {
+          "playerId": 864090636,
+          "playerName": "Peyton Kettles",
+          "teamAbbrev": "PIT",
+          "position": "D",
+          "status": "out",
+          "injuryType": "other",
+          "injuryDescription": "Out",
+          "dateInjured": null,
+          "expectedReturn": null,
+          "lastUpdated": "2025-12-08T21:00:01.394717Z",
+          "isOut": true
+        },
+        {
+          "playerId": 1055732665,
+          "playerName": "Caleb Jones",
+          "teamAbbrev": "PIT",
+          "position": "D",
+          "status": "IR",
+          "injuryType": "other",
+          "injuryDescription": "Injured Reserve",
+          "dateInjured": null,
+          "expectedReturn": null,
+          "lastUpdated": "2025-12-08T21:00:01.394717Z",
+          "isOut": true
+        },
+        {
+          "playerId": 3448032128,
+          "playerName": "Tanner Howe",
+          "teamAbbrev": "PIT",
+          "position": "L",
+          "status": "IR",
+          "injuryType": "other",
+          "injuryDescription": "Injured Reserve",
+          "dateInjured": null,
+          "expectedReturn": null,
+          "lastUpdated": "2025-12-08T21:00:01.394717Z",
+          "isOut": true
+        }
+      ],
+      "totalOut": 5,
+      "forwardsOut": 2,
+      "defensemenOut": 3,
+      "goaliesOut": 0,
+      "impactRating": 77,
+      "lastUpdated": "2025-12-08T21:00:01.394717Z"
+    },
+    "SJS": {
+      "teamAbbrev": "SJS",
+      "teamName": "San Jose Sharks",
+      "injuries": [
+        {
+          "playerId": 4284594809,
+          "playerName": "Michael Misa",
+          "teamAbbrev": "SJS",
+          "position": "C",
+          "status": "IR",
+          "injuryType": "other",
+          "injuryDescription": "Injured Reserve",
+          "dateInjured": null,
+          "expectedReturn": null,
+          "lastUpdated": "2025-12-08T21:00:01.394717Z",
+          "isOut": true
+        },
+        {
+          "playerId": 2924878107,
+          "playerName": "Vincent Desharnais",
+          "teamAbbrev": "SJS",
+          "position": "D",
+          "status": "IR",
+          "injuryType": "other",
+          "injuryDescription": "Injured Reserve",
+          "dateInjured": null,
+          "expectedReturn": null,
+          "lastUpdated": "2025-12-08T21:00:01.394717Z",
+          "isOut": true
+        },
+        {
+          "playerId": 2440800142,
+          "playerName": "Logan Couture",
+          "teamAbbrev": "SJS",
+          "position": "C",
+          "status": "IR",
+          "injuryType": "other",
+          "injuryDescription": "Injured Reserve",
+          "dateInjured": null,
+          "expectedReturn": null,
+          "lastUpdated": "2025-12-08T21:00:01.394717Z",
+          "isOut": true
+        }
+      ],
+      "totalOut": 3,
+      "forwardsOut": 2,
+      "defensemenOut": 1,
+      "goaliesOut": 0,
+      "impactRating": 44,
+      "lastUpdated": "2025-12-08T21:00:01.394717Z"
+    },
+    "SEA": {
+      "teamAbbrev": "SEA",
+      "teamName": "Seattle Kraken",
+      "injuries": [
+        {
+          "playerId": 4156261947,
+          "playerName": "Berkly Catton",
+          "teamAbbrev": "SEA",
+          "position": "C",
+          "status": "out",
+          "injuryType": "other",
+          "injuryDescription": "Out",
+          "dateInjured": null,
+          "expectedReturn": null,
+          "lastUpdated": "2025-12-08T21:00:01.394717Z",
+          "isOut": true
+        },
+        {
+          "playerId": 2323427375,
+          "playerName": "Jaden Schwartz",
+          "teamAbbrev": "SEA",
+          "position": "C",
+          "status": "IR",
+          "injuryType": "other",
+          "injuryDescription": "Injured Reserve",
+          "dateInjured": null,
+          "expectedReturn": null,
+          "lastUpdated": "2025-12-08T21:00:01.394717Z",
+          "isOut": true
+        },
+        {
+          "playerId": 876475927,
+          "playerName": "Max McCormick",
+          "teamAbbrev": "SEA",
+          "position": "L",
+          "status": "out",
+          "injuryType": "other",
+          "injuryDescription": "Out",
+          "dateInjured": null,
+          "expectedReturn": null,
+          "lastUpdated": "2025-12-08T21:00:01.394717Z",
+          "isOut": true
+        }
+      ],
+      "totalOut": 3,
+      "forwardsOut": 3,
+      "defensemenOut": 0,
+      "goaliesOut": 0,
+      "impactRating": 33,
+      "lastUpdated": "2025-12-08T21:00:01.394717Z"
+    },
+    "STL": {
+      "teamAbbrev": "STL",
+      "teamName": "St. Louis Blues",
+      "injuries": [
+        {
+          "playerId": 1136531485,
+          "playerName": "Jordan Kyrou",
+          "teamAbbrev": "STL",
+          "position": "L",
+          "status": "day-to-day",
+          "injuryType": "other",
+          "injuryDescription": "Day-To-Day",
+          "dateInjured": null,
+          "expectedReturn": null,
+          "lastUpdated": "2025-12-08T21:00:01.394717Z",
+          "isOut": false
+        },
+        {
+          "playerId": 1856689967,
+          "playerName": "Alexey Toropchenko",
+          "teamAbbrev": "STL",
+          "position": "L",
+          "status": "IR",
+          "injuryType": "other",
+          "injuryDescription": "Injured Reserve",
+          "dateInjured": null,
+          "expectedReturn": null,
+          "lastUpdated": "2025-12-08T21:00:01.394717Z",
+          "isOut": true
+        },
+        {
+          "playerId": 1059133129,
+          "playerName": "Nathan Walker",
+          "teamAbbrev": "STL",
+          "position": "L",
+          "status": "IR",
+          "injuryType": "other",
+          "injuryDescription": "Injured Reserve",
+          "dateInjured": null,
+          "expectedReturn": null,
+          "lastUpdated": "2025-12-08T21:00:01.394717Z",
+          "isOut": true
+        },
+        {
+          "playerId": 18964699,
+          "playerName": "Jimmy Snuggerud",
+          "teamAbbrev": "STL",
+          "position": "L",
+          "status": "IR",
+          "injuryType": "other",
+          "injuryDescription": "Injured Reserve",
+          "dateInjured": null,
+          "expectedReturn": null,
+          "lastUpdated": "2025-12-08T21:00:01.394717Z",
+          "isOut": true
+        },
+        {
+          "playerId": 2390798473,
+          "playerName": "Zach Dean",
+          "teamAbbrev": "STL",
+          "position": "C",
+          "status": "IR",
+          "injuryType": "other",
+          "injuryDescription": "Injured Reserve",
+          "dateInjured": null,
+          "expectedReturn": null,
+          "lastUpdated": "2025-12-08T21:00:01.394717Z",
+          "isOut": true
+        }
+      ],
+      "totalOut": 4,
+      "forwardsOut": 4,
+      "defensemenOut": 0,
+      "goaliesOut": 0,
+      "impactRating": 52,
+      "lastUpdated": "2025-12-08T21:00:01.394717Z"
     },
     "TBL": {
       "teamAbbrev": "TBL",
       "teamName": "Tampa Bay Lightning",
+      "injuries": [
+        {
+          "playerId": 587650783,
+          "playerName": "Curtis Douglas",
+          "teamAbbrev": "TBL",
+          "position": "C",
+          "status": "out",
+          "injuryType": "other",
+          "injuryDescription": "Out",
+          "dateInjured": null,
+          "expectedReturn": null,
+          "lastUpdated": "2025-12-08T21:00:01.394717Z",
+          "isOut": true
+        },
+        {
+          "playerId": 322829337,
+          "playerName": "Dominic James",
+          "teamAbbrev": "TBL",
+          "position": "C",
+          "status": "out",
+          "injuryType": "other",
+          "injuryDescription": "Out",
+          "dateInjured": null,
+          "expectedReturn": null,
+          "lastUpdated": "2025-12-08T21:00:01.394717Z",
+          "isOut": true
+        },
+        {
+          "playerId": 3820373051,
+          "playerName": "Andrei Vasilevskiy",
+          "teamAbbrev": "TBL",
+          "position": "G",
+          "status": "IR",
+          "injuryType": "other",
+          "injuryDescription": "Injured Reserve",
+          "dateInjured": null,
+          "expectedReturn": null,
+          "lastUpdated": "2025-12-08T21:00:01.394717Z",
+          "isOut": true
+        },
+        {
+          "playerId": 3578340349,
+          "playerName": "Ryan McDonagh",
+          "teamAbbrev": "TBL",
+          "position": "D",
+          "status": "IR",
+          "injuryType": "other",
+          "injuryDescription": "Injured Reserve",
+          "dateInjured": null,
+          "expectedReturn": null,
+          "lastUpdated": "2025-12-08T21:00:01.394717Z",
+          "isOut": true
+        },
+        {
+          "playerId": 491123589,
+          "playerName": "Erik Cernak",
+          "teamAbbrev": "TBL",
+          "position": "D",
+          "status": "IR",
+          "injuryType": "other",
+          "injuryDescription": "Injured Reserve",
+          "dateInjured": null,
+          "expectedReturn": null,
+          "lastUpdated": "2025-12-08T21:00:01.394717Z",
+          "isOut": true
+        }
+      ],
+      "totalOut": 5,
+      "forwardsOut": 2,
+      "defensemenOut": 2,
+      "goaliesOut": 1,
+      "impactRating": 84,
+      "lastUpdated": "2025-12-08T21:00:01.394717Z"
+    },
+    "TOR": {
+      "teamAbbrev": "TOR",
+      "teamName": "Toronto Maple Leafs",
+      "injuries": [
+        {
+          "playerId": 3184816974,
+          "playerName": "Joseph Woll",
+          "teamAbbrev": "TOR",
+          "position": "G",
+          "status": "IR",
+          "injuryType": "other",
+          "injuryDescription": "Injured Reserve",
+          "dateInjured": null,
+          "expectedReturn": null,
+          "lastUpdated": "2025-12-08T21:00:01.394717Z",
+          "isOut": true
+        },
+        {
+          "playerId": 1361746170,
+          "playerName": "Brandon Carlo",
+          "teamAbbrev": "TOR",
+          "position": "D",
+          "status": "IR",
+          "injuryType": "other",
+          "injuryDescription": "Injured Reserve",
+          "dateInjured": null,
+          "expectedReturn": null,
+          "lastUpdated": "2025-12-08T21:00:01.394717Z",
+          "isOut": true
+        },
+        {
+          "playerId": 2268746539,
+          "playerName": "Logan Cooley",
+          "teamAbbrev": "TOR",
+          "position": "C",
+          "status": "out",
+          "injuryType": "other",
+          "injuryDescription": "Out",
+          "dateInjured": null,
+          "expectedReturn": null,
+          "lastUpdated": "2025-12-08T21:00:01.394717Z",
+          "isOut": true
+        },
+        {
+          "playerId": 4182454973,
+          "playerName": "Olli Maatta",
+          "teamAbbrev": "TOR",
+          "position": "D",
+          "status": "IR",
+          "injuryType": "other",
+          "injuryDescription": "Injured Reserve",
+          "dateInjured": null,
+          "expectedReturn": null,
+          "lastUpdated": "2025-12-08T21:00:01.394717Z",
+          "isOut": true
+        }
+      ],
+      "totalOut": 4,
+      "forwardsOut": 1,
+      "defensemenOut": 2,
+      "goaliesOut": 1,
+      "impactRating": 74,
+      "lastUpdated": "2025-12-08T21:00:01.394717Z"
+    },
+    "VAN": {
+      "teamAbbrev": "VAN",
+      "teamName": "Vancouver Canucks",
+      "injuries": [
+        {
+          "playerId": 2380433014,
+          "playerName": "Elias Pettersson",
+          "teamAbbrev": "VAN",
+          "position": "C",
+          "status": "day-to-day",
+          "injuryType": "other",
+          "injuryDescription": "Day-To-Day",
+          "dateInjured": null,
+          "expectedReturn": null,
+          "lastUpdated": "2025-12-08T21:00:01.394717Z",
+          "isOut": false
+        },
+        {
+          "playerId": 3001086849,
+          "playerName": "Teddy Blueger",
+          "teamAbbrev": "VAN",
+          "position": "C",
+          "status": "IR",
+          "injuryType": "other",
+          "injuryDescription": "Injured Reserve",
+          "dateInjured": null,
+          "expectedReturn": null,
+          "lastUpdated": "2025-12-08T21:00:01.394717Z",
+          "isOut": true
+        },
+        {
+          "playerId": 3409378796,
+          "playerName": "Pierre-Olivier Joseph",
+          "teamAbbrev": "VAN",
+          "position": "D",
+          "status": "day-to-day",
+          "injuryType": "other",
+          "injuryDescription": "Day-To-Day",
+          "dateInjured": null,
+          "expectedReturn": null,
+          "lastUpdated": "2025-12-08T21:00:01.394717Z",
+          "isOut": false
+        },
+        {
+          "playerId": 2021139280,
+          "playerName": "Filip Chytil",
+          "teamAbbrev": "VAN",
+          "position": "C",
+          "status": "IR",
+          "injuryType": "other",
+          "injuryDescription": "Injured Reserve",
+          "dateInjured": null,
+          "expectedReturn": null,
+          "lastUpdated": "2025-12-08T21:00:01.394717Z",
+          "isOut": true
+        },
+        {
+          "playerId": 582102234,
+          "playerName": "Thatcher Demko",
+          "teamAbbrev": "VAN",
+          "position": "G",
+          "status": "IR",
+          "injuryType": "other",
+          "injuryDescription": "Injured Reserve",
+          "dateInjured": null,
+          "expectedReturn": null,
+          "lastUpdated": "2025-12-08T21:00:01.394717Z",
+          "isOut": true
+        },
+        {
+          "playerId": 1017892852,
+          "playerName": "Derek Forbort",
+          "teamAbbrev": "VAN",
+          "position": "D",
+          "status": "IR",
+          "injuryType": "other",
+          "injuryDescription": "Injured Reserve",
+          "dateInjured": null,
+          "expectedReturn": null,
+          "lastUpdated": "2025-12-08T21:00:01.394717Z",
+          "isOut": true
+        }
+      ],
+      "totalOut": 4,
+      "forwardsOut": 2,
+      "defensemenOut": 1,
+      "goaliesOut": 1,
+      "impactRating": 72,
+      "lastUpdated": "2025-12-08T21:00:01.394717Z"
+    },
+    "VGK": {
+      "teamAbbrev": "VGK",
+      "teamName": "Vegas Golden Knights",
+      "injuries": [
+        {
+          "playerId": 3064089065,
+          "playerName": "Colton Sissons",
+          "teamAbbrev": "VGK",
+          "position": "C",
+          "status": "day-to-day",
+          "injuryType": "other",
+          "injuryDescription": "Day-To-Day",
+          "dateInjured": null,
+          "expectedReturn": null,
+          "lastUpdated": "2025-12-08T21:00:01.394717Z",
+          "isOut": false
+        }
+      ],
+      "totalOut": 0,
+      "forwardsOut": 0,
+      "defensemenOut": 0,
+      "goaliesOut": 0,
+      "impactRating": 0,
+      "lastUpdated": "2025-12-08T21:00:01.394717Z"
+    },
+    "WSH": {
+      "teamAbbrev": "WSH",
+      "teamName": "Washington Capitals",
+      "injuries": [
+        {
+          "playerId": 869770599,
+          "playerName": "John Carlson",
+          "teamAbbrev": "WSH",
+          "position": "D",
+          "status": "day-to-day",
+          "injuryType": "other",
+          "injuryDescription": "Day-To-Day",
+          "dateInjured": null,
+          "expectedReturn": null,
+          "lastUpdated": "2025-12-08T21:00:01.394717Z",
+          "isOut": false
+        },
+        {
+          "playerId": 1258672061,
+          "playerName": "Ryan Leonard",
+          "teamAbbrev": "WSH",
+          "position": "L",
+          "status": "IR",
+          "injuryType": "other",
+          "injuryDescription": "Injured Reserve",
+          "dateInjured": null,
+          "expectedReturn": null,
+          "lastUpdated": "2025-12-08T21:00:01.394717Z",
+          "isOut": true
+        },
+        {
+          "playerId": 250263127,
+          "playerName": "Charlie Lindgren",
+          "teamAbbrev": "WSH",
+          "position": "G",
+          "status": "IR",
+          "injuryType": "other",
+          "injuryDescription": "Injured Reserve",
+          "dateInjured": null,
+          "expectedReturn": null,
+          "lastUpdated": "2025-12-08T21:00:01.394717Z",
+          "isOut": true
+        }
+      ],
+      "totalOut": 2,
+      "forwardsOut": 1,
+      "defensemenOut": 0,
+      "goaliesOut": 1,
+      "impactRating": 41,
+      "lastUpdated": "2025-12-08T21:00:01.394717Z"
+    },
+    "WPG": {
+      "teamAbbrev": "WPG",
+      "teamName": "Winnipeg Jets",
+      "injuries": [
+        {
+          "playerId": 641030395,
+          "playerName": "Haydn Fleury",
+          "teamAbbrev": "WPG",
+          "position": "D",
+          "status": "IR",
+          "injuryType": "other",
+          "injuryDescription": "Injured Reserve",
+          "dateInjured": null,
+          "expectedReturn": null,
+          "lastUpdated": "2025-12-08T21:00:01.394717Z",
+          "isOut": true
+        },
+        {
+          "playerId": 998798551,
+          "playerName": "Connor Hellebuyck",
+          "teamAbbrev": "WPG",
+          "position": "G",
+          "status": "IR",
+          "injuryType": "other",
+          "injuryDescription": "Injured Reserve",
+          "dateInjured": null,
+          "expectedReturn": null,
+          "lastUpdated": "2025-12-08T21:00:01.394717Z",
+          "isOut": true
+        }
+      ],
+      "totalOut": 2,
+      "forwardsOut": 0,
+      "defensemenOut": 1,
+      "goaliesOut": 1,
+      "impactRating": 46,
+      "lastUpdated": "2025-12-08T21:00:01.394717Z"
+    },
+    "ARI": {
+      "teamAbbrev": "ARI",
+      "teamName": "Arizona Coyotes",
       "injuries": [],
       "totalOut": 0,
       "forwardsOut": 0,
       "defensemenOut": 0,
       "goaliesOut": 0,
       "impactRating": 0,
-      "lastUpdated": "2025-12-08T12:00:00.000Z"
+      "lastUpdated": "2025-12-08T21:00:01.402350Z"
     },
     "LAK": {
       "teamAbbrev": "LAK",
@@ -182,194 +1474,7 @@
       "defensemenOut": 0,
       "goaliesOut": 0,
       "impactRating": 0,
-      "lastUpdated": "2025-12-08T12:00:00.000Z"
-    },
-    "WSH": {
-      "teamAbbrev": "WSH",
-      "teamName": "Washington Capitals",
-      "injuries": [],
-      "totalOut": 0,
-      "forwardsOut": 0,
-      "defensemenOut": 0,
-      "goaliesOut": 0,
-      "impactRating": 0,
-      "lastUpdated": "2025-12-08T12:00:00.000Z"
-    },
-    "OTT": {
-      "teamAbbrev": "OTT",
-      "teamName": "Ottawa Senators",
-      "injuries": [],
-      "totalOut": 0,
-      "forwardsOut": 0,
-      "defensemenOut": 0,
-      "goaliesOut": 0,
-      "impactRating": 0,
-      "lastUpdated": "2025-12-08T12:00:00.000Z"
-    },
-    "VAN": {
-      "teamAbbrev": "VAN",
-      "teamName": "Vancouver Canucks",
-      "injuries": [],
-      "totalOut": 0,
-      "forwardsOut": 0,
-      "defensemenOut": 0,
-      "goaliesOut": 0,
-      "impactRating": 0,
-      "lastUpdated": "2025-12-08T12:00:00.000Z"
-    },
-    "CGY": {
-      "teamAbbrev": "CGY",
-      "teamName": "Calgary Flames",
-      "injuries": [],
-      "totalOut": 0,
-      "forwardsOut": 0,
-      "defensemenOut": 0,
-      "goaliesOut": 0,
-      "impactRating": 0,
-      "lastUpdated": "2025-12-08T12:00:00.000Z"
-    },
-    "SEA": {
-      "teamAbbrev": "SEA",
-      "teamName": "Seattle Kraken",
-      "injuries": [],
-      "totalOut": 0,
-      "forwardsOut": 0,
-      "defensemenOut": 0,
-      "goaliesOut": 0,
-      "impactRating": 0,
-      "lastUpdated": "2025-12-08T12:00:00.000Z"
-    },
-    "STL": {
-      "teamAbbrev": "STL",
-      "teamName": "St. Louis Blues",
-      "injuries": [],
-      "totalOut": 0,
-      "forwardsOut": 0,
-      "defensemenOut": 0,
-      "goaliesOut": 0,
-      "impactRating": 0,
-      "lastUpdated": "2025-12-08T12:00:00.000Z"
-    },
-    "MTL": {
-      "teamAbbrev": "MTL",
-      "teamName": "Montreal Canadiens",
-      "injuries": [],
-      "totalOut": 0,
-      "forwardsOut": 0,
-      "defensemenOut": 0,
-      "goaliesOut": 0,
-      "impactRating": 0,
-      "lastUpdated": "2025-12-08T12:00:00.000Z"
-    },
-    "PIT": {
-      "teamAbbrev": "PIT",
-      "teamName": "Pittsburgh Penguins",
-      "injuries": [],
-      "totalOut": 0,
-      "forwardsOut": 0,
-      "defensemenOut": 0,
-      "goaliesOut": 0,
-      "impactRating": 0,
-      "lastUpdated": "2025-12-08T12:00:00.000Z"
-    },
-    "NSH": {
-      "teamAbbrev": "NSH",
-      "teamName": "Nashville Predators",
-      "injuries": [],
-      "totalOut": 0,
-      "forwardsOut": 0,
-      "defensemenOut": 0,
-      "goaliesOut": 0,
-      "impactRating": 0,
-      "lastUpdated": "2025-12-08T12:00:00.000Z"
-    },
-    "DET": {
-      "teamAbbrev": "DET",
-      "teamName": "Detroit Red Wings",
-      "injuries": [],
-      "totalOut": 0,
-      "forwardsOut": 0,
-      "defensemenOut": 0,
-      "goaliesOut": 0,
-      "impactRating": 0,
-      "lastUpdated": "2025-12-08T12:00:00.000Z"
-    },
-    "PHI": {
-      "teamAbbrev": "PHI",
-      "teamName": "Philadelphia Flyers",
-      "injuries": [],
-      "totalOut": 0,
-      "forwardsOut": 0,
-      "defensemenOut": 0,
-      "goaliesOut": 0,
-      "impactRating": 0,
-      "lastUpdated": "2025-12-08T12:00:00.000Z"
-    },
-    "CBJ": {
-      "teamAbbrev": "CBJ",
-      "teamName": "Columbus Blue Jackets",
-      "injuries": [],
-      "totalOut": 0,
-      "forwardsOut": 0,
-      "defensemenOut": 0,
-      "goaliesOut": 0,
-      "impactRating": 0,
-      "lastUpdated": "2025-12-08T12:00:00.000Z"
-    },
-    "NYI": {
-      "teamAbbrev": "NYI",
-      "teamName": "New York Islanders",
-      "injuries": [],
-      "totalOut": 0,
-      "forwardsOut": 0,
-      "defensemenOut": 0,
-      "goaliesOut": 0,
-      "impactRating": 0,
-      "lastUpdated": "2025-12-08T12:00:00.000Z"
-    },
-    "ANA": {
-      "teamAbbrev": "ANA",
-      "teamName": "Anaheim Ducks",
-      "injuries": [],
-      "totalOut": 0,
-      "forwardsOut": 0,
-      "defensemenOut": 0,
-      "goaliesOut": 0,
-      "impactRating": 0,
-      "lastUpdated": "2025-12-08T12:00:00.000Z"
-    },
-    "BUF": {
-      "teamAbbrev": "BUF",
-      "teamName": "Buffalo Sabres",
-      "injuries": [],
-      "totalOut": 0,
-      "forwardsOut": 0,
-      "defensemenOut": 0,
-      "goaliesOut": 0,
-      "impactRating": 0,
-      "lastUpdated": "2025-12-08T12:00:00.000Z"
-    },
-    "SJS": {
-      "teamAbbrev": "SJS",
-      "teamName": "San Jose Sharks",
-      "injuries": [],
-      "totalOut": 0,
-      "forwardsOut": 0,
-      "defensemenOut": 0,
-      "goaliesOut": 0,
-      "impactRating": 0,
-      "lastUpdated": "2025-12-08T12:00:00.000Z"
-    },
-    "CHI": {
-      "teamAbbrev": "CHI",
-      "teamName": "Chicago Blackhawks",
-      "injuries": [],
-      "totalOut": 0,
-      "forwardsOut": 0,
-      "defensemenOut": 0,
-      "goaliesOut": 0,
-      "impactRating": 0,
-      "lastUpdated": "2025-12-08T12:00:00.000Z"
+      "lastUpdated": "2025-12-08T21:00:01.402350Z"
     },
     "UTA": {
       "teamAbbrev": "UTA",
@@ -380,9 +1485,9 @@
       "defensemenOut": 0,
       "goaliesOut": 0,
       "impactRating": 0,
-      "lastUpdated": "2025-12-08T12:00:00.000Z"
+      "lastUpdated": "2025-12-08T21:00:01.402350Z"
     }
   },
-  "totalInjuries": 2,
+  "totalInjuries": 84,
   "recentChanges": []
 }
