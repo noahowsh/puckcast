@@ -27,10 +27,10 @@ const DEFAULT_GOALIE_SLOTS = 2;
 
 // Weights for ranking players
 const RANKING_WEIGHTS = {
-  timeOnIce: 0.40,  // TOI is most important
-  points: 0.25,
+  timeOnIce: 0.25,  // Ice time indicates coach trust
+  points: 0.30,     // Production is key
   pointsPerGame: 0.20,
-  plusMinus: 0.10,
+  plusMinus: 0.20,  // Defensive responsibility
   gamesPlayed: 0.05,
 };
 

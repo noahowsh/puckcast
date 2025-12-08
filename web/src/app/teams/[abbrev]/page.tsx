@@ -706,18 +706,19 @@ export default async function TeamPage({ params }: { params: Promise<{ abbrev: s
           )}
         </section>
 
-        {/* Projected Lineup */}
+        {/* Projected Roster */}
         <section className="nova-section">
-          <div className="flex items-center justify-between mb-4">
+          <div className="section-head" style={{ marginBottom: '1.5rem' }}>
             <div>
-              <h2 className="text-xl font-bold text-white">Projected Lineup</h2>
-              <p className="text-sm text-white/50 mt-1">Players ranked by TOI, points, and performance metrics</p>
+              <p className="eyebrow">Active Roster</p>
+              <h2>Projected Roster</h2>
+              <p className="lead-sm">Players ranked by points, +/-, ice time, and performance. OVR score indicates overall value.</p>
             </div>
-            <div className="flex items-center gap-2">
+            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
               <span className="text-xs text-white/40">
                 Updated: {new Date(projectedLineup.lastUpdated).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
               </span>
-              <Link href="/players" className="text-sm text-sky-400 hover:text-sky-300 transition-colors">
+              <Link href="/players" className="cta cta-ghost">
                 All Players →
               </Link>
             </div>
@@ -727,10 +728,10 @@ export default async function TeamPage({ params }: { params: Promise<{ abbrev: s
 
         {/* Top Performers */}
         {allSkaters.length > 0 && (
-          <section className="nova-section">
+          <section className="nova-section" style={{ background: 'rgba(255,255,255,0.02)', borderRadius: '1rem', padding: '2rem', marginTop: '2rem' }}>
             <div className="section-head">
               <div>
-                <p className="eyebrow">Team Leaders</p>
+                <p className="eyebrow">Season Highlights</p>
                 <h2>Top Performers</h2>
                 <p className="lead-sm">Leading scorers and key contributors this season.</p>
               </div>

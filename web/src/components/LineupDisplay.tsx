@@ -270,22 +270,24 @@ export function ProjectedLineupDisplay({ lineup }: { lineup: TeamLineup }) {
   ];
 
   return (
-    <div className="grid gap-6 lg:grid-cols-3">
+    <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '1.5rem' }} className="lg:grid-cols-[1fr_2fr]">
       {/* Left Column: Strength Card */}
-      <div className="lg:col-span-1">
+      <div>
         <LineupStrengthCard strength={lineup.lineupStrength} />
 
-        {/* Injured Players */}
+        {/* Injured/IR Players */}
         {injuredPlayers.length > 0 && (
-          <div className="card mt-4" style={{ padding: '1rem', borderLeft: '3px solid #ef4444' }}>
+          <div className="card" style={{ marginTop: '1rem', padding: '1rem', borderLeft: '3px solid #ef4444' }}>
             <h4 style={{ fontSize: '0.8rem', fontWeight: 600, color: '#ef4444', marginBottom: '0.75rem', textTransform: 'uppercase' }}>
-              Injured Players ({injuredPlayers.length})
+              Injured / IR ({injuredPlayers.length})
             </h4>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-              {lineup.lineupStrength.missingPlayerImpact.slice(0, 5).map((missing) => (
-                <div key={missing.playerId} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                  <span style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>{missing.playerName}</span>
-                  <span style={{ fontSize: '0.75rem', color: '#f59e0b', fontWeight: 600 }}>-{missing.impactScore.toFixed(1)}</span>
+              {injuredPlayers.slice(0, 8).map((player) => (
+                <div key={player.playerId} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <span style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>{player.playerName}</span>
+                  <span style={{ fontSize: '0.7rem', color: '#ef4444', fontWeight: 600 }}>
+                    {'position' in player ? player.position : 'G'}
+                  </span>
                 </div>
               ))}
             </div>
@@ -294,7 +296,7 @@ export function ProjectedLineupDisplay({ lineup }: { lineup: TeamLineup }) {
       </div>
 
       {/* Right Column: Roster Lists */}
-      <div className="lg:col-span-2">
+      <div>
         {/* Forwards */}
         <div className="card mb-4" style={{ padding: 0, overflow: 'hidden' }}>
           <div style={{ padding: '0.75rem 1rem', background: 'rgba(255,255,255,0.03)', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
