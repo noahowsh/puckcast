@@ -6,22 +6,23 @@ import { getGoaliePulse } from "@/lib/data";
 import { TeamLogo } from "@/components/TeamLogo";
 import { TeamCrest } from "@/components/TeamCrest";
 import type { GoalieCard } from "@/types/goalie";
+import { parsePlayerSlug, generatePlayerSlug } from "@/lib/playerSlug";
 
 export const revalidate = 3600; // Revalidate every hour
 
-// Generate static params for the most active goalies
+// Generate static params for the most active goalies (using slug format)
 export async function generateStaticParams() {
   const allGoalies = await fetchGoalieStats(5);
   return allGoalies.slice(0, 50).map((g) => ({
-    playerId: String(g.bio.playerId),
+    playerId: `${generatePlayerSlug(g.bio.fullName)}-${g.bio.playerId}`,
   }));
 }
 
 export default async function GoalieDetailPage({ params }: { params: Promise<{ playerId: string }> }) {
   const { playerId } = await params;
-  const id = parseInt(playerId, 10);
+  const id = parsePlayerSlug(playerId);
 
-  if (isNaN(id)) {
+  if (!id) {
     return notFound();
   }
 

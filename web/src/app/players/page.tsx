@@ -125,6 +125,7 @@ export default async function PlayersPage() {
                       key={player.bio.playerId}
                       rank={idx + 1}
                       name={player.bio.fullName}
+                      fullName={player.bio.fullName}
                       team={player.bio.teamAbbrev}
                       value={player.stats.points}
                       playerId={player.bio.playerId}
@@ -143,6 +144,7 @@ export default async function PlayersPage() {
                       key={player.bio.playerId}
                       rank={idx + 1}
                       name={player.bio.fullName}
+                      fullName={player.bio.fullName}
                       team={player.bio.teamAbbrev}
                       value={player.stats.goals}
                       playerId={player.bio.playerId}
@@ -161,6 +163,7 @@ export default async function PlayersPage() {
                       key={player.bio.playerId}
                       rank={idx + 1}
                       name={player.bio.fullName}
+                      fullName={player.bio.fullName}
                       team={player.bio.teamAbbrev}
                       value={player.stats.assists}
                       playerId={player.bio.playerId}
@@ -193,6 +196,7 @@ export default async function PlayersPage() {
                     key={player.bio.playerId}
                     rank={idx + 1}
                     name={player.bio.lastName}
+                    fullName={player.bio.fullName}
                     team={player.bio.teamAbbrev}
                     value={player.stats.powerPlayGoals}
                     playerId={player.bio.playerId}
@@ -211,6 +215,7 @@ export default async function PlayersPage() {
                     key={player.bio.playerId}
                     rank={idx + 1}
                     name={player.bio.lastName}
+                    fullName={player.bio.fullName}
                     team={player.bio.teamAbbrev}
                     value={`+${player.stats.plusMinus}`}
                     playerId={player.bio.playerId}
@@ -229,6 +234,7 @@ export default async function PlayersPage() {
                     key={player.bio.playerId}
                     rank={idx + 1}
                     name={player.bio.lastName}
+                    fullName={player.bio.fullName}
                     team={player.bio.teamAbbrev}
                     value={player.stats.gameWinningGoals}
                     playerId={player.bio.playerId}
@@ -247,6 +253,7 @@ export default async function PlayersPage() {
                     key={player.bio.playerId}
                     rank={idx + 1}
                     name={player.bio.lastName}
+                    fullName={player.bio.fullName}
                     team={player.bio.teamAbbrev}
                     value={player.stats.shots}
                     playerId={player.bio.playerId}
@@ -281,6 +288,7 @@ export default async function PlayersPage() {
                     key={goalie.bio.playerId}
                     rank={idx + 1}
                     name={goalie.bio.lastName}
+                    fullName={goalie.bio.fullName}
                     team={goalie.bio.teamAbbrev}
                     value={goalie.stats.wins}
                     playerId={goalie.bio.playerId}
@@ -300,6 +308,7 @@ export default async function PlayersPage() {
                     key={goalie.bio.playerId}
                     rank={idx + 1}
                     name={goalie.bio.lastName}
+                    fullName={goalie.bio.fullName}
                     team={goalie.bio.teamAbbrev}
                     value={`.${Math.round(goalie.stats.savePct * 1000)}`}
                     playerId={goalie.bio.playerId}
@@ -319,6 +328,7 @@ export default async function PlayersPage() {
                     key={goalie.bio.playerId}
                     rank={idx + 1}
                     name={goalie.bio.lastName}
+                    fullName={goalie.bio.fullName}
                     team={goalie.bio.teamAbbrev}
                     value={goalie.stats.goalsAgainstAverage.toFixed(2)}
                     playerId={goalie.bio.playerId}
@@ -338,6 +348,7 @@ export default async function PlayersPage() {
                     key={goalie.bio.playerId}
                     rank={idx + 1}
                     name={goalie.bio.lastName}
+                    fullName={goalie.bio.fullName}
                     team={goalie.bio.teamAbbrev}
                     value={goalie.stats.shutouts}
                     playerId={goalie.bio.playerId}

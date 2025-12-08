@@ -4,6 +4,7 @@
 import Link from "next/link";
 import { TeamCrest } from "./TeamCrest";
 import type { TeamLineup, LineupPlayer, GoalieLineup, LineupStrengthMetrics } from "@/types/lineup";
+import { getPlayerUrl, getGoalieUrl } from "@/lib/playerSlug";
 
 // =============================================================================
 // Strength Meter Component
@@ -144,7 +145,7 @@ function PlayerRow({ player, rank, showRankingScore = true }: {
 
   return (
     <Link
-      href={`/players/${player.playerId}`}
+      href={getPlayerUrl(player.playerId, player.playerName)}
       style={{
         display: 'flex',
         alignItems: 'center',
@@ -201,7 +202,7 @@ function GoalieRow({ goalie, rank }: { goalie: GoalieLineup; rank: number }) {
 
   return (
     <Link
-      href={`/goalies/${goalie.playerId}`}
+      href={getGoalieUrl(goalie.playerId, goalie.playerName)}
       style={{
         display: 'flex',
         alignItems: 'center',

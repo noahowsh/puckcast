@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useState } from "react";
 import type { SkaterCard, GoalieDetailCard } from "@/types/player";
 import { TeamLogo } from "./TeamLogo";
+import { getPlayerUrl, getGoalieUrl } from "@/lib/playerSlug";
 
 // =============================================================================
 // Skater Card Component
@@ -112,7 +113,7 @@ export function PlayerCardView({
 
   if (linkToProfile) {
     return (
-      <Link href={`/players/${bio.playerId}`} className="block">
+      <Link href={getPlayerUrl(bio.playerId, bio.fullName)} className="block">
         {content}
       </Link>
     );
@@ -226,7 +227,7 @@ export function GoalieCardView({
 
   if (linkToProfile) {
     return (
-      <Link href={`/goalies/${bio.playerId}`} className="block">
+      <Link href={getGoalieUrl(bio.playerId, bio.fullName)} className="block">
         {content}
       </Link>
     );

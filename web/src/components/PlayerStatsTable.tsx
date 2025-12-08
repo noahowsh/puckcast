@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useState } from "react";
 import type { SkaterCard, GoalieDetailCard } from "@/types/player";
 import { TeamLogo } from "./TeamLogo";
+import { getPlayerUrl, getGoalieUrl } from "@/lib/playerSlug";
 
 // =============================================================================
 // Player Avatar Component
@@ -203,7 +204,7 @@ export function SkaterStatsTable({
 
             if (linkToProfile) {
               return (
-                <Link key={bio.playerId} href={`/players/${bio.playerId}`} className="contents">
+                <Link key={bio.playerId} href={getPlayerUrl(bio.playerId, bio.fullName)} className="contents">
                   {row}
                 </Link>
               );
@@ -356,7 +357,7 @@ export function GoalieStatsTable({
 
             if (linkToProfile) {
               return (
-                <Link key={bio.playerId} href={`/goalies/${bio.playerId}`} className="contents">
+                <Link key={bio.playerId} href={getGoalieUrl(bio.playerId, bio.fullName)} className="contents">
                   {row}
                 </Link>
               );
@@ -398,14 +399,17 @@ export function LeaderSection({ title, icon, children }: LeaderSectionProps) {
 interface LeaderRowProps {
   rank: number;
   name: string;
+  fullName?: string; // Full name for slug generation (optional for backwards compatibility)
   team: string;
   value: string | number;
   playerId: number;
   isGoalie?: boolean;
 }
 
-export function LeaderRow({ rank, name, team, value, playerId, isGoalie = false }: LeaderRowProps) {
-  const href = isGoalie ? `/goalies/${playerId}` : `/players/${playerId}`;
+export function LeaderRow({ rank, name, fullName, team, value, playerId, isGoalie = false }: LeaderRowProps) {
+  // Use fullName if provided, otherwise fall back to name for slug generation
+  const playerName = fullName || name;
+  const href = isGoalie ? getGoalieUrl(playerId, playerName) : getPlayerUrl(playerId, playerName);
 
   return (
     <Link href={href} className="block">

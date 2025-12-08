@@ -36,107 +36,81 @@ export function SkillProfileCard({ profile, playerName, age, evTOI }: SkillProfi
 
   return (
     <div className="card p-0 overflow-hidden">
-      {/* Header with Overall Rating */}
-      <div className="px-6 py-5 border-b border-white/[0.06] bg-gradient-to-r from-emerald-500/10 to-transparent">
+      {/* Header */}
+      <div className="px-5 py-4 border-b border-white/[0.06] bg-gradient-to-r from-emerald-500/10 to-transparent">
         <div className="flex items-center justify-between">
           <div>
-            <h3 className="text-xl font-bold text-white">Skill Profile</h3>
-            <p className="text-sm text-white/50 mt-1">Percentile Rankings vs. NHL {positionLabel}s</p>
+            <h3 className="text-lg font-bold text-white">Skill Profile</h3>
+            <p className="text-xs text-white/50">Percentile Rankings vs. NHL {positionLabel}s</p>
           </div>
-          <div className="flex items-center gap-6">
+          <div className="flex items-center gap-4 text-right">
             {age && (
-              <div className="text-right">
-                <span className="text-xs text-white/40">Age</span>
-                <p className="text-lg font-semibold text-white">{age}</p>
+              <div>
+                <span className="text-[10px] text-white/40 block">Age</span>
+                <p className="text-sm font-semibold text-white">{age}</p>
               </div>
             )}
             {evTOI && (
-              <div className="text-right">
-                <span className="text-xs text-white/40">EV TOI</span>
-                <p className="text-lg font-semibold text-white">{evTOI}</p>
+              <div>
+                <span className="text-[10px] text-white/40 block">EV TOI</span>
+                <p className="text-sm font-semibold text-white">{evTOI}</p>
               </div>
             )}
           </div>
         </div>
       </div>
 
-      <div className="p-6 space-y-8">
+      <div className="p-5 space-y-5">
         {/* Overall Rating + Radar Chart Row */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* Overall Rating - Large Display */}
-          <div className="flex flex-col items-center justify-center">
+        <div className="grid grid-cols-2 gap-4">
+          {/* Overall Rating */}
+          <div className="flex flex-col items-center justify-center py-2">
             <OverallRatingBadge rating={overallRating} />
-            <p className="text-sm text-white/50 mt-4 mb-2">Overall Skill Rating</p>
-            <p className="text-xs text-white/60 leading-relaxed text-center max-w-xs">{skillSummary}</p>
+            <p className="text-[10px] text-white/50 mt-3">Overall Skill Rating</p>
           </div>
 
           {/* Radar Chart */}
           <div className="flex flex-col items-center">
-            <h4 className="text-sm font-semibold text-white/70 uppercase tracking-wide mb-4">
+            <h4 className="text-[10px] font-semibold text-white/50 uppercase tracking-wide mb-2">
               Relative Skill Chart
             </h4>
             <SkillRadarChart data={radarData} />
-            <p className="text-[10px] text-white/40 mt-3 text-center italic">
-              Larger enclosed area = More versatile player
-            </p>
           </div>
         </div>
 
-        {/* Even Strength Percentiles */}
+        {/* Skill Summary */}
+        <p className="text-xs text-white/60 leading-relaxed">{skillSummary}</p>
+
+        {/* Even Strength Impact */}
         <div>
-          <h4 className="text-sm font-semibold text-white/70 uppercase tracking-wide mb-4">
+          <h4 className="text-xs font-semibold text-white/60 uppercase tracking-wide mb-3">
             Even Strength Impact
           </h4>
-          <div className="grid grid-cols-3 gap-4">
-            <PercentileBox
-              label="EV OFF"
-              sublabel="Offensive"
-              rating={evenStrength.offensive}
-            />
-            <PercentileBox
-              label="EV DEF"
-              sublabel="Defensive"
-              rating={evenStrength.defensive}
-            />
-            <PercentileBox
-              label="EV +/-"
-              sublabel="Overall"
-              rating={evenStrength.overall}
-            />
+          <div className="grid grid-cols-3 gap-2">
+            <PercentileBox label="EV OFF" sublabel="Offensive" rating={evenStrength.offensive} />
+            <PercentileBox label="EV DEF" sublabel="Defensive" rating={evenStrength.defensive} />
+            <PercentileBox label="EV +/-" sublabel="Overall" rating={evenStrength.overall} />
           </div>
         </div>
 
-        {/* Special Teams Percentiles */}
+        {/* Special Teams Impact */}
         <div>
-          <h4 className="text-sm font-semibold text-white/70 uppercase tracking-wide mb-4">
+          <h4 className="text-xs font-semibold text-white/60 uppercase tracking-wide mb-3">
             Special Teams Impact
           </h4>
-          <div className="grid grid-cols-3 gap-4">
-            <PercentileBox
-              label="PP OFF"
-              sublabel="Power Play"
-              rating={specialTeams.powerPlayOffense}
-            />
-            <PercentileBox
-              label="PK DEF"
-              sublabel="Penalty Kill"
-              rating={specialTeams.penaltyKillDefense}
-              showNA={!specialTeams.penaltyKillDefense}
-            />
-            <PercentileBox
-              label="PP/EV"
-              sublabel="Combined"
-              rating={specialTeams.combinedPPEV}
-            />
+          <div className="grid grid-cols-3 gap-2">
+            <PercentileBox label="PP OFF" sublabel="Power Play" rating={specialTeams.powerPlayOffense} />
+            <PercentileBox label="PK DEF" sublabel="Penalty Kill" rating={specialTeams.penaltyKillDefense} showNA={!specialTeams.penaltyKillDefense} />
+            <PercentileBox label="PP/EV" sublabel="Combined" rating={specialTeams.combinedPPEV} />
           </div>
         </div>
 
-        {/* Talent Tools */}
+        {/* Talent Profile */}
         <div>
-          <h4 className="text-sm font-semibold text-white/70 uppercase tracking-wide mb-4">
+          <h4 className="text-xs font-semibold text-white/60 uppercase tracking-wide mb-3">
             Talent Profile
           </h4>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-2 gap-2">
             <TalentBar label="Finishing" rating={talents.finishing} />
             <TalentBar label="Playmaking" rating={talents.playmaking} />
             <TalentBar label="Penalty Impact" rating={talents.penaltyImpact} />
@@ -145,14 +119,12 @@ export function SkillProfileCard({ profile, playerName, age, evTOI }: SkillProfi
         </div>
 
         {/* Legend */}
-        <div className="pt-5 border-t border-white/[0.06]">
-          <div className="flex items-center justify-center gap-3 flex-wrap">
-            <LegendItem color="bg-rose-500/50" label="Replacement" />
-            <LegendItem color="bg-amber-500/40" label="Below Avg" />
-            <LegendItem color="bg-white/30" label="Average" />
-            <LegendItem color="bg-emerald-500/50" label="Above Avg" />
-            <LegendItem color="bg-sky-500/60" label="Elite" />
-          </div>
+        <div className="flex items-center justify-center gap-2 pt-3 border-t border-white/[0.04]">
+          <LegendItem color="bg-rose-500/50" label="Replacement" />
+          <LegendItem color="bg-amber-500/40" label="Below Avg" />
+          <LegendItem color="bg-white/25" label="Average" />
+          <LegendItem color="bg-emerald-500/50" label="Above Avg" />
+          <LegendItem color="bg-sky-500/60" label="Elite" />
         </div>
       </div>
     </div>
@@ -169,14 +141,13 @@ interface RadarDataPoint {
 }
 
 function SkillRadarChart({ data }: { data: RadarDataPoint[] }) {
-  const size = 220;
+  const size = 160;
   const center = size / 2;
-  const maxRadius = size / 2 - 30;
+  const maxRadius = size / 2 - 24;
   const levels = [25, 50, 75, 100];
   const angleStep = (2 * Math.PI) / data.length;
-  const startAngle = -Math.PI / 2; // Start from top
+  const startAngle = -Math.PI / 2;
 
-  // Calculate points for the data polygon
   const dataPoints = data.map((d, i) => {
     const angle = startAngle + i * angleStep;
     const radius = (d.value / 100) * maxRadius;
@@ -195,86 +166,23 @@ function SkillRadarChart({ data }: { data: RadarDataPoint[] }) {
     <svg width={size} height={size} className="overflow-visible">
       {/* Background circles */}
       {levels.map((level) => (
-        <circle
-          key={level}
-          cx={center}
-          cy={center}
-          r={(level / 100) * maxRadius}
-          fill="none"
-          stroke="rgba(255,255,255,0.08)"
-          strokeWidth="1"
-        />
+        <circle key={level} cx={center} cy={center} r={(level / 100) * maxRadius} fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth="1" />
       ))}
 
       {/* Axis lines */}
       {data.map((_, i) => {
         const angle = startAngle + i * angleStep;
-        const x2 = center + maxRadius * Math.cos(angle);
-        const y2 = center + maxRadius * Math.sin(angle);
-        return (
-          <line
-            key={i}
-            x1={center}
-            y1={center}
-            x2={x2}
-            y2={y2}
-            stroke="rgba(255,255,255,0.08)"
-            strokeWidth="1"
-          />
-        );
+        return <line key={i} x1={center} y1={center} x2={center + maxRadius * Math.cos(angle)} y2={center + maxRadius * Math.sin(angle)} stroke="rgba(255,255,255,0.06)" strokeWidth="1" />;
       })}
 
-      {/* Level labels */}
-      {levels.map((level) => (
-        <text
-          key={level}
-          x={center + 4}
-          y={center - (level / 100) * maxRadius + 4}
-          fill="rgba(255,255,255,0.25)"
-          fontSize="8"
-        >
-          {level}
-        </text>
-      ))}
-
       {/* Data polygon */}
-      <path
-        d={dataPath}
-        fill="rgba(110, 240, 194, 0.25)"
-        stroke="rgb(110, 240, 194)"
-        strokeWidth="2.5"
-        strokeLinejoin="round"
-      />
-
-      {/* Data points */}
-      {dataPoints.map((p, i) => (
-        <circle
-          key={i}
-          cx={p.x}
-          cy={p.y}
-          r="4"
-          fill="rgb(110, 240, 194)"
-          stroke="rgba(0,0,0,0.3)"
-          strokeWidth="1"
-        />
-      ))}
+      <path d={dataPath} fill="rgba(110, 240, 194, 0.2)" stroke="rgb(110, 240, 194)" strokeWidth="2" strokeLinejoin="round" />
 
       {/* Axis labels */}
       {dataPoints.map((p, i) => {
-        const labelRadius = maxRadius + 20;
-        const labelX = center + labelRadius * Math.cos(p.angle);
-        const labelY = center + labelRadius * Math.sin(p.angle);
+        const labelRadius = maxRadius + 14;
         return (
-          <text
-            key={i}
-            x={labelX}
-            y={labelY}
-            fill="rgba(255,255,255,0.6)"
-            fontSize="11"
-            fontWeight="600"
-            textAnchor="middle"
-            dominantBaseline="middle"
-          >
+          <text key={i} x={center + labelRadius * Math.cos(p.angle)} y={center + labelRadius * Math.sin(p.angle)} fill="rgba(255,255,255,0.5)" fontSize="8" fontWeight="500" textAnchor="middle" dominantBaseline="middle">
             {p.label}
           </text>
         );
@@ -291,74 +199,56 @@ function OverallRatingBadge({ rating }: { rating: PercentileRating }) {
   const { value, tier } = rating;
 
   const tierStyles = {
-    elite: "from-sky-400 to-sky-600 text-white shadow-sky-500/30",
-    "above-average": "from-emerald-400 to-emerald-600 text-white shadow-emerald-500/30",
-    average: "from-white/30 to-white/10 text-white shadow-white/10",
-    "below-average": "from-amber-400 to-amber-600 text-white shadow-amber-500/30",
-    replacement: "from-rose-400 to-rose-600 text-white shadow-rose-500/30",
+    elite: "from-sky-400 to-sky-600 shadow-sky-500/40",
+    "above-average": "from-emerald-400 to-emerald-600 shadow-emerald-500/40",
+    average: "from-white/20 to-white/10 shadow-white/10",
+    "below-average": "from-amber-400 to-amber-600 shadow-amber-500/40",
+    replacement: "from-rose-400 to-rose-600 shadow-rose-500/40",
   };
 
   return (
-    <div
-      className={`w-28 h-28 rounded-2xl bg-gradient-to-br ${tierStyles[tier]} flex flex-col items-center justify-center shadow-xl`}
-    >
-      <span className="text-4xl font-black">{value}%</span>
-      <span className="text-[10px] uppercase tracking-wider opacity-80 font-semibold mt-1">
+    <div className={`w-20 h-20 rounded-xl bg-gradient-to-br ${tierStyles[tier]} flex flex-col items-center justify-center shadow-lg`}>
+      <span className="text-2xl font-black text-white">{value}%</span>
+      <span className="text-[8px] uppercase tracking-wide text-white/80 font-semibold">
         {tier.replace("-", " ")}
       </span>
     </div>
   );
 }
 
-function PercentileBox({
-  label,
-  sublabel,
-  rating,
-  showNA = false,
-}: {
-  label: string;
-  sublabel: string;
-  rating: PercentileRating | null;
-  showNA?: boolean;
-}) {
+function PercentileBox({ label, sublabel, rating, showNA = false }: { label: string; sublabel: string; rating: PercentileRating | null; showNA?: boolean }) {
   if (showNA || !rating) {
     return (
-      <div className="p-4 bg-white/[0.03] rounded-xl text-center border border-white/[0.04]">
-        <p className="text-2xl font-bold text-white/30">N/A</p>
-        <p className="text-sm text-white/70 font-medium mt-2">{label}</p>
-        <p className="text-xs text-white/40 mt-0.5">{sublabel}</p>
+      <div className="p-2.5 bg-white/[0.03] rounded-lg text-center">
+        <p className="text-lg font-bold text-white/30">N/A</p>
+        <p className="text-[10px] text-white/50 font-medium">{label}</p>
+        <p className="text-[9px] text-white/30">{sublabel}</p>
       </div>
     );
   }
 
   const { value, tier } = rating;
-  const bgClass = getTierBackground(tier);
-  const textClass = getTierTextColor(tier);
 
   return (
-    <div className={`p-4 rounded-xl text-center border border-white/[0.04] ${bgClass}`}>
-      <p className={`text-2xl font-bold ${textClass}`}>{value}%</p>
-      <p className="text-sm text-white/70 font-medium mt-2">{label}</p>
-      <p className="text-xs text-white/40 mt-0.5">{sublabel}</p>
+    <div className={`p-2.5 rounded-lg text-center ${getTierBackground(tier)}`}>
+      <p className={`text-lg font-bold ${getTierTextColor(tier)}`}>{value}%</p>
+      <p className="text-[10px] text-white/50 font-medium">{label}</p>
+      <p className="text-[9px] text-white/30">{sublabel}</p>
     </div>
   );
 }
 
 function TalentBar({ label, rating }: { label: string; rating: PercentileRating }) {
   const { value, tier } = rating;
-  const barColor = getTierBarColor(tier);
 
   return (
-    <div className="p-4 bg-white/[0.03] rounded-xl border border-white/[0.04]">
-      <div className="flex justify-between items-center mb-3">
-        <span className="text-sm text-white/70 font-medium">{label}</span>
-        <span className={`text-lg font-bold ${getTierTextColor(tier)}`}>{value}%</span>
+    <div className="p-2.5 bg-white/[0.03] rounded-lg">
+      <div className="flex justify-between items-center mb-1.5">
+        <span className="text-[10px] text-white/60">{label}</span>
+        <span className={`text-xs font-bold ${getTierTextColor(tier)}`}>{value}%</span>
       </div>
-      <div className="h-2.5 bg-white/[0.06] rounded-full overflow-hidden">
-        <div
-          className={`h-full ${barColor} rounded-full transition-all duration-500`}
-          style={{ width: `${value}%` }}
-        />
+      <div className="h-1.5 bg-white/[0.06] rounded-full overflow-hidden">
+        <div className={`h-full ${getTierBarColor(tier)} rounded-full`} style={{ width: `${value}%` }} />
       </div>
     </div>
   );
@@ -366,9 +256,9 @@ function TalentBar({ label, rating }: { label: string; rating: PercentileRating 
 
 function LegendItem({ color, label }: { color: string; label: string }) {
   return (
-    <div className="flex items-center gap-2">
-      <div className={`w-4 h-4 rounded ${color}`} />
-      <span className="text-xs text-white/50">{label}</span>
+    <div className="flex items-center gap-1">
+      <div className={`w-2.5 h-2.5 rounded ${color}`} />
+      <span className="text-[9px] text-white/40">{label}</span>
     </div>
   );
 }
@@ -379,56 +269,38 @@ function LegendItem({ color, label }: { color: string; label: string }) {
 
 function getPositionLabel(position: string): string {
   switch (position) {
-    case "D":
-      return "Defensemen";
-    case "G":
-      return "Goalie";
-    default:
-      return "Forward";
+    case "D": return "Defensemen";
+    case "G": return "Goalie";
+    default: return "Forward";
   }
 }
 
 function getTierBackground(tier: PercentileRating["tier"]): string {
   switch (tier) {
-    case "elite":
-      return "bg-sky-500/20";
-    case "above-average":
-      return "bg-emerald-500/20";
-    case "average":
-      return "bg-white/[0.06]";
-    case "below-average":
-      return "bg-amber-500/15";
-    case "replacement":
-      return "bg-rose-500/15";
+    case "elite": return "bg-sky-500/15";
+    case "above-average": return "bg-emerald-500/15";
+    case "average": return "bg-white/[0.04]";
+    case "below-average": return "bg-amber-500/10";
+    case "replacement": return "bg-rose-500/10";
   }
 }
 
 function getTierTextColor(tier: PercentileRating["tier"]): string {
   switch (tier) {
-    case "elite":
-      return "text-sky-300";
-    case "above-average":
-      return "text-emerald-400";
-    case "average":
-      return "text-white/80";
-    case "below-average":
-      return "text-amber-400";
-    case "replacement":
-      return "text-rose-400";
+    case "elite": return "text-sky-300";
+    case "above-average": return "text-emerald-400";
+    case "average": return "text-white/70";
+    case "below-average": return "text-amber-400";
+    case "replacement": return "text-rose-400";
   }
 }
 
 function getTierBarColor(tier: PercentileRating["tier"]): string {
   switch (tier) {
-    case "elite":
-      return "bg-sky-400";
-    case "above-average":
-      return "bg-emerald-400";
-    case "average":
-      return "bg-white/40";
-    case "below-average":
-      return "bg-amber-400";
-    case "replacement":
-      return "bg-rose-400";
+    case "elite": return "bg-sky-400";
+    case "above-average": return "bg-emerald-400";
+    case "average": return "bg-white/40";
+    case "below-average": return "bg-amber-400";
+    case "replacement": return "bg-rose-400";
   }
 }

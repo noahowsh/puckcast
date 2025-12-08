@@ -12,22 +12,23 @@ import {
   generateSkillProfile,
   generateOnIceImpact,
 } from "@/lib/playerProjections";
+import { parsePlayerSlug, generatePlayerSlug } from "@/lib/playerSlug";
 
 export const revalidate = 3600; // Revalidate every hour
 
-// Generate static params for the most active players
+// Generate static params for the most active players (using slug format)
 export async function generateStaticParams() {
   const allSkaters = await fetchSkaterStats(10);
   return allSkaters.slice(0, 100).map((p) => ({
-    playerId: String(p.bio.playerId),
+    playerId: `${generatePlayerSlug(p.bio.fullName)}-${p.bio.playerId}`,
   }));
 }
 
 export default async function PlayerDetailPage({ params }: { params: Promise<{ playerId: string }> }) {
   const { playerId } = await params;
-  const id = parseInt(playerId, 10);
+  const id = parsePlayerSlug(playerId);
 
-  if (isNaN(id)) {
+  if (!id) {
     return notFound();
   }
 
@@ -38,7 +39,7 @@ export default async function PlayerDetailPage({ params }: { params: Promise<{ p
 
   const { bio, stats } = player;
 
-  // Calculate league ranks (simplified - would need full data for accurate ranks)
+  // Calculate league ranks
   const allSkaters = await fetchSkaterStats(5);
   const pointsRank = allSkaters.findIndex((p) => p.bio.playerId === bio.playerId) + 1;
   const goalsRank = [...allSkaters].sort((a, b) => b.stats.goals - a.stats.goals).findIndex((p) => p.bio.playerId === bio.playerId) + 1;
@@ -68,147 +69,130 @@ export default async function PlayerDetailPage({ params }: { params: Promise<{ p
 
   return (
     <div className="min-h-screen">
-      <div className="container" style={{ paddingTop: "6rem" }}>
+      <div className="container" style={{ paddingTop: "5rem" }}>
         {/* Breadcrumb */}
-        <div className="mb-6">
+        <div className="mb-4">
           <Link href="/players" className="text-sm text-white/50 hover:text-white/70 transition-colors">
             ← Back to Players
           </Link>
         </div>
 
-        {/* Hero Section */}
-        <section className="nova-hero mb-8">
-          <div className="nova-hero__grid nova-hero__grid--balanced">
-            <div className="nova-hero__text">
-              <div className="flex items-center gap-3 mb-4">
-                <TeamLogo teamAbbrev={bio.teamAbbrev} size="lg" />
-                <div>
-                  <h1 className="display-xl">{bio.fullName}</h1>
-                  <p className="lead flex items-center gap-2">
-                    <span>{positionLabel}</span>
-                    <span className="text-white/30">•</span>
-                    <span>{bio.teamAbbrev}</span>
-                    {bio.jerseyNumber && (
-                      <>
-                        <span className="text-white/30">•</span>
-                        <span>#{bio.jerseyNumber}</span>
-                      </>
-                    )}
-                  </p>
+        {/* Hero Section - Redesigned */}
+        <section className="card p-0 overflow-hidden mb-6">
+          <div className="flex flex-col lg:flex-row">
+            {/* Left - Player Photo & Basic Info */}
+            <div className="flex items-center gap-5 p-5 lg:p-6 lg:border-r border-white/[0.06] lg:w-[320px]">
+              {bio.headshot ? (
+                <Image
+                  src={bio.headshot}
+                  alt={bio.fullName}
+                  width={88}
+                  height={88}
+                  className="rounded-full bg-white/[0.03] flex-shrink-0"
+                />
+              ) : (
+                <div className="w-[88px] h-[88px] rounded-full bg-white/[0.06] flex items-center justify-center flex-shrink-0">
+                  <TeamCrest abbrev={bio.teamAbbrev} size={56} />
                 </div>
-              </div>
-
-              {/* Key Stats Grid */}
-              <div className="grid grid-cols-4 gap-3 mt-6">
-                <StatBox label="Points" value={stats.points} rank={pointsRank > 0 ? pointsRank : undefined} color="sky" />
-                <StatBox label="Goals" value={stats.goals} rank={goalsRank > 0 ? goalsRank : undefined} color="emerald" />
-                <StatBox label="Assists" value={stats.assists} rank={assistsRank > 0 ? assistsRank : undefined} color="amber" />
-                <StatBox label="+/-" value={stats.plusMinus} colored />
+              )}
+              <div className="min-w-0">
+                <h1 className="text-xl lg:text-2xl font-bold text-white truncate">{bio.fullName}</h1>
+                <div className="flex items-center gap-2 mt-1">
+                  <TeamLogo teamAbbrev={bio.teamAbbrev} size="sm" />
+                  <span className="text-sm text-white/60">{positionLabel}</span>
+                  {bio.jerseyNumber && (
+                    <>
+                      <span className="text-white/30">•</span>
+                      <span className="text-sm text-white/60">#{bio.jerseyNumber}</span>
+                    </>
+                  )}
+                </div>
+                {/* Bio row */}
+                <div className="flex items-center gap-3 mt-2 text-xs text-white/50">
+                  {playerAge && <span>{playerAge} yrs</span>}
+                  {bio.heightInInches && <span>{formatHeight(bio.heightInInches)}</span>}
+                  {bio.weightInPounds && <span>{bio.weightInPounds} lbs</span>}
+                </div>
               </div>
             </div>
 
-            {/* Player Card */}
-            <div className="nova-hero__panel" style={{ padding: "1.5rem" }}>
-              <div className="flex items-center gap-4 mb-6">
-                {bio.headshot ? (
-                  <Image
-                    src={bio.headshot}
-                    alt={bio.fullName}
-                    width={100}
-                    height={100}
-                    className="rounded-full bg-white/[0.03]"
-                  />
-                ) : (
-                  <div className="w-[100px] h-[100px] rounded-full bg-white/[0.06] flex items-center justify-center">
-                    <TeamCrest abbrev={bio.teamAbbrev} size={64} />
-                  </div>
-                )}
-                <div>
-                  <p className="text-3xl font-bold text-white">{stats.points}</p>
-                  <p className="text-sm text-white/60">Total Points</p>
-                  <p className="text-xs text-sky-300 mt-1">{pointsPerGame} P/G</p>
-                </div>
+            {/* Right - Key Stats */}
+            <div className="flex-1 p-5 lg:p-6 bg-white/[0.01]">
+              <div className="grid grid-cols-4 gap-3 lg:gap-4">
+                <KeyStat label="Points" value={stats.points} rank={pointsRank > 0 ? pointsRank : undefined} color="sky" />
+                <KeyStat label="Goals" value={stats.goals} rank={goalsRank > 0 ? goalsRank : undefined} color="emerald" />
+                <KeyStat label="Assists" value={stats.assists} rank={assistsRank > 0 ? assistsRank : undefined} color="amber" />
+                <KeyStat label="+/-" value={stats.plusMinus} plusMinus />
               </div>
-
-              {/* Bio Info */}
-              <div className="space-y-2 text-sm">
-                {bio.birthDate && (
-                  <div className="flex justify-between">
-                    <span className="text-white/50">Age</span>
-                    <span className="text-white">{calculateAge(bio.birthDate)}</span>
-                  </div>
-                )}
-                {bio.birthCity && bio.birthCountry && (
-                  <div className="flex justify-between">
-                    <span className="text-white/50">Born</span>
-                    <span className="text-white">{bio.birthCity}, {bio.birthCountry}</span>
-                  </div>
-                )}
-                {bio.heightInInches && (
-                  <div className="flex justify-between">
-                    <span className="text-white/50">Height</span>
-                    <span className="text-white">{formatHeight(bio.heightInInches)}</span>
-                  </div>
-                )}
-                {bio.weightInPounds && (
-                  <div className="flex justify-between">
-                    <span className="text-white/50">Weight</span>
-                    <span className="text-white">{bio.weightInPounds} lbs</span>
-                  </div>
-                )}
-                {bio.shootsCatches && (
-                  <div className="flex justify-between">
-                    <span className="text-white/50">Shoots</span>
-                    <span className="text-white">{bio.shootsCatches === "L" ? "Left" : "Right"}</span>
-                  </div>
-                )}
+              {/* Per-game row */}
+              <div className="flex items-center gap-6 mt-4 pt-4 border-t border-white/[0.06]">
+                <div className="text-center">
+                  <p className="text-lg font-bold text-sky-300">{pointsPerGame}</p>
+                  <p className="text-[10px] text-white/40 uppercase">P/G</p>
+                </div>
+                <div className="text-center">
+                  <p className="text-lg font-bold text-emerald-400">{goalsPerGame}</p>
+                  <p className="text-[10px] text-white/40 uppercase">G/G</p>
+                </div>
+                <div className="text-center">
+                  <p className="text-lg font-bold text-white/80">{shotsPerGame}</p>
+                  <p className="text-[10px] text-white/40 uppercase">S/G</p>
+                </div>
+                <div className="text-center">
+                  <p className="text-lg font-bold text-white/80">{stats.timeOnIcePerGame}</p>
+                  <p className="text-[10px] text-white/40 uppercase">TOI/G</p>
+                </div>
+                <div className="text-center">
+                  <p className="text-lg font-bold text-white/80">{stats.gamesPlayed}</p>
+                  <p className="text-[10px] text-white/40 uppercase">GP</p>
+                </div>
               </div>
             </div>
           </div>
         </section>
 
-        {/* Season Stats */}
-        <section className="nova-section">
-          <h2 className="text-xl font-bold text-white mb-4">2024-25 Season Stats</h2>
+        {/* Season Stats Table */}
+        <section className="mb-5">
+          <h2 className="text-base font-bold text-white mb-3">2024-25 Season Stats</h2>
           <div className="card p-0 overflow-hidden">
             <div className="overflow-x-auto">
-              <table className="w-full">
+              <table className="w-full text-sm">
                 <thead>
-                  <tr className="text-left text-xs text-white/50 uppercase tracking-wider border-b border-white/[0.06]">
-                    <th className="py-3 px-4">GP</th>
-                    <th className="py-3 px-4">G</th>
-                    <th className="py-3 px-4">A</th>
-                    <th className="py-3 px-4">P</th>
-                    <th className="py-3 px-4">+/-</th>
-                    <th className="py-3 px-4">PIM</th>
-                    <th className="py-3 px-4">PPG</th>
-                    <th className="py-3 px-4">PPP</th>
-                    <th className="py-3 px-4">SHG</th>
-                    <th className="py-3 px-4">GWG</th>
-                    <th className="py-3 px-4">S</th>
-                    <th className="py-3 px-4">S%</th>
-                    <th className="py-3 px-4">TOI/G</th>
+                  <tr className="text-left text-[10px] text-white/50 uppercase tracking-wider border-b border-white/[0.06]">
+                    <th className="py-2.5 px-3">GP</th>
+                    <th className="py-2.5 px-3">G</th>
+                    <th className="py-2.5 px-3">A</th>
+                    <th className="py-2.5 px-3">P</th>
+                    <th className="py-2.5 px-3">+/-</th>
+                    <th className="py-2.5 px-3">PIM</th>
+                    <th className="py-2.5 px-3">PPG</th>
+                    <th className="py-2.5 px-3">PPP</th>
+                    <th className="py-2.5 px-3">SHG</th>
+                    <th className="py-2.5 px-3">GWG</th>
+                    <th className="py-2.5 px-3">S</th>
+                    <th className="py-2.5 px-3">S%</th>
+                    <th className="py-2.5 px-3">TOI/G</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr className="border-b border-white/[0.04]">
-                    <td className="py-3 px-4 text-white">{stats.gamesPlayed}</td>
-                    <td className="py-3 px-4 text-white font-semibold">{stats.goals}</td>
-                    <td className="py-3 px-4 text-white font-semibold">{stats.assists}</td>
-                    <td className="py-3 px-4 text-sky-300 font-bold">{stats.points}</td>
-                    <td className={`py-3 px-4 font-medium ${stats.plusMinus > 0 ? "text-emerald-400" : stats.plusMinus < 0 ? "text-rose-400" : "text-white/60"}`}>
+                  <tr>
+                    <td className="py-2.5 px-3 text-white">{stats.gamesPlayed}</td>
+                    <td className="py-2.5 px-3 text-white font-semibold">{stats.goals}</td>
+                    <td className="py-2.5 px-3 text-white font-semibold">{stats.assists}</td>
+                    <td className="py-2.5 px-3 text-sky-300 font-bold">{stats.points}</td>
+                    <td className={`py-2.5 px-3 font-medium ${stats.plusMinus > 0 ? "text-emerald-400" : stats.plusMinus < 0 ? "text-rose-400" : "text-white/60"}`}>
                       {stats.plusMinus > 0 ? `+${stats.plusMinus}` : stats.plusMinus}
                     </td>
-                    <td className="py-3 px-4 text-white/70">{stats.penaltyMinutes}</td>
-                    <td className="py-3 px-4 text-white/70">{stats.powerPlayGoals}</td>
-                    <td className="py-3 px-4 text-white/70">{stats.powerPlayPoints}</td>
-                    <td className="py-3 px-4 text-white/70">{stats.shorthandedGoals}</td>
-                    <td className="py-3 px-4 text-white/70">{stats.gameWinningGoals}</td>
-                    <td className="py-3 px-4 text-white/70">{stats.shots}</td>
-                    <td className="py-3 px-4 text-white/70">
+                    <td className="py-2.5 px-3 text-white/60">{stats.penaltyMinutes}</td>
+                    <td className="py-2.5 px-3 text-white/60">{stats.powerPlayGoals}</td>
+                    <td className="py-2.5 px-3 text-white/60">{stats.powerPlayPoints}</td>
+                    <td className="py-2.5 px-3 text-white/60">{stats.shorthandedGoals}</td>
+                    <td className="py-2.5 px-3 text-white/60">{stats.gameWinningGoals}</td>
+                    <td className="py-2.5 px-3 text-white/60">{stats.shots}</td>
+                    <td className="py-2.5 px-3 text-white/60">
                       {stats.shootingPct > 0 ? `${(stats.shootingPct * 100).toFixed(1)}%` : "—"}
                     </td>
-                    <td className="py-3 px-4 text-white/70">{stats.timeOnIcePerGame}</td>
+                    <td className="py-2.5 px-3 text-white/60">{stats.timeOnIcePerGame}</td>
                   </tr>
                 </tbody>
               </table>
@@ -216,131 +200,66 @@ export default async function PlayerDetailPage({ params }: { params: Promise<{ p
           </div>
         </section>
 
-        {/* Per Game Stats */}
-        <section className="nova-section">
-          <h2 className="text-xl font-bold text-white mb-4">Per Game Averages</h2>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <div className="card p-4 text-center">
-              <p className="text-2xl font-bold text-sky-300">{pointsPerGame}</p>
-              <p className="text-xs text-white/50 uppercase mt-1">Points/Game</p>
-            </div>
-            <div className="card p-4 text-center">
-              <p className="text-2xl font-bold text-emerald-400">{goalsPerGame}</p>
-              <p className="text-xs text-white/50 uppercase mt-1">Goals/Game</p>
-            </div>
-            <div className="card p-4 text-center">
-              <p className="text-2xl font-bold text-white">{shotsPerGame}</p>
-              <p className="text-xs text-white/50 uppercase mt-1">Shots/Game</p>
-            </div>
-            <div className="card p-4 text-center">
-              <p className="text-2xl font-bold text-white">{stats.timeOnIcePerGame}</p>
-              <p className="text-xs text-white/50 uppercase mt-1">TOI/Game</p>
-            </div>
-          </div>
-        </section>
-
         {/* Scoring Breakdown */}
-        <section className="nova-section">
-          <h2 className="text-xl font-bold text-white mb-4">Scoring Breakdown</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* Goals Breakdown */}
+        <section className="mb-5">
+          <h2 className="text-base font-bold text-white mb-3">Scoring Breakdown</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="card p-4">
-              <h3 className="text-sm font-semibold text-white/70 mb-4 uppercase tracking-wide">Goals by Situation</h3>
-              <div className="space-y-3">
+              <h3 className="text-xs font-semibold text-white/60 mb-3 uppercase tracking-wide">Goals by Situation</h3>
+              <div className="space-y-2">
                 <ProgressBar label="Even Strength" value={stats.goals - stats.powerPlayGoals - stats.shorthandedGoals} total={stats.goals} />
                 <ProgressBar label="Power Play" value={stats.powerPlayGoals} total={stats.goals} color="amber" />
                 <ProgressBar label="Shorthanded" value={stats.shorthandedGoals} total={stats.goals} color="rose" />
               </div>
             </div>
-
-            {/* Points Breakdown */}
             <div className="card p-4">
-              <h3 className="text-sm font-semibold text-white/70 mb-4 uppercase tracking-wide">Points Distribution</h3>
-              <div className="space-y-3">
+              <h3 className="text-xs font-semibold text-white/60 mb-3 uppercase tracking-wide">Points Distribution</h3>
+              <div className="space-y-2">
                 <ProgressBar label="Goals" value={stats.goals} total={stats.points} color="emerald" />
                 <ProgressBar label="Assists" value={stats.assists} total={stats.points} color="sky" />
               </div>
-              <div className="mt-4 pt-4 border-t border-white/[0.06]">
-                <div className="flex justify-between text-sm">
-                  <span className="text-white/50">Game Winners</span>
-                  <span className="text-white font-semibold">{stats.gameWinningGoals}</span>
+              <div className="mt-3 pt-3 border-t border-white/[0.06] flex gap-4 text-xs">
+                <div>
+                  <span className="text-white/50">GWG: </span>
+                  <span className="text-white font-medium">{stats.gameWinningGoals}</span>
                 </div>
-                <div className="flex justify-between text-sm mt-2">
-                  <span className="text-white/50">Overtime Goals</span>
-                  <span className="text-white font-semibold">{stats.overtimeGoals}</span>
+                <div>
+                  <span className="text-white/50">OT: </span>
+                  <span className="text-white font-medium">{stats.overtimeGoals}</span>
                 </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Shooting Stats */}
-        <section className="nova-section">
-          <h2 className="text-xl font-bold text-white mb-4">Shooting</h2>
-          <div className="card p-4">
-            <div className="grid grid-cols-3 gap-4 text-center">
-              <div>
-                <p className="text-3xl font-bold text-white">{stats.shots}</p>
-                <p className="text-xs text-white/50 uppercase mt-1">Total Shots</p>
-              </div>
-              <div>
-                <p className="text-3xl font-bold text-emerald-400">
-                  {stats.shootingPct > 0 ? `${(stats.shootingPct * 100).toFixed(1)}%` : "—"}
-                </p>
-                <p className="text-xs text-white/50 uppercase mt-1">Shooting %</p>
-              </div>
-              <div>
-                <p className="text-3xl font-bold text-white">{shotsPerGame}</p>
-                <p className="text-xs text-white/50 uppercase mt-1">Shots/Game</p>
               </div>
             </div>
           </div>
         </section>
 
         {/* Advanced Analytics Section */}
-        <section className="nova-section">
-          <div className="flex items-center gap-3 mb-6">
-            <h2 className="text-xl font-bold text-white">Advanced Analytics</h2>
-            <span className="text-xs text-white/40 bg-white/[0.05] px-2 py-1 rounded">Beta</span>
+        <section className="mb-5">
+          <div className="flex items-center gap-2 mb-4">
+            <h2 className="text-base font-bold text-white">Advanced Analytics</h2>
+            <span className="text-[10px] text-white/40 bg-white/[0.05] px-1.5 py-0.5 rounded">Beta</span>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {/* Season Projection Card */}
-            <SeasonProjectionCard
-              projection={seasonProjection}
-              playerName={bio.fullName}
-            />
-
-            {/* Skill Profile Card */}
-            <SkillProfileCard
-              profile={skillProfile}
-              playerName={bio.fullName}
-              age={playerAge}
-              evTOI={stats.timeOnIcePerGame}
-            />
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            <SeasonProjectionCard projection={seasonProjection} playerName={bio.fullName} />
+            <SkillProfileCard profile={skillProfile} playerName={bio.fullName} age={playerAge} evTOI={stats.timeOnIcePerGame} />
           </div>
 
-          {/* On-Ice Impact Card - Full Width */}
-          <div className="mt-6">
-            <OnIceImpactCard
-              impact={onIceImpact}
-              playerName={bio.fullName}
-              age={playerAge}
-            />
+          <div className="mt-4">
+            <OnIceImpactCard impact={onIceImpact} playerName={bio.fullName} age={playerAge} />
           </div>
         </section>
 
         {/* Link to Team */}
-        <section className="nova-section">
+        <section className="mb-8">
           <Link href={`/teams/${bio.teamAbbrev.toLowerCase()}`} className="card p-4 flex items-center justify-between hover:border-white/20 transition-colors">
             <div className="flex items-center gap-3">
               <TeamLogo teamAbbrev={bio.teamAbbrev} size="md" />
               <div>
-                <p className="font-semibold text-white">View Team Stats</p>
-                <p className="text-sm text-white/50">{bio.teamAbbrev} roster and team performance</p>
+                <p className="font-semibold text-white text-sm">View Team Stats</p>
+                <p className="text-xs text-white/50">{bio.teamAbbrev} roster and performance</p>
               </div>
             </div>
-            <svg className="w-5 h-5 text-white/50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-4 h-4 text-white/50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
             </svg>
           </Link>
@@ -354,18 +273,18 @@ export default async function PlayerDetailPage({ params }: { params: Promise<{ p
 // Helper Components
 // =============================================================================
 
-function StatBox({
+function KeyStat({
   label,
   value,
   rank,
   color,
-  colored,
+  plusMinus,
 }: {
   label: string;
   value: number;
   rank?: number;
   color?: "sky" | "emerald" | "amber";
-  colored?: boolean;
+  plusMinus?: boolean;
 }) {
   const colorClasses = {
     sky: "text-sky-300",
@@ -373,24 +292,18 @@ function StatBox({
     amber: "text-amber-400",
   };
 
-  const valueColor = colored
-    ? value > 0
-      ? "text-emerald-400"
-      : value < 0
-        ? "text-rose-400"
-        : "text-white"
-    : color
-      ? colorClasses[color]
-      : "text-white";
+  const valueColor = plusMinus
+    ? value > 0 ? "text-emerald-400" : value < 0 ? "text-rose-400" : "text-white"
+    : color ? colorClasses[color] : "text-white";
 
-  const displayValue = colored && value > 0 ? `+${value}` : value;
+  const displayValue = plusMinus && value > 0 ? `+${value}` : value;
 
   return (
-    <div className="p-3 bg-white/[0.03] rounded-lg text-center">
-      <p className={`text-2xl font-bold ${valueColor}`}>{displayValue}</p>
-      <p className="text-[10px] text-white/50 uppercase mt-1">{label}</p>
-      {rank && rank > 0 && (
-        <p className="text-xs text-white/40 mt-1">#{rank} NHL</p>
+    <div className="text-center">
+      <p className={`text-2xl lg:text-3xl font-bold ${valueColor}`}>{displayValue}</p>
+      <p className="text-[10px] text-white/50 uppercase mt-0.5">{label}</p>
+      {rank && rank > 0 && rank <= 20 && (
+        <p className="text-[10px] text-white/30 mt-0.5">#{rank} NHL</p>
       )}
     </div>
   );
@@ -408,7 +321,6 @@ function ProgressBar({
   color?: "sky" | "emerald" | "amber" | "rose";
 }) {
   const pct = total > 0 ? (value / total) * 100 : 0;
-
   const colorClasses = {
     sky: "bg-sky-400",
     emerald: "bg-emerald-400",
@@ -418,15 +330,12 @@ function ProgressBar({
 
   return (
     <div>
-      <div className="flex justify-between text-sm mb-1">
-        <span className="text-white/70">{label}</span>
+      <div className="flex justify-between text-xs mb-1">
+        <span className="text-white/60">{label}</span>
         <span className="text-white font-medium">{value}</span>
       </div>
-      <div className="h-2 bg-white/[0.06] rounded-full overflow-hidden">
-        <div
-          className={`h-full ${colorClasses[color]} rounded-full transition-all`}
-          style={{ width: `${pct}%` }}
-        />
+      <div className="h-1.5 bg-white/[0.06] rounded-full overflow-hidden">
+        <div className={`h-full ${colorClasses[color]} rounded-full`} style={{ width: `${pct}%` }} />
       </div>
     </div>
   );
