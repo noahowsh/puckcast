@@ -368,13 +368,13 @@ export function LeaderRow({ rank, name, team, value, playerId, isGoalie = false 
 
   return (
     <Link href={href} className="block">
-      <div className="flex items-center gap-3 py-2 px-3 rounded-lg hover:bg-white/[0.04] transition-colors cursor-pointer">
-        <span className={`w-6 text-sm font-bold ${rank <= 3 ? "text-amber-400" : "text-white/40"}`}>
+      <div className="flex items-center gap-4 py-3 px-4 rounded-lg hover:bg-white/[0.06] transition-colors cursor-pointer">
+        <span className={`w-7 text-sm font-bold ${rank <= 3 ? "text-amber-400" : "text-white/40"}`}>
           {rank}
         </span>
-        <TeamLogo teamAbbrev={team} size="xs" />
+        <TeamLogo teamAbbrev={team} size="sm" />
         <span className="flex-1 text-sm font-medium text-white truncate">{name}</span>
-        <span className="text-sm font-bold text-sky-300">{value}</span>
+        <span className="text-base font-bold text-sky-300">{value}</span>
       </div>
     </Link>
   );

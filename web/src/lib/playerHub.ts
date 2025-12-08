@@ -190,30 +190,23 @@ async function fetchTeamRosterFromAPI(teamAbbrev: string): Promise<NHLRosterResp
 async function buildPlayerTeamLookupInternal(): Promise<Map<number, { teamAbbrev: string; headshot: string }>> {
   const lookup = new Map<number, { teamAbbrev: string; headshot: string }>();
 
-  // Fetch all rosters in parallel batches for faster builds
-  // The roster API (api-web.nhle.com) has different rate limits than stats API
-  const BATCH_SIZE = 6;
-  for (let i = 0; i < NHL_TEAMS.length; i += BATCH_SIZE) {
-    const batch = NHL_TEAMS.slice(i, i + BATCH_SIZE);
-    const rosters = await Promise.all(batch.map(team => fetchTeamRosterFromAPI(team)));
+  // Fetch all rosters in true parallel - no delays needed for roster API
+  console.log(`Building player lookup from ${NHL_TEAMS.length} teams...`);
+  const rosterPromises = NHL_TEAMS.map(team => fetchTeamRosterFromAPI(team).catch(() => null));
+  const rosters = await Promise.all(rosterPromises);
 
-    rosters.forEach((roster, idx) => {
-      if (!roster) return;
-      const teamAbbrev = batch[idx];
-      [...roster.forwards, ...roster.defensemen, ...roster.goalies].forEach(player => {
-        lookup.set(player.id, {
-          teamAbbrev,
-          headshot: player.headshot,
-        });
+  rosters.forEach((roster, idx) => {
+    if (!roster) return;
+    const teamAbbrev = NHL_TEAMS[idx];
+    [...roster.forwards, ...roster.defensemen, ...roster.goalies].forEach(player => {
+      lookup.set(player.id, {
+        teamAbbrev,
+        headshot: player.headshot,
       });
     });
+  });
 
-    // Small delay between batches
-    if (i + BATCH_SIZE < NHL_TEAMS.length) {
-      await sleep(50);
-    }
-  }
-
+  console.log(`Player lookup built with ${lookup.size} players`);
   return lookup;
 }
 
@@ -525,22 +518,54 @@ function mergeGoalieRosterWithStats(
 // =============================================================================
 
 export async function fetchSkaterStats(minGames = MIN_SKATER_GAMES): Promise<SkaterCard[]> {
-  // Use cached stats map - avoid fetching all rosters for league-wide stats
-  const statsMap = await fetchAllSkaterStatsMap();
+  // Fetch stats and team lookup in parallel
+  const [statsMap, teamLookup] = await Promise.all([
+    fetchAllSkaterStatsMap(),
+    getPlayerTeamLookup(),
+  ]);
+
+  console.log(`Skater stats: ${statsMap.size} players, Team lookup: ${teamLookup.size} players`);
 
   return Array.from(statsMap.values())
     .filter((p) => p.gamesPlayed >= minGames)
-    .map((p) => mapNHLSkaterToCard(p))
+    .map((p) => {
+      const card = mapNHLSkaterToCard(p);
+      // Enrich with team info from roster lookup
+      const teamInfo = teamLookup.get(p.playerId);
+      if (teamInfo) {
+        card.bio.teamAbbrev = teamInfo.teamAbbrev;
+        card.bio.teamName = teamInfo.teamAbbrev;
+        card.bio.headshot = teamInfo.headshot;
+        card.stats.teamAbbrev = teamInfo.teamAbbrev;
+      }
+      return card;
+    })
     .sort((a, b) => b.stats.points - a.stats.points);
 }
 
 export async function fetchGoalieStats(minGames = MIN_GOALIE_GAMES): Promise<GoalieDetailCard[]> {
-  // Use cached stats map - avoid fetching all rosters for league-wide stats
-  const statsMap = await fetchAllGoalieStatsMap();
+  // Fetch stats and team lookup in parallel
+  const [statsMap, teamLookup] = await Promise.all([
+    fetchAllGoalieStatsMap(),
+    getPlayerTeamLookup(),
+  ]);
+
+  console.log(`Goalie stats: ${statsMap.size} goalies, Team lookup: ${teamLookup.size} players`);
 
   return Array.from(statsMap.values())
     .filter((g) => g.gamesPlayed >= minGames)
-    .map((g) => mapNHLGoalieToCard(g))
+    .map((g) => {
+      const card = mapNHLGoalieToCard(g);
+      // Enrich with team info from roster lookup
+      const teamInfo = teamLookup.get(g.playerId);
+      if (teamInfo) {
+        card.bio.teamAbbrev = teamInfo.teamAbbrev;
+        card.bio.teamName = teamInfo.teamAbbrev;
+        card.bio.headshot = teamInfo.headshot;
+        card.stats.teamAbbrev = teamInfo.teamAbbrev;
+      }
+      return card;
+    })
     .sort((a, b) => b.stats.wins - a.stats.wins);
 }
 

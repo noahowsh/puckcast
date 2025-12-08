@@ -118,13 +118,13 @@ export default async function PlayersPage() {
         </section>
 
         {/* Secondary Leaders */}
-        <section className="mb-10">
-          <h2 className="text-xl font-bold text-white mb-5">Category Leaders</h2>
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <section className="mb-12">
+          <h2 className="text-xl font-bold text-white mb-6">Category Leaders</h2>
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-5">
             {/* Power Play Goals */}
-            <div className="rounded-xl border border-white/[0.06] bg-gradient-to-b from-white/[0.03] to-transparent p-4">
-              <h3 className="text-xs font-semibold text-white/50 mb-3 uppercase tracking-wide">Power Play Goals</h3>
-              <div className="space-y-0.5">
+            <div className="rounded-xl border border-white/[0.06] bg-gradient-to-b from-white/[0.03] to-transparent p-5">
+              <h3 className="text-sm font-semibold text-white/60 mb-4 uppercase tracking-wide">Power Play Goals</h3>
+              <div className="space-y-1">
                 {skaterLeaders.powerPlayGoals.slice(0, 5).map((player, idx) => (
                   <LeaderRow
                     key={player.bio.playerId}
@@ -139,9 +139,9 @@ export default async function PlayersPage() {
             </div>
 
             {/* Plus/Minus */}
-            <div className="rounded-xl border border-white/[0.06] bg-gradient-to-b from-white/[0.03] to-transparent p-4">
-              <h3 className="text-xs font-semibold text-white/50 mb-3 uppercase tracking-wide">Plus/Minus</h3>
-              <div className="space-y-0.5">
+            <div className="rounded-xl border border-white/[0.06] bg-gradient-to-b from-white/[0.03] to-transparent p-5">
+              <h3 className="text-sm font-semibold text-white/60 mb-4 uppercase tracking-wide">Plus/Minus</h3>
+              <div className="space-y-1">
                 {skaterLeaders.plusMinus.slice(0, 5).map((player, idx) => (
                   <LeaderRow
                     key={player.bio.playerId}
@@ -156,9 +156,9 @@ export default async function PlayersPage() {
             </div>
 
             {/* Game Winning Goals */}
-            <div className="rounded-xl border border-white/[0.06] bg-gradient-to-b from-white/[0.03] to-transparent p-4">
-              <h3 className="text-xs font-semibold text-white/50 mb-3 uppercase tracking-wide">Game Winners</h3>
-              <div className="space-y-0.5">
+            <div className="rounded-xl border border-white/[0.06] bg-gradient-to-b from-white/[0.03] to-transparent p-5">
+              <h3 className="text-sm font-semibold text-white/60 mb-4 uppercase tracking-wide">Game Winners</h3>
+              <div className="space-y-1">
                 {skaterLeaders.gameWinningGoals.slice(0, 5).map((player, idx) => (
                   <LeaderRow
                     key={player.bio.playerId}
@@ -173,9 +173,9 @@ export default async function PlayersPage() {
             </div>
 
             {/* Shots */}
-            <div className="rounded-xl border border-white/[0.06] bg-gradient-to-b from-white/[0.03] to-transparent p-4">
-              <h3 className="text-xs font-semibold text-white/50 mb-3 uppercase tracking-wide">Shots</h3>
-              <div className="space-y-0.5">
+            <div className="rounded-xl border border-white/[0.06] bg-gradient-to-b from-white/[0.03] to-transparent p-5">
+              <h3 className="text-sm font-semibold text-white/60 mb-4 uppercase tracking-wide">Shots</h3>
+              <div className="space-y-1">
                 {skaterLeaders.shots.slice(0, 5).map((player, idx) => (
                   <LeaderRow
                     key={player.bio.playerId}
@@ -192,13 +192,13 @@ export default async function PlayersPage() {
         </section>
 
         {/* Goalie Leaders */}
-        <section className="mb-10">
-          <h2 className="text-xl font-bold text-white mb-5">Goalie Leaders</h2>
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <section className="mb-12">
+          <h2 className="text-xl font-bold text-white mb-6">Goalie Leaders</h2>
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-5">
             {/* Wins */}
-            <div className="rounded-xl border border-white/[0.06] bg-gradient-to-b from-white/[0.03] to-transparent p-4">
-              <h3 className="text-xs font-semibold text-white/50 mb-3 uppercase tracking-wide">Wins</h3>
-              <div className="space-y-0.5">
+            <div className="rounded-xl border border-white/[0.06] bg-gradient-to-b from-white/[0.03] to-transparent p-5">
+              <h3 className="text-sm font-semibold text-white/60 mb-4 uppercase tracking-wide">Wins</h3>
+              <div className="space-y-1">
                 {goalieLeaders.wins.slice(0, 5).map((goalie, idx) => (
                   <LeaderRow
                     key={goalie.bio.playerId}
@@ -214,9 +214,9 @@ export default async function PlayersPage() {
             </div>
 
             {/* Save Percentage */}
-            <div className="rounded-xl border border-white/[0.06] bg-gradient-to-b from-white/[0.03] to-transparent p-4">
-              <h3 className="text-xs font-semibold text-white/50 mb-3 uppercase tracking-wide">Save %</h3>
-              <div className="space-y-0.5">
+            <div className="rounded-xl border border-white/[0.06] bg-gradient-to-b from-white/[0.03] to-transparent p-5">
+              <h3 className="text-sm font-semibold text-white/60 mb-4 uppercase tracking-wide">Save %</h3>
+              <div className="space-y-1">
                 {goalieLeaders.savePct.slice(0, 5).map((goalie, idx) => (
                   <LeaderRow
                     key={goalie.bio.playerId}
@@ -232,9 +232,9 @@ export default async function PlayersPage() {
             </div>
 
             {/* GAA */}
-            <div className="rounded-xl border border-white/[0.06] bg-gradient-to-b from-white/[0.03] to-transparent p-4">
-              <h3 className="text-xs font-semibold text-white/50 mb-3 uppercase tracking-wide">GAA</h3>
-              <div className="space-y-0.5">
+            <div className="rounded-xl border border-white/[0.06] bg-gradient-to-b from-white/[0.03] to-transparent p-5">
+              <h3 className="text-sm font-semibold text-white/60 mb-4 uppercase tracking-wide">GAA</h3>
+              <div className="space-y-1">
                 {goalieLeaders.goalsAgainstAverage.slice(0, 5).map((goalie, idx) => (
                   <LeaderRow
                     key={goalie.bio.playerId}
@@ -250,9 +250,9 @@ export default async function PlayersPage() {
             </div>
 
             {/* Shutouts */}
-            <div className="rounded-xl border border-white/[0.06] bg-gradient-to-b from-white/[0.03] to-transparent p-4">
-              <h3 className="text-xs font-semibold text-white/50 mb-3 uppercase tracking-wide">Shutouts</h3>
-              <div className="space-y-0.5">
+            <div className="rounded-xl border border-white/[0.06] bg-gradient-to-b from-white/[0.03] to-transparent p-5">
+              <h3 className="text-sm font-semibold text-white/60 mb-4 uppercase tracking-wide">Shutouts</h3>
+              <div className="space-y-1">
                 {goalieLeaders.shutouts.slice(0, 5).map((goalie, idx) => (
                   <LeaderRow
                     key={goalie.bio.playerId}
