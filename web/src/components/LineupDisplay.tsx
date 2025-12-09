@@ -463,7 +463,7 @@ export function ProjectedLineupDisplay({ lineup }: { lineup: TeamLineup }) {
       {/* Right Column: Roster Lists */}
       <div>
         {/* Forwards */}
-        <div className="card" style={{ padding: 0, overflow: 'hidden', marginBottom: '1.5rem' }}>
+        <div className="card card-static" style={{ padding: 0, overflow: 'hidden', marginBottom: '1.5rem' }}>
           <div style={{ padding: '0.75rem 1rem', background: 'rgba(255,255,255,0.03)', borderBottom: '1px solid rgba(255,255,255,0.05)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <h4 style={{ fontSize: '0.8rem', fontWeight: 600, color: 'white', textTransform: 'uppercase' }}>
               Forwards ({lineup.forwards.length})
@@ -483,7 +483,7 @@ export function ProjectedLineupDisplay({ lineup }: { lineup: TeamLineup }) {
         </div>
 
         {/* Defensemen */}
-        <div className="card" style={{ padding: 0, overflow: 'hidden', marginBottom: '1.5rem' }}>
+        <div className="card card-static" style={{ padding: 0, overflow: 'hidden', marginBottom: '1.5rem' }}>
           <div style={{ padding: '0.75rem 1rem', background: 'rgba(255,255,255,0.03)', borderBottom: '1px solid rgba(255,255,255,0.05)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <h4 style={{ fontSize: '0.8rem', fontWeight: 600, color: 'white', textTransform: 'uppercase' }}>
               Defensemen ({lineup.defensemen.length})
@@ -503,7 +503,7 @@ export function ProjectedLineupDisplay({ lineup }: { lineup: TeamLineup }) {
         </div>
 
         {/* Goalies */}
-        <div className="card" style={{ padding: 0, overflow: 'hidden', marginBottom: '1.5rem' }}>
+        <div className="card card-static" style={{ padding: 0, overflow: 'hidden', marginBottom: '1.5rem' }}>
           <div style={{ padding: '0.75rem 1rem', background: 'rgba(255,255,255,0.03)', borderBottom: '1px solid rgba(255,255,255,0.05)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <h4 style={{ fontSize: '0.8rem', fontWeight: 600, color: 'white', textTransform: 'uppercase' }}>
               Goalies ({lineup.goalies.length})

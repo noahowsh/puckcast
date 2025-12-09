@@ -306,6 +306,14 @@ p { line-height: 1.7; }
 
 .card:hover::after { opacity: 1; }
 
+/* Static card - no hover effects (for roster lists where rows have individual hover) */
+.card-static:hover {
+  border-color: var(--border-subtle);
+  box-shadow: var(--shadow-subtle);
+  transform: none;
+}
+.card-static:hover::after { opacity: 0; }
+
 .card-flat {
   background: var(--panel-700);
   border: 1px solid var(--border-subtle);

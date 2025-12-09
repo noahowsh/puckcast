@@ -67,35 +67,47 @@ export async function buildProjectedLineup(teamAbbrev: string): Promise<TeamLine
   let defensemen = roster.defensemen.map(p => skaterToLineupPlayer(p, injuryMap));
   let goalies = roster.goalies.map(g => goalieToLineupGoalie(g, injuryMap, goaliePulse, teamAbbrev));
 
+  // Track all player IDs we've already added to avoid duplicates
+  const allPlayerIds = new Set<number>([
+    ...forwards.map(f => f.playerId),
+    ...defensemen.map(d => d.playerId),
+    ...goalies.map(g => g.playerId),
+  ]);
+
   // Add IR/injured players who aren't on the active roster
   if (injuries?.injuries) {
-    const forwardNames = new Set(forwards.map(f => f.playerName.toLowerCase()));
-    const defenseNames = new Set(defensemen.map(d => d.playerName.toLowerCase()));
-    const goalieNames = new Set(goalies.map(g => g.playerName.toLowerCase()));
-
     for (const injury of injuries.injuries) {
       if (!injury.isOut) continue;
-      const lowerName = injury.playerName.toLowerCase();
 
-      // Check if player is already in roster
+      // Skip if we already have this player (by ID or name)
+      if (allPlayerIds.has(injury.playerId)) continue;
+      const lowerName = injury.playerName.toLowerCase();
+      const alreadyExists = forwards.some(f => f.playerName.toLowerCase() === lowerName) ||
+                           defensemen.some(d => d.playerName.toLowerCase() === lowerName) ||
+                           goalies.some(g => g.playerName.toLowerCase() === lowerName);
+      if (alreadyExists) continue;
+
+      // Add to appropriate list based on position
       const isForward = ['C', 'L', 'R', 'LW', 'RW', 'W', 'F'].includes(injury.position.toUpperCase());
       const isDefense = injury.position.toUpperCase() === 'D';
       const isGoalie = injury.position.toUpperCase() === 'G';
 
-      if (isForward && !forwardNames.has(lowerName)) {
+      if (isForward) {
         forwards.push(injuryToLineupPlayer(injury));
-      } else if (isDefense && !defenseNames.has(lowerName)) {
+      } else if (isDefense) {
         defensemen.push(injuryToLineupPlayer(injury));
-      } else if (isGoalie && !goalieNames.has(lowerName)) {
+      } else if (isGoalie) {
         goalies.push(injuryToGoalieLineup(injury));
       }
+
+      allPlayerIds.add(injury.playerId);
     }
   }
 
-  // Rank players by performance
-  const rankedForwards = rankPlayers(forwards);
-  const rankedDefensemen = rankPlayers(defensemen);
-  const rankedGoalies = rankGoalies(goalies);
+  // Rank players by performance, then move injured to bottom
+  const rankedForwards = sortPlayersWithInjuredLast(rankPlayers(forwards));
+  const rankedDefensemen = sortPlayersWithInjuredLast(rankPlayers(defensemen));
+  const rankedGoalies = sortGoaliesWithInjuredLast(rankGoalies(goalies));
 
   // Detect typical lineup sizes from roster size (or use defaults)
   const typicalForwards = Math.min(forwards.length, DEFAULT_FORWARD_SLOTS);
@@ -311,6 +323,19 @@ function rankGoalies(goalies: GoalieLineup[]): GoalieLineup[] {
     ...g,
     isProjectedStarter: !starterFound && g.isHealthy ? (starterFound = true, true) : false,
   }));
+}
+
+// Helper to sort players with injured at the bottom
+function sortPlayersWithInjuredLast(players: LineupPlayer[]): LineupPlayer[] {
+  const healthy = players.filter(p => p.isHealthy);
+  const injured = players.filter(p => !p.isHealthy);
+  return [...healthy, ...injured];
+}
+
+function sortGoaliesWithInjuredLast(goalies: GoalieLineup[]): GoalieLineup[] {
+  const healthy = goalies.filter(g => g.isHealthy);
+  const injured = goalies.filter(g => !g.isHealthy);
+  return [...healthy, ...injured];
 }
 
 // =============================================================================
