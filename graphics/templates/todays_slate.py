@@ -96,7 +96,7 @@ def draw_game_row(
     # Game info - matchup and time
     info_x = home_logo_x + logo_size + S(14)
     matchup_font = get_font(S(24), bold=True)
-    time_font = get_font(S(18), bold=False)  # Larger time text
+    time_font = get_font(S(20), bold=False)  # Bumped up for readability
 
     matchup_text = f"{away_abbrev} @ {home_abbrev}"
     matchup_bbox = draw.textbbox((0, 0), matchup_text, font=matchup_font)
@@ -111,31 +111,33 @@ def draw_game_row(
     draw.text((info_x, text_y), matchup_text, fill=hex_to_rgb(PuckcastColors.TEXT_PRIMARY), font=matchup_font)
     draw.text((info_x, text_y + matchup_h + S(6)), start_time, fill=hex_to_rgb(PuckcastColors.TEXT_TERTIARY), font=time_font)
 
-    # Right side: Pick info - centered vertically with team info
+    # Right side: Pick info - pulled inward for balance
     grade_color = get_confidence_color_rgb(confidence)
 
-    # Calculate vertical center for pick section (aligned with matchup text)
-    pick_section_x = img.width - margin - S(160)
+    # Grade badge position (anchor point)
+    badge_size = S(34)
+    badge_x = img.width - margin - badge_size - S(24)  # Pulled inward ~50px
+    badge_y = row_center_y - badge_size // 2
 
     # Probability text - balanced size
-    prob_font = get_font(S(28), bold=True)
+    prob_font = get_font(S(26), bold=True)
     prob_text = f"{pick_prob * 100:.0f}%"
     prob_bbox = draw.textbbox((0, 0), prob_text, font=prob_font)
     prob_w = prob_bbox[2] - prob_bbox[0]
     prob_h = prob_bbox[3] - prob_bbox[1]
 
-    # Pick label - with proper spacing
+    # Pick label
     pick_font = get_font(S(14), bold=False)
     pick_label = f"Pick: {pick_abbrev}"
     pick_bbox = draw.textbbox((0, 0), pick_label, font=pick_font)
     pick_w = pick_bbox[2] - pick_bbox[0]
     pick_h = pick_bbox[3] - pick_bbox[1]
 
-    # Grade badge
-    badge_size = S(36)
+    # Position pick section to left of badge with spacing
+    pick_section_x = badge_x - prob_w - S(16)  # Extra spacing between prob and badge
 
     # Total height of pick section with proper spacing
-    spacing = S(8)
+    spacing = S(10)  # Increased vertical spacing
     total_pick_h = prob_h + spacing + pick_h
     pick_start_y = row_center_y - total_pick_h // 2
 
@@ -145,13 +147,11 @@ def draw_game_row(
     # Draw pick label below with spacing
     draw.text((pick_section_x + (prob_w - pick_w) // 2, pick_start_y + prob_h + spacing), pick_label, fill=hex_to_rgb(PuckcastColors.TEXT_SECONDARY), font=pick_font)
 
-    # Grade badge on far right
-    badge_x = img.width - margin - badge_size - S(4)
-    badge_y = row_center_y - badge_size // 2
+    # Grade badge
     draw.ellipse([badge_x, badge_y, badge_x + badge_size, badge_y + badge_size], fill=grade_color)
 
     # Grade letter
-    grade_font = get_font(S(20), bold=True)
+    grade_font = get_font(S(18), bold=True)
     grade_bbox = draw.textbbox((0, 0), confidence, font=grade_font)
     grade_w = grade_bbox[2] - grade_bbox[0]
     grade_h = grade_bbox[3] - grade_bbox[1]
@@ -159,9 +159,9 @@ def draw_game_row(
     grade_y = badge_y + (badge_size - grade_h) // 2 - grade_bbox[1]
     draw.text((grade_x, grade_y), confidence, fill=(20, 20, 30), font=grade_font)
 
-    # Separator line below row
+    # Separator line below row - higher opacity
     sep_y = y_position + row_height + S(4)
-    draw.line([(margin, sep_y), (img.width - margin, sep_y)], fill=(255, 255, 255, 20), width=1)
+    draw.line([(margin, sep_y), (img.width - margin, sep_y)], fill=(255, 255, 255, 45), width=1)
 
 
 def generate_slate_image(games: List[Dict], date_str: str, page: int = 1) -> Image.Image:
@@ -171,25 +171,25 @@ def generate_slate_image(games: List[Dict], date_str: str, page: int = 1) -> Ima
 
     margin = S(48)
 
-    # Header - with proper spacing
+    # Header - with breathing room
     title_font = get_font(S(58), bold=True)
-    draw.text((margin, S(48)), "TODAY'S SLATE", fill=hex_to_rgb(PuckcastColors.TEXT_PRIMARY), font=title_font)
+    draw.text((margin, S(56)), "TODAY'S SLATE", fill=hex_to_rgb(PuckcastColors.TEXT_PRIMARY), font=title_font)
 
-    # Subtitle - 30px below title for clear hierarchy
+    # Subtitle - increased spacing below title for hierarchy
     subtitle_font = get_font(S(22), bold=False)
     subtitle = f"Model Predictions • {date_str}"
     if page > 1:
         subtitle += f" (Page {page})"
-    draw.text((margin, S(118)), subtitle, fill=hex_to_rgb(PuckcastColors.TEXT_SECONDARY), font=subtitle_font)
+    draw.text((margin, S(128)), subtitle, fill=hex_to_rgb(PuckcastColors.TEXT_SECONDARY), font=subtitle_font)
 
     # Accent line
-    line_y = S(154)
+    line_y = S(164)
     draw.line([(margin, line_y), (margin + S(140), line_y)], fill=hex_to_rgb(PuckcastColors.AQUA), width=S(4))
 
-    # Game rows - with clear separation
-    content_y = line_y + S(16)
-    row_height = S(124)  # Taller for larger logos
-    row_gap = S(8)  # Gap includes separator line
+    # Game rows - consistent height and spacing
+    content_y = line_y + S(14)
+    row_height = S(120)
+    row_gap = S(10)
 
     for i, game in enumerate(games[:6]):
         y_pos = content_y + i * (row_height + row_gap)
