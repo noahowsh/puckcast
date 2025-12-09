@@ -196,13 +196,31 @@ def build_goalie_pulse(target_date: str, season_id: str) -> dict[str, Any]:
         games_played = stat.get("gamesPlayed", 0)
         wins = stat.get("wins", 0)
         losses = stat.get("losses", 0)
+        ot_losses = stat.get("otLosses", 0)
         gaa = stat.get("goalsAgainstAverage", 3.0)
         save_pct = stat.get("savePct", 0.900)
-        goals_saved_above_avg = stat.get("goalsAgainstAverage", 0)  # Approximation
+
+        # NEW: Additional stats for social content
+        goals_against = stat.get("goalsAgainst", 0)
+        shots_against = stat.get("shotsAgainst", 0)
+        saves = stat.get("saves", 0)
+        shutouts = stat.get("shutouts", 0)
+
+        # Calculate expected goals against (xGA) using league average shooting %
+        LEAGUE_AVG_SHOOTING_PCT = 0.09
+        expected_goals_against = shots_against * LEAGUE_AVG_SHOOTING_PCT if shots_against > 0 else 0
+
+        # Calculate Goals Saved Above Expected (GSAX)
+        # GSAX = xGA - GA (positive = better than expected)
+        gsax = expected_goals_against - goals_against
 
         # Calculate rolling GSA (simplified - use season stats as proxy)
-        season_gsa = (save_pct - 0.900) * games_played * 25  # Rough estimate
+        season_gsa = gsax  # Use actual GSAX calculation
         rolling_gsa = season_gsa / max(games_played, 1) * 3  # Last 3 games approximation
+
+        # Per-game averages
+        shots_against_pg = shots_against / games_played if games_played > 0 else 0
+        saves_pg = saves / games_played if games_played > 0 else 0
 
         trend = calculate_trend(gaa, save_pct, games_played)
         strengths = generate_strengths(save_pct, gaa, wins)
@@ -216,8 +234,33 @@ def build_goalie_pulse(target_date: str, season_id: str) -> dict[str, Any]:
             {
                 "name": goalie_name,
                 "team": team,
+                "gamesPlayed": games_played,
+                "record": f"{wins}-{losses}-{ot_losses}",
+                "wins": wins,
+                "losses": losses,
+                "otLosses": ot_losses,
+
+                # Core stats
+                "gaa": round(gaa, 2),
+                "savePct": round(save_pct, 3),
+                "shutouts": shutouts,
+
+                # Raw counting stats for social content
+                "goalsAgainst": goals_against,
+                "shotsAgainst": shots_against,
+                "saves": saves,
+                "shotsAgainstPerGame": round(shots_against_pg, 1),
+                "savesPerGame": round(saves_pg, 1),
+
+                # Expected goals metrics
+                "expectedGoalsAgainst": round(expected_goals_against, 1),
+                "gsax": round(gsax, 1),
+
+                # GSA metrics (original)
                 "rollingGsa": round(rolling_gsa, 1),
                 "seasonGsa": round(season_gsa, 1),
+
+                # Other metrics
                 "restDays": rest_days,
                 "startLikelihood": round(start_likelihood, 2),
                 "trend": trend,
@@ -228,10 +271,24 @@ def build_goalie_pulse(target_date: str, season_id: str) -> dict[str, Any]:
             }
         )
 
+    # Create leaderboards for social content
+    by_gsax = sorted(goalies, key=lambda g: g["gsax"], reverse=True)
+    by_save_pct = sorted(goalies, key=lambda g: g["savePct"], reverse=True)
+    by_gaa = sorted(goalies, key=lambda g: g["gaa"])
+    by_wins = sorted(goalies, key=lambda g: g["wins"], reverse=True)
+
+    leaderboards = {
+        "byGsax": [{"rank": i+1, "name": g["name"], "team": g["team"], "gsax": g["gsax"]} for i, g in enumerate(by_gsax[:10])],
+        "bySavePct": [{"rank": i+1, "name": g["name"], "team": g["team"], "savePct": g["savePct"]} for i, g in enumerate(by_save_pct[:10])],
+        "byGaa": [{"rank": i+1, "name": g["name"], "team": g["team"], "gaa": g["gaa"]} for i, g in enumerate(by_gaa[:10])],
+        "byWins": [{"rank": i+1, "name": g["name"], "team": g["team"], "wins": g["wins"]} for i, g in enumerate(by_wins[:10])],
+    }
+
     return {
         "updatedAt": datetime.now(timezone.utc).isoformat(),
-        "notes": "Goalie performance metrics calculated from NHL Stats API data. GSAx estimates based on save percentage above league average.",
+        "notes": "Goalie performance metrics calculated from NHL Stats API data. GSAX = Expected Goals Against - Actual Goals Against (positive = outperforming expectations).",
         "goalies": goalies,
+        "leaderboards": leaderboards,
     }
 
 
