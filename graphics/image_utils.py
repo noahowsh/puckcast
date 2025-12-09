@@ -42,6 +42,20 @@ FONTS_DIR = GRAPHICS_DIR / "fonts"
 LOGOS_DIR.mkdir(parents=True, exist_ok=True)
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
+# =============================================================================
+# SUPERSAMPLING FOR CRISP OUTPUT
+# =============================================================================
+
+# Render at 2x resolution, then downscale for sharp text and graphics
+SUPERSAMPLE_SCALE = 2
+RENDER_SIZE = 1080 * SUPERSAMPLE_SCALE  # 2160px
+OUTPUT_SIZE = 1080  # Final Instagram size
+
+
+def S(value: int) -> int:
+    """Scale a value for supersampled rendering (multiply by 2x)."""
+    return value * SUPERSAMPLE_SCALE
+
 
 # =============================================================================
 # FONT LOADING
@@ -211,12 +225,16 @@ def get_logo(abbrev: str, size: int = 80) -> Image.Image:
 # =============================================================================
 
 def create_gradient_background(
-    width: int = 1080,
-    height: int = 1080,
+    width: int = None,
+    height: int = None,
     top_color: Optional[Tuple[int, int, int]] = None,
     bottom_color: Optional[Tuple[int, int, int]] = None,
 ) -> Image.Image:
-    """Create a vertical gradient background."""
+    """Create a vertical gradient background at render size (2x for supersampling)."""
+    if width is None:
+        width = RENDER_SIZE
+    if height is None:
+        height = RENDER_SIZE
     if top_color is None:
         top_color = hex_to_rgb("#0a0e1a")
     if bottom_color is None:
@@ -275,16 +293,24 @@ def add_glow_effect(
     return result.convert("RGB")
 
 
-def create_puckcast_background(width: int = 1080, height: int = 1080) -> Image.Image:
-    """Create the standard Puckcast background with brand glows."""
+def create_puckcast_background(width: int = None, height: int = None) -> Image.Image:
+    """Create the standard Puckcast background with brand glows at render size."""
+    if width is None:
+        width = RENDER_SIZE
+    if height is None:
+        height = RENDER_SIZE
+
     bg = create_gradient_background(width, height)
+
+    # Scale glow radius based on render size
+    scale = width / 1080
 
     # Add aqua glow top-left
     bg = add_glow_effect(
         bg,
         color=hex_to_rgb(PuckcastColors.AQUA),
         position=(int(width * 0.2), int(height * 0.15)),
-        radius=350,
+        radius=int(350 * scale),
         opacity=0.12,
     )
 
@@ -293,7 +319,7 @@ def create_puckcast_background(width: int = 1080, height: int = 1080) -> Image.I
         bg,
         color=hex_to_rgb(PuckcastColors.AMBER),
         position=(int(width * 0.8), int(height * 0.1)),
-        radius=300,
+        radius=int(300 * scale),
         opacity=0.10,
     )
 
@@ -439,28 +465,34 @@ def draw_header(
 
 def draw_footer(
     img: Image.Image,
-    margin: int = 40,
+    margin: int = None,
 ) -> None:
-    """Draw a clean, professional footer with logo only."""
+    """Draw a clean, professional footer with logo only. Auto-scales for supersampling."""
+    # Auto-detect scale based on image size
+    scale = img.width / 1080
+    if margin is None:
+        margin = int(40 * scale)
+
     # Load the Puckcast logo
     logo_path = ASSETS_DIR / "puckcastai.png"
     if not logo_path.exists():
         # Fallback - draw text only
         draw = ImageDraw.Draw(img)
-        font = get_font(FontSizes.CAPTION, bold=True)
+        font_size = int(22 * scale)
+        font = get_font(font_size, bold=True)
         color = hex_to_rgb(PuckcastColors.AQUA)
         text = "PUCKCAST.AI"
         bbox = draw.textbbox((0, 0), text, font=font)
         text_width = bbox[2] - bbox[0]
         x = (img.width - text_width) // 2
-        y = img.height - margin - 20
+        y = img.height - margin - int(20 * scale)
         draw.text((x, y), text, fill=color, font=font)
         return
 
     try:
         logo = Image.open(logo_path).convert("RGBA")
-        # Scale logo to fit nicely - proportional scaling
-        logo_height = 40
+        # Scale logo based on image size
+        logo_height = int(40 * scale)
         aspect = logo.width / logo.height
         logo_width = int(logo_height * aspect)
         logo = logo.resize((logo_width, logo_height), Image.Resampling.LANCZOS)
@@ -479,9 +511,10 @@ def draw_footer(
     except Exception as e:
         # Fallback to text
         draw = ImageDraw.Draw(img)
-        font = get_font(FontSizes.CAPTION, bold=True)
+        font_size = int(22 * scale)
+        font = get_font(font_size, bold=True)
         color = hex_to_rgb(PuckcastColors.AQUA)
-        draw.text((img.width // 2 - 50, img.height - margin - 20), "PUCKCAST.AI", fill=color, font=font)
+        draw.text((img.width // 2 - int(50 * scale), img.height - margin - int(20 * scale)), "PUCKCAST.AI", fill=color, font=font)
 
 
 def draw_badge(
@@ -538,18 +571,27 @@ def truncate_text(text: str, max_length: int = 20) -> str:
     return text[:max_length - 3] + "..."
 
 
-def save_high_quality(img: Image.Image, output_path: Path) -> None:
+def save_high_quality(img: Image.Image, output_path: Path, downscale: bool = True) -> None:
     """
     Save image with optimal quality settings for crisp social media graphics.
 
+    - Downscales from 2160px to 1080px using LANCZOS for sharp results
     - Uses PNG format (lossless)
     - Sets 144 DPI for retina/high-density displays
-    - Optimizes file size without quality loss
     - Converts to RGB mode for compatibility
+
+    Args:
+        img: The image to save (should be rendered at RENDER_SIZE for best quality)
+        output_path: Where to save the image
+        downscale: If True, downscale from RENDER_SIZE to OUTPUT_SIZE
     """
+    # Downscale from 2x render size to final output size
+    if downscale and img.width > OUTPUT_SIZE:
+        img = img.resize((OUTPUT_SIZE, OUTPUT_SIZE), Image.Resampling.LANCZOS)
+
     # Ensure RGB mode for final output (social media compatible)
     if img.mode == "RGBA":
-        # Create white background and composite
+        # Create background and composite
         background = Image.new("RGB", img.size, (10, 14, 26))  # Match dark theme
         background.paste(img, mask=img.split()[3])  # Use alpha channel as mask
         img = background
@@ -557,7 +599,6 @@ def save_high_quality(img: Image.Image, output_path: Path) -> None:
         img = img.convert("RGB")
 
     # Save with high DPI for crisp rendering on retina displays
-    # 144 DPI = 2x standard (72 DPI) for sharp text and logos
     img.save(
         output_path,
         "PNG",

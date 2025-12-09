@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 """
-Edge Posts Template Generator
+Edge Posts Template Generator - Premium Instagram Design
 
-Creates a square (1080x1080) Instagram graphic showing top model edges for today.
+Creates a square (1080x1080) Instagram graphic showing today's top predictions.
+Uses 2x supersampling for crisp output.
 """
 
 from __future__ import annotations
@@ -22,18 +23,16 @@ from puckcast_brand import (
     PuckcastColors,
     hex_to_rgb,
     get_confidence_color_rgb,
-    ImageDimensions,
 )
 from image_utils import (
     create_puckcast_background,
-    draw_header,
     draw_footer,
     draw_rounded_rect,
-    draw_glass_tile,
     get_logo,
     get_font,
-    FontSizes,
     save_high_quality,
+    S,  # Scale function for supersampling
+    RENDER_SIZE,
 )
 
 REPO_ROOT = GRAPHICS_DIR.parents[0]
@@ -48,118 +47,190 @@ def load_predictions() -> Dict[str, Any]:
     return json.loads(PREDICTIONS_PATH.read_text())
 
 
-def draw_edge_tile(
+def draw_prediction_row(
     img: Image.Image,
+    draw: ImageDraw.Draw,
     game: Dict[str, Any],
     y_position: int,
     margin: int,
-    tile_height: int,
-    rank: int,
+    row_height: int,
 ) -> None:
-    """Draw a clean edge tile with no overlaps."""
+    """Draw a single prediction row with large logos and clean layout."""
     away_abbrev = game.get("awayTeam", {}).get("abbrev", "???")
     home_abbrev = game.get("homeTeam", {}).get("abbrev", "???")
     home_prob = game.get("homeWinProb", 0.5)
     away_prob = game.get("awayWinProb", 0.5)
-    edge = game.get("edge", 0)
     confidence = game.get("confidenceGrade", "C")
     start_time = game.get("startTimeEt", "TBD")
     model_favorite = game.get("modelFavorite", "home")
 
-    # Determine favorite
+    # Determine favorite team and probability
     if model_favorite == "home":
-        fav_abbrev = home_abbrev
-        fav_prob = home_prob
+        pick_abbrev = home_abbrev
+        pick_prob = home_prob
     else:
-        fav_abbrev = away_abbrev
-        fav_prob = away_prob
+        pick_abbrev = away_abbrev
+        pick_prob = away_prob
 
-    # Draw glass tile background
-    is_strong = abs(edge) >= 0.05
-    highlight_color = hex_to_rgb(PuckcastColors.AQUA) if is_strong else None
-    result = draw_glass_tile(img, y_position, tile_height, margin, is_strong, highlight_color)
-    draw = ImageDraw.Draw(result)
+    # Row center for vertical alignment
+    row_center_y = y_position + row_height // 2
 
-    # Rank badge on the left
-    rank_font = get_font(24, bold=True)
-    rank_color = hex_to_rgb(PuckcastColors.AQUA)
-    draw.text((margin + 15, y_position + (tile_height - 24) // 2), f"#{rank}", fill=rank_color, font=rank_font)
+    # Large team logos (100px at 1x = 200px at 2x)
+    logo_size = S(90)
+    logo_y = row_center_y - logo_size // 2
 
-    # Team logos - BIGGER
-    logo_size = 60
-    logo_y = y_position + (tile_height - logo_size) // 2
+    # Away team logo
     away_logo = get_logo(away_abbrev, logo_size)
-    result.paste(away_logo, (margin + 55, logo_y), away_logo)
+    logo_x = margin
+    img.paste(away_logo, (logo_x, logo_y), away_logo)
 
-    # @ symbol
-    at_font = get_font(20, bold=False)
-    at_x = margin + 55 + logo_size + 8
-    draw.text((at_x, y_position + (tile_height - 20) // 2), "@", fill=hex_to_rgb(PuckcastColors.TEXT_TERTIARY), font=at_font)
+    # "at" text between logos
+    at_font = get_font(S(24), bold=False)
+    at_x = logo_x + logo_size + S(15)
+    at_bbox = draw.textbbox((0, 0), "@", font=at_font)
+    at_height = at_bbox[3] - at_bbox[1]
+    draw.text(
+        (at_x, row_center_y - at_height // 2 - S(4)),
+        "@",
+        fill=hex_to_rgb(PuckcastColors.TEXT_TERTIARY),
+        font=at_font,
+    )
 
+    # Home team logo
     home_logo = get_logo(home_abbrev, logo_size)
-    result.paste(home_logo, (at_x + 28, logo_y), home_logo)
+    home_logo_x = at_x + S(35)
+    img.paste(home_logo, (home_logo_x, logo_y), home_logo)
 
-    # Matchup text and time - positioned after home logo
-    info_x = at_x + 28 + logo_size + 15
-    name_font = get_font(22, bold=True)
-    time_font = get_font(16, bold=False)
+    # Game info - matchup and time (vertically centered)
+    info_x = home_logo_x + logo_size + S(20)
 
+    # Matchup text (larger, bold)
+    matchup_font = get_font(S(28), bold=True)
     matchup_text = f"{away_abbrev} @ {home_abbrev}"
-    draw.text((info_x, y_position + 22), matchup_text, fill=hex_to_rgb(PuckcastColors.TEXT_PRIMARY), font=name_font)
-    draw.text((info_x, y_position + 50), start_time, fill=hex_to_rgb(PuckcastColors.TEXT_TERTIARY), font=time_font)
+    matchup_bbox = draw.textbbox((0, 0), matchup_text, font=matchup_font)
+    matchup_height = matchup_bbox[3] - matchup_bbox[1]
 
-    # Right side - Edge percentage ONLY (no overlapping elements)
-    edge_font = get_font(38, bold=True)
-    edge_pct = abs(edge) * 100
-    edge_text = f"+{edge_pct:.1f}%"
-    edge_color = get_confidence_color_rgb(confidence)
+    # Time text (smaller)
+    time_font = get_font(S(20), bold=False)
+    time_bbox = draw.textbbox((0, 0), start_time, font=time_font)
+    time_height = time_bbox[3] - time_bbox[1]
 
-    # Calculate text width and position from right
-    edge_bbox = draw.textbbox((0, 0), edge_text, font=edge_font)
-    edge_width = edge_bbox[2] - edge_bbox[0]
-    edge_x = img.width - margin - edge_width - 20
-    draw.text((edge_x, y_position + 15), edge_text, fill=edge_color, font=edge_font)
+    # Stack matchup and time, centered vertically
+    total_text_height = matchup_height + S(8) + time_height
+    text_start_y = row_center_y - total_text_height // 2
 
-    # Pick info below edge (model pick abbrev + prob)
-    pick_font = get_font(16, bold=True)
-    pick_text = f"{fav_abbrev} {fav_prob * 100:.0f}%"
-    pick_bbox = draw.textbbox((0, 0), pick_text, font=pick_font)
-    pick_width = pick_bbox[2] - pick_bbox[0]
-    draw.text((img.width - margin - pick_width - 20, y_position + 56), pick_text, fill=hex_to_rgb(PuckcastColors.TEXT_SECONDARY), font=pick_font)
+    draw.text(
+        (info_x, text_start_y),
+        matchup_text,
+        fill=hex_to_rgb(PuckcastColors.TEXT_PRIMARY),
+        font=matchup_font,
+    )
+    draw.text(
+        (info_x, text_start_y + matchup_height + S(8)),
+        start_time,
+        fill=hex_to_rgb(PuckcastColors.TEXT_TERTIARY),
+        font=time_font,
+    )
 
-    # Copy back
-    img.paste(result.convert("RGB"))
+    # Right side: Confidence grade badge + Win probability
+    grade_color = get_confidence_color_rgb(confidence)
+
+    # Confidence grade circle/badge
+    badge_size = S(56)
+    badge_x = img.width - margin - badge_size
+    badge_y = row_center_y - badge_size // 2
+
+    # Draw circular badge background
+    draw.ellipse(
+        [badge_x, badge_y, badge_x + badge_size, badge_y + badge_size],
+        fill=grade_color,
+    )
+
+    # Grade letter in badge
+    grade_font = get_font(S(30), bold=True)
+    grade_bbox = draw.textbbox((0, 0), confidence, font=grade_font)
+    grade_w = grade_bbox[2] - grade_bbox[0]
+    grade_h = grade_bbox[3] - grade_bbox[1]
+    draw.text(
+        (badge_x + (badge_size - grade_w) // 2, badge_y + (badge_size - grade_h) // 2 - S(3)),
+        confidence,
+        fill=(255, 255, 255),
+        font=grade_font,
+    )
+
+    # Win probability (large, next to badge)
+    prob_font = get_font(S(44), bold=True)
+    prob_text = f"{pick_prob * 100:.0f}%"
+    prob_bbox = draw.textbbox((0, 0), prob_text, font=prob_font)
+    prob_w = prob_bbox[2] - prob_bbox[0]
+    prob_h = prob_bbox[3] - prob_bbox[1]
+    prob_x = badge_x - prob_w - S(20)
+
+    draw.text(
+        (prob_x, row_center_y - prob_h // 2 - S(6)),
+        prob_text,
+        fill=grade_color,
+        font=prob_font,
+    )
+
+    # Pick label (team abbrev under probability)
+    pick_font = get_font(S(18), bold=True)
+    pick_label = f"Pick: {pick_abbrev}"
+    pick_bbox = draw.textbbox((0, 0), pick_label, font=pick_font)
+    pick_w = pick_bbox[2] - pick_bbox[0]
+
+    draw.text(
+        (prob_x + (prob_w - pick_w) // 2, row_center_y + prob_h // 2),
+        pick_label,
+        fill=hex_to_rgb(PuckcastColors.TEXT_SECONDARY),
+        font=pick_font,
+    )
 
 
 def generate_edge_posts_image(games: List[Dict], date_str: str) -> Image.Image:
-    """Generate the edge posts image."""
-    width, height = ImageDimensions.SQUARE
+    """Generate the predictions image at 2x resolution."""
+    # Create background at render size (2160x2160)
+    img = create_puckcast_background()
+    draw = ImageDraw.Draw(img)
 
-    # Create background
-    img = create_puckcast_background(width, height)
+    margin = S(60)
 
-    # Draw header with compact mode
-    title = "TOP MODEL EDGES"
-    subtitle = f"Highest Advantage Picks • {date_str}"
-    y = draw_header(img, title, subtitle, margin=50, compact=True)
+    # Header - Title
+    title_font = get_font(S(72), bold=True)
+    title = "TODAY'S PICKS"
+    title_y = S(50)
+    draw.text((margin, title_y), title, fill=hex_to_rgb(PuckcastColors.TEXT_PRIMARY), font=title_font)
 
-    margin = 50
-    tile_height = 100  # Taller tiles for bigger logos
+    # Subtitle
+    subtitle_font = get_font(S(28), bold=False)
+    subtitle = f"Model Predictions • {date_str}"
+    subtitle_y = title_y + S(80)
+    draw.text((margin, subtitle_y), subtitle, fill=hex_to_rgb(PuckcastColors.TEXT_SECONDARY), font=subtitle_font)
 
-    # Draw edge tiles (top 8 by edge)
-    for i, game in enumerate(games[:8], 1):
-        draw_edge_tile(img, game, y, margin, tile_height, rank=i)
-        y += tile_height + 6
+    # Accent line
+    line_y = subtitle_y + S(50)
+    line_color = hex_to_rgb(PuckcastColors.AQUA)
+    draw.line([(margin, line_y), (margin + S(200), line_y)], fill=line_color, width=S(4))
 
-    # Draw footer
-    draw_footer(img)
+    # Content area - 6 games with comfortable spacing
+    content_start_y = line_y + S(35)
+    row_height = S(120)
+    row_gap = S(12)
+
+    # Draw prediction rows (6 games fits well with header and footer)
+    for i, game in enumerate(games[:6]):
+        y_pos = content_start_y + i * (row_height + row_gap)
+        draw_prediction_row(img, draw, game, y_pos, margin, row_height)
+
+    # Footer
+    draw_footer(img, margin=S(50))
 
     return img
 
 
 def generate_edge_posts() -> List[Path]:
     """Generate edge posts graphics."""
-    print("Generating Edge Posts graphics...")
+    print("Generating Today's Picks graphics...")
 
     data = load_predictions()
     games = data.get("games", [])
@@ -168,15 +239,15 @@ def generate_edge_posts() -> List[Path]:
         print("  No games found for today")
         return []
 
-    # Sort by edge (highest first)
-    games_sorted = sorted(games, key=lambda g: abs(g.get("edge", 0)), reverse=True)
-
-    # Filter to only high-edge games (> 2%)
-    high_edge_games = [g for g in games_sorted if abs(g.get("edge", 0)) > 0.02]
-
-    if not high_edge_games:
-        print("  No high-edge games found")
-        high_edge_games = games_sorted[:6]  # Fall back to top 6
+    # Sort by confidence (A > B > C) then by probability
+    grade_order = {"A+": 0, "A": 1, "A-": 2, "B+": 3, "B": 4, "B-": 5, "C+": 6, "C": 7, "C-": 8, "D": 9, "F": 10}
+    games_sorted = sorted(
+        games,
+        key=lambda g: (
+            grade_order.get(g.get("confidenceGrade", "C"), 7),
+            -max(g.get("homeWinProb", 0.5), g.get("awayWinProb", 0.5))
+        )
+    )
 
     # Get date
     generated_at = data.get("generatedAt", "")
@@ -189,7 +260,7 @@ def generate_edge_posts() -> List[Path]:
     else:
         date_str = datetime.now().strftime("%B %d, %Y")
 
-    img = generate_edge_posts_image(high_edge_games, date_str)
+    img = generate_edge_posts_image(games_sorted, date_str)
 
     output_path = OUTPUT_DIR / "edge_posts.png"
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
@@ -203,9 +274,9 @@ def main():
     try:
         paths = generate_edge_posts()
         if paths:
-            print(f"\n Generated {len(paths)} edge posts image(s)")
+            print(f"\nGenerated {len(paths)} prediction image(s)")
     except Exception as e:
-        print(f" Error: {e}")
+        print(f"Error: {e}")
         import traceback
         traceback.print_exc()
         return 1
