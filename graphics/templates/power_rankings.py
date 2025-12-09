@@ -28,6 +28,7 @@ from image_utils import (
     draw_header,
     draw_footer,
     draw_rounded_rect,
+    draw_glass_tile,
     get_logo,
     get_font,
     FontSizes,
@@ -124,24 +125,23 @@ def generate_power_rankings_image(rankings: List[Dict], week_of: str) -> Image.I
     # Create background
     img = create_puckcast_background(width, height)
 
-    # Draw header
-    title = "POWER INDEX RANKINGS"
+    # Draw header with compact mode
+    title = "POWER RANKINGS"
     subtitle = f"Week of {week_of}"
-    y_start = draw_header(img, title, subtitle, margin=60)
+    y_start = draw_header(img, title, subtitle, margin=50, compact=True)
 
-    # Calculate grid layout
-    # We want to show all 32 teams in a grid
+    # Calculate grid layout for all 32 teams
     cols = 8
     rows = 4
-    margin = 60
-    tile_size = 110
-    gap = 10
+    margin = 35
+    tile_size = 115
+    gap = 8
 
     grid_width = cols * tile_size + (cols - 1) * gap
     grid_height = rows * tile_size + (rows - 1) * gap
 
     start_x = (width - grid_width) // 2
-    start_y = y_start + 20
+    start_y = y_start + 10
 
     # Draw team tiles
     for i, team in enumerate(rankings[:32]):

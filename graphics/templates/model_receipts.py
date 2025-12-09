@@ -28,6 +28,7 @@ from image_utils import (
     draw_header,
     draw_footer,
     draw_rounded_rect,
+    draw_glass_tile,
     get_logo,
     get_font,
     FontSizes,
@@ -61,9 +62,7 @@ def draw_result_row(
     row_height: int,
     is_demo: bool = False,
 ) -> None:
-    """Draw a single game result row."""
-    draw = ImageDraw.Draw(img)
-
+    """Draw a compact game result row."""
     away_abbrev = game.get("awayTeam", {}).get("abbrev", "???")
     home_abbrev = game.get("homeTeam", {}).get("abbrev", "???")
     home_prob = game.get("homeWinProb", 0.5)
@@ -71,12 +70,11 @@ def draw_result_row(
     model_favorite = game.get("modelFavorite", "home")
 
     # For results - check if prediction was correct
-    actual_winner = game.get("actualWinner", None)  # "home", "away", or None
+    actual_winner = game.get("actualWinner", None)
     is_correct = game.get("isCorrect", None)
 
     # Demo mode - simulate results
     if is_demo:
-        # Simulate: model picks correctly when confidence > 55%
         model_conf = home_prob if model_favorite == "home" else away_prob
         is_correct = model_conf > 0.55
         actual_winner = model_favorite if is_correct else ("away" if model_favorite == "home" else "home")
@@ -86,20 +84,23 @@ def draw_result_row(
     overlay_draw = ImageDraw.Draw(overlay)
 
     if is_correct is True:
-        bg_color = (110, 240, 194, 15)  # Green for correct
+        bg_color = (110, 240, 194, 18)
+        border_color = (110, 240, 194, 45)
         result_icon = "✓"
         result_color = hex_to_rgb(PuckcastColors.RISING)
     elif is_correct is False:
-        bg_color = (255, 148, 168, 15)  # Red for incorrect
+        bg_color = (255, 148, 168, 18)
+        border_color = (255, 148, 168, 45)
         result_icon = "✗"
         result_color = hex_to_rgb(PuckcastColors.FALLING)
     else:
-        bg_color = (255, 255, 255, 10)  # Neutral
+        bg_color = (255, 255, 255, 12)
+        border_color = (255, 255, 255, 30)
         result_icon = "?"
         result_color = hex_to_rgb(PuckcastColors.TEXT_TERTIARY)
 
     coords = (margin, y_position, img.width - margin, y_position + row_height)
-    draw_rounded_rect(overlay_draw, coords, radius=12, fill=bg_color)
+    draw_rounded_rect(overlay_draw, coords, radius=12, fill=bg_color, outline=border_color, width=1)
 
     # Composite
     img_rgba = img.convert("RGBA")
@@ -107,37 +108,37 @@ def draw_result_row(
     draw = ImageDraw.Draw(result)
 
     # Result icon on the left
-    icon_font = get_font(36, bold=True)
-    draw.text((margin + 20, y_position + 18), result_icon, fill=result_color, font=icon_font)
+    icon_font = get_font(28, bold=True)
+    draw.text((margin + 15, y_position + (row_height - 28) // 2), result_icon, fill=result_color, font=icon_font)
 
     # Away team logo
-    logo_size = 50
+    logo_size = 42
     away_logo = get_logo(away_abbrev, logo_size)
-    result.paste(away_logo, (margin + 70, y_position + (row_height - logo_size) // 2), away_logo)
+    result.paste(away_logo, (margin + 55, y_position + (row_height - logo_size) // 2), away_logo)
 
     # @ symbol
-    at_font = get_font(FontSizes.BODY, bold=False)
-    draw.text((margin + 130, y_position + 25), "@", fill=hex_to_rgb(PuckcastColors.TEXT_TERTIARY), font=at_font)
+    at_font = get_font(18, bold=False)
+    draw.text((margin + 103, y_position + (row_height - 18) // 2), "@", fill=hex_to_rgb(PuckcastColors.TEXT_TERTIARY), font=at_font)
 
     # Home team logo
     home_logo = get_logo(home_abbrev, logo_size)
-    result.paste(home_logo, (margin + 165, y_position + (row_height - logo_size) // 2), home_logo)
+    result.paste(home_logo, (margin + 128, y_position + (row_height - logo_size) // 2), home_logo)
 
     # Model pick
-    pick_font = get_font(FontSizes.BODY, bold=True)
+    pick_font = get_font(18, bold=True)
     pick_abbrev = home_abbrev if model_favorite == "home" else away_abbrev
     pick_prob = home_prob if model_favorite == "home" else away_prob
     pick_text = f"Picked {pick_abbrev} ({pick_prob * 100:.0f}%)"
-    draw.text((margin + 240, y_position + 25), pick_text, fill=hex_to_rgb(PuckcastColors.TEXT_PRIMARY), font=pick_font)
+    draw.text((margin + 185, y_position + (row_height - 18) // 2), pick_text, fill=hex_to_rgb(PuckcastColors.TEXT_PRIMARY), font=pick_font)
 
     # Actual result on the right
     if actual_winner:
         winner_abbrev = home_abbrev if actual_winner == "home" else away_abbrev
-        winner_font = get_font(FontSizes.BODY, bold=True)
+        winner_font = get_font(18, bold=True)
         winner_text = f"{winner_abbrev} won"
         bbox = draw.textbbox((0, 0), winner_text, font=winner_font)
         text_width = bbox[2] - bbox[0]
-        draw.text((img.width - margin - text_width - 20, y_position + 25), winner_text, fill=result_color, font=winner_font)
+        draw.text((img.width - margin - text_width - 15, y_position + (row_height - 18) // 2), winner_text, fill=result_color, font=winner_font)
 
     # Copy back
     img.paste(result.convert("RGB"))
@@ -150,17 +151,17 @@ def generate_model_receipts_image(games: List[Dict], date_str: str, accuracy: fl
     # Create background
     img = create_puckcast_background(width, height)
 
-    # Draw header
+    # Draw header with compact mode
     title = "MODEL RECEIPTS" if not is_demo else "MODEL RECEIPTS (DEMO)"
     subtitle = f"Results from {date_str}"
-    y = draw_header(img, title, subtitle, margin=60)
+    y = draw_header(img, title, subtitle, margin=50, compact=True)
 
     draw = ImageDraw.Draw(img)
-    margin = 60
-    row_height = 75
+    margin = 50
+    row_height = 65
 
     # Accuracy summary
-    acc_font = get_font(48, bold=True)
+    acc_font = get_font(42, bold=True)
     acc_text = f"{accuracy * 100:.0f}%"
     acc_color = hex_to_rgb(PuckcastColors.AQUA) if accuracy >= 0.5 else hex_to_rgb(PuckcastColors.FALLING)
 
@@ -170,18 +171,18 @@ def generate_model_receipts_image(games: List[Dict], date_str: str, accuracy: fl
     draw.text(((width - acc_width) // 2, y), acc_text, fill=acc_color, font=acc_font)
 
     # "Accuracy" label
-    label_font = get_font(FontSizes.BODY, bold=False)
+    label_font = get_font(20, bold=False)
     label_text = "Accuracy"
     label_bbox = draw.textbbox((0, 0), label_text, font=label_font)
     label_width = label_bbox[2] - label_bbox[0]
-    draw.text(((width - label_width) // 2, y + 55), label_text, fill=hex_to_rgb(PuckcastColors.TEXT_SECONDARY), font=label_font)
+    draw.text(((width - label_width) // 2, y + 48), label_text, fill=hex_to_rgb(PuckcastColors.TEXT_SECONDARY), font=label_font)
 
-    y += 100
+    y += 85
 
-    # Draw game results
-    for game in games[:8]:  # Max 8 games
+    # Draw game results (max 10 games)
+    for game in games[:10]:
         draw_result_row(img, game, y, margin, row_height, is_demo=is_demo)
-        y += row_height + 8
+        y += row_height + 6
 
     # Draw footer
     draw_footer(img)

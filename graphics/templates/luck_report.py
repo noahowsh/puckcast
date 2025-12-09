@@ -27,6 +27,7 @@ from image_utils import (
     draw_header,
     draw_footer,
     draw_rounded_rect,
+    draw_glass_tile,
     get_logo,
     get_font,
     FontSizes,
@@ -53,26 +54,26 @@ def draw_luck_team_row(
     width: int,
     is_lucky: bool,
 ) -> None:
-    """Draw a single team row in the luck section."""
-    draw = ImageDraw.Draw(img)
-
+    """Draw a compact team row in the luck section."""
     abbrev = team_data.get("abbrev", "???")
     luck_score = team_data.get("luckScore", 0)
     pdo = team_data.get("pdo", 100)
 
-    row_height = 75
+    row_height = 68
 
     # Row background
     overlay = Image.new("RGBA", img.size, (0, 0, 0, 0))
     overlay_draw = ImageDraw.Draw(overlay)
 
     if is_lucky:
-        bg_color = (110, 240, 194, 15)  # Green tint for lucky
+        bg_color = (110, 240, 194, 18)
+        border_color = (110, 240, 194, 40)
     else:
-        bg_color = (255, 148, 168, 15)  # Red tint for unlucky
+        bg_color = (255, 148, 168, 18)
+        border_color = (255, 148, 168, 40)
 
     coords = (x_offset, y_position, x_offset + width, y_position + row_height)
-    draw_rounded_rect(overlay_draw, coords, radius=10, fill=bg_color)
+    draw_rounded_rect(overlay_draw, coords, radius=12, fill=bg_color, outline=border_color, width=1)
 
     # Composite
     img_rgba = img.convert("RGBA")
@@ -80,28 +81,28 @@ def draw_luck_team_row(
     draw = ImageDraw.Draw(result)
 
     # Rank
-    rank_font = get_font(28, bold=True)
+    rank_font = get_font(22, bold=True)
     rank_color = hex_to_rgb(PuckcastColors.TEXT_SECONDARY)
-    draw.text((x_offset + 12, y_position + 22), str(rank), fill=rank_color, font=rank_font)
+    draw.text((x_offset + 10, y_position + (row_height - 22) // 2), str(rank), fill=rank_color, font=rank_font)
 
     # Team logo
-    logo_size = 50
+    logo_size = 42
     logo = get_logo(abbrev, logo_size)
-    logo_x = x_offset + 50
+    logo_x = x_offset + 38
     logo_y = y_position + (row_height - logo_size) // 2
     result.paste(logo, (logo_x, logo_y), logo)
 
     # Team abbreviation
-    abbrev_font = get_font(FontSizes.BODY, bold=True)
-    draw.text((x_offset + 110, y_position + 15), abbrev, fill=hex_to_rgb(PuckcastColors.TEXT_PRIMARY), font=abbrev_font)
+    abbrev_font = get_font(18, bold=True)
+    draw.text((x_offset + 88, y_position + 14), abbrev, fill=hex_to_rgb(PuckcastColors.TEXT_PRIMARY), font=abbrev_font)
 
     # PDO below
-    pdo_font = get_font(FontSizes.CAPTION, bold=False)
+    pdo_font = get_font(14, bold=False)
     pdo_text = f"PDO: {pdo:.1f}"
-    draw.text((x_offset + 110, y_position + 45), pdo_text, fill=hex_to_rgb(PuckcastColors.TEXT_TERTIARY), font=pdo_font)
+    draw.text((x_offset + 88, y_position + 38), pdo_text, fill=hex_to_rgb(PuckcastColors.TEXT_TERTIARY), font=pdo_font)
 
     # Luck score on the right
-    luck_font = get_font(28, bold=True)
+    luck_font = get_font(22, bold=True)
     if luck_score > 0:
         luck_text = f"+{luck_score:.2f}"
         luck_color = hex_to_rgb(PuckcastColors.RISING)
@@ -111,7 +112,7 @@ def draw_luck_team_row(
 
     luck_bbox = draw.textbbox((0, 0), luck_text, font=luck_font)
     luck_width = luck_bbox[2] - luck_bbox[0]
-    draw.text((x_offset + width - luck_width - 15, y_position + 22), luck_text, fill=luck_color, font=luck_font)
+    draw.text((x_offset + width - luck_width - 12, y_position + (row_height - 22) // 2), luck_text, fill=luck_color, font=luck_font)
 
     # Copy back
     img.paste(result.convert("RGB"))
@@ -124,21 +125,21 @@ def generate_luck_report_image(luck_report: Dict[str, Any]) -> Image.Image:
     # Create background
     img = create_puckcast_background(width, height)
 
-    # Draw header
+    # Draw header with compact mode
     title = "LUCK REPORT"
     subtitle = "PDO & Luck Score Analysis"
-    y = draw_header(img, title, subtitle, margin=60)
+    y = draw_header(img, title, subtitle, margin=50, compact=True)
 
     draw = ImageDraw.Draw(img)
 
     # Split layout - two columns
-    margin = 60
-    col_width = (width - 2 * margin - 30) // 2  # 30px gap between columns
+    margin = 50
+    col_width = (width - 2 * margin - 25) // 2
     left_x = margin
-    right_x = margin + col_width + 30
+    right_x = margin + col_width + 25
 
     # Column headers
-    section_font = get_font(FontSizes.HEADING, bold=True)
+    section_font = get_font(30, bold=True)
 
     # Lucky column header
     lucky_header_color = hex_to_rgb(PuckcastColors.RISING)
@@ -148,26 +149,17 @@ def generate_luck_report_image(luck_report: Dict[str, Any]) -> Image.Image:
     unlucky_header_color = hex_to_rgb(PuckcastColors.FALLING)
     draw.text((right_x, y), "UNLUCKIEST", fill=unlucky_header_color, font=section_font)
 
-    y += 50
+    y += 45
 
     # Draw lucky teams
     luckiest = luck_report.get("luckiest", [])
-    for i, team in enumerate(luckiest[:5], 1):
-        draw_luck_team_row(img, team, i, y + (i - 1) * 85, left_x, col_width, is_lucky=True)
+    for i, team in enumerate(luckiest[:6], 1):
+        draw_luck_team_row(img, team, i, y + (i - 1) * 78, left_x, col_width, is_lucky=True)
 
     # Draw unlucky teams
     unluckiest = luck_report.get("unluckiest", [])
-    for i, team in enumerate(unluckiest[:5], 1):
-        draw_luck_team_row(img, team, i, y + (i - 1) * 85, right_x, col_width, is_lucky=False)
-
-    # Explanation at the bottom
-    y_bottom = y + 5 * 85 + 30
-    explain_font = get_font(FontSizes.CAPTION, bold=False)
-    explain_color = hex_to_rgb(PuckcastColors.TEXT_TERTIARY)
-    explain_text = "PDO = Shooting% + Save%. 100 is average. Luck Score accounts for shot quality."
-    bbox = draw.textbbox((0, 0), explain_text, font=explain_font)
-    text_width = bbox[2] - bbox[0]
-    draw.text(((width - text_width) // 2, y_bottom), explain_text, fill=explain_color, font=explain_font)
+    for i, team in enumerate(unluckiest[:6], 1):
+        draw_luck_team_row(img, team, i, y + (i - 1) * 78, right_x, col_width, is_lucky=False)
 
     # Draw footer
     draw_footer(img)

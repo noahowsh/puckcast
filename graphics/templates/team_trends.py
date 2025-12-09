@@ -29,6 +29,7 @@ from image_utils import (
     draw_header,
     draw_footer,
     draw_rounded_rect,
+    draw_glass_tile,
     get_logo,
     get_font,
     FontSizes,
@@ -187,19 +188,19 @@ def generate_team_trends_image(risers: List[Dict], fallers: List[Dict], teams_di
     # Create background
     img = create_puckcast_background(width, height)
 
-    # Draw header
+    # Draw header with compact mode
     title = "TEAM TRENDS"
     subtitle = "Trending Up & Trending Down"
-    y = draw_header(img, title, subtitle, margin=60)
+    y = draw_header(img, title, subtitle, margin=50, compact=True)
 
     draw = ImageDraw.Draw(img)
-    margin = 60
-    card_height = 200
+    margin = 50
+    card_height = 190
 
     # Section header - Trending Up
-    section_font = get_font(FontSizes.HEADING, bold=True)
+    section_font = get_font(30, bold=True)
     draw.text((margin, y), "TRENDING UP", fill=hex_to_rgb(PuckcastColors.RISING), font=section_font)
-    y += 45
+    y += 40
 
     # Draw top riser
     if risers:
@@ -207,11 +208,11 @@ def generate_team_trends_image(risers: List[Dict], fallers: List[Dict], teams_di
         abbrev = top_riser.get("abbrev", "")
         full_data = teams_dict.get(abbrev, {})
         draw_team_trend_card(img, top_riser, full_data, y, margin, card_height, is_rising=True)
-    y += card_height + 30
+    y += card_height + 25
 
     # Section header - Trending Down
     draw.text((margin, y), "TRENDING DOWN", fill=hex_to_rgb(PuckcastColors.FALLING), font=section_font)
-    y += 45
+    y += 40
 
     # Draw top faller
     if fallers:

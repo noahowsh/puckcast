@@ -28,6 +28,7 @@ from image_utils import (
     draw_header,
     draw_footer,
     draw_rounded_rect,
+    draw_glass_tile,
     get_logo,
     get_font,
     FontSizes,
@@ -50,12 +51,10 @@ def draw_goalie_row(
     goalie: Dict[str, Any],
     rank: int,
     y_position: int,
-    margin: int = 60,
-    row_height: int = 75,
+    margin: int = 50,
+    row_height: int = 70,
 ) -> int:
-    """Draw a single goalie row in the leaderboard."""
-    draw = ImageDraw.Draw(img)
-
+    """Draw a clean, professional goalie row."""
     # Get goalie info
     name = goalie.get("name", "Unknown")
     team = goalie.get("team", "???")
@@ -63,78 +62,63 @@ def draw_goalie_row(
     save_pct = goalie.get("savePct", 0)
     games = goalie.get("gamesPlayed", 0)
 
-    # Row background (alternating subtle colors)
-    overlay = Image.new("RGBA", img.size, (0, 0, 0, 0))
-    overlay_draw = ImageDraw.Draw(overlay)
-
-    if rank <= 3:
-        # Top 3 get special highlight
-        bg_color = (126, 227, 255, 15)  # Aqua tint
-    elif rank % 2 == 0:
-        bg_color = (255, 255, 255, 8)
-    else:
-        bg_color = (255, 255, 255, 4)
-
-    coords = (margin, y_position, img.width - margin, y_position + row_height)
-    draw_rounded_rect(overlay_draw, coords, radius=12, fill=bg_color)
-
-    # Composite
-    img_rgba = img.convert("RGBA")
-    result = Image.alpha_composite(img_rgba, overlay)
+    # Use glass tile with highlight for top 3
+    is_top = rank <= 3
+    highlight_color = hex_to_rgb(PuckcastColors.AQUA) if is_top else None
+    result = draw_glass_tile(img, y_position, row_height, margin, is_top, highlight_color)
     draw = ImageDraw.Draw(result)
 
     # Rank number
-    rank_font = get_font(28, bold=True)
-    rank_color = hex_to_rgb(PuckcastColors.AQUA) if rank <= 3 else hex_to_rgb(PuckcastColors.TEXT_SECONDARY)
-    draw.text((margin + 15, y_position + (row_height - 28) // 2), str(rank), fill=rank_color, font=rank_font)
+    rank_font = get_font(24, bold=True)
+    rank_color = hex_to_rgb(PuckcastColors.AQUA) if is_top else hex_to_rgb(PuckcastColors.TEXT_SECONDARY)
+    draw.text((margin + 12, y_position + (row_height - 24) // 2), str(rank), fill=rank_color, font=rank_font)
 
     # Team logo
-    logo_size = 48
+    logo_size = 44
     logo = get_logo(team, logo_size)
-    logo_x = margin + 55
+    logo_x = margin + 45
     logo_y = y_position + (row_height - logo_size) // 2
     result.paste(logo, (logo_x, logo_y), logo)
 
     # Goalie name
-    name_font = get_font(FontSizes.CAPTION, bold=True)
+    name_font = get_font(20, bold=True)
     name_color = hex_to_rgb(PuckcastColors.TEXT_PRIMARY)
-    draw.text((margin + 115, y_position + 15), name, fill=name_color, font=name_font)
+    draw.text((margin + 100, y_position + 15), name, fill=name_color, font=name_font)
 
-    # Team abbreviation under name
-    team_font = get_font(FontSizes.SMALL, bold=False)
+    # Team abbreviation
+    team_font = get_font(14, bold=False)
     team_color = hex_to_rgb(PuckcastColors.TEXT_TERTIARY)
-    draw.text((margin + 115, y_position + 40), team, fill=team_color, font=team_font)
+    draw.text((margin + 100, y_position + 40), team, fill=team_color, font=team_font)
 
-    # Stats on the right side
-    # GSAX (primary stat)
-    gsax_font = get_font(26, bold=True)
+    # Stats on the right side - GSAX (main stat)
+    gsax_font = get_font(24, bold=True)
     gsax_text = f"+{gsax:.1f}" if gsax > 0 else f"{gsax:.1f}"
     gsax_color = hex_to_rgb(PuckcastColors.RISING) if gsax > 0 else hex_to_rgb(PuckcastColors.FALLING)
-    draw.text((img.width - margin - 260, y_position + 12), gsax_text, fill=gsax_color, font=gsax_font)
+    draw.text((img.width - margin - 240, y_position + 12), gsax_text, fill=gsax_color, font=gsax_font)
 
     # GSAX label
-    gsax_label_font = get_font(FontSizes.TINY, bold=False)
-    draw.text((img.width - margin - 260, y_position + 42), "GSAX", fill=hex_to_rgb(PuckcastColors.TEXT_TERTIARY), font=gsax_label_font)
+    gsax_label_font = get_font(12, bold=False)
+    draw.text((img.width - margin - 240, y_position + 40), "GSAX", fill=hex_to_rgb(PuckcastColors.TEXT_TERTIARY), font=gsax_label_font)
 
     # Save percentage
-    sv_font = get_font(22, bold=True)
+    sv_font = get_font(20, bold=True)
     sv_text = f".{int(save_pct * 1000)}"
-    draw.text((img.width - margin - 160, y_position + 14), sv_text, fill=hex_to_rgb(PuckcastColors.TEXT_SECONDARY), font=sv_font)
+    draw.text((img.width - margin - 145, y_position + 14), sv_text, fill=hex_to_rgb(PuckcastColors.TEXT_SECONDARY), font=sv_font)
 
-    sv_label_font = get_font(FontSizes.TINY, bold=False)
-    draw.text((img.width - margin - 160, y_position + 42), "SV%", fill=hex_to_rgb(PuckcastColors.TEXT_TERTIARY), font=sv_label_font)
+    sv_label_font = get_font(12, bold=False)
+    draw.text((img.width - margin - 145, y_position + 40), "SV%", fill=hex_to_rgb(PuckcastColors.TEXT_TERTIARY), font=sv_label_font)
 
     # Games played
-    gp_font = get_font(22, bold=True)
-    draw.text((img.width - margin - 75, y_position + 14), str(games), fill=hex_to_rgb(PuckcastColors.TEXT_SECONDARY), font=gp_font)
+    gp_font = get_font(20, bold=True)
+    draw.text((img.width - margin - 60, y_position + 14), str(games), fill=hex_to_rgb(PuckcastColors.TEXT_SECONDARY), font=gp_font)
 
-    gp_label_font = get_font(FontSizes.TINY, bold=False)
-    draw.text((img.width - margin - 70, y_position + 42), "GP", fill=hex_to_rgb(PuckcastColors.TEXT_TERTIARY), font=gp_label_font)
+    gp_label_font = get_font(12, bold=False)
+    draw.text((img.width - margin - 55, y_position + 40), "GP", fill=hex_to_rgb(PuckcastColors.TEXT_TERTIARY), font=gp_label_font)
 
     # Copy back
     img.paste(result.convert("RGB"))
 
-    return y_position + row_height + 4
+    return y_position + row_height + 5
 
 
 def generate_goalie_leaderboard_image(goalies: List[Dict], updated_at: str) -> Image.Image:
@@ -144,15 +128,13 @@ def generate_goalie_leaderboard_image(goalies: List[Dict], updated_at: str) -> I
     # Create background
     img = create_puckcast_background(width, height)
 
-    # Draw header
-    title = "TOP GOALIES BY GSAX"
-    subtitle = "Goals Saved Above Expected"
-    y = draw_header(img, title, subtitle, margin=60)
+    # Draw header with compact mode
+    title = "GOALIE LEADERBOARD"
+    subtitle = "Top Goalies by Goals Saved Above Expected"
+    y = draw_header(img, title, subtitle, margin=50, compact=True)
 
-    y += 5
-
-    # Draw goalie rows (top 9)
-    for i, goalie in enumerate(goalies[:9], 1):
+    # Draw goalie rows (top 10)
+    for i, goalie in enumerate(goalies[:10], 1):
         y = draw_goalie_row(img, goalie, i, y)
 
     # Draw footer

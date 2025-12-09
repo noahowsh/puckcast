@@ -335,87 +335,142 @@ def draw_tile(
     img.paste(result)
 
 
+def draw_glass_tile(
+    img: Image.Image,
+    y_position: int,
+    height: int = 110,
+    margin: int = 50,
+    highlight: bool = False,
+    highlight_color: Tuple[int, int, int] = None,
+) -> Image.Image:
+    """
+    Draw a modern glass-morphism style tile with subtle gradients.
+
+    Returns the composited image.
+    """
+    overlay = Image.new("RGBA", img.size, (0, 0, 0, 0))
+    overlay_draw = ImageDraw.Draw(overlay)
+
+    coords = (margin, y_position, img.width - margin, y_position + height)
+
+    if highlight and highlight_color:
+        # Highlighted tile with accent color
+        fill_color = (*highlight_color, 25)
+        border_color = (*highlight_color, 60)
+    else:
+        # Standard glass tile
+        fill_color = (255, 255, 255, 10)
+        border_color = (255, 255, 255, 30)
+
+    # Draw main tile
+    draw_rounded_rect(overlay_draw, coords, radius=14, fill=fill_color, outline=border_color, width=1)
+
+    # Add subtle top highlight for glass effect
+    highlight_coords = (margin + 1, y_position + 1, img.width - margin - 1, y_position + 3)
+    draw_rounded_rect(overlay_draw, highlight_coords, radius=14, fill=(255, 255, 255, 15))
+
+    # Composite
+    img_rgba = img.convert("RGBA")
+    result = Image.alpha_composite(img_rgba, overlay)
+
+    return result
+
+
 def draw_header(
     img: Image.Image,
     title: str,
     subtitle: str = None,
     margin: int = 60,
+    compact: bool = False,
 ) -> int:
     """
-    Draw the header section with title and optional subtitle.
+    Draw a professional header section with title and optional subtitle.
 
     Returns the y position after the header.
     """
     draw = ImageDraw.Draw(img)
 
-    # Title
-    title_font = get_font(FontSizes.TITLE, bold=True)
+    # Title - larger and bolder for impact
+    title_size = FontSizes.TITLE if not compact else 52
+    title_font = get_font(title_size, bold=True)
     title_color = hex_to_rgb(PuckcastColors.TEXT_PRIMARY)
 
-    y = margin + 20
+    y = margin + 15 if compact else margin + 25
     draw.text((margin, y), title, fill=title_color, font=title_font)
-    y += FontSizes.TITLE + 10
+    y += title_size + 8
 
-    # Subtitle
+    # Subtitle - cleaner secondary text
     if subtitle:
-        subtitle_font = get_font(FontSizes.SUBTITLE, bold=False)
+        subtitle_size = 26 if compact else 30
+        subtitle_font = get_font(subtitle_size, bold=False)
         subtitle_color = hex_to_rgb(PuckcastColors.TEXT_SECONDARY)
         draw.text((margin, y), subtitle, fill=subtitle_color, font=subtitle_font)
-        y += FontSizes.SUBTITLE + 10
+        y += subtitle_size + 8
 
-    # Draw separator line
-    y += 20
-    line_color = hex_to_rgba(PuckcastColors.AQUA, 80)
-    draw.line([(margin, y), (img.width - margin, y)], fill=line_color[:3], width=2)
-    y += 30
+    # Draw gradient separator line for visual polish
+    y += 12
+
+    # Create a subtle gradient line effect
+    line_length = img.width - margin * 2
+    aqua_rgb = hex_to_rgb(PuckcastColors.AQUA)
+
+    # Main line with glow effect
+    for offset in range(3):
+        alpha_factor = 1.0 - (offset * 0.3)
+        line_y = y + offset
+        line_color = tuple(int(c * alpha_factor) for c in aqua_rgb)
+        draw.line([(margin, line_y), (margin + line_length // 3, line_y)], fill=line_color, width=2 - offset)
+
+    y += 25
 
     return y
 
 
 def draw_footer(
     img: Image.Image,
-    text: str = "Puckcast.ai",
-    margin: int = 50,
-    with_logo: bool = True,
+    margin: int = 40,
 ) -> None:
-    """Draw the footer with branding and logo."""
-    draw = ImageDraw.Draw(img)
+    """Draw a clean, professional footer with logo only."""
+    # Load the Puckcast logo
+    logo_path = ASSETS_DIR / "puckcastai.png"
+    if not logo_path.exists():
+        # Fallback - draw text only
+        draw = ImageDraw.Draw(img)
+        font = get_font(FontSizes.CAPTION, bold=True)
+        color = hex_to_rgb(PuckcastColors.AQUA)
+        text = "PUCKCAST.AI"
+        bbox = draw.textbbox((0, 0), text, font=font)
+        text_width = bbox[2] - bbox[0]
+        x = (img.width - text_width) // 2
+        y = img.height - margin - 20
+        draw.text((x, y), text, fill=color, font=font)
+        return
 
-    font = get_font(FontSizes.BODY, bold=True)
-    color = hex_to_rgb(PuckcastColors.AQUA)
+    try:
+        logo = Image.open(logo_path).convert("RGBA")
+        # Scale logo to fit nicely - proportional scaling
+        logo_height = 40
+        aspect = logo.width / logo.height
+        logo_width = int(logo_height * aspect)
+        logo = logo.resize((logo_width, logo_height), Image.Resampling.LANCZOS)
 
-    # Load logo if available
-    logo = None
-    logo_size = 28
-    if with_logo:
-        logo_path = ASSETS_DIR / "puckcast_icon.png"
-        if logo_path.exists():
-            try:
-                logo = Image.open(logo_path).convert("RGBA")
-                logo = logo.resize((logo_size, logo_size), Image.Resampling.LANCZOS)
-            except:
-                logo = None
+        # Center the logo horizontally
+        x = (img.width - logo_width) // 2
+        y = img.height - margin - logo_height
 
-    # Calculate total width (logo + spacing + text)
-    bbox = draw.textbbox((0, 0), text, font=font)
-    text_width = bbox[2] - bbox[0]
-    text_height = bbox[3] - bbox[1]
-
-    spacing = 8 if logo else 0
-    total_width = (logo_size + spacing if logo else 0) + text_width
-
-    # Position at bottom center
-    x = (img.width - total_width) // 2
-    y = img.height - margin
-
-    # Draw logo
-    if logo:
-        logo_y = y - logo_size + 2
-        img.paste(logo, (x, logo_y), logo)
-        x += logo_size + spacing
-
-    # Draw text
-    draw.text((x, y - text_height - 2), text, fill=color, font=font)
+        # Composite with transparency
+        if img.mode != "RGBA":
+            img_rgba = img.convert("RGBA")
+            img_rgba.paste(logo, (x, y), logo)
+            img.paste(img_rgba.convert("RGB"))
+        else:
+            img.paste(logo, (x, y), logo)
+    except Exception as e:
+        # Fallback to text
+        draw = ImageDraw.Draw(img)
+        font = get_font(FontSizes.CAPTION, bold=True)
+        color = hex_to_rgb(PuckcastColors.AQUA)
+        draw.text((img.width // 2 - 50, img.height - margin - 20), "PUCKCAST.AI", fill=color, font=font)
 
 
 def draw_badge(

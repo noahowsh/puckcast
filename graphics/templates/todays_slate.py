@@ -32,6 +32,7 @@ from image_utils import (
     draw_header,
     draw_footer,
     draw_rounded_rect,
+    draw_glass_tile,
     get_logo,
     get_font,
     FontSizes,
@@ -56,37 +57,18 @@ def draw_game_tile(
     img: Image.Image,
     game: Dict[str, Any],
     y_position: int,
-    margin: int = 60,
-    tile_height: int = 115,
+    margin: int = 50,
+    tile_height: int = 105,
     is_top_edge: bool = False,
 ) -> int:
     """
-    Draw a single game tile.
+    Draw a clean, professional game tile.
 
     Returns the y position after the tile.
     """
-    draw = ImageDraw.Draw(img)
-
-    # Tile background
-    tile_bg = (255, 255, 255, 12) if not is_top_edge else (126, 227, 255, 20)
-    border_color = (255, 255, 255, 25) if not is_top_edge else (126, 227, 255, 50)
-
-    # Create overlay for transparency
-    overlay = Image.new("RGBA", img.size, (0, 0, 0, 0))
-    overlay_draw = ImageDraw.Draw(overlay)
-
-    coords = (margin, y_position, img.width - margin, y_position + tile_height)
-    draw_rounded_rect(overlay_draw, coords, radius=16, fill=tile_bg, outline=border_color, width=1)
-
-    # Composite overlay
-    img_rgba = img.convert("RGBA")
-    result = Image.alpha_composite(img_rgba, overlay)
-
     # Get team info
     away_abbrev = game.get("awayTeam", {}).get("abbrev", "???")
     home_abbrev = game.get("homeTeam", {}).get("abbrev", "???")
-    away_name = game.get("awayTeam", {}).get("name", away_abbrev)
-    home_name = game.get("homeTeam", {}).get("name", home_abbrev)
 
     home_prob = game.get("homeWinProb", 0.5)
     away_prob = game.get("awayWinProb", 0.5)
@@ -95,7 +77,7 @@ def draw_game_tile(
     start_time = game.get("startTimeEt", "TBD")
     model_favorite = game.get("modelFavorite", "home")
 
-    # Determine winner probability
+    # Determine winner
     if model_favorite == "home":
         winner_prob = home_prob
         winner_abbrev = home_abbrev
@@ -103,75 +85,88 @@ def draw_game_tile(
         winner_prob = away_prob
         winner_abbrev = away_abbrev
 
-    # Draw on the composited image
+    # Draw glass tile background
+    highlight_color = hex_to_rgb(PuckcastColors.AQUA) if is_top_edge else None
+    result = draw_glass_tile(img, y_position, tile_height, margin, is_top_edge, highlight_color)
     draw = ImageDraw.Draw(result)
 
-    # Logo positions
-    logo_size = 65
+    # Layout constants
+    logo_size = 56
+    content_start_x = margin + 18
     logo_y = y_position + (tile_height - logo_size) // 2
 
-    # Away logo (left side)
+    # Away team logo
     away_logo = get_logo(away_abbrev, logo_size)
-    result.paste(away_logo, (margin + 20, logo_y), away_logo)
+    result.paste(away_logo, (content_start_x, logo_y), away_logo)
 
-    # Home logo (after the matchup text)
-    home_logo_x = margin + 20 + logo_size + 200
+    # @ symbol between logos
+    at_font = get_font(24, bold=False)
+    at_x = content_start_x + logo_size + 12
+    at_y = y_position + (tile_height - 24) // 2
+    draw.text((at_x, at_y), "@", fill=hex_to_rgb(PuckcastColors.TEXT_TERTIARY), font=at_font)
+
+    # Home team logo
     home_logo = get_logo(home_abbrev, logo_size)
+    home_logo_x = at_x + 32
     result.paste(home_logo, (home_logo_x, logo_y), home_logo)
 
-    # Matchup text
-    matchup_font = get_font(FontSizes.HEADING, bold=True)
-    matchup_text = f"{away_abbrev}  @  {home_abbrev}"
-    text_x = margin + 20 + logo_size + 15
-    text_y = y_position + 25
-    draw.text((text_x, text_y), matchup_text, fill=hex_to_rgb(PuckcastColors.TEXT_PRIMARY), font=matchup_font)
+    # Team names in column
+    names_x = home_logo_x + logo_size + 18
+    name_font = get_font(20, bold=True)
+    time_font = get_font(16, bold=False)
 
-    # Time
-    time_font = get_font(FontSizes.CAPTION, bold=False)
-    time_y = text_y + 40
-    draw.text((text_x, time_y), start_time, fill=hex_to_rgb(PuckcastColors.TEXT_TERTIARY), font=time_font)
+    # Away @ Home text
+    matchup_text = f"{away_abbrev} @ {home_abbrev}"
+    draw.text((names_x, y_position + 25), matchup_text, fill=hex_to_rgb(PuckcastColors.TEXT_PRIMARY), font=name_font)
 
-    # Right side: Probability and edge
-    prob_font = get_font(48, bold=True)
+    # Game time
+    draw.text((names_x, y_position + 52), start_time, fill=hex_to_rgb(PuckcastColors.TEXT_TERTIARY), font=time_font)
+
+    # Right side - Win probability (main stat)
+    prob_font = get_font(40, bold=True)
     prob_text = f"{winner_prob * 100:.0f}%"
-    prob_x = img.width - margin - 180
-    prob_y = y_position + 20
     prob_color = get_confidence_color_rgb(confidence)
+
+    # Position win prob on the right
+    prob_x = img.width - margin - 160
+    prob_y = y_position + 18
     draw.text((prob_x, prob_y), prob_text, fill=prob_color, font=prob_font)
 
-    # Edge below probability
-    edge_font = get_font(FontSizes.CAPTION, bold=True)
-    edge_text = f"{abs(edge) * 100:.1f} pts edge"
-    edge_y = prob_y + 55
-    draw.text((prob_x, edge_y), edge_text, fill=hex_to_rgb(PuckcastColors.TEXT_SECONDARY), font=edge_font)
+    # Model pick indicator (small logo of favorite)
+    pick_logo = get_logo(winner_abbrev, 32)
+    result.paste(pick_logo, (img.width - margin - 50, y_position + 20), pick_logo)
 
-    # Confidence badge
-    badge_font = get_font(FontSizes.SMALL, bold=True)
-    badge_text = confidence
-    badge_x = img.width - margin - 55
-    badge_y = y_position + tile_height - 35
+    # Edge value below probability
+    edge_font = get_font(16, bold=True)
+    edge_text = f"+{abs(edge) * 100:.1f}% edge"
+    draw.text((prob_x, y_position + 62), edge_text, fill=hex_to_rgb(PuckcastColors.TEXT_SECONDARY), font=edge_font)
+
+    # Confidence grade badge
+    badge_font = get_font(14, bold=True)
     badge_color = get_confidence_color_rgb(confidence)
+    badge_x = img.width - margin - 48
+    badge_y = y_position + 60
 
-    # Draw badge background
+    # Badge background
     draw_rounded_rect(
         draw,
-        (badge_x - 5, badge_y - 3, badge_x + 40, badge_y + 22),
-        radius=10,
-        fill=(*badge_color, 40),
+        (badge_x - 4, badge_y - 2, badge_x + 28, badge_y + 18),
+        radius=8,
+        fill=(*badge_color, 50),
     )
-    draw.text((badge_x, badge_y), badge_text, fill=badge_color, font=badge_font)
+    draw.text((badge_x + 4, badge_y), confidence, fill=badge_color, font=badge_font)
 
-    # Copy result back to original image
+    # Copy result back
     img.paste(result.convert("RGB"))
 
-    return y_position + tile_height + 10
+    return y_position + tile_height + 8
 
 
 def generate_slate_image(
     games: List[Dict[str, Any]],
     date_str: str,
     page: int = 1,
-    games_per_page: int = 6,
+    games_per_page: int = 7,
 ) -> Image.Image:
     """
     Generate a single slate image.
@@ -190,10 +185,10 @@ def generate_slate_image(
     # Create background
     img = create_puckcast_background(width, height)
 
-    # Draw header
+    # Draw header with compact mode for more content
     title = "TODAY'S NHL SLATE"
-    subtitle = f"Puckcast Model Predictions • {date_str}"
-    y = draw_header(img, title, subtitle, margin=60)
+    subtitle = f"Model Predictions • {date_str}"
+    y = draw_header(img, title, subtitle, margin=50, compact=True)
 
     # Find top edge game
     top_edge_idx = 0
@@ -207,7 +202,7 @@ def generate_slate_image(
     # Draw game tiles
     for i, game in enumerate(games[:games_per_page]):
         is_top_edge = (i == top_edge_idx)
-        y = draw_game_tile(img, game, y, is_top_edge=is_top_edge)
+        y = draw_game_tile(img, game, y, margin=50, is_top_edge=is_top_edge)
 
     # Draw footer
     draw_footer(img)
@@ -245,9 +240,9 @@ def generate_todays_slate() -> List[Path]:
     # Sort games by edge (highest first)
     games_sorted = sorted(games, key=lambda g: abs(g.get("edge", 0)), reverse=True)
 
-    # Generate images (one per 6 games)
+    # Generate images (one per 7 games)
     output_paths = []
-    games_per_page = 6
+    games_per_page = 7
 
     for page in range(0, len(games_sorted), games_per_page):
         page_games = games_sorted[page:page + games_per_page]
