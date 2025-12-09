@@ -117,22 +117,22 @@ def draw_game_row(
     # Calculate vertical center for pick section (aligned with matchup text)
     pick_section_x = img.width - margin - S(180)
 
-    # Probability text - refined size
-    prob_font = get_font(S(32), bold=True)
+    # Probability text - balanced size
+    prob_font = get_font(S(26), bold=True)
     prob_text = f"{pick_prob * 100:.0f}%"
     prob_bbox = draw.textbbox((0, 0), prob_text, font=prob_font)
     prob_w = prob_bbox[2] - prob_bbox[0]
     prob_h = prob_bbox[3] - prob_bbox[1]
 
     # Pick label
-    pick_font = get_font(S(15), bold=True)
+    pick_font = get_font(S(13), bold=True)
     pick_label = f"Pick: {pick_abbrev}"
     pick_bbox = draw.textbbox((0, 0), pick_label, font=pick_font)
     pick_w = pick_bbox[2] - pick_bbox[0]
     pick_h = pick_bbox[3] - pick_bbox[1]
 
-    # Grade badge - smaller
-    badge_size = S(40)
+    # Grade badge - compact
+    badge_size = S(34)
 
     # Total height of pick section
     total_pick_h = prob_h + S(4) + pick_h
@@ -150,7 +150,7 @@ def draw_game_row(
     draw.ellipse([badge_x, badge_y, badge_x + badge_size, badge_y + badge_size], fill=grade_color)
 
     # Grade letter
-    grade_font = get_font(S(22), bold=True)
+    grade_font = get_font(S(18), bold=True)
     grade_bbox = draw.textbbox((0, 0), confidence, font=grade_font)
     grade_w = grade_bbox[2] - grade_bbox[0]
     grade_h = grade_bbox[3] - grade_bbox[1]
