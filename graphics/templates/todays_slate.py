@@ -111,47 +111,47 @@ def draw_game_row(
     draw.text((info_x, text_y), matchup_text, fill=hex_to_rgb(PuckcastColors.TEXT_PRIMARY), font=matchup_font)
     draw.text((info_x, text_y + matchup_h + S(6)), start_time, fill=hex_to_rgb(PuckcastColors.TEXT_TERTIARY), font=time_font)
 
-    # Right side: Pick info - pulled inward for balance
+    # Right side: Pick info - sized to balance with left team column
     grade_color = get_confidence_color_rgb(confidence)
 
-    # Grade badge position (anchor point)
-    badge_size = S(34)
-    badge_x = img.width - margin - badge_size - S(36)  # Pulled inward more for connection
+    # Grade badge position (anchor point) - larger for visual balance
+    badge_size = S(44)
+    badge_x = img.width - margin - badge_size - S(32)
     badge_y = row_center_y - badge_size // 2
 
-    # Probability text - balanced size
-    prob_font = get_font(S(26), bold=True)
+    # Probability text - increased to match left column visual weight
+    prob_font = get_font(S(32), bold=True)
     prob_text = f"{pick_prob * 100:.0f}%"
     prob_bbox = draw.textbbox((0, 0), prob_text, font=prob_font)
     prob_w = prob_bbox[2] - prob_bbox[0]
     prob_h = prob_bbox[3] - prob_bbox[1]
 
-    # Pick label
-    pick_font = get_font(S(14), bold=False)
+    # Pick label - proportionally larger
+    pick_font = get_font(S(16), bold=False)
     pick_label = f"Pick: {pick_abbrev}"
     pick_bbox = draw.textbbox((0, 0), pick_label, font=pick_font)
     pick_w = pick_bbox[2] - pick_bbox[0]
     pick_h = pick_bbox[3] - pick_bbox[1]
 
     # Position pick section to left of badge with spacing
-    pick_section_x = badge_x - prob_w - S(16)  # Extra spacing between prob and badge
+    pick_section_x = badge_x - prob_w - S(18)
 
-    # Total height of pick section with better breathing room
-    spacing = S(14)  # Increased vertical spacing for less compression
+    # Total height of pick section
+    spacing = S(10)
     total_pick_h = prob_h + spacing + pick_h
     pick_start_y = row_center_y - total_pick_h // 2
 
     # Draw probability
     draw.text((pick_section_x, pick_start_y), prob_text, fill=grade_color, font=prob_font)
 
-    # Draw pick label below with spacing
+    # Draw pick label below centered under probability
     draw.text((pick_section_x + (prob_w - pick_w) // 2, pick_start_y + prob_h + spacing), pick_label, fill=hex_to_rgb(PuckcastColors.TEXT_SECONDARY), font=pick_font)
 
     # Grade badge
     draw.ellipse([badge_x, badge_y, badge_x + badge_size, badge_y + badge_size], fill=grade_color)
 
-    # Grade letter - sized to match probability text visually
-    grade_font = get_font(S(22), bold=True)
+    # Grade letter - sized to match probability/pick column height
+    grade_font = get_font(S(28), bold=True)
     grade_bbox = draw.textbbox((0, 0), confidence, font=grade_font)
     grade_w = grade_bbox[2] - grade_bbox[0]
     grade_h = grade_bbox[3] - grade_bbox[1]
@@ -195,14 +195,16 @@ def generate_slate_image(games: List[Dict], date_str: str, page: int = 1, total_
 
     # Slide counter for multi-page slates (bottom right, aligned with footer)
     if total_pages > 1:
-        counter_font = get_font(S(16), bold=True)
+        counter_font = get_font(S(18), bold=True)
         counter_text = f"{page}/{total_pages}"
         counter_bbox = draw.textbbox((0, 0), counter_text, font=counter_font)
         counter_w = counter_bbox[2] - counter_bbox[0]
         counter_h = counter_bbox[3] - counter_bbox[1]
         counter_x = img.width - margin - counter_w
-        # Align vertically with footer (footer_margin=58, logo_height~32)
-        counter_y = img.height - S(58) - S(16) - counter_h // 2
+        # Match exact footer positioning: y = img.height - footer_margin(58) - logo_height(32)
+        footer_y = img.height - S(58) - S(32)
+        footer_element_h = S(32)  # Logo height in footer
+        counter_y = footer_y + (footer_element_h - counter_h) // 2
         draw.text((counter_x, counter_y), counter_text, fill=hex_to_rgb(PuckcastColors.TEXT_TERTIARY), font=counter_font)
 
     draw_footer(img)
