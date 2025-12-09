@@ -111,46 +111,52 @@ def draw_game_row(
     draw.text((info_x, text_y), matchup_text, fill=hex_to_rgb(PuckcastColors.TEXT_PRIMARY), font=matchup_font)
     draw.text((info_x, text_y + matchup_h + S(6)), start_time, fill=hex_to_rgb(PuckcastColors.TEXT_TERTIARY), font=time_font)
 
-    # Right side: Grade badge + probability - pulled closer (50px inward)
+    # Right side: Pick info - centered vertically with team info
     grade_color = get_confidence_color_rgb(confidence)
 
-    # Grade badge
-    badge_size = S(52)
-    badge_x = img.width - margin - S(25) - badge_size  # Pulled inward 50px
-    badge_y = row_center_y - badge_size // 2
+    # Calculate vertical center for pick section (aligned with matchup text)
+    pick_section_x = img.width - margin - S(180)
 
+    # Probability text - refined size
+    prob_font = get_font(S(32), bold=True)
+    prob_text = f"{pick_prob * 100:.0f}%"
+    prob_bbox = draw.textbbox((0, 0), prob_text, font=prob_font)
+    prob_w = prob_bbox[2] - prob_bbox[0]
+    prob_h = prob_bbox[3] - prob_bbox[1]
+
+    # Pick label
+    pick_font = get_font(S(15), bold=True)
+    pick_label = f"Pick: {pick_abbrev}"
+    pick_bbox = draw.textbbox((0, 0), pick_label, font=pick_font)
+    pick_w = pick_bbox[2] - pick_bbox[0]
+    pick_h = pick_bbox[3] - pick_bbox[1]
+
+    # Grade badge - smaller
+    badge_size = S(40)
+
+    # Total height of pick section
+    total_pick_h = prob_h + S(4) + pick_h
+    pick_start_y = row_center_y - total_pick_h // 2
+
+    # Draw probability
+    draw.text((pick_section_x, pick_start_y), prob_text, fill=grade_color, font=prob_font)
+
+    # Draw pick label below
+    draw.text((pick_section_x + (prob_w - pick_w) // 2, pick_start_y + prob_h + S(4)), pick_label, fill=hex_to_rgb(PuckcastColors.TEXT_SECONDARY), font=pick_font)
+
+    # Grade badge on far right
+    badge_x = img.width - margin - badge_size
+    badge_y = row_center_y - badge_size // 2
     draw.ellipse([badge_x, badge_y, badge_x + badge_size, badge_y + badge_size], fill=grade_color)
 
     # Grade letter
-    grade_font = get_font(S(30), bold=True)
+    grade_font = get_font(S(22), bold=True)
     grade_bbox = draw.textbbox((0, 0), confidence, font=grade_font)
     grade_w = grade_bbox[2] - grade_bbox[0]
     grade_h = grade_bbox[3] - grade_bbox[1]
     grade_x = badge_x + (badge_size - grade_w) // 2 - grade_bbox[0]
     grade_y = badge_y + (badge_size - grade_h) // 2 - grade_bbox[1]
-    draw.text(
-        (grade_x, grade_y),
-        confidence,
-        fill=(20, 20, 30),
-        font=grade_font,
-    )
-
-    # Win probability - larger and more prominent
-    prob_font = get_font(S(42), bold=True)
-    prob_text = f"{pick_prob * 100:.0f}%"
-    prob_bbox = draw.textbbox((0, 0), prob_text, font=prob_font)
-    prob_w = prob_bbox[2] - prob_bbox[0]
-    prob_h = prob_bbox[3] - prob_bbox[1]
-    prob_x = badge_x - prob_w - S(14)
-
-    draw.text((prob_x, row_center_y - prob_h // 2 - S(10)), prob_text, fill=grade_color, font=prob_font)
-
-    # Pick label - proportional to probability
-    pick_font = get_font(S(20), bold=True)
-    pick_label = f"Pick: {pick_abbrev}"
-    pick_bbox = draw.textbbox((0, 0), pick_label, font=pick_font)
-    pick_w = pick_bbox[2] - pick_bbox[0]
-    draw.text((prob_x + (prob_w - pick_w) // 2, row_center_y + S(16)), pick_label, fill=hex_to_rgb(PuckcastColors.TEXT_SECONDARY), font=pick_font)
+    draw.text((grade_x, grade_y), confidence, fill=(20, 20, 30), font=grade_font)
 
     # Separator line below row
     sep_y = y_position + row_height + S(4)
