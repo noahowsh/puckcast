@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2025-12-08T23:12:35.293635+00:00",
+  "updatedAt": "2025-12-09T13:29:22.497401+00:00",
   "notes": "Goalie performance metrics calculated from NHL Stats API data. GSAx estimates based on save percentage above league average.",
   "goalies": [
     {
@@ -21,6 +21,24 @@
       "nextOpponent": "CHI"
     },
     {
+      "name": "Dennis Hildeby",
+      "team": "TOR",
+      "rollingGsa": 2.7,
+      "seasonGsa": 8.1,
+      "restDays": 3,
+      "startLikelihood": 0.85,
+      "trend": "surging",
+      "note": "Dennis Hildeby is playing at an elite level with a 0.936 save percentage, providing TOR with a strong defensive anchor.",
+      "strengths": [
+        "Elite save percentage",
+        "Exceptional goals against average"
+      ],
+      "watchouts": [
+        "Limited recent data"
+      ],
+      "nextOpponent": "SJS"
+    },
+    {
       "name": "Jesper Wallstedt",
       "team": "MIN",
       "rollingGsa": 2.7,
@@ -36,7 +54,7 @@
       "watchouts": [
         "Limited recent data"
       ],
-      "nextOpponent": "SEA"
+      "nextOpponent": "DAL"
     },
     {
       "name": "Joseph Woll",
@@ -54,25 +72,7 @@
       "watchouts": [
         "Limited recent data"
       ],
-      "nextOpponent": "TBL"
-    },
-    {
-      "name": "Dennis Hildeby",
-      "team": "TOR",
-      "rollingGsa": 2.0,
-      "seasonGsa": 5.4,
-      "restDays": 3,
-      "startLikelihood": 0.75,
-      "trend": "steady",
-      "note": "Consistent performance from Dennis Hildeby with a 2.51 GAA \u2014 reliable starter for TOR.",
-      "strengths": [
-        "Elite save percentage",
-        "Strong rebound control"
-      ],
-      "watchouts": [
-        "Limited recent data"
-      ],
-      "nextOpponent": "TBL"
+      "nextOpponent": "SJS"
     },
     {
       "name": "Logan Thompson",
@@ -108,7 +108,7 @@
       "watchouts": [
         "Limited recent data"
       ],
-      "nextOpponent": "MIN"
+      "nextOpponent": "LAK"
     },
     {
       "name": "Casey DeSmith",
@@ -180,7 +180,7 @@
       "watchouts": [
         "Limited recent data"
       ],
-      "nextOpponent": "BUF"
+      "nextOpponent": "DET"
     },
     {
       "name": "Andrei Vasilevskiy",
@@ -198,7 +198,7 @@
       "watchouts": [
         "Inconsistent results"
       ],
-      "nextOpponent": "TOR"
+      "nextOpponent": "MTL"
     },
     {
       "name": "Pyotr Kochetkov",
@@ -220,19 +220,20 @@
     {
       "name": "Darcy Kuemper",
       "team": "LAK",
-      "rollingGsa": 1.1,
-      "seasonGsa": 7.1,
+      "rollingGsa": 1.0,
+      "seasonGsa": 7.2,
       "restDays": 1,
       "startLikelihood": 0.9,
       "trend": "steady",
-      "note": "Consistent performance from Darcy Kuemper with a 2.24 GAA \u2014 reliable starter for LAK.",
+      "note": "Consistent performance from Darcy Kuemper with a 2.23 GAA \u2014 reliable starter for LAK.",
       "strengths": [
-        "Exceptional goals against average"
+        "Exceptional goals against average",
+        "Proven winner"
       ],
       "watchouts": [
         "Inconsistent results"
       ],
-      "nextOpponent": "UTA"
+      "nextOpponent": "SEA"
     },
     {
       "name": "Spencer Knight",
@@ -371,6 +372,23 @@
       "nextOpponent": "UTA"
     },
     {
+      "name": "Nikita Tolopilo",
+      "team": "VAN",
+      "rollingGsa": 0.8,
+      "seasonGsa": 1.1,
+      "restDays": 3,
+      "startLikelihood": 0.7,
+      "trend": "steady",
+      "note": "Consistent performance from Nikita Tolopilo with a 2.74 GAA \u2014 reliable starter for VAN.",
+      "strengths": [
+        "Solid fundamentals"
+      ],
+      "watchouts": [
+        "Limited recent data"
+      ],
+      "nextOpponent": "BUF"
+    },
+    {
       "name": "Jake Oettinger",
       "team": "DAL",
       "rollingGsa": 0.7,
@@ -405,6 +423,23 @@
       "nextOpponent": "OTT"
     },
     {
+      "name": "Filip Gustavsson",
+      "team": "MIN",
+      "rollingGsa": 0.6,
+      "seasonGsa": 3.6,
+      "restDays": 2,
+      "startLikelihood": 0.8,
+      "trend": "stable",
+      "note": "Filip Gustavsson showing promise with limited sample size \u2014 monitor progression closely.",
+      "strengths": [
+        "Solid fundamentals"
+      ],
+      "watchouts": [
+        "Inconsistent results"
+      ],
+      "nextOpponent": "DAL"
+    },
+    {
       "name": "Jet Greaves",
       "team": "CBJ",
       "rollingGsa": 0.5,
@@ -437,40 +472,6 @@
         "Inconsistent results"
       ],
       "nextOpponent": "SJS"
-    },
-    {
-      "name": "Filip Gustavsson",
-      "team": "MIN",
-      "rollingGsa": 0.4,
-      "seasonGsa": 2.4,
-      "restDays": 2,
-      "startLikelihood": 0.8,
-      "trend": "stable",
-      "note": "Filip Gustavsson showing promise with limited sample size \u2014 monitor progression closely.",
-      "strengths": [
-        "Solid fundamentals"
-      ],
-      "watchouts": [
-        "Inconsistent results"
-      ],
-      "nextOpponent": "SEA"
-    },
-    {
-      "name": "Nikita Tolopilo",
-      "team": "VAN",
-      "rollingGsa": 0.4,
-      "seasonGsa": 0.4,
-      "restDays": 3,
-      "startLikelihood": 0.6,
-      "trend": "stable",
-      "note": "Nikita Tolopilo showing promise with limited sample size \u2014 monitor progression closely.",
-      "strengths": [
-        "Solid fundamentals"
-      ],
-      "watchouts": [
-        "High goals against"
-      ],
-      "nextOpponent": "DET"
     },
     {
       "name": "Lukas Dostal",
@@ -522,7 +523,7 @@
       "watchouts": [
         "Limited recent data"
       ],
-      "nextOpponent": "DET"
+      "nextOpponent": "BUF"
     }
   ]
 }
