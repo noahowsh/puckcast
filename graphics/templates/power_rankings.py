@@ -2,8 +2,8 @@
 """
 Power Index Template Generator - Premium Instagram Design
 
-Creates square (1080x1080) Instagram graphics showing team power index.
-Uses 2x supersampling for crisp output. Generates 2 pages for all 32 teams.
+Creates a square (1080x1080) Instagram graphic showing all 32 teams.
+Uses 2x supersampling for crisp output.
 """
 
 from __future__ import annotations
@@ -76,102 +76,94 @@ def draw_team_tile(
     overlay = Image.new("RGBA", img.size, (0, 0, 0, 0))
     overlay_draw = ImageDraw.Draw(overlay)
 
-    # Dark tile background
+    # Dark tile background with tier-colored border
     coords = (x, y, x + tile_width, y + tile_height)
-    draw_rounded_rect(overlay_draw, coords, radius=S(14), fill=(30, 35, 50, 200), outline=(255, 255, 255, 40), width=1)
-
-    # Tier color accent stripe on left
-    stripe_width = S(5)
-    stripe_coords = (x, y + S(12), x + stripe_width, y + tile_height - S(12))
-    overlay_draw.rectangle(stripe_coords, fill=(*tier_color, 255))
+    draw_rounded_rect(overlay_draw, coords, radius=S(10), fill=(25, 30, 45, 220), outline=(*tier_color, 120), width=2)
 
     img_rgba = img.convert("RGBA")
     result = Image.alpha_composite(img_rgba, overlay)
     draw = ImageDraw.Draw(result)
 
-    # Large rank number - top left
-    rank_font = get_font(S(32), bold=True)
+    # Rank number - top left corner
+    rank_font = get_font(S(18), bold=True)
     rank_text = str(rank)
-    rank_x = x + S(18)
-    rank_y = y + S(12)
-    draw.text((rank_x, rank_y), rank_text, fill=hex_to_rgb(PuckcastColors.TEXT_PRIMARY), font=rank_font)
+    draw.text((x + S(8), y + S(6)), rank_text, fill=hex_to_rgb(PuckcastColors.TEXT_TERTIARY), font=rank_font)
 
-    # Movement indicator next to rank
+    # Large team logo - centered
+    logo_size = S(72)
+    logo = get_logo(abbrev, logo_size)
+    logo_x = x + (tile_width - logo_size) // 2
+    logo_y = y + S(24)
+    result.paste(logo, (logo_x, logo_y), logo)
+
+    # Team abbreviation + movement - centered below logo
+    abbrev_font = get_font(S(16), bold=True)
     if delta != 0:
-        delta_font = get_font(S(18), bold=True)
         if delta > 0:
             delta_text = f"+{delta}"
             delta_color = hex_to_rgb(PuckcastColors.RISING)
         else:
             delta_text = str(delta)
             delta_color = hex_to_rgb(PuckcastColors.FALLING)
-        draw.text((rank_x + S(40), rank_y + S(8)), delta_text, fill=delta_color, font=delta_font)
+        # Draw abbrev and delta side by side
+        abbrev_bbox = draw.textbbox((0, 0), abbrev, font=abbrev_font)
+        abbrev_w = abbrev_bbox[2] - abbrev_bbox[0]
+        delta_font = get_font(S(13), bold=True)
+        delta_bbox = draw.textbbox((0, 0), delta_text, font=delta_font)
+        delta_w = delta_bbox[2] - delta_bbox[0]
+        total_w = abbrev_w + S(6) + delta_w
+        start_x = x + (tile_width - total_w) // 2
+        abbrev_y = logo_y + logo_size + S(4)
+        draw.text((start_x, abbrev_y), abbrev, fill=hex_to_rgb(PuckcastColors.TEXT_PRIMARY), font=abbrev_font)
+        draw.text((start_x + abbrev_w + S(6), abbrev_y + S(2)), delta_text, fill=delta_color, font=delta_font)
+    else:
+        abbrev_bbox = draw.textbbox((0, 0), abbrev, font=abbrev_font)
+        abbrev_w = abbrev_bbox[2] - abbrev_bbox[0]
+        abbrev_y = logo_y + logo_size + S(4)
+        draw.text((x + (tile_width - abbrev_w) // 2, abbrev_y), abbrev, fill=hex_to_rgb(PuckcastColors.TEXT_PRIMARY), font=abbrev_font)
 
-    # HUGE team logo - centered
-    logo_size = S(120)
-    logo = get_logo(abbrev, logo_size)
-    logo_x = x + (tile_width - logo_size) // 2
-    logo_y = y + S(48)
-    result.paste(logo, (logo_x, logo_y), logo)
-
-    # Team abbreviation - centered below logo
-    abbrev_font = get_font(S(26), bold=True)
-    abbrev_bbox = draw.textbbox((0, 0), abbrev, font=abbrev_font)
-    abbrev_w = abbrev_bbox[2] - abbrev_bbox[0]
-    abbrev_y = logo_y + logo_size + S(8)
-    draw.text((x + (tile_width - abbrev_w) // 2, abbrev_y), abbrev, fill=hex_to_rgb(PuckcastColors.TEXT_PRIMARY), font=abbrev_font)
-
-    # Record and points - bottom of tile
-    stats_font = get_font(S(16), bold=False)
-    stats_text = f"{record}  |  {points} PTS"
+    # Points - bottom of tile
+    stats_font = get_font(S(12), bold=False)
+    stats_text = f"{points} PTS"
     stats_bbox = draw.textbbox((0, 0), stats_text, font=stats_font)
     stats_w = stats_bbox[2] - stats_bbox[0]
-    stats_y = y + tile_height - S(28)
+    stats_y = y + tile_height - S(18)
     draw.text((x + (tile_width - stats_w) // 2, stats_y), stats_text, fill=hex_to_rgb(PuckcastColors.TEXT_SECONDARY), font=stats_font)
 
     img.paste(result.convert("RGB"))
 
 
-def generate_power_index_page(rankings: List[Dict], week_of: str, page: int) -> Image.Image:
-    """Generate a single page of the power index (16 teams per page)."""
+def generate_power_index_image(rankings: List[Dict], week_of: str) -> Image.Image:
+    """Generate the power index with all 32 teams on one page."""
     img = create_puckcast_background()
     draw = ImageDraw.Draw(img)
 
-    margin = S(40)
+    margin = S(36)
 
-    # Title
-    title_font = get_font(S(52), bold=True)
-    draw.text((margin, S(32)), "POWER INDEX", fill=hex_to_rgb(PuckcastColors.TEXT_PRIMARY), font=title_font)
+    # Compact header
+    title_font = get_font(S(48), bold=True)
+    draw.text((margin, S(28)), "POWER INDEX", fill=hex_to_rgb(PuckcastColors.TEXT_PRIMARY), font=title_font)
 
-    # Subtitle with page indicator
-    subtitle_font = get_font(S(18), bold=False)
-    if page == 1:
-        page_text = f"Top 16 Teams  |  {week_of}"
-    else:
-        page_text = f"Teams 17-32  |  {week_of}"
-    draw.text((margin, S(90)), page_text, fill=hex_to_rgb(PuckcastColors.TEXT_SECONDARY), font=subtitle_font)
+    # Subtitle
+    subtitle_font = get_font(S(16), bold=False)
+    draw.text((margin, S(80)), f"Team Strength Ratings  |  {week_of}", fill=hex_to_rgb(PuckcastColors.TEXT_SECONDARY), font=subtitle_font)
 
     # Accent line
-    line_y = S(118)
-    draw.line([(margin, line_y), (margin + S(160), line_y)], fill=hex_to_rgb(PuckcastColors.AQUA), width=S(4))
+    line_y = S(104)
+    draw.line([(margin, line_y), (margin + S(140), line_y)], fill=hex_to_rgb(PuckcastColors.AQUA), width=S(3))
 
-    # Grid layout: 4 cols x 4 rows = 16 teams per page
-    cols, rows = 4, 4
-    tile_width = S(250)
-    tile_height = S(200)
-    h_gap = S(10)
-    v_gap = S(10)
+    # Grid layout: 4 cols x 8 rows = 32 teams
+    cols, rows = 4, 8
+    tile_width = S(254)
+    tile_height = S(118)
+    h_gap = S(6)
+    v_gap = S(5)
 
     grid_width = cols * tile_width + (cols - 1) * h_gap
     start_x = (RENDER_SIZE - grid_width) // 2
-    start_y = line_y + S(16)
+    start_y = line_y + S(12)
 
-    # Get teams for this page
-    start_idx = (page - 1) * 16
-    end_idx = start_idx + 16
-    page_teams = rankings[start_idx:end_idx]
-
-    for i, team in enumerate(page_teams):
+    for i, team in enumerate(rankings[:32]):
         col = i % cols
         row = i // cols
         x = start_x + col * (tile_width + h_gap)
@@ -183,7 +175,7 @@ def generate_power_index_page(rankings: List[Dict], week_of: str, page: int) -> 
 
 
 def generate_power_rankings() -> List[Path]:
-    """Generate power index graphics (2 pages)."""
+    """Generate power index graphic."""
     print("Generating Power Rankings graphics...")
 
     data = load_power_index()
@@ -195,23 +187,13 @@ def generate_power_rankings() -> List[Path]:
         return []
 
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
-    output_paths = []
 
-    # Generate page 1 (Top 16)
-    img1 = generate_power_index_page(rankings, week_of, 1)
-    output_path1 = OUTPUT_DIR / "power_rankings.png"
-    save_high_quality(img1, output_path1)
-    print(f"  Saved: {output_path1}")
-    output_paths.append(output_path1)
+    img = generate_power_index_image(rankings, week_of)
+    output_path = OUTPUT_DIR / "power_rankings.png"
+    save_high_quality(img, output_path)
+    print(f"  Saved: {output_path}")
 
-    # Generate page 2 (Teams 17-32)
-    img2 = generate_power_index_page(rankings, week_of, 2)
-    output_path2 = OUTPUT_DIR / "power_rankings_2.png"
-    save_high_quality(img2, output_path2)
-    print(f"  Saved: {output_path2}")
-    output_paths.append(output_path2)
-
-    return output_paths
+    return [output_path]
 
 
 def main():
