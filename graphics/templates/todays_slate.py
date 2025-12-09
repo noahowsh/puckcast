@@ -38,6 +38,7 @@ from image_utils import (
     FontSizes,
     format_probability,
     format_edge,
+    save_high_quality,
 )
 
 # Paths
@@ -237,7 +238,7 @@ def generate_todays_slate() -> List[Path]:
             output_path = OUTPUT_DIR / "todays_slate.png"
 
         OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
-        img.save(output_path, "PNG", quality=95)
+        save_high_quality(img, output_path)
         print(f"  Saved: {output_path}")
         output_paths.append(output_path)
 

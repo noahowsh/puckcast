@@ -122,9 +122,10 @@ def download_logo(abbrev: str, force: bool = False) -> Optional[Path]:
             svg_data = response.read()
 
         # Convert SVG to PNG using cairosvg if available, otherwise save raw
+        # Use 400x400 for high-quality source logos (crisp when scaled down)
         try:
             import cairosvg
-            png_data = cairosvg.svg2png(bytestring=svg_data, output_width=200, output_height=200)
+            png_data = cairosvg.svg2png(bytestring=svg_data, output_width=400, output_height=400)
             cache_path.write_bytes(png_data)
         except ImportError:
             # Fallback: save SVG and note that we need cairosvg
@@ -166,23 +167,33 @@ def load_logo(abbrev: str, size: int = 80) -> Optional[Image.Image]:
 
 
 def create_logo_placeholder(abbrev: str, size: int = 80) -> Image.Image:
-    """Create a placeholder for missing logos."""
-    img = Image.new("RGBA", (size, size), (0, 0, 0, 0))
+    """
+    Create a high-quality placeholder for missing logos.
+
+    Uses 2x supersampling for smooth edges on the circle and text.
+    """
+    # Create at 2x size for anti-aliasing, then scale down
+    scale = 2
+    large_size = size * scale
+    img = Image.new("RGBA", (large_size, large_size), (0, 0, 0, 0))
     draw = ImageDraw.Draw(img)
 
     # Draw circle with team color
     color = get_team_primary_rgb(abbrev)
-    draw.ellipse([0, 0, size - 1, size - 1], fill=color)
+    draw.ellipse([0, 0, large_size - 1, large_size - 1], fill=color)
 
-    # Draw team abbreviation
-    font = get_font(size // 3, bold=True)
+    # Draw team abbreviation (scaled font)
+    font = get_font(large_size // 3, bold=True)
     text = abbrev[:3]
     bbox = draw.textbbox((0, 0), text, font=font)
     text_width = bbox[2] - bbox[0]
     text_height = bbox[3] - bbox[1]
-    x = (size - text_width) // 2
-    y = (size - text_height) // 2 - 4
+    x = (large_size - text_width) // 2
+    y = (large_size - text_height) // 2 - (4 * scale)
     draw.text((x, y), text, fill=(255, 255, 255), font=font)
+
+    # Scale down with high-quality resampling for smooth result
+    img = img.resize((size, size), Image.Resampling.LANCZOS)
 
     return img
 
@@ -525,3 +536,43 @@ def truncate_text(text: str, max_length: int = 20) -> str:
     if len(text) <= max_length:
         return text
     return text[:max_length - 3] + "..."
+
+
+def save_high_quality(img: Image.Image, output_path: Path) -> None:
+    """
+    Save image with optimal quality settings for crisp social media graphics.
+
+    - Uses PNG format (lossless)
+    - Sets 144 DPI for retina/high-density displays
+    - Optimizes file size without quality loss
+    - Converts to RGB mode for compatibility
+    """
+    # Ensure RGB mode for final output (social media compatible)
+    if img.mode == "RGBA":
+        # Create white background and composite
+        background = Image.new("RGB", img.size, (10, 14, 26))  # Match dark theme
+        background.paste(img, mask=img.split()[3])  # Use alpha channel as mask
+        img = background
+    elif img.mode != "RGB":
+        img = img.convert("RGB")
+
+    # Save with high DPI for crisp rendering on retina displays
+    # 144 DPI = 2x standard (72 DPI) for sharp text and logos
+    img.save(
+        output_path,
+        "PNG",
+        optimize=True,
+        dpi=(144, 144),
+    )
+
+
+def clear_logo_cache() -> None:
+    """
+    Clear the logo cache to force re-download at higher resolution.
+
+    Call this after updating logo resolution settings.
+    """
+    if LOGOS_DIR.exists():
+        for logo_file in LOGOS_DIR.glob("*.png"):
+            logo_file.unlink()
+        print(f"Cleared {LOGOS_DIR} logo cache")

@@ -32,6 +32,7 @@ from image_utils import (
     get_logo,
     get_font,
     FontSizes,
+    save_high_quality,
 )
 
 REPO_ROOT = GRAPHICS_DIR.parents[0]
@@ -162,7 +163,7 @@ def generate_goalie_leaderboard() -> List[Path]:
 
     output_path = OUTPUT_DIR / "goalie_leaderboard.png"
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
-    img.save(output_path, "PNG", quality=95)
+    save_high_quality(img, output_path)
     print(f"  Saved: {output_path}")
 
     return [output_path]

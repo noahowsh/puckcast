@@ -31,6 +31,7 @@ from image_utils import (
     get_logo,
     get_font,
     FontSizes,
+    save_high_quality,
 )
 
 REPO_ROOT = GRAPHICS_DIR.parents[0]
@@ -181,7 +182,7 @@ def generate_risers_fallers() -> List[Path]:
 
     output_path = OUTPUT_DIR / "risers_fallers.png"
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
-    img.save(output_path, "PNG", quality=95)
+    save_high_quality(img, output_path)
     print(f"  Saved: {output_path}")
 
     return [output_path]
