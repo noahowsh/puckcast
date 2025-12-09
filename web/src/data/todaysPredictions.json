@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2025-12-09T11:26:54.675886+00:00",
+  "generatedAt": "2025-12-09T23:12:31.333607+00:00",
   "games": [
     {
       "id": "2025020466",
@@ -14,12 +14,12 @@
         "name": "Lightning",
         "abbrev": "TBL"
       },
-      "homeWinProb": 0.4534,
-      "awayWinProb": 0.5466,
-      "confidenceScore": 0.093,
+      "homeWinProb": 0.4539,
+      "awayWinProb": 0.5461,
+      "confidenceScore": 0.092,
       "confidenceGrade": "B-",
-      "edge": -0.047,
-      "summary": "Lightning project at 55% as the road lean \u2014 a B--tier edge worth 4.7 pts over a coin flip.",
+      "edge": -0.046,
+      "summary": "Lightning project at 55% as the road lean \u2014 a B--tier edge worth 4.6 pts over a coin flip.",
       "modelFavorite": "away",
       "venue": "Centre Bell",
       "season": "20252026"
@@ -106,9 +106,9 @@
         "name": "Ducks",
         "abbrev": "ANA"
       },
-      "homeWinProb": 0.5385,
-      "awayWinProb": 0.4615,
-      "confidenceScore": 0.077,
+      "homeWinProb": 0.5379,
+      "awayWinProb": 0.4621,
+      "confidenceScore": 0.076,
       "confidenceGrade": "C+",
       "edge": 0.038,
       "summary": "Penguins project at 54% as the home lean \u2014 a C+-tier edge worth 3.8 pts over a coin flip.",
@@ -129,8 +129,8 @@
         "name": "Blue Jackets",
         "abbrev": "CBJ"
       },
-      "homeWinProb": 0.7831,
-      "awayWinProb": 0.2169,
+      "homeWinProb": 0.7832,
+      "awayWinProb": 0.2168,
       "confidenceScore": 0.566,
       "confidenceGrade": "A+",
       "edge": 0.283,
@@ -152,8 +152,8 @@
         "name": "Bruins",
         "abbrev": "BOS"
       },
-      "homeWinProb": 0.634,
-      "awayWinProb": 0.366,
+      "homeWinProb": 0.6341,
+      "awayWinProb": 0.3659,
       "confidenceScore": 0.268,
       "confidenceGrade": "B+",
       "edge": 0.134,
@@ -175,8 +175,8 @@
         "name": "Stars",
         "abbrev": "DAL"
       },
-      "homeWinProb": 0.5741,
-      "awayWinProb": 0.4259,
+      "homeWinProb": 0.5742,
+      "awayWinProb": 0.4258,
       "confidenceScore": 0.148,
       "confidenceGrade": "B",
       "edge": 0.074,
@@ -198,8 +198,8 @@
         "name": "Sabres",
         "abbrev": "BUF"
       },
-      "homeWinProb": 0.5908,
-      "awayWinProb": 0.4092,
+      "homeWinProb": 0.5909,
+      "awayWinProb": 0.4091,
       "confidenceScore": 0.182,
       "confidenceGrade": "B",
       "edge": 0.091,
@@ -221,9 +221,9 @@
         "name": "Avalanche",
         "abbrev": "COL"
       },
-      "homeWinProb": 0.4958,
-      "awayWinProb": 0.5042,
-      "confidenceScore": 0.008,
+      "homeWinProb": 0.4957,
+      "awayWinProb": 0.5043,
+      "confidenceScore": 0.009,
       "confidenceGrade": "C",
       "edge": -0.004,
       "summary": "Avalanche project at 50% as the road lean \u2014 a C-tier edge worth 0.4 pts over a coin flip.",
