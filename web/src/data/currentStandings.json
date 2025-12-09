@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2025-12-08T05:12:43.394672+00:00",
+  "generatedAt": "2025-12-09T05:01:42.249414+00:00",
   "seasonId": "20252026",
   "teams": [
     {
@@ -15,7 +15,7 @@
       "goalsForPerGame": 3.96551,
       "goalsAgainstPerGame": 2.17241,
       "shotsForPerGame": 34.0,
-      "shotsAgainstPerGame": 26.65517,
+      "shotsAgainstPerGame": 26.68965,
       "seasonId": 20252026
     },
     {
@@ -79,7 +79,7 @@
       "goalsForPerGame": 3.32142,
       "goalsAgainstPerGame": 2.89285,
       "shotsForPerGame": 33.32142,
-      "shotsAgainstPerGame": 24.28571,
+      "shotsAgainstPerGame": 24.32142,
       "seasonId": 20252026
     },
     {
@@ -94,8 +94,8 @@
       "goalDifferential": 6,
       "goalsForPerGame": 3.03571,
       "goalsAgainstPerGame": 2.82142,
-      "shotsForPerGame": 29.64285,
-      "shotsAgainstPerGame": 24.89285,
+      "shotsForPerGame": 29.60714,
+      "shotsAgainstPerGame": 24.92857,
       "seasonId": 20252026
     },
     {
@@ -127,7 +127,7 @@
       "goalsForPerGame": 2.68965,
       "goalsAgainstPerGame": 2.72413,
       "shotsForPerGame": 27.89655,
-      "shotsAgainstPerGame": 30.24137,
+      "shotsAgainstPerGame": 30.27586,
       "seasonId": 20252026
     },
     {
@@ -142,7 +142,7 @@
       "goalDifferential": 0,
       "goalsForPerGame": 3.13333,
       "goalsAgainstPerGame": 3.13333,
-      "shotsForPerGame": 26.9,
+      "shotsForPerGame": 26.93333,
       "shotsAgainstPerGame": 30.9,
       "seasonId": 20252026
     },
@@ -150,16 +150,16 @@
       "team": "Tampa Bay Lightning",
       "abbrev": "TBL",
       "wins": 16,
-      "losses": 10,
+      "losses": 11,
       "ot": 2,
       "points": 34,
-      "gamesPlayed": 28,
-      "pointPctg": 0.60714,
-      "goalDifferential": 15,
-      "goalsForPerGame": 3.14285,
-      "goalsAgainstPerGame": 2.60714,
-      "shotsForPerGame": 27.35714,
-      "shotsAgainstPerGame": 27.21428,
+      "gamesPlayed": 29,
+      "pointPctg": 0.5862,
+      "goalDifferential": 13,
+      "goalsForPerGame": 3.03448,
+      "goalsAgainstPerGame": 2.5862,
+      "shotsForPerGame": 27.41379,
+      "shotsAgainstPerGame": 27.10344,
       "seasonId": 20252026
     },
     {
@@ -174,8 +174,8 @@
       "goalDifferential": 1,
       "goalsForPerGame": 2.64516,
       "goalsAgainstPerGame": 2.6129,
-      "shotsForPerGame": 26.35483,
-      "shotsAgainstPerGame": 28.90322,
+      "shotsForPerGame": 26.41935,
+      "shotsAgainstPerGame": 28.87096,
       "seasonId": 20252026
     },
     {
@@ -207,7 +207,7 @@
       "goalsForPerGame": 2.82758,
       "goalsAgainstPerGame": 3.06896,
       "shotsForPerGame": 29.34482,
-      "shotsAgainstPerGame": 28.10344,
+      "shotsAgainstPerGame": 28.13793,
       "seasonId": 20252026
     },
     {
@@ -275,6 +275,22 @@
       "seasonId": 20252026
     },
     {
+      "team": "Toronto Maple Leafs",
+      "abbrev": "TOR",
+      "wins": 14,
+      "losses": 11,
+      "ot": 4,
+      "points": 32,
+      "gamesPlayed": 29,
+      "pointPctg": 0.55172,
+      "goalDifferential": 5,
+      "goalsForPerGame": 3.34482,
+      "goalsAgainstPerGame": 3.17241,
+      "shotsForPerGame": 26.96551,
+      "shotsAgainstPerGame": 31.31034,
+      "seasonId": 20252026
+    },
+    {
       "team": "Columbus Blue Jackets",
       "abbrev": "CBJ",
       "wins": 13,
@@ -302,7 +318,7 @@
       "goalDifferential": 5,
       "goalsForPerGame": 3.03333,
       "goalsAgainstPerGame": 2.86666,
-      "shotsForPerGame": 28.6,
+      "shotsForPerGame": 28.63333,
       "shotsAgainstPerGame": 24.6,
       "seasonId": 20252026
     },
@@ -318,7 +334,7 @@
       "goalDifferential": -13,
       "goalsForPerGame": 2.83333,
       "goalsAgainstPerGame": 3.26666,
-      "shotsForPerGame": 24.03333,
+      "shotsForPerGame": 24.06666,
       "shotsAgainstPerGame": 31.36666,
       "seasonId": 20252026
     },
@@ -352,22 +368,6 @@
       "goalsAgainstPerGame": 3.17857,
       "shotsForPerGame": 29.46428,
       "shotsAgainstPerGame": 26.28571,
-      "seasonId": 20252026
-    },
-    {
-      "team": "Toronto Maple Leafs",
-      "abbrev": "TOR",
-      "wins": 13,
-      "losses": 11,
-      "ot": 4,
-      "points": 30,
-      "gamesPlayed": 28,
-      "pointPctg": 0.53571,
-      "goalDifferential": 3,
-      "goalsForPerGame": 3.39285,
-      "goalsAgainstPerGame": 3.28571,
-      "shotsForPerGame": 27.07142,
-      "shotsAgainstPerGame": 31.39285,
       "seasonId": 20252026
     },
     {
@@ -479,7 +479,7 @@
       "goalsForPerGame": 2.33333,
       "goalsAgainstPerGame": 2.86666,
       "shotsForPerGame": 29.03333,
-      "shotsAgainstPerGame": 28.36666,
+      "shotsAgainstPerGame": 28.4,
       "seasonId": 20252026
     },
     {
@@ -494,7 +494,7 @@
       "goalDifferential": -21,
       "goalsForPerGame": 2.86206,
       "goalsAgainstPerGame": 3.5862,
-      "shotsForPerGame": 26.51724,
+      "shotsForPerGame": 26.55172,
       "shotsAgainstPerGame": 29.7931,
       "seasonId": 20252026
     },
