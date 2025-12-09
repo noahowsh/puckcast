@@ -1,234 +1,234 @@
 {
-  "generatedAt": "2025-12-06T23:11:34.490225+00:00",
+  "generatedAt": "2025-12-09T01:20:08.884813Z",
   "games": [
     {
-      "id": "2025020443",
-      "gameDate": "2025-12-06",
+      "id": "2025020466",
+      "gameDate": "2025-12-09",
       "startTimeEt": "7:00 PM ET",
-      "startTimeUtc": "2025-12-07T00:00:00+00:00",
+      "startTimeUtc": "2025-12-10T00:00:00Z",
       "homeTeam": {
-        "name": "Bruins",
-        "abbrev": "BOS"
-      },
-      "awayTeam": {
-        "name": "Devils",
-        "abbrev": "NJD"
-      },
-      "homeWinProb": 0.5112,
-      "awayWinProb": 0.4888,
-      "confidenceScore": 0.022,
-      "confidenceGrade": "C",
-      "edge": 0.011,
-      "summary": "Bruins project at 51% as the home lean \u2014 a C-tier edge worth 1.1 pts over a coin flip.",
-      "modelFavorite": "home",
-      "venue": "TD Garden",
-      "season": "20252026"
-    },
-    {
-      "id": "2025020444",
-      "gameDate": "2025-12-06",
-      "startTimeEt": "7:00 PM ET",
-      "startTimeUtc": "2025-12-07T00:00:00+00:00",
-      "homeTeam": {
-        "name": "Maple Leafs",
-        "abbrev": "TOR"
-      },
-      "awayTeam": {
-        "name": "Canadiens",
+        "name": "Montr\u00e9al",
         "abbrev": "MTL"
       },
-      "homeWinProb": 0.6105,
-      "awayWinProb": 0.3895,
-      "confidenceScore": 0.221,
-      "confidenceGrade": "B",
-      "edge": 0.111,
-      "summary": "Maple Leafs project at 61% as the home lean \u2014 a B-tier edge worth 11.1 pts over a coin flip.",
-      "modelFavorite": "home",
-      "venue": "Scotiabank Arena",
+      "awayTeam": {
+        "name": "Tampa Bay",
+        "abbrev": "TBL"
+      },
+      "homeWinProb": 0.47,
+      "awayWinProb": 0.53,
+      "confidenceScore": 3.0,
+      "confidenceGrade": "C",
+      "edge": 0.0296,
+      "modelFavorite": "away",
+      "summary": "Model favors Tampa Bay on the road at 53% win probability. Based on current standings and home ice advantage.",
+      "venue": "Centre Bell",
       "season": "20252026"
     },
     {
-      "id": "2025020445",
-      "gameDate": "2025-12-06",
+      "id": "2025020467",
+      "gameDate": "2025-12-09",
       "startTimeEt": "7:00 PM ET",
-      "startTimeUtc": "2025-12-07T00:00:00+00:00",
+      "startTimeUtc": "2025-12-10T00:00:00Z",
       "homeTeam": {
-        "name": "Senators",
+        "name": "Ottawa",
         "abbrev": "OTT"
       },
       "awayTeam": {
-        "name": "Blues",
-        "abbrev": "STL"
+        "name": "New Jersey",
+        "abbrev": "NJD"
       },
-      "homeWinProb": 0.5159,
-      "awayWinProb": 0.4841,
-      "confidenceScore": 0.032,
+      "homeWinProb": 0.502,
+      "awayWinProb": 0.498,
+      "confidenceScore": 0.2,
       "confidenceGrade": "C",
-      "edge": 0.016,
-      "summary": "Senators project at 52% as the home lean \u2014 a C-tier edge worth 1.6 pts over a coin flip.",
+      "edge": 0.0022,
       "modelFavorite": "home",
+      "summary": "Model favors Ottawa at home at 50% win probability. Based on current standings and home ice advantage.",
       "venue": "Canadian Tire Centre",
       "season": "20252026"
     },
     {
-      "id": "2025020446",
-      "gameDate": "2025-12-06",
+      "id": "2025020468",
+      "gameDate": "2025-12-09",
       "startTimeEt": "7:00 PM ET",
-      "startTimeUtc": "2025-12-07T00:00:00+00:00",
+      "startTimeUtc": "2025-12-10T00:00:00Z",
       "homeTeam": {
-        "name": "Lightning",
-        "abbrev": "TBL"
-      },
-      "awayTeam": {
-        "name": "Islanders",
+        "name": "New York",
         "abbrev": "NYI"
       },
-      "homeWinProb": 0.6198,
-      "awayWinProb": 0.3802,
-      "confidenceScore": 0.24,
-      "confidenceGrade": "B",
-      "edge": 0.12,
-      "summary": "Lightning project at 62% as the home lean \u2014 a B-tier edge worth 12.0 pts over a coin flip.",
-      "modelFavorite": "home",
-      "venue": "Benchmark International Arena",
+      "awayTeam": {
+        "name": "Vegas",
+        "abbrev": "VGK"
+      },
+      "homeWinProb": 0.494,
+      "awayWinProb": 0.506,
+      "confidenceScore": 0.6,
+      "confidenceGrade": "C",
+      "edge": 0.0061,
+      "modelFavorite": "away",
+      "summary": "Model favors Vegas on the road at 51% win probability. Based on current standings and home ice advantage.",
+      "venue": "UBS Arena",
       "season": "20252026"
     },
     {
-      "id": "2025020447",
-      "gameDate": "2025-12-06",
+      "id": "2025020469",
+      "gameDate": "2025-12-09",
       "startTimeEt": "7:00 PM ET",
-      "startTimeUtc": "2025-12-07T00:00:00+00:00",
+      "startTimeUtc": "2025-12-10T00:00:00Z",
       "homeTeam": {
-        "name": "Hurricanes",
+        "name": "Philadelphia",
+        "abbrev": "PHI"
+      },
+      "awayTeam": {
+        "name": "San Jose",
+        "abbrev": "SJS"
+      },
+      "homeWinProb": 0.59,
+      "awayWinProb": 0.41,
+      "confidenceScore": 9.0,
+      "confidenceGrade": "B",
+      "edge": 0.0901,
+      "modelFavorite": "home",
+      "summary": "Model favors Philadelphia at home at 59% win probability. Based on current standings and home ice advantage.",
+      "venue": "Xfinity Mobile Arena",
+      "season": "20252026"
+    },
+    {
+      "id": "2025020470",
+      "gameDate": "2025-12-09",
+      "startTimeEt": "7:00 PM ET",
+      "startTimeUtc": "2025-12-10T00:00:00Z",
+      "homeTeam": {
+        "name": "Pittsburgh",
+        "abbrev": "PIT"
+      },
+      "awayTeam": {
+        "name": "Anaheim",
+        "abbrev": "ANA"
+      },
+      "homeWinProb": 0.522,
+      "awayWinProb": 0.478,
+      "confidenceScore": 2.2,
+      "confidenceGrade": "C",
+      "edge": 0.0223,
+      "modelFavorite": "home",
+      "summary": "Model favors Pittsburgh at home at 52% win probability. Based on current standings and home ice advantage.",
+      "venue": "PPG Paints Arena",
+      "season": "20252026"
+    },
+    {
+      "id": "2025020471",
+      "gameDate": "2025-12-09",
+      "startTimeEt": "7:30 PM ET",
+      "startTimeUtc": "2025-12-10T00:30:00Z",
+      "homeTeam": {
+        "name": "Carolina",
         "abbrev": "CAR"
       },
       "awayTeam": {
-        "name": "Predators",
-        "abbrev": "NSH"
+        "name": "Columbus",
+        "abbrev": "CBJ"
       },
-      "homeWinProb": 0.6889,
-      "awayWinProb": 0.3111,
-      "confidenceScore": 0.378,
-      "confidenceGrade": "B+",
-      "edge": 0.189,
-      "summary": "Hurricanes project at 69% as the home lean \u2014 a B+-tier edge worth 18.9 pts over a coin flip.",
+      "homeWinProb": 0.605,
+      "awayWinProb": 0.395,
+      "confidenceScore": 10.5,
+      "confidenceGrade": "A",
+      "edge": 0.1048,
       "modelFavorite": "home",
+      "summary": "Model favors Carolina at home at 60% win probability. Based on current standings and home ice advantage.",
       "venue": "Lenovo Center",
       "season": "20252026"
     },
     {
-      "id": "2025020448",
-      "gameDate": "2025-12-06",
-      "startTimeEt": "7:00 PM ET",
-      "startTimeUtc": "2025-12-07T00:00:00+00:00",
+      "id": "2025020472",
+      "gameDate": "2025-12-09",
+      "startTimeEt": "8:00 PM ET",
+      "startTimeUtc": "2025-12-10T01:00:00Z",
       "homeTeam": {
-        "name": "Flames",
-        "abbrev": "CGY"
+        "name": "St. Louis",
+        "abbrev": "STL"
       },
       "awayTeam": {
-        "name": "Mammoth",
-        "abbrev": "UTA"
+        "name": "Boston",
+        "abbrev": "BOS"
       },
-      "homeWinProb": 0.4817,
-      "awayWinProb": 0.5183,
-      "confidenceScore": 0.037,
-      "confidenceGrade": "C",
-      "edge": -0.018,
-      "summary": "Mammoth project at 52% as the road lean \u2014 a C-tier edge worth 1.8 pts over a coin flip.",
-      "modelFavorite": "away",
-      "venue": "Scotiabank Saddledome",
-      "season": "20252026"
-    },
-    {
-      "id": "2025020449",
-      "gameDate": "2025-12-06",
-      "startTimeEt": "9:00 PM ET",
-      "startTimeUtc": "2025-12-07T02:00:00+00:00",
-      "homeTeam": {
-        "name": "Kings",
-        "abbrev": "LAK"
-      },
-      "awayTeam": {
-        "name": "Blackhawks",
-        "abbrev": "CHI"
-      },
-      "homeWinProb": 0.6003,
-      "awayWinProb": 0.3997,
-      "confidenceScore": 0.201,
+      "homeWinProb": 0.412,
+      "awayWinProb": 0.588,
+      "confidenceScore": 8.8,
       "confidenceGrade": "B",
-      "edge": 0.1,
-      "summary": "Kings project at 60% as the home lean \u2014 a B-tier edge worth 10.0 pts over a coin flip.",
-      "modelFavorite": "home",
-      "venue": "Crypto.com Arena",
+      "edge": 0.0881,
+      "modelFavorite": "away",
+      "summary": "Model favors Boston on the road at 59% win probability. Based on current standings and home ice advantage.",
+      "venue": "Enterprise Center",
       "season": "20252026"
     },
     {
-      "id": "2025020450",
-      "gameDate": "2025-12-06",
-      "startTimeEt": "10:00 PM ET",
-      "startTimeUtc": "2025-12-07T03:00:00+00:00",
+      "id": "2025020473",
+      "gameDate": "2025-12-09",
+      "startTimeEt": "8:00 PM ET",
+      "startTimeUtc": "2025-12-10T01:00:00Z",
       "homeTeam": {
-        "name": "Oilers",
+        "name": "Winnipeg",
+        "abbrev": "WPG"
+      },
+      "awayTeam": {
+        "name": "Dallas",
+        "abbrev": "DAL"
+      },
+      "homeWinProb": 0.394,
+      "awayWinProb": 0.606,
+      "confidenceScore": 10.6,
+      "confidenceGrade": "A",
+      "edge": 0.1056,
+      "modelFavorite": "away",
+      "summary": "Model favors Dallas on the road at 61% win probability. Based on current standings and home ice advantage.",
+      "venue": "Canada Life Centre",
+      "season": "20252026"
+    },
+    {
+      "id": "2025020474",
+      "gameDate": "2025-12-09",
+      "startTimeEt": "9:00 PM ET",
+      "startTimeUtc": "2025-12-10T02:00:00Z",
+      "homeTeam": {
+        "name": "Edmonton",
         "abbrev": "EDM"
       },
       "awayTeam": {
-        "name": "Jets",
-        "abbrev": "WPG"
+        "name": "Buffalo",
+        "abbrev": "BUF"
       },
-      "homeWinProb": 0.4571,
-      "awayWinProb": 0.5429,
-      "confidenceScore": 0.086,
-      "confidenceGrade": "C",
-      "edge": -0.043,
-      "summary": "Jets project at 54% as the road lean \u2014 a C-tier edge worth 4.3 pts over a coin flip.",
-      "modelFavorite": "away",
+      "homeWinProb": 0.583,
+      "awayWinProb": 0.417,
+      "confidenceScore": 8.3,
+      "confidenceGrade": "B",
+      "edge": 0.0835,
+      "modelFavorite": "home",
+      "summary": "Model favors Edmonton at home at 58% win probability. Based on current standings and home ice advantage.",
       "venue": "Rogers Place",
       "season": "20252026"
     },
     {
-      "id": "2025020451",
-      "gameDate": "2025-12-06",
-      "startTimeEt": "10:00 PM ET",
-      "startTimeUtc": "2025-12-07T03:00:00+00:00",
+      "id": "2025020475",
+      "gameDate": "2025-12-09",
+      "startTimeEt": "9:30 PM ET",
+      "startTimeUtc": "2025-12-10T02:30:00Z",
       "homeTeam": {
-        "name": "Canucks",
-        "abbrev": "VAN"
+        "name": "Nashville",
+        "abbrev": "NSH"
       },
       "awayTeam": {
-        "name": "Wild",
-        "abbrev": "MIN"
+        "name": "Colorado",
+        "abbrev": "COL"
       },
-      "homeWinProb": 0.4817,
-      "awayWinProb": 0.5183,
-      "confidenceScore": 0.037,
-      "confidenceGrade": "C",
-      "edge": -0.018,
-      "summary": "Wild project at 52% as the road lean \u2014 a C-tier edge worth 1.8 pts over a coin flip.",
+      "homeWinProb": 0.28,
+      "awayWinProb": 0.72,
+      "confidenceScore": 22.0,
+      "confidenceGrade": "A",
+      "edge": 0.22,
       "modelFavorite": "away",
-      "venue": "Rogers Arena",
-      "season": "20252026"
-    },
-    {
-      "id": "2025020452",
-      "gameDate": "2025-12-06",
-      "startTimeEt": "10:00 PM ET",
-      "startTimeUtc": "2025-12-07T03:00:00+00:00",
-      "homeTeam": {
-        "name": "Kraken",
-        "abbrev": "SEA"
-      },
-      "awayTeam": {
-        "name": "Red Wings",
-        "abbrev": "DET"
-      },
-      "homeWinProb": 0.4896,
-      "awayWinProb": 0.5104,
-      "confidenceScore": 0.021,
-      "confidenceGrade": "C",
-      "edge": -0.01,
-      "summary": "Red Wings project at 51% as the road lean \u2014 a C-tier edge worth 1.0 pts over a coin flip.",
-      "modelFavorite": "away",
-      "venue": "Climate Pledge Arena",
+      "summary": "Model favors Colorado on the road at 72% win probability. Based on current standings and home ice advantage.",
+      "venue": "Bridgestone Arena",
       "season": "20252026"
     }
   ]
