@@ -503,9 +503,9 @@ def draw_footer(
     gap = int(10 * scale) if logo else 0
     total_width = logo_width + gap + text_width if logo else text_width
 
-    # Center everything horizontally, position closer to bottom
+    # Center everything horizontally, raised position for better balance
     start_x = (img.width - total_width) // 2
-    footer_margin = int(28 * scale)  # Closer to bottom edge
+    footer_margin = int(44 * scale)  # Raised ~30px for better visual anchor
     y = img.height - footer_margin - max(logo_height, text_height)
 
     # Draw logo if available

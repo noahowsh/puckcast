@@ -53,7 +53,7 @@ def draw_goalie_row(
     margin: int,
     row_height: int,
 ) -> None:
-    """Draw a goalie row with clean layout."""
+    """Draw a goalie row with clean layout and strict column grid."""
     name = goalie.get("name", "Unknown")
     team = goalie.get("team", "???")
     gsax = goalie.get("gsax", 0)
@@ -63,23 +63,23 @@ def draw_goalie_row(
     row_center_y = y_position + row_height // 2
     is_top3 = rank <= 3
 
-    # Rank
+    # Rank - with 16-18px internal padding
     rank_font = get_font(S(28), bold=True)
     rank_color = hex_to_rgb(PuckcastColors.AQUA) if is_top3 else hex_to_rgb(PuckcastColors.TEXT_TERTIARY)
     rank_bbox = draw.textbbox((0, 0), str(rank), font=rank_font)
     rank_h = rank_bbox[3] - rank_bbox[1]
-    draw.text((margin, row_center_y - rank_h // 2), str(rank), fill=rank_color, font=rank_font)
+    draw.text((margin + S(4), row_center_y - rank_h // 2), str(rank), fill=rank_color, font=rank_font)
 
-    # Team logo - larger
-    logo_size = S(68)
+    # Team logo
+    logo_size = S(72)  # Slightly larger for better fill
     logo = get_logo(team, logo_size)
-    logo_x = margin + S(42)
+    logo_x = margin + S(44)
     logo_y = row_center_y - logo_size // 2
     img.paste(logo, (logo_x, logo_y), logo)
 
     # Goalie name and team
     info_x = logo_x + logo_size + S(16)
-    name_font = get_font(S(24), bold=True)
+    name_font = get_font(S(26), bold=True)
     team_font = get_font(S(15), bold=False)
 
     name_bbox = draw.textbbox((0, 0), name, font=name_font)
@@ -93,29 +93,33 @@ def draw_goalie_row(
     draw.text((info_x, text_y), name, fill=hex_to_rgb(PuckcastColors.TEXT_PRIMARY), font=name_font)
     draw.text((info_x, text_y + name_h + S(6)), team, fill=hex_to_rgb(PuckcastColors.TEXT_TERTIARY), font=team_font)
 
-    # Stats on the right - increased spacing by 8px between columns
-    label_font = get_font(S(11), bold=False)
+    # Stats on strict column grid - fixed positions from right edge
+    label_font = get_font(S(12), bold=False)
+    value_y_offset = S(16)  # Consistent baseline for all values
+    label_y_offset = S(12)  # Consistent offset for labels below values
 
-    # GSAX - rightmost position adjusted
+    # Column positions - strict grid with equal spacing
+    col_gp_x = img.width - margin - S(60)      # GP column (rightmost)
+    col_sv_x = img.width - margin - S(160)     # SV% column
+    col_gsax_x = img.width - margin - S(280)   # GSAX column (leftmost stat)
+
+    # GSAX
     gsax_font = get_font(S(24), bold=True)
     gsax_text = f"+{gsax:.1f}" if gsax > 0 else f"{gsax:.1f}"
     gsax_color = hex_to_rgb(PuckcastColors.RISING) if gsax > 0 else hex_to_rgb(PuckcastColors.FALLING)
-    gsax_x = img.width - margin - S(300)
-    draw.text((gsax_x, row_center_y - S(18)), gsax_text, fill=gsax_color, font=gsax_font)
-    draw.text((gsax_x, row_center_y + S(10)), "GSAX", fill=hex_to_rgb(PuckcastColors.TEXT_TERTIARY), font=label_font)
+    draw.text((col_gsax_x, row_center_y - value_y_offset), gsax_text, fill=gsax_color, font=gsax_font)
+    draw.text((col_gsax_x, row_center_y + label_y_offset), "GSAX", fill=hex_to_rgb(PuckcastColors.TEXT_TERTIARY), font=label_font)
 
-    # SV% - 8px more spacing
+    # SV%
     sv_font = get_font(S(22), bold=True)
     sv_text = f".{int(save_pct * 1000)}"
-    sv_x = img.width - margin - S(188)
-    draw.text((sv_x, row_center_y - S(16)), sv_text, fill=hex_to_rgb(PuckcastColors.TEXT_SECONDARY), font=sv_font)
-    draw.text((sv_x, row_center_y + S(10)), "SV%", fill=hex_to_rgb(PuckcastColors.TEXT_TERTIARY), font=label_font)
+    draw.text((col_sv_x, row_center_y - value_y_offset), sv_text, fill=hex_to_rgb(PuckcastColors.TEXT_SECONDARY), font=sv_font)
+    draw.text((col_sv_x, row_center_y + label_y_offset), "SV%", fill=hex_to_rgb(PuckcastColors.TEXT_TERTIARY), font=label_font)
 
-    # GP - 8px more spacing
+    # GP
     gp_font = get_font(S(22), bold=True)
-    gp_x = img.width - margin - S(76)
-    draw.text((gp_x, row_center_y - S(16)), str(games), fill=hex_to_rgb(PuckcastColors.TEXT_SECONDARY), font=gp_font)
-    draw.text((gp_x, row_center_y + S(10)), "GP", fill=hex_to_rgb(PuckcastColors.TEXT_TERTIARY), font=label_font)
+    draw.text((col_gp_x, row_center_y - value_y_offset), str(games), fill=hex_to_rgb(PuckcastColors.TEXT_SECONDARY), font=gp_font)
+    draw.text((col_gp_x, row_center_y + label_y_offset), "GP", fill=hex_to_rgb(PuckcastColors.TEXT_TERTIARY), font=label_font)
 
 
 def generate_goalie_leaderboard_image(goalies: List[Dict]) -> Image.Image:
@@ -125,21 +129,22 @@ def generate_goalie_leaderboard_image(goalies: List[Dict]) -> Image.Image:
 
     margin = S(48)
 
-    # Compact header
+    # Header with proper top padding (18-24px more)
     title_font = get_font(S(54), bold=True)
-    draw.text((margin, S(38)), "GOALIE LEADERS", fill=hex_to_rgb(PuckcastColors.TEXT_PRIMARY), font=title_font)
+    draw.text((margin, S(56)), "GOALIE LEADERS", fill=hex_to_rgb(PuckcastColors.TEXT_PRIMARY), font=title_font)
 
+    # Subtitle - 22-26px below title for clear hierarchy
     subtitle_font = get_font(S(20), bold=False)
-    draw.text((margin, S(96)), "Top Goalies by Goals Saved Above Expected", fill=hex_to_rgb(PuckcastColors.TEXT_SECONDARY), font=subtitle_font)
+    draw.text((margin, S(118)), "Top Goalies by Goals Saved Above Expected", fill=hex_to_rgb(PuckcastColors.TEXT_SECONDARY), font=subtitle_font)
 
     # Accent line
-    line_y = S(128)
+    line_y = S(152)
     draw.line([(margin, line_y), (margin + S(160), line_y)], fill=hex_to_rgb(PuckcastColors.AQUA), width=S(4))
 
-    # Goalie rows - fill vertical space
-    content_y = line_y + S(16)
-    row_height = S(104)  # Larger rows to fill space
-    row_gap = S(4)
+    # Goalie rows - consistent height with 16-18px internal padding
+    content_y = line_y + S(20)
+    row_height = S(108)  # Taller rows for proper internal padding
+    row_gap = S(6)  # Consistent spacing between rows
 
     for i, goalie in enumerate(goalies[:8], 1):
         y_pos = content_y + (i - 1) * (row_height + row_gap)

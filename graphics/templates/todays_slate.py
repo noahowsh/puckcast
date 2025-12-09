@@ -74,29 +74,29 @@ def draw_game_row(
     row_center_y = y_position + row_height // 2
 
     # Team logos - sized for row height
-    logo_size = S(88)
+    logo_size = S(82)
     logo_y = row_center_y - logo_size // 2
 
     # Away logo
     away_logo = get_logo(away_abbrev, logo_size)
     img.paste(away_logo, (margin, logo_y), away_logo)
 
-    # @ symbol - tighter spacing
-    at_font = get_font(S(20), bold=False)
-    at_x = margin + logo_size + S(8)
+    # @ symbol
+    at_font = get_font(S(18), bold=False)
+    at_x = margin + logo_size + S(6)
     at_bbox = draw.textbbox((0, 0), "@", font=at_font)
     at_h = at_bbox[3] - at_bbox[1]
-    draw.text((at_x, row_center_y - at_h // 2 - S(2)), "@", fill=hex_to_rgb(PuckcastColors.TEXT_TERTIARY), font=at_font)
+    draw.text((at_x, row_center_y - at_h // 2), "@", fill=hex_to_rgb(PuckcastColors.TEXT_TERTIARY), font=at_font)
 
-    # Home logo - tighter spacing
+    # Home logo
     home_logo = get_logo(home_abbrev, logo_size)
-    home_logo_x = at_x + S(24)
+    home_logo_x = at_x + S(20)
     img.paste(home_logo, (home_logo_x, logo_y), home_logo)
 
-    # Game info - vertically centered with tighter spacing
+    # Game info - matchup and time
     info_x = home_logo_x + logo_size + S(14)
     matchup_font = get_font(S(24), bold=True)
-    time_font = get_font(S(16), bold=False)
+    time_font = get_font(S(18), bold=False)  # Larger time text
 
     matchup_text = f"{away_abbrev} @ {home_abbrev}"
     matchup_bbox = draw.textbbox((0, 0), matchup_text, font=matchup_font)
@@ -105,24 +105,24 @@ def draw_game_row(
     time_bbox = draw.textbbox((0, 0), start_time, font=time_font)
     time_h = time_bbox[3] - time_bbox[1]
 
-    total_h = matchup_h + S(8) + time_h
+    total_h = matchup_h + S(6) + time_h
     text_y = row_center_y - total_h // 2
 
     draw.text((info_x, text_y), matchup_text, fill=hex_to_rgb(PuckcastColors.TEXT_PRIMARY), font=matchup_font)
-    draw.text((info_x, text_y + matchup_h + S(8)), start_time, fill=hex_to_rgb(PuckcastColors.TEXT_TERTIARY), font=time_font)
+    draw.text((info_x, text_y + matchup_h + S(6)), start_time, fill=hex_to_rgb(PuckcastColors.TEXT_TERTIARY), font=time_font)
 
-    # Right side: Grade badge + probability - pulled inward
+    # Right side: Grade badge + probability - pulled closer (50px inward)
     grade_color = get_confidence_color_rgb(confidence)
 
-    # Grade badge - smaller and tighter
-    badge_size = S(56)
-    badge_x = img.width - margin - badge_size
+    # Grade badge
+    badge_size = S(52)
+    badge_x = img.width - margin - S(25) - badge_size  # Pulled inward 50px
     badge_y = row_center_y - badge_size // 2
 
     draw.ellipse([badge_x, badge_y, badge_x + badge_size, badge_y + badge_size], fill=grade_color)
 
-    # Grade letter - dark for contrast, properly centered
-    grade_font = get_font(S(32), bold=True)
+    # Grade letter
+    grade_font = get_font(S(30), bold=True)
     grade_bbox = draw.textbbox((0, 0), confidence, font=grade_font)
     grade_w = grade_bbox[2] - grade_bbox[0]
     grade_h = grade_bbox[3] - grade_bbox[1]
@@ -135,22 +135,22 @@ def draw_game_row(
         font=grade_font,
     )
 
-    # Win probability - pulled inward by 50-70px
-    prob_font = get_font(S(38), bold=True)
+    # Win probability - pulled closer to matchup
+    prob_font = get_font(S(36), bold=True)
     prob_text = f"{pick_prob * 100:.0f}%"
     prob_bbox = draw.textbbox((0, 0), prob_text, font=prob_font)
     prob_w = prob_bbox[2] - prob_bbox[0]
     prob_h = prob_bbox[3] - prob_bbox[1]
-    prob_x = badge_x - prob_w - S(14)
+    prob_x = badge_x - prob_w - S(10)
 
-    draw.text((prob_x, row_center_y - prob_h // 2 - S(10)), prob_text, fill=grade_color, font=prob_font)
+    draw.text((prob_x, row_center_y - prob_h // 2 - S(8)), prob_text, fill=grade_color, font=prob_font)
 
     # Pick label
-    pick_font = get_font(S(14), bold=True)
+    pick_font = get_font(S(13), bold=True)
     pick_label = f"Pick: {pick_abbrev}"
     pick_bbox = draw.textbbox((0, 0), pick_label, font=pick_font)
     pick_w = pick_bbox[2] - pick_bbox[0]
-    draw.text((prob_x + (prob_w - pick_w) // 2, row_center_y + S(14)), pick_label, fill=hex_to_rgb(PuckcastColors.TEXT_SECONDARY), font=pick_font)
+    draw.text((prob_x + (prob_w - pick_w) // 2, row_center_y + S(12)), pick_label, fill=hex_to_rgb(PuckcastColors.TEXT_SECONDARY), font=pick_font)
 
 
 def generate_slate_image(games: List[Dict], date_str: str, page: int = 1) -> Image.Image:
@@ -160,24 +160,25 @@ def generate_slate_image(games: List[Dict], date_str: str, page: int = 1) -> Ima
 
     margin = S(48)
 
-    # Header - compact to maximize content area
+    # Header - with proper spacing
     title_font = get_font(S(58), bold=True)
-    draw.text((margin, S(44)), "TODAY'S SLATE", fill=hex_to_rgb(PuckcastColors.TEXT_PRIMARY), font=title_font)
+    draw.text((margin, S(48)), "TODAY'S SLATE", fill=hex_to_rgb(PuckcastColors.TEXT_PRIMARY), font=title_font)
 
+    # Subtitle - 30px below title for clear hierarchy
     subtitle_font = get_font(S(22), bold=False)
     subtitle = f"Model Predictions • {date_str}"
     if page > 1:
         subtitle += f" (Page {page})"
-    draw.text((margin, S(108)), subtitle, fill=hex_to_rgb(PuckcastColors.TEXT_SECONDARY), font=subtitle_font)
+    draw.text((margin, S(118)), subtitle, fill=hex_to_rgb(PuckcastColors.TEXT_SECONDARY), font=subtitle_font)
 
     # Accent line
-    line_y = S(144)
+    line_y = S(154)
     draw.line([(margin, line_y), (margin + S(140), line_y)], fill=hex_to_rgb(PuckcastColors.AQUA), width=S(4))
 
-    # Game rows - fill available space (content area: ~S(160) to ~S(980))
-    content_y = line_y + S(20)
-    row_height = S(128)  # Larger rows to fill space
-    row_gap = S(8)
+    # Game rows - consistent height and spacing
+    content_y = line_y + S(18)
+    row_height = S(120)  # Consistent row height
+    row_gap = S(10)  # Consistent gap
 
     for i, game in enumerate(games[:6]):
         y_pos = content_y + i * (row_height + row_gap)

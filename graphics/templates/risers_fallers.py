@@ -82,17 +82,17 @@ def draw_trend_row(
     result = Image.alpha_composite(img_rgba, overlay)
     draw = ImageDraw.Draw(result)
 
-    # Team logo - larger for bigger rows
-    logo_size = S(80)
+    # Team logo - with proper internal padding
+    logo_size = S(72)
     logo = get_logo(abbrev, logo_size)
-    logo_x = margin + S(18)
+    logo_x = margin + S(20)  # 10px horizontal padding
     logo_y = row_center_y - logo_size // 2
     result.paste(logo, (logo_x, logo_y), logo)
 
     # Team abbreviation and rank change
-    info_x = logo_x + logo_size + S(22)
-    abbrev_font = get_font(S(32), bold=True)
-    rank_font = get_font(S(17), bold=False)
+    info_x = logo_x + logo_size + S(18)
+    abbrev_font = get_font(S(30), bold=True)
+    rank_font = get_font(S(16), bold=False)
 
     abbrev_bbox = draw.textbbox((0, 0), abbrev, font=abbrev_font)
     abbrev_h = abbrev_bbox[3] - abbrev_bbox[1]
@@ -108,7 +108,7 @@ def draw_trend_row(
     draw.text((info_x, text_y + abbrev_h + text_spacing), rank_text, fill=hex_to_rgb(PuckcastColors.TEXT_SECONDARY), font=rank_font)
 
     # Rank delta on the right - stack vertically with proper spacing
-    delta_font = get_font(S(40), bold=True)
+    delta_font = get_font(S(36), bold=True)
     delta_text = f"↑{abs(rank_delta)}" if rank_delta > 0 else f"↓{abs(rank_delta)}"
     delta_bbox = draw.textbbox((0, 0), delta_text, font=delta_font)
     delta_w = delta_bbox[2] - delta_bbox[0]
@@ -147,35 +147,35 @@ def generate_risers_fallers_image(risers: List[Dict], fallers: List[Dict]) -> Im
 
     margin = S(48)
 
-    # Compact header
+    # Header with proper top padding (24-32px more)
     title_font = get_font(S(56), bold=True)
-    draw.text((margin, S(40)), "TRENDING TEAMS", fill=hex_to_rgb(PuckcastColors.TEXT_PRIMARY), font=title_font)
+    draw.text((margin, S(56)), "TRENDING TEAMS", fill=hex_to_rgb(PuckcastColors.TEXT_PRIMARY), font=title_font)
 
     subtitle_font = get_font(S(22), bold=False)
-    draw.text((margin, S(100)), "Weekly Rank Changes", fill=hex_to_rgb(PuckcastColors.TEXT_SECONDARY), font=subtitle_font)
+    draw.text((margin, S(118)), "Weekly Rank Changes", fill=hex_to_rgb(PuckcastColors.TEXT_SECONDARY), font=subtitle_font)
 
     # Accent line
-    line_y = S(134)
+    line_y = S(152)
     draw.line([(margin, line_y), (margin + S(180), line_y)], fill=hex_to_rgb(PuckcastColors.AQUA), width=S(4))
 
-    # Card layout - larger cards to fill space
-    row_height = S(122)
-    row_gap = S(8)
+    # Card layout - consistent spacing
+    row_height = S(112)  # Cards with proper internal padding
+    row_gap = S(8)  # Exactly 16px between cards
 
-    # Risers section
+    # Risers section - 16px above header
     section_font = get_font(S(24), bold=True)
-    y = line_y + S(20)
+    y = line_y + S(24)  # 16px above Rising header
     draw.text((margin, y), "RISING", fill=hex_to_rgb(PuckcastColors.RISING), font=section_font)
-    y += S(34)
+    y += S(32)
 
     for team in risers[:3]:
         draw_trend_row(img, team, y, margin, row_height, is_riser=True)
         y += row_height + row_gap
 
-    # Fallers section
-    y += S(12)
+    # Fallers section - 40-48px gap between blocks, 24px above header
+    y += S(16)  # Extra gap between sections (total ~24px visible)
     draw.text((margin, y), "FALLING", fill=hex_to_rgb(PuckcastColors.FALLING), font=section_font)
-    y += S(34)
+    y += S(32)
 
     for team in fallers[:3]:
         draw_trend_row(img, team, y, margin, row_height, is_riser=False)
