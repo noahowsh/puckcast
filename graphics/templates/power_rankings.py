@@ -2,7 +2,8 @@
 """
 Power Index Template Generator - Premium Instagram Design
 
-Creates a square (1080x1080) Instagram graphic showing all 32 teams.
+Creates a square (1080x1080) Instagram graphic showing all 32 teams
+in a clean two-column list layout with stats.
 Uses 2x supersampling for crisp output.
 """
 
@@ -25,7 +26,6 @@ from puckcast_brand import (
 from image_utils import (
     create_puckcast_background,
     draw_footer,
-    draw_rounded_rect,
     get_logo,
     get_font,
     save_high_quality,
@@ -37,12 +37,12 @@ REPO_ROOT = GRAPHICS_DIR.parents[0]
 POWER_INDEX_PATH = REPO_ROOT / "web" / "src" / "data" / "powerIndexSnapshot.json"
 OUTPUT_DIR = GRAPHICS_DIR / "output"
 
-# Tier colors - used as accent stripe
+# Tier colors for rank badges
 TIER_COLORS = {
     "elite": (100, 210, 255),       # Cyan
     "contender": (80, 220, 160),    # Green
     "playoff": (255, 200, 100),     # Amber
-    "bubble": (150, 150, 160),      # Gray
+    "bubble": (120, 120, 130),      # Gray
     "lottery": (255, 100, 120),     # Red
 }
 
@@ -54,129 +54,168 @@ def load_power_index() -> Dict[str, Any]:
     return json.loads(POWER_INDEX_PATH.read_text())
 
 
-def draw_team_tile(
+def draw_team_row(
     img: Image.Image,
+    draw: ImageDraw.Draw,
     team: Dict[str, Any],
     x: int,
     y: int,
-    tile_width: int,
-    tile_height: int,
+    row_width: int,
+    row_height: int,
 ) -> None:
-    """Draw a compact team tile with rank, logo, and abbreviation."""
+    """Draw a single team row with rank, logo, stats."""
     abbrev = team.get("abbrev", "???")
     rank = team.get("rank", 0)
     delta = team.get("rankDelta", 0)
     tier = team.get("tier", "bubble")
+    record = team.get("record", "0-0-0")
+    points = team.get("points", 0)
 
     tier_color = TIER_COLORS.get(tier, TIER_COLORS["bubble"])
 
-    # Create overlay for tile background
-    overlay = Image.new("RGBA", img.size, (0, 0, 0, 0))
-    overlay_draw = ImageDraw.Draw(overlay)
+    # Row layout: [Rank] [Logo] [Abbrev] [Record] [Pts] [Movement]
+    # Proportions across row_width
 
-    # Simple dark tile with subtle tier-colored left border accent
-    coords = (x, y, x + tile_width, y + tile_height)
-    draw_rounded_rect(overlay_draw, coords, radius=S(8), fill=(20, 25, 40, 200))
+    # Rank badge
+    rank_size = S(28)
+    rank_x = x + S(4)
+    rank_y = y + (row_height - rank_size) // 2
 
-    # Tier color accent - left edge stripe
-    accent_coords = (x, y + S(4), x + S(3), y + tile_height - S(4))
-    overlay_draw.rectangle(accent_coords, fill=(*tier_color, 180))
-
-    img_rgba = img.convert("RGBA")
-    result = Image.alpha_composite(img_rgba, overlay)
-    draw = ImageDraw.Draw(result)
-
-    # Rank number - top left
+    # Draw rank circle with tier color
+    draw.ellipse(
+        [rank_x, rank_y, rank_x + rank_size, rank_y + rank_size],
+        fill=(*tier_color, 200)
+    )
     rank_font = get_font(S(14), bold=True)
     rank_text = str(rank)
-    draw.text((x + S(10), y + S(6)), rank_text, fill=hex_to_rgb(PuckcastColors.TEXT_TERTIARY), font=rank_font)
+    rank_bbox = draw.textbbox((0, 0), rank_text, font=rank_font)
+    rank_tw = rank_bbox[2] - rank_bbox[0]
+    rank_th = rank_bbox[3] - rank_bbox[1]
+    draw.text(
+        (rank_x + (rank_size - rank_tw) // 2 - rank_bbox[0],
+         rank_y + (rank_size - rank_th) // 2 - rank_bbox[1]),
+        rank_text,
+        fill=(10, 15, 25),
+        font=rank_font
+    )
 
-    # Team logo - centered
-    logo_size = S(52)
+    # Team logo
+    logo_size = S(36)
+    logo_x = rank_x + rank_size + S(10)
+    logo_y = y + (row_height - logo_size) // 2
     logo = get_logo(abbrev, logo_size)
-    logo_x = x + (tile_width - logo_size) // 2
-    logo_y = y + S(14)
-    result.paste(logo, (logo_x, logo_y), logo)
+    img.paste(logo, (logo_x, logo_y), logo)
 
-    # Team abbreviation + optional movement - centered below logo
-    abbrev_font = get_font(S(13), bold=True)
+    # Team abbreviation
+    abbrev_font = get_font(S(16), bold=True)
+    abbrev_x = logo_x + logo_size + S(10)
+    abbrev_bbox = draw.textbbox((0, 0), abbrev, font=abbrev_font)
+    abbrev_y = y + (row_height - (abbrev_bbox[3] - abbrev_bbox[1])) // 2 - abbrev_bbox[1]
+    draw.text((abbrev_x, abbrev_y), abbrev, fill=hex_to_rgb(PuckcastColors.TEXT_PRIMARY), font=abbrev_font)
 
+    # Record (right-aligned in middle section)
+    record_font = get_font(S(13), bold=False)
+    record_bbox = draw.textbbox((0, 0), record, font=record_font)
+    record_w = record_bbox[2] - record_bbox[0]
+    record_x = x + row_width - S(80) - record_w
+    record_y = y + (row_height - (record_bbox[3] - record_bbox[1])) // 2 - record_bbox[1]
+    draw.text((record_x, record_y), record, fill=hex_to_rgb(PuckcastColors.TEXT_SECONDARY), font=record_font)
+
+    # Points
+    pts_font = get_font(S(14), bold=True)
+    pts_text = f"{points}"
+    pts_bbox = draw.textbbox((0, 0), pts_text, font=pts_font)
+    pts_w = pts_bbox[2] - pts_bbox[0]
+    pts_x = x + row_width - S(36) - pts_w
+    pts_y = y + (row_height - (pts_bbox[3] - pts_bbox[1])) // 2 - pts_bbox[1]
+    draw.text((pts_x, pts_y), pts_text, fill=hex_to_rgb(PuckcastColors.TEXT_PRIMARY), font=pts_font)
+
+    # Movement indicator (far right)
     if delta != 0:
-        # Show abbrev with movement
         if delta > 0:
-            delta_str = f" +{delta}"
+            delta_text = f"+{delta}"
             delta_color = hex_to_rgb(PuckcastColors.RISING)
         else:
-            delta_str = f" {delta}"
+            delta_text = str(delta)
             delta_color = hex_to_rgb(PuckcastColors.FALLING)
-
-        # Draw abbreviation
-        abbrev_bbox = draw.textbbox((0, 0), abbrev, font=abbrev_font)
-        abbrev_w = abbrev_bbox[2] - abbrev_bbox[0]
-
-        delta_font = get_font(S(10), bold=True)
-        delta_bbox = draw.textbbox((0, 0), delta_str, font=delta_font)
+        delta_font = get_font(S(11), bold=True)
+        delta_bbox = draw.textbbox((0, 0), delta_text, font=delta_font)
         delta_w = delta_bbox[2] - delta_bbox[0]
-
-        total_w = abbrev_w + delta_w
-        start_x = x + (tile_width - total_w) // 2
-        text_y = logo_y + logo_size + S(4)
-
-        draw.text((start_x, text_y), abbrev, fill=hex_to_rgb(PuckcastColors.TEXT_PRIMARY), font=abbrev_font)
-        draw.text((start_x + abbrev_w, text_y + S(2)), delta_str, fill=delta_color, font=delta_font)
-    else:
-        # Just abbreviation centered
-        abbrev_bbox = draw.textbbox((0, 0), abbrev, font=abbrev_font)
-        abbrev_w = abbrev_bbox[2] - abbrev_bbox[0]
-        abbrev_x = x + (tile_width - abbrev_w) // 2
-        text_y = logo_y + logo_size + S(4)
-        draw.text((abbrev_x, text_y), abbrev, fill=hex_to_rgb(PuckcastColors.TEXT_PRIMARY), font=abbrev_font)
-
-    img.paste(result.convert("RGB"))
+        delta_x = x + row_width - S(6) - delta_w
+        delta_y = y + (row_height - (delta_bbox[3] - delta_bbox[1])) // 2 - delta_bbox[1]
+        draw.text((delta_x, delta_y), delta_text, fill=delta_color, font=delta_font)
 
 
 def generate_power_index_image(rankings: List[Dict], week_of: str) -> Image.Image:
-    """Generate the power index with all 32 teams on one page."""
+    """Generate the power index with all 32 teams in two columns."""
     img = create_puckcast_background()
     draw = ImageDraw.Draw(img)
 
     margin = S(40)
 
-    # Compact header
-    title_font = get_font(S(44), bold=True)
-    draw.text((margin, S(24)), "POWER INDEX", fill=hex_to_rgb(PuckcastColors.TEXT_PRIMARY), font=title_font)
+    # Header
+    title_font = get_font(S(48), bold=True)
+    draw.text((margin, S(28)), "POWER INDEX", fill=hex_to_rgb(PuckcastColors.TEXT_PRIMARY), font=title_font)
 
     # Subtitle
-    subtitle_font = get_font(S(14), bold=False)
-    draw.text((margin, S(72)), f"Team Strength Ratings  |  {week_of}", fill=hex_to_rgb(PuckcastColors.TEXT_SECONDARY), font=subtitle_font)
+    subtitle_font = get_font(S(16), bold=False)
+    draw.text((margin, S(82)), f"Team Strength Ratings  |  {week_of}", fill=hex_to_rgb(PuckcastColors.TEXT_SECONDARY), font=subtitle_font)
 
     # Accent line
-    line_y = S(92)
-    draw.line([(margin, line_y), (margin + S(120), line_y)], fill=hex_to_rgb(PuckcastColors.AQUA), width=S(2))
+    line_y = S(106)
+    draw.line([(margin, line_y), (margin + S(140), line_y)], fill=hex_to_rgb(PuckcastColors.AQUA), width=S(3))
 
-    # Grid layout: 4 cols x 8 rows = 32 teams
-    cols, rows = 4, 8
+    # Column headers
+    header_y = line_y + S(16)
+    header_font = get_font(S(11), bold=True)
+    header_color = hex_to_rgb(PuckcastColors.TEXT_TERTIARY)
 
-    # Calculate tile sizes to fit properly
-    grid_margin = S(32)
-    available_width = RENDER_SIZE - grid_margin * 2
-    available_height = RENDER_SIZE - line_y - S(16) - S(80)  # Header + footer space
+    col_width = (RENDER_SIZE - margin * 2 - S(20)) // 2  # Gap between columns
+    col1_x = margin
+    col2_x = margin + col_width + S(20)
 
-    h_gap = S(8)
-    v_gap = S(6)
+    # Draw headers for both columns
+    for col_x in [col1_x, col2_x]:
+        draw.text((col_x + S(4), header_y), "RK", fill=header_color, font=header_font)
+        draw.text((col_x + S(50), header_y), "TEAM", fill=header_color, font=header_font)
+        draw.text((col_x + col_width - S(120), header_y), "REC", fill=header_color, font=header_font)
+        draw.text((col_x + col_width - S(55), header_y), "PTS", fill=header_color, font=header_font)
+        draw.text((col_x + col_width - S(20), header_y), "+/-", fill=header_color, font=header_font)
 
-    tile_width = (available_width - (cols - 1) * h_gap) // cols
-    tile_height = (available_height - (rows - 1) * v_gap) // rows
+    # Draw separator line under headers
+    sep_y = header_y + S(18)
+    draw.line([(col1_x, sep_y), (col1_x + col_width, sep_y)], fill=(255, 255, 255, 30), width=1)
+    draw.line([(col2_x, sep_y), (col2_x + col_width, sep_y)], fill=(255, 255, 255, 30), width=1)
 
-    start_x = grid_margin
-    start_y = line_y + S(16)
+    # Team rows
+    content_y = sep_y + S(8)
+    row_height = S(54)
+    available_height = RENDER_SIZE - content_y - S(90)  # Footer space
+    row_height = min(row_height, available_height // 16)
 
-    for i, team in enumerate(rankings[:32]):
-        col = i % cols
-        row = i // cols
-        x = start_x + col * (tile_width + h_gap)
-        y = start_y + row * (tile_height + v_gap)
-        draw_team_tile(img, team, x, y, tile_width, tile_height)
+    # Column 1: Teams 1-16
+    for i, team in enumerate(rankings[:16]):
+        y = content_y + i * row_height
+        draw_team_row(img, draw, team, col1_x, y, col_width, row_height)
+        # Subtle separator
+        if i < 15:
+            draw.line(
+                [(col1_x + S(40), y + row_height - 1), (col1_x + col_width - S(8), y + row_height - 1)],
+                fill=(255, 255, 255, 15),
+                width=1
+            )
+
+    # Column 2: Teams 17-32
+    for i, team in enumerate(rankings[16:32]):
+        y = content_y + i * row_height
+        draw_team_row(img, draw, team, col2_x, y, col_width, row_height)
+        # Subtle separator
+        if i < 15:
+            draw.line(
+                [(col2_x + S(40), y + row_height - 1), (col2_x + col_width - S(8), y + row_height - 1)],
+                fill=(255, 255, 255, 15),
+                width=1
+            )
 
     draw_footer(img)
     return img
@@ -184,7 +223,7 @@ def generate_power_index_image(rankings: List[Dict], week_of: str) -> Image.Imag
 
 def generate_power_rankings() -> List[Path]:
     """Generate power index graphic."""
-    print("Generating Power Rankings graphics...")
+    print("Generating Power Index graphics...")
 
     data = load_power_index()
     rankings = data.get("rankings", [])
