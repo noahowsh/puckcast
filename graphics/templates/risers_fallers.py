@@ -53,7 +53,7 @@ def draw_trend_row(
     row_height: int,
     is_riser: bool,
 ) -> None:
-    """Draw a compact, professional team row in the trend section."""
+    """Draw a compact team row in the trend section."""
     abbrev = team_data.get("abbrev", "???")
     current_rank = team_data.get("currentRank", 0)
     previous_rank = team_data.get("previousRank", 0)
@@ -81,24 +81,24 @@ def draw_trend_row(
     result = Image.alpha_composite(img_rgba, overlay)
     draw = ImageDraw.Draw(result)
 
-    # Team logo
-    logo_size = 60
+    # Team logo - BIGGER
+    logo_size = 70
     logo = get_logo(abbrev, logo_size)
     logo_x = margin + 18
     logo_y = y_position + (row_height - logo_size) // 2
     result.paste(logo, (logo_x, logo_y), logo)
 
     # Team abbreviation
-    abbrev_font = get_font(32, bold=True)
-    draw.text((margin + 95, y_position + 18), abbrev, fill=hex_to_rgb(PuckcastColors.TEXT_PRIMARY), font=abbrev_font)
+    abbrev_font = get_font(36, bold=True)
+    draw.text((margin + 105, y_position + 18), abbrev, fill=hex_to_rgb(PuckcastColors.TEXT_PRIMARY), font=abbrev_font)
 
     # Rank change (e.g., "#25 → #4")
-    rank_font = get_font(18, bold=False)
+    rank_font = get_font(20, bold=False)
     rank_text = f"#{previous_rank} → #{current_rank}"
-    draw.text((margin + 95, y_position + 55), rank_text, fill=hex_to_rgb(PuckcastColors.TEXT_SECONDARY), font=rank_font)
+    draw.text((margin + 105, y_position + 58), rank_text, fill=hex_to_rgb(PuckcastColors.TEXT_SECONDARY), font=rank_font)
 
     # Big rank delta on the right
-    delta_font = get_font(42, bold=True)
+    delta_font = get_font(48, bold=True)
     if rank_delta > 0:
         delta_text = f"↑{abs(rank_delta)}"
     else:
@@ -109,14 +109,14 @@ def draw_trend_row(
     draw.text((img.width - margin - delta_width - 25, y_position + 18), delta_text, fill=accent_color, font=delta_font)
 
     # Goal differential change below
-    gd_font = get_font(16, bold=True)
+    gd_font = get_font(18, bold=True)
     if goal_diff_delta > 0:
         gd_text = f"+{goal_diff_delta} GD"
     else:
         gd_text = f"{goal_diff_delta} GD"
     gd_bbox = draw.textbbox((0, 0), gd_text, font=gd_font)
     gd_width = gd_bbox[2] - gd_bbox[0]
-    draw.text((img.width - margin - gd_width - 25, y_position + 62), gd_text, fill=hex_to_rgb(PuckcastColors.TEXT_TERTIARY), font=gd_font)
+    draw.text((img.width - margin - gd_width - 25, y_position + 68), gd_text, fill=hex_to_rgb(PuckcastColors.TEXT_TERTIARY), font=gd_font)
 
     # Copy back
     img.paste(result.convert("RGB"))
@@ -136,28 +136,28 @@ def generate_risers_fallers_image(risers: List[Dict], fallers: List[Dict]) -> Im
 
     draw = ImageDraw.Draw(img)
     margin = 50
-    row_height = 95
+    row_height = 105  # Taller for bigger logos
 
     # Section header - Risers
-    section_font = get_font(30, bold=True)
+    section_font = get_font(32, bold=True)
     draw.text((margin, y), "RISING", fill=hex_to_rgb(PuckcastColors.RISING), font=section_font)
-    y += 40
+    y += 45
 
-    # Draw risers (show 4)
-    for i, team in enumerate(risers[:4]):
+    # Draw risers (show 3 - fits better)
+    for i, team in enumerate(risers[:3]):
         draw_trend_row(img, team, y, margin, row_height, is_riser=True)
-        y += row_height + 8
+        y += row_height + 10
 
-    y += 15
+    y += 20
 
     # Section header - Fallers
     draw.text((margin, y), "FALLING", fill=hex_to_rgb(PuckcastColors.FALLING), font=section_font)
-    y += 40
+    y += 45
 
-    # Draw fallers (show 4)
-    for i, team in enumerate(fallers[:4]):
+    # Draw fallers (show 3)
+    for i, team in enumerate(fallers[:3]):
         draw_trend_row(img, team, y, margin, row_height, is_riser=False)
-        y += row_height + 8
+        y += row_height + 10
 
     # Draw footer
     draw_footer(img)

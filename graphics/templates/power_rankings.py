@@ -50,9 +50,9 @@ def draw_team_tile(
     img: Image.Image,
     team: Dict[str, Any],
     position: tuple,
-    tile_size: int = 110,
+    tile_size: int = 120,
 ) -> None:
-    """Draw a single team tile in the grid."""
+    """Draw a single team tile in the grid with bigger logos."""
     x, y = position
     draw = ImageDraw.Draw(img)
 
@@ -64,55 +64,55 @@ def draw_team_tile(
 
     # Tile background color based on tier
     tier_colors = {
-        "elite": (126, 227, 255, 25),
-        "contender": (110, 240, 194, 20),
-        "playoff": (246, 193, 119, 15),
-        "bubble": (255, 255, 255, 10),
-        "lottery": (255, 148, 168, 15),
+        "elite": (126, 227, 255, 30),
+        "contender": (110, 240, 194, 25),
+        "playoff": (246, 193, 119, 20),
+        "bubble": (255, 255, 255, 12),
+        "lottery": (255, 148, 168, 20),
     }
-    bg_color = tier_colors.get(tier, (255, 255, 255, 10))
+    bg_color = tier_colors.get(tier, (255, 255, 255, 12))
 
     # Create overlay for tile
     overlay = Image.new("RGBA", img.size, (0, 0, 0, 0))
     overlay_draw = ImageDraw.Draw(overlay)
 
     coords = (x, y, x + tile_size, y + tile_size)
-    draw_rounded_rect(overlay_draw, coords, radius=12, fill=bg_color)
+    draw_rounded_rect(overlay_draw, coords, radius=12, fill=bg_color, outline=(255, 255, 255, 25), width=1)
 
     # Composite
     img_rgba = img.convert("RGBA")
     result = Image.alpha_composite(img_rgba, overlay)
 
     # Draw rank number (top left)
-    rank_font = get_font(FontSizes.SMALL, bold=True)
+    rank_font = get_font(18, bold=True)
     rank_color = hex_to_rgb(PuckcastColors.TEXT_TERTIARY)
     ImageDraw.Draw(result).text((x + 8, y + 6), str(rank), fill=rank_color, font=rank_font)
 
-    # Draw logo (centered)
-    logo_size = 50
+    # Draw logo (centered) - BIGGER
+    logo_size = 60
     logo = get_logo(abbrev, logo_size)
     logo_x = x + (tile_size - logo_size) // 2
     logo_y = y + 25
     result.paste(logo, (logo_x, logo_y), logo)
 
     # Draw abbreviation
-    abbrev_font = get_font(FontSizes.SMALL, bold=True)
+    abbrev_font = get_font(18, bold=True)
     abbrev_color = hex_to_rgb(PuckcastColors.TEXT_PRIMARY)
     bbox = ImageDraw.Draw(result).textbbox((0, 0), abbrev, font=abbrev_font)
     text_width = bbox[2] - bbox[0]
     text_x = x + (tile_size - text_width) // 2
-    ImageDraw.Draw(result).text((text_x, y + 78), abbrev, fill=abbrev_color, font=abbrev_font)
+    ImageDraw.Draw(result).text((text_x, y + 90), abbrev, fill=abbrev_color, font=abbrev_font)
 
     # Draw delta indicator (bottom right)
     if delta != 0:
-        delta_font = get_font(FontSizes.TINY, bold=True)
+        delta_font = get_font(14, bold=True)
         if delta > 0:
             delta_text = f"+{delta}"
             delta_color = hex_to_rgb(PuckcastColors.RISING)
         else:
             delta_text = str(delta)
             delta_color = hex_to_rgb(PuckcastColors.FALLING)
-        ImageDraw.Draw(result).text((x + tile_size - 28, y + tile_size - 18), delta_text, fill=delta_color, font=delta_font)
+        ImageDraw.Draw(result).text((x + tile_size - 30, y + tile_size - 20), delta_text, fill=delta_color, font=delta_font)
 
     # Copy back
     img.paste(result.convert("RGB"))
@@ -130,18 +130,17 @@ def generate_power_rankings_image(rankings: List[Dict], week_of: str) -> Image.I
     subtitle = f"Week of {week_of}"
     y_start = draw_header(img, title, subtitle, margin=50, compact=True)
 
-    # Calculate grid layout for all 32 teams
+    # Calculate grid layout for all 32 teams - BIGGER tiles
     cols = 8
     rows = 4
-    margin = 35
-    tile_size = 115
-    gap = 8
+    tile_size = 120  # Bigger tiles
+    gap = 6
 
     grid_width = cols * tile_size + (cols - 1) * gap
     grid_height = rows * tile_size + (rows - 1) * gap
 
     start_x = (width - grid_width) // 2
-    start_y = y_start + 10
+    start_y = y_start + 15
 
     # Draw team tiles
     for i, team in enumerate(rankings[:32]):

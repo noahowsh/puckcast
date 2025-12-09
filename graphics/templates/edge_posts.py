@@ -55,7 +55,7 @@ def draw_edge_tile(
     tile_height: int,
     rank: int,
 ) -> None:
-    """Draw a clean, professional edge tile."""
+    """Draw a clean edge tile with no overlaps."""
     away_abbrev = game.get("awayTeam", {}).get("abbrev", "???")
     home_abbrev = game.get("homeTeam", {}).get("abbrev", "???")
     home_prob = game.get("homeWinProb", 0.5)
@@ -73,61 +73,58 @@ def draw_edge_tile(
         fav_abbrev = away_abbrev
         fav_prob = away_prob
 
-    # Use glass tile with highlight based on edge strength
+    # Draw glass tile background
     is_strong = abs(edge) >= 0.05
     highlight_color = hex_to_rgb(PuckcastColors.AQUA) if is_strong else None
     result = draw_glass_tile(img, y_position, tile_height, margin, is_strong, highlight_color)
     draw = ImageDraw.Draw(result)
 
     # Rank badge on the left
-    rank_font = get_font(20, bold=True)
+    rank_font = get_font(24, bold=True)
     rank_color = hex_to_rgb(PuckcastColors.AQUA)
-    draw.text((margin + 15, y_position + (tile_height - 20) // 2), f"#{rank}", fill=rank_color, font=rank_font)
+    draw.text((margin + 15, y_position + (tile_height - 24) // 2), f"#{rank}", fill=rank_color, font=rank_font)
 
-    # Team logos
-    logo_size = 46
+    # Team logos - BIGGER
+    logo_size = 60
     logo_y = y_position + (tile_height - logo_size) // 2
     away_logo = get_logo(away_abbrev, logo_size)
     result.paste(away_logo, (margin + 55, logo_y), away_logo)
 
     # @ symbol
-    at_font = get_font(18, bold=False)
+    at_font = get_font(20, bold=False)
     at_x = margin + 55 + logo_size + 8
-    draw.text((at_x, y_position + (tile_height - 18) // 2), "@", fill=hex_to_rgb(PuckcastColors.TEXT_TERTIARY), font=at_font)
+    draw.text((at_x, y_position + (tile_height - 20) // 2), "@", fill=hex_to_rgb(PuckcastColors.TEXT_TERTIARY), font=at_font)
 
     home_logo = get_logo(home_abbrev, logo_size)
-    result.paste(home_logo, (at_x + 25, logo_y), home_logo)
+    result.paste(home_logo, (at_x + 28, logo_y), home_logo)
 
-    # Matchup and time
-    info_x = at_x + 25 + logo_size + 15
-    name_font = get_font(18, bold=True)
-    time_font = get_font(14, bold=False)
+    # Matchup text and time - positioned after home logo
+    info_x = at_x + 28 + logo_size + 15
+    name_font = get_font(22, bold=True)
+    time_font = get_font(16, bold=False)
 
     matchup_text = f"{away_abbrev} @ {home_abbrev}"
     draw.text((info_x, y_position + 22), matchup_text, fill=hex_to_rgb(PuckcastColors.TEXT_PRIMARY), font=name_font)
-    draw.text((info_x, y_position + 46), start_time, fill=hex_to_rgb(PuckcastColors.TEXT_TERTIARY), font=time_font)
+    draw.text((info_x, y_position + 50), start_time, fill=hex_to_rgb(PuckcastColors.TEXT_TERTIARY), font=time_font)
 
-    # Right side - Edge percentage (main stat)
-    edge_font = get_font(34, bold=True)
+    # Right side - Edge percentage ONLY (no overlapping elements)
+    edge_font = get_font(38, bold=True)
     edge_pct = abs(edge) * 100
     edge_text = f"+{edge_pct:.1f}%"
     edge_color = get_confidence_color_rgb(confidence)
 
-    edge_x = img.width - margin - 155
+    # Calculate text width and position from right
+    edge_bbox = draw.textbbox((0, 0), edge_text, font=edge_font)
+    edge_width = edge_bbox[2] - edge_bbox[0]
+    edge_x = img.width - margin - edge_width - 20
     draw.text((edge_x, y_position + 15), edge_text, fill=edge_color, font=edge_font)
 
-    # "edge" label
-    edge_label_font = get_font(14, bold=False)
-    draw.text((edge_x, y_position + 52), "edge", fill=hex_to_rgb(PuckcastColors.TEXT_TERTIARY), font=edge_label_font)
-
-    # Model pick with logo
-    pick_logo = get_logo(fav_abbrev, 32)
-    result.paste(pick_logo, (img.width - margin - 50, y_position + 15), pick_logo)
-
-    # Pick probability below logo
-    prob_font = get_font(14, bold=True)
-    prob_text = f"{fav_prob * 100:.0f}%"
-    draw.text((img.width - margin - 45, y_position + 52), prob_text, fill=hex_to_rgb(PuckcastColors.TEXT_SECONDARY), font=prob_font)
+    # Pick info below edge (model pick abbrev + prob)
+    pick_font = get_font(16, bold=True)
+    pick_text = f"{fav_abbrev} {fav_prob * 100:.0f}%"
+    pick_bbox = draw.textbbox((0, 0), pick_text, font=pick_font)
+    pick_width = pick_bbox[2] - pick_bbox[0]
+    draw.text((img.width - margin - pick_width - 20, y_position + 56), pick_text, fill=hex_to_rgb(PuckcastColors.TEXT_SECONDARY), font=pick_font)
 
     # Copy back
     img.paste(result.convert("RGB"))
@@ -145,12 +142,11 @@ def generate_edge_posts_image(games: List[Dict], date_str: str) -> Image.Image:
     subtitle = f"Highest Advantage Picks • {date_str}"
     y = draw_header(img, title, subtitle, margin=50, compact=True)
 
-    draw = ImageDraw.Draw(img)
     margin = 50
-    tile_height = 90
+    tile_height = 100  # Taller tiles for bigger logos
 
-    # Draw edge tiles (top 7 by edge)
-    for i, game in enumerate(games[:7], 1):
+    # Draw edge tiles (top 8 by edge)
+    for i, game in enumerate(games[:8], 1):
         draw_edge_tile(img, game, y, margin, tile_height, rank=i)
         y += tile_height + 6
 

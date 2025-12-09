@@ -58,11 +58,11 @@ def draw_game_tile(
     game: Dict[str, Any],
     y_position: int,
     margin: int = 50,
-    tile_height: int = 105,
+    tile_height: int = 110,
     is_top_edge: bool = False,
 ) -> int:
     """
-    Draw a clean, professional game tile.
+    Draw a clean game tile with no overlapping elements.
 
     Returns the y position after the tile.
     """
@@ -72,7 +72,6 @@ def draw_game_tile(
 
     home_prob = game.get("homeWinProb", 0.5)
     away_prob = game.get("awayWinProb", 0.5)
-    edge = game.get("edge", 0)
     confidence = game.get("confidenceGrade", "C")
     start_time = game.get("startTimeEt", "TBD")
     model_favorite = game.get("modelFavorite", "home")
@@ -90,8 +89,8 @@ def draw_game_tile(
     result = draw_glass_tile(img, y_position, tile_height, margin, is_top_edge, highlight_color)
     draw = ImageDraw.Draw(result)
 
-    # Layout constants
-    logo_size = 56
+    # BIGGER logos
+    logo_size = 65
     content_start_x = margin + 18
     logo_y = y_position + (tile_height - logo_size) // 2
 
@@ -101,65 +100,46 @@ def draw_game_tile(
 
     # @ symbol between logos
     at_font = get_font(24, bold=False)
-    at_x = content_start_x + logo_size + 12
+    at_x = content_start_x + logo_size + 10
     at_y = y_position + (tile_height - 24) // 2
     draw.text((at_x, at_y), "@", fill=hex_to_rgb(PuckcastColors.TEXT_TERTIARY), font=at_font)
 
     # Home team logo
     home_logo = get_logo(home_abbrev, logo_size)
-    home_logo_x = at_x + 32
+    home_logo_x = at_x + 30
     result.paste(home_logo, (home_logo_x, logo_y), home_logo)
 
-    # Team names in column
-    names_x = home_logo_x + logo_size + 18
-    name_font = get_font(20, bold=True)
+    # Matchup text and time
+    names_x = home_logo_x + logo_size + 15
+    name_font = get_font(22, bold=True)
     time_font = get_font(16, bold=False)
 
-    # Away @ Home text
     matchup_text = f"{away_abbrev} @ {home_abbrev}"
-    draw.text((names_x, y_position + 25), matchup_text, fill=hex_to_rgb(PuckcastColors.TEXT_PRIMARY), font=name_font)
+    draw.text((names_x, y_position + 28), matchup_text, fill=hex_to_rgb(PuckcastColors.TEXT_PRIMARY), font=name_font)
+    draw.text((names_x, y_position + 56), start_time, fill=hex_to_rgb(PuckcastColors.TEXT_TERTIARY), font=time_font)
 
-    # Game time
-    draw.text((names_x, y_position + 52), start_time, fill=hex_to_rgb(PuckcastColors.TEXT_TERTIARY), font=time_font)
-
-    # Right side - Win probability (main stat)
-    prob_font = get_font(40, bold=True)
+    # Right side - Win probability ONLY (clean, no overlaps)
+    prob_font = get_font(44, bold=True)
     prob_text = f"{winner_prob * 100:.0f}%"
     prob_color = get_confidence_color_rgb(confidence)
 
-    # Position win prob on the right
-    prob_x = img.width - margin - 160
-    prob_y = y_position + 18
-    draw.text((prob_x, prob_y), prob_text, fill=prob_color, font=prob_font)
+    # Calculate text width and right-align
+    prob_bbox = draw.textbbox((0, 0), prob_text, font=prob_font)
+    prob_width = prob_bbox[2] - prob_bbox[0]
+    prob_x = img.width - margin - prob_width - 20
+    draw.text((prob_x, y_position + 18), prob_text, fill=prob_color, font=prob_font)
 
-    # Model pick indicator (small logo of favorite)
-    pick_logo = get_logo(winner_abbrev, 32)
-    result.paste(pick_logo, (img.width - margin - 50, y_position + 20), pick_logo)
-
-    # Edge value below probability
-    edge_font = get_font(16, bold=True)
-    edge_text = f"+{abs(edge) * 100:.1f}% edge"
-    draw.text((prob_x, y_position + 62), edge_text, fill=hex_to_rgb(PuckcastColors.TEXT_SECONDARY), font=edge_font)
-
-    # Confidence grade badge
-    badge_font = get_font(14, bold=True)
-    badge_color = get_confidence_color_rgb(confidence)
-    badge_x = img.width - margin - 48
-    badge_y = y_position + 60
-
-    # Badge background
-    draw_rounded_rect(
-        draw,
-        (badge_x - 4, badge_y - 2, badge_x + 28, badge_y + 18),
-        radius=8,
-        fill=(*badge_color, 50),
-    )
-    draw.text((badge_x + 4, badge_y), confidence, fill=badge_color, font=badge_font)
+    # Model pick text below (abbrev only)
+    pick_font = get_font(18, bold=True)
+    pick_text = f"Pick: {winner_abbrev}"
+    pick_bbox = draw.textbbox((0, 0), pick_text, font=pick_font)
+    pick_width = pick_bbox[2] - pick_bbox[0]
+    draw.text((img.width - margin - pick_width - 20, y_position + 66), pick_text, fill=hex_to_rgb(PuckcastColors.TEXT_SECONDARY), font=pick_font)
 
     # Copy result back
     img.paste(result.convert("RGB"))
 
-    return y_position + tile_height + 8
+    return y_position + tile_height + 6
 
 
 def generate_slate_image(
