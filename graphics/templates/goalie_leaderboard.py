@@ -135,12 +135,12 @@ def generate_goalie_leaderboard_image(goalies: List[Dict]) -> Image.Image:
     line_y = S(155)
     draw.line([(margin, line_y), (margin + S(200), line_y)], fill=hex_to_rgb(PuckcastColors.AQUA), width=S(4))
 
-    # Goalie rows - show 9 to avoid bottom cutoff
-    content_y = line_y + S(25)
-    row_height = S(95)
+    # Goalie rows - show 8 with proper spacing for footer
+    content_y = line_y + S(22)
+    row_height = S(92)
     row_gap = S(10)
 
-    for i, goalie in enumerate(goalies[:9], 1):
+    for i, goalie in enumerate(goalies[:8], 1):
         y_pos = content_y + (i - 1) * (row_height + row_gap)
         draw_goalie_row(img, draw, goalie, i, y_pos, margin, row_height)
 
