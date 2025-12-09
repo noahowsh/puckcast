@@ -3,12 +3,43 @@
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import insightsData from "@/data/modelInsights.json";
+import startingGoaliesData from "@/data/startingGoalies.json";
 import type { ModelInsights } from "@/types/insights";
 import type { Prediction, PredictionsPayload } from "@/types/prediction";
 import { getPredictionsPayload, selectCurrentSlate } from "@/lib/data";
 import { getPredictionGrade } from "@/lib/prediction";
 import { teamBorderColor, teamGradient } from "@/lib/teamColors";
 import { TeamCrest } from "@/components/TeamCrest";
+
+// Starting goalies types and data
+type StartingGoalieEntry = {
+  team: string;
+  playerId: number | null;
+  goalieName: string | null;
+  confirmedStart: boolean;
+  statusCode: string;
+  statusDescription: string;
+  lastUpdated: string;
+};
+
+type StartingGoaliesPayload = {
+  generatedAt: string;
+  source: string;
+  date: string;
+  teams: Record<string, StartingGoalieEntry>;
+};
+
+const startingGoalies = startingGoaliesData as StartingGoaliesPayload;
+
+function getGoalieStatusColor(statusCode: string): string {
+  switch (statusCode.toLowerCase()) {
+    case 'confirmed': return '#10b981';
+    case 'expected': return '#3b82f6';
+    case 'likely': return '#f59e0b';
+    case 'probable': return '#f97316';
+    default: return 'var(--text-tertiary)';
+  }
+}
 
 const payload: PredictionsPayload = getPredictionsPayload();
 const todaysPredictions = selectCurrentSlate(payload.games);
@@ -58,6 +89,8 @@ function PredictionRow({ game }: { game: Prediction }) {
   const prob = game.modelFavorite === "home" ? game.homeWinProb : game.awayWinProb;
   const grade = getPredictionGrade(game.edge);
   const edgePts = Math.abs(game.edge * 100);
+  const homeGoalie = startingGoalies.teams[game.homeTeam.abbrev];
+  const awayGoalie = startingGoalies.teams[game.awayTeam.abbrev];
   return (
     <Link href={`/matchup/${game.id}`} className="prediction-row prediction-row--clickable">
           <div className="prediction-row__teams">
@@ -85,6 +118,53 @@ function PredictionRow({ game }: { game: Prediction }) {
       </div>
 
       <EdgeMeter value={game.edge} />
+
+      {/* Starting Goalies */}
+      {(homeGoalie || awayGoalie) && (
+        <div style={{
+          display: 'flex',
+          gap: '0.75rem',
+          marginTop: '0.75rem',
+          paddingTop: '0.75rem',
+          borderTop: '1px solid rgba(255,255,255,0.06)',
+          flexWrap: 'wrap',
+        }}>
+          {awayGoalie && awayGoalie.goalieName && (
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
+              <span style={{ fontSize: '0.7rem', color: 'var(--text-tertiary)' }}>{game.awayTeam.abbrev}:</span>
+              <span style={{ fontSize: '0.75rem', fontWeight: 500, color: 'white' }}>🥅 {awayGoalie.goalieName}</span>
+              <span style={{
+                padding: '0.1rem 0.3rem',
+                borderRadius: '3px',
+                fontSize: '0.55rem',
+                fontWeight: 600,
+                textTransform: 'uppercase',
+                background: `${getGoalieStatusColor(awayGoalie.statusCode)}20`,
+                color: getGoalieStatusColor(awayGoalie.statusCode),
+              }}>
+                {awayGoalie.statusCode}
+              </span>
+            </div>
+          )}
+          {homeGoalie && homeGoalie.goalieName && (
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
+              <span style={{ fontSize: '0.7rem', color: 'var(--text-tertiary)' }}>{game.homeTeam.abbrev}:</span>
+              <span style={{ fontSize: '0.75rem', fontWeight: 500, color: 'white' }}>🥅 {homeGoalie.goalieName}</span>
+              <span style={{
+                padding: '0.1rem 0.3rem',
+                borderRadius: '3px',
+                fontSize: '0.55rem',
+                fontWeight: 600,
+                textTransform: 'uppercase',
+                background: `${getGoalieStatusColor(homeGoalie.statusCode)}20`,
+                color: getGoalieStatusColor(homeGoalie.statusCode),
+              }}>
+                {homeGoalie.statusCode}
+              </span>
+            </div>
+          )}
+        </div>
+      )}
 
       <div className="prediction-row__footer">
         <span className="chip-soft prediction-row__cta">

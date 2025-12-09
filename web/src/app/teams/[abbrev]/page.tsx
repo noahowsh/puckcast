@@ -8,6 +8,34 @@ import { TeamCrest } from "@/components/TeamCrest";
 import { ProjectedLineupDisplay } from "@/components/LineupDisplay";
 import { TeamGoalieSituationCard } from "@/components/StartingGoalieDisplay";
 import powerIndexSnapshot from "@/data/powerIndexSnapshot.json";
+import startingGoaliesData from "@/data/startingGoalies.json";
+
+// Type for starting goalie entry
+type StartingGoalieEntry = {
+  team: string;
+  playerId: number | null;
+  goalieName: string | null;
+  confirmedStart: boolean;
+  statusCode: string;
+  statusDescription: string;
+  lastUpdated: string;
+};
+
+type StartingGoaliesPayload = {
+  generatedAt: string;
+  source: string;
+  date: string;
+  teams: Record<string, StartingGoalieEntry>;
+  games: Array<{
+    gameId: string;
+    homeTeam: string;
+    awayTeam: string;
+    homeGoalie: StartingGoalieEntry;
+    awayGoalie: StartingGoalieEntry;
+  }>;
+};
+
+const startingGoalies = startingGoaliesData as StartingGoaliesPayload;
 
 const movementReasons = powerIndexSnapshot.movementReasons as Record<string, string>;
 const standings = getCurrentStandings();
@@ -38,6 +66,27 @@ function getTeamDivision(abbrev: string) {
     if (div.teams.includes(abbrev)) return div;
   }
   return null;
+}
+
+// Get expected starter for a team if they have a game today
+function getTeamStartingGoalie(teamAbbrev: string): StartingGoalieEntry | null {
+  return startingGoalies.teams[teamAbbrev] ?? null;
+}
+
+// Get opponent's starting goalie for a matchup
+function getOpponentGoalie(teamAbbrev: string, opponentAbbrev: string): StartingGoalieEntry | null {
+  return startingGoalies.teams[opponentAbbrev] ?? null;
+}
+
+// Get status color for goalie status
+function getGoalieStatusColor(statusCode: string): string {
+  switch (statusCode.toLowerCase()) {
+    case 'confirmed': return '#10b981';
+    case 'expected': return '#3b82f6';
+    case 'likely': return '#f59e0b';
+    case 'probable': return '#f97316';
+    default: return 'var(--text-tertiary)';
+  }
 }
 
 function getRankColor(rank: number, total: number = 32) {
@@ -631,6 +680,8 @@ export default async function TeamPage({ params }: { params: Promise<{ abbrev: s
                 const winProb = isHome ? game.homeWinProb : game.awayWinProb;
                 const teamEdge = isHome ? game.edge : -game.edge;
                 const opponentData = powerRankMap.get(opponent.abbrev.toLowerCase());
+                const teamGoalie = getTeamStartingGoalie(teamData.abbrev);
+                const opponentGoalie = getOpponentGoalie(teamData.abbrev, opponent.abbrev);
                 return (
                   <div key={game.id} className="card" style={{ padding: '1.25rem' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
@@ -694,6 +745,70 @@ export default async function TeamPage({ params }: { params: Promise<{ abbrev: s
                         }}>{game.confidenceGrade}-tier confidence</span>
                       </div>
                     </div>
+                    {/* Starting Goalies Section */}
+                    {(teamGoalie || opponentGoalie) && (
+                      <div style={{
+                        marginTop: '1rem',
+                        paddingTop: '1rem',
+                        borderTop: '1px solid rgba(255,255,255,0.08)',
+                        display: 'flex',
+                        gap: '1rem',
+                        flexWrap: 'wrap',
+                      }}>
+                        <div style={{ flex: 1, minWidth: '140px' }}>
+                          <p style={{ fontSize: '0.6rem', color: 'var(--text-tertiary)', textTransform: 'uppercase', marginBottom: '0.35rem' }}>
+                            {teamData.abbrev} Starter
+                          </p>
+                          {teamGoalie && teamGoalie.goalieName ? (
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                              <span style={{ fontSize: '0.9rem', fontWeight: 600, color: 'white' }}>
+                                🥅 {teamGoalie.goalieName}
+                              </span>
+                              <span style={{
+                                padding: '0.15rem 0.4rem',
+                                borderRadius: '4px',
+                                fontSize: '0.6rem',
+                                fontWeight: 600,
+                                textTransform: 'uppercase',
+                                background: `${getGoalieStatusColor(teamGoalie.statusCode)}20`,
+                                color: getGoalieStatusColor(teamGoalie.statusCode),
+                                border: `1px solid ${getGoalieStatusColor(teamGoalie.statusCode)}40`,
+                              }}>
+                                {teamGoalie.statusCode}
+                              </span>
+                            </div>
+                          ) : (
+                            <span style={{ fontSize: '0.85rem', color: 'var(--text-tertiary)', fontStyle: 'italic' }}>TBD</span>
+                          )}
+                        </div>
+                        <div style={{ flex: 1, minWidth: '140px' }}>
+                          <p style={{ fontSize: '0.6rem', color: 'var(--text-tertiary)', textTransform: 'uppercase', marginBottom: '0.35rem' }}>
+                            {opponent.abbrev} Starter
+                          </p>
+                          {opponentGoalie && opponentGoalie.goalieName ? (
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                              <span style={{ fontSize: '0.9rem', fontWeight: 600, color: 'white' }}>
+                                🥅 {opponentGoalie.goalieName}
+                              </span>
+                              <span style={{
+                                padding: '0.15rem 0.4rem',
+                                borderRadius: '4px',
+                                fontSize: '0.6rem',
+                                fontWeight: 600,
+                                textTransform: 'uppercase',
+                                background: `${getGoalieStatusColor(opponentGoalie.statusCode)}20`,
+                                color: getGoalieStatusColor(opponentGoalie.statusCode),
+                                border: `1px solid ${getGoalieStatusColor(opponentGoalie.statusCode)}40`,
+                              }}>
+                                {opponentGoalie.statusCode}
+                              </span>
+                            </div>
+                          ) : (
+                            <span style={{ fontSize: '0.85rem', color: 'var(--text-tertiary)', fontStyle: 'italic' }}>TBD</span>
+                          )}
+                        </div>
+                      </div>
+                    )}
                   </div>
                 );
               })}
