@@ -170,7 +170,7 @@ def generate_luck_report_image(luck_report: Dict[str, Any]) -> Image.Image:
     draw.text(((width - text_width) // 2, y_bottom), explain_text, fill=explain_color, font=explain_font)
 
     # Draw footer
-    draw_footer(img, "puckcast.ai")
+    draw_footer(img)
 
     return img
 

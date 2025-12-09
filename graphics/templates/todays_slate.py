@@ -57,7 +57,7 @@ def draw_game_tile(
     game: Dict[str, Any],
     y_position: int,
     margin: int = 60,
-    tile_height: int = 130,
+    tile_height: int = 115,
     is_top_edge: bool = False,
 ) -> int:
     """
@@ -164,7 +164,7 @@ def draw_game_tile(
     # Copy result back to original image
     img.paste(result.convert("RGB"))
 
-    return y_position + tile_height + 15
+    return y_position + tile_height + 10
 
 
 def generate_slate_image(
@@ -210,7 +210,7 @@ def generate_slate_image(
         y = draw_game_tile(img, game, y, is_top_edge=is_top_edge)
 
     # Draw footer
-    draw_footer(img, "puckcast.ai")
+    draw_footer(img)
 
     return img
 

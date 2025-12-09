@@ -95,48 +95,49 @@ def draw_edge_tile(
     draw = ImageDraw.Draw(result)
 
     # Rank badge on the left
-    rank_font = get_font(24, bold=True)
+    rank_font = get_font(22, bold=True)
     rank_color = hex_to_rgb(PuckcastColors.AQUA)
-    draw.text((margin + 20, y_position + 40), f"#{rank}", fill=rank_color, font=rank_font)
+    draw.text((margin + 18, y_position + (tile_height - 22) // 2), f"#{rank}", fill=rank_color, font=rank_font)
 
     # Team logos
-    logo_size = 60
+    logo_size = 50
+    logo_y = y_position + (tile_height - logo_size) // 2
     away_logo = get_logo(away_abbrev, logo_size)
-    result.paste(away_logo, (margin + 70, y_position + (tile_height - logo_size) // 2), away_logo)
+    result.paste(away_logo, (margin + 60, logo_y), away_logo)
 
     # VS text
-    vs_font = get_font(FontSizes.CAPTION, bold=False)
-    draw.text((margin + 140, y_position + 42), "vs", fill=hex_to_rgb(PuckcastColors.TEXT_TERTIARY), font=vs_font)
+    vs_font = get_font(FontSizes.SMALL, bold=False)
+    draw.text((margin + 118, y_position + (tile_height - 18) // 2), "vs", fill=hex_to_rgb(PuckcastColors.TEXT_TERTIARY), font=vs_font)
 
     home_logo = get_logo(home_abbrev, logo_size)
-    result.paste(home_logo, (margin + 175, y_position + (tile_height - logo_size) // 2), home_logo)
+    result.paste(home_logo, (margin + 150, logo_y), home_logo)
 
-    # Game time
-    time_font = get_font(FontSizes.CAPTION, bold=False)
-    draw.text((margin + 70, y_position + tile_height - 25), start_time, fill=hex_to_rgb(PuckcastColors.TEXT_TERTIARY), font=time_font)
+    # Game time below logos
+    time_font = get_font(FontSizes.SMALL, bold=False)
+    draw.text((margin + 60, y_position + tile_height - 22), start_time, fill=hex_to_rgb(PuckcastColors.TEXT_TERTIARY), font=time_font)
 
     # Right side - Edge info
     # Big edge percentage
-    edge_font = get_font(42, bold=True)
+    edge_font = get_font(36, bold=True)
     edge_pct = abs(edge) * 100
     edge_text = f"{edge_pct:.1f}%"
     edge_color = get_confidence_color_rgb(confidence)
 
-    edge_x = img.width - margin - 200
+    edge_x = img.width - margin - 185
     draw.text((edge_x, y_position + 15), edge_text, fill=edge_color, font=edge_font)
 
     # "edge" label
-    edge_label_font = get_font(FontSizes.CAPTION, bold=False)
-    draw.text((edge_x, y_position + 60), "edge", fill=hex_to_rgb(PuckcastColors.TEXT_TERTIARY), font=edge_label_font)
+    edge_label_font = get_font(FontSizes.SMALL, bold=False)
+    draw.text((edge_x, y_position + 52), "edge", fill=hex_to_rgb(PuckcastColors.TEXT_TERTIARY), font=edge_label_font)
 
     # Model pick with logo
-    pick_logo = get_logo(fav_abbrev, 40)
-    result.paste(pick_logo, (img.width - margin - 85, y_position + 25), pick_logo)
+    pick_logo = get_logo(fav_abbrev, 36)
+    result.paste(pick_logo, (img.width - margin - 75, y_position + 18), pick_logo)
 
     # Pick probability below
-    prob_font = get_font(FontSizes.CAPTION, bold=True)
+    prob_font = get_font(FontSizes.SMALL, bold=True)
     prob_text = f"{fav_prob * 100:.0f}%"
-    draw.text((img.width - margin - 80, y_position + 70), prob_text, fill=hex_to_rgb(PuckcastColors.TEXT_SECONDARY), font=prob_font)
+    draw.text((img.width - margin - 70, y_position + 58), prob_text, fill=hex_to_rgb(PuckcastColors.TEXT_SECONDARY), font=prob_font)
 
     # Copy back
     img.paste(result.convert("RGB"))
@@ -156,7 +157,7 @@ def generate_edge_posts_image(games: List[Dict], date_str: str) -> Image.Image:
 
     draw = ImageDraw.Draw(img)
     margin = 60
-    tile_height = 110
+    tile_height = 100
 
     # Explanation
     explain_font = get_font(FontSizes.BODY, bold=False)
@@ -164,15 +165,15 @@ def generate_edge_posts_image(games: List[Dict], date_str: str) -> Image.Image:
     bbox = draw.textbbox((0, 0), explain_text, font=explain_font)
     text_width = bbox[2] - bbox[0]
     draw.text(((width - text_width) // 2, y), explain_text, fill=hex_to_rgb(PuckcastColors.TEXT_SECONDARY), font=explain_font)
-    y += 50
+    y += 45
 
     # Draw edge tiles (top 6 by edge)
     for i, game in enumerate(games[:6], 1):
         draw_edge_tile(img, game, y, margin, tile_height, rank=i)
-        y += tile_height + 12
+        y += tile_height + 8
 
     # Draw footer
-    draw_footer(img, "puckcast.ai")
+    draw_footer(img)
 
     return img
 

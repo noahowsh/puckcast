@@ -152,7 +152,7 @@ def generate_power_rankings_image(rankings: List[Dict], week_of: str) -> Image.I
         draw_team_tile(img, team, (x, y), tile_size)
 
     # Draw footer
-    draw_footer(img, "puckcast.ai")
+    draw_footer(img)
 
     return img
 

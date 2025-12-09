@@ -184,7 +184,7 @@ def generate_model_receipts_image(games: List[Dict], date_str: str, accuracy: fl
         y += row_height + 8
 
     # Draw footer
-    draw_footer(img, "puckcast.ai")
+    draw_footer(img)
 
     return img
 

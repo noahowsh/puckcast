@@ -374,22 +374,48 @@ def draw_header(
 
 def draw_footer(
     img: Image.Image,
-    text: str = "puckcast.ai",
-    margin: int = 60,
+    text: str = "Puckcast.ai",
+    margin: int = 50,
+    with_logo: bool = True,
 ) -> None:
-    """Draw the footer with branding."""
+    """Draw the footer with branding and logo."""
     draw = ImageDraw.Draw(img)
 
-    font = get_font(FontSizes.CAPTION, bold=True)
-    color = hex_to_rgb(PuckcastColors.AMBER)
+    font = get_font(FontSizes.BODY, bold=True)
+    color = hex_to_rgb(PuckcastColors.AQUA)
 
-    # Calculate position
+    # Load logo if available
+    logo = None
+    logo_size = 28
+    if with_logo:
+        logo_path = ASSETS_DIR / "puckcast_icon.png"
+        if logo_path.exists():
+            try:
+                logo = Image.open(logo_path).convert("RGBA")
+                logo = logo.resize((logo_size, logo_size), Image.Resampling.LANCZOS)
+            except:
+                logo = None
+
+    # Calculate total width (logo + spacing + text)
     bbox = draw.textbbox((0, 0), text, font=font)
     text_width = bbox[2] - bbox[0]
-    x = (img.width - text_width) // 2
-    y = img.height - margin - FontSizes.CAPTION
+    text_height = bbox[3] - bbox[1]
 
-    draw.text((x, y), text, fill=color, font=font)
+    spacing = 8 if logo else 0
+    total_width = (logo_size + spacing if logo else 0) + text_width
+
+    # Position at bottom center
+    x = (img.width - total_width) // 2
+    y = img.height - margin
+
+    # Draw logo
+    if logo:
+        logo_y = y - logo_size + 2
+        img.paste(logo, (x, logo_y), logo)
+        x += logo_size + spacing
+
+    # Draw text
+    draw.text((x, y - text_height - 2), text, fill=color, font=font)
 
 
 def draw_badge(

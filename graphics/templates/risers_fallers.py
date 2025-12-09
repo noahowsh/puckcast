@@ -160,7 +160,7 @@ def generate_risers_fallers_image(risers: List[Dict], fallers: List[Dict]) -> Im
         y += row_height + 10
 
     # Draw footer
-    draw_footer(img, "puckcast.ai")
+    draw_footer(img)
 
     return img
 

@@ -221,7 +221,7 @@ def generate_team_trends_image(risers: List[Dict], fallers: List[Dict], teams_di
         draw_team_trend_card(img, top_faller, full_data, y, margin, card_height, is_rising=False)
 
     # Draw footer
-    draw_footer(img, "puckcast.ai")
+    draw_footer(img)
 
     return img
 
