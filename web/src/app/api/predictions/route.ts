@@ -12,7 +12,8 @@ export async function GET() {
   const startingGoalies = getStartingGoalies();
   const playerInjuries = getPlayerInjuries();
   const playerHub = getPlayerHubContext();
-  const matchupMap = new Map<string, GoalieMatchup>(goalies.tonight.games.map((game) => [String(game.gameId), game]));
+  const tonightGames = goalies.tonight?.games ?? [];
+  const matchupMap = new Map<string, GoalieMatchup>(tonightGames.map((game) => [String(game.gameId), game]));
   const specialTeams = playerHub.specialTeams?.teams ?? {};
   const enrichedGames = payload.games.map((game) =>
     enhanceGame(game, matchupMap, specialTeams, startingGoalies, playerInjuries),
@@ -22,7 +23,7 @@ export async function GET() {
     {
       ...payload,
       games: enrichedGames,
-      goalieMetadata: { updatedAt: goalies.updatedAt, projectedGames: goalies.tonight.games.length },
+      goalieMetadata: { updatedAt: goalies.updatedAt, projectedGames: tonightGames.length },
       specialTeams: playerHub.specialTeams ?? null,
       goalieShots: playerHub.goalieShotProfiles ?? [],
     },
