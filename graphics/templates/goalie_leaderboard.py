@@ -63,24 +63,24 @@ def draw_goalie_row(
     row_center_y = y_position + row_height // 2
     is_top3 = rank <= 3
 
-    # Rank - consistent alignment
-    rank_font = get_font(S(26), bold=True)
+    # Rank
+    rank_font = get_font(S(28), bold=True)
     rank_color = hex_to_rgb(PuckcastColors.AQUA) if is_top3 else hex_to_rgb(PuckcastColors.TEXT_TERTIARY)
     rank_bbox = draw.textbbox((0, 0), str(rank), font=rank_font)
     rank_h = rank_bbox[3] - rank_bbox[1]
     draw.text((margin, row_center_y - rank_h // 2), str(rank), fill=rank_color, font=rank_font)
 
-    # Team logo
-    logo_size = S(58)
+    # Team logo - larger
+    logo_size = S(68)
     logo = get_logo(team, logo_size)
-    logo_x = margin + S(40)
+    logo_x = margin + S(42)
     logo_y = row_center_y - logo_size // 2
     img.paste(logo, (logo_x, logo_y), logo)
 
-    # Goalie name and team - better spacing
-    info_x = logo_x + logo_size + S(14)
-    name_font = get_font(S(22), bold=True)
-    team_font = get_font(S(14), bold=False)
+    # Goalie name and team
+    info_x = logo_x + logo_size + S(16)
+    name_font = get_font(S(24), bold=True)
+    team_font = get_font(S(15), bold=False)
 
     name_bbox = draw.textbbox((0, 0), name, font=name_font)
     name_h = name_bbox[3] - name_bbox[1]
@@ -125,22 +125,21 @@ def generate_goalie_leaderboard_image(goalies: List[Dict]) -> Image.Image:
 
     margin = S(48)
 
-    # Header - reduced top padding by 40px
-    title_font = get_font(S(60), bold=True)
-    draw.text((margin, S(48)), "GOALIE LEADERS", fill=hex_to_rgb(PuckcastColors.TEXT_PRIMARY), font=title_font)
+    # Compact header
+    title_font = get_font(S(54), bold=True)
+    draw.text((margin, S(38)), "GOALIE LEADERS", fill=hex_to_rgb(PuckcastColors.TEXT_PRIMARY), font=title_font)
 
-    # Subtitle
-    subtitle_font = get_font(S(22), bold=False)
-    draw.text((margin, S(116)), "Top Goalies by Goals Saved Above Expected", fill=hex_to_rgb(PuckcastColors.TEXT_SECONDARY), font=subtitle_font)
+    subtitle_font = get_font(S(20), bold=False)
+    draw.text((margin, S(96)), "Top Goalies by Goals Saved Above Expected", fill=hex_to_rgb(PuckcastColors.TEXT_SECONDARY), font=subtitle_font)
 
     # Accent line
-    line_y = S(154)
-    draw.line([(margin, line_y), (margin + S(180), line_y)], fill=hex_to_rgb(PuckcastColors.AQUA), width=S(4))
+    line_y = S(128)
+    draw.line([(margin, line_y), (margin + S(160), line_y)], fill=hex_to_rgb(PuckcastColors.AQUA), width=S(4))
 
-    # Goalie rows - 12-16px more internal padding, consistent height
-    content_y = line_y + S(24)
-    row_height = S(98)  # Increased internal padding
-    row_gap = S(8)
+    # Goalie rows - fill vertical space
+    content_y = line_y + S(16)
+    row_height = S(104)  # Larger rows to fill space
+    row_gap = S(4)
 
     for i, goalie in enumerate(goalies[:8], 1):
         y_pos = content_y + (i - 1) * (row_height + row_gap)

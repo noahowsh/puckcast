@@ -50,9 +50,13 @@ def draw_team_tile(
     team: Dict[str, Any],
     x: int,
     y: int,
-    tile_size: int,
+    tile_width: int,
+    tile_height: int = None,
 ) -> None:
     """Draw a single team tile in the grid."""
+    if tile_height is None:
+        tile_height = tile_width  # Square tile if height not specified
+
     draw = ImageDraw.Draw(img)
     abbrev = team.get("abbrev", "???")
     rank = team.get("rank", 0)
@@ -72,38 +76,38 @@ def draw_team_tile(
     # Draw tile background
     overlay = Image.new("RGBA", img.size, (0, 0, 0, 0))
     overlay_draw = ImageDraw.Draw(overlay)
-    coords = (x, y, x + tile_size, y + tile_size)
+    coords = (x, y, x + tile_width, y + tile_height)
     draw_rounded_rect(overlay_draw, coords, radius=S(8), fill=bg_color, outline=(255, 255, 255, 30), width=1)
 
     img_rgba = img.convert("RGBA")
     result = Image.alpha_composite(img_rgba, overlay)
     draw = ImageDraw.Draw(result)
 
-    # Rank number (top left) - consistent positioning
-    rank_font = get_font(S(15), bold=True)
-    draw.text((x + S(6), y + S(5)), str(rank), fill=hex_to_rgb(PuckcastColors.TEXT_TERTIARY), font=rank_font)
+    # Rank number (top left)
+    rank_font = get_font(S(16), bold=True)
+    draw.text((x + S(8), y + S(8)), str(rank), fill=hex_to_rgb(PuckcastColors.TEXT_TERTIARY), font=rank_font)
 
-    # Team logo (centered) - sized to tile
-    logo_size = S(56)
+    # Team logo (centered horizontally, positioned in upper area)
+    logo_size = S(68)
     logo = get_logo(abbrev, logo_size)
-    logo_x = x + (tile_size - logo_size) // 2
-    logo_y = y + S(20)
+    logo_x = x + (tile_width - logo_size) // 2
+    logo_y = y + S(32)
     result.paste(logo, (logo_x, logo_y), logo)
 
-    # Team abbreviation - centered at bottom
-    abbrev_font = get_font(S(15), bold=True)
+    # Team abbreviation - centered below logo
+    abbrev_font = get_font(S(16), bold=True)
     abbrev_bbox = draw.textbbox((0, 0), abbrev, font=abbrev_font)
     abbrev_w = abbrev_bbox[2] - abbrev_bbox[0]
-    draw.text((x + (tile_size - abbrev_w) // 2, y + tile_size - S(26)), abbrev, fill=hex_to_rgb(PuckcastColors.TEXT_PRIMARY), font=abbrev_font)
+    draw.text((x + (tile_width - abbrev_w) // 2, y + tile_height - S(50)), abbrev, fill=hex_to_rgb(PuckcastColors.TEXT_PRIMARY), font=abbrev_font)
 
     # Delta indicator - bottom right
     if delta != 0:
-        delta_font = get_font(S(12), bold=True)
+        delta_font = get_font(S(14), bold=True)
         delta_text = f"+{delta}" if delta > 0 else str(delta)
         delta_color = hex_to_rgb(PuckcastColors.RISING) if delta > 0 else hex_to_rgb(PuckcastColors.FALLING)
         delta_bbox = draw.textbbox((0, 0), delta_text, font=delta_font)
         delta_w = delta_bbox[2] - delta_bbox[0]
-        draw.text((x + tile_size - delta_w - S(6), y + tile_size - S(18)), delta_text, fill=delta_color, font=delta_font)
+        draw.text((x + tile_width - delta_w - S(8), y + tile_height - S(24)), delta_text, fill=delta_color, font=delta_font)
 
     img.paste(result.convert("RGB"))
 
@@ -113,35 +117,35 @@ def generate_power_rankings_image(rankings: List[Dict], week_of: str) -> Image.I
     img = create_puckcast_background()
     draw = ImageDraw.Draw(img)
 
-    margin = S(48)
+    margin = S(40)
 
-    # Header - 64px top padding
-    title_font = get_font(S(64), bold=True)
-    draw.text((margin, S(64)), "POWER RANKINGS", fill=hex_to_rgb(PuckcastColors.TEXT_PRIMARY), font=title_font)
+    # Compact header to maximize grid space
+    title_font = get_font(S(56), bold=True)
+    draw.text((margin, S(36)), "POWER RANKINGS", fill=hex_to_rgb(PuckcastColors.TEXT_PRIMARY), font=title_font)
 
-    # Subtitle - 28px below title
-    subtitle_font = get_font(S(24), bold=False)
-    draw.text((margin, S(136)), f"Week of {week_of}", fill=hex_to_rgb(PuckcastColors.TEXT_SECONDARY), font=subtitle_font)
+    subtitle_font = get_font(S(20), bold=False)
+    draw.text((margin, S(96)), f"Week of {week_of}", fill=hex_to_rgb(PuckcastColors.TEXT_SECONDARY), font=subtitle_font)
 
     # Accent line
-    line_y = S(176)
-    draw.line([(margin, line_y), (margin + S(200), line_y)], fill=hex_to_rgb(PuckcastColors.AQUA), width=S(4))
+    line_y = S(128)
+    draw.line([(margin, line_y), (margin + S(180), line_y)], fill=hex_to_rgb(PuckcastColors.AQUA), width=S(4))
 
-    # Grid layout: 8 cols x 4 rows - tight professional grid
+    # Grid layout: 8 cols x 4 rows - fill vertical space with rectangular tiles
     cols, rows = 8, 4
-    tile_size = S(122)
-    gap = S(6)  # 6-8px tight spacing
+    tile_width = S(120)
+    tile_height = S(190)  # Taller tiles to fill space
+    gap = S(6)
 
-    grid_width = cols * tile_size + (cols - 1) * gap
+    grid_width = cols * tile_width + (cols - 1) * gap
     start_x = (RENDER_SIZE - grid_width) // 2
-    start_y = line_y + S(40)  # 40-48px spacing from subtitle
+    start_y = line_y + S(16)
 
     for i, team in enumerate(rankings[:32]):
         col = i % cols
         row = i // cols
-        x = start_x + col * (tile_size + gap)
-        y = start_y + row * (tile_size + gap)
-        draw_team_tile(img, team, x, y, tile_size)
+        x = start_x + col * (tile_width + gap)
+        y = start_y + row * (tile_height + gap)
+        draw_team_tile(img, team, x, y, tile_width, tile_height)
 
     draw_footer(img)
     return img

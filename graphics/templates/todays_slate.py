@@ -74,7 +74,7 @@ def draw_game_row(
     row_center_y = y_position + row_height // 2
 
     # Team logos - sized for row height
-    logo_size = S(72)
+    logo_size = S(88)
     logo_y = row_center_y - logo_size // 2
 
     # Away logo
@@ -160,25 +160,24 @@ def generate_slate_image(games: List[Dict], date_str: str, page: int = 1) -> Ima
 
     margin = S(48)
 
-    # Header - 64px top padding
-    title_font = get_font(S(64), bold=True)
-    draw.text((margin, S(64)), "TODAY'S SLATE", fill=hex_to_rgb(PuckcastColors.TEXT_PRIMARY), font=title_font)
+    # Header - compact to maximize content area
+    title_font = get_font(S(58), bold=True)
+    draw.text((margin, S(44)), "TODAY'S SLATE", fill=hex_to_rgb(PuckcastColors.TEXT_PRIMARY), font=title_font)
 
-    # Subtitle - 28px below title for clear hierarchy
-    subtitle_font = get_font(S(24), bold=False)
+    subtitle_font = get_font(S(22), bold=False)
     subtitle = f"Model Predictions • {date_str}"
     if page > 1:
         subtitle += f" (Page {page})"
-    draw.text((margin, S(136)), subtitle, fill=hex_to_rgb(PuckcastColors.TEXT_SECONDARY), font=subtitle_font)
+    draw.text((margin, S(108)), subtitle, fill=hex_to_rgb(PuckcastColors.TEXT_SECONDARY), font=subtitle_font)
 
-    # Accent line - 32px grid spacing
-    line_y = S(176)
-    draw.line([(margin, line_y), (margin + S(160), line_y)], fill=hex_to_rgb(PuckcastColors.AQUA), width=S(4))
+    # Accent line
+    line_y = S(144)
+    draw.line([(margin, line_y), (margin + S(140), line_y)], fill=hex_to_rgb(PuckcastColors.AQUA), width=S(4))
 
-    # Game rows - consistent 32px grid with 16px internal padding
-    content_y = line_y + S(24)
-    row_height = S(108)
-    row_gap = S(12)
+    # Game rows - fill available space (content area: ~S(160) to ~S(980))
+    content_y = line_y + S(20)
+    row_height = S(128)  # Larger rows to fill space
+    row_gap = S(8)
 
     for i, game in enumerate(games[:6]):
         y_pos = content_y + i * (row_height + row_gap)
