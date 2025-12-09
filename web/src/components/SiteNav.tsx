@@ -10,7 +10,7 @@ const links = [
   { href: "/predictions", label: "Predictions" },
   { href: "/leaderboards", label: "Power Rankings" },
   { href: "/teams", label: "Teams" },
-  { href: "/players", label: "Player Stats" },
+  { href: "/players", label: "Players" },
   { href: "/performance", label: "Performance" },
 ];
 

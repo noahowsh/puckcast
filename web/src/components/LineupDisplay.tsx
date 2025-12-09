@@ -42,10 +42,11 @@ function StrengthMeter({ label, value, maxValue = 100, color }: {
 }
 
 function getStrengthColor(value: number): string {
-  if (value >= 75) return '#10b981';
-  if (value >= 50) return '#3b82f6';
-  if (value >= 25) return '#f59e0b';
-  return '#ef4444';
+  if (value >= 80) return '#3b82f6';  // Elite - Blue
+  if (value >= 60) return '#10b981';  // Great - Green
+  if (value >= 40) return '#f59e0b';  // Good - Amber
+  if (value >= 20) return '#f97316';  // Average - Orange
+  return '#ef4444';                   // Below Avg - Red
 }
 
 // =============================================================================
@@ -154,22 +155,26 @@ function OvrRatingLegend() {
       <span style={{ fontSize: '0.7rem', color: 'var(--text-tertiary)', textTransform: 'uppercase', fontWeight: 600 }}>
         OVR Rating:
       </span>
-      <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
-          <div style={{ width: '12px', height: '12px', borderRadius: '2px', background: '#10b981' }} />
-          <span style={{ fontSize: '0.65rem', color: 'var(--text-secondary)' }}>Elite (75+)</span>
-        </div>
+      <div style={{ display: 'flex', gap: '0.6rem', alignItems: 'center', flexWrap: 'wrap' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
           <div style={{ width: '12px', height: '12px', borderRadius: '2px', background: '#3b82f6' }} />
-          <span style={{ fontSize: '0.65rem', color: 'var(--text-secondary)' }}>Above Avg (50-74)</span>
+          <span style={{ fontSize: '0.65rem', color: 'var(--text-secondary)' }}>Elite (80+)</span>
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+          <div style={{ width: '12px', height: '12px', borderRadius: '2px', background: '#10b981' }} />
+          <span style={{ fontSize: '0.65rem', color: 'var(--text-secondary)' }}>Great (60-79)</span>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
           <div style={{ width: '12px', height: '12px', borderRadius: '2px', background: '#f59e0b' }} />
-          <span style={{ fontSize: '0.65rem', color: 'var(--text-secondary)' }}>Average (25-49)</span>
+          <span style={{ fontSize: '0.65rem', color: 'var(--text-secondary)' }}>Good (40-59)</span>
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+          <div style={{ width: '12px', height: '12px', borderRadius: '2px', background: '#f97316' }} />
+          <span style={{ fontSize: '0.65rem', color: 'var(--text-secondary)' }}>Avg (20-39)</span>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
           <div style={{ width: '12px', height: '12px', borderRadius: '2px', background: '#ef4444' }} />
-          <span style={{ fontSize: '0.65rem', color: 'var(--text-secondary)' }}>Below Avg (&lt;25)</span>
+          <span style={{ fontSize: '0.65rem', color: 'var(--text-secondary)' }}>Below (&lt;20)</span>
         </div>
       </div>
     </div>
@@ -270,7 +275,7 @@ function PlayerRow({ player, rank, showRankingScore = true, teamAbbrev }: {
         cursor: 'pointer',
         borderLeft: isDTD ? '3px solid #f59e0b' : isOut ? '3px solid #ef4444' : '3px solid transparent',
       }}
-      className="hover:bg-white/[0.08] hover:border-l-sky-500"
+      className="player-row-hover"
     >
       <span style={{
         width: '28px',
@@ -324,7 +329,7 @@ function PlayerRow({ player, rank, showRankingScore = true, teamAbbrev }: {
           <span style={{ fontSize: '0.8rem', color: '#10b981', fontWeight: 700, display: 'block' }}>{player.goals}</span>
         </div>
         <div style={{ width: '32px', textAlign: 'center' }}>
-          <span style={{ fontSize: '0.8rem', color: '#3b82f6', fontWeight: 700, display: 'block' }}>{player.assists}</span>
+          <span style={{ fontSize: '0.8rem', color: 'white', fontWeight: 600, display: 'block' }}>{player.assists}</span>
         </div>
         <div style={{ width: '32px', textAlign: 'center' }}>
           <span style={{ fontSize: '0.8rem', color: 'white', fontWeight: 700, display: 'block' }}>{player.points}</span>
@@ -343,14 +348,17 @@ function PlayerRow({ player, rank, showRankingScore = true, teamAbbrev }: {
           </span>
         </div>
         <div style={{ width: '32px', textAlign: 'center' }}>
-          <span style={{ fontSize: '0.8rem', color: '#a855f7', fontWeight: 700, display: 'block' }}>{player.powerPlayGoals}</span>
+          <span style={{ fontSize: '0.8rem', color: 'white', fontWeight: 600, display: 'block' }}>{player.powerPlayGoals}</span>
+        </div>
+        <div style={{ width: '28px', textAlign: 'center' }}>
+          <span style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', fontWeight: 600, display: 'block' }}>{player.hits}</span>
         </div>
         {showRankingScore && (
           <div style={{
             width: '40px',
             textAlign: 'center',
             padding: '0.1rem 0.2rem',
-            background: `rgba(${player.rankingScore >= 75 ? '16,185,129' : player.rankingScore >= 50 ? '59,130,246' : player.rankingScore >= 25 ? '245,158,11' : '239,68,68'}, 0.15)`,
+            background: `rgba(${player.rankingScore >= 80 ? '59,130,246' : player.rankingScore >= 60 ? '16,185,129' : player.rankingScore >= 40 ? '245,158,11' : player.rankingScore >= 20 ? '249,115,22' : '239,68,68'}, 0.15)`,
             borderRadius: '4px',
           }}>
             <span style={{
@@ -383,7 +391,7 @@ function GoalieRow({ goalie, rank, teamAbbrev }: { goalie: GoalieLineup; rank: n
         cursor: 'pointer',
         borderLeft: '3px solid transparent',
       }}
-      className="hover:bg-white/[0.08] hover:border-l-sky-500"
+      className="player-row-hover"
     >
       <span style={{
         width: '28px',
@@ -470,7 +478,7 @@ function GoalieRow({ goalie, rank, teamAbbrev }: { goalie: GoalieLineup; rank: n
           width: '44px',
           textAlign: 'center',
           padding: '0.15rem 0.25rem',
-          background: `rgba(${goalie.rankingScore >= 75 ? '16,185,129' : goalie.rankingScore >= 50 ? '59,130,246' : goalie.rankingScore >= 25 ? '245,158,11' : '239,68,68'}, 0.15)`,
+          background: `rgba(${goalie.rankingScore >= 80 ? '59,130,246' : goalie.rankingScore >= 60 ? '16,185,129' : goalie.rankingScore >= 40 ? '245,158,11' : goalie.rankingScore >= 20 ? '249,115,22' : '239,68,68'}, 0.15)`,
           borderRadius: '4px',
         }}>
           <span style={{
@@ -531,6 +539,7 @@ export function ProjectedLineupDisplay({ lineup }: { lineup: TeamLineup }) {
               <span style={{ width: '36px', textAlign: 'center' }}>+/-</span>
               <span style={{ width: '36px', textAlign: 'center' }}>S%</span>
               <span style={{ width: '32px', textAlign: 'center' }}>PPG</span>
+              <span style={{ width: '28px', textAlign: 'center' }}>HIT</span>
               <span style={{ width: '40px', textAlign: 'center' }}>OVR</span>
             </div>
           </div>
@@ -553,6 +562,7 @@ export function ProjectedLineupDisplay({ lineup }: { lineup: TeamLineup }) {
               <span style={{ width: '36px', textAlign: 'center' }}>+/-</span>
               <span style={{ width: '36px', textAlign: 'center' }}>S%</span>
               <span style={{ width: '32px', textAlign: 'center' }}>PPG</span>
+              <span style={{ width: '28px', textAlign: 'center' }}>HIT</span>
               <span style={{ width: '40px', textAlign: 'center' }}>OVR</span>
             </div>
           </div>

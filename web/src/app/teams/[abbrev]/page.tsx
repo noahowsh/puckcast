@@ -42,10 +42,11 @@ function getTeamDivision(abbrev: string) {
 
 function getRankColor(rank: number, total: number = 32) {
   const pct = rank / total;
-  if (pct <= 0.25) return '#10b981';
-  if (pct <= 0.5) return '#3b82f6';
-  if (pct <= 0.75) return '#f59e0b';
-  return '#ef4444';
+  if (pct <= 0.125) return '#3b82f6';  // Top ~4 (Elite) - Blue
+  if (pct <= 0.3125) return '#10b981'; // 5-10 (Great) - Green
+  if (pct <= 0.5) return '#f59e0b';    // 11-16 (Good) - Amber
+  if (pct <= 0.75) return '#f97316';   // 17-24 (Average) - Orange
+  return '#ef4444';                    // 25-32 (Below Avg) - Red
 }
 
 function getLeagueRank(abbrev: string, stat: 'goalsForPerGame' | 'goalsAgainstPerGame' | 'shotsForPerGame' | 'shotsAgainstPerGame' | 'pointPctg' | 'goalDifferential', ascending: boolean = false) {

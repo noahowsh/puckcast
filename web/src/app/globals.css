@@ -314,6 +314,12 @@ p { line-height: 1.7; }
 }
 .card-static:hover::after { opacity: 0; }
 
+/* Player row hover effect for individual players in roster lists */
+.player-row-hover:hover {
+  background: rgba(59, 130, 246, 0.12) !important;
+  border-left-color: #3b82f6 !important;
+}
+
 .card-flat {
   background: var(--panel-700);
   border: 1px solid var(--border-subtle);
