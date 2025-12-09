@@ -205,38 +205,27 @@ def generate_model_receipts_image(games: List[Dict], date_str: str, accuracy: fl
 
 
 def generate_model_receipts() -> List[Path]:
-    """Generate model receipts graphics."""
+    """Generate model receipts graphics (only if actual results exist)."""
     print("Generating Model Receipts graphics...")
 
     results = load_prediction_results()
 
-    if results and results.get("results"):
-        latest = results["results"][0] if results["results"] else None
-        if latest:
-            games = latest.get("games", [])
-            date_str = latest.get("date", "Recent")
-            correct = sum(1 for g in games if g.get("isCorrect"))
-            accuracy = correct / len(games) if games else 0
-            is_demo = False
-        else:
-            games = []
-            date_str = "No Data"
-            accuracy = 0
-            is_demo = True
-    else:
-        print("  No results data found, using demo mode")
-        predictions = load_todays_predictions()
-        games = predictions.get("games", [])
-        date_str = datetime.now().strftime("%B %d, %Y")
-        correct = sum(1 for g in games if (g.get("homeWinProb", 0.5) if g.get("modelFavorite") == "home" else g.get("awayWinProb", 0.5)) > 0.55)
-        accuracy = correct / len(games) if games else 0
-        is_demo = True
-
-    if not games:
-        print("  No game data found")
+    # Only generate if we have actual prediction results
+    if not results or not results.get("results"):
+        print("  No prediction results data found - skipping (this requires yesterday's game results)")
         return []
 
-    img = generate_model_receipts_image(games, date_str, accuracy, is_demo=is_demo)
+    latest = results["results"][0] if results["results"] else None
+    if not latest or not latest.get("games"):
+        print("  No game results in data - skipping")
+        return []
+
+    games = latest.get("games", [])
+    date_str = latest.get("date", "Recent")
+    correct = sum(1 for g in games if g.get("isCorrect"))
+    accuracy = correct / len(games) if games else 0
+
+    img = generate_model_receipts_image(games, date_str, accuracy, is_demo=False)
 
     output_path = OUTPUT_DIR / "model_receipts.png"
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)

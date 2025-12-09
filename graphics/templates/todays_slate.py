@@ -121,13 +121,16 @@ def draw_game_row(
 
     draw.ellipse([badge_x, badge_y, badge_x + badge_size, badge_y + badge_size], fill=grade_color)
 
-    # Grade letter - dark for contrast
+    # Grade letter - dark for contrast, properly centered
     grade_font = get_font(S(36), bold=True)
     grade_bbox = draw.textbbox((0, 0), confidence, font=grade_font)
     grade_w = grade_bbox[2] - grade_bbox[0]
     grade_h = grade_bbox[3] - grade_bbox[1]
+    # Account for textbbox offset for proper centering
+    grade_x = badge_x + (badge_size - grade_w) // 2 - grade_bbox[0]
+    grade_y = badge_y + (badge_size - grade_h) // 2 - grade_bbox[1]
     draw.text(
-        (badge_x + (badge_size - grade_w) // 2, badge_y + (badge_size - grade_h) // 2 - S(2)),
+        (grade_x, grade_y),
         confidence,
         fill=(20, 20, 30),
         font=grade_font,

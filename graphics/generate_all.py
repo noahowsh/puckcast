@@ -23,7 +23,6 @@ from templates.goalie_leaderboard import generate_goalie_leaderboard
 from templates.luck_report import generate_luck_report
 from templates.risers_fallers import generate_risers_fallers
 from templates.model_receipts import generate_model_receipts
-from templates.edge_posts import generate_edge_posts
 from templates.team_trends import generate_team_trends
 
 
@@ -34,7 +33,6 @@ GENERATORS = {
     "luck": ("Luck Report", generate_luck_report),
     "trends": ("Risers/Fallers", generate_risers_fallers),
     "receipts": ("Model Receipts", generate_model_receipts),
-    "edges": ("Edge Posts", generate_edge_posts),
     "team_trends": ("Team Trends", generate_team_trends),
 }
 
