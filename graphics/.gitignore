@@ -1,0 +1,9 @@
+# Output files
+output/
+
+# Logo cache
+logos/
+
+# Python cache
+__pycache__/
+*.pyc
