@@ -146,15 +146,19 @@ def draw_prediction_row(
         fill=grade_color,
     )
 
-    # Grade letter in badge - LARGER font for legibility
-    grade_font = get_font(S(40), bold=True)
+    # Grade letter in badge - LARGER font, dark text for contrast on light bg
+    grade_font = get_font(S(38), bold=True)
     grade_bbox = draw.textbbox((0, 0), confidence, font=grade_font)
     grade_w = grade_bbox[2] - grade_bbox[0]
     grade_h = grade_bbox[3] - grade_bbox[1]
+    # Center properly: account for font baseline offset
+    grade_x = badge_x + (badge_size - grade_w) // 2
+    grade_y = badge_y + (badge_size - grade_h) // 2 - S(2)
+    # Dark text for better contrast on colored backgrounds
     draw.text(
-        (badge_x + (badge_size - grade_w) // 2, badge_y + (badge_size - grade_h) // 2 - S(4)),
+        (grade_x, grade_y),
         confidence,
-        fill=(255, 255, 255),
+        fill=(20, 20, 30),  # Dark color for legibility
         font=grade_font,
     )
 

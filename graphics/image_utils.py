@@ -474,8 +474,8 @@ def draw_footer(
         margin = int(40 * scale)
 
     draw = ImageDraw.Draw(img)
-    brand_text = "PUCKCAST"
-    font_size = int(24 * scale)
+    brand_text = "puckcast.ai"
+    font_size = int(22 * scale)
     font = get_font(font_size, bold=True)
     text_color = hex_to_rgb(PuckcastColors.AQUA)
 
@@ -488,7 +488,7 @@ def draw_footer(
     logo_path = ASSETS_DIR / "puckcastai.png"
     logo = None
     logo_width = 0
-    logo_height = int(36 * scale)
+    logo_height = int(32 * scale)
 
     if logo_path.exists():
         try:
@@ -500,12 +500,13 @@ def draw_footer(
             logo = None
 
     # Calculate total width (logo + gap + text)
-    gap = int(12 * scale) if logo else 0
+    gap = int(10 * scale) if logo else 0
     total_width = logo_width + gap + text_width if logo else text_width
 
-    # Center everything horizontally
+    # Center everything horizontally, position closer to bottom
     start_x = (img.width - total_width) // 2
-    y = img.height - margin - max(logo_height, text_height)
+    footer_margin = int(28 * scale)  # Closer to bottom edge
+    y = img.height - footer_margin - max(logo_height, text_height)
 
     # Draw logo if available
     if logo:
