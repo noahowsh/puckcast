@@ -73,8 +73,8 @@ def draw_game_row(
 
     row_center_y = y_position + row_height // 2
 
-    # Team logos - sized for row height
-    logo_size = S(82)
+    # Team logos - larger for visual impact
+    logo_size = S(90)
     logo_y = row_center_y - logo_size // 2
 
     # Away logo
@@ -145,12 +145,16 @@ def draw_game_row(
 
     draw.text((prob_x, row_center_y - prob_h // 2 - S(10)), prob_text, fill=grade_color, font=prob_font)
 
-    # Pick label - larger
-    pick_font = get_font(S(16), bold=True)
+    # Pick label - proportional to probability
+    pick_font = get_font(S(20), bold=True)
     pick_label = f"Pick: {pick_abbrev}"
     pick_bbox = draw.textbbox((0, 0), pick_label, font=pick_font)
     pick_w = pick_bbox[2] - pick_bbox[0]
-    draw.text((prob_x + (prob_w - pick_w) // 2, row_center_y + S(14)), pick_label, fill=hex_to_rgb(PuckcastColors.TEXT_SECONDARY), font=pick_font)
+    draw.text((prob_x + (prob_w - pick_w) // 2, row_center_y + S(16)), pick_label, fill=hex_to_rgb(PuckcastColors.TEXT_SECONDARY), font=pick_font)
+
+    # Separator line below row
+    sep_y = y_position + row_height + S(4)
+    draw.line([(margin, sep_y), (img.width - margin, sep_y)], fill=(255, 255, 255, 20), width=1)
 
 
 def generate_slate_image(games: List[Dict], date_str: str, page: int = 1) -> Image.Image:
@@ -175,10 +179,10 @@ def generate_slate_image(games: List[Dict], date_str: str, page: int = 1) -> Ima
     line_y = S(154)
     draw.line([(margin, line_y), (margin + S(140), line_y)], fill=hex_to_rgb(PuckcastColors.AQUA), width=S(4))
 
-    # Game rows - consistent height and spacing
-    content_y = line_y + S(18)
-    row_height = S(120)  # Consistent row height
-    row_gap = S(10)  # Consistent gap
+    # Game rows - with clear separation
+    content_y = line_y + S(16)
+    row_height = S(124)  # Taller for larger logos
+    row_gap = S(8)  # Gap includes separator line
 
     for i, game in enumerate(games[:6]):
         y_pos = content_y + i * (row_height + row_gap)
