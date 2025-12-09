@@ -106,25 +106,27 @@ def draw_trend_row(
     draw.text((info_x, text_y), abbrev, fill=hex_to_rgb(PuckcastColors.TEXT_PRIMARY), font=abbrev_font)
     draw.text((info_x, text_y + abbrev_h + S(6)), rank_text, fill=hex_to_rgb(PuckcastColors.TEXT_SECONDARY), font=rank_font)
 
-    # Rank delta on the right
-    delta_font = get_font(S(42), bold=True)
+    # Rank delta on the right - stack vertically with proper spacing
+    delta_font = get_font(S(40), bold=True)
     delta_text = f"↑{abs(rank_delta)}" if rank_delta > 0 else f"↓{abs(rank_delta)}"
     delta_bbox = draw.textbbox((0, 0), delta_text, font=delta_font)
     delta_w = delta_bbox[2] - delta_bbox[0]
     delta_h = delta_bbox[3] - delta_bbox[1]
 
-    gd_font = get_font(S(14), bold=True)
+    gd_font = get_font(S(13), bold=True)
     gd_text = f"+{goal_diff_delta} GD" if goal_diff_delta > 0 else f"{goal_diff_delta} GD"
     gd_bbox = draw.textbbox((0, 0), gd_text, font=gd_font)
     gd_w = gd_bbox[2] - gd_bbox[0]
     gd_h = gd_bbox[3] - gd_bbox[1]
 
-    right_x = img.width - margin - max(delta_w, gd_w) - S(20)
-    total_right_h = delta_h + S(4) + gd_h
+    # Position on right side with proper spacing
+    right_x = img.width - margin - max(delta_w, gd_w) - S(22)
+    spacing = S(6)  # More space between delta and GD
+    total_right_h = delta_h + spacing + gd_h
     right_y = row_center_y - total_right_h // 2
 
     draw.text((right_x, right_y), delta_text, fill=accent_color, font=delta_font)
-    draw.text((right_x + (delta_w - gd_w) // 2, right_y + delta_h + S(4)), gd_text, fill=hex_to_rgb(PuckcastColors.TEXT_TERTIARY), font=gd_font)
+    draw.text((right_x + (delta_w - gd_w) // 2, right_y + delta_h + spacing), gd_text, fill=hex_to_rgb(PuckcastColors.TEXT_TERTIARY), font=gd_font)
 
     img.paste(result.convert("RGB"))
 

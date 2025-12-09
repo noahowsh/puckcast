@@ -80,28 +80,28 @@ def draw_team_tile(
     draw = ImageDraw.Draw(result)
 
     # Rank number (top left)
-    rank_font = get_font(S(16), bold=True)
-    draw.text((x + S(8), y + S(6)), str(rank), fill=hex_to_rgb(PuckcastColors.TEXT_TERTIARY), font=rank_font)
+    rank_font = get_font(S(17), bold=True)
+    draw.text((x + S(8), y + S(7)), str(rank), fill=hex_to_rgb(PuckcastColors.TEXT_TERTIARY), font=rank_font)
 
-    # Team logo (centered)
-    logo_size = S(56)
+    # Team logo (centered, larger)
+    logo_size = S(62)
     logo = get_logo(abbrev, logo_size)
     logo_x = x + (tile_size - logo_size) // 2
-    logo_y = y + S(22)
+    logo_y = y + S(24)
     result.paste(logo, (logo_x, logo_y), logo)
 
     # Team abbreviation
-    abbrev_font = get_font(S(16), bold=True)
+    abbrev_font = get_font(S(17), bold=True)
     abbrev_bbox = draw.textbbox((0, 0), abbrev, font=abbrev_font)
     abbrev_w = abbrev_bbox[2] - abbrev_bbox[0]
-    draw.text((x + (tile_size - abbrev_w) // 2, y + tile_size - S(28)), abbrev, fill=hex_to_rgb(PuckcastColors.TEXT_PRIMARY), font=abbrev_font)
+    draw.text((x + (tile_size - abbrev_w) // 2, y + tile_size - S(30)), abbrev, fill=hex_to_rgb(PuckcastColors.TEXT_PRIMARY), font=abbrev_font)
 
     # Delta indicator
     if delta != 0:
-        delta_font = get_font(S(13), bold=True)
+        delta_font = get_font(S(14), bold=True)
         delta_text = f"+{delta}" if delta > 0 else str(delta)
         delta_color = hex_to_rgb(PuckcastColors.RISING) if delta > 0 else hex_to_rgb(PuckcastColors.FALLING)
-        draw.text((x + tile_size - S(28), y + tile_size - S(20)), delta_text, fill=delta_color, font=delta_font)
+        draw.text((x + tile_size - S(30), y + tile_size - S(22)), delta_text, fill=delta_color, font=delta_font)
 
     img.paste(result.convert("RGB"))
 
@@ -124,14 +124,14 @@ def generate_power_rankings_image(rankings: List[Dict], week_of: str) -> Image.I
     line_y = S(165)
     draw.line([(margin, line_y), (margin + S(220), line_y)], fill=hex_to_rgb(PuckcastColors.AQUA), width=S(4))
 
-    # Grid layout: 8 cols x 4 rows - sized to fit within margins
+    # Grid layout: 8 cols x 4 rows - maximize space usage
     cols, rows = 8, 4
-    tile_size = S(118)
-    gap = S(8)
+    tile_size = S(128)
+    gap = S(4)
 
     grid_width = cols * tile_size + (cols - 1) * gap
     start_x = (RENDER_SIZE - grid_width) // 2
-    start_y = line_y + S(30)
+    start_y = line_y + S(22)
 
     for i, team in enumerate(rankings[:32]):
         col = i % cols

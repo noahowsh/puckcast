@@ -474,7 +474,7 @@ def draw_footer(
         margin = int(40 * scale)
 
     draw = ImageDraw.Draw(img)
-    brand_text = "puckcast.ai"
+    brand_text = "Puckcast.ai"
     font_size = int(22 * scale)
     font = get_font(font_size, bold=True)
     text_color = hex_to_rgb(PuckcastColors.AQUA)
