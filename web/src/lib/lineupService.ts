@@ -186,6 +186,13 @@ function skaterToLineupPlayer(
     assists: skater.stats.assists,
     points: skater.stats.points,
     plusMinus: skater.stats.plusMinus,
+    // Additional stats
+    shots: skater.stats.shots || 0,
+    shootingPct: skater.stats.shootingPct || 0,
+    powerPlayGoals: skater.stats.powerPlayGoals || 0,
+    powerPlayPoints: skater.stats.powerPlayPoints || 0,
+    hits: skater.stats.hits || 0,
+    blockedShots: skater.stats.blockedShots || 0,
     rankingScore: 0, // Will be calculated
     isHealthy,
     injuryStatus: injuryInfo ? (injuryInfo.status as InjuryStatus) : null,
@@ -236,6 +243,12 @@ function injuryToLineupPlayer(injury: { playerId: number; playerName: string; po
     assists: 0,
     points: 0,
     plusMinus: 0,
+    shots: 0,
+    shootingPct: 0,
+    powerPlayGoals: 0,
+    powerPlayPoints: 0,
+    hits: 0,
+    blockedShots: 0,
     rankingScore: 0, // IR players have no ranking since they can't play
     isHealthy: false,
     injuryStatus: (injury.status || "IR") as InjuryStatus,

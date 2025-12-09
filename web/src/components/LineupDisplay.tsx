@@ -136,6 +136,47 @@ export function LineupStrengthCard({ strength }: { strength: LineupStrengthMetri
 }
 
 // =============================================================================
+// OVR Rating Legend Component
+// =============================================================================
+
+function OvrRatingLegend() {
+  return (
+    <div style={{
+      display: 'flex',
+      alignItems: 'center',
+      gap: '1rem',
+      padding: '0.5rem 1rem',
+      background: 'rgba(255,255,255,0.02)',
+      borderRadius: '0.5rem',
+      marginBottom: '1rem',
+      flexWrap: 'wrap',
+    }}>
+      <span style={{ fontSize: '0.7rem', color: 'var(--text-tertiary)', textTransform: 'uppercase', fontWeight: 600 }}>
+        OVR Rating:
+      </span>
+      <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+          <div style={{ width: '12px', height: '12px', borderRadius: '2px', background: '#10b981' }} />
+          <span style={{ fontSize: '0.65rem', color: 'var(--text-secondary)' }}>Elite (75+)</span>
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+          <div style={{ width: '12px', height: '12px', borderRadius: '2px', background: '#3b82f6' }} />
+          <span style={{ fontSize: '0.65rem', color: 'var(--text-secondary)' }}>Above Avg (50-74)</span>
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+          <div style={{ width: '12px', height: '12px', borderRadius: '2px', background: '#f59e0b' }} />
+          <span style={{ fontSize: '0.65rem', color: 'var(--text-secondary)' }}>Average (25-49)</span>
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+          <div style={{ width: '12px', height: '12px', borderRadius: '2px', background: '#ef4444' }} />
+          <span style={{ fontSize: '0.65rem', color: 'var(--text-secondary)' }}>Below Avg (&lt;25)</span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// =============================================================================
 // Player Row Components
 // =============================================================================
 
@@ -210,7 +251,10 @@ function PlayerRow({ player, rank, showRankingScore = true, teamAbbrev }: {
   showRankingScore?: boolean;
   teamAbbrev?: string;
 }) {
-  const isInjured = !player.isHealthy;
+  const isOut = !player.isHealthy;
+  const isDTD = player.isHealthy && player.injuryStatus &&
+    ['dtd', 'gtd', 'questionable', 'probable', 'day-to-day'].includes(player.injuryStatus.toLowerCase());
+  const hasInjuryStatus = player.injuryStatus !== null;
 
   return (
     <Link
@@ -220,11 +264,11 @@ function PlayerRow({ player, rank, showRankingScore = true, teamAbbrev }: {
         alignItems: 'center',
         padding: '0.75rem 1rem',
         background: rank % 2 === 0 ? 'rgba(255,255,255,0.02)' : 'transparent',
-        opacity: isInjured ? 0.5 : 1,
+        opacity: isOut ? 0.5 : 1,
         textDecoration: 'none',
         transition: 'all 0.15s ease',
         cursor: 'pointer',
-        borderLeft: '3px solid transparent',
+        borderLeft: isDTD ? '3px solid #f59e0b' : isOut ? '3px solid #ef4444' : '3px solid transparent',
       }}
       className="hover:bg-white/[0.08] hover:border-l-sky-500"
     >
@@ -255,15 +299,15 @@ function PlayerRow({ player, rank, showRankingScore = true, teamAbbrev }: {
             color: 'var(--text-tertiary)',
             fontFamily: 'monospace',
           }}>#{player.jerseyNumber || '—'}</span>
-          {isInjured && (
+          {hasInjuryStatus && (
             <span style={{
               fontSize: '0.6rem',
-              color: '#ef4444',
+              color: isDTD ? '#f59e0b' : '#ef4444',
               fontWeight: 600,
-              background: 'rgba(239,68,68,0.15)',
+              background: isDTD ? 'rgba(245,158,11,0.15)' : 'rgba(239,68,68,0.15)',
               padding: '0.1rem 0.35rem',
               borderRadius: '3px',
-            }}>{player.injuryStatus || 'INJ'}</span>
+            }}>{player.injuryStatus}</span>
           )}
         </div>
         <div style={{ fontSize: '0.7rem', color: 'var(--text-tertiary)', marginTop: '0.15rem' }}>
@@ -273,36 +317,44 @@ function PlayerRow({ player, rank, showRankingScore = true, teamAbbrev }: {
 
       {/* Stats columns - fixed width for proper alignment */}
       <div style={{ display: 'flex', gap: '0.25rem', alignItems: 'center' }}>
-        <div style={{ width: '40px', textAlign: 'center' }}>
-          <span style={{ fontSize: '0.85rem', color: 'white', fontWeight: 600, display: 'block' }}>{player.gamesPlayed}</span>
+        <div style={{ width: '32px', textAlign: 'center' }}>
+          <span style={{ fontSize: '0.8rem', color: 'white', fontWeight: 600, display: 'block' }}>{player.gamesPlayed}</span>
         </div>
-        <div style={{ width: '40px', textAlign: 'center' }}>
-          <span style={{ fontSize: '0.85rem', color: '#10b981', fontWeight: 700, display: 'block' }}>{player.goals}</span>
+        <div style={{ width: '32px', textAlign: 'center' }}>
+          <span style={{ fontSize: '0.8rem', color: '#10b981', fontWeight: 700, display: 'block' }}>{player.goals}</span>
         </div>
-        <div style={{ width: '40px', textAlign: 'center' }}>
-          <span style={{ fontSize: '0.85rem', color: '#3b82f6', fontWeight: 700, display: 'block' }}>{player.assists}</span>
+        <div style={{ width: '32px', textAlign: 'center' }}>
+          <span style={{ fontSize: '0.8rem', color: '#3b82f6', fontWeight: 700, display: 'block' }}>{player.assists}</span>
         </div>
-        <div style={{ width: '40px', textAlign: 'center' }}>
-          <span style={{ fontSize: '0.85rem', color: 'white', fontWeight: 700, display: 'block' }}>{player.points}</span>
+        <div style={{ width: '32px', textAlign: 'center' }}>
+          <span style={{ fontSize: '0.8rem', color: 'white', fontWeight: 700, display: 'block' }}>{player.points}</span>
         </div>
-        <div style={{ width: '44px', textAlign: 'center' }}>
+        <div style={{ width: '36px', textAlign: 'center' }}>
           <span style={{
-            fontSize: '0.85rem',
+            fontSize: '0.8rem',
             color: player.plusMinus >= 0 ? '#10b981' : '#ef4444',
             fontWeight: 600,
             display: 'block',
           }}>{player.plusMinus >= 0 ? '+' : ''}{player.plusMinus}</span>
         </div>
+        <div style={{ width: '36px', textAlign: 'center' }}>
+          <span style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', fontWeight: 600, display: 'block' }}>
+            {player.shootingPct ? (player.shootingPct * 100).toFixed(1) : '0.0'}
+          </span>
+        </div>
+        <div style={{ width: '32px', textAlign: 'center' }}>
+          <span style={{ fontSize: '0.8rem', color: '#a855f7', fontWeight: 700, display: 'block' }}>{player.powerPlayGoals}</span>
+        </div>
         {showRankingScore && (
           <div style={{
-            width: '44px',
+            width: '40px',
             textAlign: 'center',
-            padding: '0.15rem 0.25rem',
+            padding: '0.1rem 0.2rem',
             background: `rgba(${player.rankingScore >= 75 ? '16,185,129' : player.rankingScore >= 50 ? '59,130,246' : player.rankingScore >= 25 ? '245,158,11' : '239,68,68'}, 0.15)`,
             borderRadius: '4px',
           }}>
             <span style={{
-              fontSize: '0.85rem',
+              fontSize: '0.8rem',
               color: getStrengthColor(player.rankingScore),
               fontWeight: 700,
               display: 'block',
@@ -462,6 +514,9 @@ export function ProjectedLineupDisplay({ lineup }: { lineup: TeamLineup }) {
 
       {/* Right Column: Roster Lists */}
       <div>
+        {/* OVR Rating Legend */}
+        <OvrRatingLegend />
+
         {/* Forwards */}
         <div className="card card-static" style={{ padding: 0, overflow: 'hidden', marginBottom: '1.5rem' }}>
           <div style={{ padding: '0.75rem 1rem', background: 'rgba(255,255,255,0.03)', borderBottom: '1px solid rgba(255,255,255,0.05)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -469,12 +524,14 @@ export function ProjectedLineupDisplay({ lineup }: { lineup: TeamLineup }) {
               Forwards ({lineup.forwards.length})
             </h4>
             <div style={{ display: 'flex', gap: '0.25rem', fontSize: '0.6rem', color: 'var(--text-tertiary)', textTransform: 'uppercase' }}>
-              <span style={{ width: '40px', textAlign: 'center' }}>GP</span>
-              <span style={{ width: '40px', textAlign: 'center' }}>G</span>
-              <span style={{ width: '40px', textAlign: 'center' }}>A</span>
-              <span style={{ width: '40px', textAlign: 'center' }}>PTS</span>
-              <span style={{ width: '44px', textAlign: 'center' }}>+/-</span>
-              <span style={{ width: '44px', textAlign: 'center' }}>OVR</span>
+              <span style={{ width: '32px', textAlign: 'center' }}>GP</span>
+              <span style={{ width: '32px', textAlign: 'center' }}>G</span>
+              <span style={{ width: '32px', textAlign: 'center' }}>A</span>
+              <span style={{ width: '32px', textAlign: 'center' }}>PTS</span>
+              <span style={{ width: '36px', textAlign: 'center' }}>+/-</span>
+              <span style={{ width: '36px', textAlign: 'center' }}>S%</span>
+              <span style={{ width: '32px', textAlign: 'center' }}>PPG</span>
+              <span style={{ width: '40px', textAlign: 'center' }}>OVR</span>
             </div>
           </div>
           {lineup.forwards.map((player, idx) => (
@@ -489,12 +546,14 @@ export function ProjectedLineupDisplay({ lineup }: { lineup: TeamLineup }) {
               Defensemen ({lineup.defensemen.length})
             </h4>
             <div style={{ display: 'flex', gap: '0.25rem', fontSize: '0.6rem', color: 'var(--text-tertiary)', textTransform: 'uppercase' }}>
-              <span style={{ width: '40px', textAlign: 'center' }}>GP</span>
-              <span style={{ width: '40px', textAlign: 'center' }}>G</span>
-              <span style={{ width: '40px', textAlign: 'center' }}>A</span>
-              <span style={{ width: '40px', textAlign: 'center' }}>PTS</span>
-              <span style={{ width: '44px', textAlign: 'center' }}>+/-</span>
-              <span style={{ width: '44px', textAlign: 'center' }}>OVR</span>
+              <span style={{ width: '32px', textAlign: 'center' }}>GP</span>
+              <span style={{ width: '32px', textAlign: 'center' }}>G</span>
+              <span style={{ width: '32px', textAlign: 'center' }}>A</span>
+              <span style={{ width: '32px', textAlign: 'center' }}>PTS</span>
+              <span style={{ width: '36px', textAlign: 'center' }}>+/-</span>
+              <span style={{ width: '36px', textAlign: 'center' }}>S%</span>
+              <span style={{ width: '32px', textAlign: 'center' }}>PPG</span>
+              <span style={{ width: '40px', textAlign: 'center' }}>OVR</span>
             </div>
           </div>
           {lineup.defensemen.map((player, idx) => (
@@ -524,7 +583,7 @@ export function ProjectedLineupDisplay({ lineup }: { lineup: TeamLineup }) {
 
         {/* IR/OUT Players */}
         {outPlayers.length > 0 && (
-          <div className="card" style={{ padding: '1rem', borderLeft: '3px solid #ef4444' }}>
+          <div className="card" style={{ padding: '1rem', borderLeft: '3px solid #ef4444', marginBottom: '1rem' }}>
             <h4 style={{ fontSize: '0.8rem', fontWeight: 600, color: '#ef4444', marginBottom: '0.75rem', textTransform: 'uppercase' }}>
               Injured Reserve / Out ({outPlayers.length})
             </h4>

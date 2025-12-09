@@ -452,6 +452,10 @@ export async function fetchTeamRoster(teamAbbrev: string): Promise<TeamRoster> {
     .filter((g): g is GoalieDetailCard => g !== null);
 
   // Add players from stats API who played for this team but aren't on current roster (AHL call-ups)
+  // Collect players that need landing page data for jersey numbers
+  const playersNeedingLandingData: { card: SkaterCard; isForward: boolean }[] = [];
+  const goaliesNeedingLandingData: GoalieDetailCard[] = [];
+
   for (const [playerId, statsData] of skaterStatsMap) {
     if (rosterPlayerIds.has(playerId)) continue;
 
@@ -467,11 +471,14 @@ export async function fetchTeamRoster(teamAbbrev: string): Promise<TeamRoster> {
     card.stats.teamAbbrev = teamAbbrev;
 
     const position = statsData.positionCode?.toUpperCase() || "C";
-    if (["C", "L", "R", "LW", "RW", "W", "F"].includes(position)) {
+    const isForward = ["C", "L", "R", "LW", "RW", "W", "F"].includes(position);
+    if (isForward) {
       forwards.push(card);
     } else if (position === "D") {
       defensemen.push(card);
     }
+    // Queue for landing page data to get jersey number
+    playersNeedingLandingData.push({ card, isForward: isForward || position !== "D" });
   }
 
   // Add goalies from stats API who played for this team but aren't on current roster
@@ -487,7 +494,40 @@ export async function fetchTeamRoster(teamAbbrev: string): Promise<TeamRoster> {
     card.bio.teamAbbrev = teamAbbrev;
     card.stats.teamAbbrev = teamAbbrev;
     goalies.push(card);
+    goaliesNeedingLandingData.push(card);
   }
+
+  // Fetch landing page data for AHL call-ups to get jersey numbers (in parallel)
+  await Promise.all([
+    ...playersNeedingLandingData.map(async ({ card }) => {
+      try {
+        const landingUrl = `${NHL_WEB_API}/player/${card.bio.playerId}/landing`;
+        const landingData = await fetchWithRetry<any>(landingUrl);
+        if (landingData?.sweaterNumber) {
+          card.bio.jerseyNumber = landingData.sweaterNumber;
+        }
+        if (landingData?.headshot) {
+          card.bio.headshot = landingData.headshot;
+        }
+      } catch {
+        // Landing data optional - continue without jersey number
+      }
+    }),
+    ...goaliesNeedingLandingData.map(async (card) => {
+      try {
+        const landingUrl = `${NHL_WEB_API}/player/${card.bio.playerId}/landing`;
+        const landingData = await fetchWithRetry<any>(landingUrl);
+        if (landingData?.sweaterNumber) {
+          card.bio.jerseyNumber = landingData.sweaterNumber;
+        }
+        if (landingData?.headshot) {
+          card.bio.headshot = landingData.headshot;
+        }
+      } catch {
+        // Landing data optional - continue without jersey number
+      }
+    }),
+  ]);
 
   // Sort all by points/wins
   forwards.sort((a, b) => b.stats.points - a.stats.points);

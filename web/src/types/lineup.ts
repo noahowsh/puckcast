@@ -99,6 +99,13 @@ export type LineupPlayer = {
   assists: number;
   points: number;
   plusMinus: number;
+  // Additional stats
+  shots: number;
+  shootingPct: number;
+  powerPlayGoals: number;
+  powerPlayPoints: number;
+  hits: number;
+  blockedShots: number;
   // Computed ranking score
   rankingScore: number;
   // Status
