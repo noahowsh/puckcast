@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 """
-Team Trends Template Generator
+Team Trends Template Generator - Premium Instagram Design
 
 Creates a square (1080x1080) Instagram graphic showing team trend deep dives.
+Uses 2x supersampling for crisp output.
 """
 
 from __future__ import annotations
@@ -20,20 +21,17 @@ sys.path.insert(0, str(GRAPHICS_DIR))
 from puckcast_brand import (
     PuckcastColors,
     hex_to_rgb,
-    get_team_primary_rgb,
-    ImageDimensions,
     TEAM_NAMES,
 )
 from image_utils import (
     create_puckcast_background,
-    draw_header,
     draw_footer,
     draw_rounded_rect,
-    draw_glass_tile,
     get_logo,
     get_font,
-    FontSizes,
     save_high_quality,
+    S,
+    RENDER_SIZE,
 )
 
 REPO_ROOT = GRAPHICS_DIR.parents[0]
@@ -54,23 +52,13 @@ def draw_stat_block(
     y: int,
     label: str,
     value: str,
-    delta: str = None,
-    delta_positive: bool = True,
 ) -> None:
-    """Draw a stat block with label and value."""
-    # Value
-    value_font = get_font(32, bold=True)
+    """Draw a stat block with value and label."""
+    value_font = get_font(S(28), bold=True)
+    label_font = get_font(S(14), bold=False)
+
     draw.text((x, y), value, fill=hex_to_rgb(PuckcastColors.TEXT_PRIMARY), font=value_font)
-
-    # Label below
-    label_font = get_font(FontSizes.CAPTION, bold=False)
-    draw.text((x, y + 35), label, fill=hex_to_rgb(PuckcastColors.TEXT_TERTIARY), font=label_font)
-
-    # Delta if provided
-    if delta:
-        delta_font = get_font(FontSizes.SMALL, bold=True)
-        delta_color = hex_to_rgb(PuckcastColors.RISING if delta_positive else PuckcastColors.FALLING)
-        draw.text((x + 80, y + 5), delta, fill=delta_color, font=delta_font)
+    draw.text((x, y + S(32)), label, fill=hex_to_rgb(PuckcastColors.TEXT_TERTIARY), font=label_font)
 
 
 def draw_team_trend_card(
@@ -83,8 +71,6 @@ def draw_team_trend_card(
     is_rising: bool,
 ) -> None:
     """Draw a detailed team trend card."""
-    draw = ImageDraw.Draw(img)
-
     abbrev = team_data.get("abbrev", "???")
     team_name = team_data.get("team", TEAM_NAMES.get(abbrev, abbrev))
     current_rank = team_data.get("currentRank", 0)
@@ -94,9 +80,8 @@ def draw_team_trend_card(
     goal_diff_delta = team_data.get("goalDiffDelta", 0)
     trend_direction = team_data.get("trendDirection", "steady")
 
-    # Get additional stats from full team data
+    # Additional stats
     pdo = full_team_data.get("pdo", 100) if full_team_data else 100
-    luck_score = full_team_data.get("totalLuckScore", 0) if full_team_data else 0
     goals_for_pg = full_team_data.get("goalsForPerGame", 0) if full_team_data else 0
     goals_against_pg = full_team_data.get("goalsAgainstPerGame", 0) if full_team_data else 0
     shot_share = full_team_data.get("shotShare", 50) if full_team_data else 50
@@ -106,125 +91,111 @@ def draw_team_trend_card(
     overlay_draw = ImageDraw.Draw(overlay)
 
     if is_rising:
-        bg_color = (110, 240, 194, 12)
+        bg_color = (110, 240, 194, 15)
         accent_color = hex_to_rgb(PuckcastColors.RISING)
     else:
-        bg_color = (255, 148, 168, 12)
+        bg_color = (255, 148, 168, 15)
         accent_color = hex_to_rgb(PuckcastColors.FALLING)
 
     coords = (margin, y_position, img.width - margin, y_position + card_height)
-    draw_rounded_rect(overlay_draw, coords, radius=16, fill=bg_color)
+    draw_rounded_rect(overlay_draw, coords, radius=S(14), fill=bg_color)
 
-    # Composite
     img_rgba = img.convert("RGBA")
     result = Image.alpha_composite(img_rgba, overlay)
     draw = ImageDraw.Draw(result)
 
-    # Team logo (large)
-    logo_size = 100
+    # Team logo
+    logo_size = S(100)
     logo = get_logo(abbrev, logo_size)
-    logo_x = margin + 25
-    logo_y = y_position + 25
+    logo_x = margin + S(25)
+    logo_y = y_position + S(25)
     result.paste(logo, (logo_x, logo_y), logo)
 
     # Team name and rank
-    name_font = get_font(32, bold=True)
-    draw.text((logo_x + logo_size + 20, y_position + 25), team_name, fill=hex_to_rgb(PuckcastColors.TEXT_PRIMARY), font=name_font)
+    info_x = logo_x + logo_size + S(20)
+    name_font = get_font(S(30), bold=True)
+    draw.text((info_x, y_position + S(25)), team_name, fill=hex_to_rgb(PuckcastColors.TEXT_PRIMARY), font=name_font)
 
-    # Rank change
-    rank_font = get_font(FontSizes.BODY, bold=False)
+    rank_font = get_font(S(20), bold=False)
     rank_text = f"#{previous_rank} → #{current_rank}"
-    draw.text((logo_x + logo_size + 20, y_position + 60), rank_text, fill=hex_to_rgb(PuckcastColors.TEXT_SECONDARY), font=rank_font)
+    draw.text((info_x, y_position + S(60)), rank_text, fill=hex_to_rgb(PuckcastColors.TEXT_SECONDARY), font=rank_font)
 
     # Big trend indicator on the right
-    trend_font = get_font(60, bold=True)
-    if rank_delta > 0:
-        trend_text = f"↑{abs(rank_delta)}"
-    else:
-        trend_text = f"↓{abs(rank_delta)}"
+    trend_font = get_font(S(56), bold=True)
+    trend_text = f"↑{abs(rank_delta)}" if rank_delta > 0 else f"↓{abs(rank_delta)}"
     trend_bbox = draw.textbbox((0, 0), trend_text, font=trend_font)
-    trend_width = trend_bbox[2] - trend_bbox[0]
-    draw.text((img.width - margin - trend_width - 30, y_position + 30), trend_text, fill=accent_color, font=trend_font)
+    trend_w = trend_bbox[2] - trend_bbox[0]
+    draw.text((img.width - margin - trend_w - S(30), y_position + S(30)), trend_text, fill=accent_color, font=trend_font)
 
     # Trend label
-    trend_label_font = get_font(FontSizes.CAPTION, bold=True)
+    trend_label_font = get_font(S(16), bold=True)
     trend_label = trend_direction.upper()
     label_bbox = draw.textbbox((0, 0), trend_label, font=trend_label_font)
-    label_width = label_bbox[2] - label_bbox[0]
-    draw.text((img.width - margin - label_width - 30, y_position + 95), trend_label, fill=accent_color, font=trend_label_font)
+    label_w = label_bbox[2] - label_bbox[0]
+    draw.text((img.width - margin - label_w - S(30), y_position + S(90)), trend_label, fill=accent_color, font=trend_label_font)
 
     # Stats row
-    stats_y = y_position + 140
-    stat_width = 130
+    stats_y = y_position + S(135)
+    stat_spacing = S(125)
 
-    # Points delta
     pts_delta = f"+{points_delta}" if points_delta > 0 else str(points_delta)
-    draw_stat_block(draw, margin + 30, stats_y, "Points", pts_delta, None)
+    draw_stat_block(draw, margin + S(30), stats_y, "Points", pts_delta)
 
-    # Goal diff delta
     gd_delta = f"+{goal_diff_delta}" if goal_diff_delta > 0 else str(goal_diff_delta)
-    draw_stat_block(draw, margin + 30 + stat_width, stats_y, "Goal Diff", gd_delta, None)
+    draw_stat_block(draw, margin + S(30) + stat_spacing, stats_y, "Goal Diff", gd_delta)
 
-    # GF/Game
-    draw_stat_block(draw, margin + 30 + stat_width * 2, stats_y, "GF/G", f"{goals_for_pg:.2f}", None)
+    draw_stat_block(draw, margin + S(30) + stat_spacing * 2, stats_y, "GF/G", f"{goals_for_pg:.2f}")
+    draw_stat_block(draw, margin + S(30) + stat_spacing * 3, stats_y, "GA/G", f"{goals_against_pg:.2f}")
+    draw_stat_block(draw, margin + S(30) + stat_spacing * 4, stats_y, "Shot%", f"{shot_share:.1f}")
+    draw_stat_block(draw, margin + S(30) + stat_spacing * 5, stats_y, "PDO", f"{pdo:.1f}")
 
-    # GA/Game
-    draw_stat_block(draw, margin + 30 + stat_width * 3, stats_y, "GA/G", f"{goals_against_pg:.2f}", None)
-
-    # Shot share
-    draw_stat_block(draw, margin + 30 + stat_width * 4, stats_y, "Shot%", f"{shot_share:.1f}", None)
-
-    # PDO
-    pdo_delta = "Lucky" if pdo > 101 else ("Unlucky" if pdo < 99 else "Neutral")
-    draw_stat_block(draw, margin + 30 + stat_width * 5, stats_y, "PDO", f"{pdo:.1f}", None)
-
-    # Copy back
     img.paste(result.convert("RGB"))
 
 
 def generate_team_trends_image(risers: List[Dict], fallers: List[Dict], teams_dict: Dict[str, Dict]) -> Image.Image:
-    """Generate the team trends image."""
-    width, height = ImageDimensions.SQUARE
-
-    # Create background
-    img = create_puckcast_background(width, height)
-
-    # Draw header with compact mode
-    title = "TEAM TRENDS"
-    subtitle = "Trending Up & Trending Down"
-    y = draw_header(img, title, subtitle, margin=50, compact=True)
-
+    """Generate the team trends image at 2x resolution."""
+    img = create_puckcast_background()
     draw = ImageDraw.Draw(img)
-    margin = 50
-    card_height = 190
 
-    # Section header - Trending Up
-    section_font = get_font(30, bold=True)
+    margin = S(55)
+
+    # Header
+    title_font = get_font(S(68), bold=True)
+    draw.text((margin, S(45)), "TEAM TRENDS", fill=hex_to_rgb(PuckcastColors.TEXT_PRIMARY), font=title_font)
+
+    subtitle_font = get_font(S(26), bold=False)
+    draw.text((margin, S(120)), "Weekly Performance Analysis", fill=hex_to_rgb(PuckcastColors.TEXT_SECONDARY), font=subtitle_font)
+
+    # Accent line
+    line_y = S(165)
+    draw.line([(margin, line_y), (margin + S(200), line_y)], fill=hex_to_rgb(PuckcastColors.AQUA), width=S(4))
+
+    card_height = S(195)
+
+    # Trending Up section
+    section_font = get_font(S(28), bold=True)
+    y = line_y + S(25)
     draw.text((margin, y), "TRENDING UP", fill=hex_to_rgb(PuckcastColors.RISING), font=section_font)
-    y += 40
+    y += S(38)
 
-    # Draw top riser
     if risers:
         top_riser = risers[0]
         abbrev = top_riser.get("abbrev", "")
         full_data = teams_dict.get(abbrev, {})
         draw_team_trend_card(img, top_riser, full_data, y, margin, card_height, is_rising=True)
-    y += card_height + 25
+    y += card_height + S(25)
 
-    # Section header - Trending Down
+    # Trending Down section
     draw.text((margin, y), "TRENDING DOWN", fill=hex_to_rgb(PuckcastColors.FALLING), font=section_font)
-    y += 40
+    y += S(38)
 
-    # Draw top faller
     if fallers:
         top_faller = fallers[0]
         abbrev = top_faller.get("abbrev", "")
         full_data = teams_dict.get(abbrev, {})
         draw_team_trend_card(img, top_faller, full_data, y, margin, card_height, is_rising=False)
 
-    # Draw footer
     draw_footer(img)
-
     return img
 
 
@@ -237,7 +208,6 @@ def generate_team_trends() -> List[Path]:
     fallers = data.get("topFallers", [])
     teams = data.get("teams", [])
 
-    # Create lookup dict
     teams_dict = {t.get("abbrev"): t for t in teams}
 
     if not risers and not fallers:
@@ -258,9 +228,9 @@ def main():
     try:
         paths = generate_team_trends()
         if paths:
-            print(f"\n Generated {len(paths)} team trends image(s)")
+            print(f"\nGenerated {len(paths)} team trends image(s)")
     except Exception as e:
-        print(f" Error: {e}")
+        print(f"Error: {e}")
         import traceback
         traceback.print_exc()
         return 1

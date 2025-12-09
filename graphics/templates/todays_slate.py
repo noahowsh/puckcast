@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 """
-Today's Slate Template Generator
+Today's Slate Template Generator - Premium Instagram Design
 
 Creates a square (1080x1080) Instagram graphic showing today's NHL predictions.
+Uses 2x supersampling for crisp output.
 """
 
 from __future__ import annotations
@@ -15,33 +16,24 @@ from typing import List, Dict, Any
 
 from PIL import Image, ImageDraw
 
-# Add parent directory to path for imports
 GRAPHICS_DIR = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(GRAPHICS_DIR))
 
 from puckcast_brand import (
     PuckcastColors,
     hex_to_rgb,
-    get_team_primary_rgb,
     get_confidence_color_rgb,
-    get_team_name,
-    ImageDimensions,
 )
 from image_utils import (
     create_puckcast_background,
-    draw_header,
     draw_footer,
-    draw_rounded_rect,
-    draw_glass_tile,
     get_logo,
     get_font,
-    FontSizes,
-    format_probability,
-    format_edge,
     save_high_quality,
+    S,
+    RENDER_SIZE,
 )
 
-# Paths
 REPO_ROOT = GRAPHICS_DIR.parents[0]
 PREDICTIONS_PATH = REPO_ROOT / "web" / "src" / "data" / "todaysPredictions.json"
 OUTPUT_DIR = GRAPHICS_DIR / "output"
@@ -54,160 +46,156 @@ def load_predictions() -> Dict[str, Any]:
     return json.loads(PREDICTIONS_PATH.read_text())
 
 
-def draw_game_tile(
+def draw_game_row(
     img: Image.Image,
+    draw: ImageDraw.Draw,
     game: Dict[str, Any],
     y_position: int,
-    margin: int = 50,
-    tile_height: int = 110,
-    is_top_edge: bool = False,
-) -> int:
-    """
-    Draw a clean game tile with no overlapping elements.
-
-    Returns the y position after the tile.
-    """
-    # Get team info
+    margin: int,
+    row_height: int,
+) -> None:
+    """Draw a single game row with large logos and clean layout."""
     away_abbrev = game.get("awayTeam", {}).get("abbrev", "???")
     home_abbrev = game.get("homeTeam", {}).get("abbrev", "???")
-
     home_prob = game.get("homeWinProb", 0.5)
     away_prob = game.get("awayWinProb", 0.5)
     confidence = game.get("confidenceGrade", "C")
     start_time = game.get("startTimeEt", "TBD")
     model_favorite = game.get("modelFavorite", "home")
 
-    # Determine winner
+    # Determine favorite
     if model_favorite == "home":
-        winner_prob = home_prob
-        winner_abbrev = home_abbrev
+        pick_abbrev = home_abbrev
+        pick_prob = home_prob
     else:
-        winner_prob = away_prob
-        winner_abbrev = away_abbrev
+        pick_abbrev = away_abbrev
+        pick_prob = away_prob
 
-    # Draw glass tile background
-    highlight_color = hex_to_rgb(PuckcastColors.AQUA) if is_top_edge else None
-    result = draw_glass_tile(img, y_position, tile_height, margin, is_top_edge, highlight_color)
-    draw = ImageDraw.Draw(result)
+    row_center_y = y_position + row_height // 2
 
-    # BIGGER logos
-    logo_size = 65
-    content_start_x = margin + 18
-    logo_y = y_position + (tile_height - logo_size) // 2
+    # Large team logos
+    logo_size = S(85)
+    logo_y = row_center_y - logo_size // 2
 
-    # Away team logo
+    # Away logo
     away_logo = get_logo(away_abbrev, logo_size)
-    result.paste(away_logo, (content_start_x, logo_y), away_logo)
+    img.paste(away_logo, (margin, logo_y), away_logo)
 
-    # @ symbol between logos
-    at_font = get_font(24, bold=False)
-    at_x = content_start_x + logo_size + 10
-    at_y = y_position + (tile_height - 24) // 2
-    draw.text((at_x, at_y), "@", fill=hex_to_rgb(PuckcastColors.TEXT_TERTIARY), font=at_font)
+    # @ symbol
+    at_font = get_font(S(22), bold=False)
+    at_x = margin + logo_size + S(12)
+    at_bbox = draw.textbbox((0, 0), "@", font=at_font)
+    at_h = at_bbox[3] - at_bbox[1]
+    draw.text((at_x, row_center_y - at_h // 2 - S(3)), "@", fill=hex_to_rgb(PuckcastColors.TEXT_TERTIARY), font=at_font)
 
-    # Home team logo
+    # Home logo
     home_logo = get_logo(home_abbrev, logo_size)
-    home_logo_x = at_x + 30
-    result.paste(home_logo, (home_logo_x, logo_y), home_logo)
+    home_logo_x = at_x + S(30)
+    img.paste(home_logo, (home_logo_x, logo_y), home_logo)
 
-    # Matchup text and time
-    names_x = home_logo_x + logo_size + 15
-    name_font = get_font(22, bold=True)
-    time_font = get_font(16, bold=False)
+    # Game info - vertically centered
+    info_x = home_logo_x + logo_size + S(18)
+    matchup_font = get_font(S(26), bold=True)
+    time_font = get_font(S(18), bold=False)
 
     matchup_text = f"{away_abbrev} @ {home_abbrev}"
-    draw.text((names_x, y_position + 28), matchup_text, fill=hex_to_rgb(PuckcastColors.TEXT_PRIMARY), font=name_font)
-    draw.text((names_x, y_position + 56), start_time, fill=hex_to_rgb(PuckcastColors.TEXT_TERTIARY), font=time_font)
+    matchup_bbox = draw.textbbox((0, 0), matchup_text, font=matchup_font)
+    matchup_h = matchup_bbox[3] - matchup_bbox[1]
 
-    # Right side - Win probability ONLY (clean, no overlaps)
-    prob_font = get_font(44, bold=True)
-    prob_text = f"{winner_prob * 100:.0f}%"
-    prob_color = get_confidence_color_rgb(confidence)
+    time_bbox = draw.textbbox((0, 0), start_time, font=time_font)
+    time_h = time_bbox[3] - time_bbox[1]
 
-    # Calculate text width and right-align
+    total_h = matchup_h + S(6) + time_h
+    text_y = row_center_y - total_h // 2
+
+    draw.text((info_x, text_y), matchup_text, fill=hex_to_rgb(PuckcastColors.TEXT_PRIMARY), font=matchup_font)
+    draw.text((info_x, text_y + matchup_h + S(6)), start_time, fill=hex_to_rgb(PuckcastColors.TEXT_TERTIARY), font=time_font)
+
+    # Right side: Grade badge + probability
+    grade_color = get_confidence_color_rgb(confidence)
+
+    # Grade badge
+    badge_size = S(65)
+    badge_x = img.width - margin - badge_size
+    badge_y = row_center_y - badge_size // 2
+
+    draw.ellipse([badge_x, badge_y, badge_x + badge_size, badge_y + badge_size], fill=grade_color)
+
+    # Grade letter - dark for contrast
+    grade_font = get_font(S(36), bold=True)
+    grade_bbox = draw.textbbox((0, 0), confidence, font=grade_font)
+    grade_w = grade_bbox[2] - grade_bbox[0]
+    grade_h = grade_bbox[3] - grade_bbox[1]
+    draw.text(
+        (badge_x + (badge_size - grade_w) // 2, badge_y + (badge_size - grade_h) // 2 - S(2)),
+        confidence,
+        fill=(20, 20, 30),
+        font=grade_font,
+    )
+
+    # Win probability
+    prob_font = get_font(S(42), bold=True)
+    prob_text = f"{pick_prob * 100:.0f}%"
     prob_bbox = draw.textbbox((0, 0), prob_text, font=prob_font)
-    prob_width = prob_bbox[2] - prob_bbox[0]
-    prob_x = img.width - margin - prob_width - 20
-    draw.text((prob_x, y_position + 18), prob_text, fill=prob_color, font=prob_font)
+    prob_w = prob_bbox[2] - prob_bbox[0]
+    prob_h = prob_bbox[3] - prob_bbox[1]
+    prob_x = badge_x - prob_w - S(22)
 
-    # Model pick text below (abbrev only)
-    pick_font = get_font(18, bold=True)
-    pick_text = f"Pick: {winner_abbrev}"
-    pick_bbox = draw.textbbox((0, 0), pick_text, font=pick_font)
-    pick_width = pick_bbox[2] - pick_bbox[0]
-    draw.text((img.width - margin - pick_width - 20, y_position + 66), pick_text, fill=hex_to_rgb(PuckcastColors.TEXT_SECONDARY), font=pick_font)
+    draw.text((prob_x, row_center_y - prob_h // 2 - S(12)), prob_text, fill=grade_color, font=prob_font)
 
-    # Copy result back
-    img.paste(result.convert("RGB"))
-
-    return y_position + tile_height + 6
+    # Pick label
+    pick_font = get_font(S(16), bold=True)
+    pick_label = f"Pick: {pick_abbrev}"
+    pick_bbox = draw.textbbox((0, 0), pick_label, font=pick_font)
+    pick_w = pick_bbox[2] - pick_bbox[0]
+    draw.text((prob_x + (prob_w - pick_w) // 2, row_center_y + S(18)), pick_label, fill=hex_to_rgb(PuckcastColors.TEXT_SECONDARY), font=pick_font)
 
 
-def generate_slate_image(
-    games: List[Dict[str, Any]],
-    date_str: str,
-    page: int = 1,
-    games_per_page: int = 7,
-) -> Image.Image:
-    """
-    Generate a single slate image.
+def generate_slate_image(games: List[Dict], date_str: str, page: int = 1) -> Image.Image:
+    """Generate the slate image at 2x resolution."""
+    img = create_puckcast_background()
+    draw = ImageDraw.Draw(img)
 
-    Args:
-        games: List of game dictionaries
-        date_str: Date string for the header
-        page: Page number (for multi-page slates)
-        games_per_page: Maximum games per image
+    margin = S(55)
 
-    Returns:
-        PIL Image
-    """
-    width, height = ImageDimensions.SQUARE
+    # Header
+    title_font = get_font(S(68), bold=True)
+    draw.text((margin, S(45)), "TODAY'S SLATE", fill=hex_to_rgb(PuckcastColors.TEXT_PRIMARY), font=title_font)
 
-    # Create background
-    img = create_puckcast_background(width, height)
-
-    # Draw header with compact mode for more content
-    title = "TODAY'S NHL SLATE"
+    subtitle_font = get_font(S(26), bold=False)
     subtitle = f"Model Predictions • {date_str}"
-    y = draw_header(img, title, subtitle, margin=50, compact=True)
+    if page > 1:
+        subtitle += f" (Page {page})"
+    draw.text((margin, S(120)), subtitle, fill=hex_to_rgb(PuckcastColors.TEXT_SECONDARY), font=subtitle_font)
 
-    # Find top edge game
-    top_edge_idx = 0
-    top_edge_val = 0
-    for i, game in enumerate(games):
-        edge = abs(game.get("edge", 0))
-        if edge > top_edge_val:
-            top_edge_val = edge
-            top_edge_idx = i
+    # Accent line
+    line_y = S(165)
+    draw.line([(margin, line_y), (margin + S(180), line_y)], fill=hex_to_rgb(PuckcastColors.AQUA), width=S(4))
 
-    # Draw game tiles
-    for i, game in enumerate(games[:games_per_page]):
-        is_top_edge = (i == top_edge_idx)
-        y = draw_game_tile(img, game, y, margin=50, is_top_edge=is_top_edge)
+    # Game rows
+    content_y = line_y + S(30)
+    row_height = S(115)
+    row_gap = S(10)
 
-    # Draw footer
+    for i, game in enumerate(games[:6]):
+        y_pos = content_y + i * (row_height + row_gap)
+        draw_game_row(img, draw, game, y_pos, margin, row_height)
+
     draw_footer(img)
-
     return img
 
 
 def generate_todays_slate() -> List[Path]:
-    """
-    Generate today's slate graphics.
-
-    Returns list of output file paths.
-    """
+    """Generate today's slate graphics."""
     print("Generating Today's Slate graphics...")
 
-    # Load predictions
     data = load_predictions()
     games = data.get("games", [])
 
     if not games:
-        print("  No games found for today")
+        print("  No games found")
         return []
 
-    # Get date from first game or generated timestamp
     generated_at = data.get("generatedAt", "")
     if generated_at:
         try:
@@ -218,20 +206,22 @@ def generate_todays_slate() -> List[Path]:
     else:
         date_str = datetime.now().strftime("%B %d, %Y")
 
-    # Sort games by edge (highest first)
-    games_sorted = sorted(games, key=lambda g: abs(g.get("edge", 0)), reverse=True)
+    # Sort by confidence grade then probability
+    grade_order = {"A+": 0, "A": 1, "A-": 2, "B+": 3, "B": 4, "B-": 5, "C+": 6, "C": 7, "C-": 8, "D": 9, "F": 10}
+    games_sorted = sorted(
+        games,
+        key=lambda g: (grade_order.get(g.get("confidenceGrade", "C"), 7), -max(g.get("homeWinProb", 0.5), g.get("awayWinProb", 0.5)))
+    )
 
-    # Generate images (one per 7 games)
     output_paths = []
-    games_per_page = 7
+    games_per_page = 6
 
-    for page in range(0, len(games_sorted), games_per_page):
-        page_games = games_sorted[page:page + games_per_page]
-        page_num = page // games_per_page + 1
+    for page_idx in range(0, len(games_sorted), games_per_page):
+        page_games = games_sorted[page_idx:page_idx + games_per_page]
+        page_num = page_idx // games_per_page + 1
 
         img = generate_slate_image(page_games, date_str, page=page_num)
 
-        # Save
         if len(games_sorted) > games_per_page:
             output_path = OUTPUT_DIR / f"todays_slate_{page_num}.png"
         else:
@@ -246,15 +236,12 @@ def generate_todays_slate() -> List[Path]:
 
 
 def main():
-    """CLI entry point."""
     try:
         paths = generate_todays_slate()
         if paths:
-            print(f"\n Generated {len(paths)} slate image(s)")
-        else:
-            print("\n No images generated")
+            print(f"\nGenerated {len(paths)} slate image(s)")
     except Exception as e:
-        print(f" Error: {e}")
+        print(f"Error: {e}")
         import traceback
         traceback.print_exc()
         return 1

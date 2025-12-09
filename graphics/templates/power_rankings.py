@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 """
-Power Rankings Template Generator
+Power Rankings Template Generator - Premium Instagram Design
 
 Creates a square (1080x1080) Instagram graphic showing power index rankings.
+Uses 2x supersampling for crisp output.
 """
 
 from __future__ import annotations
@@ -20,19 +21,16 @@ sys.path.insert(0, str(GRAPHICS_DIR))
 from puckcast_brand import (
     PuckcastColors,
     hex_to_rgb,
-    get_team_primary_rgb,
-    ImageDimensions,
 )
 from image_utils import (
     create_puckcast_background,
-    draw_header,
     draw_footer,
     draw_rounded_rect,
-    draw_glass_tile,
     get_logo,
     get_font,
-    FontSizes,
     save_high_quality,
+    S,
+    RENDER_SIZE,
 )
 
 REPO_ROOT = GRAPHICS_DIR.parents[0]
@@ -50,110 +48,99 @@ def load_power_index() -> Dict[str, Any]:
 def draw_team_tile(
     img: Image.Image,
     team: Dict[str, Any],
-    position: tuple,
-    tile_size: int = 120,
+    x: int,
+    y: int,
+    tile_size: int,
 ) -> None:
-    """Draw a single team tile in the grid with bigger logos."""
-    x, y = position
+    """Draw a single team tile in the grid."""
     draw = ImageDraw.Draw(img)
-
-    # Get team info
     abbrev = team.get("abbrev", "???")
     rank = team.get("rank", 0)
     delta = team.get("rankDelta", 0)
     tier = team.get("tier", "")
 
-    # Tile background color based on tier
+    # Tier colors
     tier_colors = {
-        "elite": (126, 227, 255, 30),
-        "contender": (110, 240, 194, 25),
-        "playoff": (246, 193, 119, 20),
-        "bubble": (255, 255, 255, 12),
-        "lottery": (255, 148, 168, 20),
+        "elite": (126, 227, 255, 35),
+        "contender": (110, 240, 194, 30),
+        "playoff": (246, 193, 119, 25),
+        "bubble": (255, 255, 255, 15),
+        "lottery": (255, 148, 168, 25),
     }
-    bg_color = tier_colors.get(tier, (255, 255, 255, 12))
+    bg_color = tier_colors.get(tier, (255, 255, 255, 15))
 
-    # Create overlay for tile
+    # Draw tile background
     overlay = Image.new("RGBA", img.size, (0, 0, 0, 0))
     overlay_draw = ImageDraw.Draw(overlay)
-
     coords = (x, y, x + tile_size, y + tile_size)
-    draw_rounded_rect(overlay_draw, coords, radius=12, fill=bg_color, outline=(255, 255, 255, 25), width=1)
+    draw_rounded_rect(overlay_draw, coords, radius=S(10), fill=bg_color, outline=(255, 255, 255, 30), width=1)
 
-    # Composite
     img_rgba = img.convert("RGBA")
     result = Image.alpha_composite(img_rgba, overlay)
+    draw = ImageDraw.Draw(result)
 
-    # Draw rank number (top left)
-    rank_font = get_font(18, bold=True)
-    rank_color = hex_to_rgb(PuckcastColors.TEXT_TERTIARY)
-    ImageDraw.Draw(result).text((x + 8, y + 6), str(rank), fill=rank_color, font=rank_font)
+    # Rank number (top left)
+    rank_font = get_font(S(16), bold=True)
+    draw.text((x + S(8), y + S(6)), str(rank), fill=hex_to_rgb(PuckcastColors.TEXT_TERTIARY), font=rank_font)
 
-    # Draw logo (centered) - BIGGER
-    logo_size = 60
+    # Team logo (centered, large)
+    logo_size = S(55)
     logo = get_logo(abbrev, logo_size)
     logo_x = x + (tile_size - logo_size) // 2
-    logo_y = y + 25
+    logo_y = y + S(22)
     result.paste(logo, (logo_x, logo_y), logo)
 
-    # Draw abbreviation
-    abbrev_font = get_font(18, bold=True)
-    abbrev_color = hex_to_rgb(PuckcastColors.TEXT_PRIMARY)
-    bbox = ImageDraw.Draw(result).textbbox((0, 0), abbrev, font=abbrev_font)
-    text_width = bbox[2] - bbox[0]
-    text_x = x + (tile_size - text_width) // 2
-    ImageDraw.Draw(result).text((text_x, y + 90), abbrev, fill=abbrev_color, font=abbrev_font)
+    # Team abbreviation
+    abbrev_font = get_font(S(16), bold=True)
+    abbrev_bbox = draw.textbbox((0, 0), abbrev, font=abbrev_font)
+    abbrev_w = abbrev_bbox[2] - abbrev_bbox[0]
+    draw.text((x + (tile_size - abbrev_w) // 2, y + tile_size - S(28)), abbrev, fill=hex_to_rgb(PuckcastColors.TEXT_PRIMARY), font=abbrev_font)
 
-    # Draw delta indicator (bottom right)
+    # Delta indicator
     if delta != 0:
-        delta_font = get_font(14, bold=True)
-        if delta > 0:
-            delta_text = f"+{delta}"
-            delta_color = hex_to_rgb(PuckcastColors.RISING)
-        else:
-            delta_text = str(delta)
-            delta_color = hex_to_rgb(PuckcastColors.FALLING)
-        ImageDraw.Draw(result).text((x + tile_size - 30, y + tile_size - 20), delta_text, fill=delta_color, font=delta_font)
+        delta_font = get_font(S(13), bold=True)
+        delta_text = f"+{delta}" if delta > 0 else str(delta)
+        delta_color = hex_to_rgb(PuckcastColors.RISING) if delta > 0 else hex_to_rgb(PuckcastColors.FALLING)
+        draw.text((x + tile_size - S(28), y + tile_size - S(20)), delta_text, fill=delta_color, font=delta_font)
 
-    # Copy back
     img.paste(result.convert("RGB"))
 
 
 def generate_power_rankings_image(rankings: List[Dict], week_of: str) -> Image.Image:
-    """Generate the power rankings grid image."""
-    width, height = ImageDimensions.SQUARE
+    """Generate the power rankings grid at 2x resolution."""
+    img = create_puckcast_background()
+    draw = ImageDraw.Draw(img)
 
-    # Create background
-    img = create_puckcast_background(width, height)
+    margin = S(50)
 
-    # Draw header with compact mode
-    title = "POWER RANKINGS"
-    subtitle = f"Week of {week_of}"
-    y_start = draw_header(img, title, subtitle, margin=50, compact=True)
+    # Header
+    title_font = get_font(S(68), bold=True)
+    draw.text((margin, S(45)), "POWER RANKINGS", fill=hex_to_rgb(PuckcastColors.TEXT_PRIMARY), font=title_font)
 
-    # Calculate grid layout for all 32 teams - BIGGER tiles
-    cols = 8
-    rows = 4
-    tile_size = 120  # Bigger tiles
-    gap = 6
+    subtitle_font = get_font(S(26), bold=False)
+    draw.text((margin, S(120)), f"Week of {week_of}", fill=hex_to_rgb(PuckcastColors.TEXT_SECONDARY), font=subtitle_font)
+
+    # Accent line
+    line_y = S(165)
+    draw.line([(margin, line_y), (margin + S(220), line_y)], fill=hex_to_rgb(PuckcastColors.AQUA), width=S(4))
+
+    # Grid layout: 8 cols x 4 rows
+    cols, rows = 8, 4
+    tile_size = S(115)
+    gap = S(8)
 
     grid_width = cols * tile_size + (cols - 1) * gap
-    grid_height = rows * tile_size + (rows - 1) * gap
+    start_x = (RENDER_SIZE - grid_width) // 2
+    start_y = line_y + S(25)
 
-    start_x = (width - grid_width) // 2
-    start_y = y_start + 15
-
-    # Draw team tiles
     for i, team in enumerate(rankings[:32]):
         col = i % cols
         row = i // cols
         x = start_x + col * (tile_size + gap)
         y = start_y + row * (tile_size + gap)
-        draw_team_tile(img, team, (x, y), tile_size)
+        draw_team_tile(img, team, x, y, tile_size)
 
-    # Draw footer
     draw_footer(img)
-
     return img
 
 
@@ -183,9 +170,9 @@ def main():
     try:
         paths = generate_power_rankings()
         if paths:
-            print(f"\n Generated {len(paths)} power rankings image(s)")
+            print(f"\nGenerated {len(paths)} power rankings image(s)")
     except Exception as e:
-        print(f" Error: {e}")
+        print(f"Error: {e}")
         import traceback
         traceback.print_exc()
         return 1

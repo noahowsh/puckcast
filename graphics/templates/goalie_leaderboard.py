@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 """
-Goalie Leaderboard Template Generator
+Goalie Leaderboard Template Generator - Premium Instagram Design
 
 Creates a square (1080x1080) Instagram graphic showing top goalies by GSAX.
+Uses 2x supersampling for crisp output.
 """
 
 from __future__ import annotations
@@ -20,19 +21,15 @@ sys.path.insert(0, str(GRAPHICS_DIR))
 from puckcast_brand import (
     PuckcastColors,
     hex_to_rgb,
-    get_team_primary_rgb,
-    ImageDimensions,
 )
 from image_utils import (
     create_puckcast_background,
-    draw_header,
     draw_footer,
-    draw_rounded_rect,
-    draw_glass_tile,
     get_logo,
     get_font,
-    FontSizes,
     save_high_quality,
+    S,
+    RENDER_SIZE,
 )
 
 REPO_ROOT = GRAPHICS_DIR.parents[0]
@@ -49,98 +46,105 @@ def load_goalie_data() -> Dict[str, Any]:
 
 def draw_goalie_row(
     img: Image.Image,
+    draw: ImageDraw.Draw,
     goalie: Dict[str, Any],
     rank: int,
     y_position: int,
-    margin: int = 50,
-    row_height: int = 85,
-) -> int:
-    """Draw a goalie row with bigger logos."""
-    # Get goalie info
+    margin: int,
+    row_height: int,
+) -> None:
+    """Draw a goalie row with clean layout."""
     name = goalie.get("name", "Unknown")
     team = goalie.get("team", "???")
     gsax = goalie.get("gsax", 0)
     save_pct = goalie.get("savePct", 0)
     games = goalie.get("gamesPlayed", 0)
 
-    # Use glass tile with highlight for top 3
-    is_top = rank <= 3
-    highlight_color = hex_to_rgb(PuckcastColors.AQUA) if is_top else None
-    result = draw_glass_tile(img, y_position, row_height, margin, is_top, highlight_color)
-    draw = ImageDraw.Draw(result)
+    row_center_y = y_position + row_height // 2
+    is_top3 = rank <= 3
 
-    # Rank number
-    rank_font = get_font(28, bold=True)
-    rank_color = hex_to_rgb(PuckcastColors.AQUA) if is_top else hex_to_rgb(PuckcastColors.TEXT_SECONDARY)
-    draw.text((margin + 12, y_position + (row_height - 28) // 2), str(rank), fill=rank_color, font=rank_font)
+    # Rank
+    rank_font = get_font(S(28), bold=True)
+    rank_color = hex_to_rgb(PuckcastColors.AQUA) if is_top3 else hex_to_rgb(PuckcastColors.TEXT_TERTIARY)
+    rank_bbox = draw.textbbox((0, 0), str(rank), font=rank_font)
+    rank_h = rank_bbox[3] - rank_bbox[1]
+    draw.text((margin, row_center_y - rank_h // 2 - S(2)), str(rank), fill=rank_color, font=rank_font)
 
-    # Team logo - BIGGER
-    logo_size = 55
+    # Team logo
+    logo_size = S(60)
     logo = get_logo(team, logo_size)
-    logo_x = margin + 50
-    logo_y = y_position + (row_height - logo_size) // 2
-    result.paste(logo, (logo_x, logo_y), logo)
+    logo_x = margin + S(45)
+    logo_y = row_center_y - logo_size // 2
+    img.paste(logo, (logo_x, logo_y), logo)
 
-    # Goalie name
-    name_font = get_font(24, bold=True)
-    name_color = hex_to_rgb(PuckcastColors.TEXT_PRIMARY)
-    draw.text((margin + 120, y_position + 18), name, fill=name_color, font=name_font)
+    # Goalie name and team
+    info_x = logo_x + logo_size + S(15)
+    name_font = get_font(S(24), bold=True)
+    team_font = get_font(S(16), bold=False)
 
-    # Team abbreviation
-    team_font = get_font(16, bold=False)
-    team_color = hex_to_rgb(PuckcastColors.TEXT_TERTIARY)
-    draw.text((margin + 120, y_position + 48), team, fill=team_color, font=team_font)
+    name_bbox = draw.textbbox((0, 0), name, font=name_font)
+    name_h = name_bbox[3] - name_bbox[1]
+    team_bbox = draw.textbbox((0, 0), team, font=team_font)
+    team_h = team_bbox[3] - team_bbox[1]
 
-    # Stats on the right side - GSAX (main stat)
-    gsax_font = get_font(28, bold=True)
+    total_h = name_h + S(4) + team_h
+    text_y = row_center_y - total_h // 2
+
+    draw.text((info_x, text_y), name, fill=hex_to_rgb(PuckcastColors.TEXT_PRIMARY), font=name_font)
+    draw.text((info_x, text_y + name_h + S(4)), team, fill=hex_to_rgb(PuckcastColors.TEXT_TERTIARY), font=team_font)
+
+    # Stats on the right
+    # GSAX
+    gsax_font = get_font(S(26), bold=True)
     gsax_text = f"+{gsax:.1f}" if gsax > 0 else f"{gsax:.1f}"
     gsax_color = hex_to_rgb(PuckcastColors.RISING) if gsax > 0 else hex_to_rgb(PuckcastColors.FALLING)
-    draw.text((img.width - margin - 255, y_position + 15), gsax_text, fill=gsax_color, font=gsax_font)
+    gsax_x = img.width - margin - S(280)
+    draw.text((gsax_x, row_center_y - S(22)), gsax_text, fill=gsax_color, font=gsax_font)
+    label_font = get_font(S(12), bold=False)
+    draw.text((gsax_x, row_center_y + S(8)), "GSAX", fill=hex_to_rgb(PuckcastColors.TEXT_TERTIARY), font=label_font)
 
-    # GSAX label
-    gsax_label_font = get_font(14, bold=False)
-    draw.text((img.width - margin - 255, y_position + 48), "GSAX", fill=hex_to_rgb(PuckcastColors.TEXT_TERTIARY), font=gsax_label_font)
-
-    # Save percentage
-    sv_font = get_font(24, bold=True)
+    # SV%
+    sv_font = get_font(S(24), bold=True)
     sv_text = f".{int(save_pct * 1000)}"
-    draw.text((img.width - margin - 155, y_position + 17), sv_text, fill=hex_to_rgb(PuckcastColors.TEXT_SECONDARY), font=sv_font)
+    sv_x = img.width - margin - S(175)
+    draw.text((sv_x, row_center_y - S(20)), sv_text, fill=hex_to_rgb(PuckcastColors.TEXT_SECONDARY), font=sv_font)
+    draw.text((sv_x, row_center_y + S(8)), "SV%", fill=hex_to_rgb(PuckcastColors.TEXT_TERTIARY), font=label_font)
 
-    sv_label_font = get_font(14, bold=False)
-    draw.text((img.width - margin - 155, y_position + 48), "SV%", fill=hex_to_rgb(PuckcastColors.TEXT_TERTIARY), font=sv_label_font)
-
-    # Games played
-    gp_font = get_font(24, bold=True)
-    draw.text((img.width - margin - 65, y_position + 17), str(games), fill=hex_to_rgb(PuckcastColors.TEXT_SECONDARY), font=gp_font)
-
-    gp_label_font = get_font(14, bold=False)
-    draw.text((img.width - margin - 60, y_position + 48), "GP", fill=hex_to_rgb(PuckcastColors.TEXT_TERTIARY), font=gp_label_font)
-
-    # Copy back
-    img.paste(result.convert("RGB"))
-
-    return y_position + row_height + 6
+    # GP
+    gp_font = get_font(S(24), bold=True)
+    gp_x = img.width - margin - S(70)
+    draw.text((gp_x, row_center_y - S(20)), str(games), fill=hex_to_rgb(PuckcastColors.TEXT_SECONDARY), font=gp_font)
+    draw.text((gp_x, row_center_y + S(8)), "GP", fill=hex_to_rgb(PuckcastColors.TEXT_TERTIARY), font=label_font)
 
 
-def generate_goalie_leaderboard_image(goalies: List[Dict], updated_at: str) -> Image.Image:
-    """Generate the goalie leaderboard image."""
-    width, height = ImageDimensions.SQUARE
+def generate_goalie_leaderboard_image(goalies: List[Dict]) -> Image.Image:
+    """Generate the goalie leaderboard at 2x resolution."""
+    img = create_puckcast_background()
+    draw = ImageDraw.Draw(img)
 
-    # Create background
-    img = create_puckcast_background(width, height)
+    margin = S(55)
 
-    # Draw header with compact mode
-    title = "GOALIE LEADERBOARD"
-    subtitle = "Top Goalies by Goals Saved Above Expected"
-    y = draw_header(img, title, subtitle, margin=50, compact=True)
+    # Header
+    title_font = get_font(S(64), bold=True)
+    draw.text((margin, S(45)), "GOALIE LEADERS", fill=hex_to_rgb(PuckcastColors.TEXT_PRIMARY), font=title_font)
 
-    # Draw goalie rows (top 10)
+    subtitle_font = get_font(S(24), bold=False)
+    draw.text((margin, S(115)), "Top Goalies by Goals Saved Above Expected", fill=hex_to_rgb(PuckcastColors.TEXT_SECONDARY), font=subtitle_font)
+
+    # Accent line
+    line_y = S(155)
+    draw.line([(margin, line_y), (margin + S(200), line_y)], fill=hex_to_rgb(PuckcastColors.AQUA), width=S(4))
+
+    # Goalie rows
+    content_y = line_y + S(25)
+    row_height = S(88)
+    row_gap = S(8)
+
     for i, goalie in enumerate(goalies[:10], 1):
-        y = draw_goalie_row(img, goalie, i, y)
+        y_pos = content_y + (i - 1) * (row_height + row_gap)
+        draw_goalie_row(img, draw, goalie, i, y_pos, margin, row_height)
 
-    # Draw footer
     draw_footer(img)
-
     return img
 
 
@@ -150,16 +154,13 @@ def generate_goalie_leaderboard() -> List[Path]:
 
     data = load_goalie_data()
     goalies = data.get("goalies", [])
-    updated_at = data.get("updatedAt", "")
 
     if not goalies:
         print("  No goalie data found")
         return []
 
-    # Sort by GSAX (highest first)
     goalies_sorted = sorted(goalies, key=lambda g: g.get("gsax", 0), reverse=True)
-
-    img = generate_goalie_leaderboard_image(goalies_sorted, updated_at)
+    img = generate_goalie_leaderboard_image(goalies_sorted)
 
     output_path = OUTPUT_DIR / "goalie_leaderboard.png"
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
@@ -173,9 +174,9 @@ def main():
     try:
         paths = generate_goalie_leaderboard()
         if paths:
-            print(f"\n Generated {len(paths)} goalie leaderboard image(s)")
+            print(f"\nGenerated {len(paths)} goalie leaderboard image(s)")
     except Exception as e:
-        print(f" Error: {e}")
+        print(f"Error: {e}")
         import traceback
         traceback.print_exc()
         return 1

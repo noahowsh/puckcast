@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 """
-Model Receipts Template Generator
+Model Receipts Template Generator - Premium Instagram Design
 
-Creates a square (1080x1080) Instagram graphic showing how the model did on recent predictions.
+Creates a square (1080x1080) Instagram graphic showing model prediction results.
+Uses 2x supersampling for crisp output.
 """
 
 from __future__ import annotations
@@ -21,18 +22,16 @@ sys.path.insert(0, str(GRAPHICS_DIR))
 from puckcast_brand import (
     PuckcastColors,
     hex_to_rgb,
-    ImageDimensions,
 )
 from image_utils import (
     create_puckcast_background,
-    draw_header,
     draw_footer,
     draw_rounded_rect,
-    draw_glass_tile,
     get_logo,
     get_font,
-    FontSizes,
     save_high_quality,
+    S,
+    RENDER_SIZE,
 )
 
 REPO_ROOT = GRAPHICS_DIR.parents[0]
@@ -63,131 +62,145 @@ def draw_result_row(
     row_height: int,
     is_demo: bool = False,
 ) -> None:
-    """Draw a compact game result row."""
+    """Draw a game result row."""
     away_abbrev = game.get("awayTeam", {}).get("abbrev", "???")
     home_abbrev = game.get("homeTeam", {}).get("abbrev", "???")
     home_prob = game.get("homeWinProb", 0.5)
     away_prob = game.get("awayWinProb", 0.5)
     model_favorite = game.get("modelFavorite", "home")
-
-    # For results - check if prediction was correct
     actual_winner = game.get("actualWinner", None)
     is_correct = game.get("isCorrect", None)
 
-    # Demo mode - simulate results
+    # Demo mode simulation
     if is_demo:
         model_conf = home_prob if model_favorite == "home" else away_prob
         is_correct = model_conf > 0.55
         actual_winner = model_favorite if is_correct else ("away" if model_favorite == "home" else "home")
 
-    # Row background based on result
+    row_center_y = y_position + row_height // 2
+
+    # Row background
     overlay = Image.new("RGBA", img.size, (0, 0, 0, 0))
     overlay_draw = ImageDraw.Draw(overlay)
 
     if is_correct is True:
-        bg_color = (110, 240, 194, 18)
-        border_color = (110, 240, 194, 45)
+        bg_color = (110, 240, 194, 20)
+        border_color = (110, 240, 194, 50)
         result_icon = "✓"
         result_color = hex_to_rgb(PuckcastColors.RISING)
     elif is_correct is False:
-        bg_color = (255, 148, 168, 18)
-        border_color = (255, 148, 168, 45)
+        bg_color = (255, 148, 168, 20)
+        border_color = (255, 148, 168, 50)
         result_icon = "✗"
         result_color = hex_to_rgb(PuckcastColors.FALLING)
     else:
-        bg_color = (255, 255, 255, 12)
-        border_color = (255, 255, 255, 30)
+        bg_color = (255, 255, 255, 15)
+        border_color = (255, 255, 255, 35)
         result_icon = "?"
         result_color = hex_to_rgb(PuckcastColors.TEXT_TERTIARY)
 
     coords = (margin, y_position, img.width - margin, y_position + row_height)
-    draw_rounded_rect(overlay_draw, coords, radius=12, fill=bg_color, outline=border_color, width=1)
+    draw_rounded_rect(overlay_draw, coords, radius=S(10), fill=bg_color, outline=border_color, width=1)
 
-    # Composite
     img_rgba = img.convert("RGBA")
-    result = Image.alpha_composite(img_rgba, overlay)
-    draw = ImageDraw.Draw(result)
+    result_img = Image.alpha_composite(img_rgba, overlay)
+    draw = ImageDraw.Draw(result_img)
 
-    # Result icon on the left
-    icon_font = get_font(28, bold=True)
-    draw.text((margin + 15, y_position + (row_height - 28) // 2), result_icon, fill=result_color, font=icon_font)
+    # Result icon
+    icon_font = get_font(S(26), bold=True)
+    icon_bbox = draw.textbbox((0, 0), result_icon, font=icon_font)
+    icon_h = icon_bbox[3] - icon_bbox[1]
+    draw.text((margin + S(15), row_center_y - icon_h // 2 - S(2)), result_icon, fill=result_color, font=icon_font)
 
-    # Away team logo
-    logo_size = 42
+    # Away logo
+    logo_size = S(48)
     away_logo = get_logo(away_abbrev, logo_size)
-    result.paste(away_logo, (margin + 55, y_position + (row_height - logo_size) // 2), away_logo)
+    away_logo_x = margin + S(55)
+    logo_y = row_center_y - logo_size // 2
+    result_img.paste(away_logo, (away_logo_x, logo_y), away_logo)
 
     # @ symbol
-    at_font = get_font(18, bold=False)
-    draw.text((margin + 103, y_position + (row_height - 18) // 2), "@", fill=hex_to_rgb(PuckcastColors.TEXT_TERTIARY), font=at_font)
+    at_font = get_font(S(16), bold=False)
+    at_x = away_logo_x + logo_size + S(8)
+    at_bbox = draw.textbbox((0, 0), "@", font=at_font)
+    at_h = at_bbox[3] - at_bbox[1]
+    draw.text((at_x, row_center_y - at_h // 2 - S(2)), "@", fill=hex_to_rgb(PuckcastColors.TEXT_TERTIARY), font=at_font)
 
-    # Home team logo
+    # Home logo
     home_logo = get_logo(home_abbrev, logo_size)
-    result.paste(home_logo, (margin + 128, y_position + (row_height - logo_size) // 2), home_logo)
+    home_logo_x = at_x + S(22)
+    result_img.paste(home_logo, (home_logo_x, logo_y), home_logo)
 
-    # Model pick
-    pick_font = get_font(18, bold=True)
+    # Model pick info
+    pick_x = home_logo_x + logo_size + S(15)
+    pick_font = get_font(S(18), bold=True)
     pick_abbrev = home_abbrev if model_favorite == "home" else away_abbrev
     pick_prob = home_prob if model_favorite == "home" else away_prob
     pick_text = f"Picked {pick_abbrev} ({pick_prob * 100:.0f}%)"
-    draw.text((margin + 185, y_position + (row_height - 18) // 2), pick_text, fill=hex_to_rgb(PuckcastColors.TEXT_PRIMARY), font=pick_font)
+    pick_bbox = draw.textbbox((0, 0), pick_text, font=pick_font)
+    pick_h = pick_bbox[3] - pick_bbox[1]
+    draw.text((pick_x, row_center_y - pick_h // 2 - S(2)), pick_text, fill=hex_to_rgb(PuckcastColors.TEXT_PRIMARY), font=pick_font)
 
-    # Actual result on the right
+    # Actual result
     if actual_winner:
         winner_abbrev = home_abbrev if actual_winner == "home" else away_abbrev
-        winner_font = get_font(18, bold=True)
+        winner_font = get_font(S(18), bold=True)
         winner_text = f"{winner_abbrev} won"
-        bbox = draw.textbbox((0, 0), winner_text, font=winner_font)
-        text_width = bbox[2] - bbox[0]
-        draw.text((img.width - margin - text_width - 15, y_position + (row_height - 18) // 2), winner_text, fill=result_color, font=winner_font)
+        winner_bbox = draw.textbbox((0, 0), winner_text, font=winner_font)
+        winner_w = winner_bbox[2] - winner_bbox[0]
+        winner_h = winner_bbox[3] - winner_bbox[1]
+        draw.text((img.width - margin - winner_w - S(18), row_center_y - winner_h // 2 - S(2)), winner_text, fill=result_color, font=winner_font)
 
-    # Copy back
-    img.paste(result.convert("RGB"))
+    img.paste(result_img.convert("RGB"))
 
 
 def generate_model_receipts_image(games: List[Dict], date_str: str, accuracy: float, is_demo: bool = False) -> Image.Image:
-    """Generate the model receipts image."""
-    width, height = ImageDimensions.SQUARE
-
-    # Create background
-    img = create_puckcast_background(width, height)
-
-    # Draw header with compact mode
-    title = "MODEL RECEIPTS" if not is_demo else "MODEL RECEIPTS (DEMO)"
-    subtitle = f"Results from {date_str}"
-    y = draw_header(img, title, subtitle, margin=50, compact=True)
-
+    """Generate the model receipts at 2x resolution."""
+    img = create_puckcast_background()
     draw = ImageDraw.Draw(img)
-    margin = 50
-    row_height = 65
 
-    # Accuracy summary
-    acc_font = get_font(42, bold=True)
+    margin = S(55)
+
+    # Header
+    title_font = get_font(S(64), bold=True)
+    title = "MODEL RECEIPTS" if not is_demo else "MODEL RECEIPTS"
+    draw.text((margin, S(45)), title, fill=hex_to_rgb(PuckcastColors.TEXT_PRIMARY), font=title_font)
+
+    subtitle_font = get_font(S(24), bold=False)
+    subtitle = f"Results from {date_str}"
+    if is_demo:
+        subtitle += " (Demo)"
+    draw.text((margin, S(115)), subtitle, fill=hex_to_rgb(PuckcastColors.TEXT_SECONDARY), font=subtitle_font)
+
+    # Accent line
+    line_y = S(155)
+    draw.line([(margin, line_y), (margin + S(200), line_y)], fill=hex_to_rgb(PuckcastColors.AQUA), width=S(4))
+
+    # Accuracy display
+    acc_y = line_y + S(30)
+    acc_font = get_font(S(52), bold=True)
     acc_text = f"{accuracy * 100:.0f}%"
     acc_color = hex_to_rgb(PuckcastColors.AQUA) if accuracy >= 0.5 else hex_to_rgb(PuckcastColors.FALLING)
-
-    # Center accuracy
     acc_bbox = draw.textbbox((0, 0), acc_text, font=acc_font)
-    acc_width = acc_bbox[2] - acc_bbox[0]
-    draw.text(((width - acc_width) // 2, y), acc_text, fill=acc_color, font=acc_font)
+    acc_w = acc_bbox[2] - acc_bbox[0]
+    draw.text(((RENDER_SIZE - acc_w) // 2, acc_y), acc_text, fill=acc_color, font=acc_font)
 
-    # "Accuracy" label
-    label_font = get_font(20, bold=False)
+    label_font = get_font(S(20), bold=False)
     label_text = "Accuracy"
     label_bbox = draw.textbbox((0, 0), label_text, font=label_font)
-    label_width = label_bbox[2] - label_bbox[0]
-    draw.text(((width - label_width) // 2, y + 48), label_text, fill=hex_to_rgb(PuckcastColors.TEXT_SECONDARY), font=label_font)
+    label_w = label_bbox[2] - label_bbox[0]
+    draw.text(((RENDER_SIZE - label_w) // 2, acc_y + S(58)), label_text, fill=hex_to_rgb(PuckcastColors.TEXT_SECONDARY), font=label_font)
 
-    y += 85
+    # Game results
+    content_y = acc_y + S(100)
+    row_height = S(72)
+    row_gap = S(8)
 
-    # Draw game results (max 10 games)
-    for game in games[:10]:
-        draw_result_row(img, game, y, margin, row_height, is_demo=is_demo)
-        y += row_height + 6
+    for i, game in enumerate(games[:9]):
+        y_pos = content_y + i * (row_height + row_gap)
+        draw_result_row(img, game, y_pos, margin, row_height, is_demo=is_demo)
 
-    # Draw footer
     draw_footer(img)
-
     return img
 
 
@@ -195,11 +208,9 @@ def generate_model_receipts() -> List[Path]:
     """Generate model receipts graphics."""
     print("Generating Model Receipts graphics...")
 
-    # Try to load actual results
     results = load_prediction_results()
 
     if results and results.get("results"):
-        # Use actual results
         latest = results["results"][0] if results["results"] else None
         if latest:
             games = latest.get("games", [])
@@ -213,13 +224,10 @@ def generate_model_receipts() -> List[Path]:
             accuracy = 0
             is_demo = True
     else:
-        # Demo mode - use today's predictions
-        print("  No results data found, using demo mode with today's predictions")
+        print("  No results data found, using demo mode")
         predictions = load_todays_predictions()
         games = predictions.get("games", [])
-        date_str = datetime.now().strftime("%B %d, %Y") + " (Demo)"
-
-        # Simulate accuracy based on confidence
+        date_str = datetime.now().strftime("%B %d, %Y")
         correct = sum(1 for g in games if (g.get("homeWinProb", 0.5) if g.get("modelFavorite") == "home" else g.get("awayWinProb", 0.5)) > 0.55)
         accuracy = correct / len(games) if games else 0
         is_demo = True
@@ -242,9 +250,9 @@ def main():
     try:
         paths = generate_model_receipts()
         if paths:
-            print(f"\n Generated {len(paths)} model receipts image(s)")
+            print(f"\nGenerated {len(paths)} model receipts image(s)")
     except Exception as e:
-        print(f" Error: {e}")
+        print(f"Error: {e}")
         import traceback
         traceback.print_exc()
         return 1
