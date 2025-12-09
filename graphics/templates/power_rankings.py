@@ -73,35 +73,37 @@ def draw_team_tile(
     overlay = Image.new("RGBA", img.size, (0, 0, 0, 0))
     overlay_draw = ImageDraw.Draw(overlay)
     coords = (x, y, x + tile_size, y + tile_size)
-    draw_rounded_rect(overlay_draw, coords, radius=S(10), fill=bg_color, outline=(255, 255, 255, 30), width=1)
+    draw_rounded_rect(overlay_draw, coords, radius=S(8), fill=bg_color, outline=(255, 255, 255, 30), width=1)
 
     img_rgba = img.convert("RGBA")
     result = Image.alpha_composite(img_rgba, overlay)
     draw = ImageDraw.Draw(result)
 
-    # Rank number (top left)
-    rank_font = get_font(S(17), bold=True)
-    draw.text((x + S(8), y + S(7)), str(rank), fill=hex_to_rgb(PuckcastColors.TEXT_TERTIARY), font=rank_font)
+    # Rank number (top left) - consistent positioning
+    rank_font = get_font(S(15), bold=True)
+    draw.text((x + S(6), y + S(5)), str(rank), fill=hex_to_rgb(PuckcastColors.TEXT_TERTIARY), font=rank_font)
 
-    # Team logo (centered, larger)
-    logo_size = S(62)
+    # Team logo (centered) - sized to tile
+    logo_size = S(56)
     logo = get_logo(abbrev, logo_size)
     logo_x = x + (tile_size - logo_size) // 2
-    logo_y = y + S(24)
+    logo_y = y + S(20)
     result.paste(logo, (logo_x, logo_y), logo)
 
-    # Team abbreviation
-    abbrev_font = get_font(S(17), bold=True)
+    # Team abbreviation - centered at bottom
+    abbrev_font = get_font(S(15), bold=True)
     abbrev_bbox = draw.textbbox((0, 0), abbrev, font=abbrev_font)
     abbrev_w = abbrev_bbox[2] - abbrev_bbox[0]
-    draw.text((x + (tile_size - abbrev_w) // 2, y + tile_size - S(30)), abbrev, fill=hex_to_rgb(PuckcastColors.TEXT_PRIMARY), font=abbrev_font)
+    draw.text((x + (tile_size - abbrev_w) // 2, y + tile_size - S(26)), abbrev, fill=hex_to_rgb(PuckcastColors.TEXT_PRIMARY), font=abbrev_font)
 
-    # Delta indicator
+    # Delta indicator - bottom right
     if delta != 0:
-        delta_font = get_font(S(14), bold=True)
+        delta_font = get_font(S(12), bold=True)
         delta_text = f"+{delta}" if delta > 0 else str(delta)
         delta_color = hex_to_rgb(PuckcastColors.RISING) if delta > 0 else hex_to_rgb(PuckcastColors.FALLING)
-        draw.text((x + tile_size - S(30), y + tile_size - S(22)), delta_text, fill=delta_color, font=delta_font)
+        delta_bbox = draw.textbbox((0, 0), delta_text, font=delta_font)
+        delta_w = delta_bbox[2] - delta_bbox[0]
+        draw.text((x + tile_size - delta_w - S(6), y + tile_size - S(18)), delta_text, fill=delta_color, font=delta_font)
 
     img.paste(result.convert("RGB"))
 
@@ -111,27 +113,28 @@ def generate_power_rankings_image(rankings: List[Dict], week_of: str) -> Image.I
     img = create_puckcast_background()
     draw = ImageDraw.Draw(img)
 
-    margin = S(50)
+    margin = S(48)
 
-    # Header
-    title_font = get_font(S(68), bold=True)
-    draw.text((margin, S(45)), "POWER RANKINGS", fill=hex_to_rgb(PuckcastColors.TEXT_PRIMARY), font=title_font)
+    # Header - 64px top padding
+    title_font = get_font(S(64), bold=True)
+    draw.text((margin, S(64)), "POWER RANKINGS", fill=hex_to_rgb(PuckcastColors.TEXT_PRIMARY), font=title_font)
 
-    subtitle_font = get_font(S(26), bold=False)
-    draw.text((margin, S(120)), f"Week of {week_of}", fill=hex_to_rgb(PuckcastColors.TEXT_SECONDARY), font=subtitle_font)
+    # Subtitle - 28px below title
+    subtitle_font = get_font(S(24), bold=False)
+    draw.text((margin, S(136)), f"Week of {week_of}", fill=hex_to_rgb(PuckcastColors.TEXT_SECONDARY), font=subtitle_font)
 
     # Accent line
-    line_y = S(165)
-    draw.line([(margin, line_y), (margin + S(220), line_y)], fill=hex_to_rgb(PuckcastColors.AQUA), width=S(4))
+    line_y = S(176)
+    draw.line([(margin, line_y), (margin + S(200), line_y)], fill=hex_to_rgb(PuckcastColors.AQUA), width=S(4))
 
-    # Grid layout: 8 cols x 4 rows - maximize space usage
+    # Grid layout: 8 cols x 4 rows - tight professional grid
     cols, rows = 8, 4
-    tile_size = S(128)
-    gap = S(4)
+    tile_size = S(122)
+    gap = S(6)  # 6-8px tight spacing
 
     grid_width = cols * tile_size + (cols - 1) * gap
     start_x = (RENDER_SIZE - grid_width) // 2
-    start_y = line_y + S(22)
+    start_y = line_y + S(40)  # 40-48px spacing from subtitle
 
     for i, team in enumerate(rankings[:32]):
         col = i % cols

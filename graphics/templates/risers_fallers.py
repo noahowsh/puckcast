@@ -145,36 +145,38 @@ def generate_risers_fallers_image(risers: List[Dict], fallers: List[Dict]) -> Im
     img = create_puckcast_background()
     draw = ImageDraw.Draw(img)
 
-    margin = S(55)
+    margin = S(48)
 
-    # Header
-    title_font = get_font(S(68), bold=True)
-    draw.text((margin, S(45)), "TRENDING TEAMS", fill=hex_to_rgb(PuckcastColors.TEXT_PRIMARY), font=title_font)
+    # Header - 64px top padding
+    title_font = get_font(S(64), bold=True)
+    draw.text((margin, S(64)), "TRENDING TEAMS", fill=hex_to_rgb(PuckcastColors.TEXT_PRIMARY), font=title_font)
 
-    subtitle_font = get_font(S(26), bold=False)
-    draw.text((margin, S(120)), "Weekly Rank Changes", fill=hex_to_rgb(PuckcastColors.TEXT_SECONDARY), font=subtitle_font)
+    # Subtitle - 28px below title
+    subtitle_font = get_font(S(24), bold=False)
+    draw.text((margin, S(136)), "Weekly Rank Changes", fill=hex_to_rgb(PuckcastColors.TEXT_SECONDARY), font=subtitle_font)
 
     # Accent line
-    line_y = S(165)
-    draw.line([(margin, line_y), (margin + S(220), line_y)], fill=hex_to_rgb(PuckcastColors.AQUA), width=S(4))
+    line_y = S(176)
+    draw.line([(margin, line_y), (margin + S(200), line_y)], fill=hex_to_rgb(PuckcastColors.AQUA), width=S(4))
 
-    row_height = S(100)
-    row_gap = S(10)
+    # Card layout - 12px internal padding increase
+    row_height = S(94)
+    row_gap = S(8)  # 16px between cards (reduced)
 
-    # Risers section
-    section_font = get_font(S(28), bold=True)
-    y = line_y + S(22)
+    # Risers section - 48px above section header
+    section_font = get_font(S(26), bold=True)
+    y = line_y + S(32)
     draw.text((margin, y), "RISING", fill=hex_to_rgb(PuckcastColors.RISING), font=section_font)
-    y += S(38)
+    y += S(36)
 
     for team in risers[:3]:
         draw_trend_row(img, team, y, margin, row_height, is_riser=True)
         y += row_height + row_gap
 
-    # Fallers section
-    y += S(12)
+    # Fallers section - 48px gap between sections
+    y += S(16)  # Total gap = row_gap + 16 = ~24px visible gap before header
     draw.text((margin, y), "FALLING", fill=hex_to_rgb(PuckcastColors.FALLING), font=section_font)
-    y += S(38)
+    y += S(36)
 
     for team in fallers[:3]:
         draw_trend_row(img, team, y, margin, row_height, is_riser=False)

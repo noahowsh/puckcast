@@ -76,29 +76,29 @@ def draw_luck_row(
         accent_color = hex_to_rgb(PuckcastColors.FALLING)
 
     coords = (x_offset, y_position, x_offset + width, y_position + row_height)
-    draw_rounded_rect(overlay_draw, coords, radius=S(10), fill=bg_color, outline=border_color, width=1)
+    draw_rounded_rect(overlay_draw, coords, radius=S(8), fill=bg_color, outline=border_color, width=1)
 
     img_rgba = img.convert("RGBA")
     result = Image.alpha_composite(img_rgba, overlay)
     draw = ImageDraw.Draw(result)
 
-    # Rank
-    rank_font = get_font(S(32), bold=True)
+    # Rank - consistent alignment
+    rank_font = get_font(S(28), bold=True)
     rank_bbox = draw.textbbox((0, 0), str(rank), font=rank_font)
     rank_h = rank_bbox[3] - rank_bbox[1]
-    draw.text((x_offset + S(15), row_center_y - rank_h // 2 - S(2)), str(rank), fill=hex_to_rgb(PuckcastColors.TEXT_TERTIARY), font=rank_font)
+    draw.text((x_offset + S(12), row_center_y - rank_h // 2), str(rank), fill=hex_to_rgb(PuckcastColors.TEXT_TERTIARY), font=rank_font)
 
-    # Team logo - larger
-    logo_size = S(75)
+    # Team logo
+    logo_size = S(68)
     logo = get_logo(abbrev, logo_size)
-    logo_x = x_offset + S(55)
+    logo_x = x_offset + S(48)
     logo_y = row_center_y - logo_size // 2
     result.paste(logo, (logo_x, logo_y), logo)
 
-    # Team abbreviation and PDO
-    info_x = logo_x + logo_size + S(15)
-    abbrev_font = get_font(S(28), bold=True)
-    pdo_font = get_font(S(18), bold=False)
+    # Team abbreviation and PDO - better spacing
+    info_x = logo_x + logo_size + S(12)
+    abbrev_font = get_font(S(24), bold=True)
+    pdo_font = get_font(S(16), bold=False)
 
     abbrev_bbox = draw.textbbox((0, 0), abbrev, font=abbrev_font)
     abbrev_h = abbrev_bbox[3] - abbrev_bbox[1]
@@ -106,19 +106,19 @@ def draw_luck_row(
     pdo_bbox = draw.textbbox((0, 0), pdo_text, font=pdo_font)
     pdo_h = pdo_bbox[3] - pdo_bbox[1]
 
-    total_h = abbrev_h + S(4) + pdo_h
+    total_h = abbrev_h + S(6) + pdo_h
     text_y = row_center_y - total_h // 2
 
     draw.text((info_x, text_y), abbrev, fill=hex_to_rgb(PuckcastColors.TEXT_PRIMARY), font=abbrev_font)
-    draw.text((info_x, text_y + abbrev_h + S(4)), pdo_text, fill=hex_to_rgb(PuckcastColors.TEXT_TERTIARY), font=pdo_font)
+    draw.text((info_x, text_y + abbrev_h + S(6)), pdo_text, fill=hex_to_rgb(PuckcastColors.TEXT_TERTIARY), font=pdo_font)
 
-    # Luck score on the right - larger
-    luck_font = get_font(S(36), bold=True)
+    # Luck score on the right - consistent alignment
+    luck_font = get_font(S(32), bold=True)
     luck_text = f"+{luck_score:.2f}" if luck_score > 0 else f"{luck_score:.2f}"
     luck_bbox = draw.textbbox((0, 0), luck_text, font=luck_font)
     luck_w = luck_bbox[2] - luck_bbox[0]
     luck_h = luck_bbox[3] - luck_bbox[1]
-    draw.text((x_offset + width - luck_w - S(18), row_center_y - luck_h // 2 - S(2)), luck_text, fill=accent_color, font=luck_font)
+    draw.text((x_offset + width - luck_w - S(14), row_center_y - luck_h // 2), luck_text, fill=accent_color, font=luck_font)
 
     img.paste(result.convert("RGB"))
 
@@ -128,35 +128,36 @@ def generate_luck_report_image(luck_report: Dict[str, Any]) -> Image.Image:
     img = create_puckcast_background()
     draw = ImageDraw.Draw(img)
 
-    margin = S(45)
+    margin = S(40)
 
-    # Header
-    title_font = get_font(S(68), bold=True)
-    draw.text((margin, S(45)), "LUCK REPORT", fill=hex_to_rgb(PuckcastColors.TEXT_PRIMARY), font=title_font)
+    # Header - 64px top padding
+    title_font = get_font(S(64), bold=True)
+    draw.text((margin, S(64)), "LUCK REPORT", fill=hex_to_rgb(PuckcastColors.TEXT_PRIMARY), font=title_font)
 
+    # Subtitle - 32px below title for stronger hierarchy
     subtitle_font = get_font(S(24), bold=False)
-    draw.text((margin, S(120)), "PDO & Luck Score Analysis", fill=hex_to_rgb(PuckcastColors.TEXT_SECONDARY), font=subtitle_font)
+    draw.text((margin, S(140)), "PDO & Luck Score Analysis", fill=hex_to_rgb(PuckcastColors.TEXT_SECONDARY), font=subtitle_font)
 
     # Accent line
-    line_y = S(160)
+    line_y = S(180)
     draw.line([(margin, line_y), (margin + S(180), line_y)], fill=hex_to_rgb(PuckcastColors.AQUA), width=S(4))
 
-    # Two columns
-    col_gap = S(20)
+    # Two columns - increased gap by 20px
+    col_gap = S(28)
     col_width = (RENDER_SIZE - 2 * margin - col_gap) // 2
     left_x = margin
     right_x = margin + col_width + col_gap
 
     # Column headers
-    header_y = line_y + S(25)
-    section_font = get_font(S(30), bold=True)
+    header_y = line_y + S(28)
+    section_font = get_font(S(28), bold=True)
     draw.text((left_x, header_y), "LUCKIEST", fill=hex_to_rgb(PuckcastColors.RISING), font=section_font)
     draw.text((right_x, header_y), "UNLUCKIEST", fill=hex_to_rgb(PuckcastColors.FALLING), font=section_font)
 
-    # Team rows - 5 teams per side, expanded to fill space
-    content_y = header_y + S(55)
-    row_height = S(130)
-    row_gap = S(20)
+    # Team rows - 5 teams per side with 10-12px more internal padding
+    content_y = header_y + S(48)
+    row_height = S(120)  # Increased internal padding
+    row_gap = S(14)
 
     luckiest = luck_report.get("luckiest", [])
     unluckiest = luck_report.get("unluckiest", [])
