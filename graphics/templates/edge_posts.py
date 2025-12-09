@@ -135,8 +135,8 @@ def draw_prediction_row(
     # Right side: Confidence grade badge + Win probability
     grade_color = get_confidence_color_rgb(confidence)
 
-    # Confidence grade circle/badge
-    badge_size = S(56)
+    # Confidence grade circle/badge - BIGGER for legibility
+    badge_size = S(70)
     badge_x = img.width - margin - badge_size
     badge_y = row_center_y - badge_size // 2
 
@@ -146,13 +146,13 @@ def draw_prediction_row(
         fill=grade_color,
     )
 
-    # Grade letter in badge
-    grade_font = get_font(S(30), bold=True)
+    # Grade letter in badge - LARGER font for legibility
+    grade_font = get_font(S(40), bold=True)
     grade_bbox = draw.textbbox((0, 0), confidence, font=grade_font)
     grade_w = grade_bbox[2] - grade_bbox[0]
     grade_h = grade_bbox[3] - grade_bbox[1]
     draw.text(
-        (badge_x + (badge_size - grade_w) // 2, badge_y + (badge_size - grade_h) // 2 - S(3)),
+        (badge_x + (badge_size - grade_w) // 2, badge_y + (badge_size - grade_h) // 2 - S(4)),
         confidence,
         fill=(255, 255, 255),
         font=grade_font,
@@ -164,23 +164,24 @@ def draw_prediction_row(
     prob_bbox = draw.textbbox((0, 0), prob_text, font=prob_font)
     prob_w = prob_bbox[2] - prob_bbox[0]
     prob_h = prob_bbox[3] - prob_bbox[1]
-    prob_x = badge_x - prob_w - S(20)
+    prob_x = badge_x - prob_w - S(25)
 
+    # Position probability higher to make room for pick label
     draw.text(
-        (prob_x, row_center_y - prob_h // 2 - S(6)),
+        (prob_x, row_center_y - prob_h // 2 - S(14)),
         prob_text,
         fill=grade_color,
         font=prob_font,
     )
 
-    # Pick label (team abbrev under probability)
+    # Pick label (team abbrev under probability) - MORE SPACING
     pick_font = get_font(S(18), bold=True)
     pick_label = f"Pick: {pick_abbrev}"
     pick_bbox = draw.textbbox((0, 0), pick_label, font=pick_font)
     pick_w = pick_bbox[2] - pick_bbox[0]
 
     draw.text(
-        (prob_x + (prob_w - pick_w) // 2, row_center_y + prob_h // 2),
+        (prob_x + (prob_w - pick_w) // 2, row_center_y + S(20)),
         pick_label,
         fill=hex_to_rgb(PuckcastColors.TEXT_SECONDARY),
         font=pick_font,

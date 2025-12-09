@@ -467,54 +467,60 @@ def draw_footer(
     img: Image.Image,
     margin: int = None,
 ) -> None:
-    """Draw a clean, professional footer with logo only. Auto-scales for supersampling."""
+    """Draw footer with logo and PUCKCAST text. Auto-scales for supersampling."""
     # Auto-detect scale based on image size
     scale = img.width / 1080
     if margin is None:
         margin = int(40 * scale)
 
+    draw = ImageDraw.Draw(img)
+    brand_text = "PUCKCAST"
+    font_size = int(24 * scale)
+    font = get_font(font_size, bold=True)
+    text_color = hex_to_rgb(PuckcastColors.AQUA)
+
+    # Get text dimensions
+    text_bbox = draw.textbbox((0, 0), brand_text, font=font)
+    text_width = text_bbox[2] - text_bbox[0]
+    text_height = text_bbox[3] - text_bbox[1]
+
     # Load the Puckcast logo
     logo_path = ASSETS_DIR / "puckcastai.png"
-    if not logo_path.exists():
-        # Fallback - draw text only
-        draw = ImageDraw.Draw(img)
-        font_size = int(22 * scale)
-        font = get_font(font_size, bold=True)
-        color = hex_to_rgb(PuckcastColors.AQUA)
-        text = "PUCKCAST.AI"
-        bbox = draw.textbbox((0, 0), text, font=font)
-        text_width = bbox[2] - bbox[0]
-        x = (img.width - text_width) // 2
-        y = img.height - margin - int(20 * scale)
-        draw.text((x, y), text, fill=color, font=font)
-        return
+    logo = None
+    logo_width = 0
+    logo_height = int(36 * scale)
 
-    try:
-        logo = Image.open(logo_path).convert("RGBA")
-        # Scale logo based on image size
-        logo_height = int(40 * scale)
-        aspect = logo.width / logo.height
-        logo_width = int(logo_height * aspect)
-        logo = logo.resize((logo_width, logo_height), Image.Resampling.LANCZOS)
+    if logo_path.exists():
+        try:
+            logo = Image.open(logo_path).convert("RGBA")
+            aspect = logo.width / logo.height
+            logo_width = int(logo_height * aspect)
+            logo = logo.resize((logo_width, logo_height), Image.Resampling.LANCZOS)
+        except Exception:
+            logo = None
 
-        # Center the logo horizontally
-        x = (img.width - logo_width) // 2
-        y = img.height - margin - logo_height
+    # Calculate total width (logo + gap + text)
+    gap = int(12 * scale) if logo else 0
+    total_width = logo_width + gap + text_width if logo else text_width
 
-        # Composite with transparency
+    # Center everything horizontally
+    start_x = (img.width - total_width) // 2
+    y = img.height - margin - max(logo_height, text_height)
+
+    # Draw logo if available
+    if logo:
+        logo_y = y + (max(logo_height, text_height) - logo_height) // 2
         if img.mode != "RGBA":
             img_rgba = img.convert("RGBA")
-            img_rgba.paste(logo, (x, y), logo)
+            img_rgba.paste(logo, (start_x, logo_y), logo)
             img.paste(img_rgba.convert("RGB"))
         else:
-            img.paste(logo, (x, y), logo)
-    except Exception as e:
-        # Fallback to text
-        draw = ImageDraw.Draw(img)
-        font_size = int(22 * scale)
-        font = get_font(font_size, bold=True)
-        color = hex_to_rgb(PuckcastColors.AQUA)
-        draw.text((img.width // 2 - int(50 * scale), img.height - margin - int(20 * scale)), "PUCKCAST.AI", fill=color, font=font)
+            img.paste(logo, (start_x, logo_y), logo)
+
+    # Draw brand text
+    text_x = start_x + logo_width + gap if logo else start_x
+    text_y = y + (max(logo_height, text_height) - text_height) // 2 - int(4 * scale)
+    draw.text((text_x, text_y), brand_text, fill=text_color, font=font)
 
 
 def draw_badge(
