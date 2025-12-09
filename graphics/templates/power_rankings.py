@@ -62,13 +62,11 @@ def draw_team_tile(
     tile_width: int,
     tile_height: int,
 ) -> None:
-    """Draw a premium team tile with large logo and stats."""
+    """Draw a clean team tile with rank, logo, and abbreviation."""
     abbrev = team.get("abbrev", "???")
     rank = team.get("rank", 0)
     delta = team.get("rankDelta", 0)
     tier = team.get("tier", "bubble")
-    record = team.get("record", "0-0-0")
-    points = team.get("points", 0)
 
     tier_color = TIER_COLORS.get(tier, TIER_COLORS["bubble"])
 
@@ -78,7 +76,7 @@ def draw_team_tile(
 
     # Dark tile background with tier-colored border
     coords = (x, y, x + tile_width, y + tile_height)
-    draw_rounded_rect(overlay_draw, coords, radius=S(10), fill=(25, 30, 45, 220), outline=(*tier_color, 120), width=2)
+    draw_rounded_rect(overlay_draw, coords, radius=S(10), fill=(25, 30, 45, 220), outline=(*tier_color, 100), width=2)
 
     img_rgba = img.convert("RGBA")
     result = Image.alpha_composite(img_rgba, overlay)
@@ -87,48 +85,39 @@ def draw_team_tile(
     # Rank number - top left corner
     rank_font = get_font(S(18), bold=True)
     rank_text = str(rank)
-    draw.text((x + S(8), y + S(6)), rank_text, fill=hex_to_rgb(PuckcastColors.TEXT_TERTIARY), font=rank_font)
+    draw.text((x + S(10), y + S(8)), rank_text, fill=hex_to_rgb(PuckcastColors.TEXT_TERTIARY), font=rank_font)
 
-    # Large team logo - centered
-    logo_size = S(72)
+    # Team logo - centered vertically in tile
+    logo_size = S(64)
     logo = get_logo(abbrev, logo_size)
     logo_x = x + (tile_width - logo_size) // 2
-    logo_y = y + S(24)
+    logo_y = y + S(18)
     result.paste(logo, (logo_x, logo_y), logo)
 
-    # Team abbreviation + movement - centered below logo
-    abbrev_font = get_font(S(16), bold=True)
+    # Team abbreviation centered below logo
+    abbrev_font = get_font(S(15), bold=True)
+    abbrev_bbox = draw.textbbox((0, 0), abbrev, font=abbrev_font)
+    abbrev_w = abbrev_bbox[2] - abbrev_bbox[0]
+    abbrev_h = abbrev_bbox[3] - abbrev_bbox[1]
+    abbrev_x = x + (tile_width - abbrev_w) // 2
+    abbrev_y = logo_y + logo_size + S(6)
+    draw.text((abbrev_x, abbrev_y), abbrev, fill=hex_to_rgb(PuckcastColors.TEXT_PRIMARY), font=abbrev_font)
+
+    # Movement indicator (if any) - small, to the right of abbrev
     if delta != 0:
         if delta > 0:
-            delta_text = f"+{delta}"
+            delta_text = f"▲{delta}"
             delta_color = hex_to_rgb(PuckcastColors.RISING)
         else:
-            delta_text = str(delta)
+            delta_text = f"▼{abs(delta)}"
             delta_color = hex_to_rgb(PuckcastColors.FALLING)
-        # Draw abbrev and delta side by side
-        abbrev_bbox = draw.textbbox((0, 0), abbrev, font=abbrev_font)
-        abbrev_w = abbrev_bbox[2] - abbrev_bbox[0]
-        delta_font = get_font(S(13), bold=True)
+        delta_font = get_font(S(11), bold=True)
         delta_bbox = draw.textbbox((0, 0), delta_text, font=delta_font)
         delta_w = delta_bbox[2] - delta_bbox[0]
-        total_w = abbrev_w + S(6) + delta_w
-        start_x = x + (tile_width - total_w) // 2
-        abbrev_y = logo_y + logo_size + S(4)
-        draw.text((start_x, abbrev_y), abbrev, fill=hex_to_rgb(PuckcastColors.TEXT_PRIMARY), font=abbrev_font)
-        draw.text((start_x + abbrev_w + S(6), abbrev_y + S(2)), delta_text, fill=delta_color, font=delta_font)
-    else:
-        abbrev_bbox = draw.textbbox((0, 0), abbrev, font=abbrev_font)
-        abbrev_w = abbrev_bbox[2] - abbrev_bbox[0]
-        abbrev_y = logo_y + logo_size + S(4)
-        draw.text((x + (tile_width - abbrev_w) // 2, abbrev_y), abbrev, fill=hex_to_rgb(PuckcastColors.TEXT_PRIMARY), font=abbrev_font)
-
-    # Points - bottom of tile
-    stats_font = get_font(S(12), bold=False)
-    stats_text = f"{points} PTS"
-    stats_bbox = draw.textbbox((0, 0), stats_text, font=stats_font)
-    stats_w = stats_bbox[2] - stats_bbox[0]
-    stats_y = y + tile_height - S(18)
-    draw.text((x + (tile_width - stats_w) // 2, stats_y), stats_text, fill=hex_to_rgb(PuckcastColors.TEXT_SECONDARY), font=stats_font)
+        # Position to right of abbreviation
+        delta_x = abbrev_x + abbrev_w + S(4)
+        delta_y = abbrev_y + (abbrev_h - (delta_bbox[3] - delta_bbox[1])) // 2
+        draw.text((delta_x, delta_y), delta_text, fill=delta_color, font=delta_font)
 
     img.paste(result.convert("RGB"))
 
