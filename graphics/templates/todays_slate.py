@@ -116,7 +116,7 @@ def draw_game_row(
 
     # Grade badge position (anchor point)
     badge_size = S(34)
-    badge_x = img.width - margin - badge_size - S(24)  # Pulled inward ~50px
+    badge_x = img.width - margin - badge_size - S(36)  # Pulled inward more for connection
     badge_y = row_center_y - badge_size // 2
 
     # Probability text - balanced size
@@ -136,8 +136,8 @@ def draw_game_row(
     # Position pick section to left of badge with spacing
     pick_section_x = badge_x - prob_w - S(16)  # Extra spacing between prob and badge
 
-    # Total height of pick section with proper spacing
-    spacing = S(10)  # Increased vertical spacing
+    # Total height of pick section with better breathing room
+    spacing = S(14)  # Increased vertical spacing for less compression
     total_pick_h = prob_h + spacing + pick_h
     pick_start_y = row_center_y - total_pick_h // 2
 
@@ -164,7 +164,7 @@ def draw_game_row(
     draw.line([(margin, sep_y), (img.width - margin, sep_y)], fill=(255, 255, 255, 45), width=1)
 
 
-def generate_slate_image(games: List[Dict], date_str: str, page: int = 1) -> Image.Image:
+def generate_slate_image(games: List[Dict], date_str: str, page: int = 1, total_pages: int = 1) -> Image.Image:
     """Generate the slate image at 2x resolution."""
     img = create_puckcast_background()
     draw = ImageDraw.Draw(img)
@@ -178,8 +178,6 @@ def generate_slate_image(games: List[Dict], date_str: str, page: int = 1) -> Ima
     # Subtitle - increased spacing below title for hierarchy
     subtitle_font = get_font(S(22), bold=False)
     subtitle = f"Model Predictions • {date_str}"
-    if page > 1:
-        subtitle += f" (Page {page})"
     draw.text((margin, S(128)), subtitle, fill=hex_to_rgb(PuckcastColors.TEXT_SECONDARY), font=subtitle_font)
 
     # Accent line
@@ -194,6 +192,16 @@ def generate_slate_image(games: List[Dict], date_str: str, page: int = 1) -> Ima
     for i, game in enumerate(games[:6]):
         y_pos = content_y + i * (row_height + row_gap)
         draw_game_row(img, draw, game, y_pos, margin, row_height)
+
+    # Slide counter for multi-page slates (bottom right)
+    if total_pages > 1:
+        counter_font = get_font(S(18), bold=True)
+        counter_text = f"{page}/{total_pages}"
+        counter_bbox = draw.textbbox((0, 0), counter_text, font=counter_font)
+        counter_w = counter_bbox[2] - counter_bbox[0]
+        counter_x = img.width - margin - counter_w
+        counter_y = img.height - S(52)
+        draw.text((counter_x, counter_y), counter_text, fill=hex_to_rgb(PuckcastColors.TEXT_TERTIARY), font=counter_font)
 
     draw_footer(img)
     return img
@@ -229,12 +237,13 @@ def generate_todays_slate() -> List[Path]:
 
     output_paths = []
     games_per_page = 6
+    total_pages = (len(games_sorted) + games_per_page - 1) // games_per_page
 
     for page_idx in range(0, len(games_sorted), games_per_page):
         page_games = games_sorted[page_idx:page_idx + games_per_page]
         page_num = page_idx // games_per_page + 1
 
-        img = generate_slate_image(page_games, date_str, page=page_num)
+        img = generate_slate_image(page_games, date_str, page=page_num, total_pages=total_pages)
 
         if len(games_sorted) > games_per_page:
             output_path = OUTPUT_DIR / f"todays_slate_{page_num}.png"
