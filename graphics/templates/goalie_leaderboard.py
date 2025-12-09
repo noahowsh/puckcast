@@ -71,9 +71,9 @@ def draw_goalie_row(
     draw.text((margin + S(4), row_center_y - rank_h // 2), str(rank), fill=rank_color, font=rank_font)
 
     # Team logo
-    logo_size = S(72)  # Slightly larger for better fill
+    logo_size = S(60)  # Sized for row height
     logo = get_logo(team, logo_size)
-    logo_x = margin + S(44)
+    logo_x = margin + S(40)
     logo_y = row_center_y - logo_size // 2
     img.paste(logo, (logo_x, logo_y), logo)
 
@@ -141,9 +141,9 @@ def generate_goalie_leaderboard_image(goalies: List[Dict]) -> Image.Image:
     line_y = S(152)
     draw.line([(margin, line_y), (margin + S(160), line_y)], fill=hex_to_rgb(PuckcastColors.AQUA), width=S(4))
 
-    # Goalie rows - consistent height with 16-18px internal padding
-    content_y = line_y + S(20)
-    row_height = S(108)  # Taller rows for proper internal padding
+    # Goalie rows - sized to fit 8 rows above footer
+    content_y = line_y + S(18)
+    row_height = S(92)  # Balanced row height
     row_gap = S(6)  # Consistent spacing between rows
 
     for i, goalie in enumerate(goalies[:8], 1):
