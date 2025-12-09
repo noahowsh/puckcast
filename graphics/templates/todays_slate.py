@@ -135,22 +135,22 @@ def draw_game_row(
         font=grade_font,
     )
 
-    # Win probability - pulled closer to matchup
-    prob_font = get_font(S(36), bold=True)
+    # Win probability - larger and more prominent
+    prob_font = get_font(S(42), bold=True)
     prob_text = f"{pick_prob * 100:.0f}%"
     prob_bbox = draw.textbbox((0, 0), prob_text, font=prob_font)
     prob_w = prob_bbox[2] - prob_bbox[0]
     prob_h = prob_bbox[3] - prob_bbox[1]
-    prob_x = badge_x - prob_w - S(10)
+    prob_x = badge_x - prob_w - S(14)
 
-    draw.text((prob_x, row_center_y - prob_h // 2 - S(8)), prob_text, fill=grade_color, font=prob_font)
+    draw.text((prob_x, row_center_y - prob_h // 2 - S(10)), prob_text, fill=grade_color, font=prob_font)
 
-    # Pick label
-    pick_font = get_font(S(13), bold=True)
+    # Pick label - larger
+    pick_font = get_font(S(16), bold=True)
     pick_label = f"Pick: {pick_abbrev}"
     pick_bbox = draw.textbbox((0, 0), pick_label, font=pick_font)
     pick_w = pick_bbox[2] - pick_bbox[0]
-    draw.text((prob_x + (prob_w - pick_w) // 2, row_center_y + S(12)), pick_label, fill=hex_to_rgb(PuckcastColors.TEXT_SECONDARY), font=pick_font)
+    draw.text((prob_x + (prob_w - pick_w) // 2, row_center_y + S(14)), pick_label, fill=hex_to_rgb(PuckcastColors.TEXT_SECONDARY), font=pick_font)
 
 
 def generate_slate_image(games: List[Dict], date_str: str, page: int = 1) -> Image.Image:
