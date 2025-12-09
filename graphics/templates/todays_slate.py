@@ -150,8 +150,8 @@ def draw_game_row(
     # Grade badge
     draw.ellipse([badge_x, badge_y, badge_x + badge_size, badge_y + badge_size], fill=grade_color)
 
-    # Grade letter
-    grade_font = get_font(S(18), bold=True)
+    # Grade letter - sized to match probability text visually
+    grade_font = get_font(S(22), bold=True)
     grade_bbox = draw.textbbox((0, 0), confidence, font=grade_font)
     grade_w = grade_bbox[2] - grade_bbox[0]
     grade_h = grade_bbox[3] - grade_bbox[1]
@@ -193,14 +193,16 @@ def generate_slate_image(games: List[Dict], date_str: str, page: int = 1, total_
         y_pos = content_y + i * (row_height + row_gap)
         draw_game_row(img, draw, game, y_pos, margin, row_height)
 
-    # Slide counter for multi-page slates (bottom right)
+    # Slide counter for multi-page slates (bottom right, aligned with footer)
     if total_pages > 1:
-        counter_font = get_font(S(18), bold=True)
+        counter_font = get_font(S(16), bold=True)
         counter_text = f"{page}/{total_pages}"
         counter_bbox = draw.textbbox((0, 0), counter_text, font=counter_font)
         counter_w = counter_bbox[2] - counter_bbox[0]
+        counter_h = counter_bbox[3] - counter_bbox[1]
         counter_x = img.width - margin - counter_w
-        counter_y = img.height - S(52)
+        # Align vertically with footer (footer_margin=58, logo_height~32)
+        counter_y = img.height - S(58) - S(16) - counter_h // 2
         draw.text((counter_x, counter_y), counter_text, fill=hex_to_rgb(PuckcastColors.TEXT_TERTIARY), font=counter_font)
 
     draw_footer(img)
