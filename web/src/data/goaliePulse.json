@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2025-12-10T13:30:25.668651+00:00",
+  "updatedAt": "2025-12-10T23:14:15.622332+00:00",
   "notes": "Goalie performance metrics calculated from NHL Stats API data. GSAx estimates based on save percentage above league average.",
   "goalies": [
     {
@@ -167,8 +167,8 @@
     {
       "name": "Scott Wedgewood",
       "team": "COL",
-      "rollingGsa": 1.4,
-      "seasonGsa": 9.4,
+      "rollingGsa": 1.5,
+      "seasonGsa": 9.7,
       "restDays": 1,
       "startLikelihood": 0.9,
       "trend": "steady",
@@ -375,7 +375,7 @@
       "name": "Ilya Sorokin",
       "team": "NYI",
       "rollingGsa": 0.8,
-      "seasonGsa": 5.3,
+      "seasonGsa": 5.4,
       "restDays": 1,
       "startLikelihood": 0.9,
       "trend": "steady",
@@ -494,7 +494,7 @@
       "name": "Jet Greaves",
       "team": "CBJ",
       "rollingGsa": 0.5,
-      "seasonGsa": 2.8,
+      "seasonGsa": 2.9,
       "restDays": 2,
       "startLikelihood": 0.8,
       "trend": "stable",
