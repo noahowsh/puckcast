@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2025-12-10T11:26:42.193701+00:00",
+  "generatedAt": "2025-12-10T23:13:14.365233+00:00",
   "games": [
     {
       "id": "2025020476",
@@ -14,12 +14,12 @@
         "name": "Rangers",
         "abbrev": "NYR"
       },
-      "homeWinProb": 0.461,
-      "awayWinProb": 0.539,
-      "confidenceScore": 0.078,
-      "confidenceGrade": "C+",
-      "edge": -0.039,
-      "summary": "Rangers project at 54% as the road lean \u2014 a C+-tier edge worth 3.9 pts over a coin flip.",
+      "homeWinProb": 0.4599,
+      "awayWinProb": 0.5401,
+      "confidenceScore": 0.08,
+      "confidenceGrade": "B-",
+      "edge": -0.04,
+      "summary": "Rangers project at 54% as the road lean \u2014 a B--tier edge worth 4.0 pts over a coin flip.",
       "modelFavorite": "away",
       "venue": "United Center",
       "season": "20252026"
@@ -37,12 +37,12 @@
         "name": "Red Wings",
         "abbrev": "DET"
       },
-      "homeWinProb": 0.4878,
-      "awayWinProb": 0.5122,
-      "confidenceScore": 0.024,
+      "homeWinProb": 0.4903,
+      "awayWinProb": 0.5097,
+      "confidenceScore": 0.019,
       "confidenceGrade": "C",
-      "edge": -0.012,
-      "summary": "Red Wings project at 51% as the road lean \u2014 a C-tier edge worth 1.2 pts over a coin flip.",
+      "edge": -0.01,
+      "summary": "Red Wings project at 51% as the road lean \u2014 a C-tier edge worth 1.0 pts over a coin flip.",
       "modelFavorite": "away",
       "venue": "Scotiabank Saddledome",
       "season": "20252026"
@@ -60,12 +60,12 @@
         "name": "Panthers",
         "abbrev": "FLA"
       },
-      "homeWinProb": 0.4791,
-      "awayWinProb": 0.5209,
-      "confidenceScore": 0.042,
+      "homeWinProb": 0.4773,
+      "awayWinProb": 0.5227,
+      "confidenceScore": 0.045,
       "confidenceGrade": "C+",
-      "edge": -0.021,
-      "summary": "Panthers project at 52% as the road lean \u2014 a C+-tier edge worth 2.1 pts over a coin flip.",
+      "edge": -0.023,
+      "summary": "Panthers project at 52% as the road lean \u2014 a C+-tier edge worth 2.3 pts over a coin flip.",
       "modelFavorite": "away",
       "venue": "Delta Center",
       "season": "20252026"
@@ -83,9 +83,9 @@
         "name": "Kings",
         "abbrev": "LAK"
       },
-      "homeWinProb": 0.4473,
-      "awayWinProb": 0.5527,
-      "confidenceScore": 0.105,
+      "homeWinProb": 0.4467,
+      "awayWinProb": 0.5533,
+      "confidenceScore": 0.107,
       "confidenceGrade": "B-",
       "edge": -0.053,
       "summary": "Kings project at 55% as the road lean \u2014 a B--tier edge worth 5.3 pts over a coin flip.",
