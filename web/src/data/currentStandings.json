@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2025-12-10T05:12:07.986886+00:00",
+  "generatedAt": "2025-12-11T05:13:23.873954+00:00",
   "seasonId": "20252026",
   "teams": [
     {
@@ -7,15 +7,15 @@
       "abbrev": "COL",
       "wins": 21,
       "losses": 2,
-      "ot": 6,
-      "points": 48,
-      "gamesPlayed": 29,
-      "pointPctg": 0.82758,
+      "ot": 7,
+      "points": 49,
+      "gamesPlayed": 30,
+      "pointPctg": 0.81666,
       "goalDifferential": 52,
-      "goalsForPerGame": 3.96551,
-      "goalsAgainstPerGame": 2.17241,
-      "shotsForPerGame": 34.0,
-      "shotsAgainstPerGame": 26.68965,
+      "goalsForPerGame": 3.93333,
+      "goalsAgainstPerGame": 2.2,
+      "shotsForPerGame": 34.26666,
+      "shotsAgainstPerGame": 26.83333,
       "seasonId": 20252026
     },
     {
@@ -78,7 +78,7 @@
       "goalDifferential": 15,
       "goalsForPerGame": 3.34482,
       "goalsAgainstPerGame": 2.82758,
-      "shotsForPerGame": 33.24137,
+      "shotsForPerGame": 33.27586,
       "shotsAgainstPerGame": 24.31034,
       "seasonId": 20252026
     },
@@ -95,7 +95,7 @@
       "goalsForPerGame": 2.90322,
       "goalsAgainstPerGame": 2.77419,
       "shotsForPerGame": 29.0,
-      "shotsAgainstPerGame": 28.0,
+      "shotsAgainstPerGame": 28.03225,
       "seasonId": 20252026
     },
     {
@@ -126,7 +126,7 @@
       "goalDifferential": 6,
       "goalsForPerGame": 3.06896,
       "goalsAgainstPerGame": 2.86206,
-      "shotsForPerGame": 29.82758,
+      "shotsForPerGame": 29.86206,
       "shotsAgainstPerGame": 25.0,
       "seasonId": 20252026
     },
@@ -246,16 +246,16 @@
       "team": "New York Rangers",
       "abbrev": "NYR",
       "wins": 15,
-      "losses": 12,
+      "losses": 13,
       "ot": 4,
       "points": 34,
-      "gamesPlayed": 31,
-      "pointPctg": 0.54838,
-      "goalDifferential": 1,
-      "goalsForPerGame": 2.64516,
-      "goalsAgainstPerGame": 2.6129,
-      "shotsForPerGame": 26.41935,
-      "shotsAgainstPerGame": 28.87096,
+      "gamesPlayed": 32,
+      "pointPctg": 0.53125,
+      "goalDifferential": -2,
+      "goalsForPerGame": 2.5625,
+      "goalsAgainstPerGame": 2.625,
+      "shotsForPerGame": 26.25,
+      "shotsAgainstPerGame": 28.75,
       "seasonId": 20252026
     },
     {
@@ -291,6 +291,38 @@
       "seasonId": 20252026
     },
     {
+      "team": "Chicago Blackhawks",
+      "abbrev": "CHI",
+      "wins": 13,
+      "losses": 11,
+      "ot": 6,
+      "points": 32,
+      "gamesPlayed": 30,
+      "pointPctg": 0.53333,
+      "goalDifferential": 0,
+      "goalsForPerGame": 2.96666,
+      "goalsAgainstPerGame": 2.96666,
+      "shotsForPerGame": 25.43333,
+      "shotsAgainstPerGame": 30.63333,
+      "seasonId": 20252026
+    },
+    {
+      "team": "Edmonton Oilers",
+      "abbrev": "EDM",
+      "wins": 13,
+      "losses": 11,
+      "ot": 6,
+      "points": 32,
+      "gamesPlayed": 30,
+      "pointPctg": 0.53333,
+      "goalDifferential": -5,
+      "goalsForPerGame": 3.3,
+      "goalsAgainstPerGame": 3.46666,
+      "shotsForPerGame": 28.5,
+      "shotsAgainstPerGame": 26.53333,
+      "seasonId": 20252026
+    },
+    {
       "team": "Columbus Blue Jackets",
       "abbrev": "CBJ",
       "wins": 13,
@@ -303,7 +335,7 @@
       "goalsForPerGame": 2.9,
       "goalsAgainstPerGame": 3.4,
       "shotsForPerGame": 30.5,
-      "shotsAgainstPerGame": 31.5,
+      "shotsAgainstPerGame": 31.53333,
       "seasonId": 20252026
     },
     {
@@ -339,22 +371,6 @@
       "seasonId": 20252026
     },
     {
-      "team": "Edmonton Oilers",
-      "abbrev": "EDM",
-      "wins": 13,
-      "losses": 11,
-      "ot": 5,
-      "points": 31,
-      "gamesPlayed": 29,
-      "pointPctg": 0.53448,
-      "goalDifferential": -4,
-      "goalsForPerGame": 3.31034,
-      "goalsAgainstPerGame": 3.44827,
-      "shotsForPerGame": 28.44827,
-      "shotsAgainstPerGame": 26.48275,
-      "seasonId": 20252026
-    },
-    {
       "team": "Florida Panthers",
       "abbrev": "FLA",
       "wins": 14,
@@ -384,22 +400,6 @@
       "goalsAgainstPerGame": 3.31034,
       "shotsForPerGame": 27.13793,
       "shotsAgainstPerGame": 25.5862,
-      "seasonId": 20252026
-    },
-    {
-      "team": "Chicago Blackhawks",
-      "abbrev": "CHI",
-      "wins": 12,
-      "losses": 11,
-      "ot": 6,
-      "points": 30,
-      "gamesPlayed": 29,
-      "pointPctg": 0.51724,
-      "goalDifferential": -3,
-      "goalsForPerGame": 2.96551,
-      "goalsAgainstPerGame": 3.06896,
-      "shotsForPerGame": 25.44827,
-      "shotsAgainstPerGame": 30.96551,
       "seasonId": 20252026
     },
     {
@@ -451,6 +451,22 @@
       "seasonId": 20252026
     },
     {
+      "team": "Buffalo Sabres",
+      "abbrev": "BUF",
+      "wins": 12,
+      "losses": 14,
+      "ot": 4,
+      "points": 28,
+      "gamesPlayed": 30,
+      "pointPctg": 0.46666,
+      "goalDifferential": -16,
+      "goalsForPerGame": 3.0,
+      "goalsAgainstPerGame": 3.53333,
+      "shotsForPerGame": 28.96666,
+      "shotsAgainstPerGame": 29.93333,
+      "seasonId": 20252026
+    },
+    {
       "team": "Seattle Kraken",
       "abbrev": "SEA",
       "wins": 11,
@@ -467,19 +483,19 @@
       "seasonId": 20252026
     },
     {
-      "team": "Buffalo Sabres",
-      "abbrev": "BUF",
+      "team": "Nashville Predators",
+      "abbrev": "NSH",
       "wins": 11,
       "losses": 14,
       "ot": 4,
       "points": 26,
       "gamesPlayed": 29,
       "pointPctg": 0.44827,
-      "goalDifferential": -17,
-      "goalsForPerGame": 2.96551,
+      "goalDifferential": -27,
+      "goalsForPerGame": 2.62068,
       "goalsAgainstPerGame": 3.55172,
-      "shotsForPerGame": 29.0,
-      "shotsAgainstPerGame": 29.93103,
+      "shotsForPerGame": 27.75862,
+      "shotsAgainstPerGame": 28.48275,
       "seasonId": 20252026
     },
     {
@@ -496,22 +512,6 @@
       "goalsAgainstPerGame": 3.6,
       "shotsForPerGame": 26.96666,
       "shotsAgainstPerGame": 29.5,
-      "seasonId": 20252026
-    },
-    {
-      "team": "Nashville Predators",
-      "abbrev": "NSH",
-      "wins": 10,
-      "losses": 14,
-      "ot": 4,
-      "points": 24,
-      "gamesPlayed": 28,
-      "pointPctg": 0.42857,
-      "goalDifferential": -27,
-      "goalsForPerGame": 2.60714,
-      "goalsAgainstPerGame": 3.57142,
-      "shotsForPerGame": 27.64285,
-      "shotsAgainstPerGame": 28.0,
       "seasonId": 20252026
     }
   ]
