@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2025-12-10T23:14:15.622332+00:00",
+  "updatedAt": "2025-12-11T13:31:44.706201+00:00",
   "notes": "Goalie performance metrics calculated from NHL Stats API data. GSAx estimates based on save percentage above league average.",
   "goalies": [
     {
@@ -18,7 +18,7 @@
       "watchouts": [
         "Limited recent data"
       ],
-      "nextOpponent": "CHI"
+      "nextOpponent": "MTL"
     },
     {
       "name": "Dennis Hildeby",
@@ -108,7 +108,7 @@
       "watchouts": [
         "Limited recent data"
       ],
-      "nextOpponent": "LAK"
+      "nextOpponent": "UTA"
     },
     {
       "name": "Mackenzie Blackwood",
@@ -147,24 +147,6 @@
       "nextOpponent": "MIN"
     },
     {
-      "name": "Devin Cooley",
-      "team": "CGY",
-      "rollingGsa": 1.5,
-      "seasonGsa": 5.4,
-      "restDays": 2,
-      "startLikelihood": 0.8,
-      "trend": "steady",
-      "note": "Consistent performance from Devin Cooley with a 2.17 GAA \u2014 reliable starter for CGY.",
-      "strengths": [
-        "Exceptional goals against average",
-        "Strong rebound control"
-      ],
-      "watchouts": [
-        "Limited recent data"
-      ],
-      "nextOpponent": "DET"
-    },
-    {
       "name": "Scott Wedgewood",
       "team": "COL",
       "rollingGsa": 1.5,
@@ -201,6 +183,24 @@
       "nextOpponent": "NJD"
     },
     {
+      "name": "Spencer Knight",
+      "team": "CHI",
+      "rollingGsa": 1.2,
+      "seasonGsa": 8.6,
+      "restDays": 1,
+      "startLikelihood": 0.9,
+      "trend": "steady",
+      "note": "Consistent performance from Spencer Knight with a 2.50 GAA \u2014 reliable starter for CHI.",
+      "strengths": [
+        "Proven winner",
+        "Strong rebound control"
+      ],
+      "watchouts": [
+        "Inconsistent results"
+      ],
+      "nextOpponent": "STL"
+    },
+    {
       "name": "Pyotr Kochetkov",
       "team": "CAR",
       "rollingGsa": 1.1,
@@ -233,24 +233,7 @@
       "watchouts": [
         "Inconsistent results"
       ],
-      "nextOpponent": "SEA"
-    },
-    {
-      "name": "Spencer Knight",
-      "team": "CHI",
-      "rollingGsa": 1.0,
-      "seasonGsa": 6.8,
-      "restDays": 1,
-      "startLikelihood": 0.9,
-      "trend": "steady",
-      "note": "Consistent performance from Spencer Knight with a 2.62 GAA \u2014 reliable starter for CHI.",
-      "strengths": [
-        "Solid fundamentals"
-      ],
-      "watchouts": [
-        "Inconsistent results"
-      ],
-      "nextOpponent": "NYR"
+      "nextOpponent": "CGY"
     },
     {
       "name": "Connor Hellebuyck",
@@ -270,21 +253,21 @@
       "nextOpponent": "BOS"
     },
     {
-      "name": "Igor Shesterkin",
-      "team": "NYR",
+      "name": "Devin Cooley",
+      "team": "CGY",
       "rollingGsa": 1.0,
-      "seasonGsa": 8.0,
-      "restDays": 1,
-      "startLikelihood": 0.9,
+      "seasonGsa": 4.0,
+      "restDays": 2,
+      "startLikelihood": 0.8,
       "trend": "steady",
-      "note": "Consistent performance from Igor Shesterkin with a 2.46 GAA \u2014 reliable starter for NYR.",
+      "note": "Consistent performance from Devin Cooley with a 2.35 GAA \u2014 reliable starter for CGY.",
       "strengths": [
-        "Proven winner"
+        "Solid fundamentals"
       ],
       "watchouts": [
-        "Inconsistent results"
+        "Limited recent data"
       ],
-      "nextOpponent": "CHI"
+      "nextOpponent": "LAK"
     },
     {
       "name": "Jeremy Swayman",
@@ -338,6 +321,23 @@
       "nextOpponent": "MTL"
     },
     {
+      "name": "Igor Shesterkin",
+      "team": "NYR",
+      "rollingGsa": 0.9,
+      "seasonGsa": 7.6,
+      "restDays": 1,
+      "startLikelihood": 0.9,
+      "trend": "steady",
+      "note": "Consistent performance from Igor Shesterkin with a 2.48 GAA \u2014 reliable starter for NYR.",
+      "strengths": [
+        "Proven winner"
+      ],
+      "watchouts": [
+        "Inconsistent results"
+      ],
+      "nextOpponent": "MTL"
+    },
+    {
       "name": "Daniil Tarasov",
       "team": "FLA",
       "rollingGsa": 0.9,
@@ -352,7 +352,7 @@
       "watchouts": [
         "Limited recent data"
       ],
-      "nextOpponent": "UTA"
+      "nextOpponent": "COL"
     },
     {
       "name": "Nikita Tolopilo",
