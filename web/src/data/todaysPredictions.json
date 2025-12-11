@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2025-12-11T11:26:46.261400+00:00",
+  "generatedAt": "2025-12-11T23:12:17.445585+00:00",
   "games": [
     {
       "id": "2025020480",
@@ -14,8 +14,8 @@
         "name": "Sharks",
         "abbrev": "SJS"
       },
-      "homeWinProb": 0.54,
-      "awayWinProb": 0.46,
+      "homeWinProb": 0.5401,
+      "awayWinProb": 0.4599,
       "confidenceScore": 0.08,
       "confidenceGrade": "B-",
       "edge": 0.04,
@@ -106,9 +106,9 @@
         "name": "Canadiens",
         "abbrev": "MTL"
       },
-      "homeWinProb": 0.5107,
-      "awayWinProb": 0.4893,
-      "confidenceScore": 0.021,
+      "homeWinProb": 0.5108,
+      "awayWinProb": 0.4892,
+      "confidenceScore": 0.022,
       "confidenceGrade": "C",
       "edge": 0.011,
       "summary": "Penguins project at 51% as the home lean \u2014 a C-tier edge worth 1.1 pts over a coin flip.",
@@ -175,9 +175,9 @@
         "name": "Blues",
         "abbrev": "STL"
       },
-      "homeWinProb": 0.4228,
-      "awayWinProb": 0.5772,
-      "confidenceScore": 0.154,
+      "homeWinProb": 0.4226,
+      "awayWinProb": 0.5774,
+      "confidenceScore": 0.155,
       "confidenceGrade": "B",
       "edge": -0.077,
       "summary": "Blues project at 58% as the road lean \u2014 a B-tier edge worth 7.7 pts over a coin flip.",
@@ -198,8 +198,8 @@
         "name": "Stars",
         "abbrev": "DAL"
       },
-      "homeWinProb": 0.5001,
-      "awayWinProb": 0.4999,
+      "homeWinProb": 0.5002,
+      "awayWinProb": 0.4998,
       "confidenceScore": 0.0,
       "confidenceGrade": "C",
       "edge": 0.0,
@@ -244,8 +244,8 @@
         "name": "Red Wings",
         "abbrev": "DET"
       },
-      "homeWinProb": 0.5932,
-      "awayWinProb": 0.4068,
+      "homeWinProb": 0.5929,
+      "awayWinProb": 0.4071,
       "confidenceScore": 0.186,
       "confidenceGrade": "B",
       "edge": 0.093,
@@ -267,9 +267,9 @@
         "name": "Panthers",
         "abbrev": "FLA"
       },
-      "homeWinProb": 0.5507,
-      "awayWinProb": 0.4493,
-      "confidenceScore": 0.101,
+      "homeWinProb": 0.5509,
+      "awayWinProb": 0.4491,
+      "confidenceScore": 0.102,
       "confidenceGrade": "B-",
       "edge": 0.051,
       "summary": "Avalanche project at 55% as the home lean \u2014 a B--tier edge worth 5.1 pts over a coin flip.",
@@ -290,9 +290,9 @@
         "name": "Sabres",
         "abbrev": "BUF"
       },
-      "homeWinProb": 0.5587,
-      "awayWinProb": 0.4413,
-      "confidenceScore": 0.117,
+      "homeWinProb": 0.5588,
+      "awayWinProb": 0.4412,
+      "confidenceScore": 0.118,
       "confidenceGrade": "B-",
       "edge": 0.059,
       "summary": "Canucks project at 56% as the home lean \u2014 a B--tier edge worth 5.9 pts over a coin flip.",
