@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2025-12-11T13:31:44.706201+00:00",
+  "updatedAt": "2025-12-11T23:13:20.176985+00:00",
   "notes": "Goalie performance metrics calculated from NHL Stats API data. GSAx estimates based on save percentage above league average.",
   "goalies": [
     {
@@ -218,6 +218,23 @@
       "nextOpponent": "WSH"
     },
     {
+      "name": "Devin Cooley",
+      "team": "CGY",
+      "rollingGsa": 1.0,
+      "seasonGsa": 4.1,
+      "restDays": 2,
+      "startLikelihood": 0.8,
+      "trend": "steady",
+      "note": "Consistent performance from Devin Cooley with a 2.35 GAA \u2014 reliable starter for CGY.",
+      "strengths": [
+        "Solid fundamentals"
+      ],
+      "watchouts": [
+        "Limited recent data"
+      ],
+      "nextOpponent": "LAK"
+    },
+    {
       "name": "Darcy Kuemper",
       "team": "LAK",
       "rollingGsa": 1.0,
@@ -251,23 +268,6 @@
         "Inconsistent results"
       ],
       "nextOpponent": "BOS"
-    },
-    {
-      "name": "Devin Cooley",
-      "team": "CGY",
-      "rollingGsa": 1.0,
-      "seasonGsa": 4.0,
-      "restDays": 2,
-      "startLikelihood": 0.8,
-      "trend": "steady",
-      "note": "Consistent performance from Devin Cooley with a 2.35 GAA \u2014 reliable starter for CGY.",
-      "strengths": [
-        "Solid fundamentals"
-      ],
-      "watchouts": [
-        "Limited recent data"
-      ],
-      "nextOpponent": "LAK"
     },
     {
       "name": "Jeremy Swayman",
