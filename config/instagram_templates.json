@@ -1,0 +1,179 @@
+{
+  "_description": "Instagram caption templates for Puckcast social media content. Variables in {brackets} are replaced with actual data.",
+
+  "daily_predictions": {
+    "templates": [
+      {
+        "id": "A",
+        "caption": "TODAY'S NHL PICKS\n\n{game_lines}\n\n{top_edge_callout}\n\nModel accuracy: {accuracy}% this season\n\nFull analysis at puckcast.ai\n\n#NHL #Hockey #NHLPicks #HockeyPredictions #NHLBetting #Puckcast"
+      },
+      {
+        "id": "B",
+        "caption": "{num_games} games on the board tonight.\n\n{game_lines}\n\nBiggest edge: {top_edge_team} ({top_edge_pct}%)\n\nLink in bio for full breakdown.\n\n#NHL #HockeyTwitter #NHLPredictions #SportsBetting #Puckcast"
+      }
+    ],
+    "variables": {
+      "game_lines": "Formatted list of games with predictions",
+      "top_edge_callout": "Highlight of the best edge",
+      "accuracy": "Season accuracy percentage",
+      "num_games": "Number of games today",
+      "top_edge_team": "Team with highest edge",
+      "top_edge_pct": "Highest edge probability"
+    }
+  },
+
+  "power_rankings": {
+    "templates": [
+      {
+        "id": "A",
+        "caption": "PUCKCAST POWER RANKINGS\nWeek of {week_date}\n\n{rankings_1_to_10}\n\n{biggest_mover_callout}\n\nFull 32-team rankings at puckcast.ai\n\n#NHL #PowerRankings #Hockey #NHLRankings #Puckcast"
+      },
+      {
+        "id": "B",
+        "caption": "Who's up? Who's down?\n\n{top_5_rankings}\n\nBiggest riser: {top_riser} (+{riser_delta})\nBiggest faller: {top_faller} ({faller_delta})\n\nSee the full Power Index at puckcast.ai\n\n#NHL #HockeyAnalytics #NHLStats"
+      }
+    ]
+  },
+
+  "goalie_leaderboard": {
+    "templates": [
+      {
+        "id": "A",
+        "caption": "GOALIE LEADERBOARD\nGoals Saved Above Expected (GSAX)\n\n{goalie_rankings}\n\n{top_goalie_callout}\n\nFull goalie analytics at puckcast.ai\n\n#NHL #Goalies #NHLGoalies #HockeyStats #Puckcast"
+      },
+      {
+        "id": "B",
+        "caption": "Who's been the best netminder?\n\nTop 5 by GSAX:\n{goalie_rankings}\n\n{hot_goalie_note}\n\n#NHL #GoalieStats #NHLAnalytics #Hockey"
+      }
+    ]
+  },
+
+  "luck_report": {
+    "templates": [
+      {
+        "id": "A",
+        "caption": "LUCK REPORT\nWho's running hot? Who's due for regression?\n\nLUCKIEST TEAMS:\n{luckiest_teams}\n\nUNLUCKIEST TEAMS:\n{unluckiest_teams}\n\nBased on PDO and expected goals differential.\n\n#NHL #HockeyAnalytics #Regression #NHLStats #Puckcast"
+      }
+    ],
+    "variables": {
+      "luckiest_teams": "Top 5 teams outperforming expectations",
+      "unluckiest_teams": "Top 5 teams underperforming expectations"
+    }
+  },
+
+  "weekly_trends": {
+    "templates": [
+      {
+        "id": "A",
+        "caption": "WEEKLY TRENDS\n\nRISERS:\n{risers}\n\nFALLERS:\n{fallers}\n\n{trend_insight}\n\nFull trend analysis at puckcast.ai\n\n#NHL #HockeyTrends #NHLWeekly #Puckcast"
+      }
+    ]
+  },
+
+  "model_results": {
+    "templates": [
+      {
+        "id": "A",
+        "caption": "MODEL RECEIPTS\n{date_range}\n\nRecord: {record}\nAccuracy: {accuracy}%\n\nTOP HITS:\n{top_hits}\n\nBIG MISSES:\n{big_misses}\n\nHigh confidence picks: {high_conf_record}\n\n#NHL #ModelReceipts #HockeyPredictions #Puckcast"
+      },
+      {
+        "id": "B",
+        "caption": "How'd we do this week?\n\n{record} ({accuracy}%)\n\n{headline}\n\nBest call: {best_call}\nWorst miss: {worst_miss}\n\nFull breakdown at puckcast.ai\n\n#NHL #BettingRecap #HockeyAnalytics"
+      }
+    ]
+  },
+
+  "matchup_preview": {
+    "templates": [
+      {
+        "id": "A",
+        "caption": "{away_team} @ {home_team}\n{game_time}\n\nMODEL PICK: {favorite} ({win_prob}%)\nEdge: {edge_grade}\n\n{key_factors}\n\nFull matchup analysis at puckcast.ai\n\n#NHL #{home_hashtag} #{away_hashtag} #Hockey"
+      }
+    ],
+    "variables": {
+      "away_team": "Away team name",
+      "home_team": "Home team name",
+      "favorite": "Model's predicted winner",
+      "win_prob": "Win probability percentage",
+      "edge_grade": "Confidence grade (A+, B, etc.)",
+      "key_factors": "2-3 key factors driving the prediction"
+    }
+  },
+
+  "playoff_odds": {
+    "templates": [
+      {
+        "id": "A",
+        "caption": "PLAYOFF PROBABILITY UPDATE\n\nMost likely to make playoffs:\n{top_playoff_teams}\n\nOn the bubble:\n{bubble_teams}\n\nLongest shots:\n{long_shots}\n\nUpdated daily at puckcast.ai\n\n#NHL #NHLPlayoffs #PlayoffRace #Hockey"
+      }
+    ],
+    "note": "REQUIRES SIMULATION SYSTEM - Template ready for when simulation data is available"
+  },
+
+  "team_spotlight": {
+    "templates": [
+      {
+        "id": "A",
+        "caption": "TEAM SPOTLIGHT: {team_name}\n\nRecord: {record}\nPower Rank: #{power_rank}\n\nStrengths:\n{strengths}\n\nWeaknesses:\n{weaknesses}\n\n{outlook_note}\n\n#NHL #{team_hashtag} #Hockey #TeamAnalysis"
+      }
+    ]
+  },
+
+  "upset_alert": {
+    "templates": [
+      {
+        "id": "A",
+        "caption": "UPSET ALERT\n\n{underdog} pulled off the upset over {favorite}!\n\nFinal: {score}\n\nModel had {favorite} at {favorite_prob}%\n\nThat's hockey.\n\n#NHL #Upset #HockeyUpset #NHLResults"
+      }
+    ]
+  },
+
+  "edge_of_the_day": {
+    "templates": [
+      {
+        "id": "A",
+        "caption": "EDGE OF THE DAY\n\n{favorite} over {underdog}\n\n{win_prob}% | {edge_grade} confidence\n\n{reasoning}\n\nThis is our strongest lean tonight.\n\n#NHL #BestBet #HockeyPick #NHLPrediction #Puckcast"
+      }
+    ]
+  },
+
+  "hashtag_sets": {
+    "general": "#NHL #Hockey #NHLPredictions #HockeyAnalytics #Puckcast",
+    "betting": "#NHL #NHLBetting #SportsBetting #HockeyPicks #BettingTwitter",
+    "analytics": "#NHL #HockeyAnalytics #AdvancedStats #NHLStats #DataDriven",
+    "teams": {
+      "ANA": "#FlyTogether #AnaheimDucks",
+      "BOS": "#NHLBruins #BostonBruins",
+      "BUF": "#LetsGoBuffalo #Sabres",
+      "CGY": "#Flames #CalgaryFlames",
+      "CAR": "#LetsGoCanes #Hurricanes",
+      "CHI": "#Blackhawks #ChicagoBlackhawks",
+      "COL": "#GoAvsGo #Avalanche",
+      "CBJ": "#CBJ #BlueJackets",
+      "DAL": "#TexasHockey #GoStars",
+      "DET": "#LGRW #RedWings",
+      "EDM": "#LetsGoOilers #Oilers",
+      "FLA": "#TimeToHunt #Panthers",
+      "LAK": "#GoKingsGo #LAKings",
+      "MIN": "#MNWild #Wild",
+      "MTL": "#GoHabsGo #Habs",
+      "NSH": "#Smashville #Preds",
+      "NJD": "#NJDevils #Devils",
+      "NYI": "#Isles #Islanders",
+      "NYR": "#NYR #Rangers",
+      "OTT": "#GoSensGo #Senators",
+      "PHI": "#FlyersNation #Flyers",
+      "PIT": "#LetsGoPens #Penguins",
+      "SJS": "#SJSharks #Sharks",
+      "SEA": "#SeaKraken #Kraken",
+      "STL": "#STLBlues #Blues",
+      "TBL": "#GoBolts #Lightning",
+      "TOR": "#LeafsForever #MapleLeafs",
+      "UTA": "#UtahHC #UtahHockey",
+      "VAN": "#Canucks #VancouverCanucks",
+      "VGK": "#VegasBorn #GoldenKnights",
+      "WSH": "#ALLCAPS #Capitals",
+      "WPG": "#GoJetsGo #Jets"
+    }
+  }
+}

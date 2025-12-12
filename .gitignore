@@ -64,13 +64,17 @@ data/moneypuck_all_games.csv
 data/moneypuck_*.parquet
 data/raw/
 data/processed/
-data/cache/
 data/*.pkl
+
+# Cache directory (but keep native_logs training data)
+data/cache/
+!data/cache/native_logs_*.parquet
 
 # Daily prediction exports
 predictions_*.csv
 devserver.log
 temp_outputs/
+prediction/web/
 
 # Debug and test scripts (but allow tests/ directory)
 test_*.py
@@ -78,3 +82,4 @@ test_*.py
 ablation_*.py
 !tests/test_*.py
 !tests/*_test.py
+catboost_info/

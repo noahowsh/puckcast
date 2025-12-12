@@ -1,5 +1,4 @@
 import { PageHeader } from "@/components/PageHeader";
-import { StatCard } from "@/components/StatCard";
 
 export default function AboutPage() {
   return (
@@ -26,80 +25,212 @@ export default function AboutPage() {
           </div>
         </section>
 
-        {/* Model Overview */}
+        {/* Model Pipeline Visualization */}
         <section className="mb-12">
           <h2 className="text-2xl font-bold text-white mb-6">How the model works</h2>
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-            {[{ title: "Data collection", body: "Official NHL Stats API covering 3 seasons (2021-2024): play-by-play, player stats, team metrics, xG, Corsi, and situational splits." },
-              { title: "Feature engineering", body: "204 features including Elo, rolling xG differential, goalie GSAx, rest days, home/away splits, special teams efficiency, travel distance, schedule strength." },
-              { title: "Model training", body: "Logistic regression (C=1.0) on 2,460 games from 2021-2023. Simple, interpretable, and less prone to overfitting than black-box models." },
-              { title: "Validation & testing", body: "Full 2023-24 season (1,230 games) held out for testing. Strict separation keeps real-world accuracy honest." }
-            ].map((item) => (
-              <div key={item.title} className="card">
-                <div className="flex items-center gap-3 mb-3">
-                  <div className="w-10 h-10 rounded-lg bg-white/[0.04] flex items-center justify-center border border-white/10">
-                    <svg className="w-5 h-5 text-sky-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                    </svg>
+          <div className="card-elevated">
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', flexWrap: 'wrap', padding: '1.5rem 0' }}>
+              {[
+                { icon: '📊', label: 'NHL API', desc: '8 seasons of data' },
+                { icon: '⚙️', label: '39 Features', desc: 'Engineered signals' },
+                { icon: '🧠', label: 'Training', desc: '4-season window' },
+                { icon: '🎯', label: 'Calibration', desc: 'Isotonic regression' },
+                { icon: '📈', label: 'Prediction', desc: '60.9% accuracy' },
+              ].map((step, idx) => (
+                <div key={step.label} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                  <div style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    padding: '1rem 1.5rem',
+                    background: 'rgba(126, 227, 255, 0.08)',
+                    border: '1px solid rgba(126, 227, 255, 0.2)',
+                    borderRadius: '0.75rem',
+                    minWidth: '120px'
+                  }}>
+                    <span style={{ fontSize: '1.75rem', marginBottom: '0.5rem' }}>{step.icon}</span>
+                    <span style={{ fontWeight: 700, color: 'var(--aqua)', fontSize: '0.9rem' }}>{step.label}</span>
+                    <span style={{ fontSize: '0.75rem', color: 'var(--text-tertiary)', marginTop: '0.25rem' }}>{step.desc}</span>
                   </div>
-                  <h3 className="text-xl font-bold text-white">{item.title}</h3>
+                  {idx < 4 && (
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" style={{ color: 'var(--text-tertiary)', flexShrink: 0 }}>
+                      <path d="M9 18l6-6-6-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                  )}
                 </div>
-                <p className="text-sm text-white/75 leading-relaxed">{item.body}</p>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </section>
 
-        {/* Key Features */}
+        {/* Accuracy Comparison Visual */}
         <section className="mb-12">
-          <h2 className="text-2xl font-bold text-white mb-6">204 features explained</h2>
-          <div className="card">
-            <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
+          <h2 className="text-2xl font-bold text-white mb-6">Model vs baseline</h2>
+          <div className="card-elevated">
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem', alignItems: 'center' }}>
+              {/* Bar comparison */}
               <div>
-                <h4 className="text-sm font-bold text-sky-300 uppercase mb-3">Team metrics</h4>
-                <ul className="space-y-2 text-sm text-white/75">
-                  <li>- Elo ratings (offense & defense)</li>
-                  <li>- xG for/against (rolling windows)</li>
-                  <li>- Power play & penalty kill %</li>
-                  <li>- Corsi & Fenwick differentials</li>
-                  <li>- Shots for/against per game</li>
-                  <li>- Faceoff win percentage</li>
-                </ul>
+                <div style={{ marginBottom: '1.5rem' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
+                    <span style={{ fontSize: '0.9rem', fontWeight: 600, color: 'var(--text-secondary)' }}>Home team baseline</span>
+                    <span style={{ fontSize: '0.9rem', fontWeight: 700, color: 'var(--text-tertiary)' }}>53.9%</span>
+                  </div>
+                  <div style={{ height: '2rem', background: 'rgba(255,255,255,0.1)', borderRadius: '0.5rem', overflow: 'hidden' }}>
+                    <div style={{ width: '53.9%', height: '100%', background: 'rgba(255,255,255,0.3)', borderRadius: '0.5rem' }} />
+                  </div>
+                </div>
+                <div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
+                    <span style={{ fontSize: '0.9rem', fontWeight: 600, color: 'var(--aqua)' }}>Puckcast V7.0</span>
+                    <span style={{ fontSize: '0.9rem', fontWeight: 700, color: 'var(--mint)' }}>60.9%</span>
+                  </div>
+                  <div style={{ height: '2rem', background: 'rgba(255,255,255,0.1)', borderRadius: '0.5rem', overflow: 'hidden' }}>
+                    <div style={{ width: '60.9%', height: '100%', background: 'linear-gradient(90deg, var(--aqua), var(--mint))', borderRadius: '0.5rem' }} />
+                  </div>
+                </div>
               </div>
-              <div>
-                <h4 className="text-sm font-bold text-cyan-300 uppercase mb-3">Goalie metrics</h4>
-                <ul className="space-y-2 text-sm text-white/75">
-                  <li>- Goals Saved Above Expected (GSAx)</li>
-                  <li>- Save percentage (rolling)</li>
-                  <li>- High-danger save %</li>
-                  <li>- Games started in last 7 days</li>
-                  <li>- Rest day advantage</li>
-                  <li>- Home vs away splits</li>
-                </ul>
-              </div>
-              <div>
-                <h4 className="text-sm font-bold text-emerald-300 uppercase mb-3">Context factors</h4>
-                <ul className="space-y-2 text-sm text-white/75">
-                  <li>- Home ice advantage</li>
-                  <li>- Back-to-back games</li>
-                  <li>- Travel distance</li>
-                  <li>- Days since last game</li>
-                  <li>- Recent form (L5, L10)</li>
-                  <li>- Schedule strength</li>
-                </ul>
+              {/* Stats */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                <div style={{ textAlign: 'center', padding: '1.25rem', background: 'rgba(110, 240, 194, 0.1)', borderRadius: '0.75rem', border: '1px solid rgba(110, 240, 194, 0.2)' }}>
+                  <p style={{ fontSize: '2.5rem', fontWeight: 800, color: 'var(--mint)', lineHeight: 1 }}>+7.0</p>
+                  <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginTop: '0.25rem' }}>percentage points above baseline</p>
+                </div>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
+                  <div style={{ textAlign: 'center', padding: '0.75rem', background: 'rgba(255,255,255,0.04)', borderRadius: '0.5rem' }}>
+                    <p style={{ fontSize: '1.25rem', fontWeight: 700, color: 'var(--text-primary)' }}>5,002</p>
+                    <p style={{ fontSize: '0.75rem', color: 'var(--text-tertiary)' }}>test games</p>
+                  </div>
+                  <div style={{ textAlign: 'center', padding: '0.75rem', background: 'rgba(255,255,255,0.04)', borderRadius: '0.5rem' }}>
+                    <p style={{ fontSize: '1.25rem', fontWeight: 700, color: 'var(--text-primary)' }}>0.655</p>
+                    <p style={{ fontSize: '0.75rem', color: 'var(--text-tertiary)' }}>log loss</p>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </section>
 
-        {/* Performance Highlights */}
+        {/* Key Features with Visual Breakdown */}
         <section className="mb-12">
-          <h2 className="text-2xl font-bold text-white mb-6">Performance highlights</h2>
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
-            <StatCard label="Test accuracy" value="59.3%" change={{ value: "vs 53.7% baseline", isPositive: true }} />
-            <StatCard label="A+ confidence" value="69.5%" change={{ value: "20+ pt edges", isPositive: true }} />
-            <StatCard label="Log loss" value="0.676" change={{ value: "Calibration", isPositive: true }} />
-            <StatCard label="Test games" value="1,230" change={{ value: "2023-24 season", isPositive: true }} />
+          <h2 className="text-2xl font-bold text-white mb-6">39 features explained (V7.0)</h2>
+          <div className="card-elevated">
+            <div style={{ display: 'grid', gridTemplateColumns: '200px 1fr', gap: '2rem', alignItems: 'start' }}>
+              {/* Donut Chart Visual */}
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                <svg viewBox="0 0 100 100" style={{ width: '160px', height: '160px' }}>
+                  {/* Background circle */}
+                  <circle cx="50" cy="50" r="40" fill="none" stroke="rgba(255,255,255,0.1)" strokeWidth="12" />
+                  {/* Elo segment (7/39 = 18%) - blue */}
+                  <circle cx="50" cy="50" r="40" fill="none" stroke="rgb(56, 189, 248)" strokeWidth="12"
+                    strokeDasharray="45.2 251.3" strokeDashoffset="0" transform="rotate(-90 50 50)" />
+                  {/* Rolling segment (20/39 = 51%) - cyan */}
+                  <circle cx="50" cy="50" r="40" fill="none" stroke="rgb(34, 211, 238)" strokeWidth="12"
+                    strokeDasharray="128.7 251.3" strokeDashoffset="-45.2" transform="rotate(-90 50 50)" />
+                  {/* Rest segment (12/39 = 31%) - green */}
+                  <circle cx="50" cy="50" r="40" fill="none" stroke="rgb(52, 211, 153)" strokeWidth="12"
+                    strokeDasharray="77.4 251.3" strokeDashoffset="-173.9" transform="rotate(-90 50 50)" />
+                  {/* Center text */}
+                  <text x="50" y="46" textAnchor="middle" fill="white" fontSize="16" fontWeight="bold">39</text>
+                  <text x="50" y="58" textAnchor="middle" fill="rgba(255,255,255,0.6)" fontSize="7">features</text>
+                </svg>
+                {/* Legend */}
+                <div style={{ marginTop: '1rem', display: 'flex', flexDirection: 'column', gap: '0.5rem', fontSize: '0.8rem' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                    <div style={{ width: '12px', height: '12px', borderRadius: '2px', background: 'rgb(56, 189, 248)' }} />
+                    <span style={{ color: 'var(--text-secondary)' }}>Elo (7)</span>
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                    <div style={{ width: '12px', height: '12px', borderRadius: '2px', background: 'rgb(34, 211, 238)' }} />
+                    <span style={{ color: 'var(--text-secondary)' }}>Rolling (20)</span>
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                    <div style={{ width: '12px', height: '12px', borderRadius: '2px', background: 'rgb(52, 211, 153)' }} />
+                    <span style={{ color: 'var(--text-secondary)' }}>Rest & Goalie (12)</span>
+                  </div>
+                </div>
+              </div>
+              {/* Feature lists */}
+              <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+                <div>
+                  <h4 className="text-sm font-bold text-sky-400 uppercase mb-3">Elo & Team Strength (7)</h4>
+                  <ul className="space-y-2 text-sm text-white/75">
+                    <li>• League home win rate</li>
+                    <li>• Elo ratings (50% carryover)</li>
+                    <li>• Elo expectation</li>
+                    <li>• Season win pct diff</li>
+                    <li>• Goal differential</li>
+                    <li>• xG differential</li>
+                    <li>• Shot margin</li>
+                  </ul>
+                </div>
+                <div>
+                  <h4 className="text-sm font-bold text-cyan-400 uppercase mb-3">Rolling Stats (20)</h4>
+                  <ul className="space-y-2 text-sm text-white/75">
+                    <li>• Win pct (3, 5, 10 game)</li>
+                    <li>• Goal diff (3, 5, 10 game)</li>
+                    <li>• xG diff (3, 5, 10 game)</li>
+                    <li>• Corsi/Fenwick metrics</li>
+                    <li>• High-danger shots</li>
+                    <li>• Faceoff % (5 game)</li>
+                    <li>• Shot volume (10 game)</li>
+                  </ul>
+                </div>
+                <div>
+                  <h4 className="text-sm font-bold text-emerald-400 uppercase mb-3">Rest & Goaltending (12)</h4>
+                  <ul className="space-y-2 text-sm text-white/75">
+                    <li>• Rest days differential</li>
+                    <li>• Back-to-back flags</li>
+                    <li>• Games in last 3/6 days</li>
+                    <li>• Save pct rolling diffs</li>
+                    <li>• Goalie GSAx (5, 10)</li>
+                    <li>• Goalie trend scoring</li>
+                    <li>• Momentum indicators</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Confidence Tiers Visual */}
+        <section className="mb-12">
+          <h2 className="text-2xl font-bold text-white mb-6">Confidence tiers</h2>
+          <div className="card-elevated">
+            <p className="text-white/70 mb-6">Higher confidence = higher historical accuracy. Our grading system helps you focus on the best opportunities.</p>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+              {[
+                { grade: 'A+', range: '≥25 pts', accuracy: 79.3, color: 'var(--aqua)', games: 333 },
+                { grade: 'A', range: '20-25 pts', accuracy: 72.0, color: 'var(--aqua)', games: 404 },
+                { grade: 'B+', range: '15-20 pts', accuracy: 67.3, color: 'var(--amber)', games: 687 },
+                { grade: 'B', range: '10-15 pts', accuracy: 62.0, color: 'var(--amber)', games: 975 },
+                { grade: 'C+', range: '5-10 pts', accuracy: 57.8, color: 'rgba(255,255,255,0.4)', games: 1231 },
+                { grade: 'C', range: '0-5 pts', accuracy: 51.9, color: 'rgba(255,255,255,0.25)', games: 1372 },
+              ].map((tier) => (
+                <div key={tier.grade} style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                  <span style={{
+                    width: '2.5rem',
+                    fontSize: '0.95rem',
+                    fontWeight: 800,
+                    color: tier.color
+                  }}>{tier.grade}</span>
+                  <span style={{ width: '5rem', fontSize: '0.8rem', color: 'var(--text-tertiary)' }}>{tier.range}</span>
+                  <div style={{ flex: 1, height: '1.5rem', background: 'rgba(255,255,255,0.08)', borderRadius: '0.375rem', overflow: 'hidden' }}>
+                    <div style={{
+                      width: `${tier.accuracy}%`,
+                      height: '100%',
+                      background: tier.grade.startsWith('A') ? 'linear-gradient(90deg, var(--aqua), var(--mint))' : tier.grade.startsWith('B') ? 'var(--amber)' : 'rgba(255,255,255,0.3)',
+                      borderRadius: '0.375rem',
+                      transition: 'width 0.3s ease'
+                    }} />
+                  </div>
+                  <span style={{ width: '3.5rem', fontSize: '0.9rem', fontWeight: 700, textAlign: 'right' }}>{tier.accuracy}%</span>
+                  <span style={{ width: '4rem', fontSize: '0.75rem', color: 'var(--text-tertiary)', textAlign: 'right' }}>{tier.games} games</span>
+                </div>
+              ))}
+            </div>
+            <p style={{ fontSize: '0.8rem', color: 'var(--text-tertiary)', marginTop: '1rem', textAlign: 'center' }}>
+              Based on 5,002 holdout games across 4 seasons
+            </p>
           </div>
         </section>
 
@@ -185,7 +316,7 @@ const faqItems = [
   {
     question: "How often do you update predictions?",
     answer:
-      "We generate fresh predictions daily at 11:00 AM UTC (6:00 AM ET) via automated GitHub Actions. The model pulls the latest stats from the NHL API and recalculates all 204 features before making predictions.",
+      "We generate fresh predictions daily at 10:00 AM and 10:00 PM UTC via automated GitHub Actions. The model pulls the latest stats from the NHL API and recalculates all 39 curated features (V7.0) before making predictions.",
   },
   {
     question: "Do you sell picks or betting advice?",

@@ -8,6 +8,9 @@ export function PageTransition({ children }: { children: ReactNode }) {
   const [isTransitioning, setIsTransitioning] = useState(false);
 
   useEffect(() => {
+    // Scroll to top on route change
+    window.scrollTo(0, 0);
+
     // Trigger fade-in on route change
     setIsTransitioning(true);
     const timer = setTimeout(() => setIsTransitioning(false), 300);

@@ -96,3 +96,88 @@ export function teamLogoUrl(abbrev: string) {
   const safe = abbrev?.toUpperCase?.() ?? "";
   return `https://assets.nhle.com/logos/nhl/svg/${safe}_light.svg`;
 }
+
+export function teamPrimaryColor(abbrev: string, alpha = 1) {
+  const colors = TEAM_COLORS[abbrev?.toUpperCase?.() ?? ""];
+  if (!colors) return `rgba(126, 227, 255, ${alpha})`;
+  return hexToRgba(colors.primary, alpha);
+}
+
+export function teamSecondaryColor(abbrev: string, alpha = 1) {
+  const colors = TEAM_COLORS[abbrev?.toUpperCase?.() ?? ""];
+  if (!colors) return `rgba(110, 240, 194, ${alpha})`;
+  return hexToRgba(colors.secondary ?? colors.primary, alpha);
+}
+
+// Returns a contrasting color for teams with similar colors
+// Also handles dark colors that are hard to see on dark backgrounds
+export function getContrastingTeamColor(abbrev1: string, abbrev2: string): { team1: string; team2: string } {
+  const colors1 = TEAM_COLORS[abbrev1?.toUpperCase?.() ?? ""];
+  const colors2 = TEAM_COLORS[abbrev2?.toUpperCase?.() ?? ""];
+
+  if (!colors1 || !colors2) {
+    return {
+      team1: hexToRgba(colors1?.primary ?? "#7ee3ff", 0.9),
+      team2: hexToRgba(colors2?.primary ?? "#6ef0c2", 0.9)
+    };
+  }
+
+  const luma1 = luma(colors1.primary);
+  const luma2 = luma(colors2.primary);
+
+  // Helper to get a visible color for a team
+  // Colors need minimum luma of ~120 to be easily readable on dark backgrounds
+  const getVisibleColor = (colors: { primary: string; secondary?: string }, teamLuma: number): string => {
+    const MIN_READABLE_LUMA = 100;
+
+    // Very dark colors (luma < 50) - use secondary if light enough, or heavily lighten
+    if (teamLuma < 50) {
+      const secondaryLuma = colors.secondary ? luma(colors.secondary) : 0;
+      if (secondaryLuma >= MIN_READABLE_LUMA) {
+        return hexToRgba(colors.secondary!, 0.95);
+      }
+      return lightenColor(colors.primary, 0.65);
+    }
+
+    // Medium-dark colors (luma 50-100) - lighten proportionally
+    if (teamLuma < MIN_READABLE_LUMA) {
+      // Calculate how much to lighten: darker = more lightening
+      const lightenAmount = ((MIN_READABLE_LUMA - teamLuma) / MIN_READABLE_LUMA) * 0.5;
+      return lightenColor(colors.primary, lightenAmount + 0.15);
+    }
+
+    // Bright enough colors - use as-is
+    return hexToRgba(colors.primary, 0.95);
+  };
+
+  let color1 = getVisibleColor(colors1, luma1);
+  let color2 = getVisibleColor(colors2, luma2);
+
+  // Check if resulting colors are too similar
+  const lumaDiff = Math.abs(luma1 - luma2);
+  if (lumaDiff < 40 && luma1 >= 50 && luma2 >= 50) {
+    // Use secondary for team2 if available and different enough
+    const secondary2Luma = colors2.secondary ? luma(colors2.secondary) : luma2;
+    if (Math.abs(luma1 - secondary2Luma) > 40) {
+      color2 = hexToRgba(colors2.secondary ?? colors2.primary, 0.9);
+    }
+  }
+
+  return { team1: color1, team2: color2 };
+}
+
+// Lighten a hex color by blending with white
+function lightenColor(hex: string, amount: number): string {
+  const trimmed = hex.replace("#", "");
+  const bigint = parseInt(trimmed, 16);
+  let r = (bigint >> 16) & 255;
+  let g = (bigint >> 8) & 255;
+  let b = bigint & 255;
+
+  // Blend towards white
+  r = Math.round(r + (255 - r) * amount);
+  g = Math.round(g + (255 - g) * amount);
+  b = Math.round(b + (255 - b) * amount);
+
+  return `rgba(${r}, ${g}, ${b}, 0.9)`;
+}

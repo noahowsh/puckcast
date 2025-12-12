@@ -9,10 +9,34 @@ export type StrategySummary = {
 
 export type ConfidenceBucket = {
   label: string;
+  grade: string;
   min: number;
   max: number | null;
   accuracy: number;
   count: number;
+  coverage?: number;
+  description?: string;
+};
+
+export type SeasonBreakdown = {
+  season: string;
+  games: number;
+  accuracy: number;
+  logLoss: number;
+  baseline: number;
+};
+
+export type CurrentSeason = {
+  hidden?: boolean;
+  season: string;
+  games: number;
+  accuracy: number;
+  logLoss: number;
+  baseline: number;
+  aGradeAccuracy: number;
+  aGradeGames: number;
+  asOf: string;
+  note?: string;
 };
 
 export type TeamPerformance = {
@@ -49,6 +73,7 @@ export type FeatureImportance = {
   feature: string;
   coefficient: number;
   absImportance: number;
+  description?: string;
 };
 
 export type DistributionFinding = {
@@ -75,6 +100,7 @@ export type BankrollPoint = {
 
 export type ModelInsights = {
   generatedAt: string;
+  modelVersion?: string;
   overall: {
     games: number;
     accuracy: number;
@@ -88,6 +114,8 @@ export type ModelInsights = {
   insights: HeadlineInsight[];
   strategies: StrategySummary[];
   confidenceBuckets: ConfidenceBucket[];
+  currentSeason?: CurrentSeason;
+  seasonBreakdown?: SeasonBreakdown[];
   teamPerformance: TeamPerformance[];
   standings: {
     east: StandingEntry[];
