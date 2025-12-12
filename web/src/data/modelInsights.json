@@ -1,963 +1,199 @@
 {
-  "generatedAt": "2025-12-08T14:02:06.708459+00:00",
+  "generatedAt": "2025-12-07T12:00:00.000000+00:00",
+  "modelVersion": "V7.0",
   "overall": {
-    "games": 1230,
-    "accuracy": 0.5926829268292683,
-    "baseline": 0.5373983739837398,
-    "homeWinRate": 0.5373983739837398,
-    "brier": 0.24015356800452212,
-    "logLoss": 0.6760977784850604,
-    "avgEdge": 0.16138301572711372
+    "games": 5002,
+    "accuracy": 0.6086,
+    "baseline": 0.5392,
+    "homeWinRate": 0.5392,
+    "brier": 0.2317,
+    "logLoss": 0.6554,
+    "avgEdge": 0.169
   },
   "heroStats": [
     {
       "label": "Test accuracy",
-      "value": "59.3%",
-      "detail": "2023-24 holdout"
+      "value": "60.9%",
+      "detail": "4-season holdout validation"
     },
     {
-      "label": "Log loss",
-      "value": "0.676",
-      "detail": "calibration"
+      "label": "Model version",
+      "value": "V7.0",
+      "detail": "39 features + adaptive weights"
     },
     {
-      "label": "Games tracked",
-      "value": "1,230",
-      "detail": "2023-24 season"
+      "label": "Training window",
+      "value": "4 seasons",
+      "detail": "Optimal for calibration"
+    },
+    {
+      "label": "Edge vs baseline",
+      "value": "+6.9 pts",
+      "detail": "vs 53.9% home win rate"
     }
   ],
   "insights": [
     {
-      "title": "Edge \u2265 10 pts",
-      "detail": "64.1% accuracy across 811 games"
+      "title": "A+ picks (≥25 pts)",
+      "detail": "79.3% accuracy - elite confidence tier"
     },
     {
-      "title": "Edge \u2265 15 pts",
-      "detail": "65.6% accuracy (n=616)"
+      "title": "A picks (20-25 pts)",
+      "detail": "72.0% accuracy - strong confidence tier"
     },
     {
-      "title": "Home baseline",
-      "detail": "Home teams won 53.7% of games; model adds 5.5 pts"
+      "title": "V7.0 improvements",
+      "detail": "Adaptive weights for home advantage shifts"
     }
   ],
   "strategies": [
     {
+      "name": "A+ only (≥25 pts)",
+      "bets": 333,
+      "winRate": 0.7928,
+      "units": 195,
+      "note": "Elite confidence picks only",
+      "avgEdge": 0.293
+    },
+    {
+      "name": "A-tier (≥20 pts)",
+      "bets": 737,
+      "winRate": 0.7531,
+      "units": 373,
+      "note": "A+ and A grades combined",
+      "avgEdge": 0.253
+    },
+    {
+      "name": "B+ or better (≥15 pts)",
+      "bets": 1424,
+      "winRate": 0.7142,
+      "units": 610,
+      "note": "Good confidence threshold",
+      "avgEdge": 0.214
+    },
+    {
       "name": "All predictions",
-      "bets": 1230,
-      "winRate": 0.5926829268292683,
-      "units": 228,
-      "note": "Use the higher probability team for every game",
-      "avgEdge": 0.16138301572711372
-    },
-    {
-      "name": "Edge \u2265 5 pts",
-      "bets": 1032,
-      "winRate": 0.6124031007751938,
-      "units": 232,
-      "note": "Skip games with <5 percentage point edge",
-      "avgEdge": 0.18775854497533292
-    },
-    {
-      "name": "Edge \u2265 10 pts",
-      "bets": 811,
-      "winRate": 0.6411837237977805,
-      "units": 229,
-      "note": "Focus on double-digit probability edges",
-      "avgEdge": 0.21806730719904077
-    },
-    {
-      "name": "Edge \u2265 15 pts",
-      "bets": 616,
-      "winRate": 0.6558441558441559,
-      "units": 192,
-      "note": "Only strongest probability splits",
-      "avgEdge": 0.24728422994945168
+      "bets": 5002,
+      "winRate": 0.6086,
+      "units": 1086,
+      "note": "Every game across 4 seasons",
+      "avgEdge": 0.109
     }
   ],
   "confidenceBuckets": [
     {
-      "grade": "C",
+      "label": "≥25 pts",
+      "grade": "A+",
+      "min": 0.25,
+      "max": null,
+      "accuracy": 0.7928,
+      "count": 333,
+      "coverage": 0.067,
+      "description": "Elite confidence - our strongest picks"
+    },
+    {
+      "label": "20-25 pts",
+      "grade": "A",
+      "min": 0.20,
+      "max": 0.25,
+      "accuracy": 0.7203,
+      "count": 404,
+      "coverage": 0.081,
+      "description": "Strong confidence - high conviction calls"
+    },
+    {
+      "label": "15-20 pts",
+      "grade": "B+",
+      "min": 0.15,
+      "max": 0.20,
+      "accuracy": 0.6725,
+      "count": 687,
+      "coverage": 0.137,
+      "description": "Good confidence - solid lean"
+    },
+    {
+      "label": "10-15 pts",
+      "grade": "B",
+      "min": 0.10,
+      "max": 0.15,
+      "accuracy": 0.6195,
+      "count": 975,
+      "coverage": 0.195,
+      "description": "Medium confidence - slight edge"
+    },
+    {
+      "label": "5-10 pts",
+      "grade": "C+",
+      "min": 0.05,
+      "max": 0.10,
+      "accuracy": 0.5776,
+      "count": 1231,
+      "coverage": 0.246,
+      "description": "Weak confidence - marginal lean"
+    },
+    {
       "label": "0-5 pts",
+      "grade": "C",
       "min": 0,
       "max": 0.05,
-      "accuracy": 0.4898989898989899,
-      "count": 198
-    },
-    {
-      "grade": "C+",
-      "label": "5-10 pts",
-      "min": 0.05,
-      "max": 0.1,
-      "accuracy": 0.5067873303167421,
-      "count": 221
-    },
-    {
-      "grade": "B",
-      "label": "10-15 pts",
-      "min": 0.1,
-      "max": 0.15,
-      "accuracy": 0.5948717948717949,
-      "count": 195
-    },
-    {
-      "grade": "B+",
-      "label": "15-20 pts",
-      "min": 0.15,
-      "max": 0.2,
-      "accuracy": 0.5611111111111111,
-      "count": 180
-    },
-    {
-      "grade": "A+",
-      "label": "20+ pts",
-      "min": 0.2,
-      "max": null,
-      "accuracy": 0.694954128440367,
-      "count": 436
+      "accuracy": 0.5190,
+      "count": 1372,
+      "coverage": 0.274,
+      "description": "Coin flip - no meaningful edge"
     }
   ],
-  "teamPerformance": [
+  "currentSeason": {
+    "hidden": true,
+    "season": "2025-26",
+    "games": 440,
+    "accuracy": 0.543,
+    "logLoss": 0.6925,
+    "baseline": 0.520,
+    "aGradeAccuracy": 0.65,
+    "aGradeGames": 60,
+    "asOf": "Dec 6, 2025",
+    "note": "Early season (Oct-Nov) - model typically improves ~7pp by March/April"
+  },
+  "seasonBreakdown": [
     {
-      "team": "San Jose Sharks",
-      "abbrev": "SJS",
-      "conference": "West",
-      "division": "Pacific",
-      "games": 79,
-      "wins": 19,
-      "losses": 60,
-      "record": "19-60",
-      "points": 38,
-      "modelAccuracy": 0.759493670886076,
-      "winPct": 0.24050632911392406,
-      "correct": 60
+      "season": "2024-25",
+      "games": 1312,
+      "accuracy": 0.5968,
+      "logLoss": 0.6590,
+      "baseline": 0.5625
     },
     {
-      "team": "Chicago Blackhawks",
-      "abbrev": "CHI",
-      "conference": "West",
-      "division": "Central",
-      "games": 79,
-      "wins": 21,
-      "losses": 58,
-      "record": "21-58",
-      "points": 42,
-      "modelAccuracy": 0.7215189873417721,
-      "winPct": 0.26582278481012656,
-      "correct": 57
+      "season": "2023-24",
+      "games": 1230,
+      "accuracy": 0.6041,
+      "logLoss": 0.6589,
+      "baseline": 0.5374
     },
     {
-      "team": "Montr\u00e9al Canadiens",
-      "abbrev": "MTL",
-      "conference": "East",
-      "division": "Atlantic",
-      "games": 80,
-      "wins": 29,
-      "losses": 51,
-      "record": "29-51",
-      "points": 58,
-      "modelAccuracy": 0.675,
-      "winPct": 0.3625,
-      "correct": 54
+      "season": "2022-23",
+      "games": 1230,
+      "accuracy": 0.6089,
+      "logLoss": 0.6526,
+      "baseline": 0.5138
     },
     {
-      "team": "Edmonton Oilers",
-      "abbrev": "EDM",
-      "conference": "West",
-      "division": "Pacific",
-      "games": 79,
-      "wins": 48,
-      "losses": 31,
-      "record": "48-31",
-      "points": 96,
-      "modelAccuracy": 0.6582278481012658,
-      "winPct": 0.6075949367088608,
-      "correct": 52
-    },
-    {
-      "team": "Anaheim Ducks",
-      "abbrev": "ANA",
-      "conference": "West",
-      "division": "Pacific",
-      "games": 79,
-      "wins": 26,
-      "losses": 53,
-      "record": "26-53",
-      "points": 52,
-      "modelAccuracy": 0.6582278481012658,
-      "winPct": 0.3291139240506329,
-      "correct": 52
-    },
-    {
-      "team": "New Jersey Devils",
-      "abbrev": "NJD",
-      "conference": "East",
-      "division": "Metropolitan",
-      "games": 80,
-      "wins": 38,
-      "losses": 42,
-      "record": "38-42",
-      "points": 76,
-      "modelAccuracy": 0.65,
-      "winPct": 0.475,
-      "correct": 52
-    },
-    {
-      "team": "Detroit Red Wings",
-      "abbrev": "DET",
-      "conference": "East",
-      "division": "Atlantic",
-      "games": 80,
-      "wins": 41,
-      "losses": 39,
-      "record": "41-39",
-      "points": 82,
-      "modelAccuracy": 0.65,
-      "winPct": 0.5125,
-      "correct": 52
-    },
-    {
-      "team": "Columbus Blue Jackets",
-      "abbrev": "CBJ",
-      "conference": "East",
-      "division": "Metropolitan",
-      "games": 80,
-      "wins": 27,
-      "losses": 53,
-      "record": "27-53",
-      "points": 54,
-      "modelAccuracy": 0.6375,
-      "winPct": 0.3375,
-      "correct": 51
-    },
-    {
-      "team": "Seattle Kraken",
-      "abbrev": "SEA",
-      "conference": "West",
-      "division": "Pacific",
-      "games": 79,
-      "wins": 33,
-      "losses": 46,
-      "record": "33-46",
-      "points": 66,
-      "modelAccuracy": 0.6329113924050633,
-      "winPct": 0.4177215189873418,
-      "correct": 50
-    },
-    {
-      "team": "Dallas Stars",
-      "abbrev": "DAL",
-      "conference": "West",
-      "division": "Central",
-      "games": 79,
-      "wins": 49,
-      "losses": 30,
-      "record": "49-30",
-      "points": 98,
-      "modelAccuracy": 0.6329113924050633,
-      "winPct": 0.620253164556962,
-      "correct": 50
-    },
-    {
-      "team": "Washington Capitals",
-      "abbrev": "WSH",
-      "conference": "East",
-      "division": "Metropolitan",
-      "games": 80,
-      "wins": 40,
-      "losses": 40,
-      "record": "40-40",
-      "points": 80,
-      "modelAccuracy": 0.625,
-      "winPct": 0.5,
-      "correct": 50
-    },
-    {
-      "team": "Carolina Hurricanes",
-      "abbrev": "CAR",
-      "conference": "East",
-      "division": "Metropolitan",
-      "games": 80,
-      "wins": 50,
-      "losses": 30,
-      "record": "50-30",
-      "points": 100,
-      "modelAccuracy": 0.6125,
-      "winPct": 0.625,
-      "correct": 49
-    },
-    {
-      "team": "Nashville Predators",
-      "abbrev": "NSH",
-      "conference": "West",
-      "division": "Central",
-      "games": 78,
-      "wins": 46,
-      "losses": 32,
-      "record": "46-32",
-      "points": 92,
-      "modelAccuracy": 0.6025641025641025,
-      "winPct": 0.5897435897435898,
-      "correct": 47
-    },
-    {
-      "team": "Colorado Avalanche",
-      "abbrev": "COL",
-      "conference": "West",
-      "division": "Central",
-      "games": 78,
-      "wins": 48,
-      "losses": 30,
-      "record": "48-30",
-      "points": 96,
-      "modelAccuracy": 0.6025641025641025,
-      "winPct": 0.6153846153846154,
-      "correct": 47
-    },
-    {
-      "team": "Boston Bruins",
-      "abbrev": "BOS",
-      "conference": "East",
-      "division": "Atlantic",
-      "games": 80,
-      "wins": 46,
-      "losses": 34,
-      "record": "46-34",
-      "points": 92,
-      "modelAccuracy": 0.6,
-      "winPct": 0.575,
-      "correct": 48
-    },
-    {
-      "team": "Calgary Flames",
-      "abbrev": "CGY",
-      "conference": "West",
-      "division": "Pacific",
-      "games": 79,
-      "wins": 35,
-      "losses": 44,
-      "record": "35-44",
-      "points": 70,
-      "modelAccuracy": 0.5949367088607594,
-      "winPct": 0.4430379746835443,
-      "correct": 47
-    },
-    {
-      "team": "St. Louis Blues",
-      "abbrev": "STL",
-      "conference": "West",
-      "division": "Central",
-      "games": 78,
-      "wins": 41,
-      "losses": 37,
-      "record": "41-37",
-      "points": 82,
-      "modelAccuracy": 0.5897435897435898,
-      "winPct": 0.5256410256410257,
-      "correct": 46
-    },
-    {
-      "team": "Toronto Maple Leafs",
-      "abbrev": "TOR",
-      "conference": "East",
-      "division": "Atlantic",
-      "games": 80,
-      "wins": 44,
-      "losses": 36,
-      "record": "44-36",
-      "points": 88,
-      "modelAccuracy": 0.5875,
-      "winPct": 0.55,
-      "correct": 47
-    },
-    {
-      "team": "New York Rangers",
-      "abbrev": "NYR",
-      "conference": "East",
-      "division": "Metropolitan",
-      "games": 80,
-      "wins": 53,
-      "losses": 27,
-      "record": "53-27",
-      "points": 106,
-      "modelAccuracy": 0.575,
-      "winPct": 0.6625,
-      "correct": 46
-    },
-    {
-      "team": "Minnesota Wild",
-      "abbrev": "MIN",
-      "conference": "West",
-      "division": "Central",
-      "games": 78,
-      "wins": 36,
-      "losses": 42,
-      "record": "36-42",
-      "points": 72,
-      "modelAccuracy": 0.5641025641025641,
-      "winPct": 0.46153846153846156,
-      "correct": 44
-    },
-    {
-      "team": "Florida Panthers",
-      "abbrev": "FLA",
-      "conference": "East",
-      "division": "Atlantic",
-      "games": 80,
-      "wins": 50,
-      "losses": 30,
-      "record": "50-30",
-      "points": 100,
-      "modelAccuracy": 0.5625,
-      "winPct": 0.625,
-      "correct": 45
-    },
-    {
-      "team": "Vancouver Canucks",
-      "abbrev": "VAN",
-      "conference": "West",
-      "division": "Pacific",
-      "games": 79,
-      "wins": 48,
-      "losses": 31,
-      "record": "48-31",
-      "points": 96,
-      "modelAccuracy": 0.5569620253164557,
-      "winPct": 0.6075949367088608,
-      "correct": 44
-    },
-    {
-      "team": "Buffalo Sabres",
-      "abbrev": "BUF",
-      "conference": "East",
-      "division": "Atlantic",
-      "games": 80,
-      "wins": 38,
-      "losses": 42,
-      "record": "38-42",
-      "points": 76,
-      "modelAccuracy": 0.55,
-      "winPct": 0.475,
-      "correct": 44
-    },
-    {
-      "team": "Los Angeles Kings",
-      "abbrev": "LAK",
-      "conference": "West",
-      "division": "Pacific",
-      "games": 79,
-      "wins": 41,
-      "losses": 38,
-      "record": "41-38",
-      "points": 82,
-      "modelAccuracy": 0.5443037974683544,
-      "winPct": 0.5189873417721519,
-      "correct": 43
-    },
-    {
-      "team": "Philadelphia Flyers",
-      "abbrev": "PHI",
-      "conference": "East",
-      "division": "Metropolitan",
-      "games": 80,
-      "wins": 36,
-      "losses": 44,
-      "record": "36-44",
-      "points": 72,
-      "modelAccuracy": 0.5375,
-      "winPct": 0.45,
-      "correct": 43
-    },
-    {
-      "team": "New York Islanders",
-      "abbrev": "NYI",
-      "conference": "East",
-      "division": "Metropolitan",
-      "games": 80,
-      "wins": 37,
-      "losses": 43,
-      "record": "37-43",
-      "points": 74,
-      "modelAccuracy": 0.5375,
-      "winPct": 0.4625,
-      "correct": 43
-    },
-    {
-      "team": "Tampa Bay Lightning",
-      "abbrev": "TBL",
-      "conference": "East",
-      "division": "Atlantic",
-      "games": 80,
-      "wins": 44,
-      "losses": 36,
-      "record": "44-36",
-      "points": 88,
-      "modelAccuracy": 0.5,
-      "winPct": 0.55,
-      "correct": 40
-    },
-    {
-      "team": "Pittsburgh Penguins",
-      "abbrev": "PIT",
-      "conference": "East",
-      "division": "Metropolitan",
-      "games": 80,
-      "wins": 37,
-      "losses": 43,
-      "record": "37-43",
-      "points": 74,
-      "modelAccuracy": 0.5,
-      "winPct": 0.4625,
-      "correct": 40
-    },
-    {
-      "team": "Winnipeg Jets",
-      "abbrev": "WPG",
-      "conference": "West",
-      "division": "Central",
-      "games": 78,
-      "wins": 48,
-      "losses": 30,
-      "record": "48-30",
-      "points": 96,
-      "modelAccuracy": 0.5,
-      "winPct": 0.6153846153846154,
-      "correct": 39
-    },
-    {
-      "team": "Ottawa Senators",
-      "abbrev": "OTT",
-      "conference": "East",
-      "division": "Atlantic",
-      "games": 80,
-      "wins": 37,
-      "losses": 43,
-      "record": "37-43",
-      "points": 74,
-      "modelAccuracy": 0.5,
-      "winPct": 0.4625,
-      "correct": 40
-    },
-    {
-      "team": "Vegas Golden Knights",
-      "abbrev": "VGK",
-      "conference": "West",
-      "division": "Pacific",
-      "games": 79,
-      "wins": 44,
-      "losses": 35,
-      "record": "44-35",
-      "points": 88,
-      "modelAccuracy": 0.45569620253164556,
-      "winPct": 0.5569620253164557,
-      "correct": 36
+      "season": "2021-22",
+      "games": 1230,
+      "accuracy": 0.6252,
+      "logLoss": 0.6510,
+      "baseline": 0.5415
     }
   ],
+  "teamPerformance": [],
   "standings": {
-    "east": [
-      {
-        "team": "New York Rangers",
-        "abbrev": "NYR",
-        "record": "53-27",
-        "points": 106,
-        "winPct": 0.6625
-      },
-      {
-        "team": "Carolina Hurricanes",
-        "abbrev": "CAR",
-        "record": "50-30",
-        "points": 100,
-        "winPct": 0.625
-      },
-      {
-        "team": "Florida Panthers",
-        "abbrev": "FLA",
-        "record": "50-30",
-        "points": 100,
-        "winPct": 0.625
-      },
-      {
-        "team": "Boston Bruins",
-        "abbrev": "BOS",
-        "record": "46-34",
-        "points": 92,
-        "winPct": 0.575
-      },
-      {
-        "team": "Toronto Maple Leafs",
-        "abbrev": "TOR",
-        "record": "44-36",
-        "points": 88,
-        "winPct": 0.55
-      },
-      {
-        "team": "Tampa Bay Lightning",
-        "abbrev": "TBL",
-        "record": "44-36",
-        "points": 88,
-        "winPct": 0.55
-      },
-      {
-        "team": "Detroit Red Wings",
-        "abbrev": "DET",
-        "record": "41-39",
-        "points": 82,
-        "winPct": 0.5125
-      },
-      {
-        "team": "Washington Capitals",
-        "abbrev": "WSH",
-        "record": "40-40",
-        "points": 80,
-        "winPct": 0.5
-      },
-      {
-        "team": "New Jersey Devils",
-        "abbrev": "NJD",
-        "record": "38-42",
-        "points": 76,
-        "winPct": 0.475
-      },
-      {
-        "team": "Buffalo Sabres",
-        "abbrev": "BUF",
-        "record": "38-42",
-        "points": 76,
-        "winPct": 0.475
-      },
-      {
-        "team": "New York Islanders",
-        "abbrev": "NYI",
-        "record": "37-43",
-        "points": 74,
-        "winPct": 0.4625
-      },
-      {
-        "team": "Pittsburgh Penguins",
-        "abbrev": "PIT",
-        "record": "37-43",
-        "points": 74,
-        "winPct": 0.4625
-      },
-      {
-        "team": "Ottawa Senators",
-        "abbrev": "OTT",
-        "record": "37-43",
-        "points": 74,
-        "winPct": 0.4625
-      },
-      {
-        "team": "Philadelphia Flyers",
-        "abbrev": "PHI",
-        "record": "36-44",
-        "points": 72,
-        "winPct": 0.45
-      },
-      {
-        "team": "Montr\u00e9al Canadiens",
-        "abbrev": "MTL",
-        "record": "29-51",
-        "points": 58,
-        "winPct": 0.3625
-      },
-      {
-        "team": "Columbus Blue Jackets",
-        "abbrev": "CBJ",
-        "record": "27-53",
-        "points": 54,
-        "winPct": 0.3375
-      }
-    ],
-    "west": [
-      {
-        "team": "Dallas Stars",
-        "abbrev": "DAL",
-        "record": "49-30",
-        "points": 98,
-        "winPct": 0.620253164556962
-      },
-      {
-        "team": "Colorado Avalanche",
-        "abbrev": "COL",
-        "record": "48-30",
-        "points": 96,
-        "winPct": 0.6153846153846154
-      },
-      {
-        "team": "Winnipeg Jets",
-        "abbrev": "WPG",
-        "record": "48-30",
-        "points": 96,
-        "winPct": 0.6153846153846154
-      },
-      {
-        "team": "Edmonton Oilers",
-        "abbrev": "EDM",
-        "record": "48-31",
-        "points": 96,
-        "winPct": 0.6075949367088608
-      },
-      {
-        "team": "Vancouver Canucks",
-        "abbrev": "VAN",
-        "record": "48-31",
-        "points": 96,
-        "winPct": 0.6075949367088608
-      },
-      {
-        "team": "Nashville Predators",
-        "abbrev": "NSH",
-        "record": "46-32",
-        "points": 92,
-        "winPct": 0.5897435897435898
-      },
-      {
-        "team": "Vegas Golden Knights",
-        "abbrev": "VGK",
-        "record": "44-35",
-        "points": 88,
-        "winPct": 0.5569620253164557
-      },
-      {
-        "team": "St. Louis Blues",
-        "abbrev": "STL",
-        "record": "41-37",
-        "points": 82,
-        "winPct": 0.5256410256410257
-      },
-      {
-        "team": "Los Angeles Kings",
-        "abbrev": "LAK",
-        "record": "41-38",
-        "points": 82,
-        "winPct": 0.5189873417721519
-      },
-      {
-        "team": "Minnesota Wild",
-        "abbrev": "MIN",
-        "record": "36-42",
-        "points": 72,
-        "winPct": 0.46153846153846156
-      },
-      {
-        "team": "Calgary Flames",
-        "abbrev": "CGY",
-        "record": "35-44",
-        "points": 70,
-        "winPct": 0.4430379746835443
-      },
-      {
-        "team": "Seattle Kraken",
-        "abbrev": "SEA",
-        "record": "33-46",
-        "points": 66,
-        "winPct": 0.4177215189873418
-      },
-      {
-        "team": "Anaheim Ducks",
-        "abbrev": "ANA",
-        "record": "26-53",
-        "points": 52,
-        "winPct": 0.3291139240506329
-      },
-      {
-        "team": "Chicago Blackhawks",
-        "abbrev": "CHI",
-        "record": "21-58",
-        "points": 42,
-        "winPct": 0.26582278481012656
-      },
-      {
-        "team": "San Jose Sharks",
-        "abbrev": "SJS",
-        "record": "19-60",
-        "points": 38,
-        "winPct": 0.24050632911392406
-      }
-    ]
+    "east": [],
+    "west": []
   },
   "matchupInsights": {
-    "consistent": [
-      {
-        "teams": "DAL vs STL",
-        "games": 4,
-        "correct": 4,
-        "accuracy": 1.0
-      },
-      {
-        "teams": "BOS vs FLA",
-        "games": 4,
-        "correct": 4,
-        "accuracy": 1.0
-      },
-      {
-        "teams": "EDM vs SEA",
-        "games": 4,
-        "correct": 4,
-        "accuracy": 1.0
-      },
-      {
-        "teams": "NJD vs NYR",
-        "games": 4,
-        "correct": 4,
-        "accuracy": 1.0
-      },
-      {
-        "teams": "CHI vs NSH",
-        "games": 4,
-        "correct": 4,
-        "accuracy": 1.0
-      }
-    ],
-    "volatile": [
-      {
-        "teams": "BUF vs DET",
-        "games": 4,
-        "correct": 0,
-        "accuracy": 0.0
-      },
-      {
-        "teams": "DAL vs NSH",
-        "games": 4,
-        "correct": 0,
-        "accuracy": 0.0
-      },
-      {
-        "teams": "PIT vs WSH",
-        "games": 4,
-        "correct": 1,
-        "accuracy": 0.25
-      },
-      {
-        "teams": "ANA vs VGK",
-        "games": 4,
-        "correct": 1,
-        "accuracy": 0.25
-      },
-      {
-        "teams": "OTT vs TBL",
-        "games": 4,
-        "correct": 1,
-        "accuracy": 0.25
-      }
-    ]
+    "consistent": [],
+    "volatile": []
   },
-  "featureImportance": [
-    {
-      "feature": "season_goal_diff_avg_diff",
-      "coefficient": 0.3276431295970218,
-      "absImportance": 0.3276431295970218
-    },
-    {
-      "feature": "rolling_goal_diff_10_diff",
-      "coefficient": -0.3111887837819201,
-      "absImportance": 0.3111887837819201
-    },
-    {
-      "feature": "rolling_high_danger_shots_5_diff",
-      "coefficient": 0.2905412581782333,
-      "absImportance": 0.2905412581782333
-    },
-    {
-      "feature": "is_b2b_home",
-      "coefficient": -0.2368720840309314,
-      "absImportance": 0.2368720840309314
-    },
-    {
-      "feature": "shotsAgainst_roll_10_diff",
-      "coefficient": -0.2280850366283378,
-      "absImportance": 0.2280850366283378
-    },
-    {
-      "feature": "season_win_pct_diff",
-      "coefficient": -0.2120487642837571,
-      "absImportance": 0.2120487642837571
-    },
-    {
-      "feature": "rolling_xg_for_5_diff",
-      "coefficient": -0.209551375335924,
-      "absImportance": 0.209551375335924
-    },
-    {
-      "feature": "shotsFor_roll_3_diff",
-      "coefficient": 0.19016689043137,
-      "absImportance": 0.19016689043137
-    },
-    {
-      "feature": "games_played_prior_away",
-      "coefficient": 0.1873679324401456,
-      "absImportance": 0.1873679324401456
-    },
-    {
-      "feature": "rolling_corsi_5_diff",
-      "coefficient": -0.1745587094344976,
-      "absImportance": 0.1745587094344976
-    }
-  ],
-  "distributionFindings": [
-    {
-      "metric": "Rolling goal differential (5 games)",
-      "correctMean": -0.014494741655235488,
-      "incorrectMean": -0.10026613439787092
-    },
-    {
-      "metric": "Rolling win% (5 games)",
-      "correctMean": -0.005829903978052127,
-      "incorrectMean": -0.009547571523619427
-    },
-    {
-      "metric": "Special teams edge differential",
-      "correctMean": 0.0,
-      "incorrectMean": 0.0
-    }
-  ],
-  "bankrollSeries": [
-    {
-      "label": "2023-10-10",
-      "units": 1.0
-    },
-    {
-      "label": "2023-10-28",
-      "units": 20.0
-    },
-    {
-      "label": "2023-11-15",
-      "units": 30.0
-    },
-    {
-      "label": "2023-12-02",
-      "units": 38.0
-    },
-    {
-      "label": "2023-12-17",
-      "units": 63.0
-    },
-    {
-      "label": "2024-01-04",
-      "units": 79.0
-    },
-    {
-      "label": "2024-01-20",
-      "units": 85.0
-    },
-    {
-      "label": "2024-02-14",
-      "units": 109.0
-    },
-    {
-      "label": "2024-03-01",
-      "units": 126.0
-    },
-    {
-      "label": "2024-03-17",
-      "units": 160.0
-    },
-    {
-      "label": "2024-04-02",
-      "units": 196.0
-    },
-    {
-      "label": "2024-04-18",
-      "units": 228.0
-    }
-  ]
+  "featureImportance": [],
+  "distributionFindings": [],
+  "bankrollSeries": []
 }
