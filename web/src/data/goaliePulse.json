@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2025-12-12T13:27:47.731951+00:00",
+  "updatedAt": "2025-12-12T23:13:23.693022+00:00",
   "notes": "Goalie performance metrics calculated from NHL Stats API data. GSAx estimates based on save percentage above league average.",
   "goalies": [
     {
@@ -114,7 +114,7 @@
       "name": "Mackenzie Blackwood",
       "team": "COL",
       "rollingGsa": 1.5,
-      "seasonGsa": 5.6,
+      "seasonGsa": 6.1,
       "restDays": 2,
       "startLikelihood": 0.95,
       "trend": "surging",
