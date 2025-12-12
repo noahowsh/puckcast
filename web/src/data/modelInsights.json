@@ -76,6 +76,7 @@
   ],
   "confidenceBuckets": [
     {
+      "grade": "C",
       "label": "0-5 pts",
       "min": 0,
       "max": 0.05,
@@ -83,6 +84,7 @@
       "count": 198
     },
     {
+      "grade": "C+",
       "label": "5-10 pts",
       "min": 0.05,
       "max": 0.1,
@@ -90,6 +92,7 @@
       "count": 221
     },
     {
+      "grade": "B",
       "label": "10-15 pts",
       "min": 0.1,
       "max": 0.15,
@@ -97,6 +100,7 @@
       "count": 195
     },
     {
+      "grade": "B+",
       "label": "15-20 pts",
       "min": 0.15,
       "max": 0.2,
@@ -104,6 +108,7 @@
       "count": 180
     },
     {
+      "grade": "A+",
       "label": "20+ pts",
       "min": 0.2,
       "max": null,
