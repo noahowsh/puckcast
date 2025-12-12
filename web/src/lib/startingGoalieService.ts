@@ -7,13 +7,9 @@ import type {
   DailyGoalieReport,
   GoalieSource,
   GoaliePulseEntry,
-  ConfidenceLevel,
 } from "@/types/startingGoalie";
 import {
   getConfidenceLevel,
-  getGoalieStatus,
-  combineConfidence,
-  getSourceWeight,
 } from "@/types/startingGoalie";
 
 // =============================================================================

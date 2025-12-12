@@ -1,13 +1,11 @@
 // Starting Goalie Display Components
 // Visual components for showing starting goalie intelligence
 
-import Link from "next/link";
 import type {
   StartingGoalieInfo,
   GameGoalieReport,
-  ConfidenceLevel,
 } from "@/types/startingGoalie";
-import { getConfidenceColor, formatConfidence } from "@/types/startingGoalie";
+import { getConfidenceColor } from "@/types/startingGoalie";
 
 // =============================================================================
 // Status Badge
@@ -286,12 +284,11 @@ export function GoalieMatchupCard({ report }: { report: GameGoalieReport }) {
 export function TeamGoalieSituationCard({
   starter,
   backup,
-  teamAbbrev,
   nextOpponent,
 }: {
   starter: StartingGoalieInfo | null;
   backup: StartingGoalieInfo | null;
-  teamAbbrev: string;
+  teamAbbrev?: string;
   nextOpponent?: string;
 }) {
   return (

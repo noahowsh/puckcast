@@ -1,8 +1,8 @@
 "use client";
 
+import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { useState } from "react";
 import type { SkaterCard, GoalieDetailCard } from "@/types/player";
 import { TeamLogo } from "./TeamLogo";
 import { getPlayerUrl, getGoalieUrl } from "@/lib/playerSlug";

@@ -7,12 +7,10 @@ import { fetchNextGamesMap } from "@/lib/nextGames";
 const snapshots = buildTeamSnapshots();
 const snapshotMap = new Map(snapshots.map((team) => [team.abbrev, team]));
 const standings = getCurrentStandings();
-const nameToAbbrev = new Map<string, string>(standings.map((team) => [team.team, team.abbrev]));
 
 // Calculate expected win rates for all teams based on power score
 // This provides a meaningful "model strength" metric even when team isn't playing today
 const allPowerScores = standings.map(s => computeStandingsPowerScore(s));
-const avgPowerScore = allPowerScores.reduce((a, b) => a + b, 0) / allPowerScores.length;
 const maxPowerScore = Math.max(...allPowerScores);
 const minPowerScore = Math.min(...allPowerScores);
 
@@ -69,73 +67,8 @@ const biggestSlider = rankedRows.reduce<LeaderboardRow | null>((best, row) => {
   return best;
 }, null);
 
-const pct = (value: number) => `${(value * 100).toFixed(1)}%`;
-
-type NextGameInfo = { opponent: string; date: string; startTimeEt: string | null };
-
-async function fetchNextGames(abbrevs: string[]): Promise<Record<string, NextGameInfo>> {
-  const today = new Date();
-  const end = new Date();
-  end.setDate(end.getDate() + 14); // two-week lookahead
-  const fmt = (d: Date) => d.toISOString().slice(0, 10);
-  const url = `https://statsapi.web.nhl.com/api/v1/schedule?startDate=${fmt(today)}&endDate=${fmt(end)}`;
-
-  try {
-    const res = await fetch(url, { cache: "no-store" });
-    if (!res.ok) {
-      console.warn("schedule fetch failed", res.status);
-      return {};
-    }
-    const data = await res.json();
-    const map: Record<string, NextGameInfo> = {};
-
-    const resolveAbbrev = (team: any) => {
-      const cand = team?.abbreviation || team?.triCode || nameToAbbrev.get(team?.name) || team?.teamName || team?.name;
-      return (cand || "").toString().toUpperCase();
-    };
-
-    const formatEt = (iso: string) => {
-      if (!iso) return null;
-      const dt = new Date(iso);
-      return new Intl.DateTimeFormat("en-US", {
-        timeZone: "America/New_York",
-        hour: "numeric",
-        minute: "2-digit",
-      }).format(dt);
-    };
-
-    data?.dates?.forEach((block: any) => {
-      const date = block?.date;
-      block?.games?.forEach((game: any) => {
-        const homeTeam = game?.teams?.home?.team;
-        const awayTeam = game?.teams?.away?.team;
-        const home = resolveAbbrev(homeTeam);
-        const away = resolveAbbrev(awayTeam);
-        const startTimeEt = formatEt(game?.gameDate);
-        if (home && !map[home]) {
-          map[home] = { opponent: away, date, startTimeEt };
-        }
-        if (away && !map[away]) {
-          map[away] = { opponent: home, date, startTimeEt };
-        }
-      });
-    });
-
-    // Keep only requested teams
-    const filtered: Record<string, NextGameInfo> = {};
-    abbrevs.forEach((abbr) => {
-      if (map[abbr]) filtered[abbr] = map[abbr];
-    });
-    return filtered;
-  } catch (e) {
-    console.warn("schedule fetch exception", e);
-    return {};
-  }
-}
-
 export default async function LeaderboardsPage() {
   const nextGames = await fetchNextGamesMap(rankedRows.map((r) => r.abbrev), 14);
-  const topTeam = rankedRows[0];
 
   return (
     <div className="min-h-screen">

@@ -1,14 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import { use, useMemo } from "react";
+import { use } from "react";
 import { getPredictionsPayload } from "@/lib/data";
 import { getCurrentStandings, computeStandingsPowerScore } from "@/lib/current";
 import type { CurrentStanding } from "@/lib/current";
 import type { Prediction } from "@/types/prediction";
 import { getPredictionGrade } from "@/lib/prediction";
 import { TeamCrest } from "@/components/TeamCrest";
-import { teamPrimaryColor, getContrastingTeamColor } from "@/lib/teamColors";
+import { getContrastingTeamColor } from "@/lib/teamColors";
 
 const payload = getPredictionsPayload();
 const standings = getCurrentStandings();
@@ -108,7 +108,6 @@ export default function MatchupPage({ params }: PageProps) {
   const awayStanding = getTeamStanding(game.awayTeam.abbrev);
   const grade = getPredictionGrade(game.edge);
   const favorite = game.modelFavorite === "home" ? game.homeTeam : game.awayTeam;
-  const underdog = game.modelFavorite === "home" ? game.awayTeam : game.homeTeam;
   const favoriteProb = game.modelFavorite === "home" ? game.homeWinProb : game.awayWinProb;
   const edgePts = Math.abs(game.edge * 100);
 
@@ -120,76 +119,72 @@ export default function MatchupPage({ params }: PageProps) {
   const awayColor = teamColors.team1;
   const homeColor = teamColors.team2;
 
-  const comparisonStats: ComparisonStat[] = useMemo(() => {
-    if (!homeStanding || !awayStanding) return [];
-
-    return [
-      {
-        label: "Points",
-        away: awayStanding.points,
-        home: homeStanding.points,
-        awayRaw: awayStanding.points,
-        homeRaw: homeStanding.points,
-        higherIsBetter: true,
-      },
-      {
-        label: "Point %",
-        away: pct(awayStanding.pointPctg),
-        home: pct(homeStanding.pointPctg),
-        awayRaw: awayStanding.pointPctg,
-        homeRaw: homeStanding.pointPctg,
-        higherIsBetter: true,
-      },
-      {
-        label: "Goal Diff",
-        away: awayStanding.goalDifferential >= 0 ? `+${awayStanding.goalDifferential}` : awayStanding.goalDifferential,
-        home: homeStanding.goalDifferential >= 0 ? `+${homeStanding.goalDifferential}` : homeStanding.goalDifferential,
-        awayRaw: awayStanding.goalDifferential + 100,
-        homeRaw: homeStanding.goalDifferential + 100,
-        higherIsBetter: true,
-      },
-      {
-        label: "Goals/Game",
-        away: (awayStanding.goalsForPerGame ?? 0).toFixed(2),
-        home: (homeStanding.goalsForPerGame ?? 0).toFixed(2),
-        awayRaw: awayStanding.goalsForPerGame ?? 0,
-        homeRaw: homeStanding.goalsForPerGame ?? 0,
-        higherIsBetter: true,
-      },
-      {
-        label: "Goals Against",
-        away: (awayStanding.goalsAgainstPerGame ?? 0).toFixed(2),
-        home: (homeStanding.goalsAgainstPerGame ?? 0).toFixed(2),
-        awayRaw: awayStanding.goalsAgainstPerGame ?? 0,
-        homeRaw: homeStanding.goalsAgainstPerGame ?? 0,
-        higherIsBetter: false,
-      },
-      {
-        label: "Power Score",
-        away: awayPowerScore,
-        home: homePowerScore,
-        awayRaw: awayPowerScore,
-        homeRaw: homePowerScore,
-        higherIsBetter: true,
-      },
-      {
-        label: "Power Play %",
-        away: awayStanding.powerPlayPct != null ? `${(awayStanding.powerPlayPct * 100).toFixed(1)}%` : "—",
-        home: homeStanding.powerPlayPct != null ? `${(homeStanding.powerPlayPct * 100).toFixed(1)}%` : "—",
-        awayRaw: awayStanding.powerPlayPct ?? 0,
-        homeRaw: homeStanding.powerPlayPct ?? 0,
-        higherIsBetter: true,
-      },
-      {
-        label: "Penalty Kill %",
-        away: awayStanding.penaltyKillPct != null ? `${(awayStanding.penaltyKillPct * 100).toFixed(1)}%` : "—",
-        home: homeStanding.penaltyKillPct != null ? `${(homeStanding.penaltyKillPct * 100).toFixed(1)}%` : "—",
-        awayRaw: awayStanding.penaltyKillPct ?? 0,
-        homeRaw: homeStanding.penaltyKillPct ?? 0,
-        higherIsBetter: true,
-      },
-    ];
-  }, [homeStanding, awayStanding, homePowerScore, awayPowerScore]);
+  const comparisonStats: ComparisonStat[] = (homeStanding && awayStanding) ? [
+    {
+      label: "Points",
+      away: awayStanding.points,
+      home: homeStanding.points,
+      awayRaw: awayStanding.points,
+      homeRaw: homeStanding.points,
+      higherIsBetter: true,
+    },
+    {
+      label: "Point %",
+      away: pct(awayStanding.pointPctg),
+      home: pct(homeStanding.pointPctg),
+      awayRaw: awayStanding.pointPctg,
+      homeRaw: homeStanding.pointPctg,
+      higherIsBetter: true,
+    },
+    {
+      label: "Goal Diff",
+      away: awayStanding.goalDifferential >= 0 ? `+${awayStanding.goalDifferential}` : awayStanding.goalDifferential,
+      home: homeStanding.goalDifferential >= 0 ? `+${homeStanding.goalDifferential}` : homeStanding.goalDifferential,
+      awayRaw: awayStanding.goalDifferential + 100,
+      homeRaw: homeStanding.goalDifferential + 100,
+      higherIsBetter: true,
+    },
+    {
+      label: "Goals/Game",
+      away: (awayStanding.goalsForPerGame ?? 0).toFixed(2),
+      home: (homeStanding.goalsForPerGame ?? 0).toFixed(2),
+      awayRaw: awayStanding.goalsForPerGame ?? 0,
+      homeRaw: homeStanding.goalsForPerGame ?? 0,
+      higherIsBetter: true,
+    },
+    {
+      label: "Goals Against",
+      away: (awayStanding.goalsAgainstPerGame ?? 0).toFixed(2),
+      home: (homeStanding.goalsAgainstPerGame ?? 0).toFixed(2),
+      awayRaw: awayStanding.goalsAgainstPerGame ?? 0,
+      homeRaw: homeStanding.goalsAgainstPerGame ?? 0,
+      higherIsBetter: false,
+    },
+    {
+      label: "Power Score",
+      away: awayPowerScore,
+      home: homePowerScore,
+      awayRaw: awayPowerScore,
+      homeRaw: homePowerScore,
+      higherIsBetter: true,
+    },
+    {
+      label: "Power Play %",
+      away: awayStanding.powerPlayPct != null ? `${(awayStanding.powerPlayPct * 100).toFixed(1)}%` : "—",
+      home: homeStanding.powerPlayPct != null ? `${(homeStanding.powerPlayPct * 100).toFixed(1)}%` : "—",
+      awayRaw: awayStanding.powerPlayPct ?? 0,
+      homeRaw: homeStanding.powerPlayPct ?? 0,
+      higherIsBetter: true,
+    },
+    {
+      label: "Penalty Kill %",
+      away: awayStanding.penaltyKillPct != null ? `${(awayStanding.penaltyKillPct * 100).toFixed(1)}%` : "—",
+      home: homeStanding.penaltyKillPct != null ? `${(homeStanding.penaltyKillPct * 100).toFixed(1)}%` : "—",
+      awayRaw: awayStanding.penaltyKillPct ?? 0,
+      homeRaw: homeStanding.penaltyKillPct ?? 0,
+      higherIsBetter: true,
+    },
+  ] : [];
 
   const formatGameDate = (dateStr: string) => {
     const date = new Date(dateStr + "T12:00:00");

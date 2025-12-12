@@ -22,8 +22,6 @@ function formatPct(value: number) {
   return `${(value * 100).toFixed(0)}%`;
 }
 
-const nameFallback: Record<string, string> = {};
-
 export function PowerBoardClient({ rows, initialNextGames }: { rows: LeaderboardRow[]; initialNextGames?: Record<string, NextGameInfo> }) {
   const [nextGames, setNextGames] = React.useState<Record<string, NextGameInfo>>(initialNextGames || {});
 
@@ -48,7 +46,6 @@ export function PowerBoardClient({ rows, initialNextGames }: { rows: Leaderboard
         const res = await fetch(url);
         if (!res.ok) return;
         const data = await res.json();
-        const map: Record<string, NextGameInfo> = {};
         const incoming = data?.nextGames || {};
         if (Object.keys(incoming).length) {
           setNextGames(incoming);

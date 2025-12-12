@@ -32,10 +32,10 @@ const resolveAbbrev = (team: any) => {
 };
 
 export async function fetchNextGamesMap(abbrevs: string[], lookaheadDays = 14): Promise<Record<string, NextGameInfo>> {
+  void lookaheadDays; // Reserved for future API endpoint construction
   const today = new Date();
   const fmt = (d: Date) => d.toISOString().slice(0, 10);
   const start = fmt(today);
-  const end = fmt(new Date(today.getTime() + lookaheadDays * 24 * 60 * 60 * 1000));
   const map: Record<string, NextGameInfo> = {};
 
   // Seed from current predictions payload (only if gameDate is today or in the future)

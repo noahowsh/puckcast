@@ -7,7 +7,6 @@ import { TeamLogo } from "@/components/TeamLogo";
 import { TeamCrest } from "@/components/TeamCrest";
 import { GoaliePerformanceCard } from "@/components/GoaliePerformanceCard";
 import { GoalieSkillProfileCard } from "@/components/GoalieSkillProfileCard";
-import type { GoalieCard } from "@/types/goalie";
 import { parsePlayerSlug, generatePlayerSlug } from "@/lib/playerSlug";
 
 export const revalidate = 3600; // Revalidate every hour

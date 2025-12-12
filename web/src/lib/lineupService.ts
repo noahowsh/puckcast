@@ -8,8 +8,6 @@ import type {
   LineupStrengthMetrics,
   MissingPlayerImpact,
   LineupFeatures,
-  TeamLineupPattern,
-  PositionGroup,
   InjuryStatus,
 } from "@/types/lineup";
 import type { SkaterCard, GoalieDetailCard } from "@/types/player";

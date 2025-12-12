@@ -12,8 +12,6 @@ const pct = (value: number) => `${(value * 100).toFixed(1)}%`;
 
 export default function PerformancePage() {
   const edge = ((overview.accuracy - overview.baseline) * 100).toFixed(1);
-  const correct = Math.round(overview.accuracy * overview.games);
-  const incorrect = overview.games - correct;
 
   return (
     <div className="min-h-screen">

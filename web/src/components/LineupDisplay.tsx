@@ -5,7 +5,6 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { TeamCrest } from "./TeamCrest";
 import type { TeamLineup, LineupPlayer, GoalieLineup, LineupStrengthMetrics } from "@/types/lineup";
 import { getPlayerUrl, getGoalieUrl } from "@/lib/playerSlug";
 
@@ -228,6 +227,7 @@ function PlayerHeadshot({ playerId, playerName, teamAbbrev, size = 40 }: {
       )}
       {/* Only render image if no error */}
       {!hasError && (
+        // eslint-disable-next-line @next/next/no-img-element
         <img
           src={getHeadshotUrl(playerId, teamAbbrev)}
           alt={playerName}

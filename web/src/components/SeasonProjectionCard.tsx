@@ -9,12 +9,12 @@ import type { SeasonProjection, StatProjection } from "@/types/player";
 
 interface SeasonProjectionCardProps {
   projection: SeasonProjection;
-  playerName: string;
+  playerName?: string;
 }
 
 type DistributionStat = "points" | "goals" | "assists";
 
-export function SeasonProjectionCard({ projection, playerName }: SeasonProjectionCardProps) {
+export function SeasonProjectionCard({ projection }: SeasonProjectionCardProps) {
   const [selectedStat, setSelectedStat] = useState<DistributionStat>("points");
   const { goals, assists, points, awardProbabilities, milestoneProbabilities, distributionSummary, gamesRemaining } = projection;
 

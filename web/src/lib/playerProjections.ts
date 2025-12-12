@@ -9,7 +9,6 @@ import type {
   PercentileRating,
   OnIceImpact,
   ImpactMetric,
-  PlayerPosition,
 } from "@/types/player";
 
 // =============================================================================
@@ -95,7 +94,7 @@ function calculateMilestoneProbabilities(
   milestones: number[]
 ): Record<number, number> {
   const result: Record<number, number> = {};
-  const { average, min, max, current } = projection;
+  const { min, max, current } = projection;
 
   for (const milestone of milestones) {
     if (milestone <= current) {
@@ -157,7 +156,7 @@ export function generateSeasonProjection(
   const assistsRank = sortedByAssists.findIndex(p => p.bio.playerId === bio.playerId) + 1;
 
   // Award probabilities based on rank (simplified model)
-  const calculateAwardProb = (rank: number, spread: number = 5): number => {
+  const calculateAwardProb = (rank: number): number => {
     if (rank === 1) return Math.min(45, 30 + Math.random() * 15);
     if (rank <= 3) return Math.max(0, 20 - (rank - 1) * 8 + Math.random() * 5);
     if (rank <= 10) return Math.max(0, 8 - (rank - 3) * 1 + Math.random() * 2);
@@ -221,7 +220,6 @@ export function generateSkillProfile(
   const pointsPerGame = stats.gamesPlayed > 0 ? stats.points / stats.gamesPlayed : 0;
   const goalsPerGame = stats.gamesPlayed > 0 ? stats.goals / stats.gamesPlayed : 0;
   const assistsPerGame = stats.gamesPlayed > 0 ? stats.assists / stats.gamesPlayed : 0;
-  const shootingPct = stats.shootingPct || 0;
 
   // Get all values for percentile calculations
   const allPPG = samePosition.map(p => p.stats.gamesPlayed > 0 ? p.stats.points / p.stats.gamesPlayed : 0);
@@ -229,9 +227,7 @@ export function generateSkillProfile(
   const allAPG = samePosition.map(p => p.stats.gamesPlayed > 0 ? p.stats.assists / p.stats.gamesPlayed : 0);
   const allPlusMinus = samePosition.map(p => p.stats.plusMinus);
   const allPPGoals = samePosition.map(p => p.stats.powerPlayGoals);
-  const allHits = samePosition.map(p => p.stats.hits);
   const allBlocks = samePosition.map(p => p.stats.blockedShots);
-  const allShootingPct = samePosition.map(p => p.stats.shootingPct);
 
   // Calculate percentiles
   const offensivePercentile = calculatePercentileFromStats(pointsPerGame, allPPG);

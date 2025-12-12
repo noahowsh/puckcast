@@ -8,9 +8,6 @@ import type {
   InjuryChange,
   InjuryStatus,
   InjuryType,
-  ESPNInjuryResponse,
-  ESPN_TEAM_MAP,
-  ESPN_STATUS_MAP,
 } from "@/types/lineup";
 
 // =============================================================================

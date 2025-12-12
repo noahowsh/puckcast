@@ -8,7 +8,6 @@ import type { ModelInsights } from "@/types/insights";
 import type { Prediction, PredictionsPayload } from "@/types/prediction";
 import { getPredictionsPayload, selectCurrentSlate } from "@/lib/data";
 import { getPredictionGrade } from "@/lib/prediction";
-import { teamBorderColor, teamGradient } from "@/lib/teamColors";
 import { TeamCrest } from "@/components/TeamCrest";
 
 // Starting goalies types and data

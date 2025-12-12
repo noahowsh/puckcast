@@ -8,12 +8,12 @@ import type { SkillProfile, PercentileRating } from "@/types/player";
 
 interface SkillProfileCardProps {
   profile: SkillProfile;
-  playerName: string;
+  playerName?: string;
   age?: number;
   evTOI?: string;
 }
 
-export function SkillProfileCard({ profile, playerName, age, evTOI }: SkillProfileCardProps) {
+export function SkillProfileCard({ profile, age, evTOI }: SkillProfileCardProps) {
   const {
     overallRating,
     evenStrength,

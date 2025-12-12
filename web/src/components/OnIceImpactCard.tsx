@@ -8,11 +8,11 @@ import type { OnIceImpact, ImpactMetric } from "@/types/player";
 
 interface OnIceImpactCardProps {
   impact: OnIceImpact;
-  playerName: string;
+  playerName?: string;
   age?: number;
 }
 
-export function OnIceImpactCard({ impact, playerName, age }: OnIceImpactCardProps) {
+export function OnIceImpactCard({ impact, age }: OnIceImpactCardProps) {
   const { forMetrics, againstMetrics, general, impactSummary, evTimeOnIce, position } = impact;
   const positionLabel = position === "D" ? "Defenseman" : "Forward";
 

@@ -156,7 +156,7 @@ async function sleep(ms: number): Promise<void> {
 // Track if we've been rate limited to add delays on subsequent requests
 let lastRateLimitTime = 0;
 
-async function fetchWithRetry<T>(url: string, options: RequestInit = {}, retries = 8): Promise<T | null> {
+async function fetchWithRetry<T>(url: string, options: globalThis.RequestInit = {}, retries = 8): Promise<T | null> {
   // If we were rate limited recently, add initial delay
   const timeSinceRateLimit = Date.now() - lastRateLimitTime;
   if (lastRateLimitTime > 0 && timeSinceRateLimit < 30000) {
@@ -1167,11 +1167,12 @@ export function formatStat(value: number | string | null, format: "number" | "de
       return num.toFixed(0);
     case "decimal":
       return num.toFixed(precision);
-    case "percent":
+    case "percent": {
       // If value is already a percentage (like 12.5), display as is
       // If value is a decimal (like 0.125), multiply by 100
       const pctValue = num < 1 && num > 0 ? num * 100 : num;
       return `${pctValue.toFixed(precision)}%`;
+    }
     case "time":
       return typeof value === "string" ? value : formatSecondsToTime(num);
     case "plusMinus":

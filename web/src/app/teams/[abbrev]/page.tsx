@@ -830,6 +830,7 @@ export default async function TeamPage({ params }: { params: Promise<{ abbrev: s
               {allSkaters[0] && (
                 <Link href={`/players/${allSkaters[0].bio.playerId}`} className="card" style={{ padding: '1rem', textDecoration: 'none' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src={`https://assets.nhle.com/mugs/nhl/20252026/${teamData.abbrev}/${allSkaters[0].bio.playerId}.png`}
                       alt={allSkaters[0].bio.fullName}
@@ -853,6 +854,7 @@ export default async function TeamPage({ params }: { params: Promise<{ abbrev: s
                 return goalsLeader && (
                   <Link href={`/players/${goalsLeader.bio.playerId}`} className="card" style={{ padding: '1rem', textDecoration: 'none' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
                         src={`https://assets.nhle.com/mugs/nhl/20252026/${teamData.abbrev}/${goalsLeader.bio.playerId}.png`}
                         alt={goalsLeader.bio.fullName}
@@ -877,6 +879,7 @@ export default async function TeamPage({ params }: { params: Promise<{ abbrev: s
                 return pmLeader && (
                   <Link href={`/players/${pmLeader.bio.playerId}`} className="card" style={{ padding: '1rem', textDecoration: 'none' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
                         src={`https://assets.nhle.com/mugs/nhl/20252026/${teamData.abbrev}/${pmLeader.bio.playerId}.png`}
                         alt={pmLeader.bio.fullName}
