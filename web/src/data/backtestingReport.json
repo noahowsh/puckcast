@@ -2,10 +2,15 @@
   "generatedAt": "2025-12-06T23:00:00Z",
   "modelVersion": "V7.0",
   "summary": {
-    "fourSeasonAverage": 0.6104,
-    "fiveSeasonAverage": 0.5970,
-    "logLoss": 0.6559,
+    "overallAccuracy": 0.6086,
+    "overallAccuracyNote": "Weighted: total correct / total games (3044/5002)",
+    "fourSeasonUnweightedAvg": 0.6104,
+    "fourSeasonUnweightedNote": "Simple average of per-season accuracies (less precise)",
+    "logLoss": 0.6554,
+    "brier": 0.2317,
     "totalGames": 5002,
+    "baseline": 0.5392,
+    "edgeOverBaseline": 0.0694,
     "trainingWindow": "4 seasons",
     "validationMethod": "Leave-one-season-out cross-validation"
   },
