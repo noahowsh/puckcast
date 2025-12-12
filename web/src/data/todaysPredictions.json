@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2025-12-12T11:25:43.982806+00:00",
+  "generatedAt": "2025-12-12T23:12:17.676692+00:00",
   "games": [
     {
       "id": "2025020493",
@@ -37,12 +37,12 @@
         "name": "Kraken",
         "abbrev": "SEA"
       },
-      "homeWinProb": 0.4967,
-      "awayWinProb": 0.5033,
-      "confidenceScore": 0.007,
+      "homeWinProb": 0.4975,
+      "awayWinProb": 0.5025,
+      "confidenceScore": 0.005,
       "confidenceGrade": "C",
-      "edge": -0.003,
-      "summary": "Kraken project at 50% as the road lean \u2014 a C-tier edge worth 0.3 pts over a coin flip.",
+      "edge": -0.002,
+      "summary": "Kraken project at 50% as the road lean \u2014 a C-tier edge worth 0.2 pts over a coin flip.",
       "modelFavorite": "away",
       "venue": "Delta Center",
       "season": "20252026"
