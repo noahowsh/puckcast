@@ -240,3 +240,130 @@ class TestGoaliePulseValidation:
                 assert (
                     0 <= likelihood <= 1
                 ), f"Goalie {i}: startLikelihood out of range [0,1]"
+
+
+class TestV70ModelMetrics:
+    """
+    V7.0 Model Metrics Validation.
+
+    These tests ensure the V7.0 model metrics in modelInsights.json match
+    the validated backtesting results. This prevents accidental data corruption
+    or merge conflicts from breaking the production model metrics.
+
+    V7.0 was validated on 5,002 holdout games across 4 seasons (2021-25).
+    """
+
+    # V7.0 VALIDATED METRICS - DO NOT CHANGE WITHOUT RE-VALIDATION
+    V70_EXPECTED = {
+        "games": 5002,
+        "accuracy": 0.6086,
+        "baseline": 0.5392,
+        "log_loss": 0.6554,
+        "brier": 0.2317,
+    }
+
+    # V7.0 CONFIDENCE BUCKETS - MUST HAVE EXACTLY 6 TIERS
+    V70_BUCKETS = {
+        "A+": {"accuracy": 0.7928, "count": 333},
+        "A":  {"accuracy": 0.7203, "count": 404},
+        "B+": {"accuracy": 0.6725, "count": 687},
+        "B":  {"accuracy": 0.6195, "count": 975},
+        "C+": {"accuracy": 0.5776, "count": 1231},
+        "C":  {"accuracy": 0.5190, "count": 1372},
+    }
+
+    def test_model_insights_has_6_confidence_buckets(self):
+        """V7.0 MUST have exactly 6 confidence buckets (A+, A, B+, B, C+, C)."""
+        insights_file = DATA_DIR / "modelInsights.json"
+        with open(insights_file) as f:
+            data = json.load(f)
+
+        buckets = data.get("confidenceBuckets", [])
+        assert len(buckets) == 6, f"Expected 6 confidence buckets, got {len(buckets)}"
+
+        grades = [b.get("grade") for b in buckets]
+        expected_grades = ["A+", "A", "B+", "B", "C+", "C"]
+        assert grades == expected_grades, f"Expected grades {expected_grades}, got {grades}"
+
+    def test_confidence_bucket_grades_exist(self):
+        """Each confidence bucket MUST have a 'grade' field."""
+        insights_file = DATA_DIR / "modelInsights.json"
+        with open(insights_file) as f:
+            data = json.load(f)
+
+        buckets = data.get("confidenceBuckets", [])
+        for i, bucket in enumerate(buckets):
+            assert "grade" in bucket, f"Bucket {i} missing 'grade' field"
+            assert bucket["grade"] is not None, f"Bucket {i} has null 'grade'"
+
+    def test_v70_accuracy_matches_validated(self):
+        """V7.0 accuracy must match validated 60.86% on 5,002 games."""
+        insights_file = DATA_DIR / "modelInsights.json"
+        with open(insights_file) as f:
+            data = json.load(f)
+
+        overall = data.get("overall", {})
+        accuracy = overall.get("accuracy", 0)
+        games = overall.get("games", 0)
+
+        assert games == self.V70_EXPECTED["games"], \
+            f"Expected {self.V70_EXPECTED['games']} games, got {games}"
+        assert abs(accuracy - self.V70_EXPECTED["accuracy"]) < 0.001, \
+            f"Expected accuracy ~{self.V70_EXPECTED['accuracy']}, got {accuracy}"
+
+    def test_v70_bucket_accuracies_match_validated(self):
+        """V7.0 bucket accuracies must match validated backtesting results."""
+        insights_file = DATA_DIR / "modelInsights.json"
+        with open(insights_file) as f:
+            data = json.load(f)
+
+        buckets = {b["grade"]: b for b in data.get("confidenceBuckets", [])}
+
+        for grade, expected in self.V70_BUCKETS.items():
+            assert grade in buckets, f"Missing bucket for grade {grade}"
+            actual_acc = buckets[grade].get("accuracy", 0)
+            actual_cnt = buckets[grade].get("count", 0)
+
+            assert abs(actual_acc - expected["accuracy"]) < 0.0001, \
+                f"Grade {grade}: expected accuracy {expected['accuracy']}, got {actual_acc}"
+            assert actual_cnt == expected["count"], \
+                f"Grade {grade}: expected count {expected['count']}, got {actual_cnt}"
+
+    def test_v70_total_bucket_games_equals_total(self):
+        """Sum of all bucket counts must equal total games tested."""
+        insights_file = DATA_DIR / "modelInsights.json"
+        with open(insights_file) as f:
+            data = json.load(f)
+
+        buckets = data.get("confidenceBuckets", [])
+        total_from_buckets = sum(b.get("count", 0) for b in buckets)
+        total_games = data.get("overall", {}).get("games", 0)
+
+        assert total_from_buckets == total_games, \
+            f"Bucket counts sum to {total_from_buckets}, but total games is {total_games}"
+
+    def test_backtesting_report_matches_model_insights(self):
+        """backtestingReport.json confidence tiers must match modelInsights.json."""
+        insights_file = DATA_DIR / "modelInsights.json"
+        backtest_file = DATA_DIR / "backtestingReport.json"
+
+        if not backtest_file.exists():
+            pytest.skip("backtestingReport.json not found")
+
+        with open(insights_file) as f:
+            insights = json.load(f)
+        with open(backtest_file) as f:
+            backtest = json.load(f)
+
+        insights_buckets = {b["grade"]: b for b in insights.get("confidenceBuckets", [])}
+        backtest_tiers = {t["grade"]: t for t in backtest.get("confidenceTiers", [])}
+
+        for grade in ["A+", "A", "B+", "B", "C+", "C"]:
+            if grade not in backtest_tiers:
+                continue
+
+            i_acc = insights_buckets[grade]["accuracy"]
+            b_acc = backtest_tiers[grade]["accuracy"]
+
+            assert abs(i_acc - b_acc) < 0.0001, \
+                f"Grade {grade}: modelInsights={i_acc} != backtesting={b_acc}"
