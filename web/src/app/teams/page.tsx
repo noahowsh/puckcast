@@ -177,8 +177,8 @@ export default async function TeamsIndexPage() {
                     <h3 className="text-lg font-bold text-white group-hover:text-cyan-400 transition-colors leading-tight mb-1">
                       {team.team}
                     </h3>
-                    <p className="text-sm text-white/60 mb-2">{team.record}</p>
-                    <div className="flex flex-wrap items-center gap-1.5">
+                    <p className="text-sm text-white/60">{team.record}</p>
+                    <div className="flex flex-wrap items-center gap-2 mt-3">
                       <span className="chip-soft chip-soft--mini">{team.points} pts</span>
                       <span className="chip-soft chip-soft--mini">{(team.pointPctg * 100).toFixed(0)}%</span>
                       <span className="chip-soft chip-soft--mini">#{team.powerRank}</span>

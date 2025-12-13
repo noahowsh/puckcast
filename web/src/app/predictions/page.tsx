@@ -164,7 +164,8 @@ function PredictionRow({ game }: { game: Prediction }) {
 }
 
 function ConfidenceLadder() {
-  const ladder = [...modelInsights.confidenceBuckets].reverse();
+  // Sort by accuracy descending - highest at top
+  const ladder = [...modelInsights.confidenceBuckets].sort((a, b) => b.accuracy - a.accuracy);
   return (
     <div className="bento-card">
       <p className="micro-label">Confidence ladder</p>
@@ -205,14 +206,6 @@ export default function PredictionsPage() {
     return games.sort((a, b) => (a.startTimeUtc ?? "").localeCompare(b.startTimeUtc ?? ""));
   }, [sortBy]);
 
-  const upsetRadar = useMemo(
-    () =>
-      todaysPredictions
-        .filter((g) => g.modelFavorite === "away" && g.awayWinProb >= 0.55)
-        .sort((a, b) => b.awayWinProb - a.awayWinProb)
-        .slice(0, 3),
-    []
-  );
 
   return (
     <div className="min-h-screen">
@@ -324,27 +317,6 @@ export default function PredictionsPage() {
                 </Link>
               </div>
 
-              {upsetRadar.length > 0 && (
-                <div className="bento-card">
-                  <p className="micro-label">Upset radar</p>
-                  <h3>Road favorites to watch</h3>
-                  <div className="upset-grid">
-                    {upsetRadar.map((game) => (
-                      <div key={game.id} className="upset-card">
-                        <div className="versus">
-                          <TeamCrest abbrev={game.awayTeam.abbrev} />
-                          <span className="versus__divider">at</span>
-                          <TeamCrest abbrev={game.homeTeam.abbrev} />
-                        </div>
-                        <div className="upset-card__prob">
-                          <span className="edge-card__prob-value">{pct(game.awayWinProb)}</span>
-                          <span className="tag">Road lean</span>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
             </div>
           </div>
         </section>

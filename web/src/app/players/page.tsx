@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { SkaterStatsTable, GoalieStatsTable, LeaderRow } from "@/components/PlayerStatsTable";
 import { fetchSkaterLeaders, fetchGoalieLeaders, fetchEnrichedSkaterStats, fetchGoalieStats } from "@/lib/playerHub";
 
@@ -54,8 +55,12 @@ export default async function PlayersPage() {
 
               {topScorer && (
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.75rem', background: 'rgba(126, 227, 255, 0.08)', borderRadius: '0.75rem', border: '1px solid rgba(126, 227, 255, 0.2)', marginBottom: '0.5rem' }}>
-                  <div style={{ width: '2.5rem', height: '2.5rem', borderRadius: '50%', background: 'linear-gradient(135deg, rgba(126, 227, 255, 0.2), rgba(110, 240, 194, 0.2))', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, fontSize: '0.9rem', color: 'var(--aqua)' }}>
-                    1
+                  <div style={{ width: '2.5rem', height: '2.5rem', borderRadius: '50%', overflow: 'hidden', background: 'linear-gradient(135deg, rgba(126, 227, 255, 0.2), rgba(110, 240, 194, 0.2))', flexShrink: 0 }}>
+                    {topScorer.bio.headshot ? (
+                      <Image src={topScorer.bio.headshot} alt={topScorer.bio.fullName} width={40} height={40} className="object-cover" unoptimized />
+                    ) : (
+                      <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, fontSize: '0.9rem', color: 'var(--aqua)' }}>1</div>
+                    )}
                   </div>
                   <div style={{ flex: 1 }}>
                     <p style={{ fontSize: '0.7rem', textTransform: 'uppercase', color: 'var(--text-tertiary)', fontWeight: 600, marginBottom: '0.1rem' }}>Points Leader</p>
@@ -70,8 +75,12 @@ export default async function PlayersPage() {
 
               {topGoalie && (
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.75rem', background: 'rgba(110, 240, 194, 0.08)', borderRadius: '0.75rem', border: '1px solid rgba(110, 240, 194, 0.2)' }}>
-                  <div style={{ width: '2.5rem', height: '2.5rem', borderRadius: '50%', background: 'linear-gradient(135deg, rgba(110, 240, 194, 0.2), rgba(126, 227, 255, 0.2))', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, fontSize: '0.9rem', color: 'var(--mint)' }}>
-                    1
+                  <div style={{ width: '2.5rem', height: '2.5rem', borderRadius: '50%', overflow: 'hidden', background: 'linear-gradient(135deg, rgba(110, 240, 194, 0.2), rgba(126, 227, 255, 0.2))', flexShrink: 0 }}>
+                    {topGoalie.bio.headshot ? (
+                      <Image src={topGoalie.bio.headshot} alt={topGoalie.bio.fullName} width={40} height={40} className="object-cover" unoptimized />
+                    ) : (
+                      <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, fontSize: '0.9rem', color: 'var(--mint)' }}>1</div>
+                    )}
                   </div>
                   <div style={{ flex: 1 }}>
                     <p style={{ fontSize: '0.7rem', textTransform: 'uppercase', color: 'var(--text-tertiary)', fontWeight: 600, marginBottom: '0.1rem' }}>Save % Leader</p>

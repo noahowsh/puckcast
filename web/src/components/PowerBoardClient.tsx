@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import Link from "next/link";
 import { TeamCrest } from "@/components/TeamCrest";
 import type { NextGameInfo } from "@/lib/nextGames";
 
@@ -68,7 +69,7 @@ export function PowerBoardClient({ rows, initialNextGames }: { rows: Leaderboard
       : "Next game TBA";
 
     return (
-      <div className="power-board__row" key={row.abbrev}>
+      <Link href={`/teams/${row.abbrev.toLowerCase()}`} key={row.abbrev} className="power-board__row" style={{ textDecoration: 'none' }}>
         <div className="rank-chip">#{row.powerRank}</div>
         <div className="power-team">
           <TeamCrest abbrev={row.abbrev} />
@@ -85,7 +86,7 @@ export function PowerBoardClient({ rows, initialNextGames }: { rows: Leaderboard
           {row.goalDifferential}
         </span>
         <span className="power-data">{nextDisplay}</span>
-      </div>
+      </Link>
     );
   };
 

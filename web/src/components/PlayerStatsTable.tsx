@@ -49,20 +49,6 @@ function PlayerAvatar({ headshot, name, teamAbbrev, size = 32 }: {
 }
 
 // =============================================================================
-// Premium Table Wrapper Component
-// =============================================================================
-
-function PremiumTableWrapper({ children }: { children: React.ReactNode }) {
-  return (
-    <div className="rounded-2xl border border-white/[0.08] bg-gradient-to-b from-white/[0.03] to-transparent overflow-hidden">
-      <div className="overflow-x-auto">
-        {children}
-      </div>
-    </div>
-  );
-}
-
-// =============================================================================
 // Skater Stats Table
 // =============================================================================
 
@@ -105,110 +91,98 @@ export function SkaterStatsTable({
   const displayPlayers = maxRows ? sortedPlayers.slice(0, maxRows) : sortedPlayers;
 
   return (
-    <PremiumTableWrapper>
-      <table className="w-full" style={{ minWidth: compact ? "650px" : "850px" }}>
-        <thead>
-          <tr className="text-left text-[10px] text-white/50 uppercase tracking-wider border-b border-white/[0.06]" style={{ background: "rgba(255,255,255,0.02)" }}>
+    <div className="rounded-xl border border-white/[0.08] bg-gradient-to-b from-white/[0.02] to-transparent overflow-hidden">
+      {/* Header */}
+      <div style={{
+        display: 'flex',
+        alignItems: 'center',
+        padding: '0.6rem 1rem',
+        background: 'rgba(255,255,255,0.02)',
+        borderBottom: '1px solid rgba(255,255,255,0.05)',
+        gap: '0.25rem',
+      }}>
+        {showRank && <span style={{ width: '28px', fontSize: '0.6rem', color: 'var(--text-tertiary)', textTransform: 'uppercase', fontWeight: 600 }}>#</span>}
+        <span style={{ flex: 1, minWidth: '140px', fontSize: '0.6rem', color: 'var(--text-tertiary)', textTransform: 'uppercase', fontWeight: 600 }}>Player</span>
+        {showTeam && <span style={{ width: '48px', fontSize: '0.6rem', color: 'var(--text-tertiary)', textTransform: 'uppercase', fontWeight: 600, textAlign: 'center' }}>Team</span>}
+        <span style={{ width: '32px', fontSize: '0.6rem', color: 'var(--text-tertiary)', textTransform: 'uppercase', fontWeight: 600, textAlign: 'center' }}>GP</span>
+        <span style={{ width: '32px', fontSize: '0.6rem', color: 'var(--text-tertiary)', textTransform: 'uppercase', fontWeight: 600, textAlign: 'center' }}>G</span>
+        <span style={{ width: '32px', fontSize: '0.6rem', color: 'var(--text-tertiary)', textTransform: 'uppercase', fontWeight: 600, textAlign: 'center' }}>A</span>
+        <span style={{ width: '36px', fontSize: '0.6rem', color: 'var(--aqua)', textTransform: 'uppercase', fontWeight: 600, textAlign: 'center' }}>PTS</span>
+        <span style={{ width: '36px', fontSize: '0.6rem', color: 'var(--text-tertiary)', textTransform: 'uppercase', fontWeight: 600, textAlign: 'center' }}>+/-</span>
+        {!compact && (
+          <>
+            <span style={{ width: '32px', fontSize: '0.6rem', color: 'var(--text-tertiary)', textTransform: 'uppercase', fontWeight: 600, textAlign: 'center' }}>PPG</span>
+            <span style={{ width: '36px', fontSize: '0.6rem', color: 'var(--text-tertiary)', textTransform: 'uppercase', fontWeight: 600, textAlign: 'center' }}>SOG</span>
+          </>
+        )}
+      </div>
+
+      {/* Rows */}
+      {displayPlayers.map((player, idx) => {
+        const { bio, stats } = player;
+        const isTopThree = idx < 3;
+        const isEven = idx % 2 === 0;
+
+        const rowContent = (
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              padding: '0.5rem 1rem',
+              background: isEven ? 'transparent' : 'rgba(255,255,255,0.015)',
+              borderBottom: '1px solid rgba(255,255,255,0.03)',
+              gap: '0.25rem',
+              transition: 'background 0.15s ease',
+            }}
+            className={linkToProfile ? "hover:bg-white/[0.04] cursor-pointer" : ""}
+          >
             {showRank && (
-              <th className="py-3 pl-4 pr-2 font-semibold w-12">#</th>
+              <span style={{
+                width: '28px',
+                fontSize: '0.8rem',
+                fontWeight: 600,
+                color: isTopThree ? '#fbbf24' : 'var(--text-tertiary)',
+              }}>{idx + 1}</span>
             )}
-            <th className="py-3 px-3 font-semibold" style={{ minWidth: "180px" }}>Player</th>
-            {showTeam && <th className="py-3 px-2 font-semibold">Team</th>}
-            <th className="py-3 px-2 text-center font-semibold">POS</th>
-            <th className="py-3 px-2 text-center font-semibold">GP</th>
-            <th className="py-3 px-2 text-center font-semibold">G</th>
-            <th className="py-3 px-2 text-center font-semibold">A</th>
-            <th className="py-3 px-2 text-center font-semibold text-sky-400">PTS</th>
-            <th className="py-3 px-2 text-center font-semibold">+/-</th>
+            <div style={{ flex: 1, minWidth: '140px', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              <PlayerAvatar headshot={bio.headshot} name={bio.fullName} teamAbbrev={bio.teamAbbrev} size={28} />
+              <span style={{ fontSize: '0.85rem', fontWeight: 500, color: 'white', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{bio.fullName}</span>
+            </div>
+            {showTeam && (
+              <div style={{ width: '48px', display: 'flex', justifyContent: 'center' }}>
+                <TeamLogo teamAbbrev={bio.teamAbbrev} size="xs" />
+              </div>
+            )}
+            <span style={{ width: '32px', fontSize: '0.8rem', color: 'var(--text-secondary)', fontWeight: 500, textAlign: 'center' }}>{stats.gamesPlayed}</span>
+            <span style={{ width: '32px', fontSize: '0.8rem', color: '#10b981', fontWeight: 700, textAlign: 'center' }}>{stats.goals}</span>
+            <span style={{ width: '32px', fontSize: '0.8rem', color: 'white', fontWeight: 600, textAlign: 'center' }}>{stats.assists}</span>
+            <span style={{ width: '36px', fontSize: '0.85rem', color: 'var(--aqua)', fontWeight: 700, textAlign: 'center' }}>{stats.points}</span>
+            <span style={{
+              width: '36px',
+              fontSize: '0.8rem',
+              fontWeight: 600,
+              textAlign: 'center',
+              color: stats.plusMinus > 0 ? '#10b981' : stats.plusMinus < 0 ? '#ef4444' : 'var(--text-tertiary)',
+            }}>{stats.plusMinus > 0 ? `+${stats.plusMinus}` : stats.plusMinus}</span>
             {!compact && (
               <>
-                <th className="py-3 px-2 text-center font-semibold">PPG</th>
-                <th className="py-3 px-2 text-center font-semibold">SOG</th>
-                <th className="py-3 px-2 text-center font-semibold">S%</th>
-                <th className="py-3 pr-4 pl-2 text-center font-semibold">TOI</th>
+                <span style={{ width: '32px', fontSize: '0.8rem', color: 'var(--text-secondary)', textAlign: 'center' }}>{stats.powerPlayGoals}</span>
+                <span style={{ width: '36px', fontSize: '0.8rem', color: 'var(--text-secondary)', textAlign: 'center' }}>{stats.shots}</span>
               </>
             )}
-          </tr>
-        </thead>
-        <tbody>
-          {displayPlayers.map((player, idx) => {
-            const { bio, stats } = player;
-            const isTopThree = idx < 3;
-            const isEven = idx % 2 === 0;
+          </div>
+        );
 
-            const row = (
-              <tr
-                key={bio.playerId}
-                className={`
-                  ${linkToProfile ? "hover:bg-white/[0.04] cursor-pointer" : ""}
-                  ${isEven ? "bg-transparent" : "bg-white/[0.015]"}
-                  transition-colors duration-150 border-b border-white/[0.03] last:border-b-0
-                `}
-              >
-                {showRank && (
-                  <td className="py-2.5 pl-4 pr-2">
-                    <div className={`
-                      w-7 h-7 rounded-lg flex items-center justify-center text-xs font-bold
-                      ${isTopThree
-                        ? "bg-gradient-to-br from-amber-400/20 to-amber-500/10 text-amber-400 border border-amber-400/20"
-                        : "bg-white/[0.03] text-white/40 border border-white/[0.04]"
-                      }
-                    `}>
-                      {idx + 1}
-                    </div>
-                  </td>
-                )}
-                <td className="py-2.5 px-3">
-                  <div className="flex items-center gap-2.5">
-                    <PlayerAvatar headshot={bio.headshot} name={bio.fullName} teamAbbrev={bio.teamAbbrev} size={32} />
-                    <span className="font-medium text-white text-sm truncate">{bio.fullName}</span>
-                  </div>
-                </td>
-                {showTeam && (
-                  <td className="py-2.5 px-2">
-                    <div className="flex items-center gap-2">
-                      <TeamLogo teamAbbrev={bio.teamAbbrev} size="xs" />
-                      <span className="text-xs font-medium text-white/60">{bio.teamAbbrev}</span>
-                    </div>
-                  </td>
-                )}
-                <td className="py-2.5 px-2 text-center">
-                  <span className="text-[10px] font-medium text-white/50 bg-white/[0.05] px-2 py-1 rounded">{bio.position}</span>
-                </td>
-                <td className="py-2.5 px-2 text-center text-xs text-white/60 font-medium">{stats.gamesPlayed}</td>
-                <td className="py-2.5 px-2 text-center text-xs text-white font-bold">{stats.goals}</td>
-                <td className="py-2.5 px-2 text-center text-xs text-white font-bold">{stats.assists}</td>
-                <td className="py-2.5 px-2 text-center">
-                  <span className="text-xs font-bold text-sky-300 bg-sky-500/15 px-2 py-1 rounded border border-sky-400/20">{stats.points}</span>
-                </td>
-                <td className={`py-2.5 px-2 text-center text-xs font-bold ${stats.plusMinus > 0 ? "text-emerald-400" : stats.plusMinus < 0 ? "text-rose-400" : "text-white/50"}`}>
-                  {stats.plusMinus > 0 ? `+${stats.plusMinus}` : stats.plusMinus}
-                </td>
-                {!compact && (
-                  <>
-                    <td className="py-2.5 px-2 text-center text-xs text-white/60">{stats.powerPlayGoals}</td>
-                    <td className="py-2.5 px-2 text-center text-xs text-white/60">{stats.shots}</td>
-                    <td className="py-2.5 px-2 text-center text-xs text-white/60">
-                      {stats.shootingPct > 0 ? `${(stats.shootingPct * 100).toFixed(1)}%` : "—"}
-                    </td>
-                    <td className="py-2.5 pr-4 pl-2 text-center text-xs text-white/60">{stats.timeOnIcePerGame}</td>
-                  </>
-                )}
-              </tr>
-            );
-
-            if (linkToProfile) {
-              return (
-                <Link key={bio.playerId} href={getPlayerUrl(bio.playerId, bio.fullName)} className="contents">
-                  {row}
-                </Link>
-              );
-            }
-            return row;
-          })}
-        </tbody>
-      </table>
-    </PremiumTableWrapper>
+        if (linkToProfile) {
+          return (
+            <Link key={bio.playerId} href={getPlayerUrl(bio.playerId, bio.fullName)} style={{ display: 'block', textDecoration: 'none' }}>
+              {rowContent}
+            </Link>
+          );
+        }
+        return <div key={bio.playerId}>{rowContent}</div>;
+      })}
+    </div>
   );
 }
 
@@ -253,110 +227,92 @@ export function GoalieStatsTable({
   const displayGoalies = maxRows ? sortedGoalies.slice(0, maxRows) : sortedGoalies;
 
   return (
-    <PremiumTableWrapper>
-      <table className="w-full" style={{ minWidth: compact ? "600px" : "800px" }}>
-        <thead>
-          <tr className="text-left text-[10px] text-white/50 uppercase tracking-wider border-b border-white/[0.06]" style={{ background: "rgba(255,255,255,0.02)" }}>
+    <div className="rounded-xl border border-white/[0.08] bg-gradient-to-b from-white/[0.02] to-transparent overflow-hidden">
+      {/* Header */}
+      <div style={{
+        display: 'flex',
+        alignItems: 'center',
+        padding: '0.6rem 1rem',
+        background: 'rgba(255,255,255,0.02)',
+        borderBottom: '1px solid rgba(255,255,255,0.05)',
+        gap: '0.25rem',
+      }}>
+        {showRank && <span style={{ width: '28px', fontSize: '0.6rem', color: 'var(--text-tertiary)', textTransform: 'uppercase', fontWeight: 600 }}>#</span>}
+        <span style={{ flex: 1, minWidth: '140px', fontSize: '0.6rem', color: 'var(--text-tertiary)', textTransform: 'uppercase', fontWeight: 600 }}>Goalie</span>
+        {showTeam && <span style={{ width: '48px', fontSize: '0.6rem', color: 'var(--text-tertiary)', textTransform: 'uppercase', fontWeight: 600, textAlign: 'center' }}>Team</span>}
+        <span style={{ width: '32px', fontSize: '0.6rem', color: 'var(--text-tertiary)', textTransform: 'uppercase', fontWeight: 600, textAlign: 'center' }}>GP</span>
+        <span style={{ width: '32px', fontSize: '0.6rem', color: '#10b981', textTransform: 'uppercase', fontWeight: 600, textAlign: 'center' }}>W</span>
+        <span style={{ width: '28px', fontSize: '0.6rem', color: 'var(--text-tertiary)', textTransform: 'uppercase', fontWeight: 600, textAlign: 'center' }}>L</span>
+        <span style={{ width: '44px', fontSize: '0.6rem', color: 'var(--aqua)', textTransform: 'uppercase', fontWeight: 600, textAlign: 'center' }}>SV%</span>
+        <span style={{ width: '40px', fontSize: '0.6rem', color: '#fbbf24', textTransform: 'uppercase', fontWeight: 600, textAlign: 'center' }}>GAA</span>
+        {!compact && (
+          <span style={{ width: '28px', fontSize: '0.6rem', color: 'var(--text-tertiary)', textTransform: 'uppercase', fontWeight: 600, textAlign: 'center' }}>SO</span>
+        )}
+      </div>
+
+      {/* Rows */}
+      {displayGoalies.map((goalie, idx) => {
+        const { bio, stats } = goalie;
+        const isTopThree = idx < 3;
+        const isEven = idx % 2 === 0;
+
+        const rowContent = (
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              padding: '0.5rem 1rem',
+              background: isEven ? 'transparent' : 'rgba(255,255,255,0.015)',
+              borderBottom: '1px solid rgba(255,255,255,0.03)',
+              gap: '0.25rem',
+              transition: 'background 0.15s ease',
+            }}
+            className={linkToProfile ? "hover:bg-white/[0.04] cursor-pointer" : ""}
+          >
             {showRank && (
-              <th className="py-3 pl-4 pr-2 font-semibold w-12">#</th>
+              <span style={{
+                width: '28px',
+                fontSize: '0.8rem',
+                fontWeight: 600,
+                color: isTopThree ? '#fbbf24' : 'var(--text-tertiary)',
+              }}>{idx + 1}</span>
             )}
-            <th className="py-3 px-3 font-semibold" style={{ minWidth: "160px" }}>Goalie</th>
-            {showTeam && <th className="py-3 px-2 font-semibold">Team</th>}
-            <th className="py-3 px-2 text-center font-semibold">GP</th>
-            <th className="py-3 px-2 text-center font-semibold">GS</th>
-            <th className="py-3 px-2 text-center font-semibold text-emerald-400">W</th>
-            <th className="py-3 px-2 text-center font-semibold">L</th>
-            <th className="py-3 px-2 text-center font-semibold">OT</th>
-            <th className="py-3 px-2 text-center font-semibold text-sky-400">SV%</th>
-            <th className="py-3 px-2 text-center font-semibold text-amber-400">GAA</th>
+            <div style={{ flex: 1, minWidth: '140px', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              <PlayerAvatar headshot={bio.headshot} name={bio.fullName} teamAbbrev={bio.teamAbbrev} size={28} />
+              <span style={{ fontSize: '0.85rem', fontWeight: 500, color: 'white', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{bio.fullName}</span>
+            </div>
+            {showTeam && (
+              <div style={{ width: '48px', display: 'flex', justifyContent: 'center' }}>
+                <TeamLogo teamAbbrev={bio.teamAbbrev} size="xs" />
+              </div>
+            )}
+            <span style={{ width: '32px', fontSize: '0.8rem', color: 'var(--text-secondary)', fontWeight: 500, textAlign: 'center' }}>{stats.gamesPlayed}</span>
+            <span style={{ width: '32px', fontSize: '0.8rem', color: '#10b981', fontWeight: 700, textAlign: 'center' }}>{stats.wins}</span>
+            <span style={{ width: '28px', fontSize: '0.8rem', color: '#ef4444', fontWeight: 600, textAlign: 'center' }}>{stats.losses}</span>
+            <span style={{ width: '44px', fontSize: '0.8rem', color: 'var(--aqua)', fontWeight: 600, textAlign: 'center' }}>{formatSavePct(stats.savePct)}</span>
+            <span style={{
+              width: '40px',
+              fontSize: '0.8rem',
+              fontWeight: 600,
+              textAlign: 'center',
+              color: stats.goalsAgainstAverage < 2.5 ? '#10b981' : stats.goalsAgainstAverage > 3.2 ? '#ef4444' : '#fbbf24',
+            }}>{stats.goalsAgainstAverage.toFixed(2)}</span>
             {!compact && (
-              <>
-                <th className="py-3 px-2 text-center font-semibold">SO</th>
-                <th className="py-3 px-2 text-center font-semibold">SA</th>
-                <th className="py-3 pr-4 pl-2 text-center font-semibold">SV</th>
-              </>
+              <span style={{ width: '28px', fontSize: '0.8rem', color: 'white', fontWeight: 600, textAlign: 'center' }}>{stats.shutouts}</span>
             )}
-          </tr>
-        </thead>
-        <tbody>
-          {displayGoalies.map((goalie, idx) => {
-            const { bio, stats } = goalie;
-            const isTopThree = idx < 3;
-            const isEven = idx % 2 === 0;
+          </div>
+        );
 
-            const row = (
-              <tr
-                key={bio.playerId}
-                className={`
-                  ${linkToProfile ? "hover:bg-white/[0.04] cursor-pointer" : ""}
-                  ${isEven ? "bg-transparent" : "bg-white/[0.015]"}
-                  transition-colors duration-150 border-b border-white/[0.03] last:border-b-0
-                `}
-              >
-                {showRank && (
-                  <td className="py-2.5 pl-4 pr-2">
-                    <div className={`
-                      w-7 h-7 rounded-lg flex items-center justify-center text-xs font-bold
-                      ${isTopThree
-                        ? "bg-gradient-to-br from-amber-400/20 to-amber-500/10 text-amber-400 border border-amber-400/20"
-                        : "bg-white/[0.03] text-white/40 border border-white/[0.04]"
-                      }
-                    `}>
-                      {idx + 1}
-                    </div>
-                  </td>
-                )}
-                <td className="py-2.5 px-3">
-                  <div className="flex items-center gap-2.5">
-                    <PlayerAvatar headshot={bio.headshot} name={bio.fullName} teamAbbrev={bio.teamAbbrev} size={32} />
-                    <span className="font-medium text-white text-sm truncate">{bio.fullName}</span>
-                  </div>
-                </td>
-                {showTeam && (
-                  <td className="py-2.5 px-2">
-                    <div className="flex items-center gap-2">
-                      <TeamLogo teamAbbrev={bio.teamAbbrev} size="xs" />
-                      <span className="text-xs font-medium text-white/60">{bio.teamAbbrev}</span>
-                    </div>
-                  </td>
-                )}
-                <td className="py-2.5 px-2 text-center text-xs text-white/60 font-medium">{stats.gamesPlayed}</td>
-                <td className="py-2.5 px-2 text-center text-xs text-white/60">{stats.gamesStarted}</td>
-                <td className="py-2.5 px-2 text-center">
-                  <span className="text-xs font-bold text-emerald-400 bg-emerald-500/15 px-2 py-1 rounded border border-emerald-400/20">{stats.wins}</span>
-                </td>
-                <td className="py-2.5 px-2 text-center text-xs text-white/60">{stats.losses}</td>
-                <td className="py-2.5 px-2 text-center text-xs text-white/60">{stats.otLosses}</td>
-                <td className="py-2.5 px-2 text-center">
-                  <span className="text-xs font-bold text-sky-300 bg-sky-500/15 px-2 py-1 rounded border border-sky-400/20">
-                    {formatSavePct(stats.savePct)}
-                  </span>
-                </td>
-                <td className={`py-2.5 px-2 text-center text-xs font-bold ${stats.goalsAgainstAverage < 2.5 ? "text-emerald-400" : stats.goalsAgainstAverage > 3.2 ? "text-rose-400" : "text-amber-400"}`}>
-                  {stats.goalsAgainstAverage.toFixed(2)}
-                </td>
-                {!compact && (
-                  <>
-                    <td className="py-2.5 px-2 text-center text-xs text-white font-semibold">{stats.shutouts}</td>
-                    <td className="py-2.5 px-2 text-center text-xs text-white/60">{stats.shotsAgainst}</td>
-                    <td className="py-2.5 pr-4 pl-2 text-center text-xs text-white/60">{stats.saves}</td>
-                  </>
-                )}
-              </tr>
-            );
-
-            if (linkToProfile) {
-              return (
-                <Link key={bio.playerId} href={getGoalieUrl(bio.playerId, bio.fullName)} className="contents">
-                  {row}
-                </Link>
-              );
-            }
-            return row;
-          })}
-        </tbody>
-      </table>
-    </PremiumTableWrapper>
+        if (linkToProfile) {
+          return (
+            <Link key={bio.playerId} href={getGoalieUrl(bio.playerId, bio.fullName)} style={{ display: 'block', textDecoration: 'none' }}>
+              {rowContent}
+            </Link>
+          );
+        }
+        return <div key={bio.playerId}>{rowContent}</div>;
+      })}
+    </div>
   );
 }
 
