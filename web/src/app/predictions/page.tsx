@@ -106,12 +106,12 @@ function MatchupCard({ game }: { game: Prediction }) {
 
   return (
     <Link href={`/matchup/${game.id}`} className="matchup-card-v3">
-      {/* Teams Row with Goalies */}
+      {/* Teams Row - Big Logos */}
       <div className="matchup-card-v3__teams-row">
         {/* Away Side */}
         <div className="matchup-card-v3__side">
           <div className="matchup-card-v3__team-block">
-            <TeamCrest abbrev={game.awayTeam.abbrev} size={42} />
+            <TeamCrest abbrev={game.awayTeam.abbrev} size={56} />
             <div className="matchup-card-v3__team-details">
               <span className="matchup-card-v3__team-name">{game.awayTeam.name}</span>
               <span
@@ -122,7 +122,6 @@ function MatchupCard({ game }: { game: Prediction }) {
               </span>
             </div>
           </div>
-          <GoalieTag goalie={awayGoalie} />
         </div>
 
         {/* Center */}
@@ -143,13 +142,12 @@ function MatchupCard({ game }: { game: Prediction }) {
                 {pct(game.homeWinProb)}
               </span>
             </div>
-            <TeamCrest abbrev={game.homeTeam.abbrev} size={42} />
+            <TeamCrest abbrev={game.homeTeam.abbrev} size={56} />
           </div>
-          <GoalieTag goalie={homeGoalie} />
         </div>
       </div>
 
-      {/* Probability Bar - Split with gap */}
+      {/* Probability Bar - High contrast */}
       <div className="matchup-card-v3__prob-bar">
         <div
           className="matchup-card-v3__prob-segment matchup-card-v3__prob-segment--away"
@@ -162,6 +160,12 @@ function MatchupCard({ game }: { game: Prediction }) {
         />
       </div>
 
+      {/* Goalies Row - Below bar */}
+      <div className="matchup-card-v3__goalies-row">
+        <GoalieTag goalie={awayGoalie} />
+        <GoalieTag goalie={homeGoalie} />
+      </div>
+
       {/* Footer: Model Lean + Grade */}
       <div className="matchup-card-v3__footer">
         <div className="matchup-card-v3__lean">
@@ -171,7 +175,7 @@ function MatchupCard({ game }: { game: Prediction }) {
 
         <div className={`matchup-card-v3__grade matchup-card-v3__grade--${grade.label.charAt(0).toLowerCase()}`}>
           <span className="matchup-card-v3__grade-letter">{grade.label}</span>
-          <span className="matchup-card-v3__grade-edge">{edgePts.toFixed(1)} pts edge</span>
+          <span className="matchup-card-v3__grade-edge">{edgePts.toFixed(1)} pts</span>
         </div>
       </div>
 

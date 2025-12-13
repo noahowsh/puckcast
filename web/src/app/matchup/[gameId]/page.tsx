@@ -314,6 +314,33 @@ export default function MatchupPage({ params }: PageProps) {
           <p className="matchup-pick-banner__summary">{game.summary}</p>
         </section>
 
+        {/* Team comparison stats */}
+        {comparisonStats.length > 0 && (
+          <section className="matchup-comparison">
+            <div className="matchup-comparison__header">
+              <div className="matchup-comparison__team">
+                <TeamCrest abbrev={game.awayTeam.abbrev} size={40} />
+                <span style={{ color: awayColor }}>{game.awayTeam.abbrev}</span>
+              </div>
+              <h2 className="matchup-comparison__title">Team Comparison</h2>
+              <div className="matchup-comparison__team matchup-comparison__team--right">
+                <span style={{ color: homeColor }}>{game.homeTeam.abbrev}</span>
+                <TeamCrest abbrev={game.homeTeam.abbrev} size={40} />
+              </div>
+            </div>
+            <div className="matchup-comparison__stats">
+              {comparisonStats.map((stat) => (
+                <StatBar
+                  key={stat.label}
+                  stat={stat}
+                  awayColor={awayColor}
+                  homeColor={homeColor}
+                />
+              ))}
+            </div>
+          </section>
+        )}
+
         {/* Starting Goalies Section */}
         {(() => {
           const homeGoalie = startingGoalies.teams[game.homeTeam.abbrev];
@@ -375,33 +402,6 @@ export default function MatchupPage({ params }: PageProps) {
             </section>
           );
         })()}
-
-        {/* Team comparison stats */}
-        {comparisonStats.length > 0 && (
-          <section className="matchup-comparison">
-            <div className="matchup-comparison__header">
-              <div className="matchup-comparison__team">
-                <TeamCrest abbrev={game.awayTeam.abbrev} size={40} />
-                <span style={{ color: awayColor }}>{game.awayTeam.abbrev}</span>
-              </div>
-              <h2 className="matchup-comparison__title">Team Comparison</h2>
-              <div className="matchup-comparison__team matchup-comparison__team--right">
-                <span style={{ color: homeColor }}>{game.homeTeam.abbrev}</span>
-                <TeamCrest abbrev={game.homeTeam.abbrev} size={40} />
-              </div>
-            </div>
-            <div className="matchup-comparison__stats">
-              {comparisonStats.map((stat) => (
-                <StatBar
-                  key={stat.label}
-                  stat={stat}
-                  awayColor={awayColor}
-                  homeColor={homeColor}
-                />
-              ))}
-            </div>
-          </section>
-        )}
 
         {/* Projected goalies */}
         {game.projectedGoalies && (game.projectedGoalies.home || game.projectedGoalies.away) && (

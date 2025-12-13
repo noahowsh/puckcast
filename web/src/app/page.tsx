@@ -256,6 +256,63 @@ export default function Home() {
             </div>
           </div>
         </section>
+
+        {/* Explore More Sections */}
+        <section className="nova-section">
+          <div className="section-head">
+            <div>
+              <p className="eyebrow">Explore Puckcast</p>
+              <h2>Dig deeper into the data</h2>
+            </div>
+          </div>
+          <div className="explore-grid">
+            <Link href="/teams" className="explore-card">
+              <div className="explore-card__icon explore-card__icon--teams">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                  <circle cx="9" cy="7" r="4" />
+                  <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                  <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                </svg>
+              </div>
+              <div className="explore-card__content">
+                <h3 className="explore-card__title">All 32 Teams</h3>
+                <p className="explore-card__desc">Team pages with stats, rosters, standings, and model projections for every franchise.</p>
+              </div>
+              <span className="explore-card__cta">Browse teams →</span>
+            </Link>
+
+            <Link href="/players" className="explore-card">
+              <div className="explore-card__icon explore-card__icon--players">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                  <circle cx="12" cy="7" r="4" />
+                </svg>
+              </div>
+              <div className="explore-card__content">
+                <h3 className="explore-card__title">Player Stats</h3>
+                <p className="explore-card__desc">League leaders, individual profiles, and season projections for all NHL skaters.</p>
+              </div>
+              <span className="explore-card__cta">View players →</span>
+            </Link>
+
+            <Link href="/performance" className="explore-card">
+              <div className="explore-card__icon explore-card__icon--performance">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M3 3v18h18" />
+                  <path d="M18 17V9" />
+                  <path d="M13 17V5" />
+                  <path d="M8 17v-3" />
+                </svg>
+              </div>
+              <div className="explore-card__content">
+                <h3 className="explore-card__title">Model Performance</h3>
+                <p className="explore-card__desc">Historical accuracy, calibration charts, and confidence breakdowns for transparency.</p>
+              </div>
+              <span className="explore-card__cta">See the receipts →</span>
+            </Link>
+          </div>
+        </section>
       </div>
     </div>
   );

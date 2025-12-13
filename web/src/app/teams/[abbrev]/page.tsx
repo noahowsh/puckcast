@@ -286,20 +286,18 @@ export default async function TeamPage({ params }: { params: Promise<{ abbrev: s
                       strokeDasharray={`${((33 - teamData.powerRank) / 32) * 352} 352`} strokeLinecap="round" />
                   </svg>
                   {/* Logo with gradient background filling the ring */}
-                  <div style={{
+                  <div className="team-hero-crest" style={{
                     position: 'absolute',
                     top: '50%',
                     left: '50%',
                     transform: 'translate(-50%, -50%)',
-                    width: '100px',
-                    height: '100px',
-                    borderRadius: '50%',
-                    background: 'radial-gradient(circle, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 70%, transparent 100%)',
+                    width: '106px',
+                    height: '106px',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
                   }}>
-                    <TeamCrest abbrev={teamData.abbrev} size={72} />
+                    <TeamCrest abbrev={teamData.abbrev} size={106} />
                   </div>
                 </div>
                 <div style={{ flex: 1 }}>
