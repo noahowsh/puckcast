@@ -92,9 +92,49 @@ export default async function TeamsIndexPage() {
           </div>
         </section>
 
-        {/* Quick Navigation */}
+        {/* All Teams - First */}
         <section className="nova-section">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+          <div className="section-head" style={{ marginBottom: '1.5rem' }}>
+            <div>
+              <p className="eyebrow">32 Franchises</p>
+              <h2>All Teams</h2>
+            </div>
+          </div>
+          <div className="team-card-grid">
+            {allTeams.map((team) => (
+              <Link key={team.abbrev} href={`/teams/${team.abbrev.toLowerCase()}`} className="team-card-v2">
+                <div className="team-card-v2__rank">#{team.powerRank}</div>
+                <div className="team-card-v2__logo">
+                  <TeamLogo teamAbbrev={team.abbrev} size="xl" />
+                </div>
+                <div className="team-card-v2__info">
+                  <span className="team-card-v2__abbrev">{team.abbrev}</span>
+                  <span className="team-card-v2__name">{team.team}</span>
+                </div>
+                <div className="team-card-v2__stats">
+                  <div className="team-card-v2__stat">
+                    <span className="team-card-v2__stat-value">{team.record}</span>
+                    <span className="team-card-v2__stat-label">Record</span>
+                  </div>
+                  <div className="team-card-v2__stat">
+                    <span className="team-card-v2__stat-value">{team.points}</span>
+                    <span className="team-card-v2__stat-label">Points</span>
+                  </div>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </section>
+
+        {/* Quick Navigation - Below teams */}
+        <section className="nova-section">
+          <div className="section-head" style={{ marginBottom: '1.5rem' }}>
+            <div>
+              <p className="eyebrow">Explore More</p>
+              <h2>League Stats & Rankings</h2>
+            </div>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <Link href="/players" className="card p-4 hover:border-sky-500/30 transition-all group">
               <div className="flex items-center gap-3 mb-3">
                 <div className="w-10 h-10 rounded-lg bg-sky-500/20 flex items-center justify-center">
@@ -160,40 +200,6 @@ export default async function TeamsIndexPage() {
                 ))}
               </div>
             </Link>
-          </div>
-        </section>
-
-        {/* All Teams */}
-        <section className="nova-section">
-          <div className="section-head" style={{ marginBottom: '1.5rem' }}>
-            <div>
-              <p className="eyebrow">32 Franchises</p>
-              <h2>All Teams</h2>
-            </div>
-          </div>
-          <div className="team-card-grid">
-            {allTeams.map((team) => (
-              <Link key={team.abbrev} href={`/teams/${team.abbrev.toLowerCase()}`} className="team-card-v2">
-                <div className="team-card-v2__rank">#{team.powerRank}</div>
-                <div className="team-card-v2__logo">
-                  <TeamLogo teamAbbrev={team.abbrev} size="lg" />
-                </div>
-                <div className="team-card-v2__info">
-                  <span className="team-card-v2__abbrev">{team.abbrev}</span>
-                  <span className="team-card-v2__name">{team.team}</span>
-                </div>
-                <div className="team-card-v2__stats">
-                  <div className="team-card-v2__stat">
-                    <span className="team-card-v2__stat-value">{team.record}</span>
-                    <span className="team-card-v2__stat-label">Record</span>
-                  </div>
-                  <div className="team-card-v2__stat">
-                    <span className="team-card-v2__stat-value">{team.points}</span>
-                    <span className="team-card-v2__stat-label">Points</span>
-                  </div>
-                </div>
-              </Link>
-            ))}
           </div>
         </section>
       </div>

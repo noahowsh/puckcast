@@ -69,44 +69,31 @@ const pct = (num: number) => `${(num * 100).toFixed(1)}%`;
 
 type SortKey = "edge" | "time";
 
-function GoalieCard({ goalie, teamAbbrev }: { goalie: StartingGoalieEntry | undefined; teamAbbrev: string }) {
+function GoalieTag({ goalie }: { goalie: StartingGoalieEntry | undefined }) {
   if (!goalie?.goalieName) {
     return (
-      <div className="goalie-card goalie-card--tbd">
-        <span className="goalie-card__icon">🥅</span>
-        <div className="goalie-card__info">
-          <span className="goalie-card__team">{teamAbbrev}</span>
-          <span className="goalie-card__name">TBD</span>
-        </div>
-      </div>
+      <span className="goalie-tag goalie-tag--tbd">
+        🥅 TBD
+      </span>
     );
   }
 
   return (
-    <div
-      className="goalie-card"
+    <span
+      className="goalie-tag"
       style={{
         background: getGoalieStatusBg(goalie.statusCode),
-        borderColor: `${getGoalieStatusColor(goalie.statusCode)}30`,
+        borderColor: `${getGoalieStatusColor(goalie.statusCode)}40`,
       }}
     >
-      <span className="goalie-card__icon">🥅</span>
-      <div className="goalie-card__info">
-        <span className="goalie-card__team">
-          {teamAbbrev}
-          <span
-            className="goalie-card__status"
-            style={{
-              background: `${getGoalieStatusColor(goalie.statusCode)}20`,
-              color: getGoalieStatusColor(goalie.statusCode),
-            }}
-          >
-            {goalie.statusCode}
-          </span>
-        </span>
-        <span className="goalie-card__name">{goalie.goalieName}</span>
-      </div>
-    </div>
+      🥅 {goalie.goalieName}
+      <span
+        className="goalie-tag__status"
+        style={{ color: getGoalieStatusColor(goalie.statusCode) }}
+      >
+        {goalie.statusCode}
+      </span>
+    </span>
   );
 }
 
@@ -118,77 +105,77 @@ function MatchupCard({ game }: { game: Prediction }) {
   const awayGoalie = startingGoalies.teams[game.awayTeam.abbrev];
 
   return (
-    <Link href={`/matchup/${game.id}`} className="matchup-card-v2">
-      {/* Header: Teams, Time, Grade */}
-      <div className="matchup-card-v2__header">
-        <div className="matchup-card-v2__teams">
-          {/* Away Team */}
-          <div className="matchup-card-v2__team">
-            <TeamCrest abbrev={game.awayTeam.abbrev} size={36} />
-            <div className="matchup-card-v2__team-info">
-              <span className="matchup-card-v2__team-name">{game.awayTeam.name}</span>
+    <Link href={`/matchup/${game.id}`} className="matchup-card-v3">
+      {/* Teams Row with Goalies */}
+      <div className="matchup-card-v3__teams-row">
+        {/* Away Side */}
+        <div className="matchup-card-v3__side">
+          <div className="matchup-card-v3__team-block">
+            <TeamCrest abbrev={game.awayTeam.abbrev} size={42} />
+            <div className="matchup-card-v3__team-details">
+              <span className="matchup-card-v3__team-name">{game.awayTeam.name}</span>
               <span
-                className="matchup-card-v2__team-prob"
-                style={{ color: game.modelFavorite === 'away' ? 'var(--mint)' : 'var(--text-tertiary)' }}
+                className="matchup-card-v3__prob"
+                style={{ color: game.modelFavorite === 'away' ? 'var(--mint)' : 'var(--text-secondary)' }}
               >
                 {pct(game.awayWinProb)}
               </span>
             </div>
           </div>
+          <GoalieTag goalie={awayGoalie} />
+        </div>
 
-          {/* VS Divider */}
-          <div className="matchup-card-v2__vs">
-            <span className="matchup-card-v2__time">{game.startTimeEt ?? "TBD"}</span>
-            <span className="matchup-card-v2__at">@</span>
-          </div>
+        {/* Center */}
+        <div className="matchup-card-v3__center">
+          <span className="matchup-card-v3__time">{game.startTimeEt ?? "TBD"}</span>
+          <span className="matchup-card-v3__vs">VS</span>
+        </div>
 
-          {/* Home Team */}
-          <div className="matchup-card-v2__team matchup-card-v2__team--home">
-            <div className="matchup-card-v2__team-info" style={{ textAlign: 'right' }}>
-              <span className="matchup-card-v2__team-name">{game.homeTeam.name}</span>
+        {/* Home Side */}
+        <div className="matchup-card-v3__side matchup-card-v3__side--home">
+          <div className="matchup-card-v3__team-block matchup-card-v3__team-block--home">
+            <div className="matchup-card-v3__team-details" style={{ textAlign: 'right' }}>
+              <span className="matchup-card-v3__team-name">{game.homeTeam.name}</span>
               <span
-                className="matchup-card-v2__team-prob"
-                style={{ color: game.modelFavorite === 'home' ? 'var(--mint)' : 'var(--text-tertiary)' }}
+                className="matchup-card-v3__prob"
+                style={{ color: game.modelFavorite === 'home' ? 'var(--mint)' : 'var(--text-secondary)' }}
               >
                 {pct(game.homeWinProb)}
               </span>
             </div>
-            <TeamCrest abbrev={game.homeTeam.abbrev} size={36} />
+            <TeamCrest abbrev={game.homeTeam.abbrev} size={42} />
           </div>
-        </div>
-
-        {/* Grade Badge */}
-        <div className={`matchup-card-v2__grade matchup-card-v2__grade--${grade.label.charAt(0).toLowerCase()}`}>
-          <span className="matchup-card-v2__grade-letter">{grade.label}</span>
-          <span className="matchup-card-v2__grade-edge">{edgePts.toFixed(1)} pts</span>
+          <GoalieTag goalie={homeGoalie} />
         </div>
       </div>
 
-      {/* Probability Bar */}
-      <div className="matchup-card-v2__prob-bar">
+      {/* Probability Bar - Split with gap */}
+      <div className="matchup-card-v3__prob-bar">
         <div
-          className="matchup-card-v2__prob-fill matchup-card-v2__prob-fill--away"
-          style={{ width: `${game.awayWinProb * 100}%` }}
+          className="matchup-card-v3__prob-segment matchup-card-v3__prob-segment--away"
+          style={{ width: `calc(${game.awayWinProb * 100}% - 2px)` }}
         />
+        <div className="matchup-card-v3__prob-divider" />
         <div
-          className="matchup-card-v2__prob-fill matchup-card-v2__prob-fill--home"
-          style={{ width: `${game.homeWinProb * 100}%` }}
+          className="matchup-card-v3__prob-segment matchup-card-v3__prob-segment--home"
+          style={{ width: `calc(${game.homeWinProb * 100}% - 2px)` }}
         />
       </div>
 
-      {/* Footer: Goalies and Model Lean */}
-      <div className="matchup-card-v2__footer">
-        <div className="matchup-card-v2__goalies">
-          <GoalieCard goalie={awayGoalie} teamAbbrev={game.awayTeam.abbrev} />
-          <GoalieCard goalie={homeGoalie} teamAbbrev={game.homeTeam.abbrev} />
+      {/* Footer: Model Lean + Grade */}
+      <div className="matchup-card-v3__footer">
+        <div className="matchup-card-v3__lean">
+          <span className="matchup-card-v3__lean-label">Model lean →</span>
+          <span className="matchup-card-v3__lean-team">{favorite.name}</span>
         </div>
 
-        <div className="matchup-card-v2__lean">
-          <span className="matchup-card-v2__lean-label">Model lean</span>
-          <span className="matchup-card-v2__lean-team">{favorite.name}</span>
-          <span className="matchup-card-v2__lean-cta">View analysis →</span>
+        <div className={`matchup-card-v3__grade matchup-card-v3__grade--${grade.label.charAt(0).toLowerCase()}`}>
+          <span className="matchup-card-v3__grade-letter">{grade.label}</span>
+          <span className="matchup-card-v3__grade-edge">{edgePts.toFixed(1)} pts edge</span>
         </div>
       </div>
+
+      <span className="matchup-card-v3__cta">View full analysis →</span>
     </Link>
   );
 }
