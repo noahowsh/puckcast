@@ -1,375 +1,316 @@
 {
-  "generatedAt": "2025-11-19T13:18:52.398545Z",
-  "date": "2025-11-19",
-  "teams": {},
+  "generatedAt": "2025-12-13T14:28:07.117773+00:00",
+  "date": "2025-12-13",
+  "teams": {
+    "STL": {
+      "injuries": [
+        {
+          "team": "STL",
+          "playerId": 2700134941,
+          "name": "Torey Krug",
+          "statusCode": "IR",
+          "statusDescription": "IR",
+          "position": "L"
+        },
+        {
+          "team": "STL",
+          "playerId": 1856689967,
+          "name": "Alexey Toropchenko",
+          "statusCode": "OUT",
+          "statusDescription": "OUT",
+          "position": "L"
+        },
+        {
+          "team": "STL",
+          "playerId": 18964699,
+          "name": "Jimmy Snuggerud",
+          "statusCode": "OUT",
+          "statusDescription": "OUT",
+          "position": "L"
+        },
+        {
+          "team": "STL",
+          "playerId": 1136531485,
+          "name": "Jordan Kyrou",
+          "statusCode": "DTD",
+          "statusDescription": "DTD",
+          "position": "L"
+        },
+        {
+          "team": "STL",
+          "playerId": 1059133129,
+          "name": "Nathan Walker",
+          "statusCode": "IR",
+          "statusDescription": "Injured Reserve",
+          "position": "L"
+        },
+        {
+          "team": "STL",
+          "playerId": 2390798473,
+          "name": "Zach Dean",
+          "statusCode": "IR",
+          "statusDescription": "Injured Reserve",
+          "position": "C"
+        }
+      ]
+    },
+    "CHI": {
+      "injuries": [
+        {
+          "team": "CHI",
+          "playerId": 188076258,
+          "name": "Laurent Brossoit",
+          "statusCode": "IR",
+          "statusDescription": "IR",
+          "position": "L"
+        },
+        {
+          "team": "CHI",
+          "playerId": 1720128383,
+          "name": "Nick Foligno",
+          "statusCode": "IR",
+          "statusDescription": "IR",
+          "position": "L"
+        },
+        {
+          "team": "CHI",
+          "playerId": 614283122,
+          "name": "Shea Weber",
+          "statusCode": "IR",
+          "statusDescription": "Injured Reserve",
+          "position": "D"
+        }
+      ]
+    },
+    "UTA": {
+      "injuries": [
+        {
+          "team": "UTA",
+          "playerId": 2518032446,
+          "name": "Alex Kerfoot",
+          "statusCode": "IR",
+          "statusDescription": "IR",
+          "position": "L"
+        },
+        {
+          "team": "UTA",
+          "playerId": 1077313262,
+          "name": "Juuso Valimaki",
+          "statusCode": "IR",
+          "statusDescription": "IR",
+          "position": "L"
+        },
+        {
+          "team": "UTA",
+          "playerId": 4182456072,
+          "name": "Olli Maatta",
+          "statusCode": "IR",
+          "statusDescription": "IR",
+          "position": "L"
+        },
+        {
+          "team": "UTA",
+          "playerId": 2268747638,
+          "name": "Logan Cooley",
+          "statusCode": "OUT",
+          "statusDescription": "OUT",
+          "position": "L"
+        }
+      ]
+    },
+    "SEA": {
+      "injuries": [
+        {
+          "team": "SEA",
+          "playerId": 2323427375,
+          "name": "Jaden Schwartz",
+          "statusCode": "IR",
+          "statusDescription": "IR",
+          "position": "L"
+        },
+        {
+          "team": "SEA",
+          "playerId": 902174211,
+          "name": "Matt Murray",
+          "statusCode": "IR",
+          "statusDescription": "IR",
+          "position": "L"
+        },
+        {
+          "team": "SEA",
+          "playerId": 4156261947,
+          "name": "Berkly Catton",
+          "statusCode": "OUT",
+          "statusDescription": "OUT",
+          "position": "L"
+        },
+        {
+          "team": "SEA",
+          "playerId": 876475927,
+          "name": "Max McCormick",
+          "statusCode": "OUT",
+          "statusDescription": "Out",
+          "position": "L"
+        }
+      ]
+    }
+  },
   "games": [
     {
-      "gameId": "2025020315",
-      "date": "2025-11-19",
-      "home": "WSH",
-      "away": "EDM",
-      "homeInjuries": [],
-      "awayInjuries": []
-    },
-    {
-      "gameId": "2025020316",
-      "date": "2025-11-19",
-      "home": "BUF",
-      "away": "CGY",
-      "homeInjuries": [],
-      "awayInjuries": []
-    },
-    {
-      "gameId": "2025020317",
-      "date": "2025-11-19",
-      "home": "MIN",
-      "away": "CAR",
-      "homeInjuries": [],
-      "awayInjuries": []
-    },
-    {
-      "gameId": "2025020318",
-      "date": "2025-11-19",
-      "home": "ANA",
-      "away": "BOS",
-      "homeInjuries": [],
-      "awayInjuries": []
-    },
-    {
-      "gameId": "2025020319",
-      "date": "2025-11-20",
-      "home": "TOR",
-      "away": "CBJ",
-      "homeInjuries": [],
-      "awayInjuries": []
-    },
-    {
-      "gameId": "2025020320",
-      "date": "2025-11-20",
-      "home": "MTL",
-      "away": "WSH",
-      "homeInjuries": [],
-      "awayInjuries": []
-    },
-    {
-      "gameId": "2025020321",
-      "date": "2025-11-20",
-      "home": "DET",
-      "away": "NYI",
-      "homeInjuries": [],
-      "awayInjuries": []
-    },
-    {
-      "gameId": "2025020323",
-      "date": "2025-11-20",
-      "home": "FLA",
-      "away": "NJD",
-      "homeInjuries": [],
-      "awayInjuries": []
-    },
-    {
-      "gameId": "2025020324",
-      "date": "2025-11-20",
-      "home": "PHI",
-      "away": "STL",
-      "homeInjuries": [],
-      "awayInjuries": []
-    },
-    {
-      "gameId": "2025020322",
-      "date": "2025-11-20",
-      "home": "TBL",
-      "away": "EDM",
-      "homeInjuries": [],
-      "awayInjuries": []
-    },
-    {
-      "gameId": "2025020325",
-      "date": "2025-11-20",
-      "home": "CHI",
-      "away": "SEA",
-      "homeInjuries": [],
-      "awayInjuries": []
-    },
-    {
-      "gameId": "2025020326",
-      "date": "2025-11-20",
-      "home": "COL",
-      "away": "NYR",
-      "homeInjuries": [],
-      "awayInjuries": []
-    },
-    {
-      "gameId": "2025020327",
-      "date": "2025-11-20",
-      "home": "UTA",
-      "away": "VGK",
-      "homeInjuries": [],
-      "awayInjuries": []
-    },
-    {
-      "gameId": "2025020328",
-      "date": "2025-11-20",
-      "home": "VAN",
-      "away": "DAL",
-      "homeInjuries": [],
-      "awayInjuries": []
-    },
-    {
-      "gameId": "2025020329",
-      "date": "2025-11-20",
-      "home": "ANA",
-      "away": "OTT",
-      "homeInjuries": [],
-      "awayInjuries": []
-    },
-    {
-      "gameId": "2025020330",
-      "date": "2025-11-20",
-      "home": "SJS",
-      "away": "LAK",
-      "homeInjuries": [],
-      "awayInjuries": []
-    },
-    {
-      "gameId": "2025020331",
-      "date": "2025-11-21",
-      "home": "BUF",
+      "gameId": "2025020493",
+      "date": "2025-12-12",
+      "home": "STL",
       "away": "CHI",
-      "homeInjuries": [],
-      "awayInjuries": []
+      "homeInjuries": [
+        {
+          "team": "STL",
+          "playerId": 2700134941,
+          "name": "Torey Krug",
+          "statusCode": "IR",
+          "statusDescription": "IR",
+          "position": "L"
+        },
+        {
+          "team": "STL",
+          "playerId": 1856689967,
+          "name": "Alexey Toropchenko",
+          "statusCode": "OUT",
+          "statusDescription": "OUT",
+          "position": "L"
+        },
+        {
+          "team": "STL",
+          "playerId": 18964699,
+          "name": "Jimmy Snuggerud",
+          "statusCode": "OUT",
+          "statusDescription": "OUT",
+          "position": "L"
+        },
+        {
+          "team": "STL",
+          "playerId": 1136531485,
+          "name": "Jordan Kyrou",
+          "statusCode": "DTD",
+          "statusDescription": "DTD",
+          "position": "L"
+        },
+        {
+          "team": "STL",
+          "playerId": 1059133129,
+          "name": "Nathan Walker",
+          "statusCode": "IR",
+          "statusDescription": "Injured Reserve",
+          "position": "L"
+        },
+        {
+          "team": "STL",
+          "playerId": 2390798473,
+          "name": "Zach Dean",
+          "statusCode": "IR",
+          "statusDescription": "Injured Reserve",
+          "position": "C"
+        }
+      ],
+      "awayInjuries": [
+        {
+          "team": "CHI",
+          "playerId": 188076258,
+          "name": "Laurent Brossoit",
+          "statusCode": "IR",
+          "statusDescription": "IR",
+          "position": "L"
+        },
+        {
+          "team": "CHI",
+          "playerId": 1720128383,
+          "name": "Nick Foligno",
+          "statusCode": "IR",
+          "statusDescription": "IR",
+          "position": "L"
+        },
+        {
+          "team": "CHI",
+          "playerId": 614283122,
+          "name": "Shea Weber",
+          "statusCode": "IR",
+          "statusDescription": "Injured Reserve",
+          "position": "D"
+        }
+      ]
     },
     {
-      "gameId": "2025020332",
-      "date": "2025-11-21",
-      "home": "PIT",
-      "away": "MIN",
-      "homeInjuries": [],
-      "awayInjuries": []
-    },
-    {
-      "gameId": "2025020333",
-      "date": "2025-11-21",
-      "home": "WPG",
-      "away": "CAR",
-      "homeInjuries": [],
-      "awayInjuries": []
-    },
-    {
-      "gameId": "2025020334",
-      "date": "2025-11-21",
-      "home": "LAK",
-      "away": "BOS",
-      "homeInjuries": [],
-      "awayInjuries": []
-    },
-    {
-      "gameId": "2025020335",
-      "date": "2025-11-22",
-      "home": "DET",
-      "away": "CBJ",
-      "homeInjuries": [],
-      "awayInjuries": []
-    },
-    {
-      "gameId": "2025020336",
-      "date": "2025-11-22",
-      "home": "NYI",
-      "away": "STL",
-      "homeInjuries": [],
-      "awayInjuries": []
-    },
-    {
-      "gameId": "2025020337",
-      "date": "2025-11-22",
-      "home": "MTL",
-      "away": "TOR",
-      "homeInjuries": [],
-      "awayInjuries": []
-    },
-    {
-      "gameId": "2025020338",
-      "date": "2025-11-22",
-      "home": "FLA",
-      "away": "EDM",
-      "homeInjuries": [],
-      "awayInjuries": []
-    },
-    {
-      "gameId": "2025020339",
-      "date": "2025-11-22",
-      "home": "PHI",
-      "away": "NJD",
-      "homeInjuries": [],
-      "awayInjuries": []
-    },
-    {
-      "gameId": "2025020340",
-      "date": "2025-11-22",
-      "home": "PIT",
-      "away": "SEA",
-      "homeInjuries": [],
-      "awayInjuries": []
-    },
-    {
-      "gameId": "2025020341",
-      "date": "2025-11-22",
-      "home": "WSH",
-      "away": "TBL",
-      "homeInjuries": [],
-      "awayInjuries": []
-    },
-    {
-      "gameId": "2025020342",
-      "date": "2025-11-22",
-      "home": "SJS",
-      "away": "OTT",
-      "homeInjuries": [],
-      "awayInjuries": []
-    },
-    {
-      "gameId": "2025020343",
-      "date": "2025-11-22",
-      "home": "NSH",
-      "away": "COL",
-      "homeInjuries": [],
-      "awayInjuries": []
-    },
-    {
-      "gameId": "2025020344",
-      "date": "2025-11-22",
+      "gameId": "2025020494",
+      "date": "2025-12-12",
       "home": "UTA",
-      "away": "NYR",
-      "homeInjuries": [],
-      "awayInjuries": []
-    },
-    {
-      "gameId": "2025020345",
-      "date": "2025-11-22",
-      "home": "CGY",
-      "away": "DAL",
-      "homeInjuries": [],
-      "awayInjuries": []
-    },
-    {
-      "gameId": "2025020346",
-      "date": "2025-11-22",
-      "home": "ANA",
-      "away": "VGK",
-      "homeInjuries": [],
-      "awayInjuries": []
-    },
-    {
-      "gameId": "2025020347",
-      "date": "2025-11-23",
-      "home": "BUF",
-      "away": "CAR",
-      "homeInjuries": [],
-      "awayInjuries": []
-    },
-    {
-      "gameId": "2025020348",
-      "date": "2025-11-23",
-      "home": "WPG",
-      "away": "MIN",
-      "homeInjuries": [],
-      "awayInjuries": []
-    },
-    {
-      "gameId": "2025020349",
-      "date": "2025-11-23",
-      "home": "NYI",
       "away": "SEA",
-      "homeInjuries": [],
-      "awayInjuries": []
-    },
-    {
-      "gameId": "2025020350",
-      "date": "2025-11-23",
-      "home": "CHI",
-      "away": "COL",
-      "homeInjuries": [],
-      "awayInjuries": []
-    },
-    {
-      "gameId": "2025020351",
-      "date": "2025-11-23",
-      "home": "SJS",
-      "away": "BOS",
-      "homeInjuries": [],
-      "awayInjuries": []
-    },
-    {
-      "gameId": "2025020352",
-      "date": "2025-11-23",
-      "home": "VAN",
-      "away": "CGY",
-      "homeInjuries": [],
-      "awayInjuries": []
-    },
-    {
-      "gameId": "2025020353",
-      "date": "2025-11-24",
-      "home": "TBL",
-      "away": "PHI",
-      "homeInjuries": [],
-      "awayInjuries": []
-    },
-    {
-      "gameId": "2025020354",
-      "date": "2025-11-24",
-      "home": "NJD",
-      "away": "DET",
-      "homeInjuries": [],
-      "awayInjuries": []
-    },
-    {
-      "gameId": "2025020355",
-      "date": "2025-11-24",
-      "home": "NYR",
-      "away": "STL",
-      "homeInjuries": [],
-      "awayInjuries": []
-    },
-    {
-      "gameId": "2025020356",
-      "date": "2025-11-24",
-      "home": "WSH",
-      "away": "CBJ",
-      "homeInjuries": [],
-      "awayInjuries": []
-    },
-    {
-      "gameId": "2025020357",
-      "date": "2025-11-24",
-      "home": "NSH",
-      "away": "FLA",
-      "homeInjuries": [],
-      "awayInjuries": []
-    },
-    {
-      "gameId": "2025020358",
-      "date": "2025-11-24",
-      "home": "UTA",
-      "away": "VGK",
-      "homeInjuries": [],
-      "awayInjuries": []
-    },
-    {
-      "gameId": "2025020359",
-      "date": "2025-11-24",
-      "home": "LAK",
-      "away": "OTT",
-      "homeInjuries": [],
-      "awayInjuries": []
-    },
-    {
-      "gameId": "2025020360",
-      "date": "2025-11-25",
-      "home": "EDM",
-      "away": "DAL",
-      "homeInjuries": [],
-      "awayInjuries": []
+      "homeInjuries": [
+        {
+          "team": "UTA",
+          "playerId": 2518032446,
+          "name": "Alex Kerfoot",
+          "statusCode": "IR",
+          "statusDescription": "IR",
+          "position": "L"
+        },
+        {
+          "team": "UTA",
+          "playerId": 1077313262,
+          "name": "Juuso Valimaki",
+          "statusCode": "IR",
+          "statusDescription": "IR",
+          "position": "L"
+        },
+        {
+          "team": "UTA",
+          "playerId": 4182456072,
+          "name": "Olli Maatta",
+          "statusCode": "IR",
+          "statusDescription": "IR",
+          "position": "L"
+        },
+        {
+          "team": "UTA",
+          "playerId": 2268747638,
+          "name": "Logan Cooley",
+          "statusCode": "OUT",
+          "statusDescription": "OUT",
+          "position": "L"
+        }
+      ],
+      "awayInjuries": [
+        {
+          "team": "SEA",
+          "playerId": 2323427375,
+          "name": "Jaden Schwartz",
+          "statusCode": "IR",
+          "statusDescription": "IR",
+          "position": "L"
+        },
+        {
+          "team": "SEA",
+          "playerId": 902174211,
+          "name": "Matt Murray",
+          "statusCode": "IR",
+          "statusDescription": "IR",
+          "position": "L"
+        },
+        {
+          "team": "SEA",
+          "playerId": 4156261947,
+          "name": "Berkly Catton",
+          "statusCode": "OUT",
+          "statusDescription": "OUT",
+          "position": "L"
+        },
+        {
+          "team": "SEA",
+          "playerId": 876475927,
+          "name": "Max McCormick",
+          "statusCode": "OUT",
+          "statusDescription": "Out",
+          "position": "L"
+        }
+      ]
     }
   ]
 }

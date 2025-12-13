@@ -16,6 +16,11 @@ on:
     - cron: '0 13 * * *'  # 9am ET - morning update
     - cron: '0 23 * * *'  # 7pm ET - evening update
 
+    # Injuries & Starting goalies: Three times daily (morning, afternoon, evening)
+    - cron: '0 14 * * *'  # 10am ET - morning update
+    - cron: '0 19 * * *'  # 3pm ET - afternoon update
+    - cron: '0 0 * * *'   # 8pm ET - evening update
+
     # Model insights: Weekly on Monday morning
     - cron: '0 14 * * 1'  # 10am ET on Mondays
 
@@ -36,6 +41,8 @@ on:
           - predictions
           - standings
           - goalie_pulse
+          - injuries
+          - starting_goalies
           - model_insights
           - social_metrics
           - power_index
@@ -58,6 +65,8 @@ jobs:
       refresh_predictions: ${{ steps.check.outputs.predictions }}
       refresh_standings: ${{ steps.check.outputs.standings }}
       refresh_goalie_pulse: ${{ steps.check.outputs.goalie_pulse }}
+      refresh_injuries: ${{ steps.check.outputs.injuries }}
+      refresh_starting_goalies: ${{ steps.check.outputs.starting_goalies }}
       refresh_model_insights: ${{ steps.check.outputs.insights }}
       refresh_social_metrics: ${{ steps.check.outputs.social_metrics }}
       refresh_power_index: ${{ steps.check.outputs.power_index }}
@@ -71,6 +80,8 @@ jobs:
           echo "predictions=false" >> $GITHUB_OUTPUT
           echo "standings=false" >> $GITHUB_OUTPUT
           echo "goalie_pulse=false" >> $GITHUB_OUTPUT
+          echo "injuries=false" >> $GITHUB_OUTPUT
+          echo "starting_goalies=false" >> $GITHUB_OUTPUT
           echo "insights=false" >> $GITHUB_OUTPUT
           echo "social_metrics=false" >> $GITHUB_OUTPUT
           echo "power_index=false" >> $GITHUB_OUTPUT
@@ -88,6 +99,12 @@ jobs:
             fi
             if [ "$DATA_TYPE" = "all" ] || [ "$DATA_TYPE" = "goalie_pulse" ]; then
               echo "goalie_pulse=true" >> $GITHUB_OUTPUT
+            fi
+            if [ "$DATA_TYPE" = "all" ] || [ "$DATA_TYPE" = "injuries" ]; then
+              echo "injuries=true" >> $GITHUB_OUTPUT
+            fi
+            if [ "$DATA_TYPE" = "all" ] || [ "$DATA_TYPE" = "starting_goalies" ]; then
+              echo "starting_goalies=true" >> $GITHUB_OUTPUT
             fi
             if [ "$DATA_TYPE" = "all" ] || [ "$DATA_TYPE" = "model_insights" ]; then
               echo "insights=true" >> $GITHUB_OUTPUT
@@ -121,6 +138,12 @@ jobs:
               echo "goalie_pulse=true" >> $GITHUB_OUTPUT
             fi
 
+            # Injuries & Starting goalies: three times daily (14, 19, 0 UTC)
+            if [ "$HOUR" = "14" ] || [ "$HOUR" = "19" ] || [ "$HOUR" = "00" ]; then
+              echo "injuries=true" >> $GITHUB_OUTPUT
+              echo "starting_goalies=true" >> $GITHUB_OUTPUT
+            fi
+
             # Model insights: Monday morning (14 UTC, day 1)
             if [ "$HOUR" = "14" ] && [ "$DAY" = "1" ]; then
               echo "insights=true" >> $GITHUB_OUTPUT
@@ -145,6 +168,8 @@ jobs:
       needs.determine-refresh.outputs.refresh_predictions == 'true' ||
       needs.determine-refresh.outputs.refresh_standings == 'true' ||
       needs.determine-refresh.outputs.refresh_goalie_pulse == 'true' ||
+      needs.determine-refresh.outputs.refresh_injuries == 'true' ||
+      needs.determine-refresh.outputs.refresh_starting_goalies == 'true' ||
       needs.determine-refresh.outputs.refresh_model_insights == 'true' ||
       needs.determine-refresh.outputs.refresh_social_metrics == 'true' ||
       needs.determine-refresh.outputs.refresh_power_index == 'true' ||
@@ -187,6 +212,27 @@ jobs:
         run: |
           echo "🥅 Refreshing goalie pulse..."
           python scripts/generate_goalie_pulse.py --date $(date +%Y-%m-%d)
+        continue-on-error: true
+
+      - name: Refresh injuries
+        if: needs.determine-refresh.outputs.refresh_injuries == 'true'
+        run: |
+          echo "🏥 Refreshing injury data..."
+          python scripts/fetch_injuries.py
+        continue-on-error: true
+
+      - name: Generate player injuries for games
+        if: needs.determine-refresh.outputs.refresh_injuries == 'true'
+        run: |
+          echo "🏥 Generating player injuries for today's games..."
+          python scripts/generate_player_injuries.py
+        continue-on-error: true
+
+      - name: Refresh starting goalies
+        if: needs.determine-refresh.outputs.refresh_starting_goalies == 'true'
+        run: |
+          echo "🥅 Refreshing starting goalies..."
+          python scripts/fetch_starting_goalies.py
         continue-on-error: true
 
       - name: Refresh model insights
@@ -244,6 +290,8 @@ jobs:
           echo "  - Predictions: ${{ needs.determine-refresh.outputs.refresh_predictions }}"
           echo "  - Standings: ${{ needs.determine-refresh.outputs.refresh_standings }}"
           echo "  - Goalie Pulse: ${{ needs.determine-refresh.outputs.refresh_goalie_pulse }}"
+          echo "  - Injuries: ${{ needs.determine-refresh.outputs.refresh_injuries }}"
+          echo "  - Starting Goalies: ${{ needs.determine-refresh.outputs.refresh_starting_goalies }}"
           echo "  - Model Insights: ${{ needs.determine-refresh.outputs.refresh_model_insights }}"
           echo "  - Social Metrics: ${{ needs.determine-refresh.outputs.refresh_social_metrics }}"
           echo "  - Power Index: ${{ needs.determine-refresh.outputs.refresh_power_index }}"
