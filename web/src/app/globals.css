@@ -1812,6 +1812,11 @@ p { line-height: 1.7; }
 
 .power-board__row {
   border-bottom: 1px solid var(--border-subtle);
+  transition: background var(--duration-fast) var(--ease-smooth);
+}
+
+.power-board__row:hover {
+  background: rgba(126, 227, 255, 0.06);
 }
 
 .power-board__row:last-child { border-bottom: 0; }

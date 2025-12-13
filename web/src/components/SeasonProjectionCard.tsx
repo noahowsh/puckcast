@@ -83,8 +83,8 @@ export function SeasonProjectionCard({ projection }: SeasonProjectionCardProps) 
           </h4>
           <div className="bg-white/[0.02] rounded-lg overflow-hidden" style={{ fontSize: '0.75rem' }}>
             {/* Header */}
-            <div style={{ display: 'grid', gridTemplateColumns: '70px 1fr 1fr 1fr' }} className="border-b border-white/[0.06]">
-              <div style={{ padding: '0.75rem 0.5rem' }}></div>
+            <div style={{ display: 'grid', gridTemplateColumns: '80px 1fr 1fr 1fr' }} className="border-b border-white/[0.06]">
+              <div style={{ padding: '0.75rem 0.75rem' }}></div>
               <div style={{ padding: '0.75rem 0.5rem', textAlign: 'center' }}>
                 <span className="text-[10px] font-bold text-white/40 uppercase tracking-wide">Goals</span>
               </div>
@@ -95,47 +95,19 @@ export function SeasonProjectionCard({ projection }: SeasonProjectionCardProps) 
                 <span className="text-[10px] font-bold text-white/40 uppercase tracking-wide">Points</span>
               </div>
             </div>
-            {/* Average Row */}
-            <div style={{ display: 'grid', gridTemplateColumns: '70px 1fr 1fr 1fr' }} className="border-b border-white/[0.04] bg-white/[0.02]">
-              <div style={{ padding: '0.625rem 0.5rem' }} className="text-white font-medium">Average</div>
-              <div style={{ padding: '0.625rem 0.5rem', textAlign: 'center' }} className="text-white">{goals.average}</div>
-              <div style={{ padding: '0.625rem 0.5rem', textAlign: 'center' }} className="text-white">{assists.average}</div>
-              <div style={{ padding: '0.625rem 0.5rem', textAlign: 'center' }} className="text-sky-300 font-bold">{points.average}</div>
-            </div>
-            {/* Median Row */}
-            <div style={{ display: 'grid', gridTemplateColumns: '70px 1fr 1fr 1fr' }} className="border-b border-white/[0.04]">
-              <div style={{ padding: '0.625rem 0.5rem' }} className="text-white/60">Median</div>
-              <div style={{ padding: '0.625rem 0.5rem', textAlign: 'center' }} className="text-white/70">{goals.median}</div>
-              <div style={{ padding: '0.625rem 0.5rem', textAlign: 'center' }} className="text-white/70">{assists.median}</div>
-              <div style={{ padding: '0.625rem 0.5rem', textAlign: 'center' }} className="text-white/80">{points.median}</div>
-            </div>
-            {/* Mode Row */}
-            <div style={{ display: 'grid', gridTemplateColumns: '70px 1fr 1fr 1fr' }} className="border-b border-white/[0.04]">
-              <div style={{ padding: '0.625rem 0.5rem' }} className="text-white/60">Mode</div>
-              <div style={{ padding: '0.625rem 0.5rem', textAlign: 'center' }} className="text-white/70">{goals.mode}</div>
-              <div style={{ padding: '0.625rem 0.5rem', textAlign: 'center' }} className="text-white/70">{assists.mode}</div>
-              <div style={{ padding: '0.625rem 0.5rem', textAlign: 'center' }} className="text-white/80">{points.mode}</div>
-            </div>
-            {/* Min Row */}
-            <div style={{ display: 'grid', gridTemplateColumns: '70px 1fr 1fr 1fr' }} className="border-b border-white/[0.04]">
-              <div style={{ padding: '0.625rem 0.5rem' }} className="text-white/40">Min</div>
-              <div style={{ padding: '0.625rem 0.5rem', textAlign: 'center' }} className="text-white/40">{goals.min}</div>
-              <div style={{ padding: '0.625rem 0.5rem', textAlign: 'center' }} className="text-white/40">{assists.min}</div>
-              <div style={{ padding: '0.625rem 0.5rem', textAlign: 'center' }} className="text-white/50">{points.min}</div>
-            </div>
-            {/* Max Row */}
-            <div style={{ display: 'grid', gridTemplateColumns: '70px 1fr 1fr 1fr' }} className="border-b border-white/[0.04]">
-              <div style={{ padding: '0.625rem 0.5rem' }} className="text-white/40">Max</div>
-              <div style={{ padding: '0.625rem 0.5rem', textAlign: 'center' }} className="text-white/40">{goals.max}</div>
-              <div style={{ padding: '0.625rem 0.5rem', textAlign: 'center' }} className="text-white/40">{assists.max}</div>
-              <div style={{ padding: '0.625rem 0.5rem', textAlign: 'center' }} className="text-white/50">{points.max}</div>
+            {/* Projected Row */}
+            <div style={{ display: 'grid', gridTemplateColumns: '80px 1fr 1fr 1fr' }} className="border-b border-white/[0.04] bg-white/[0.02]">
+              <div style={{ padding: '0.875rem 0.75rem' }} className="text-white font-semibold">Projected</div>
+              <div style={{ padding: '0.875rem 0.5rem', textAlign: 'center' }} className="text-emerald-400 text-lg font-bold">{goals.average}</div>
+              <div style={{ padding: '0.875rem 0.5rem', textAlign: 'center' }} className="text-amber-400 text-lg font-bold">{assists.average}</div>
+              <div style={{ padding: '0.875rem 0.5rem', textAlign: 'center' }} className="text-sky-300 text-xl font-bold">{points.average}</div>
             </div>
             {/* Current Row */}
-            <div style={{ display: 'grid', gridTemplateColumns: '70px 1fr 1fr 1fr' }} className="bg-white/[0.01]">
-              <div style={{ padding: '0.625rem 0.5rem', fontSize: '0.625rem', fontStyle: 'italic' }} className="text-white/50">Current</div>
-              <div style={{ padding: '0.625rem 0.5rem', textAlign: 'center' }} className="text-emerald-400 font-medium">{goals.current}</div>
-              <div style={{ padding: '0.625rem 0.5rem', textAlign: 'center' }} className="text-amber-400 font-medium">{assists.current}</div>
-              <div style={{ padding: '0.625rem 0.5rem', textAlign: 'center' }} className="text-sky-300 font-bold">{points.current}</div>
+            <div style={{ display: 'grid', gridTemplateColumns: '80px 1fr 1fr 1fr' }} className="bg-white/[0.01]">
+              <div style={{ padding: '0.75rem 0.75rem', fontSize: '0.7rem' }} className="text-white/50">Current</div>
+              <div style={{ padding: '0.75rem 0.5rem', textAlign: 'center' }} className="text-white/70 font-medium">{goals.current}</div>
+              <div style={{ padding: '0.75rem 0.5rem', textAlign: 'center' }} className="text-white/70 font-medium">{assists.current}</div>
+              <div style={{ padding: '0.75rem 0.5rem', textAlign: 'center' }} className="text-white/80 font-semibold">{points.current}</div>
             </div>
           </div>
         </div>
@@ -146,15 +118,21 @@ export function SeasonProjectionCard({ projection }: SeasonProjectionCardProps) 
             <h4 className="text-xs font-semibold text-white/60 uppercase tracking-wide">
               Projection Distribution
             </h4>
-            <select
-              value={selectedStat}
-              onChange={(e) => setSelectedStat(e.target.value as DistributionStat)}
-              className="bg-white/[0.05] border border-white/[0.08] rounded px-2 py-1 text-xs text-white focus:outline-none"
-            >
-              <option value="points">Points</option>
-              <option value="goals">Goals</option>
-              <option value="assists">Assists</option>
-            </select>
+            <div className="flex items-center gap-1 bg-white/[0.04] rounded-lg p-0.5">
+              {(["points", "goals", "assists"] as DistributionStat[]).map((stat) => (
+                <button
+                  key={stat}
+                  onClick={() => setSelectedStat(stat)}
+                  className={`px-3 py-1.5 text-xs font-medium rounded-md transition-all ${
+                    selectedStat === stat
+                      ? "bg-white/[0.12] text-white"
+                      : "text-white/50 hover:text-white/70"
+                  }`}
+                >
+                  {stat.charAt(0).toUpperCase() + stat.slice(1)}
+                </button>
+              ))}
+            </div>
           </div>
           <ProjectionHistogram
             data={histogramData}

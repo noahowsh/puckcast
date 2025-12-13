@@ -258,12 +258,11 @@ export default async function PlayerDetailPage({ params }: { params: Promise<{ p
         <section className="nova-section" style={{ paddingTop: "0.5rem" }}>
           <div className="section-head mb-8">
             <div>
-              <div className="flex items-center gap-2">
-                <p className="eyebrow">Player Intelligence</p>
-                <span className="text-[10px] text-white/40 bg-white/[0.06] px-2 py-0.5 rounded-full">Beta</span>
-              </div>
+              <p className="eyebrow">Player Intelligence</p>
               <h2>Advanced Analytics</h2>
-              <p className="lead-sm">Projections, skill profile, and on-ice impact metrics.</p>
+              <p className="lead-sm">
+                Projections, skill profile, and on-ice impact metrics based on {currentSeason} season data.
+              </p>
             </div>
           </div>
 

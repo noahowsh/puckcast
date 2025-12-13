@@ -61,11 +61,11 @@ export function SkillProfileCard({ profile, age, evTOI }: SkillProfileCardProps)
         </div>
       </div>
 
-      <div style={{ padding: '2rem' }}>
+      <div style={{ padding: '1.5rem 2rem 2rem' }}>
         {/* Two Column Layout: Left (rating + key) | Right (chart + description) */}
-        <div style={{ display: 'grid', gridTemplateColumns: '140px 1fr', gap: '2rem', alignItems: 'center' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: '130px 1fr', gap: '1.5rem', alignItems: 'center' }}>
           {/* Left Column: Rating + Legend Key */}
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '1.5rem' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '1.25rem' }}>
             {/* Overall Rating */}
             <OverallRatingDisplay rating={overallRating} />
 
@@ -83,9 +83,11 @@ export function SkillProfileCard({ profile, age, evTOI }: SkillProfileCardProps)
           </div>
 
           {/* Right Column: Chart + Description */}
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1rem' }}>
-            <SkillRadarChart data={radarData} size={290} />
-            <p style={{ fontSize: '0.75rem', lineHeight: '1.625', textAlign: 'center', maxWidth: '26rem' }} className="text-white/60">{skillSummary}</p>
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.75rem', overflow: 'hidden' }}>
+            <div style={{ maxWidth: '100%', display: 'flex', justifyContent: 'center' }}>
+              <SkillRadarChart data={radarData} size={260} />
+            </div>
+            <p style={{ fontSize: '0.75rem', lineHeight: '1.625', textAlign: 'center', maxWidth: '100%', padding: '0 0.5rem' }} className="text-white/60">{skillSummary}</p>
           </div>
         </div>
 
