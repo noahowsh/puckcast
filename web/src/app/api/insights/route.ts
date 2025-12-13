@@ -11,17 +11,22 @@ export const dynamic = "force-dynamic";
  * - metric: Specific metric to return (overall, strategies, confidenceBuckets, etc.)
  */
 export async function GET(request: Request) {
-  const { searchParams } = new URL(request.url);
-  const metric = searchParams.get("metric");
+  try {
+    const { searchParams } = new URL(request.url);
+    const metric = searchParams.get("metric");
 
-  // If specific metric requested, return just that
-  if (metric && metric in insightsData) {
-    return NextResponse.json({
-      generatedAt: insightsData.generatedAt,
-      [metric]: insightsData[metric as keyof typeof insightsData],
-    });
+    // If specific metric requested, return just that
+    if (metric && metric in insightsData) {
+      return NextResponse.json({
+        generatedAt: insightsData.generatedAt,
+        [metric]: insightsData[metric as keyof typeof insightsData],
+      });
+    }
+
+    // Return all insights
+    return NextResponse.json(insightsData);
+  } catch (error) {
+    console.error("API /insights error:", error);
+    return NextResponse.json({ error: "Failed to fetch insights" }, { status: 500 });
   }
-
-  // Return all insights
-  return NextResponse.json(insightsData);
 }

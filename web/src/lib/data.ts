@@ -4,7 +4,6 @@ const captureException = (error: unknown) => {
 };
 
 import goaliePulseRaw from "@/data/goaliePulse.json";
-import lineCombosRaw from "@/data/lineCombos.json";
 import predictionsRaw from "@/data/todaysPredictions.json";
 import insightsRaw from "@/data/modelInsights.json";
 import startingGoaliesRaw from "@/data/startingGoalies.json";
@@ -12,7 +11,6 @@ import playerInjuriesRaw from "@/data/playerInjuries.json";
 import type { Prediction, PredictionsPayload, PlayerInjuriesPayload, StartingGoaliesPayload } from "@/types/prediction";
 import type { GoaliePulse } from "@/types/goalie";
 import type { ModelInsights } from "@/types/insights";
-import type { LineCombosPayload } from "@/types/lineCombos";
 
 export function getPredictionsPayload(): PredictionsPayload {
   return predictionsRaw as PredictionsPayload;
@@ -30,15 +28,6 @@ export function getGoaliePulse(): GoaliePulse {
 export function getModelInsights(): ModelInsights {
   try {
     return insightsRaw as ModelInsights;
-  } catch (error) {
-    captureException(error);
-    throw error;
-  }
-}
-
-export function getLineCombos(): LineCombosPayload {
-  try {
-    return lineCombosRaw as LineCombosPayload;
   } catch (error) {
     captureException(error);
     throw error;
