@@ -942,30 +942,17 @@ def main() -> None:
 
     print(f"🏒 Fetching NHL injuries...")
 
-    # Try CBS Sports first (most reliable and complete)
-    print("\n📋 Scraping CBS Sports (primary source)...")
-    cbs_teams = {}
+    # Use CBS Sports as the sole source (most reliable and up-to-date)
+    print("\n📋 Scraping CBS Sports...")
+    teams = {}
     try:
-        cbs_teams = scrape_cbs_injuries(args.timeout)
-        cbs_count = sum(len(t.get("injuries", [])) for t in cbs_teams.values())
+        teams = scrape_cbs_injuries(args.timeout)
+        cbs_count = sum(len(t.get("injuries", [])) for t in teams.values())
         print(f"  ✅ CBS Sports: {cbs_count} injuries found")
     except Exception as e:
         print(f"  ⚠️  CBS Sports scraping failed: {e}")
 
-    # Also get ESPN data as backup
-    print("\n📋 Scraping ESPN for additional data...")
-    espn_teams = scrape_espn_injuries(args.timeout)
-    espn_count = sum(len(t.get("injuries", [])) for t in espn_teams.values())
-    print(f"  ✅ ESPN: {espn_count} injuries found")
-
-    # Merge the data, preferring CBS Sports but adding ESPN's additional data
-    if cbs_teams:
-        # Use CBS Sports as primary, ESPN as secondary
-        teams = merge_injury_data(cbs_teams, espn_teams)
-        source = "CBS Sports + ESPN"
-    else:
-        teams = espn_teams
-        source = "ESPN"
+    source = "CBS Sports"
 
     if not teams:
         print("⚠️  No injury data scraped from any source.")
