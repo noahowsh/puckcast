@@ -1,7 +1,25 @@
 {
-  "updatedAt": "2025-12-13T13:19:50.858198+00:00",
+  "updatedAt": "2025-12-13T23:12:16.575976+00:00",
   "notes": "Goalie performance metrics calculated from NHL Stats API data. GSAx estimates based on save percentage above league average.",
   "goalies": [
+    {
+      "name": "Jesper Wallstedt",
+      "team": "MIN",
+      "rollingGsa": 2.8,
+      "seasonGsa": 11.0,
+      "restDays": 2,
+      "startLikelihood": 0.95,
+      "trend": "surging",
+      "note": "Jesper Wallstedt is playing at an elite level with a 0.937 save percentage, providing MIN with a strong defensive anchor.",
+      "strengths": [
+        "Elite save percentage",
+        "Exceptional goals against average"
+      ],
+      "watchouts": [
+        "Limited recent data"
+      ],
+      "nextOpponent": "OTT"
+    },
     {
       "name": "Jonathan Quick",
       "team": "NYR",
@@ -19,24 +37,6 @@
         "Limited recent data"
       ],
       "nextOpponent": "MTL"
-    },
-    {
-      "name": "Jesper Wallstedt",
-      "team": "MIN",
-      "rollingGsa": 2.7,
-      "seasonGsa": 9.9,
-      "restDays": 2,
-      "startLikelihood": 0.95,
-      "trend": "surging",
-      "note": "Jesper Wallstedt is playing at an elite level with a 0.936 save percentage, providing MIN with a strong defensive anchor.",
-      "strengths": [
-        "Elite save percentage",
-        "Exceptional goals against average"
-      ],
-      "watchouts": [
-        "Limited recent data"
-      ],
-      "nextOpponent": "OTT"
     },
     {
       "name": "Dennis Hildeby",
@@ -407,6 +407,23 @@
       "nextOpponent": "FLA"
     },
     {
+      "name": "Jake Allen",
+      "team": "NJD",
+      "rollingGsa": 0.5,
+      "seasonGsa": 3.0,
+      "restDays": 2,
+      "startLikelihood": 0.8,
+      "trend": "stable",
+      "note": "Jake Allen showing promise with limited sample size \u2014 monitor progression closely.",
+      "strengths": [
+        "Solid fundamentals"
+      ],
+      "watchouts": [
+        "Inconsistent results"
+      ],
+      "nextOpponent": "ANA"
+    },
+    {
       "name": "Filip Gustavsson",
       "team": "MIN",
       "rollingGsa": 0.5,
@@ -490,23 +507,6 @@
         "Limited recent data"
       ],
       "nextOpponent": "TBL"
-    },
-    {
-      "name": "Lukas Dostal",
-      "team": "ANA",
-      "rollingGsa": 0.3,
-      "seasonGsa": 1.9,
-      "restDays": 2,
-      "startLikelihood": 0.8,
-      "trend": "stable",
-      "note": "Lukas Dostal showing promise with limited sample size \u2014 monitor progression closely.",
-      "strengths": [
-        "Proven winner"
-      ],
-      "watchouts": [
-        "Inconsistent results"
-      ],
-      "nextOpponent": "NJD"
     },
     {
       "name": "Daniil Tarasov",
