@@ -44,11 +44,6 @@ const topEdges = todaysPredictions
   .sort((a, b) => Math.abs(b.edge) - Math.abs(a.edge))
   .slice(0, 3);
 
-const upsetRadar = todaysPredictions
-  .filter((g) => g.modelFavorite === "away" && g.awayWinProb >= 0.55)
-  .sort((a, b) => b.awayWinProb - a.awayWinProb)
-  .slice(0, 3);
-
 const pct = (value: number) => `${(value * 100).toFixed(1)}%`;
 const edgeGap = ((modelInsights.overall.accuracy - modelInsights.overall.baseline) * 100).toFixed(1);
 const updatedTimestamp = predictionsPayload.generatedAt ? new Date(predictionsPayload.generatedAt) : null;
@@ -172,26 +167,6 @@ export default function Home() {
                 )}
               </div>
 
-              {upsetRadar.length > 0 && (
-                <div className="upset-ribbon">
-                  <p className="micro-label">Upset radar</p>
-                  <div className="upset-grid">
-                    {upsetRadar.map((game) => (
-                      <div key={game.id} className="upset-card">
-                        <div className="versus">
-                          <TeamCrest abbrev={game.awayTeam.abbrev} />
-                          <span className="versus__divider">at</span>
-                          <TeamCrest abbrev={game.homeTeam.abbrev} />
-                        </div>
-                        <div className="upset-card__prob">
-                          <span className="tag">Road lean</span>
-                          <span className="edge-card__prob-value">{pct(game.awayWinProb)}</span>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
             </div>
           </div>
         </section>

@@ -134,7 +134,7 @@ export function SkaterStatsTable({
               gap: '0.25rem',
               transition: 'background 0.15s ease',
             }}
-            className={linkToProfile ? "hover:bg-white/[0.04] cursor-pointer" : ""}
+            className={linkToProfile ? "hover:bg-[rgba(126,227,255,0.08)] cursor-pointer" : ""}
           >
             {showRank && (
               <span style={{
@@ -267,7 +267,7 @@ export function GoalieStatsTable({
               gap: '0.25rem',
               transition: 'background 0.15s ease',
             }}
-            className={linkToProfile ? "hover:bg-white/[0.04] cursor-pointer" : ""}
+            className={linkToProfile ? "hover:bg-[rgba(126,227,255,0.08)] cursor-pointer" : ""}
           >
             {showRank && (
               <span style={{

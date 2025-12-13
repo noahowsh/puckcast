@@ -51,7 +51,7 @@ export function SiteFooter() {
             <a className="footer-cta" href="https://x.com/puckcastai" target="_blank" rel="noreferrer">
               Follow on X
             </a>
-            <a className="footer-cta" href="https://instagram.com/puckcast.ai" target="_blank" rel="noreferrer" style={{ background: 'linear-gradient(135deg, #833ab4, #fd1d1d, #fcb045)', border: 'none' }}>
+            <a className="footer-cta" href="https://instagram.com/puckcast.ai" target="_blank" rel="noreferrer">
               Follow on Instagram
             </a>
           </div>

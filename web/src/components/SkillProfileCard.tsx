@@ -128,6 +128,11 @@ export function SkillProfileCard({ profile, age, evTOI }: SkillProfileCardProps)
           </div>
         </div>
 
+        {/* Methodology */}
+        <p style={{ marginTop: '2rem', paddingTop: '1.25rem' }} className="text-[10px] text-white/30 leading-relaxed border-t border-white/[0.06]">
+          Percentile rankings compare this player to all NHL {positionLabel}s based on goals, assists, shots, ice time, and situational scoring rates from the current season. Overall rating is a weighted composite of even-strength and special teams contributions.
+        </p>
+
       </div>
     </div>
   );
