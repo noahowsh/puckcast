@@ -111,7 +111,7 @@ function MatchupCard({ game }: { game: Prediction }) {
         {/* Away Side */}
         <div className="matchup-card-v3__side">
           <div className="matchup-card-v3__team-block">
-            <TeamCrest abbrev={game.awayTeam.abbrev} size={56} />
+            <TeamCrest abbrev={game.awayTeam.abbrev} size={72} />
             <div className="matchup-card-v3__team-details">
               <span className="matchup-card-v3__team-name">{game.awayTeam.name}</span>
               <span
@@ -132,7 +132,7 @@ function MatchupCard({ game }: { game: Prediction }) {
 
         {/* Home Side */}
         <div className="matchup-card-v3__side matchup-card-v3__side--home">
-          <div className="matchup-card-v3__team-block matchup-card-v3__team-block--home">
+          <div className="matchup-card-v3__team-block">
             <div className="matchup-card-v3__team-details" style={{ textAlign: 'right' }}>
               <span className="matchup-card-v3__team-name">{game.homeTeam.name}</span>
               <span
@@ -142,22 +142,25 @@ function MatchupCard({ game }: { game: Prediction }) {
                 {pct(game.homeWinProb)}
               </span>
             </div>
-            <TeamCrest abbrev={game.homeTeam.abbrev} size={56} />
+            <TeamCrest abbrev={game.homeTeam.abbrev} size={72} />
           </div>
         </div>
       </div>
 
-      {/* Probability Bar - High contrast */}
-      <div className="matchup-card-v3__prob-bar">
-        <div
-          className="matchup-card-v3__prob-segment matchup-card-v3__prob-segment--away"
-          style={{ width: `calc(${game.awayWinProb * 100}% - 2px)` }}
-        />
-        <div className="matchup-card-v3__prob-divider" />
-        <div
-          className="matchup-card-v3__prob-segment matchup-card-v3__prob-segment--home"
-          style={{ width: `calc(${game.homeWinProb * 100}% - 2px)` }}
-        />
+      {/* Probability Bar - High contrast with labels */}
+      <div className="matchup-card-v3__prob-wrap">
+        <span className="matchup-card-v3__prob-label matchup-card-v3__prob-label--away">{pct(game.awayWinProb)}</span>
+        <div className="matchup-card-v3__prob-bar">
+          <div
+            className="matchup-card-v3__prob-segment matchup-card-v3__prob-segment--away"
+            style={{ width: `${game.awayWinProb * 100}%` }}
+          />
+          <div
+            className="matchup-card-v3__prob-segment matchup-card-v3__prob-segment--home"
+            style={{ width: `${game.homeWinProb * 100}%` }}
+          />
+        </div>
+        <span className="matchup-card-v3__prob-label matchup-card-v3__prob-label--home">{pct(game.homeWinProb)}</span>
       </div>
 
       {/* Goalies Row - Below bar */}
@@ -166,20 +169,21 @@ function MatchupCard({ game }: { game: Prediction }) {
         <GoalieTag goalie={homeGoalie} />
       </div>
 
-      {/* Footer: Model Lean + Grade */}
+      {/* Footer: Grade on left, Model Lean + CTA on right */}
       <div className="matchup-card-v3__footer">
-        <div className="matchup-card-v3__lean">
-          <span className="matchup-card-v3__lean-label">Model lean →</span>
-          <span className="matchup-card-v3__lean-team">{favorite.name}</span>
-        </div>
-
         <div className={`matchup-card-v3__grade matchup-card-v3__grade--${grade.label.charAt(0).toLowerCase()}`}>
           <span className="matchup-card-v3__grade-letter">{grade.label}</span>
           <span className="matchup-card-v3__grade-edge">{edgePts.toFixed(1)} pts</span>
         </div>
-      </div>
 
-      <span className="matchup-card-v3__cta">View full analysis →</span>
+        <div className="matchup-card-v3__footer-right">
+          <div className="matchup-card-v3__lean">
+            <span className="matchup-card-v3__lean-label">Model lean</span>
+            <span className="matchup-card-v3__lean-team">{favorite.name}</span>
+          </div>
+          <span className="matchup-card-v3__cta">View analysis →</span>
+        </div>
+      </div>
     </Link>
   );
 }
