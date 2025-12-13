@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
-"""Fetch NHL injury data from Rotowire, DailyFaceoff, and ESPN.
+"""Fetch NHL injury data from CBS Sports and ESPN.
 
-This script scrapes Rotowire first (most reliable), then supplements with
-DailyFaceoff and ESPN data as needed.
+This script scrapes CBS Sports first (most reliable and up-to-date),
+then supplements with ESPN data as needed.
 
-Rotowire provides the most consistent and complete injury data.
+CBS Sports provides the most consistent and complete injury data with
+expected return dates.
 """
 
 from __future__ import annotations
@@ -20,6 +21,7 @@ from typing import Any
 import requests
 from bs4 import BeautifulSoup
 
+CBS_INJURIES_URL = "https://www.cbssports.com/nhl/injuries/"
 ROTOWIRE_INJURIES_URL = "https://www.rotowire.com/hockey/injury-report.php"
 ESPN_INJURIES_URL = "https://www.espn.com/nhl/injuries"
 DAILYFACEOFF_BASE_URL = "https://www.dailyfaceoff.com/teams"
@@ -420,8 +422,148 @@ def scrape_dailyfaceoff_all(timeout: float) -> dict[str, Any]:
     return teams
 
 
+def scrape_cbs_injuries(timeout: float) -> dict[str, Any]:
+    """Scrape CBS Sports NHL injuries page - primary source."""
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+        "Accept-Language": "en-US,en;q=0.5",
+    }
+
+    try:
+        response = requests.get(CBS_INJURIES_URL, headers=headers, timeout=timeout)
+        response.raise_for_status()
+    except requests.RequestException as e:
+        print(f"❌ Failed to fetch CBS Sports injuries: {e}")
+        return {}
+
+    soup = BeautifulSoup(response.text, "html.parser")
+    teams: dict[str, Any] = {}
+    now = datetime.utcnow().isoformat() + "Z"
+
+    # CBS Sports structure: Each team has a TableBaseWrapper div
+    # Team name is in TeamLogoNameLockup-name with link like /nhl/teams/ANA/anaheim-ducks/
+    # Player rows are in TableBase-bodyTr with cells for name, pos, date, injury, status
+
+    team_sections = soup.find_all("div", class_="TableBaseWrapper")
+
+    for section in team_sections:
+        # Get team abbreviation from the team link
+        team_link = section.find("a", href=re.compile(r"/nhl/teams/([A-Z]{3})/"))
+        if not team_link:
+            continue
+
+        href = team_link.get("href", "")
+        abbrev_match = re.search(r"/nhl/teams/([A-Z]{3})/", href)
+        if not abbrev_match:
+            continue
+
+        team_abbrev = abbrev_match.group(1)
+        team_name_elem = section.find("span", class_="TeamName")
+        team_name = team_name_elem.get_text(strip=True) if team_name_elem else team_abbrev
+
+        # Initialize team
+        if team_abbrev not in teams:
+            teams[team_abbrev] = {
+                "teamAbbrev": team_abbrev,
+                "teamName": team_name,
+                "injuries": [],
+                "totalOut": 0,
+                "forwardsOut": 0,
+                "defensemenOut": 0,
+                "goaliesOut": 0,
+                "impactRating": 0,
+                "lastUpdated": now,
+            }
+
+        # Find all player rows
+        rows = section.find_all("tr", class_="TableBase-bodyTr")
+
+        for row in rows:
+            cells = row.find_all("td", class_="TableBase-bodyTd")
+            if len(cells) < 4:
+                continue
+
+            # Get player name (prefer long name)
+            name_long = row.find("span", class_="CellPlayerName--long")
+            if name_long:
+                player_link = name_long.find("a")
+                player_name = player_link.get_text(strip=True) if player_link else name_long.get_text(strip=True)
+            else:
+                player_name = cells[0].get_text(strip=True)
+
+            if not player_name:
+                continue
+
+            # Get position (cell 1)
+            pos_text = cells[1].get_text(strip=True) if len(cells) > 1 else ""
+
+            # Get injury type (cell 3)
+            injury_desc = cells[3].get_text(strip=True) if len(cells) > 3 else ""
+
+            # Get status (cell 4)
+            status_text = cells[4].get_text(strip=True) if len(cells) > 4 else ""
+
+            position = normalize_position(pos_text)
+            status, is_out = parse_status(status_text or injury_desc)
+
+            # Parse expected return from status text
+            expected_return = None
+            return_match = re.search(r"until at least (\w+ \d+)", status_text)
+            if return_match:
+                expected_return = return_match.group(1)
+
+            injury = {
+                "playerId": generate_player_id(player_name, team_abbrev),
+                "playerName": player_name,
+                "teamAbbrev": team_abbrev,
+                "position": position,
+                "status": status,
+                "injuryType": parse_injury_type(injury_desc),
+                "injuryDescription": injury_desc,
+                "dateInjured": None,
+                "expectedReturn": expected_return,
+                "lastUpdated": now,
+                "isOut": is_out,
+            }
+
+            teams[team_abbrev]["injuries"].append(injury)
+
+            if is_out:
+                teams[team_abbrev]["totalOut"] += 1
+                if is_forward(position):
+                    teams[team_abbrev]["forwardsOut"] += 1
+                elif position == "D":
+                    teams[team_abbrev]["defensemenOut"] += 1
+                elif position == "G":
+                    teams[team_abbrev]["goaliesOut"] += 1
+
+    # Calculate impact ratings
+    for team_data in teams.values():
+        impact = 0
+        for inj in team_data["injuries"]:
+            if not inj["isOut"]:
+                continue
+            pos = inj["position"]
+            if pos == "G":
+                impact += 25
+            elif pos == "D":
+                impact += 15
+            else:
+                impact += 10
+
+            if inj["status"] == "IR-LT":
+                impact += 5
+            elif inj["status"] == "IR":
+                impact += 3
+
+        team_data["impactRating"] = min(100, impact)
+
+    return teams
+
+
 def scrape_rotowire_injuries(timeout: float) -> dict[str, Any]:
-    """Scrape Rotowire NHL injury report - primary source.
+    """Scrape Rotowire NHL injury report - backup source.
 
     Note: Rotowire uses JavaScript rendering, so this may not find data.
     Falls back gracefully to ESPN if no data is found.
@@ -800,27 +942,27 @@ def main() -> None:
 
     print(f"🏒 Fetching NHL injuries...")
 
-    # Try Rotowire first (most reliable and complete)
-    print("\n📋 Scraping Rotowire (primary source)...")
-    rw_teams = {}
+    # Try CBS Sports first (most reliable and complete)
+    print("\n📋 Scraping CBS Sports (primary source)...")
+    cbs_teams = {}
     try:
-        rw_teams = scrape_rotowire_injuries(args.timeout)
-        rw_count = sum(len(t.get("injuries", [])) for t in rw_teams.values())
-        print(f"  ✅ Rotowire: {rw_count} injuries found")
+        cbs_teams = scrape_cbs_injuries(args.timeout)
+        cbs_count = sum(len(t.get("injuries", [])) for t in cbs_teams.values())
+        print(f"  ✅ CBS Sports: {cbs_count} injuries found")
     except Exception as e:
-        print(f"  ⚠️  Rotowire scraping failed: {e}")
+        print(f"  ⚠️  CBS Sports scraping failed: {e}")
 
-    # Also get ESPN data (has return dates)
+    # Also get ESPN data as backup
     print("\n📋 Scraping ESPN for additional data...")
     espn_teams = scrape_espn_injuries(args.timeout)
     espn_count = sum(len(t.get("injuries", [])) for t in espn_teams.values())
     print(f"  ✅ ESPN: {espn_count} injuries found")
 
-    # Merge the data, preferring Rotowire but adding ESPN's additional data
-    if rw_teams:
-        # Use Rotowire as primary, ESPN as secondary
-        teams = merge_injury_data(rw_teams, espn_teams)
-        source = "Rotowire + ESPN"
+    # Merge the data, preferring CBS Sports but adding ESPN's additional data
+    if cbs_teams:
+        # Use CBS Sports as primary, ESPN as secondary
+        teams = merge_injury_data(cbs_teams, espn_teams)
+        source = "CBS Sports + ESPN"
     else:
         teams = espn_teams
         source = "ESPN"
