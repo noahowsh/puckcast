@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-"""Fetch NHL injury data from DailyFaceoff and ESPN.
+"""Fetch NHL injury data from Rotowire, DailyFaceoff, and ESPN.
 
-This script scrapes DailyFaceoff's team line combination pages which include
-comprehensive injury data for each team. Falls back to ESPN if needed.
+This script scrapes Rotowire first (most reliable), then supplements with
+DailyFaceoff and ESPN data as needed.
 
-DailyFaceoff provides more complete IR data than ESPN alone.
+Rotowire provides the most consistent and complete injury data.
 """
 
 from __future__ import annotations
@@ -20,6 +20,7 @@ from typing import Any
 import requests
 from bs4 import BeautifulSoup
 
+ROTOWIRE_INJURIES_URL = "https://www.rotowire.com/hockey/injury-report.php"
 ESPN_INJURIES_URL = "https://www.espn.com/nhl/injuries"
 DAILYFACEOFF_BASE_URL = "https://www.dailyfaceoff.com/teams"
 OUTPUT_PATH = Path(__file__).resolve().parents[1] / "web" / "src" / "data" / "injuries.json"
@@ -419,6 +420,148 @@ def scrape_dailyfaceoff_all(timeout: float) -> dict[str, Any]:
     return teams
 
 
+def scrape_rotowire_injuries(timeout: float) -> dict[str, Any]:
+    """Scrape Rotowire NHL injury report - primary source.
+
+    Note: Rotowire uses JavaScript rendering, so this may not find data.
+    Falls back gracefully to ESPN if no data is found.
+    """
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+        "Accept-Language": "en-US,en;q=0.5",
+    }
+
+    try:
+        response = requests.get(ROTOWIRE_INJURIES_URL, headers=headers, timeout=timeout)
+        response.raise_for_status()
+    except requests.RequestException as e:
+        print(f"❌ Failed to fetch Rotowire injuries: {e}")
+        return {}
+
+    soup = BeautifulSoup(response.text, "html.parser")
+    teams: dict[str, Any] = {}
+    now = datetime.utcnow().isoformat() + "Z"
+
+    # Rotowire uses JavaScript rendering for injury data
+    # Try to find the injury table in static HTML first
+    table = soup.find("table", class_=re.compile(r"injury", re.I))
+    if not table:
+        # Look for tables with injury-related classes or IDs
+        table = soup.find("table", id=re.compile(r"injur", re.I))
+    if not table:
+        # Try finding div containers that might have injury data
+        injury_div = soup.find("div", class_=re.compile(r"injury", re.I))
+        if injury_div:
+            table = injury_div.find("table")
+    if not table:
+        # Last resort - find any table on the page
+        tables = soup.find_all("table")
+        for t in tables:
+            # Check if table has injury-related content
+            text = t.get_text().lower()
+            if "injury" in text or "ir" in text or "dtd" in text:
+                table = t
+                break
+
+    if not table:
+        print("  ⚠️  Rotowire uses JS rendering - falling back to ESPN")
+        return {}
+
+    rows = table.find_all("tr")
+
+    for row in rows:
+        cells = row.find_all("td")
+        if len(cells) < 4:
+            continue
+
+        # Rotowire structure: Player | Team | Pos | Injury | Status | Est. Return
+        player_name = cells[0].get_text(strip=True)
+        team_text = cells[1].get_text(strip=True)
+        pos_text = cells[2].get_text(strip=True) if len(cells) > 2 else ""
+        injury_desc = cells[3].get_text(strip=True) if len(cells) > 3 else ""
+        status_text = cells[4].get_text(strip=True) if len(cells) > 4 else ""
+        return_date = cells[5].get_text(strip=True) if len(cells) > 5 else ""
+
+        if not player_name or player_name.lower() in ("player", "name", ""):
+            continue
+
+        # Get team abbreviation
+        team_abbrev = get_team_abbrev(team_text)
+        if not team_abbrev:
+            # Try partial match on abbreviation
+            team_upper = team_text.upper().strip()
+            if team_upper in ALL_TEAMS:
+                team_abbrev = team_upper
+            else:
+                continue
+
+        # Initialize team if needed
+        if team_abbrev not in teams:
+            teams[team_abbrev] = {
+                "teamAbbrev": team_abbrev,
+                "teamName": team_text,
+                "injuries": [],
+                "totalOut": 0,
+                "forwardsOut": 0,
+                "defensemenOut": 0,
+                "goaliesOut": 0,
+                "impactRating": 0,
+                "lastUpdated": now,
+            }
+
+        position = normalize_position(pos_text)
+        status, is_out = parse_status(status_text or injury_desc)
+
+        injury = {
+            "playerId": generate_player_id(player_name, team_abbrev),
+            "playerName": player_name,
+            "teamAbbrev": team_abbrev,
+            "position": position,
+            "status": status,
+            "injuryType": parse_injury_type(injury_desc),
+            "injuryDescription": injury_desc,
+            "dateInjured": None,
+            "expectedReturn": return_date if return_date and return_date.lower() not in ("out", "day-to-day", "dtd", "") else None,
+            "lastUpdated": now,
+            "isOut": is_out,
+        }
+
+        teams[team_abbrev]["injuries"].append(injury)
+
+        if is_out:
+            teams[team_abbrev]["totalOut"] += 1
+            if is_forward(position):
+                teams[team_abbrev]["forwardsOut"] += 1
+            elif position == "D":
+                teams[team_abbrev]["defensemenOut"] += 1
+            elif position == "G":
+                teams[team_abbrev]["goaliesOut"] += 1
+
+    # Calculate impact ratings
+    for team_data in teams.values():
+        impact = 0
+        for inj in team_data["injuries"]:
+            if not inj["isOut"]:
+                continue
+            pos = inj["position"]
+            if pos == "G":
+                impact += 25
+            elif pos == "D":
+                impact += 15
+            else:
+                impact += 10
+
+            if inj["status"] == "IR-LT":
+                impact += 5
+            elif inj["status"] == "IR":
+                impact += 3
+
+        team_data["impactRating"] = min(100, impact)
+
+    return teams
+
+
 def scrape_espn_injuries(timeout: float) -> dict[str, Any]:
     """Scrape ESPN NHL injuries page."""
     headers = {
@@ -657,14 +800,15 @@ def main() -> None:
 
     print(f"🏒 Fetching NHL injuries...")
 
-    # Try DailyFaceoff first (more complete data)
-    df_teams = {}
+    # Try Rotowire first (most reliable and complete)
+    print("\n📋 Scraping Rotowire (primary source)...")
+    rw_teams = {}
     try:
-        df_teams = scrape_dailyfaceoff_all(args.timeout)
-        df_count = sum(len(t.get("injuries", [])) for t in df_teams.values())
-        print(f"  ✅ DailyFaceoff: {df_count} injuries found")
+        rw_teams = scrape_rotowire_injuries(args.timeout)
+        rw_count = sum(len(t.get("injuries", [])) for t in rw_teams.values())
+        print(f"  ✅ Rotowire: {rw_count} injuries found")
     except Exception as e:
-        print(f"  ⚠️  DailyFaceoff scraping failed: {e}")
+        print(f"  ⚠️  Rotowire scraping failed: {e}")
 
     # Also get ESPN data (has return dates)
     print("\n📋 Scraping ESPN for additional data...")
@@ -672,11 +816,11 @@ def main() -> None:
     espn_count = sum(len(t.get("injuries", [])) for t in espn_teams.values())
     print(f"  ✅ ESPN: {espn_count} injuries found")
 
-    # Merge the data, preferring DailyFaceoff but adding ESPN's return dates
-    if df_teams:
-        # Use DailyFaceoff as primary, ESPN as secondary
-        teams = merge_injury_data(df_teams, espn_teams)
-        source = "DailyFaceoff + ESPN"
+    # Merge the data, preferring Rotowire but adding ESPN's additional data
+    if rw_teams:
+        # Use Rotowire as primary, ESPN as secondary
+        teams = merge_injury_data(rw_teams, espn_teams)
+        source = "Rotowire + ESPN"
     else:
         teams = espn_teams
         source = "ESPN"
