@@ -67,12 +67,36 @@ def fetch_game_results(game_id: str) -> Dict[str, Any] | None:
     """
     Fetch actual game results from NHL API.
 
-    In production, this would query the NHL API for game outcomes.
-    For now, we'll return None and rely on manually updated results.
+    Returns game outcome with home/away scores if game is complete.
     """
-    # TODO: Implement NHL API call to get final scores
-    # Example: https://api-web.nhle.com/v1/gamecenter/{game_id}/boxscore
-    return None
+    import ssl
+    from urllib.request import Request, urlopen
+
+    url = f"https://api-web.nhle.com/v1/gamecenter/{game_id}/boxscore"
+    req = Request(url, headers={"User-Agent": "Mozilla/5.0"})
+    context = ssl._create_unverified_context()
+
+    try:
+        with urlopen(req, timeout=30, context=context) as response:
+            data = json.loads(response.read().decode("utf-8"))
+            game_state = data.get("gameState", "")
+
+            if game_state not in ["FINAL", "OFF"]:
+                return None  # Game not complete
+
+            home_score = data.get("homeTeam", {}).get("score", 0)
+            away_score = data.get("awayTeam", {}).get("score", 0)
+
+            return {
+                "gameId": game_id,
+                "homeScore": home_score,
+                "awayScore": away_score,
+                "actualWinner": "home" if home_score > away_score else "away",
+                "gameState": game_state,
+            }
+    except Exception as e:
+        print(f"  Failed to fetch results for game {game_id}: {e}")
+        return None
 
 
 def analyze_calibration(games: List[Dict[str, Any]]) -> Dict[str, Any]:
