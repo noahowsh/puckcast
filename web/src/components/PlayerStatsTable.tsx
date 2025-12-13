@@ -403,21 +403,22 @@ interface LeaderRowProps {
   team: string;
   value: string | number;
   playerId: number;
+  headshot?: string | null;
   isGoalie?: boolean;
 }
 
-export function LeaderRow({ rank, name, fullName, team, value, playerId, isGoalie = false }: LeaderRowProps) {
+export function LeaderRow({ rank, name, fullName, team, value, playerId, headshot, isGoalie = false }: LeaderRowProps) {
   // Use fullName if provided, otherwise fall back to name for slug generation
   const playerName = fullName || name;
   const href = isGoalie ? getGoalieUrl(playerId, playerName) : getPlayerUrl(playerId, playerName);
 
   return (
     <Link href={href} className="block">
-      <div className="flex items-center gap-4 py-3 px-4 rounded-lg hover:bg-white/[0.06] transition-colors cursor-pointer">
-        <span className={`w-7 text-sm font-bold ${rank <= 3 ? "text-amber-400" : "text-white/40"}`}>
+      <div className="flex items-center gap-3 py-2.5 px-3 rounded-lg hover:bg-white/[0.06] transition-colors cursor-pointer">
+        <span className={`w-5 text-xs font-bold ${rank <= 3 ? "text-amber-400" : "text-white/40"}`}>
           {rank}
         </span>
-        <TeamLogo teamAbbrev={team} size="sm" />
+        <PlayerAvatar headshot={headshot || null} name={name} teamAbbrev={team} size={28} />
         <span className="flex-1 text-sm font-medium text-white truncate">{name}</span>
         <span className="text-base font-bold text-sky-300">{value}</span>
       </div>

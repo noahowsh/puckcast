@@ -10,6 +10,7 @@ export function SiteFooter() {
     { href: "/leaderboards", label: "Power Rankings" },
     { href: "/performance", label: "Performance" },
     { href: "/teams", label: "Teams" },
+    { href: "/players", label: "Players" },
   ];
 
   return (
@@ -31,7 +32,7 @@ export function SiteFooter() {
             </div>
           </div>
           <p className="footer-copy">
-            Daily AI-powered win probabilities and weekly power rankings built from real NHL data. Clarity for fans who want signal over noise.
+            Daily win probabilities and power rankings built from real NHL data. Clarity for fans who want signal over noise.
           </p>
           <div className="footer-links">
             {links.map((link) => (

@@ -168,19 +168,19 @@ export default async function TeamsIndexPage() {
           <h2 className="text-xl font-bold text-white mb-4">All 32 Teams</h2>
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {allTeams.map((team) => (
-              <Link key={team.abbrev} href={`/teams/${team.abbrev.toLowerCase()}`} className="card group">
-                <div className="flex items-start gap-4">
+              <Link key={team.abbrev} href={`/teams/${team.abbrev.toLowerCase()}`} className="card group p-4">
+                <div className="flex items-center gap-4">
                   <div className="flex-shrink-0">
-                    <TeamLogo teamAbbrev={team.abbrev} size="md" />
+                    <TeamLogo teamAbbrev={team.abbrev} size="lg" />
                   </div>
                   <div className="flex-1 min-w-0">
                     <h3 className="text-lg font-bold text-white group-hover:text-cyan-400 transition-colors leading-tight mb-1">
                       {team.team}
                     </h3>
-                    <p className="text-sm text-white/60">{team.record}</p>
-                    <div className="flex items-center gap-2 mt-2">
+                    <p className="text-sm text-white/60 mb-2">{team.record}</p>
+                    <div className="flex flex-wrap items-center gap-1.5">
                       <span className="chip-soft chip-soft--mini">{team.points} pts</span>
-                      <span className="chip-soft chip-soft--mini">{(team.pointPctg * 100).toFixed(0)}% pt pct</span>
+                      <span className="chip-soft chip-soft--mini">{(team.pointPctg * 100).toFixed(0)}%</span>
                       <span className="chip-soft chip-soft--mini">#{team.powerRank}</span>
                     </div>
                   </div>

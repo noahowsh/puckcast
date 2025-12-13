@@ -72,17 +72,6 @@ function EdgeMeter({ value }: { value: number }) {
   );
 }
 
-function getSummary(predictions: Prediction[]) {
-  if (!predictions.length) {
-    return { avgEdge: 0, aGrades: 0, tossUps: 0 };
-  }
-  const edges = predictions.map((g) => Math.abs(g.edge));
-  const avgEdge = edges.reduce((acc, curr) => acc + curr, 0) / predictions.length;
-  const aGrades = predictions.filter((g) => getPredictionGrade(g.edge).label.includes("A")).length;
-  const tossUps = predictions.filter((g) => Math.abs(g.edge) < 0.02).length;
-  return { avgEdge, aGrades, tossUps };
-}
-
 function PredictionRow({ game }: { game: Prediction }) {
   const favorite = game.modelFavorite === "home" ? game.homeTeam : game.awayTeam;
   const prob = game.modelFavorite === "home" ? game.homeWinProb : game.awayWinProb;
@@ -207,7 +196,6 @@ function ConfidenceLadder() {
 
 export default function PredictionsPage() {
   const [sortBy, setSortBy] = useState<SortKey>("edge");
-  const summary = getSummary(todaysPredictions);
 
   const sortedGames = useMemo(() => {
     const games = [...todaysPredictions];
@@ -273,16 +261,10 @@ export default function PredictionsPage() {
                 })()}
               </div>
 
-              {/* Summary stats */}
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem', paddingTop: '0.75rem', borderTop: '1px solid var(--border-subtle)' }}>
-                <div style={{ textAlign: 'center' }}>
-                  <p style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--mint)' }}>{(summary.avgEdge * 100).toFixed(1)}</p>
-                  <p style={{ fontSize: '0.7rem', color: 'var(--text-tertiary)', textTransform: 'uppercase' }}>Avg edge (pts)</p>
-                </div>
-                <div style={{ textAlign: 'center' }}>
-                  <p style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--aqua)' }}>{pct(modelInsights.overall.accuracy)}</p>
-                  <p style={{ fontSize: '0.7rem', color: 'var(--text-tertiary)', textTransform: 'uppercase' }}>Model accuracy</p>
-                </div>
+              {/* Summary stat */}
+              <div style={{ paddingTop: '0.75rem', borderTop: '1px solid var(--border-subtle)', textAlign: 'center' }}>
+                <p style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--aqua)' }}>{pct(modelInsights.overall.accuracy)}</p>
+                <p style={{ fontSize: '0.7rem', color: 'var(--text-tertiary)', textTransform: 'uppercase' }}>Model accuracy</p>
               </div>
 
               <div className="cta-row" style={{ marginTop: '1rem' }}>

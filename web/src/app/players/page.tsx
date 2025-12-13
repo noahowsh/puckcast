@@ -129,6 +129,7 @@ export default async function PlayersPage() {
                       team={player.bio.teamAbbrev}
                       value={player.stats.points}
                       playerId={player.bio.playerId}
+                      headshot={player.bio.headshot}
                     />
                   ))}
                 </div>
@@ -148,6 +149,7 @@ export default async function PlayersPage() {
                       team={player.bio.teamAbbrev}
                       value={player.stats.goals}
                       playerId={player.bio.playerId}
+                      headshot={player.bio.headshot}
                     />
                   ))}
                 </div>
@@ -167,6 +169,7 @@ export default async function PlayersPage() {
                       team={player.bio.teamAbbrev}
                       value={player.stats.assists}
                       playerId={player.bio.playerId}
+                      headshot={player.bio.headshot}
                     />
                   ))}
                 </div>
@@ -200,6 +203,7 @@ export default async function PlayersPage() {
                     team={player.bio.teamAbbrev}
                     value={player.stats.powerPlayGoals}
                     playerId={player.bio.playerId}
+                      headshot={player.bio.headshot}
                   />
                 ))}
               </div>
@@ -219,6 +223,7 @@ export default async function PlayersPage() {
                     team={player.bio.teamAbbrev}
                     value={`+${player.stats.plusMinus}`}
                     playerId={player.bio.playerId}
+                      headshot={player.bio.headshot}
                   />
                 ))}
               </div>
@@ -238,6 +243,7 @@ export default async function PlayersPage() {
                     team={player.bio.teamAbbrev}
                     value={player.stats.gameWinningGoals}
                     playerId={player.bio.playerId}
+                      headshot={player.bio.headshot}
                   />
                 ))}
               </div>
@@ -257,6 +263,7 @@ export default async function PlayersPage() {
                     team={player.bio.teamAbbrev}
                     value={player.stats.shots}
                     playerId={player.bio.playerId}
+                      headshot={player.bio.headshot}
                   />
                 ))}
               </div>
@@ -292,6 +299,7 @@ export default async function PlayersPage() {
                     team={goalie.bio.teamAbbrev}
                     value={goalie.stats.wins}
                     playerId={goalie.bio.playerId}
+                    headshot={goalie.bio.headshot}
                     isGoalie
                   />
                 ))}
@@ -312,6 +320,7 @@ export default async function PlayersPage() {
                     team={goalie.bio.teamAbbrev}
                     value={`.${Math.round(goalie.stats.savePct * 1000)}`}
                     playerId={goalie.bio.playerId}
+                    headshot={goalie.bio.headshot}
                     isGoalie
                   />
                 ))}
@@ -332,6 +341,7 @@ export default async function PlayersPage() {
                     team={goalie.bio.teamAbbrev}
                     value={goalie.stats.goalsAgainstAverage.toFixed(2)}
                     playerId={goalie.bio.playerId}
+                    headshot={goalie.bio.headshot}
                     isGoalie
                   />
                 ))}
@@ -352,6 +362,7 @@ export default async function PlayersPage() {
                     team={goalie.bio.teamAbbrev}
                     value={goalie.stats.shutouts}
                     playerId={goalie.bio.playerId}
+                    headshot={goalie.bio.headshot}
                     isGoalie
                   />
                 ))}
