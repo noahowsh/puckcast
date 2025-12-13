@@ -1,3 +1,14 @@
+# =============================================================================
+# Fetch Game Results & Backtesting Workflow
+# =============================================================================
+# Fetches completed game results and updates prediction accuracy tracking:
+# - Runs daily at 4am ET to catch previous night's games
+# - Updates archived predictions with actual outcomes
+# - Generates accuracy metrics for performance dashboard
+#
+# Can be manually triggered for specific dates or date ranges.
+# =============================================================================
+
 name: Fetch Game Results & Backtesting
 
 on:

@@ -1,7 +1,15 @@
+/**
+ * LineupDisplay - Visual components for team lineup projections
+ *
+ * Shows:
+ * - Projected lineup with forwards, defensemen, goalies
+ * - Lineup strength metrics (offense, defense, goalie quality)
+ * - Injury impact indicators
+ * - Healthy scratches and IR list
+ *
+ * Used on matchup pages and team detail pages.
+ */
 "use client";
-
-// Lineup Display Components
-// Visual components for showing projected lineups and strength metrics
 
 import { useState } from "react";
 import Link from "next/link";

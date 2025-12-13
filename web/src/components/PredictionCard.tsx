@@ -1,3 +1,13 @@
+/**
+ * PredictionCard - Displays a single game prediction with team matchup and probabilities
+ *
+ * Shows:
+ * - Team logos and names
+ * - Win probability percentages
+ * - Model's pick and confidence grade
+ * - Edge over Vegas lines (if available)
+ * - Social sharing buttons
+ */
 import type { Prediction } from "@/types/prediction";
 import { getPredictionGrade, normalizeSummaryWithGrade } from "@/lib/prediction";
 

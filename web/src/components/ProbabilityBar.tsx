@@ -1,6 +1,13 @@
+/**
+ * ProbabilityBar - Visual representation of win probability split between two teams
+ *
+ * Displays a horizontal bar showing the relative win probability for home vs away team.
+ * Color-coded by team and includes optional percentage labels.
+ */
 import React from 'react';
 
 interface ProbabilityBarProps {
+  /** Home team win probability (0-1) */
   homeProb: number;
   awayProb: number;
   homeTeam: string;

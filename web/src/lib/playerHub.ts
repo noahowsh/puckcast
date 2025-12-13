@@ -410,6 +410,13 @@ async function fetchAllGoalieStatsMap(): Promise<Map<number, NHLApiGoalieStats>>
 // Team-Specific Functions (NEW APPROACH)
 // =============================================================================
 
+/**
+ * Fetches and enriches a team's complete roster with current season statistics.
+ * Combines roster data from NHL Web API with stats from NHL Stats API.
+ * Includes AHL call-ups who have played games but aren't on the active roster.
+ * @param teamAbbrev - Three-letter team abbreviation (e.g., "TOR", "NYR")
+ * @returns Complete team roster with forwards, defensemen, and goalies
+ */
 export async function fetchTeamRoster(teamAbbrev: string): Promise<TeamRoster> {
   // Fetch roster and stats in parallel
   const [roster, skaterStatsMap, goalieStatsMap] = await Promise.all([
@@ -704,6 +711,12 @@ function mergeGoalieRosterWithStats(
 // Uses cached maps to prevent rate limiting during static generation
 // =============================================================================
 
+/**
+ * Fetches all NHL skaters with at least the minimum games played.
+ * Results are sorted by points (descending) and enriched with team info.
+ * @param minGames - Minimum games played filter (default: 1)
+ * @returns Array of skater cards sorted by points
+ */
 export async function fetchSkaterStats(minGames = MIN_SKATER_GAMES): Promise<SkaterCard[]> {
   // Fetch stats and team lookup in parallel
   const [statsMap, teamLookup] = await Promise.all([
@@ -730,6 +743,12 @@ export async function fetchSkaterStats(minGames = MIN_SKATER_GAMES): Promise<Ska
     .sort((a, b) => b.stats.points - a.stats.points);
 }
 
+/**
+ * Fetches all NHL goalies with at least the minimum games played.
+ * Results are sorted by wins (descending) and enriched with team info.
+ * @param minGames - Minimum games played filter (default: 1)
+ * @returns Array of goalie cards sorted by wins
+ */
 export async function fetchGoalieStats(minGames = MIN_GOALIE_GAMES): Promise<GoalieDetailCard[]> {
   // Fetch stats and team lookup in parallel
   const [statsMap, teamLookup] = await Promise.all([
@@ -756,6 +775,11 @@ export async function fetchGoalieStats(minGames = MIN_GOALIE_GAMES): Promise<Goa
     .sort((a, b) => b.stats.wins - a.stats.wins);
 }
 
+/**
+ * Fetches league-wide skater leaders across multiple categories.
+ * Includes: points, goals, assists, +/-, PPG, GWG, shots, hits, blocks, TOI, rookies.
+ * @returns Object containing top 10 players in each category
+ */
 export async function fetchSkaterLeaders(): Promise<LeagueSkaterLeaders> {
   const allSkaters = await fetchSkaterStats(MIN_SKATER_GAMES);
 
@@ -782,6 +806,11 @@ export async function fetchSkaterLeaders(): Promise<LeagueSkaterLeaders> {
   };
 }
 
+/**
+ * Fetches league-wide goalie leaders across multiple categories.
+ * Rate stats (SV%, GAA) require 10+ games played for qualification.
+ * @returns Object containing top 10 goalies in each category
+ */
 export async function fetchGoalieLeaders(): Promise<LeagueGoalieLeaders> {
   const allGoalies = await fetchGoalieStats(MIN_GOALIE_GAMES);
 
@@ -805,6 +834,12 @@ export async function fetchGoalieLeaders(): Promise<LeagueGoalieLeaders> {
 // Individual Player Functions
 // =============================================================================
 
+/**
+ * Fetches a single skater by their NHL player ID.
+ * Enriches with bio data from the player landing page API.
+ * @param playerId - NHL player ID
+ * @returns Skater card with full bio and stats, or null if not found
+ */
 export async function fetchSkaterById(playerId: number): Promise<SkaterCard | null> {
   // Use cached stats map for better performance
   const statsMap = await fetchAllSkaterStatsMap();
@@ -837,6 +872,12 @@ export async function fetchSkaterById(playerId: number): Promise<SkaterCard | nu
   return card;
 }
 
+/**
+ * Fetches a single goalie by their NHL player ID.
+ * Enriches with bio data from the player landing page API.
+ * @param playerId - NHL player ID
+ * @returns Goalie card with full bio and stats, or null if not found
+ */
 export async function fetchGoalieById(playerId: number): Promise<GoalieDetailCard | null> {
   // Use cached stats map for better performance
   const statsMap = await fetchAllGoalieStatsMap();
@@ -868,18 +909,28 @@ export async function fetchGoalieById(playerId: number): Promise<GoalieDetailCar
   return card;
 }
 
-// Deprecated: Use fetchTeamRoster instead
+/**
+ * @deprecated Use fetchTeamRoster instead for better performance
+ */
 export async function fetchTeamSkaters(teamAbbrev: string): Promise<SkaterCard[]> {
   const roster = await fetchTeamRoster(teamAbbrev);
   return [...roster.forwards, ...roster.defensemen];
 }
 
-// Deprecated: Use fetchTeamRoster instead
+/**
+ * @deprecated Use fetchTeamRoster instead for better performance
+ */
 export async function fetchTeamGoalies(teamAbbrev: string): Promise<GoalieDetailCard[]> {
   const roster = await fetchTeamRoster(teamAbbrev);
   return roster.goalies;
 }
 
+/**
+ * Fetches the statistical leaders for a single team.
+ * Returns top player in each category: points, goals, assists, +/-, and starting goalie.
+ * @param teamAbbrev - Three-letter team abbreviation
+ * @returns Team leaders object
+ */
 export async function fetchTeamLeaders(teamAbbrev: string): Promise<TeamLeaders> {
   const roster = await fetchTeamRoster(teamAbbrev);
 
@@ -1068,6 +1119,11 @@ async function fetchSkaterRealTimeStatsInternal(): Promise<Map<number, { hits: n
   return map;
 }
 
+/**
+ * Fetches real-time stats (hits, blocked shots) for all skaters.
+ * Uses caching to prevent API rate limiting during static generation.
+ * @returns Map of player ID to hits/blocks stats
+ */
 export async function fetchSkaterRealTimeStats(): Promise<Map<number, { hits: number; blockedShots: number }>> {
   // Return from cache if available
   if (realtimeStatsCache) {
@@ -1090,6 +1146,12 @@ export async function fetchSkaterRealTimeStats(): Promise<Map<number, { hits: nu
   }
 }
 
+/**
+ * Fetches skater stats enriched with real-time data (hits, blocks).
+ * Combines base stats with real-time endpoint for complete picture.
+ * @param minGames - Minimum games played filter (default: 1)
+ * @returns Array of skater cards with enriched stats
+ */
 export async function fetchEnrichedSkaterStats(minGames = MIN_SKATER_GAMES): Promise<SkaterCard[]> {
   const [baseSkaters, realTimeStats] = await Promise.all([
     fetchSkaterStats(minGames),
@@ -1117,6 +1179,10 @@ export interface PlayerHubContext {
   goalieShotProfiles?: any[];
 }
 
+/**
+ * Returns legacy context object for backward compatibility.
+ * @deprecated This is a stub for legacy code paths
+ */
 export function getPlayerHubContext(): PlayerHubContext {
   return {
     specialTeams: null,
@@ -1128,6 +1194,12 @@ export function getPlayerHubContext(): PlayerHubContext {
 // Search Functions
 // =============================================================================
 
+/**
+ * Searches for players by name (first name, last name, or full name).
+ * Returns up to 20 skaters and 10 goalies matching the query.
+ * @param query - Search string (minimum 2 characters)
+ * @returns Object containing matching skaters and goalies
+ */
 export async function searchPlayers(query: string): Promise<{ skaters: SkaterCard[]; goalies: GoalieDetailCard[] }> {
   const normalizedQuery = query.toLowerCase().trim();
   if (normalizedQuery.length < 2) {
@@ -1156,6 +1228,13 @@ export async function searchPlayers(query: string): Promise<{ skaters: SkaterCar
 // Stat Formatting Utilities
 // =============================================================================
 
+/**
+ * Formats a stat value for display based on the specified format type.
+ * @param value - The stat value to format
+ * @param format - Format type: number, decimal, percent, time, or plusMinus
+ * @param precision - Decimal precision (default: 1)
+ * @returns Formatted string (or "—" for null/invalid values)
+ */
 export function formatStat(value: number | string | null, format: "number" | "decimal" | "percent" | "time" | "plusMinus", precision = 1): string {
   if (value === null || value === undefined) return "—";
 

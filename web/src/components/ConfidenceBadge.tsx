@@ -1,6 +1,16 @@
+/**
+ * ConfidenceBadge - Displays prediction confidence as a color-coded grade badge
+ *
+ * Used throughout the site to show model confidence levels:
+ * - S/A grade (green): High confidence predictions
+ * - B grade (yellow): Medium confidence
+ * - C grade (orange): Lower confidence
+ * - D/F grade (red): Low confidence
+ */
 import React from 'react';
 
 interface ConfidenceBadgeProps {
+  /** The confidence grade (e.g., "A+", "B", "C-") */
   grade: string;
   showLabel?: boolean;
   size?: 'sm' | 'md' | 'lg';
@@ -41,6 +51,11 @@ export function ConfidenceBadge({
   );
 }
 
+/**
+ * Returns the CSS color variable for a given confidence grade.
+ * @param grade - The confidence grade (e.g., "A+", "B", "C-")
+ * @returns CSS variable string for the grade color
+ */
 export function getConfidenceColor(grade: string): string {
   const normalizedGrade = grade.replace(/[+-]/g, '').toUpperCase();
 

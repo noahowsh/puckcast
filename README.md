@@ -1,6 +1,6 @@
 # 🏒 Puckcast NHL Prediction Model - Complete Documentation
 
-> **Last Updated**: December 7, 2025
+> **Last Updated**: December 13, 2025
 > **Current Model**: V7.0 (Adaptive Weights)
 > **Production Accuracy**: 60.9% on 4-season holdout (5,002 games)
 > **Features**: 39 + adaptive weights
@@ -67,9 +67,9 @@ puckcast/
 │   ├── pipeline.py                  # Feature engineering pipeline
 │   ├── model.py                     # Model training/prediction
 │   ├── situational_features.py      # ⭐ V7.0 situational features
-│   ├── head_to_head_features.py     # Test: H2H (not used in production)
-│   ├── interaction_features.py      # Test: interactions (not used)
-│   └── team_calibration_features.py # Test: calibration (not used)
+│   ├── goalie_features.py           # Team-level goalie metrics
+│   ├── special_teams_features.py    # Power play / penalty kill
+│   └── travel_features.py           # Travel & fatigue factors
 │
 ├── training/                        # 🎓 Training Scripts
 │   ├── README.md                    # Training documentation

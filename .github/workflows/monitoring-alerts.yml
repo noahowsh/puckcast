@@ -1,3 +1,14 @@
+# =============================================================================
+# Monitoring & Alerts Workflow
+# =============================================================================
+# Monitors workflow health and sends notifications on failures:
+# - Watches "Daily Predictions Update" and "Scheduled Data Refresh" workflows
+# - Runs health checks every 6 hours
+# - Sends alerts to configured channels (Discord/Slack) on failures
+#
+# Configure ALERT_WEBHOOK_URL secret for notifications.
+# =============================================================================
+
 name: Monitoring & Alerts
 
 on:

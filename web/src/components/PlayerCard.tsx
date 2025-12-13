@@ -1,3 +1,13 @@
+/**
+ * PlayerCard - Displays player information in a card format
+ *
+ * Used for:
+ * - League leaders lists
+ * - Team roster displays
+ * - Search results
+ *
+ * Supports both skaters and goalies with different stat displays.
+ */
 "use client";
 
 import Link from "next/link";

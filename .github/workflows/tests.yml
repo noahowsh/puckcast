@@ -1,3 +1,15 @@
+# =============================================================================
+# Tests & CI Workflow
+# =============================================================================
+# Runs on every push and PR to ensure code quality:
+# - Python unit tests (pytest)
+# - Linting checks
+# - Syntax validation
+# - Frontend tests (Vitest)
+#
+# Required for merging PRs to main/develop branches.
+# =============================================================================
+
 name: Tests & CI
 
 on:

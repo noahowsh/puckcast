@@ -38,7 +38,11 @@ const RANKING_WEIGHTS = {
 // =============================================================================
 
 /**
- * Build a projected lineup for a team
+ * Builds a projected lineup for a team based on current roster and injury status.
+ * Fetches roster data, applies injury filters, ranks players by performance,
+ * and calculates lineup strength metrics.
+ * @param teamAbbrev - Three-letter team abbreviation (e.g., "TOR", "NYR")
+ * @returns Complete team lineup with projected starters, healthy scratches, and IR list
  */
 export async function buildProjectedLineup(teamAbbrev: string): Promise<TeamLineup> {
   // Fetch roster and injuries in parallel
@@ -499,7 +503,13 @@ function calculateLineupStrength(
 // =============================================================================
 
 /**
- * Generate lineup features for the prediction model
+ * Generates lineup-based features for the prediction model.
+ * Compares home vs away team lineup quality, injuries, and goalie strength.
+ * Used as input features for game outcome predictions.
+ * @param homeTeam - Home team abbreviation
+ * @param awayTeam - Away team abbreviation
+ * @param gameId - Unique game identifier
+ * @returns Lineup features for both teams with comparative advantages
  */
 export async function generateLineupFeatures(
   homeTeam: string,
@@ -557,7 +567,10 @@ function lineupToFeatures(lineup: TeamLineup, gameId: string): LineupFeatures {
 // =============================================================================
 
 /**
- * Build projected lineups for all teams
+ * Builds projected lineups for multiple teams in batches.
+ * Processes 4 teams at a time to avoid API rate limiting.
+ * @param teamAbbrevs - Array of team abbreviations to process
+ * @returns Record mapping team abbreviation to lineup data
  */
 export async function buildAllTeamLineups(teamAbbrevs: string[]): Promise<Record<string, TeamLineup>> {
   const lineups: Record<string, TeamLineup> = {};
