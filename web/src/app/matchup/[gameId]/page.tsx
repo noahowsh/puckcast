@@ -9,6 +9,37 @@ import type { Prediction } from "@/types/prediction";
 import { getPredictionGrade } from "@/lib/prediction";
 import { TeamCrest } from "@/components/TeamCrest";
 import { getContrastingTeamColor } from "@/lib/teamColors";
+import startingGoaliesData from "@/data/startingGoalies.json";
+
+// Starting goalies types
+type StartingGoalieEntry = {
+  team: string;
+  playerId: number | null;
+  goalieName: string | null;
+  confirmedStart: boolean;
+  statusCode: string;
+  statusDescription: string;
+  lastUpdated: string;
+};
+
+type StartingGoaliesPayload = {
+  generatedAt: string;
+  source: string;
+  date: string;
+  teams: Record<string, StartingGoalieEntry>;
+};
+
+const startingGoalies = startingGoaliesData as StartingGoaliesPayload;
+
+function getGoalieStatusColor(statusCode: string): string {
+  switch (statusCode.toLowerCase()) {
+    case 'confirmed': return '#10b981';
+    case 'expected': return '#3b82f6';
+    case 'likely': return '#f59e0b';
+    case 'probable': return '#f97316';
+    default: return 'var(--text-tertiary)';
+  }
+}
 
 const payload = getPredictionsPayload();
 const standings = getCurrentStandings();
@@ -282,6 +313,68 @@ export default function MatchupPage({ params }: PageProps) {
           </div>
           <p className="matchup-pick-banner__summary">{game.summary}</p>
         </section>
+
+        {/* Starting Goalies Section */}
+        {(() => {
+          const homeGoalie = startingGoalies.teams[game.homeTeam.abbrev];
+          const awayGoalie = startingGoalies.teams[game.awayTeam.abbrev];
+          if (!homeGoalie?.goalieName && !awayGoalie?.goalieName) return null;
+          return (
+            <section className="matchup-goalies-banner">
+              <h3 className="matchup-section-title">Starting Goalies</h3>
+              <div className="matchup-goalies-banner__grid">
+                {/* Away Goalie */}
+                <div className="matchup-goalie-banner" style={{ borderColor: awayColor }}>
+                  <div className="matchup-goalie-banner__header">
+                    <TeamCrest abbrev={game.awayTeam.abbrev} size={32} />
+                    <span className="matchup-goalie-banner__team">{game.awayTeam.abbrev}</span>
+                  </div>
+                  {awayGoalie?.goalieName ? (
+                    <>
+                      <p className="matchup-goalie-banner__name">{awayGoalie.goalieName}</p>
+                      <div className="matchup-goalie-banner__status" style={{
+                        background: `${getGoalieStatusColor(awayGoalie.statusCode)}15`,
+                        borderColor: `${getGoalieStatusColor(awayGoalie.statusCode)}40`,
+                        color: getGoalieStatusColor(awayGoalie.statusCode),
+                      }}>
+                        {awayGoalie.statusCode}
+                      </div>
+                    </>
+                  ) : (
+                    <p className="matchup-goalie-banner__tbd">TBD</p>
+                  )}
+                </div>
+
+                <div className="matchup-goalies-banner__vs">VS</div>
+
+                {/* Home Goalie */}
+                <div className="matchup-goalie-banner" style={{ borderColor: homeColor }}>
+                  <div className="matchup-goalie-banner__header">
+                    <TeamCrest abbrev={game.homeTeam.abbrev} size={32} />
+                    <span className="matchup-goalie-banner__team">{game.homeTeam.abbrev}</span>
+                  </div>
+                  {homeGoalie?.goalieName ? (
+                    <>
+                      <p className="matchup-goalie-banner__name">{homeGoalie.goalieName}</p>
+                      <div className="matchup-goalie-banner__status" style={{
+                        background: `${getGoalieStatusColor(homeGoalie.statusCode)}15`,
+                        borderColor: `${getGoalieStatusColor(homeGoalie.statusCode)}40`,
+                        color: getGoalieStatusColor(homeGoalie.statusCode),
+                      }}>
+                        {homeGoalie.statusCode}
+                      </div>
+                    </>
+                  ) : (
+                    <p className="matchup-goalie-banner__tbd">TBD</p>
+                  )}
+                </div>
+              </div>
+              <p className="matchup-goalies-banner__source">
+                Source: {startingGoalies.source} • Updated: {new Date(startingGoalies.generatedAt).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })}
+              </p>
+            </section>
+          );
+        })()}
 
         {/* Team comparison stats */}
         {comparisonStats.length > 0 && (

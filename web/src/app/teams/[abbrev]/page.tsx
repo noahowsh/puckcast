@@ -281,18 +281,25 @@ export default async function TeamPage({ params }: { params: Promise<{ abbrev: s
                 <div style={{ position: 'relative', width: '120px', height: '120px' }}>
                   {/* Progress ring */}
                   <svg width="120" height="120" viewBox="0 0 120 120" style={{ position: 'absolute', transform: 'rotate(-90deg)' }}>
-                    <circle cx="60" cy="60" r="52" fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth="8" />
-                    <circle cx="60" cy="60" r="52" fill="none" stroke={getRankColor(teamData.powerRank)} strokeWidth="8"
-                      strokeDasharray={`${((33 - teamData.powerRank) / 32) * 327} 327`} strokeLinecap="round" />
+                    <circle cx="60" cy="60" r="56" fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth="6" />
+                    <circle cx="60" cy="60" r="56" fill="none" stroke={getRankColor(teamData.powerRank)} strokeWidth="6"
+                      strokeDasharray={`${((33 - teamData.powerRank) / 32) * 352} 352`} strokeLinecap="round" />
                   </svg>
-                  {/* Logo centered */}
-                  <div className="team-hero-crest" style={{
+                  {/* Logo with gradient background filling the ring */}
+                  <div style={{
                     position: 'absolute',
                     top: '50%',
                     left: '50%',
                     transform: 'translate(-50%, -50%)',
+                    width: '100px',
+                    height: '100px',
+                    borderRadius: '50%',
+                    background: 'radial-gradient(circle, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 70%, transparent 100%)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
                   }}>
-                    <TeamCrest abbrev={teamData.abbrev} size={64} />
+                    <TeamCrest abbrev={teamData.abbrev} size={72} />
                   </div>
                 </div>
                 <div style={{ flex: 1 }}>

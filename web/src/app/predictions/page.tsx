@@ -188,7 +188,6 @@ function ConfidenceLadder() {
         <div>
           <p className="eyebrow">Model Performance</p>
           <h3>Confidence Ladder</h3>
-          <p className="lead-sm">Holdout accuracy by prediction confidence band</p>
         </div>
         <Link href="/performance" className="cta cta-ghost">
           Full breakdown →
@@ -197,15 +196,15 @@ function ConfidenceLadder() {
       <div className="confidence-ladder-bottom__grid">
         {ladder.map((bucket) => (
           <div key={bucket.label} className="confidence-ladder-bottom__item">
+            <span className="confidence-ladder-bottom__grade">{bucket.grade}</span>
             <div className="confidence-ladder-bottom__bar-wrap">
               <div
                 className="confidence-ladder-bottom__bar"
-                style={{ height: `${Math.max(bucket.accuracy * 100, 10)}%` }}
+                style={{ width: `${Math.max(bucket.accuracy * 100, 10)}%` }}
               />
             </div>
             <span className="confidence-ladder-bottom__pct">{pct(bucket.accuracy)}</span>
-            <span className="confidence-ladder-bottom__grade">{bucket.grade}</span>
-            <span className="confidence-ladder-bottom__count">{bucket.count} games</span>
+            <span className="confidence-ladder-bottom__count">{bucket.count}</span>
           </div>
         ))}
       </div>
