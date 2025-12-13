@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2025-12-12T23:13:23.693022+00:00",
+  "updatedAt": "2025-12-13T13:19:50.858198+00:00",
   "notes": "Goalie performance metrics calculated from NHL Stats API data. GSAx estimates based on save percentage above league average.",
   "goalies": [
     {
@@ -108,7 +108,7 @@
       "watchouts": [
         "Limited recent data"
       ],
-      "nextOpponent": "UTA"
+      "nextOpponent": "BUF"
     },
     {
       "name": "Mackenzie Blackwood",
@@ -185,12 +185,12 @@
     {
       "name": "Spencer Knight",
       "team": "CHI",
-      "rollingGsa": 1.2,
-      "seasonGsa": 8.6,
+      "rollingGsa": 1.1,
+      "seasonGsa": 8.3,
       "restDays": 1,
       "startLikelihood": 0.9,
       "trend": "steady",
-      "note": "Consistent performance from Spencer Knight with a 2.50 GAA \u2014 reliable starter for CHI.",
+      "note": "Consistent performance from Spencer Knight with a 2.52 GAA \u2014 reliable starter for CHI.",
       "strengths": [
         "Proven winner",
         "Strong rebound control"
@@ -198,7 +198,7 @@
       "watchouts": [
         "Inconsistent results"
       ],
-      "nextOpponent": "STL"
+      "nextOpponent": "DET"
     },
     {
       "name": "Pyotr Kochetkov",
