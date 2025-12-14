@@ -3814,6 +3814,44 @@ p { line-height: 1.7; }
   }
 }
 
+/* Tablet breakpoint for prediction cards - medium logos */
+@media (max-width: 1024px) and (min-width: 769px) {
+  .matchup-card-v3__logo-wrap {
+    width: 64px !important;
+    height: 64px !important;
+    border-radius: 10px;
+  }
+
+  .matchup-card-v3__logo-wrap .crest {
+    width: 64px !important;
+    height: 64px !important;
+  }
+
+  .matchup-card-v3__logo-wrap .crest img,
+  .matchup-card-v3__logo-wrap .crest .crest__img {
+    width: 52px !important;
+    height: 52px !important;
+    max-width: 52px !important;
+    max-height: 52px !important;
+  }
+
+  .matchup-card-v3__team-name {
+    font-size: 0.85rem;
+  }
+
+  .matchup-card-v3__center {
+    padding: 0 0.5rem;
+  }
+
+  .matchup-card-v3__vs {
+    font-size: 0.75rem;
+  }
+
+  .matchup-card-v3__time {
+    font-size: 0.7rem;
+  }
+}
+
 /* =====================================================
    EXPLORE GRID - Overview Page Navigation Cards
    ===================================================== */
