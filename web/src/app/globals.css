@@ -2235,15 +2235,25 @@ p { line-height: 1.7; }
   }
 
   .matchup-card-v3__logo-wrap {
-    width: 18px;
-    height: 18px;
-    padding: 0;
+    width: 24px;
+    height: 24px;
+    padding: 2px;
     border-radius: 4px;
   }
 
   .matchup-card-v3__logo-wrap .crest {
-    width: 14px !important;
-    height: 14px !important;
+    width: 20px !important;
+    height: 20px !important;
+    min-width: 20px !important;
+    min-height: 20px !important;
+  }
+
+  .matchup-card-v3__logo-wrap .crest img,
+  .matchup-card-v3__logo-wrap .crest .crest__img {
+    width: 16px !important;
+    height: 16px !important;
+    max-width: 16px !important;
+    max-height: 16px !important;
   }
 
   .matchup-card-v3__team-name {
@@ -3103,6 +3113,24 @@ p { line-height: 1.7; }
 
 .matchup-header__vs-block {
   flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: 0 var(--space-md);
+}
+
+.matchup-header__time {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.matchup-header__goalie {
+  font-size: 0.8rem;
+  font-weight: 500;
+  margin: 0;
+  margin-top: var(--space-2xs);
 }
 
 .matchup-header__crest {
@@ -3512,9 +3540,22 @@ p { line-height: 1.7; }
     text-align: center;
   }
 
-  /* Hide the vs block on mobile */
+  /* Show vs block between teams on mobile */
   .matchup-header__vs-block {
-    display: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0;
+  }
+
+  .matchup-header__time {
+    font-size: 0.8rem;
+    font-weight: 600;
+  }
+
+  .matchup-header__goalie {
+    font-size: 0.65rem;
   }
 
   /* Prob section - full width */
@@ -3835,16 +3876,32 @@ p { line-height: 1.7; }
   }
 
   /* Override ALL card overflow for lineup cards */
-  .card.card-static {
+  .card.card-static,
+  .card.lineup-table-wrap,
+  .lineup-table-wrap {
     overflow-x: scroll !important;
     overflow-y: visible !important;
-    overflow: visible scroll !important;
     -webkit-overflow-scrolling: touch;
   }
 
   /* Ensure the card doesn't clip content */
   .card.card-static.lineup-table-wrap {
     overflow: auto !important;
+  }
+
+  /* Make sure nova-section and container don't clip lineup tables */
+  .nova-section {
+    overflow-x: visible !important;
+  }
+
+  .container {
+    overflow-x: visible !important;
+  }
+
+  /* Any card with player rows should scroll */
+  .card:has(.player-row-hover) {
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
   }
 
   /* Performance page hero grid - stack on mobile */

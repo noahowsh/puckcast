@@ -246,6 +246,7 @@ export default function MatchupPage({ params }: PageProps) {
         {/* Main matchup header - teams row + full-width prob bar */}
         <section className="matchup-header">
           <div className="matchup-header__teams-row">
+            {/* Away Team with Goalie */}
             <div className="matchup-header__team">
               <div className="matchup-header__crest" style={{ borderColor: awayColor }}>
                 <TeamCrest abbrev={game.awayTeam.abbrev} size={88} />
@@ -257,13 +258,26 @@ export default function MatchupPage({ params }: PageProps) {
                     {formatRecord(awayStanding)} <span className="matchup-header__rank">#{awayStanding.rank}</span>
                   </p>
                 )}
+                {/* Away Goalie */}
+                {(() => {
+                  const awayGoalie = startingGoalies.teams[game.awayTeam.abbrev];
+                  if (!awayGoalie?.goalieName) return null;
+                  return (
+                    <p className="matchup-header__goalie" style={{ color: getGoalieStatusColor(awayGoalie.statusCode) }}>
+                      🥅 {awayGoalie.goalieName}
+                    </p>
+                  );
+                })()}
               </div>
             </div>
 
+            {/* Center - Time + VS */}
             <div className="matchup-header__vs-block">
+              <span className="matchup-header__time">{game.startTimeEt ?? "TBD"}</span>
               <span className="matchup-header__vs">vs</span>
             </div>
 
+            {/* Home Team with Goalie */}
             <div className="matchup-header__team matchup-header__team--right">
               <div className="matchup-header__info matchup-header__info--right">
                 <h1 className="matchup-header__name">{game.homeTeam.name}</h1>
@@ -272,6 +286,16 @@ export default function MatchupPage({ params }: PageProps) {
                     {formatRecord(homeStanding)} <span className="matchup-header__rank">#{homeStanding.rank}</span>
                   </p>
                 )}
+                {/* Home Goalie */}
+                {(() => {
+                  const homeGoalie = startingGoalies.teams[game.homeTeam.abbrev];
+                  if (!homeGoalie?.goalieName) return null;
+                  return (
+                    <p className="matchup-header__goalie" style={{ color: getGoalieStatusColor(homeGoalie.statusCode) }}>
+                      🥅 {homeGoalie.goalieName}
+                    </p>
+                  );
+                })()}
               </div>
               <div className="matchup-header__crest" style={{ borderColor: homeColor }}>
                 <TeamCrest abbrev={game.homeTeam.abbrev} size={88} />
