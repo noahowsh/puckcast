@@ -2241,8 +2241,8 @@ p { line-height: 1.7; }
   }
 
   .matchup-card-v3__logo-wrap .crest {
-    width: 44px !important;
-    height: 44px !important;
+    width: 36px !important;
+    height: 36px !important;
   }
 
   .matchup-card-v3__team-name {
@@ -3507,6 +3507,40 @@ p { line-height: 1.7; }
     text-align: center;
     margin-bottom: var(--space-sm);
   }
+
+  /* Matchup header crest sizing on mobile */
+  .matchup-header__crest {
+    width: 64px;
+    height: 64px;
+  }
+
+  .matchup-header__crest .crest {
+    width: 56px !important;
+    height: 56px !important;
+  }
+
+  /* Starting goalies banner mobile */
+  .matchup-goalies-banner__grid {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .matchup-goalies-banner__vs {
+    display: none;
+  }
+
+  .matchup-goalie-banner {
+    padding: 0.75rem;
+  }
+
+  .matchup-goalie-banner__name {
+    font-size: 0.95rem;
+  }
+
+  /* Matchup links stack on mobile */
+  .matchup-links {
+    flex-direction: column;
+  }
 }
 
 /* =====================================================
@@ -3611,12 +3645,20 @@ p { line-height: 1.7; }
 @media (max-width: 768px) {
   /* Reduce top padding on hero sections */
   .nova-hero {
-    padding-top: var(--space-lg);
-    padding-bottom: var(--space-xl);
+    padding-top: var(--space-md);
+    padding-bottom: var(--space-lg);
   }
 
   .nav-offset {
-    padding-top: calc(var(--nav-height) + var(--space-md));
+    padding-top: calc(var(--nav-height) + var(--space-sm));
+  }
+
+  /* Stack hero grid on tablet */
+  .nova-hero__grid,
+  .nova-hero__grid--balanced {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
   }
 
   /* Performance page hero grid - stack on mobile */
@@ -3683,12 +3725,12 @@ p { line-height: 1.7; }
 @media (max-width: 480px) {
   /* Even tighter on very small screens */
   .nova-hero {
-    padding-top: var(--space-md);
-    padding-bottom: var(--space-lg);
+    padding-top: var(--space-sm);
+    padding-bottom: var(--space-md);
   }
 
   .nav-offset {
-    padding-top: calc(var(--nav-height) + var(--space-sm));
+    padding-top: calc(var(--nav-height) + 0.25rem);
   }
 
   /* Performance page - single column grids */
@@ -3749,8 +3791,18 @@ p { line-height: 1.7; }
     -webkit-overflow-scrolling: touch;
   }
 
+  .card.card-static > div:first-child {
+    min-width: 520px;
+  }
+
   .player-row-hover {
-    min-width: 580px;
+    min-width: 520px;
+  }
+
+  /* Goalie row needs same treatment */
+  .card.card-static > a,
+  .card.card-static > div {
+    min-width: 520px;
   }
 
   /* OVR legend mobile */
@@ -3758,5 +3810,56 @@ p { line-height: 1.7; }
     display: flex !important;
     flex-direction: column;
     gap: 1rem !important;
+  }
+
+  /* Teams page hero grid - tighter on mobile */
+  .nova-hero__grid {
+    gap: 1rem;
+  }
+
+  .nova-hero__panel {
+    padding: 1rem !important;
+  }
+
+  /* Team page smaller crests in hero */
+  .team-hero-crest {
+    width: 80px !important;
+    height: 80px !important;
+  }
+
+  .team-hero-crest .crest {
+    width: 80px !important;
+    height: 80px !important;
+  }
+
+  /* Lineup tables - ensure scrollable container */
+  .lineup-section {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .lineup-table {
+    min-width: 480px;
+  }
+
+  /* Matchup analysis page - smaller crests */
+  .matchup-header__crest {
+    width: 52px !important;
+    height: 52px !important;
+  }
+
+  .matchup-header__crest .crest {
+    width: 44px !important;
+    height: 44px !important;
+  }
+
+  .matchup-pick-banner__pick .crest {
+    width: 36px !important;
+    height: 36px !important;
+  }
+
+  .matchup-comparison__team .crest {
+    width: 28px !important;
+    height: 28px !important;
   }
 }
