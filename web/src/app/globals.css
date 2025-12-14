@@ -2235,34 +2235,34 @@ p { line-height: 1.7; }
   }
 
   .matchup-card-v3__logo-wrap {
-    width: 24px;
-    height: 24px;
+    width: 40px;
+    height: 40px;
     padding: 2px;
-    border-radius: 4px;
+    border-radius: 8px;
   }
 
   .matchup-card-v3__logo-wrap .crest {
-    width: 20px !important;
-    height: 20px !important;
-    min-width: 20px !important;
-    min-height: 20px !important;
+    width: 36px !important;
+    height: 36px !important;
+    min-width: 36px !important;
+    min-height: 36px !important;
   }
 
   .matchup-card-v3__logo-wrap .crest img,
   .matchup-card-v3__logo-wrap .crest .crest__img {
-    width: 16px !important;
-    height: 16px !important;
-    max-width: 16px !important;
-    max-height: 16px !important;
+    width: 28px !important;
+    height: 28px !important;
+    max-width: 28px !important;
+    max-height: 28px !important;
   }
 
   .matchup-card-v3__team-name {
-    font-size: 0.6rem;
+    font-size: 0.65rem;
     line-height: 1.1;
   }
 
   .matchup-card-v3__prob {
-    font-size: 0.7rem;
+    font-size: 0.75rem;
     font-weight: 700;
   }
 
@@ -3114,23 +3114,27 @@ p { line-height: 1.7; }
 .matchup-header__vs-block {
   flex-shrink: 0;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   align-items: center;
-  gap: var(--space-sm);
+  justify-content: center;
+  gap: var(--space-2xs);
   padding: 0 var(--space-md);
 }
 
 .matchup-header__time {
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   font-weight: 600;
   color: var(--text-secondary);
+  order: 2;
 }
 
 .matchup-header__vs {
-  font-size: 0.8rem;
+  font-size: 0.9rem;
   color: var(--text-tertiary);
   text-transform: uppercase;
   letter-spacing: 0.1em;
+  font-weight: 700;
+  order: 1;
 }
 
 .matchup-header__goalie {
@@ -3510,11 +3514,11 @@ p { line-height: 1.7; }
     margin-bottom: var(--space-md);
   }
 
-  /* Teams row - keeps side by side layout */
+  /* Teams row - keeps side by side layout, vs centered */
   .matchup-header__teams-row {
     display: flex;
     justify-content: space-between;
-    align-items: flex-start;
+    align-items: center;
     gap: var(--space-sm);
   }
 
@@ -3547,26 +3551,28 @@ p { line-height: 1.7; }
     text-align: center;
   }
 
-  /* Show vs block between teams on mobile - horizontal */
+  /* VS block - stacked vertically, centered in row */
   .matchup-header__vs-block {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     align-items: center;
-    gap: 0.25rem;
+    justify-content: center;
+    gap: 0.15rem;
     padding: 0;
   }
 
   .matchup-header__time {
-    font-size: 0.7rem;
+    font-size: 0.65rem;
     font-weight: 600;
   }
 
   .matchup-header__vs {
-    font-size: 0.6rem;
+    font-size: 0.7rem;
+    font-weight: 700;
   }
 
   .matchup-header__goalie {
-    font-size: 0.65rem;
+    font-size: 0.6rem;
   }
 
   /* Prob section - full width */
@@ -3752,32 +3758,32 @@ p { line-height: 1.7; }
     font-size: 0.7rem;
   }
 
-  /* Prediction card logos - smaller on tablet/mobile */
+  /* Prediction card logos - moderate size on tablet/mobile */
   .matchup-card-v3__logo-wrap {
-    width: 36px !important;
-    height: 36px !important;
-    border-radius: 8px;
+    width: 52px !important;
+    height: 52px !important;
+    border-radius: 10px;
   }
 
   .matchup-card-v3__logo-wrap .crest {
-    width: 32px !important;
-    height: 32px !important;
+    width: 48px !important;
+    height: 48px !important;
   }
 
   .matchup-card-v3__logo-wrap .crest img,
   .matchup-card-v3__logo-wrap .crest .crest__img {
-    width: 24px !important;
-    height: 24px !important;
-    max-width: 24px !important;
-    max-height: 24px !important;
+    width: 38px !important;
+    height: 38px !important;
+    max-width: 38px !important;
+    max-height: 38px !important;
   }
 
   .matchup-card-v3__team-name {
-    font-size: 0.75rem;
+    font-size: 0.8rem;
   }
 
   .matchup-card-v3__prob {
-    font-size: 0.8rem;
+    font-size: 0.85rem;
   }
 }
 
@@ -3981,21 +3987,106 @@ p { line-height: 1.7; }
     -webkit-overflow-scrolling: touch;
   }
 
-  /* Lineup Strength Card - mobile responsive */
+  /* Lineup Strength Card - make content fit on mobile */
+  .lineup-strength-card {
+    padding: 1rem !important;
+    max-width: 100% !important;
+    overflow: hidden !important;
+  }
+
+  /* Scale down the SVG ring container */
+  .lineup-strength-card > div:nth-child(2) {
+    gap: 1rem !important;
+    flex-wrap: wrap;
+  }
+
+  .lineup-strength-card > div:nth-child(2) > div:first-child {
+    width: 64px !important;
+    height: 64px !important;
+  }
+
+  .lineup-strength-card > div:nth-child(2) > div:first-child svg {
+    width: 64px !important;
+    height: 64px !important;
+  }
+
+  /* Scale the text in the ring */
+  .lineup-strength-card > div:nth-child(2) > div:first-child > div p {
+    font-size: 1.2rem !important;
+  }
+
+  /* 3-column grid at bottom - reduce gaps and padding */
+  .lineup-strength-card > div:last-child {
+    gap: 0.35rem !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+  }
+
+  .lineup-strength-card > div:last-child > div {
+    padding: 0.4rem !important;
+  }
+
+  .lineup-strength-card > div:last-child > div p:first-child {
+    font-size: 0.9rem !important;
+  }
+
+  .lineup-strength-card > div:last-child > div p:last-child {
+    font-size: 0.55rem !important;
+  }
+
   .nova-section .card > div {
     min-width: 0;
   }
 
-  /* Team roster tables - wrap in scrollable container */
-  .nova-section .card:has(a[href*="/player/"]) {
-    overflow-x: scroll !important;
-    -webkit-overflow-scrolling: touch;
+  /* Player tables - hide less important columns on mobile */
+  /* Hide: GP, S%, PPG, HIT (keep: G, A, PTS, +/-, OVR) */
+  .stat-col--gp,
+  .stat-col--spct,
+  .stat-col--ppg,
+  .stat-col--hit {
+    display: none !important;
   }
 
-  /* Force min-width on player row content */
-  .nova-section a[href*="/player/"] {
-    min-width: 550px;
-    display: flex !important;
+  /* Goalies - hide GP, L, GAA (keep: W, SV%, OVR) */
+  .stat-col--l,
+  .stat-col--gaa {
+    display: none !important;
+  }
+
+  /* Make player rows fit without scroll */
+  .player-row-hover,
+  a.player-row-hover {
+    min-width: unset !important;
+  }
+
+  /* Player stats flex container - reduce gap */
+  .player-stats {
+    gap: 0.15rem !important;
+  }
+
+  /* Make stat columns smaller on mobile */
+  .stat-col {
+    width: auto !important;
+    min-width: 28px;
+  }
+
+  .stat-col--ovr {
+    min-width: 36px;
+  }
+
+  /* Reduce player name/info section */
+  .player-row-hover > div:nth-child(3) {
+    flex: 1;
+    min-width: 0;
+  }
+
+  /* Table header columns match */
+  .table-header__cols {
+    gap: 0.15rem !important;
+  }
+
+  .table-header__cols .stat-col {
+    width: auto !important;
+    min-width: 28px;
   }
 
   /* Performance page hero grid - stack on mobile */

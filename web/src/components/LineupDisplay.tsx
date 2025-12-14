@@ -62,7 +62,7 @@ function getStrengthColor(value: number): string {
 
 export function LineupStrengthCard({ strength }: { strength: LineupStrengthMetrics }) {
   return (
-    <div className="card" style={{ padding: '1.25rem' }}>
+    <div className="card lineup-strength-card" style={{ padding: '1.25rem' }}>
       <h3 style={{ fontSize: '0.9rem', fontWeight: 600, color: 'white', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
         <span style={{
           width: '32px',
@@ -329,20 +329,20 @@ function PlayerRow({ player, rank, showRankingScore = true, teamAbbrev }: {
       </div>
 
       {/* Stats columns - fixed width for proper alignment */}
-      <div style={{ display: 'flex', gap: '0.25rem', alignItems: 'center' }}>
-        <div style={{ width: '32px', textAlign: 'center' }}>
+      <div className="player-stats" style={{ display: 'flex', gap: '0.25rem', alignItems: 'center' }}>
+        <div className="stat-col stat-col--gp" style={{ width: '32px', textAlign: 'center' }}>
           <span style={{ fontSize: '0.8rem', color: 'white', fontWeight: 600, display: 'block' }}>{player.gamesPlayed}</span>
         </div>
-        <div style={{ width: '32px', textAlign: 'center' }}>
+        <div className="stat-col stat-col--g" style={{ width: '32px', textAlign: 'center' }}>
           <span style={{ fontSize: '0.8rem', color: '#10b981', fontWeight: 700, display: 'block' }}>{player.goals}</span>
         </div>
-        <div style={{ width: '32px', textAlign: 'center' }}>
+        <div className="stat-col stat-col--a" style={{ width: '32px', textAlign: 'center' }}>
           <span style={{ fontSize: '0.8rem', color: 'white', fontWeight: 600, display: 'block' }}>{player.assists}</span>
         </div>
-        <div style={{ width: '32px', textAlign: 'center' }}>
+        <div className="stat-col stat-col--pts" style={{ width: '32px', textAlign: 'center' }}>
           <span style={{ fontSize: '0.8rem', color: 'white', fontWeight: 700, display: 'block' }}>{player.points}</span>
         </div>
-        <div style={{ width: '36px', textAlign: 'center' }}>
+        <div className="stat-col stat-col--pm" style={{ width: '36px', textAlign: 'center' }}>
           <span style={{
             fontSize: '0.8rem',
             color: player.plusMinus >= 0 ? '#10b981' : '#ef4444',
@@ -350,19 +350,19 @@ function PlayerRow({ player, rank, showRankingScore = true, teamAbbrev }: {
             display: 'block',
           }}>{player.plusMinus >= 0 ? '+' : ''}{player.plusMinus}</span>
         </div>
-        <div style={{ width: '36px', textAlign: 'center' }}>
+        <div className="stat-col stat-col--spct" style={{ width: '36px', textAlign: 'center' }}>
           <span style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', fontWeight: 600, display: 'block' }}>
             {player.shootingPct ? (player.shootingPct * 100).toFixed(1) : '0.0'}
           </span>
         </div>
-        <div style={{ width: '32px', textAlign: 'center' }}>
+        <div className="stat-col stat-col--ppg" style={{ width: '32px', textAlign: 'center' }}>
           <span style={{ fontSize: '0.8rem', color: 'white', fontWeight: 600, display: 'block' }}>{player.powerPlayGoals}</span>
         </div>
-        <div style={{ width: '28px', textAlign: 'center' }}>
+        <div className="stat-col stat-col--hit" style={{ width: '28px', textAlign: 'center' }}>
           <span style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', fontWeight: 600, display: 'block' }}>{player.hits}</span>
         </div>
         {showRankingScore && (
-          <div style={{
+          <div className="stat-col stat-col--ovr" style={{
             width: '40px',
             textAlign: 'center',
             padding: '0.1rem 0.2rem',
@@ -455,24 +455,24 @@ function GoalieRow({ goalie, rank, teamAbbrev }: { goalie: GoalieLineup; rank: n
       </div>
 
       {/* Stats columns - aligned with header */}
-      <div style={{ display: 'flex', gap: '0.25rem', alignItems: 'center' }}>
-        <div style={{ width: '36px', textAlign: 'center' }}>
+      <div className="player-stats" style={{ display: 'flex', gap: '0.25rem', alignItems: 'center' }}>
+        <div className="stat-col stat-col--gp" style={{ width: '36px', textAlign: 'center' }}>
           <span style={{ fontSize: '0.85rem', color: 'white', fontWeight: 600, display: 'block' }}>{goalie.gamesPlayed}</span>
         </div>
-        <div style={{ width: '36px', textAlign: 'center' }}>
+        <div className="stat-col stat-col--w" style={{ width: '36px', textAlign: 'center' }}>
           <span style={{ fontSize: '0.85rem', color: '#10b981', fontWeight: 700, display: 'block' }}>{goalie.wins}</span>
         </div>
-        <div style={{ width: '36px', textAlign: 'center' }}>
+        <div className="stat-col stat-col--l" style={{ width: '36px', textAlign: 'center' }}>
           <span style={{ fontSize: '0.85rem', color: '#ef4444', fontWeight: 600, display: 'block' }}>
             {goalie.gamesPlayed - goalie.wins}
           </span>
         </div>
-        <div style={{ width: '48px', textAlign: 'center' }}>
+        <div className="stat-col stat-col--svpct" style={{ width: '48px', textAlign: 'center' }}>
           <span style={{ fontSize: '0.85rem', color: 'white', fontWeight: 600, display: 'block' }}>
             .{Math.round(goalie.savePct * 1000).toString().padStart(3, '0')}
           </span>
         </div>
-        <div style={{ width: '48px', textAlign: 'center' }}>
+        <div className="stat-col stat-col--gaa" style={{ width: '48px', textAlign: 'center' }}>
           <span style={{
             fontSize: '0.85rem',
             color: goalie.goalsAgainstAverage <= 2.5 ? '#10b981' : goalie.goalsAgainstAverage <= 3.0 ? '#3b82f6' : '#f59e0b',
@@ -482,7 +482,7 @@ function GoalieRow({ goalie, rank, teamAbbrev }: { goalie: GoalieLineup; rank: n
             {goalie.goalsAgainstAverage.toFixed(2)}
           </span>
         </div>
-        <div style={{
+        <div className="stat-col stat-col--ovr" style={{
           width: '44px',
           textAlign: 'center',
           padding: '0.15rem 0.25rem',
@@ -542,20 +542,20 @@ export function ProjectedLineupDisplay({ lineup }: { lineup: TeamLineup }) {
 
         {/* Forwards */}
         <div className="card card-static lineup-table-wrap" style={{ padding: 0, marginBottom: '1.5rem' }}>
-          <div style={{ padding: '0.75rem 1rem', background: 'rgba(255,255,255,0.03)', borderBottom: '1px solid rgba(255,255,255,0.05)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <div className="table-header" style={{ padding: '0.75rem 1rem', background: 'rgba(255,255,255,0.03)', borderBottom: '1px solid rgba(255,255,255,0.05)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <h4 style={{ fontSize: '0.8rem', fontWeight: 600, color: 'white', textTransform: 'uppercase' }}>
               Forwards ({lineup.forwards.length})
             </h4>
-            <div style={{ display: 'flex', gap: '0.25rem', fontSize: '0.6rem', color: 'var(--text-tertiary)', textTransform: 'uppercase' }}>
-              <span style={{ width: '32px', textAlign: 'center' }}>GP</span>
-              <span style={{ width: '32px', textAlign: 'center' }}>G</span>
-              <span style={{ width: '32px', textAlign: 'center' }}>A</span>
-              <span style={{ width: '32px', textAlign: 'center' }}>PTS</span>
-              <span style={{ width: '36px', textAlign: 'center' }}>+/-</span>
-              <span style={{ width: '36px', textAlign: 'center' }}>S%</span>
-              <span style={{ width: '32px', textAlign: 'center' }}>PPG</span>
-              <span style={{ width: '28px', textAlign: 'center' }}>HIT</span>
-              <span style={{ width: '40px', textAlign: 'center' }}>OVR</span>
+            <div className="table-header__cols" style={{ display: 'flex', gap: '0.25rem', fontSize: '0.6rem', color: 'var(--text-tertiary)', textTransform: 'uppercase' }}>
+              <span className="stat-col stat-col--gp" style={{ width: '32px', textAlign: 'center' }}>GP</span>
+              <span className="stat-col stat-col--g" style={{ width: '32px', textAlign: 'center' }}>G</span>
+              <span className="stat-col stat-col--a" style={{ width: '32px', textAlign: 'center' }}>A</span>
+              <span className="stat-col stat-col--pts" style={{ width: '32px', textAlign: 'center' }}>PTS</span>
+              <span className="stat-col stat-col--pm" style={{ width: '36px', textAlign: 'center' }}>+/-</span>
+              <span className="stat-col stat-col--spct" style={{ width: '36px', textAlign: 'center' }}>S%</span>
+              <span className="stat-col stat-col--ppg" style={{ width: '32px', textAlign: 'center' }}>PPG</span>
+              <span className="stat-col stat-col--hit" style={{ width: '28px', textAlign: 'center' }}>HIT</span>
+              <span className="stat-col stat-col--ovr" style={{ width: '40px', textAlign: 'center' }}>OVR</span>
             </div>
           </div>
           {lineup.forwards.map((player, idx) => (
@@ -565,20 +565,20 @@ export function ProjectedLineupDisplay({ lineup }: { lineup: TeamLineup }) {
 
         {/* Defensemen */}
         <div className="card card-static lineup-table-wrap" style={{ padding: 0, marginBottom: '1.5rem' }}>
-          <div style={{ padding: '0.75rem 1rem', background: 'rgba(255,255,255,0.03)', borderBottom: '1px solid rgba(255,255,255,0.05)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <div className="table-header" style={{ padding: '0.75rem 1rem', background: 'rgba(255,255,255,0.03)', borderBottom: '1px solid rgba(255,255,255,0.05)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <h4 style={{ fontSize: '0.8rem', fontWeight: 600, color: 'white', textTransform: 'uppercase' }}>
               Defensemen ({lineup.defensemen.length})
             </h4>
-            <div style={{ display: 'flex', gap: '0.25rem', fontSize: '0.6rem', color: 'var(--text-tertiary)', textTransform: 'uppercase' }}>
-              <span style={{ width: '32px', textAlign: 'center' }}>GP</span>
-              <span style={{ width: '32px', textAlign: 'center' }}>G</span>
-              <span style={{ width: '32px', textAlign: 'center' }}>A</span>
-              <span style={{ width: '32px', textAlign: 'center' }}>PTS</span>
-              <span style={{ width: '36px', textAlign: 'center' }}>+/-</span>
-              <span style={{ width: '36px', textAlign: 'center' }}>S%</span>
-              <span style={{ width: '32px', textAlign: 'center' }}>PPG</span>
-              <span style={{ width: '28px', textAlign: 'center' }}>HIT</span>
-              <span style={{ width: '40px', textAlign: 'center' }}>OVR</span>
+            <div className="table-header__cols" style={{ display: 'flex', gap: '0.25rem', fontSize: '0.6rem', color: 'var(--text-tertiary)', textTransform: 'uppercase' }}>
+              <span className="stat-col stat-col--gp" style={{ width: '32px', textAlign: 'center' }}>GP</span>
+              <span className="stat-col stat-col--g" style={{ width: '32px', textAlign: 'center' }}>G</span>
+              <span className="stat-col stat-col--a" style={{ width: '32px', textAlign: 'center' }}>A</span>
+              <span className="stat-col stat-col--pts" style={{ width: '32px', textAlign: 'center' }}>PTS</span>
+              <span className="stat-col stat-col--pm" style={{ width: '36px', textAlign: 'center' }}>+/-</span>
+              <span className="stat-col stat-col--spct" style={{ width: '36px', textAlign: 'center' }}>S%</span>
+              <span className="stat-col stat-col--ppg" style={{ width: '32px', textAlign: 'center' }}>PPG</span>
+              <span className="stat-col stat-col--hit" style={{ width: '28px', textAlign: 'center' }}>HIT</span>
+              <span className="stat-col stat-col--ovr" style={{ width: '40px', textAlign: 'center' }}>OVR</span>
             </div>
           </div>
           {lineup.defensemen.map((player, idx) => (
@@ -588,17 +588,17 @@ export function ProjectedLineupDisplay({ lineup }: { lineup: TeamLineup }) {
 
         {/* Goalies */}
         <div className="card card-static lineup-table-wrap" style={{ padding: 0, marginBottom: '1.5rem' }}>
-          <div style={{ padding: '0.75rem 1rem', background: 'rgba(255,255,255,0.03)', borderBottom: '1px solid rgba(255,255,255,0.05)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <div className="table-header" style={{ padding: '0.75rem 1rem', background: 'rgba(255,255,255,0.03)', borderBottom: '1px solid rgba(255,255,255,0.05)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <h4 style={{ fontSize: '0.8rem', fontWeight: 600, color: 'white', textTransform: 'uppercase' }}>
               Goalies ({lineup.goalies.length})
             </h4>
-            <div style={{ display: 'flex', gap: '0.25rem', fontSize: '0.6rem', color: 'var(--text-tertiary)', textTransform: 'uppercase' }}>
-              <span style={{ width: '36px', textAlign: 'center' }}>GP</span>
-              <span style={{ width: '36px', textAlign: 'center' }}>W</span>
-              <span style={{ width: '36px', textAlign: 'center' }}>L</span>
-              <span style={{ width: '48px', textAlign: 'center' }}>SV%</span>
-              <span style={{ width: '48px', textAlign: 'center' }}>GAA</span>
-              <span style={{ width: '44px', textAlign: 'center' }}>OVR</span>
+            <div className="table-header__cols" style={{ display: 'flex', gap: '0.25rem', fontSize: '0.6rem', color: 'var(--text-tertiary)', textTransform: 'uppercase' }}>
+              <span className="stat-col stat-col--gp" style={{ width: '36px', textAlign: 'center' }}>GP</span>
+              <span className="stat-col stat-col--w" style={{ width: '36px', textAlign: 'center' }}>W</span>
+              <span className="stat-col stat-col--l" style={{ width: '36px', textAlign: 'center' }}>L</span>
+              <span className="stat-col stat-col--svpct" style={{ width: '48px', textAlign: 'center' }}>SV%</span>
+              <span className="stat-col stat-col--gaa" style={{ width: '48px', textAlign: 'center' }}>GAA</span>
+              <span className="stat-col stat-col--ovr" style={{ width: '44px', textAlign: 'center' }}>OVR</span>
             </div>
           </div>
           {lineup.goalies.map((goalie, idx) => (
