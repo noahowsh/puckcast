@@ -1991,21 +1991,17 @@ p { line-height: 1.7; }
 
 .matchup-card-v3__logo-wrap {
   position: relative;
-  border-radius: 12px;
-  transition: box-shadow var(--duration-normal) var(--ease-smooth);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.matchup-card-v3__logo-wrap--favored {
-  box-shadow: 0 2px 12px rgba(110, 240, 194, 0.15), 0 0 20px rgba(110, 240, 194, 0.08);
-}
-
-.matchup-card-v3__logo-wrap--favored::after {
-  content: '';
-  position: absolute;
-  inset: -2px;
-  border-radius: 14px;
-  background: linear-gradient(135deg, rgba(110, 240, 194, 0.08), rgba(126, 227, 255, 0.04));
-  z-index: -1;
+/* Apply highlight glow directly to the crest for perfect alignment */
+.matchup-card-v3__logo-wrap--favored .crest {
+  box-shadow:
+    0 0 0 3px rgba(110, 240, 194, 0.25),
+    0 4px 16px rgba(110, 240, 194, 0.2),
+    0 0 28px rgba(110, 240, 194, 0.15);
 }
 
 .matchup-card-v3__team-details {
@@ -2261,26 +2257,19 @@ p { line-height: 1.7; }
     text-align: left;
   }
 
-  .matchup-card-v3__logo-wrap {
-    width: 40px;
-    height: 40px;
-    padding: 2px;
-    border-radius: 8px;
-  }
-
   .matchup-card-v3__logo-wrap .crest {
-    width: 36px !important;
-    height: 36px !important;
-    min-width: 36px !important;
-    min-height: 36px !important;
+    width: 40px !important;
+    height: 40px !important;
+    min-width: 40px !important;
+    min-height: 40px !important;
   }
 
   .matchup-card-v3__logo-wrap .crest img,
   .matchup-card-v3__logo-wrap .crest .crest__img {
-    width: 28px !important;
-    height: 28px !important;
-    max-width: 28px !important;
-    max-height: 28px !important;
+    width: 30px !important;
+    height: 30px !important;
+    max-width: 30px !important;
+    max-height: 30px !important;
   }
 
   .matchup-card-v3__team-name {
@@ -3786,12 +3775,6 @@ p { line-height: 1.7; }
   }
 
   /* Prediction card logos - moderate size on tablet/mobile */
-  .matchup-card-v3__logo-wrap {
-    width: 56px !important;
-    height: 56px !important;
-    border-radius: 10px;
-  }
-
   .matchup-card-v3__logo-wrap .crest {
     width: 56px !important;
     height: 56px !important;
@@ -3799,10 +3782,10 @@ p { line-height: 1.7; }
 
   .matchup-card-v3__logo-wrap .crest img,
   .matchup-card-v3__logo-wrap .crest .crest__img {
-    width: 48px !important;
-    height: 48px !important;
-    max-width: 48px !important;
-    max-height: 48px !important;
+    width: 44px !important;
+    height: 44px !important;
+    max-width: 44px !important;
+    max-height: 44px !important;
   }
 
   .matchup-card-v3__team-name {
@@ -3816,12 +3799,6 @@ p { line-height: 1.7; }
 
 /* Tablet breakpoint for prediction cards - medium logos */
 @media (max-width: 1024px) and (min-width: 769px) {
-  .matchup-card-v3__logo-wrap {
-    width: 64px !important;
-    height: 64px !important;
-    border-radius: 10px;
-  }
-
   .matchup-card-v3__logo-wrap .crest {
     width: 64px !important;
     height: 64px !important;
@@ -3829,10 +3806,10 @@ p { line-height: 1.7; }
 
   .matchup-card-v3__logo-wrap .crest img,
   .matchup-card-v3__logo-wrap .crest .crest__img {
-    width: 52px !important;
-    height: 52px !important;
-    max-width: 52px !important;
-    max-height: 52px !important;
+    width: 50px !important;
+    height: 50px !important;
+    max-width: 50px !important;
+    max-height: 50px !important;
   }
 
   .matchup-card-v3__team-name {
