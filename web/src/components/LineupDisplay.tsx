@@ -507,11 +507,18 @@ function GoalieRow({ goalie, rank, teamAbbrev }: { goalie: GoalieLineup; rank: n
 
 export function ProjectedLineupDisplay({ lineup }: { lineup: TeamLineup }) {
   // Collect all players with injury status (both out and day-to-day)
+  // Deduplicate by player name (lowercase) to avoid showing same player multiple times
+  const seenNames = new Set<string>();
   const allPlayersWithInjury = [
     ...lineup.forwards.filter(p => p.injuryStatus),
     ...lineup.defensemen.filter(p => p.injuryStatus),
     ...lineup.goalies.filter(g => !g.isHealthy),
-  ];
+  ].filter(p => {
+    const name = p.playerName.toLowerCase();
+    if (seenNames.has(name)) return false;
+    seenNames.add(name);
+    return true;
+  });
 
   // Split into IR/OUT (definitely out) and DTD/GTD (uncertain)
   const outPlayers = allPlayersWithInjury.filter(p =>

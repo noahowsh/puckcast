@@ -2201,65 +2201,129 @@ p { line-height: 1.7; }
 /* Matchup Card V3 - Mobile */
 @media (max-width: 480px) {
   .matchup-card-v3 {
-    padding: 1rem;
+    padding: 0.875rem;
+    gap: 0.625rem;
+  }
+
+  /* Restructure teams row for mobile - logos side by side */
+  .matchup-card-v3__teams-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     gap: 0.75rem;
   }
 
-  .matchup-card-v3__teams-row {
-    gap: 0.5rem;
+  .matchup-card-v3__side {
+    flex: 0 0 auto;
   }
 
   .matchup-card-v3__team-block {
-    gap: 0.5rem;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+  }
+
+  .matchup-card-v3__side--home .matchup-card-v3__team-block {
+    flex-direction: column;
+  }
+
+  .matchup-card-v3__side--home .matchup-card-v3__team-details {
+    text-align: center !important;
+  }
+
+  .matchup-card-v3__team-details {
+    text-align: center;
+    order: 1;
+  }
+
+  .matchup-card-v3__logo-wrap {
+    order: 0;
   }
 
   .matchup-card-v3__logo-wrap .crest {
-    width: 56px !important;
-    height: 56px !important;
+    width: 44px !important;
+    height: 44px !important;
   }
 
   .matchup-card-v3__team-name {
-    font-size: 0.8rem;
+    font-size: 0.7rem;
   }
 
   .matchup-card-v3__prob {
-    font-size: 0.75rem;
+    font-size: 0.8rem;
+    font-weight: 800;
+  }
+
+  .matchup-card-v3__center {
+    padding: 0 0.5rem;
+  }
+
+  .matchup-card-v3__time {
+    display: none;
+  }
+
+  .matchup-card-v3__vs {
+    font-size: 0.7rem;
   }
 
   .matchup-card-v3__prob-wrap {
-    gap: 0.5rem;
-  }
-
-  .matchup-card-v3__prob-label {
-    font-size: 0.7rem;
-    min-width: 40px;
-  }
-
-  .matchup-card-v3__goalies-row {
-    flex-wrap: wrap;
     gap: 0.4rem;
   }
 
+  .matchup-card-v3__prob-label {
+    font-size: 0.65rem;
+    min-width: 36px;
+  }
+
+  .matchup-card-v3__prob-bar {
+    height: 10px;
+  }
+
+  .matchup-card-v3__goalies-row {
+    justify-content: center;
+    gap: 0.5rem;
+  }
+
   .goalie-tag {
-    font-size: 0.6rem;
-    padding: 0.25rem 0.5rem;
+    font-size: 0.55rem;
+    padding: 0.2rem 0.4rem;
+  }
+
+  .goalie-tag__status {
+    display: none;
   }
 
   .matchup-card-v3__footer {
-    gap: 0.75rem;
+    gap: 0.5rem;
   }
 
   .matchup-card-v3__grade {
-    padding: 0.5rem 0.75rem;
-    min-width: 60px;
+    padding: 0.4rem 0.6rem;
+    min-width: 50px;
   }
 
   .matchup-card-v3__grade-letter {
-    font-size: 1.25rem;
+    font-size: 1.1rem;
+  }
+
+  .matchup-card-v3__grade-edge {
+    font-size: 0.55rem;
+  }
+
+  .matchup-card-v3__footer-right {
+    gap: 0.2rem;
+  }
+
+  .matchup-card-v3__lean-label {
+    font-size: 0.55rem;
   }
 
   .matchup-card-v3__lean-team {
-    font-size: 0.8rem;
+    font-size: 0.75rem;
+  }
+
+  .matchup-card-v3__cta {
+    font-size: 0.65rem;
   }
 }
 
@@ -3538,4 +3602,161 @@ p { line-height: 1.7; }
 
 .explore-card:hover .explore-card__cta {
   color: var(--mint);
+}
+
+/* =====================================================
+   MOBILE FIXES - Global responsive adjustments
+   ===================================================== */
+
+@media (max-width: 768px) {
+  /* Reduce top padding on hero sections */
+  .nova-hero {
+    padding-top: var(--space-lg);
+    padding-bottom: var(--space-xl);
+  }
+
+  .nav-offset {
+    padding-top: calc(var(--nav-height) + var(--space-md));
+  }
+
+  /* Performance page hero grid - stack on mobile */
+  .hero-grid {
+    display: block !important;
+  }
+
+  .hero-grid > div:first-child {
+    margin-bottom: 1.5rem;
+  }
+
+  /* Performance page stat tiles 4-col -> 2-col */
+  .nova-hero .stat-tile {
+    min-width: 0;
+  }
+
+  /* Make all inline 3/4 col grids stack to 1-2 cols */
+  .nova-section [style*="repeat(3, 1fr)"],
+  .nova-section [style*="repeat(4, 1fr)"] {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+
+  /* Edge bands grid */
+  .stat-card {
+    padding: 1rem !important;
+  }
+
+  /* Bento cards - stack to 1 col */
+  .bento-card [style*="repeat(auto-fit"] {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Data tables - allow horizontal scroll */
+  .table-container {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .data-table {
+    min-width: 500px;
+  }
+
+  /* Footer mobile */
+  .footer {
+    padding: var(--space-lg) var(--space-md);
+  }
+
+  .footer-grid {
+    grid-template-columns: 1fr !important;
+    gap: 1.5rem;
+  }
+
+  .footer-links {
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  /* Player pages padding */
+  .player-hero {
+    padding-top: var(--space-md);
+  }
+}
+
+@media (max-width: 480px) {
+  /* Even tighter on very small screens */
+  .nova-hero {
+    padding-top: var(--space-md);
+    padding-bottom: var(--space-lg);
+  }
+
+  .nav-offset {
+    padding-top: calc(var(--nav-height) + var(--space-sm));
+  }
+
+  /* Performance page - single column grids */
+  .nova-section [style*="repeat(3, 1fr)"],
+  .nova-section [style*="repeat(4, 1fr)"],
+  .nova-section [style*="repeat(2, 1fr)"] {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Stat tiles smaller */
+  .stat-tile {
+    padding: 0.75rem;
+  }
+
+  .stat-tile__value {
+    font-size: 1.5rem;
+  }
+
+  /* Understanding numbers cards */
+  .bento-card {
+    padding: 1rem;
+  }
+
+  .bento-card h3 {
+    font-size: 1rem;
+  }
+
+  /* Hero text sizing */
+  .display-xl {
+    font-size: 1.75rem;
+  }
+
+  .lead {
+    font-size: 0.95rem;
+  }
+
+  .lead-sm {
+    font-size: 0.85rem;
+  }
+
+  /* Section headers */
+  .section-head h2 {
+    font-size: 1.25rem;
+  }
+
+  .eyebrow {
+    font-size: 0.65rem;
+  }
+
+  /* Card elevated padding */
+  .card-elevated {
+    padding: 1rem;
+  }
+
+  /* Team roster mobile - horizontal scroll for player rows */
+  .card.card-static {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .player-row-hover {
+    min-width: 580px;
+  }
+
+  /* OVR legend mobile */
+  .lg\\:grid-cols-\\[1fr_2fr\\] {
+    display: flex !important;
+    flex-direction: column;
+    gap: 1rem !important;
+  }
 }
