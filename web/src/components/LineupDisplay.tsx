@@ -542,10 +542,11 @@ export function ProjectedLineupDisplay({ lineup }: { lineup: TeamLineup }) {
 
         {/* Forwards */}
         <div className="card card-static lineup-table-wrap" style={{ padding: 0, marginBottom: '1.5rem' }}>
-          <div className="table-header" style={{ padding: '0.75rem 1rem', background: 'rgba(255,255,255,0.03)', borderBottom: '1px solid rgba(255,255,255,0.05)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <div className="table-header" style={{ padding: '0.75rem 1rem', background: 'rgba(255,255,255,0.03)', borderBottom: '1px solid rgba(255,255,255,0.05)', display: 'flex', alignItems: 'center' }}>
             <h4 style={{ fontSize: '0.8rem', fontWeight: 600, color: 'white', textTransform: 'uppercase' }}>
               Forwards ({lineup.forwards.length})
             </h4>
+            <div style={{ flex: 1 }}></div>
             <div className="table-header__cols" style={{ display: 'flex', gap: '0.25rem', fontSize: '0.6rem', color: 'var(--text-tertiary)', textTransform: 'uppercase' }}>
               <span className="stat-col stat-col--gp" style={{ width: '32px', textAlign: 'center' }}>GP</span>
               <span className="stat-col stat-col--g" style={{ width: '32px', textAlign: 'center' }}>G</span>
@@ -565,10 +566,11 @@ export function ProjectedLineupDisplay({ lineup }: { lineup: TeamLineup }) {
 
         {/* Defensemen */}
         <div className="card card-static lineup-table-wrap" style={{ padding: 0, marginBottom: '1.5rem' }}>
-          <div className="table-header" style={{ padding: '0.75rem 1rem', background: 'rgba(255,255,255,0.03)', borderBottom: '1px solid rgba(255,255,255,0.05)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <div className="table-header" style={{ padding: '0.75rem 1rem', background: 'rgba(255,255,255,0.03)', borderBottom: '1px solid rgba(255,255,255,0.05)', display: 'flex', alignItems: 'center' }}>
             <h4 style={{ fontSize: '0.8rem', fontWeight: 600, color: 'white', textTransform: 'uppercase' }}>
               Defensemen ({lineup.defensemen.length})
             </h4>
+            <div style={{ flex: 1 }}></div>
             <div className="table-header__cols" style={{ display: 'flex', gap: '0.25rem', fontSize: '0.6rem', color: 'var(--text-tertiary)', textTransform: 'uppercase' }}>
               <span className="stat-col stat-col--gp" style={{ width: '32px', textAlign: 'center' }}>GP</span>
               <span className="stat-col stat-col--g" style={{ width: '32px', textAlign: 'center' }}>G</span>
@@ -588,10 +590,11 @@ export function ProjectedLineupDisplay({ lineup }: { lineup: TeamLineup }) {
 
         {/* Goalies */}
         <div className="card card-static lineup-table-wrap" style={{ padding: 0, marginBottom: '1.5rem' }}>
-          <div className="table-header" style={{ padding: '0.75rem 1rem', background: 'rgba(255,255,255,0.03)', borderBottom: '1px solid rgba(255,255,255,0.05)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <div className="table-header" style={{ padding: '0.75rem 1rem', background: 'rgba(255,255,255,0.03)', borderBottom: '1px solid rgba(255,255,255,0.05)', display: 'flex', alignItems: 'center' }}>
             <h4 style={{ fontSize: '0.8rem', fontWeight: 600, color: 'white', textTransform: 'uppercase' }}>
               Goalies ({lineup.goalies.length})
             </h4>
+            <div style={{ flex: 1 }}></div>
             <div className="table-header__cols" style={{ display: 'flex', gap: '0.25rem', fontSize: '0.6rem', color: 'var(--text-tertiary)', textTransform: 'uppercase' }}>
               <span className="stat-col stat-col--gp" style={{ width: '36px', textAlign: 'center' }}>GP</span>
               <span className="stat-col stat-col--w" style={{ width: '36px', textAlign: 'center' }}>W</span>

@@ -3887,12 +3887,12 @@ p { line-height: 1.7; }
    ===================================================== */
 
 @media (max-width: 768px) {
-  /* Hero needs some top padding for navbar clearance */
+  /* Hero - reduce top spacing for mobile */
   .nova-hero {
-    padding-top: calc(var(--nav-height) + 0.5rem);
-    padding-bottom: var(--space-sm);
-    padding-left: 1rem;
-    padding-right: 1rem;
+    margin-top: 0.5rem !important;
+    padding: 1rem !important;
+    padding-top: calc(var(--nav-height) + 0.25rem) !important;
+    border-radius: 20px;
   }
 
   .nav-offset {
@@ -4184,12 +4184,12 @@ p { line-height: 1.7; }
 }
 
 @media (max-width: 480px) {
-  /* Hero still needs navbar clearance */
+  /* Hero - even tighter on small screens */
   .nova-hero {
-    padding-top: calc(var(--nav-height) + 0.25rem);
-    padding-bottom: 0.5rem;
-    padding-left: 0.75rem;
-    padding-right: 0.75rem;
+    margin-top: 0.25rem !important;
+    padding: 0.75rem !important;
+    padding-top: calc(var(--nav-height) + 0.15rem) !important;
+    border-radius: 16px;
   }
 
   .nav-offset {
