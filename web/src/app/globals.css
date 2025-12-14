@@ -780,6 +780,19 @@ p { line-height: 1.7; }
 @media (min-width: 768px) { .nav-offset { padding-top: calc(var(--nav-height) + 2.25rem); } }
 @media (min-width: 1024px) { .nav-offset { padding-top: calc(var(--nav-height) + 2.75rem); } }
 
+/* When nav-offset is on nova-hero, reduce the combined padding on mobile */
+@media (max-width: 768px) {
+  .nova-hero.nav-offset {
+    padding-top: calc(var(--nav-height) + 0.5rem) !important;
+    margin-top: 0 !important;
+  }
+}
+@media (max-width: 480px) {
+  .nova-hero.nav-offset {
+    padding-top: calc(var(--nav-height) + 0.25rem) !important;
+  }
+}
+
 @media (max-width: 1080px) {
   .nav-links { display: none; }
   .nav-cta--ghost { display: none; }
@@ -4094,10 +4107,18 @@ p { line-height: 1.7; }
     min-width: 0;
   }
 
-  /* Table header columns match - push to far right */
+  /* Table header - force full width and position columns at right */
+  .table-header {
+    position: relative !important;
+    width: 100% !important;
+  }
+
   .table-header__cols {
+    position: absolute !important;
+    right: 1rem !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
     gap: 0.15rem !important;
-    margin-left: auto;
   }
 
   .table-header__cols .stat-col {
