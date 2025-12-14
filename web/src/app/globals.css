@@ -719,8 +719,9 @@ p { line-height: 1.7; }
 .nav-drawer {
   position: fixed;
   inset: 0;
-  top: 78px;
-  background: transparent;
+  top: 105px;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(10px);
   opacity: 0;
   pointer-events: none;
   transition: opacity var(--duration-normal) var(--ease-smooth);
@@ -733,10 +734,10 @@ p { line-height: 1.7; }
 }
 
 .nav-drawer__content {
-  background: linear-gradient(180deg, rgba(7, 10, 18, 0.98), rgba(6, 12, 24, 0.96));
+  background: rgb(8, 12, 20);
   border-radius: 20px;
-  margin: 0.5rem 1rem 0;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+  margin: 0 1rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
   padding: 1.25rem 1.25rem 1.5rem;
   border: 1px solid var(--border-medium);
 }
