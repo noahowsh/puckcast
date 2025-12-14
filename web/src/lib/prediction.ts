@@ -7,14 +7,12 @@ const tierLabelPattern = /([ABC][+-]?)(?:-|\s*)tier/gi;
 
 export function getPredictionGrade(edge: number): GradeDetail {
   const pts = Math.abs(edge) * 100;
-  if (pts >= 20) return { label: "A+", description: "Very high confidence (≥20 pts edge)" };
-  if (pts >= 17) return { label: "A", description: "High confidence (17-19 pts edge)" };
-  if (pts >= 14) return { label: "A-", description: "Solid confidence (14-16 pts edge)" };
-  if (pts >= 10) return { label: "B+", description: "Above-average confidence (10-13 pts edge)" };
-  if (pts >= 7) return { label: "B", description: "Moderate confidence (7-9 pts edge)" };
-  if (pts >= 4) return { label: "B-", description: "Slight edge (4-6 pts)" };
-  if (pts >= 2) return { label: "C+", description: "Marginal edge (2-3 pts)" };
-  return { label: "C", description: "Near coin flip (<2 pts)" };
+  if (pts >= 25) return { label: "A+", description: "Elite confidence (≥25 pts edge)" };
+  if (pts >= 20) return { label: "A", description: "Strong confidence (20-25 pts edge)" };
+  if (pts >= 15) return { label: "B+", description: "Good confidence (15-20 pts edge)" };
+  if (pts >= 10) return { label: "B", description: "Medium confidence (10-15 pts edge)" };
+  if (pts >= 5) return { label: "C+", description: "Weak confidence (5-10 pts edge)" };
+  return { label: "C", description: "Coin flip (0-5 pts edge)" };
 }
 
 export function normalizeSummaryWithGrade(summary: string, gradeLabel: string): string {

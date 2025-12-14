@@ -1,6 +1,13 @@
+/**
+ * StatCard - Reusable card for displaying a single statistic with optional change indicator
+ *
+ * Used for dashboard metrics, player stats, and model performance numbers.
+ * Supports different sizes and compact mode for dense layouts.
+ */
 import React from 'react';
 
 interface StatCardProps {
+  /** Label text displayed above the value */
   label: string;
   value: string | number;
   change?: {

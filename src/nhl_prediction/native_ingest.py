@@ -92,6 +92,12 @@ class ShotFeatures:
     is_even_strength: bool
     is_power_play: bool
     zone: str  # O, D, N
+    is_rush_shot: bool = False  # Shot taken quickly after zone entry
+    period: int = 1
+    # V7.0 Enhanced features
+    is_deflection: bool = False  # Tip-in or deflection
+    is_screened: bool = False  # Goalie view blocked
+    is_one_timer: bool = False  # Shot immediately after pass
 
     def to_dict(self) -> Dict[str, Any]:
         return {
@@ -101,10 +107,16 @@ class ShotFeatures:
             "is_even_strength": 1 if self.is_even_strength else 0,
             "is_power_play": 1 if self.is_power_play else 0,
             "is_offensive_zone": 1 if self.zone == "O" else 0,
+            "is_rush_shot": 1 if self.is_rush_shot else 0,
+            "is_third_period": 1 if self.period >= 3 else 0,
+            # V7.0 enhanced features
+            "is_deflection": 1 if self.is_deflection else 0,
+            "is_screened": 1 if self.is_screened else 0,
+            "is_one_timer": 1 if self.is_one_timer else 0,
         }
 
 
-def _extract_shot_features(play: Dict[str, Any], home_defending: str) -> ShotFeatures:
+def _extract_shot_features(play: Dict[str, Any], home_defending: str, period: int = 1, last_event_time: float = 0, last_event_type: str = "") -> ShotFeatures:
     """Extract features from a shot event for xG model."""
     details = play.get("details", {})
 
@@ -142,6 +154,39 @@ def _extract_shot_features(play: Dict[str, Any], home_defending: str) -> ShotFea
     # Get zone
     zone = details.get("zoneCode", "O")
 
+    # Detect rush shots (shot within 4 seconds of zone entry/turnover)
+    current_time_str = play.get("timeInPeriod", "00:00")
+    try:
+        mins, secs = current_time_str.split(":")
+        current_time_sec = int(mins) * 60 + int(secs)
+    except:
+        current_time_sec = 0
+
+    time_since_last = current_time_sec - last_event_time
+    is_rush = (
+        time_since_last > 0 and time_since_last <= 4 and
+        last_event_type in ["takeaway", "giveaway", "faceoff-won"]
+    )
+
+    # V7.0: Enhanced shot features
+    # Deflection detection (from shot type)
+    is_deflection = shot_type in ["tip-in", "deflected", "tipped"]
+
+    # Screening detection (from description or deflection implies traffic)
+    description = details.get("description", "").lower()
+    is_screened = (
+        is_deflection or
+        distance > 15.0 and any(kw in description for kw in ["screened", "screen", "traffic"])
+    )
+
+    # One-timer detection (pass to shot, inferred from shot type or description)
+    # Note: Limited by NHL API data - best approximation
+    is_one_timer = (
+        shot_type in ["slap", "snap"] and
+        time_since_last > 0 and time_since_last <= 2 and
+        last_event_type in ["pass", "play"]
+    )
+
     return ShotFeatures(
         distance=distance,
         angle=angle,
@@ -149,6 +194,11 @@ def _extract_shot_features(play: Dict[str, Any], home_defending: str) -> ShotFea
         is_even_strength=situation["is_even_strength"],
         is_power_play=situation["is_power_play"],
         zone=zone,
+        is_rush_shot=is_rush,
+        period=period,
+        is_deflection=is_deflection,
+        is_screened=is_screened,
+        is_one_timer=is_one_timer,
     )
 
 
@@ -175,31 +225,40 @@ def _build_xg_training_data(game_ids: List[str], client: GamecenterClient) -> pd
             last_shot_time = None
             last_shot_team = None
 
+            # Track previous event for rush detection
+            last_event_time = 0
+            last_event_type = ""
+
             for play in plays:
                 type_key = play.get("typeDescKey", "")
+                period = play.get("periodDescriptor", {}).get("number", 1)
 
                 # Track which side home team is defending
                 if home_defending is None:
                     home_defending = play.get("homeTeamDefendingSide", "left")
 
-                # Only process shot events
-                if type_key not in ["shot-on-goal", "missed-shot", "blocked-shot", "goal"]:
-                    continue
-
-                # Extract features
-                features = _extract_shot_features(play, home_defending)
-
-                # Detect rebounds (shot within 3 seconds by same team)
+                # Track all events for rush detection
                 current_time_str = play.get("timeInPeriod", "00:00")
-                current_team = play.get("details", {}).get("eventOwnerTeamId")
-                is_rebound = 0
-
-                # Convert MM:SS to seconds
                 try:
                     mins, secs = current_time_str.split(":")
                     current_time_sec = int(mins) * 60 + int(secs)
                 except:
                     current_time_sec = 0
+
+                # Only process shot events
+                if type_key not in ["shot-on-goal", "missed-shot", "blocked-shot", "goal"]:
+                    # Update last event for rush detection
+                    if type_key in ["takeaway", "giveaway", "faceoff-won"]:
+                        last_event_time = current_time_sec
+                        last_event_type = type_key
+                    continue
+
+                # Extract features
+                features = _extract_shot_features(play, home_defending, period, last_event_time, last_event_type)
+
+                # Detect rebounds (shot within 3 seconds by same team)
+                current_team = play.get("details", {}).get("eventOwnerTeamId")
+                is_rebound = 0
 
                 if last_shot_time is not None and last_shot_team == current_team:
                     time_diff = current_time_sec - last_shot_time
@@ -237,21 +296,27 @@ def _train_xg_model(training_data: pd.DataFrame) -> HistGradientBoostingClassifi
     # Encode shot types
     shot_type_dummies = pd.get_dummies(training_data["shot_type"], prefix="shot")
 
-    # Prepare features (now includes rebound detection)
-    feature_cols = ["distance", "angle", "is_even_strength", "is_power_play", "is_offensive_zone", "is_rebound"]
+    # Prepare features (includes rebound, rush, period detection, and V7.0 enhancements)
+    feature_cols = [
+        "distance", "angle",
+        "is_even_strength", "is_power_play", "is_offensive_zone",
+        "is_rebound", "is_rush_shot", "is_third_period",
+        # V7.0 enhanced features
+        "is_deflection", "is_screened", "is_one_timer"
+    ]
     X = pd.concat([training_data[feature_cols], shot_type_dummies], axis=1)
     y = training_data["is_goal"]
 
     # Train/val split
     X_train, X_val, y_train, y_val = train_test_split(X, y, test_size=0.2, random_state=42)
 
-    # Train model (use fewer iterations for speed)
+    # Train model with more capacity for additional features
     model = HistGradientBoostingClassifier(
-        max_iter=100,
+        max_iter=150,  # Increased from 100
         learning_rate=0.1,
-        max_depth=4,
-        max_leaf_nodes=31,
-        min_samples_leaf=20,
+        max_depth=5,  # Increased from 4
+        max_leaf_nodes=41,  # Increased from 31
+        min_samples_leaf=15,  # Decreased from 20 for more flexibility
         random_state=42,
         verbose=0,
     )
@@ -263,6 +328,7 @@ def _train_xg_model(training_data: pd.DataFrame) -> HistGradientBoostingClassifi
     val_acc = model.score(X_val, y_val)
 
     LOGGER.info(f"xG model trained - Train acc: {train_acc:.3f}, Val acc: {val_acc:.3f}")
+    LOGGER.info(f"  Features: {len(X.columns)} total ({len(feature_cols)} base + {len(shot_type_dummies.columns)} shot types)")
 
     # Store feature columns for prediction
     model.feature_columns_ = X.columns.tolist()
@@ -348,11 +414,21 @@ def _process_game_plays(game_id: str, pbp: Dict[str, Any], xg_model: ExpectedGoa
             "reboundsAgainst": 0,
             "reboundGoalsFor": 0,
             "reboundGoalsAgainst": 0,
+            "rushShotsFor": 0,  # Shots within 4s of turnover/zone entry
+            "rushShotsAgainst": 0,
+            "rushGoalsFor": 0,
+            "rushGoalsAgainst": 0,
             "penaltiesTaken": 0,
             "penaltiesDrawn": 0,
             "penaltyMinutes": 0,
             "faceoffsWon": 0,
             "faceoffsLost": 0,
+            "hitsFor": 0,
+            "hitsAgainst": 0,
+            "takeaways": 0,
+            "giveaways": 0,
+            "blockedShotsFor": 0,  # Shots we blocked (defensive)
+            "blockedShotsAgainst": 0,  # Our shots that were blocked (offensive)
         },
         away_team_id: {
             "teamId": away_team_id,
@@ -382,11 +458,21 @@ def _process_game_plays(game_id: str, pbp: Dict[str, Any], xg_model: ExpectedGoa
             "reboundsAgainst": 0,
             "reboundGoalsFor": 0,
             "reboundGoalsAgainst": 0,
+            "rushShotsFor": 0,  # Shots within 4s of turnover/zone entry
+            "rushShotsAgainst": 0,
+            "rushGoalsFor": 0,
+            "rushGoalsAgainst": 0,
             "penaltiesTaken": 0,
             "penaltiesDrawn": 0,
             "penaltyMinutes": 0,
             "faceoffsWon": 0,
             "faceoffsLost": 0,
+            "hitsFor": 0,
+            "hitsAgainst": 0,
+            "takeaways": 0,
+            "giveaways": 0,
+            "blockedShotsFor": 0,  # Shots we blocked (defensive)
+            "blockedShotsAgainst": 0,  # Our shots that were blocked (offensive)
         },
     }
 
@@ -396,15 +482,28 @@ def _process_game_plays(game_id: str, pbp: Dict[str, Any], xg_model: ExpectedGoa
     last_shot_time = None
     last_shot_team = None
 
+    # Track last event for rush detection
+    last_event_time = 0
+    last_event_type = ""
+
     # Process each play
     for play in plays:
         type_key = play.get("typeDescKey", "")
         details = play.get("details", {})
         event_owner = details.get("eventOwnerTeamId")
+        period = play.get("periodDescriptor", {}).get("number", 1)
 
         # Track defending side
         if home_defending is None:
             home_defending = play.get("homeTeamDefendingSide", "left")
+
+        # Get current time for all events
+        current_time_str = play.get("timeInPeriod", "00:00")
+        try:
+            mins, secs = current_time_str.split(":")
+            current_time_sec = int(mins) * 60 + int(secs)
+        except:
+            current_time_sec = 0
 
         # Skip if no event owner
         if not event_owner:
@@ -425,15 +524,7 @@ def _process_game_plays(game_id: str, pbp: Dict[str, Any], xg_model: ExpectedGoa
             stats[opponent_team]["shotsAgainstPerGame"] += 1
 
             # Detect rebounds (shot within 3 seconds by same team)
-            current_time_str = play.get("timeInPeriod", "00:00")
             is_rebound = False
-
-            # Convert MM:SS to seconds
-            try:
-                mins, secs = current_time_str.split(":")
-                current_time_sec = int(mins) * 60 + int(secs)
-            except:
-                current_time_sec = 0
 
             if last_shot_time is not None and last_shot_team == acting_team:
                 time_diff = current_time_sec - last_shot_time
@@ -450,7 +541,7 @@ def _process_game_plays(game_id: str, pbp: Dict[str, Any], xg_model: ExpectedGoa
             last_shot_team = acting_team
 
             # Compute xG
-            features = _extract_shot_features(play, home_defending)
+            features = _extract_shot_features(play, home_defending, period, last_event_time, last_event_type)
             xg = xg_model.predict_xg(features)
 
             stats[acting_team]["xGoalsFor"] += xg
@@ -462,6 +553,19 @@ def _process_game_plays(game_id: str, pbp: Dict[str, Any], xg_model: ExpectedGoa
                 stats[opponent_team]["highDangerShotsAgainst"] += 1
                 stats[acting_team]["highDangerxGoalsFor"] += xg
                 stats[opponent_team]["highDangerxGoalsAgainst"] += xg
+
+            # Rush shots (within 4s of turnover/faceoff/zone entry)
+            if features.is_rush_shot:
+                stats[acting_team]["rushShotsFor"] += 1
+                stats[opponent_team]["rushShotsAgainst"] += 1
+                if type_key == "goal":
+                    stats[acting_team]["rushGoalsFor"] += 1
+                    stats[opponent_team]["rushGoalsAgainst"] += 1
+
+        # Track events for rush detection (after processing all events)
+        if type_key in ["takeaway", "giveaway", "faceoff-won"]:
+            last_event_time = current_time_sec
+            last_event_type = type_key
 
         # === CORSI (all shot attempts) ===
         if type_key in ["shot-on-goal", "goal", "missed-shot", "blocked-shot"]:
@@ -493,6 +597,29 @@ def _process_game_plays(game_id: str, pbp: Dict[str, Any], xg_model: ExpectedGoa
             stats[penalized_team]["penaltyMinutes"] += penalty_minutes
             stats[drawn_by_team]["penaltiesDrawn"] += 1
 
+        # === HITS ===
+        if type_key == "hit":
+            hitting_team = event_owner
+            hit_team = opponent_team
+            stats[hitting_team]["hitsFor"] += 1
+            stats[hit_team]["hitsAgainst"] += 1
+
+        # === TAKEAWAYS ===
+        if type_key == "takeaway":
+            stats[event_owner]["takeaways"] += 1
+
+        # === GIVEAWAYS ===
+        if type_key == "giveaway":
+            stats[event_owner]["giveaways"] += 1
+
+        # === BLOCKED SHOTS ===
+        if type_key == "blocked-shot":
+            # The blocking team is the event owner
+            blocking_team = event_owner
+            shooting_team = opponent_team
+            stats[blocking_team]["blockedShotsFor"] += 1  # Defensive blocks
+            stats[shooting_team]["blockedShotsAgainst"] += 1  # Offensive shots blocked
+
     # Compute derived metrics
     for team_id in [home_team_id, away_team_id]:
         s = stats[team_id]
@@ -515,6 +642,23 @@ def _process_game_plays(game_id: str, pbp: Dict[str, Any], xg_model: ExpectedGoa
 
         # Penalty differential (positive = drew more penalties than took)
         s["penaltyDifferential"] = s["penaltiesDrawn"] - s["penaltiesTaken"]
+
+        # Possession quality: takeaways - giveaways
+        s["possessionDifferential"] = s["takeaways"] - s["giveaways"]
+
+        # Hit differential
+        s["hitDifferential"] = s["hitsFor"] - s["hitsAgainst"]
+
+        # Shot block percentage (how many opponent shots did we block?)
+        total_opponent_attempts = s["shotAttemptsAgainst"]
+        s["shotBlockPct"] = (s["blockedShotsFor"] / total_opponent_attempts * 100) if total_opponent_attempts > 0 else 0.0
+
+        # Rush shot percentage (what % of our shots are rush shots?)
+        total_shots = s["shotsForPerGame"]
+        s["rushShotPct"] = (s["rushShotsFor"] / total_shots * 100) if total_shots > 0 else 0.0
+
+        # Rush goal conversion (how effective are our rush shots?)
+        s["rushGoalConversion"] = (s["rushGoalsFor"] / s["rushShotsFor"] * 100) if s["rushShotsFor"] > 0 else 0.0
 
     return stats
 

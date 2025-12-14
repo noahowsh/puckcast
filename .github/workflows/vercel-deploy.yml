@@ -1,3 +1,13 @@
+# =============================================================================
+# Vercel Auto-Deploy Workflow
+# =============================================================================
+# Automatically deploys the Next.js frontend to Vercel:
+# - Triggers on pushes to main/master that modify web/ directory
+# - Gracefully skips if Vercel secrets not configured
+#
+# Required secrets: VERCEL_ORG_ID, VERCEL_PROJECT_ID, VERCEL_TOKEN
+# =============================================================================
+
 name: Vercel Auto-Deploy
 
 on:

@@ -49,6 +49,8 @@ export type CurrentStanding = {
   goalsAgainstPerGame?: number;
   shotsForPerGame?: number;
   shotsAgainstPerGame?: number;
+  powerPlayPct?: number;
+  penaltyKillPct?: number;
 };
 
 const predictionsPayload = predictionsPayloadRaw as PredictionsPayload;

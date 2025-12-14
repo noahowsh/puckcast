@@ -1,351 +1,959 @@
 import { notFound } from "next/navigation";
-import { buildTeamSnapshots, computeStandingsPowerScore, formatPowerScore, getCurrentStandings, getCurrentPredictions } from "@/lib/current";
-import { TeamLogo } from "@/components/TeamLogo";
-import goaliePulseRaw from "@/data/goaliePulse.json";
-import type { GoaliePulse } from "@/types/goalie";
+import Link from "next/link";
+import { computeStandingsPowerScore, getCurrentStandings, getCurrentPredictions } from "@/lib/current";
+import { fetchTeamRoster } from "@/lib/playerHub";
+import { buildProjectedLineup } from "@/lib/lineupService";
+import { getTeamGoalies } from "@/lib/startingGoalieService";
+import { TeamCrest } from "@/components/TeamCrest";
+import { ProjectedLineupDisplay } from "@/components/LineupDisplay";
+import { TeamGoalieSituationCard } from "@/components/StartingGoalieDisplay";
+import powerIndexSnapshot from "@/data/powerIndexSnapshot.json";
+import startingGoaliesData from "@/data/startingGoalies.json";
 
-const goaliePulse = goaliePulseRaw as GoaliePulse;
-const snapshots = buildTeamSnapshots();
-const snapshotMap = new Map(
-  snapshots.map((team, idx) => [team.abbrev.toLowerCase(), { ...team, powerRank: idx + 1, powerScore: formatPowerScore(team) }]),
-);
+// Type for starting goalie entry
+type StartingGoalieEntry = {
+  team: string;
+  playerId: number | null;
+  goalieName: string | null;
+  confirmedStart: boolean;
+  statusCode: string;
+  statusDescription: string;
+  lastUpdated: string;
+};
+
+type StartingGoaliesPayload = {
+  generatedAt: string;
+  source: string;
+  date: string;
+  teams: Record<string, StartingGoalieEntry>;
+  games: Array<{
+    gameId: string;
+    homeTeam: string;
+    awayTeam: string;
+    homeGoalie: StartingGoalieEntry;
+    awayGoalie: StartingGoalieEntry;
+  }>;
+};
+
+const startingGoalies = startingGoaliesData as StartingGoaliesPayload;
+
+const movementReasons = powerIndexSnapshot.movementReasons as Record<string, string>;
 const standings = getCurrentStandings();
-const standingsMap = new Map(standings.map((t) => [t.abbrev.toLowerCase(), { ...t, record: `${t.wins}-${t.losses}-${t.ot}` }]));
 const predictions = getCurrentPredictions();
 
-function movementLabel(movement: number) {
-  if (movement === 0) return "Even";
-  return movement > 0 ? `+${movement}` : `${movement}`;
+// Build power rankings from standings (consistent across all teams)
+const powerRankings = [...standings]
+  .map(team => ({
+    ...team,
+    powerScore: computeStandingsPowerScore(team),
+    record: `${team.wins}-${team.losses}-${team.ot}`,
+  }))
+  .sort((a, b) => b.powerScore - a.powerScore)
+  .map((team, idx) => ({ ...team, powerRank: idx + 1 }));
+
+const powerRankMap = new Map(powerRankings.map(t => [t.abbrev.toLowerCase(), t]));
+
+// Division mapping
+const divisions: Record<string, { name: string; conference: string; teams: string[] }> = {
+  atlantic: { name: "Atlantic", conference: "Eastern", teams: ["BOS", "BUF", "DET", "FLA", "MTL", "OTT", "TBL", "TOR"] },
+  metropolitan: { name: "Metropolitan", conference: "Eastern", teams: ["CAR", "CBJ", "NJD", "NYI", "NYR", "PHI", "PIT", "WSH"] },
+  central: { name: "Central", conference: "Western", teams: ["CHI", "COL", "DAL", "MIN", "NSH", "STL", "UTA", "WPG"] },
+  pacific: { name: "Pacific", conference: "Western", teams: ["ANA", "CGY", "EDM", "LAK", "SEA", "SJS", "VAN", "VGK"] },
+};
+
+function getTeamDivision(abbrev: string) {
+  for (const [, div] of Object.entries(divisions)) {
+    if (div.teams.includes(abbrev)) return div;
+  }
+  return null;
 }
 
-function buildStrengths(team: (typeof snapshots)[number]) {
+// Get expected starter for a team if they have a game today
+function getTeamStartingGoalie(teamAbbrev: string): StartingGoalieEntry | null {
+  return startingGoalies.teams[teamAbbrev] ?? null;
+}
+
+// Get opponent's starting goalie for a matchup
+function getOpponentGoalie(teamAbbrev: string, opponentAbbrev: string): StartingGoalieEntry | null {
+  return startingGoalies.teams[opponentAbbrev] ?? null;
+}
+
+// Get status color for goalie status
+function getGoalieStatusColor(statusCode: string): string {
+  switch (statusCode.toLowerCase()) {
+    case 'confirmed': return '#10b981';
+    case 'expected': return '#3b82f6';
+    case 'likely': return '#f59e0b';
+    case 'probable': return '#f97316';
+    default: return 'var(--text-tertiary)';
+  }
+}
+
+function getRankColor(rank: number, total: number = 32) {
+  const pct = rank / total;
+  if (pct <= 0.125) return '#3b82f6';  // Top ~4 (Elite) - Blue
+  if (pct <= 0.3125) return '#10b981'; // 5-10 (Great) - Green
+  if (pct <= 0.5) return '#f59e0b';    // 11-16 (Good) - Amber
+  if (pct <= 0.75) return '#f97316';   // 17-24 (Average) - Orange
+  return '#ef4444';                    // 25-32 (Below Avg) - Red
+}
+
+function getLeagueRank(abbrev: string, stat: 'goalsForPerGame' | 'goalsAgainstPerGame' | 'shotsForPerGame' | 'shotsAgainstPerGame' | 'pointPctg' | 'goalDifferential', ascending: boolean = false) {
+  const sorted = [...standings].sort((a, b) => {
+    const aVal = a[stat] ?? 0;
+    const bVal = b[stat] ?? 0;
+    return ascending ? aVal - bVal : bVal - aVal;
+  });
+  return sorted.findIndex(t => t.abbrev === abbrev) + 1;
+}
+
+// Calculate efficiency ranks
+function getShootingPctRank(abbrev: string) {
+  const withPct = standings.map(t => ({
+    abbrev: t.abbrev,
+    pct: t.goalsForPerGame && t.shotsForPerGame ? t.goalsForPerGame / t.shotsForPerGame : 0
+  })).sort((a, b) => b.pct - a.pct);
+  return withPct.findIndex(t => t.abbrev === abbrev) + 1;
+}
+
+function getSavePctRank(abbrev: string) {
+  const withPct = standings.map(t => ({
+    abbrev: t.abbrev,
+    pct: t.goalsAgainstPerGame && t.shotsAgainstPerGame ? 1 - t.goalsAgainstPerGame / t.shotsAgainstPerGame : 0
+  })).sort((a, b) => b.pct - a.pct);
+  return withPct.findIndex(t => t.abbrev === abbrev) + 1;
+}
+
+function getPowerPlayRank(abbrev: string) {
+  const sorted = [...standings]
+    .filter(t => t.powerPlayPct != null)
+    .sort((a, b) => (b.powerPlayPct ?? 0) - (a.powerPlayPct ?? 0));
+  return sorted.findIndex(t => t.abbrev === abbrev) + 1;
+}
+
+function getPenaltyKillRank(abbrev: string) {
+  const sorted = [...standings]
+    .filter(t => t.penaltyKillPct != null)
+    .sort((a, b) => (b.penaltyKillPct ?? 0) - (a.penaltyKillPct ?? 0));
+  return sorted.findIndex(t => t.abbrev === abbrev) + 1;
+}
+
+function buildStrengths(teamData: typeof powerRankings[number]) {
   const strengths: string[] = [];
-  if (team.avgProb > 0.55) strengths.push("Consistent favorite in the model");
-  if ((team.avgEdge ?? 0) > 0.12) strengths.push("High average edge vs market baselines");
-  if ((team.favoriteRate ?? 0) > 0.6) strengths.push("Wins model coin flips often");
-  if (strengths.length === 0) strengths.push("Steady but not dominant in recent projections");
-  return strengths;
+  const offenseRank = getLeagueRank(teamData.abbrev, 'goalsForPerGame');
+  const defenseRank = getLeagueRank(teamData.abbrev, 'goalsAgainstPerGame', true);
+  const shotsForRank = getLeagueRank(teamData.abbrev, 'shotsForPerGame');
+
+  if (offenseRank <= 5) strengths.push(`Elite offense - #${offenseRank} in goals/game`);
+  else if (offenseRank <= 10) strengths.push(`Strong offense - #${offenseRank} in scoring`);
+
+  if (defenseRank <= 5) strengths.push(`Stingy defense - #${defenseRank} in goals against`);
+  else if (defenseRank <= 10) strengths.push(`Solid defense - #${defenseRank} in GA/game`);
+
+  if (shotsForRank <= 5) strengths.push(`Shot generation machine - #${shotsForRank} in shots/game`);
+  if ((teamData.goalDifferential ?? 0) > 20) strengths.push("Elite goal differential");
+  if ((teamData.pointPctg ?? 0) > 0.65) strengths.push("Outstanding point percentage");
+  if (teamData.powerRank <= 5) strengths.push(`Top 5 in Power Index (#${teamData.powerRank})`);
+
+  if (strengths.length === 0) strengths.push("Steady but not dominant in projections");
+  return strengths.slice(0, 4);
 }
 
-function buildWeaknesses(team: (typeof snapshots)[number]) {
+function buildWeaknesses(teamData: typeof powerRankings[number]) {
   const weaknesses: string[] = [];
-  if (team.avgProb < 0.5) weaknesses.push("Model sees below-average win probability");
-  if ((team.avgEdge ?? 0) < 0.08) weaknesses.push("Edges are tight; little margin for error");
-  if ((team.favoriteRate ?? 0) < 0.4) weaknesses.push("Rarely a strong favorite in the model");
-  if (weaknesses.length === 0) weaknesses.push("Edges can compress against top opponents");
-  return weaknesses;
+  const offenseRank = getLeagueRank(teamData.abbrev, 'goalsForPerGame');
+  const defenseRank = getLeagueRank(teamData.abbrev, 'goalsAgainstPerGame', true);
+  const shotsAgainstRank = getLeagueRank(teamData.abbrev, 'shotsAgainstPerGame', true);
+
+  if (offenseRank >= 28) weaknesses.push(`Struggling offense - #${offenseRank} in goals`);
+  else if (offenseRank >= 22) weaknesses.push(`Below-average scoring - #${offenseRank}`);
+
+  if (defenseRank >= 28) weaknesses.push(`Leaky defense - #${defenseRank} in goals against`);
+  else if (defenseRank >= 22) weaknesses.push(`Defensive concerns - #${defenseRank} in GA`);
+
+  if (shotsAgainstRank >= 28) weaknesses.push(`Giving up too many shots - #${shotsAgainstRank}`);
+  if ((teamData.goalDifferential ?? 0) < -15) weaknesses.push("Concerning goal differential");
+  if (teamData.powerRank >= 25) weaknesses.push(`Bottom tier in Power Index (#${teamData.powerRank})`);
+
+  if (weaknesses.length === 0) weaknesses.push("No major weaknesses identified");
+  return weaknesses.slice(0, 4);
 }
 
 export function generateStaticParams() {
-  return standings.map((team) => ({
-    abbrev: team.abbrev.toLowerCase(),
-  }));
+  return standings.map((team) => ({ abbrev: team.abbrev.toLowerCase() }));
 }
 
 export default async function TeamPage({ params }: { params: Promise<{ abbrev: string }> }) {
   const { abbrev } = await params;
   const key = abbrev?.toLowerCase?.();
   if (!key) return notFound();
-  const fallbackStandings = standingsMap.get(key);
-  const snapshot =
-    snapshotMap.get(key) ||
-    (fallbackStandings && {
-      team: fallbackStandings.team,
-      abbrev: fallbackStandings.abbrev,
-      games: fallbackStandings.gamesPlayed,
-      avgProb: 0.5,
-      avgEdge: 0,
-      favoriteRate: 0.5,
-      record: fallbackStandings.record,
-      points: fallbackStandings.points,
-      pointPctg: fallbackStandings.pointPctg,
-      standingsRank: fallbackStandings.rank,
-      powerRank: fallbackStandings.rank,
-      powerScore: computeStandingsPowerScore(fallbackStandings),
-    });
-  if (!snapshot) return notFound();
 
-  const standingsInfo = standingsMap.get(key);
-  const powerScore = snapshot.powerScore ?? formatPowerScore(snapshot as any);
-  const movement = standingsInfo?.rank ? standingsInfo.rank - snapshot.powerRank : 0;
-  const strengths = buildStrengths(snapshot);
-  const weaknesses = buildWeaknesses(snapshot);
+  const teamData = powerRankMap.get(key);
+  if (!teamData) return notFound();
 
-  // Get upcoming games for this team
-  const upcomingGames = predictions.games.filter(
-    (game) => game.homeTeam.abbrev === snapshot.abbrev || game.awayTeam.abbrev === snapshot.abbrev
-  );
+  const movement = teamData.rank - teamData.powerRank;
+  const strengths = buildStrengths(teamData);
+  const weaknesses = buildWeaknesses(teamData);
+  const teamDivision = getTeamDivision(teamData.abbrev);
 
-  // Get team goalies
-  const teamGoalies = goaliePulse.goalies.filter((g) => g.team === snapshot.abbrev);
+  // Get division standings
+  const divisionStandings = teamDivision
+    ? powerRankings.filter(t => teamDivision.teams.includes(t.abbrev)).sort((a, b) => b.points - a.points)
+    : [];
+  const divisionRank = divisionStandings.findIndex(t => t.abbrev === teamData.abbrev) + 1;
+
+  // Get conference standings
+  const conferenceTeams = teamDivision
+    ? Object.values(divisions).filter(d => d.conference === teamDivision.conference).flatMap(d => d.teams)
+    : [];
+  const conferenceStandings = powerRankings.filter(t => conferenceTeams.includes(t.abbrev)).sort((a, b) => b.points - a.points);
+  const conferenceRank = conferenceStandings.findIndex(t => t.abbrev === teamData.abbrev) + 1;
+
+  // Get upcoming games (up to 3)
+  const upcomingGames = predictions.games
+    .filter((game) => game.homeTeam.abbrev === teamData.abbrev || game.awayTeam.abbrev === teamData.abbrev)
+    .slice(0, 3);
+
+  // Fetch team roster, projected lineup, and goalie info in parallel
+  const [roster, projectedLineup, goalieInfo] = await Promise.all([
+    fetchTeamRoster(teamData.abbrev),
+    buildProjectedLineup(teamData.abbrev),
+    getTeamGoalies(teamData.abbrev),
+  ]);
+  const allSkaters = [...roster.forwards, ...roster.defensemen].sort((a, b) => b.stats.points - a.stats.points);
+
+  // Calculate efficiency metrics
+  const shootingPct = teamData.goalsForPerGame && teamData.shotsForPerGame
+    ? (teamData.goalsForPerGame / teamData.shotsForPerGame * 100) : 0;
+  const savePct = teamData.goalsAgainstPerGame && teamData.shotsAgainstPerGame
+    ? ((1 - teamData.goalsAgainstPerGame / teamData.shotsAgainstPerGame) * 100) : 0;
+
+  // All league ranks
+  const ranks = {
+    offense: getLeagueRank(teamData.abbrev, 'goalsForPerGame'),
+    defense: getLeagueRank(teamData.abbrev, 'goalsAgainstPerGame', true),
+    shotsFor: getLeagueRank(teamData.abbrev, 'shotsForPerGame'),
+    shotsAgainst: getLeagueRank(teamData.abbrev, 'shotsAgainstPerGame', true),
+    goalDiff: getLeagueRank(teamData.abbrev, 'goalDifferential'),
+    pointPct: getLeagueRank(teamData.abbrev, 'pointPctg'),
+    shootingPct: getShootingPctRank(teamData.abbrev),
+    savePct: getSavePctRank(teamData.abbrev),
+    powerPlay: getPowerPlayRank(teamData.abbrev),
+    penaltyKill: getPenaltyKillRank(teamData.abbrev),
+  };
 
   return (
     <div className="min-h-screen">
       <div className="container">
+        {/* Hero Section */}
         <section className="nova-hero nav-offset">
           <div className="nova-hero__grid nova-hero__grid--balanced">
             <div className="nova-hero__text">
-              <div className="pill-row">
-                <span className="pill">Team profile</span>
-                <span className="pill">{snapshot.team}</span>
-              </div>
-              <h1 className="display-xl">
-                #{snapshot.powerRank} · {snapshot.team}
-              </h1>
-              <p className="lead">
-                Model view of the {snapshot.team}: power index, edges, upcoming games, and how the model stacks them versus the standings.
-              </p>
-              <div className="stat-grid">
-                <div className="stat-tile">
-                  <p className="stat-tile__label">Power score</p>
-                  <p className="stat-tile__value">{powerScore}</p>
-                  <p className="stat-tile__detail">#{snapshot.powerRank} in the model</p>
+              <h1 className="display-xl">{teamData.team}</h1>
+              <p className="lead">{teamDivision?.name} Division • {teamDivision?.conference} Conference</p>
+
+              {/* Key Stats */}
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '0.75rem', marginTop: '1.5rem' }}>
+                <div style={{ padding: '1rem', background: 'rgba(255,255,255,0.03)', borderRadius: '0.75rem', textAlign: 'center' }}>
+                  <p style={{ fontSize: '2rem', fontWeight: 800, color: getRankColor(teamData.powerRank), lineHeight: 1 }}>#{teamData.powerRank}</p>
+                  <p style={{ fontSize: '0.65rem', color: 'var(--text-tertiary)', marginTop: '0.25rem', textTransform: 'uppercase' }}>Power Index</p>
                 </div>
-                <div className="stat-tile">
-                  <p className="stat-tile__label">Record</p>
-                  <p className="stat-tile__value">{standingsInfo?.record ?? "N/A"}</p>
-                  <p className="stat-tile__detail">Points {standingsInfo?.points ?? "N/A"}</p>
+                <div style={{ padding: '1rem', background: 'rgba(255,255,255,0.03)', borderRadius: '0.75rem', textAlign: 'center' }}>
+                  <p style={{ fontSize: '2rem', fontWeight: 800, color: 'white', lineHeight: 1 }}>{teamData.points}</p>
+                  <p style={{ fontSize: '0.65rem', color: 'var(--text-tertiary)', marginTop: '0.25rem', textTransform: 'uppercase' }}>Points</p>
                 </div>
-                <div className="stat-tile">
-                  <p className="stat-tile__label">Model win %</p>
-                  <p className="stat-tile__value">{(snapshot.avgProb * 100).toFixed(1)}%</p>
-                  <p className="stat-tile__detail">Avg edge {(snapshot.avgEdge * 100).toFixed(1)} pts</p>
+                <div style={{ padding: '1rem', background: 'rgba(255,255,255,0.03)', borderRadius: '0.75rem', textAlign: 'center' }}>
+                  <p style={{ fontSize: '2rem', fontWeight: 800, color: teamData.goalDifferential >= 0 ? '#10b981' : '#ef4444', lineHeight: 1 }}>
+                    {teamData.goalDifferential >= 0 ? '+' : ''}{teamData.goalDifferential}
+                  </p>
+                  <p style={{ fontSize: '0.65rem', color: 'var(--text-tertiary)', marginTop: '0.25rem', textTransform: 'uppercase' }}>Goal Diff</p>
                 </div>
-                <div className="stat-tile">
-                  <p className="stat-tile__label">Movement</p>
-                  <p className="stat-tile__value">{movementLabel(movement)}</p>
-                  <p className="stat-tile__detail">vs standings #{standingsInfo?.rank ?? "N/A"}</p>
+                <div style={{ padding: '1rem', background: 'rgba(255,255,255,0.03)', borderRadius: '0.75rem', textAlign: 'center' }}>
+                  <p style={{ fontSize: '2rem', fontWeight: 800, color: 'white', lineHeight: 1 }}>{(teamData.pointPctg * 100).toFixed(0)}%</p>
+                  <p style={{ fontSize: '0.65rem', color: 'var(--text-tertiary)', marginTop: '0.25rem', textTransform: 'uppercase' }}>Point %</p>
                 </div>
               </div>
             </div>
 
-            <div className="nova-hero__panel">
-              <div className="flex items-center gap-3 mb-4">
-                <TeamLogo teamAbbrev={snapshot.abbrev} size="sm" />
+            {/* Team Card Panel */}
+            <div className="nova-hero__panel" style={{ padding: '1.5rem' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem', marginBottom: '1.25rem' }}>
+                <div style={{ position: 'relative', width: '120px', height: '120px' }}>
+                  {/* Progress ring */}
+                  <svg width="120" height="120" viewBox="0 0 120 120" style={{ position: 'absolute', transform: 'rotate(-90deg)' }}>
+                    <circle cx="60" cy="60" r="56" fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth="6" />
+                    <circle cx="60" cy="60" r="56" fill="none" stroke={getRankColor(teamData.powerRank)} strokeWidth="6"
+                      strokeDasharray={`${((33 - teamData.powerRank) / 32) * 352} 352`} strokeLinecap="round" />
+                  </svg>
+                  {/* Logo with gradient background filling the ring */}
+                  <div className="team-hero-crest" style={{
+                    position: 'absolute',
+                    top: '50%',
+                    left: '50%',
+                    transform: 'translate(-50%, -50%)',
+                    width: '106px',
+                    height: '106px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}>
+                    <TeamCrest abbrev={teamData.abbrev} size={106} />
+                  </div>
+                </div>
+                <div style={{ flex: 1 }}>
+                  <p style={{ fontSize: '3rem', fontWeight: 800, color: 'white', lineHeight: 1, letterSpacing: '-0.02em' }}>#{teamData.powerRank}</p>
+                  <p style={{ fontSize: '0.8rem', color: 'var(--text-tertiary)', marginTop: '0.35rem', fontWeight: 500 }}>Power Index</p>
+                </div>
+              </div>
+
+              {/* Record Bar - Fixed OT issue */}
+              <div style={{ background: 'rgba(255,255,255,0.03)', borderRadius: '0.75rem', padding: '1rem', marginBottom: '1rem' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
+                  <span style={{ fontSize: '0.7rem', color: 'var(--text-tertiary)', textTransform: 'uppercase' }}>Season Record</span>
+                  <span style={{ fontSize: '1.25rem', fontWeight: 700, color: 'white' }}>{teamData.record}</span>
+                </div>
+                <div style={{ display: 'flex', height: '24px', borderRadius: '6px', overflow: 'hidden' }}>
+                  <div style={{ width: `${(teamData.wins / teamData.gamesPlayed) * 100}%`, background: '#10b981', display: 'flex', alignItems: 'center', justifyContent: 'center', minWidth: '30px' }}>
+                    <span style={{ fontSize: '0.7rem', fontWeight: 600, color: 'white' }}>{teamData.wins}W</span>
+                  </div>
+                  <div style={{ width: `${(teamData.losses / teamData.gamesPlayed) * 100}%`, background: '#ef4444', display: 'flex', alignItems: 'center', justifyContent: 'center', minWidth: '30px' }}>
+                    <span style={{ fontSize: '0.7rem', fontWeight: 600, color: 'white' }}>{teamData.losses}L</span>
+                  </div>
+                  {teamData.ot > 0 && (
+                    <div style={{ width: `${(teamData.ot / teamData.gamesPlayed) * 100}%`, background: '#f59e0b', display: 'flex', alignItems: 'center', justifyContent: 'center', minWidth: '30px' }}>
+                      <span style={{ fontSize: '0.7rem', fontWeight: 600, color: 'white' }}>{teamData.ot}OT</span>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Division/Conference */}
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem' }}>
+                <div style={{ padding: '0.5rem', background: 'rgba(255,255,255,0.03)', borderRadius: '0.5rem', textAlign: 'center' }}>
+                  <p style={{ fontSize: '1.25rem', fontWeight: 700, color: getRankColor(divisionRank, 8) }}>{divisionRank}{['st','nd','rd'][divisionRank-1] || 'th'}</p>
+                  <p style={{ fontSize: '0.6rem', color: 'var(--text-tertiary)', textTransform: 'uppercase' }}>{teamDivision?.name} Div</p>
+                </div>
+                <div style={{ padding: '0.5rem', background: 'rgba(255,255,255,0.03)', borderRadius: '0.5rem', textAlign: 'center' }}>
+                  <p style={{ fontSize: '1.25rem', fontWeight: 700, color: getRankColor(conferenceRank, 16) }}>{conferenceRank}{['st','nd','rd'][conferenceRank-1] || 'th'}</p>
+                  <p style={{ fontSize: '0.6rem', color: 'var(--text-tertiary)', textTransform: 'uppercase' }}>{teamDivision?.conference} Conf</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Standings vs Power Index Comparison */}
+        <section className="nova-section">
+          <h2 className="text-xl font-bold text-white mb-3">Standings vs Power Index</h2>
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div className="card" style={{ padding: '1.25rem' }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem' }}>
                 <div>
-                  <p className="text-lg font-semibold text-white">{snapshot.team}</p>
-                  <p className="text-sm text-white/60">Power score {powerScore}</p>
+                  <p style={{ fontSize: '0.7rem', color: 'var(--text-tertiary)', textTransform: 'uppercase' }}>League Standings</p>
+                  <p style={{ fontSize: '2.5rem', fontWeight: 800, color: 'white', lineHeight: 1 }}>#{teamData.rank}</p>
+                </div>
+                <div style={{ textAlign: 'right' }}>
+                  <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>{teamData.points} points</p>
+                  <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>{teamData.record}</p>
                 </div>
               </div>
-              <div className="grid gap-3 sm:grid-cols-2">
-                <div className="card-flat">
-                  <p className="stat-label">Strengths</p>
-                  <ul className="space-y-2 text-sm text-white/80">
-                    {strengths.map((item, idx) => (
-                      <li key={idx}>• {item}</li>
-                    ))}
-                  </ul>
+              <p style={{ fontSize: '0.8rem', color: 'var(--text-tertiary)' }}>Based on total points earned this season</p>
+            </div>
+            <div className="card" style={{ padding: '1.25rem', borderLeft: `4px solid ${getRankColor(teamData.powerRank)}` }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem' }}>
+                <div>
+                  <p style={{ fontSize: '0.7rem', color: 'var(--text-tertiary)', textTransform: 'uppercase' }}>Power Index</p>
+                  <p style={{ fontSize: '2.5rem', fontWeight: 800, color: getRankColor(teamData.powerRank), lineHeight: 1 }}>#{teamData.powerRank}</p>
                 </div>
-                <div className="card-flat">
-                  <p className="stat-label">Weaknesses</p>
-                  <ul className="space-y-2 text-sm text-white/80">
-                    {weaknesses.map((item, idx) => (
-                      <li key={idx}>• {item}</li>
-                    ))}
-                  </ul>
+                <div style={{ textAlign: 'right' }}>
+                  <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>Score: {teamData.powerScore}</p>
+                  <p style={{
+                    fontSize: '0.75rem',
+                    color: movement > 0 ? '#10b981' : movement < 0 ? '#ef4444' : 'var(--text-tertiary)',
+                    fontWeight: 600
+                  }}>
+                    {movement > 0 ? `▲ ${movement} undervalued` : movement < 0 ? `▼ ${Math.abs(movement)} overvalued` : '● Fair value'}
+                  </p>
                 </div>
               </div>
-              <div className="mt-4 rounded-xl border border-white/10 bg-white/[0.03] p-4">
-                <p className="stat-label mb-1">Next game</p>
-                <p className="text-sm text-white/80">
-                  {snapshot.nextGame ? `vs ${snapshot.nextGame.opponent} on ${snapshot.nextGame.date}` : "TBD"}
-                </p>
+              <p style={{ fontSize: '0.8rem', color: 'var(--text-tertiary)' }}>Model rank using points, goal diff, offense & defense metrics</p>
+            </div>
+          </div>
+        </section>
+
+        {/* Weekly Insight */}
+        {movementReasons[teamData.abbrev] && (
+          <section className="nova-section">
+            <div className="card" style={{ padding: '1.25rem', borderLeft: '4px solid var(--accent-primary)' }}>
+              <p style={{ fontSize: '0.7rem', color: 'var(--text-tertiary)', textTransform: 'uppercase', marginBottom: '0.5rem' }}>Weekly Insight</p>
+              <p style={{ fontSize: '1rem', color: 'var(--text-secondary)', fontStyle: 'italic', lineHeight: 1.5 }}>
+                {movementReasons[teamData.abbrev]}
+              </p>
+            </div>
+          </section>
+        )}
+
+        {/* League Rankings - Expanded */}
+        <section className="nova-section">
+          <h2 className="text-xl font-bold text-white mb-3">League Rankings</h2>
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="card" style={{ padding: '1rem' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
+                <span style={{ fontSize: '0.7rem', color: 'var(--text-tertiary)', textTransform: 'uppercase' }}>Offense</span>
+                <span style={{ fontSize: '1.25rem', fontWeight: 700, color: getRankColor(ranks.offense) }}>#{ranks.offense}</span>
+              </div>
+              <div style={{ height: '6px', background: 'rgba(255,255,255,0.1)', borderRadius: '3px', overflow: 'hidden' }}>
+                <div style={{ height: '100%', width: `${((33 - ranks.offense) / 32) * 100}%`, background: getRankColor(ranks.offense), borderRadius: '3px' }} />
+              </div>
+              <p style={{ fontSize: '0.85rem', color: 'white', marginTop: '0.5rem', fontWeight: 600 }}>{teamData.goalsForPerGame?.toFixed(2)} GPG</p>
+            </div>
+            <div className="card" style={{ padding: '1rem' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
+                <span style={{ fontSize: '0.7rem', color: 'var(--text-tertiary)', textTransform: 'uppercase' }}>Defense</span>
+                <span style={{ fontSize: '1.25rem', fontWeight: 700, color: getRankColor(ranks.defense) }}>#{ranks.defense}</span>
+              </div>
+              <div style={{ height: '6px', background: 'rgba(255,255,255,0.1)', borderRadius: '3px', overflow: 'hidden' }}>
+                <div style={{ height: '100%', width: `${((33 - ranks.defense) / 32) * 100}%`, background: getRankColor(ranks.defense), borderRadius: '3px' }} />
+              </div>
+              <p style={{ fontSize: '0.85rem', color: 'white', marginTop: '0.5rem', fontWeight: 600 }}>{teamData.goalsAgainstPerGame?.toFixed(2)} GA/G</p>
+            </div>
+            <div className="card" style={{ padding: '1rem' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
+                <span style={{ fontSize: '0.7rem', color: 'var(--text-tertiary)', textTransform: 'uppercase' }}>Goal Diff</span>
+                <span style={{ fontSize: '1.25rem', fontWeight: 700, color: getRankColor(ranks.goalDiff) }}>#{ranks.goalDiff}</span>
+              </div>
+              <div style={{ height: '6px', background: 'rgba(255,255,255,0.1)', borderRadius: '3px', overflow: 'hidden' }}>
+                <div style={{ height: '100%', width: `${((33 - ranks.goalDiff) / 32) * 100}%`, background: getRankColor(ranks.goalDiff), borderRadius: '3px' }} />
+              </div>
+              <p style={{ fontSize: '0.85rem', color: teamData.goalDifferential >= 0 ? '#10b981' : '#ef4444', marginTop: '0.5rem', fontWeight: 600 }}>
+                {teamData.goalDifferential >= 0 ? '+' : ''}{teamData.goalDifferential}
+              </p>
+            </div>
+            <div className="card" style={{ padding: '1rem' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
+                <span style={{ fontSize: '0.7rem', color: 'var(--text-tertiary)', textTransform: 'uppercase' }}>Point %</span>
+                <span style={{ fontSize: '1.25rem', fontWeight: 700, color: getRankColor(ranks.pointPct) }}>#{ranks.pointPct}</span>
+              </div>
+              <div style={{ height: '6px', background: 'rgba(255,255,255,0.1)', borderRadius: '3px', overflow: 'hidden' }}>
+                <div style={{ height: '100%', width: `${((33 - ranks.pointPct) / 32) * 100}%`, background: getRankColor(ranks.pointPct), borderRadius: '3px' }} />
+              </div>
+              <p style={{ fontSize: '0.85rem', color: 'white', marginTop: '0.5rem', fontWeight: 600 }}>{(teamData.pointPctg * 100).toFixed(1)}%</p>
+            </div>
+          </div>
+
+          {/* Second row of rankings */}
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4 mt-3">
+            <div className="card" style={{ padding: '1rem' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
+                <span style={{ fontSize: '0.7rem', color: 'var(--text-tertiary)', textTransform: 'uppercase' }}>Shots For</span>
+                <span style={{ fontSize: '1.25rem', fontWeight: 700, color: getRankColor(ranks.shotsFor) }}>#{ranks.shotsFor}</span>
+              </div>
+              <div style={{ height: '6px', background: 'rgba(255,255,255,0.1)', borderRadius: '3px', overflow: 'hidden' }}>
+                <div style={{ height: '100%', width: `${((33 - ranks.shotsFor) / 32) * 100}%`, background: getRankColor(ranks.shotsFor), borderRadius: '3px' }} />
+              </div>
+              <p style={{ fontSize: '0.85rem', color: 'white', marginTop: '0.5rem', fontWeight: 600 }}>{teamData.shotsForPerGame?.toFixed(1)} S/G</p>
+            </div>
+            <div className="card" style={{ padding: '1rem' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
+                <span style={{ fontSize: '0.7rem', color: 'var(--text-tertiary)', textTransform: 'uppercase' }}>Shots Against</span>
+                <span style={{ fontSize: '1.25rem', fontWeight: 700, color: getRankColor(ranks.shotsAgainst) }}>#{ranks.shotsAgainst}</span>
+              </div>
+              <div style={{ height: '6px', background: 'rgba(255,255,255,0.1)', borderRadius: '3px', overflow: 'hidden' }}>
+                <div style={{ height: '100%', width: `${((33 - ranks.shotsAgainst) / 32) * 100}%`, background: getRankColor(ranks.shotsAgainst), borderRadius: '3px' }} />
+              </div>
+              <p style={{ fontSize: '0.85rem', color: 'white', marginTop: '0.5rem', fontWeight: 600 }}>{teamData.shotsAgainstPerGame?.toFixed(1)} SA/G</p>
+            </div>
+            <div className="card" style={{ padding: '1rem' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
+                <span style={{ fontSize: '0.7rem', color: 'var(--text-tertiary)', textTransform: 'uppercase' }}>Shooting %</span>
+                <span style={{ fontSize: '1.25rem', fontWeight: 700, color: getRankColor(ranks.shootingPct) }}>#{ranks.shootingPct}</span>
+              </div>
+              <div style={{ height: '6px', background: 'rgba(255,255,255,0.1)', borderRadius: '3px', overflow: 'hidden' }}>
+                <div style={{ height: '100%', width: `${((33 - ranks.shootingPct) / 32) * 100}%`, background: getRankColor(ranks.shootingPct), borderRadius: '3px' }} />
+              </div>
+              <p style={{ fontSize: '0.85rem', color: 'white', marginTop: '0.5rem', fontWeight: 600 }}>{shootingPct.toFixed(1)}%</p>
+            </div>
+            <div className="card" style={{ padding: '1rem' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
+                <span style={{ fontSize: '0.7rem', color: 'var(--text-tertiary)', textTransform: 'uppercase' }}>Team Save %</span>
+                <span style={{ fontSize: '1.25rem', fontWeight: 700, color: getRankColor(ranks.savePct) }}>#{ranks.savePct}</span>
+              </div>
+              <div style={{ height: '6px', background: 'rgba(255,255,255,0.1)', borderRadius: '3px', overflow: 'hidden' }}>
+                <div style={{ height: '100%', width: `${((33 - ranks.savePct) / 32) * 100}%`, background: getRankColor(ranks.savePct), borderRadius: '3px' }} />
+              </div>
+              <p style={{ fontSize: '0.85rem', color: 'white', marginTop: '0.5rem', fontWeight: 600 }}>{savePct.toFixed(1)}%</p>
+            </div>
+          </div>
+
+          {/* Special Teams */}
+          <h3 className="text-lg font-semibold text-white mt-8 mb-3" style={{ paddingTop: '0.5rem' }}>Special Teams</h3>
+          <div className="grid gap-3 sm:grid-cols-2">
+            <div className="card" style={{ padding: '1rem' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
+                <span style={{ fontSize: '0.7rem', color: 'var(--text-tertiary)', textTransform: 'uppercase' }}>Power Play</span>
+                <span style={{ fontSize: '1.25rem', fontWeight: 700, color: getRankColor(ranks.powerPlay) }}>#{ranks.powerPlay}</span>
+              </div>
+              <div style={{ height: '6px', background: 'rgba(255,255,255,0.1)', borderRadius: '3px', overflow: 'hidden' }}>
+                <div style={{ height: '100%', width: `${((33 - ranks.powerPlay) / 32) * 100}%`, background: getRankColor(ranks.powerPlay), borderRadius: '3px' }} />
+              </div>
+              <p style={{ fontSize: '0.85rem', color: 'white', marginTop: '0.5rem', fontWeight: 600 }}>
+                {teamData.powerPlayPct != null ? `${(teamData.powerPlayPct * 100).toFixed(1)}%` : '—'}
+              </p>
+            </div>
+            <div className="card" style={{ padding: '1rem' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
+                <span style={{ fontSize: '0.7rem', color: 'var(--text-tertiary)', textTransform: 'uppercase' }}>Penalty Kill</span>
+                <span style={{ fontSize: '1.25rem', fontWeight: 700, color: getRankColor(ranks.penaltyKill) }}>#{ranks.penaltyKill}</span>
+              </div>
+              <div style={{ height: '6px', background: 'rgba(255,255,255,0.1)', borderRadius: '3px', overflow: 'hidden' }}>
+                <div style={{ height: '100%', width: `${((33 - ranks.penaltyKill) / 32) * 100}%`, background: getRankColor(ranks.penaltyKill), borderRadius: '3px' }} />
+              </div>
+              <p style={{ fontSize: '0.85rem', color: 'white', marginTop: '0.5rem', fontWeight: 600 }}>
+                {teamData.penaltyKillPct != null ? `${(teamData.penaltyKillPct * 100).toFixed(1)}%` : '—'}
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* Strengths & Weaknesses */}
+        <section className="nova-section">
+          <h2 className="text-xl font-bold text-white mb-3">Analysis</h2>
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div className="card" style={{ borderTop: '3px solid #10b981', padding: '1.25rem' }}>
+              <h3 style={{ fontSize: '0.9rem', fontWeight: 600, color: '#10b981', marginBottom: '0.75rem', textTransform: 'uppercase' }}>Strengths</h3>
+              <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+                {strengths.map((item, idx) => (
+                  <li key={idx} style={{ display: 'flex', gap: '0.5rem', marginBottom: '0.5rem', fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
+                    <span style={{ color: '#10b981' }}>✓</span> {item}
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div className="card" style={{ borderTop: '3px solid #f59e0b', padding: '1.25rem' }}>
+              <h3 style={{ fontSize: '0.9rem', fontWeight: 600, color: '#f59e0b', marginBottom: '0.75rem', textTransform: 'uppercase' }}>Areas to Watch</h3>
+              <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+                {weaknesses.map((item, idx) => (
+                  <li key={idx} style={{ display: 'flex', gap: '0.5rem', marginBottom: '0.5rem', fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
+                    <span style={{ color: '#f59e0b' }}>!</span> {item}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        {/* Goaltending Situation */}
+        {(goalieInfo.starter || goalieInfo.backup) && (
+          <section className="nova-section">
+            <h2 className="text-xl font-bold text-white mb-3">Goaltending Situation</h2>
+            <div className="grid gap-4 sm:grid-cols-2">
+              <TeamGoalieSituationCard
+                starter={goalieInfo.starter}
+                backup={goalieInfo.backup}
+                teamAbbrev={teamData.abbrev}
+              />
+              {/* Next start projection */}
+              {goalieInfo.starter && (
+                <div className="card" style={{ padding: '1.25rem' }}>
+                  <h3 style={{ fontSize: '0.9rem', fontWeight: 600, color: 'white', marginBottom: '1rem' }}>Next Start Analysis</h3>
+                  <div style={{ marginBottom: '1rem' }}>
+                    <p style={{ fontSize: '0.7rem', color: 'var(--text-tertiary)', textTransform: 'uppercase', marginBottom: '0.25rem' }}>
+                      Start Confidence
+                    </p>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                      <div style={{ flex: 1, height: '8px', background: 'rgba(255,255,255,0.1)', borderRadius: '4px', overflow: 'hidden' }}>
+                        <div style={{
+                          width: `${goalieInfo.starter.confidence * 100}%`,
+                          height: '100%',
+                          background: goalieInfo.starter.confidence > 0.7 ? '#10b981' : goalieInfo.starter.confidence > 0.4 ? '#f59e0b' : '#ef4444',
+                          borderRadius: '4px',
+                        }} />
+                      </div>
+                      <span style={{ fontSize: '1rem', fontWeight: 700, color: 'white' }}>
+                        {Math.round(goalieInfo.starter.confidence * 100)}%
+                      </span>
+                    </div>
+                  </div>
+                  <div style={{ padding: '0.75rem', background: 'rgba(255,255,255,0.03)', borderRadius: '0.5rem' }}>
+                    <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', lineHeight: 1.5 }}>
+                      {goalieInfo.starter.restDays !== null && goalieInfo.starter.restDays >= 2
+                        ? `Well-rested with ${goalieInfo.starter.restDays} days off. Strong candidate for next start.`
+                        : goalieInfo.starter.restDays === 1
+                        ? "One day rest. May start depending on schedule."
+                        : goalieInfo.starter.restDays === 0
+                        ? "Started last game. Backup may get the call."
+                        : "Start projection based on season patterns."}
+                    </p>
+                  </div>
+                  <div style={{ marginTop: '1rem', fontSize: '0.7rem', color: 'var(--text-tertiary)' }}>
+                    <p>Source: {goalieInfo.starter.source.replace(/_/g, ' ')}</p>
+                    <p style={{ marginTop: '0.25rem' }}>Updated: {new Date(goalieInfo.starter.updatedAt).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })}</p>
+                  </div>
+                </div>
+              )}
+            </div>
+          </section>
+        )}
+
+        {/* Goals Breakdown Visual */}
+        <section className="nova-section">
+          <h2 className="text-xl font-bold text-white mb-3">Scoring Breakdown</h2>
+          <div className="card" style={{ padding: '1.5rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '2rem' }}>
+              {/* Goals For vs Against visual */}
+              <div style={{ flex: 1 }}>
+                <div style={{ display: 'flex', alignItems: 'center', marginBottom: '1rem' }}>
+                  <div style={{ flex: 1 }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.25rem' }}>
+                      <span style={{ fontSize: '0.75rem', color: '#10b981', fontWeight: 600 }}>Goals For</span>
+                      <span style={{ fontSize: '0.9rem', fontWeight: 700, color: '#10b981' }}>{Math.round((teamData.goalsForPerGame ?? 0) * teamData.gamesPlayed)}</span>
+                    </div>
+                    <div style={{ height: '24px', background: 'rgba(255,255,255,0.05)', borderRadius: '4px', overflow: 'hidden' }}>
+                      <div style={{
+                        height: '100%',
+                        width: `${((teamData.goalsForPerGame ?? 0) / 4.5) * 100}%`,
+                        background: 'linear-gradient(90deg, #10b98140 0%, #10b981 100%)',
+                        borderRadius: '4px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'flex-end',
+                        paddingRight: '8px',
+                      }}>
+                        <span style={{ fontSize: '0.75rem', fontWeight: 600, color: 'white' }}>{teamData.goalsForPerGame?.toFixed(2)}/G</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center' }}>
+                  <div style={{ flex: 1 }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.25rem' }}>
+                      <span style={{ fontSize: '0.75rem', color: '#ef4444', fontWeight: 600 }}>Goals Against</span>
+                      <span style={{ fontSize: '0.9rem', fontWeight: 700, color: '#ef4444' }}>{Math.round((teamData.goalsAgainstPerGame ?? 0) * teamData.gamesPlayed)}</span>
+                    </div>
+                    <div style={{ height: '24px', background: 'rgba(255,255,255,0.05)', borderRadius: '4px', overflow: 'hidden' }}>
+                      <div style={{
+                        height: '100%',
+                        width: `${((teamData.goalsAgainstPerGame ?? 0) / 4.5) * 100}%`,
+                        background: 'linear-gradient(90deg, #ef444440 0%, #ef4444 100%)',
+                        borderRadius: '4px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'flex-end',
+                        paddingRight: '8px',
+                      }}>
+                        <span style={{ fontSize: '0.75rem', fontWeight: 600, color: 'white' }}>{teamData.goalsAgainstPerGame?.toFixed(2)}/G</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              {/* Net result */}
+              <div style={{
+                width: '120px',
+                height: '120px',
+                borderRadius: '50%',
+                background: `conic-gradient(${teamData.goalDifferential >= 0 ? '#10b981' : '#ef4444'} 0deg, rgba(255,255,255,0.05) 0deg)`,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                border: `4px solid ${teamData.goalDifferential >= 0 ? '#10b981' : '#ef4444'}`,
+              }}>
+                <div style={{ textAlign: 'center' }}>
+                  <p style={{
+                    fontSize: '2rem',
+                    fontWeight: 800,
+                    color: teamData.goalDifferential >= 0 ? '#10b981' : '#ef4444',
+                    lineHeight: 1,
+                  }}>
+                    {teamData.goalDifferential >= 0 ? '+' : ''}{teamData.goalDifferential}
+                  </p>
+                  <p style={{ fontSize: '0.6rem', color: 'var(--text-tertiary)', textTransform: 'uppercase', marginTop: '0.25rem' }}>Goal Diff</p>
+                </div>
               </div>
             </div>
           </div>
         </section>
 
+        {/* Today's Game Predictions */}
         <section className="nova-section">
-          <div className="card">
-            <h2 className="text-xl font-bold text-white mb-3">How the model sees this team</h2>
-            <p className="text-white/75 leading-relaxed">
-              {snapshot.team} rate as #{snapshot.powerRank} in the Puckcast power index. The model blends win probability, edge, and standings context
-              to size up each matchup. Edges tighten against elite opponents and expand versus teams the model flags as overrated.
-            </p>
-          </div>
-        </section>
-
-        {/* Upcoming Games Section */}
-        <section className="nova-section">
-          <h2 className="text-2xl font-bold text-white mb-4">Upcoming games</h2>
+          <h2 className="text-xl font-bold text-white mb-3">Today&apos;s Game Predictions</h2>
           {upcomingGames.length > 0 ? (
-            <div className="space-y-3">
+            <div className="grid gap-3">
               {upcomingGames.map((game) => {
-                const isHome = game.homeTeam.abbrev === snapshot.abbrev;
+                const isHome = game.homeTeam.abbrev === teamData.abbrev;
                 const opponent = isHome ? game.awayTeam : game.homeTeam;
                 const winProb = isHome ? game.homeWinProb : game.awayWinProb;
                 const teamEdge = isHome ? game.edge : -game.edge;
-
+                const opponentData = powerRankMap.get(opponent.abbrev.toLowerCase());
+                const teamGoalie = getTeamStartingGoalie(teamData.abbrev);
+                const opponentGoalie = getOpponentGoalie(teamData.abbrev, opponent.abbrev);
                 return (
-                  <div key={game.id} className="card">
-                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                      <div className="flex items-center gap-4">
-                        <TeamLogo teamAbbrev={opponent.abbrev} size="xs" />
-                        <div>
-                          <p className="text-white font-semibold">
-                            {isHome ? "vs" : "@"} {opponent.name}
-                          </p>
-                          <p className="text-sm text-white/60">
-                            {game.gameDate} • {game.startTimeEt ?? "TBD"}
-                          </p>
-                          {game.venue && <p className="text-xs text-white/50">{game.venue}</p>}
-                        </div>
+                  <div key={game.id} className="card" style={{ padding: '1.25rem' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                      <div style={{ position: 'relative' }}>
+                        <TeamCrest abbrev={opponent.abbrev} size={56} />
+                        {opponentData && (
+                          <div style={{
+                            position: 'absolute',
+                            bottom: '-4px',
+                            right: '-4px',
+                            background: getRankColor(opponentData.powerRank),
+                            borderRadius: '4px',
+                            padding: '2px 6px',
+                            fontSize: '0.65rem',
+                            fontWeight: 700,
+                            color: 'white',
+                          }}>#{opponentData.powerRank}</div>
+                        )}
                       </div>
-                      <div className="flex flex-col sm:items-end gap-1">
-                        <div className="flex items-center gap-2">
-                          <span className="chip-soft chip-soft--mini">{(winProb * 100).toFixed(1)}% win prob</span>
-                          <span className={`chip-soft chip-soft--mini ${teamEdge >= 0 ? 'text-emerald-400' : 'text-rose-400'}`}>
-                            {teamEdge >= 0 ? '+' : ''}{(teamEdge * 100).toFixed(1)} edge
-                          </span>
+                      <div style={{ flex: 1 }}>
+                        <p style={{ fontSize: '1.1rem', fontWeight: 600, color: 'white' }}>{isHome ? "vs" : "@"} {opponent.name}</p>
+                        <p style={{ fontSize: '0.8rem', color: 'var(--text-tertiary)', marginTop: '0.25rem' }}>{game.startTimeEt ?? "TBD"} • {game.venue}</p>
+                        {opponentData && (
+                          <p style={{ fontSize: '0.75rem', color: 'var(--text-tertiary)', marginTop: '0.25rem' }}>
+                            {opponentData.record} ({opponentData.points} pts)
+                          </p>
+                        )}
+                      </div>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', alignItems: 'flex-end' }}>
+                        <div style={{ display: 'flex', gap: '0.5rem' }}>
+                          <div style={{
+                            padding: '0.5rem 0.75rem',
+                            borderRadius: '8px',
+                            background: winProb >= 0.55 ? 'rgba(16,185,129,0.15)' : winProb >= 0.45 ? 'rgba(59,130,246,0.15)' : 'rgba(245,158,11,0.15)',
+                            border: `1px solid ${winProb >= 0.55 ? 'rgba(16,185,129,0.3)' : winProb >= 0.45 ? 'rgba(59,130,246,0.3)' : 'rgba(245,158,11,0.3)'}`
+                          }}>
+                            <p style={{ fontSize: '0.6rem', color: 'var(--text-tertiary)', textTransform: 'uppercase', marginBottom: '0.15rem' }}>Win Prob</p>
+                            <p style={{ fontSize: '1.25rem', fontWeight: 700, color: winProb >= 0.55 ? '#10b981' : winProb >= 0.45 ? '#3b82f6' : '#f59e0b' }}>
+                              {(winProb * 100).toFixed(0)}%
+                            </p>
+                          </div>
+                          <div style={{
+                            padding: '0.5rem 0.75rem',
+                            borderRadius: '8px',
+                            background: teamEdge >= 0 ? 'rgba(16,185,129,0.15)' : 'rgba(239,68,68,0.15)',
+                            border: `1px solid ${teamEdge >= 0 ? 'rgba(16,185,129,0.3)' : 'rgba(239,68,68,0.3)'}`
+                          }}>
+                            <p style={{ fontSize: '0.6rem', color: 'var(--text-tertiary)', textTransform: 'uppercase', marginBottom: '0.15rem' }}>Model Edge</p>
+                            <p style={{ fontSize: '1.25rem', fontWeight: 700, color: teamEdge >= 0 ? '#10b981' : '#ef4444' }}>
+                              {teamEdge >= 0 ? '+' : ''}{(teamEdge * 100).toFixed(1)}
+                            </p>
+                          </div>
                         </div>
-                        <span className="text-xs text-white/60 text-right sm:text-left">{game.confidenceGrade} confidence</span>
+                        <span style={{
+                          padding: '0.25rem 0.5rem',
+                          borderRadius: '4px',
+                          fontSize: '0.7rem',
+                          fontWeight: 600,
+                          background: game.confidenceGrade === 'A' ? 'rgba(16,185,129,0.2)' : game.confidenceGrade === 'B' ? 'rgba(59,130,246,0.2)' : 'rgba(245,158,11,0.2)',
+                          color: game.confidenceGrade === 'A' ? '#10b981' : game.confidenceGrade === 'B' ? '#3b82f6' : '#f59e0b',
+                        }}>{game.confidenceGrade}-tier confidence</span>
                       </div>
                     </div>
+                    {/* Starting Goalies Section */}
+                    {(teamGoalie || opponentGoalie) && (
+                      <div style={{
+                        marginTop: '1rem',
+                        paddingTop: '1rem',
+                        borderTop: '1px solid rgba(255,255,255,0.08)',
+                        display: 'flex',
+                        gap: '1rem',
+                        flexWrap: 'wrap',
+                      }}>
+                        <div style={{ flex: 1, minWidth: '140px' }}>
+                          <p style={{ fontSize: '0.6rem', color: 'var(--text-tertiary)', textTransform: 'uppercase', marginBottom: '0.35rem' }}>
+                            {teamData.abbrev} Starter
+                          </p>
+                          {teamGoalie && teamGoalie.goalieName ? (
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                              <span style={{ fontSize: '0.9rem', fontWeight: 600, color: 'white' }}>
+                                🥅 {teamGoalie.goalieName}
+                              </span>
+                              <span style={{
+                                padding: '0.15rem 0.4rem',
+                                borderRadius: '4px',
+                                fontSize: '0.6rem',
+                                fontWeight: 600,
+                                textTransform: 'uppercase',
+                                background: `${getGoalieStatusColor(teamGoalie.statusCode)}20`,
+                                color: getGoalieStatusColor(teamGoalie.statusCode),
+                                border: `1px solid ${getGoalieStatusColor(teamGoalie.statusCode)}40`,
+                              }}>
+                                {teamGoalie.statusCode}
+                              </span>
+                            </div>
+                          ) : (
+                            <span style={{ fontSize: '0.85rem', color: 'var(--text-tertiary)', fontStyle: 'italic' }}>TBD</span>
+                          )}
+                        </div>
+                        <div style={{ flex: 1, minWidth: '140px' }}>
+                          <p style={{ fontSize: '0.6rem', color: 'var(--text-tertiary)', textTransform: 'uppercase', marginBottom: '0.35rem' }}>
+                            {opponent.abbrev} Starter
+                          </p>
+                          {opponentGoalie && opponentGoalie.goalieName ? (
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                              <span style={{ fontSize: '0.9rem', fontWeight: 600, color: 'white' }}>
+                                🥅 {opponentGoalie.goalieName}
+                              </span>
+                              <span style={{
+                                padding: '0.15rem 0.4rem',
+                                borderRadius: '4px',
+                                fontSize: '0.6rem',
+                                fontWeight: 600,
+                                textTransform: 'uppercase',
+                                background: `${getGoalieStatusColor(opponentGoalie.statusCode)}20`,
+                                color: getGoalieStatusColor(opponentGoalie.statusCode),
+                                border: `1px solid ${getGoalieStatusColor(opponentGoalie.statusCode)}40`,
+                              }}>
+                                {opponentGoalie.statusCode}
+                              </span>
+                            </div>
+                          ) : (
+                            <span style={{ fontSize: '0.85rem', color: 'var(--text-tertiary)', fontStyle: 'italic' }}>TBD</span>
+                          )}
+                        </div>
+                      </div>
+                    )}
                   </div>
                 );
               })}
             </div>
           ) : (
-            <div className="card">
-              <p className="text-white/70">No upcoming games scheduled</p>
+            <div className="card" style={{ padding: '2rem', textAlign: 'center' }}>
+              <p style={{ fontSize: '1rem', color: 'var(--text-secondary)', marginBottom: '0.5rem' }}>No games scheduled for today</p>
+              <p style={{ fontSize: '0.8rem', color: 'var(--text-tertiary)' }}>Check back on game days for model predictions</p>
             </div>
           )}
         </section>
 
-        {/* Team Statistics Section */}
-        <section className="nova-section">
-          <h2 className="text-2xl font-bold text-white mb-4">Team statistics</h2>
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            <div className="card">
-              <p className="stat-label">Goals per game</p>
-              <p className="stat-tile__value text-2xl">{standingsInfo?.goalsForPerGame?.toFixed(2) ?? "N/A"}</p>
-              <p className="text-xs text-white/50 mt-1">Offense</p>
-            </div>
-            <div className="card">
-              <p className="stat-label">Goals against per game</p>
-              <p className="stat-tile__value text-2xl">{standingsInfo?.goalsAgainstPerGame?.toFixed(2) ?? "N/A"}</p>
-              <p className="text-xs text-white/50 mt-1">Defense</p>
-            </div>
-            <div className="card">
-              <p className="stat-label">Goal differential</p>
-              <p className={`stat-tile__value text-2xl ${(standingsInfo?.goalDifferential ?? 0) >= 0 ? 'text-emerald-400' : 'text-rose-400'}`}>
-                {standingsInfo?.goalDifferential ?? "N/A"}
-              </p>
-              <p className="text-xs text-white/50 mt-1">Season total</p>
-            </div>
-            <div className="card">
-              <p className="stat-label">Point percentage</p>
-              <p className="stat-tile__value text-2xl">{standingsInfo?.pointPctg ? (standingsInfo.pointPctg * 100).toFixed(1) + '%' : "N/A"}</p>
-              <p className="text-xs text-white/50 mt-1">Win rate</p>
-            </div>
-          </div>
-
-          <div className="grid gap-4 sm:grid-cols-2 mt-4">
-            <div className="card">
-              <p className="stat-label mb-3">Shooting</p>
-              <div className="space-y-2">
-                <div className="flex justify-between">
-                  <span className="text-sm text-white/70">Shots for per game</span>
-                  <span className="text-white font-semibold">{standingsInfo?.shotsForPerGame?.toFixed(1) ?? "N/A"}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-sm text-white/70">Shots against per game</span>
-                  <span className="text-white font-semibold">{standingsInfo?.shotsAgainstPerGame?.toFixed(1) ?? "N/A"}</span>
-                </div>
-                {standingsInfo?.shotsForPerGame && standingsInfo?.shotsAgainstPerGame && (
-                  <div className="flex justify-between pt-2 border-t border-white/10">
-                    <span className="text-sm text-white/70">Shot differential</span>
-                    <span className={`font-semibold ${(standingsInfo.shotsForPerGame - standingsInfo.shotsAgainstPerGame) >= 0 ? 'text-emerald-400' : 'text-rose-400'}`}>
-                      {(standingsInfo.shotsForPerGame - standingsInfo.shotsAgainstPerGame) >= 0 ? '+' : ''}
-                      {(standingsInfo.shotsForPerGame - standingsInfo.shotsAgainstPerGame).toFixed(1)}
-                    </span>
-                  </div>
-                )}
-              </div>
-            </div>
-            <div className="card">
-              <p className="stat-label mb-3">Record breakdown</p>
-              <div className="space-y-2">
-                <div className="flex justify-between">
-                  <span className="text-sm text-white/70">Wins</span>
-                  <span className="text-emerald-400 font-semibold">{standingsInfo?.wins ?? "N/A"}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-sm text-white/70">Losses</span>
-                  <span className="text-rose-400 font-semibold">{standingsInfo?.losses ?? "N/A"}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-sm text-white/70">Overtime/Shootout</span>
-                  <span className="text-amber-400 font-semibold">{standingsInfo?.ot ?? "N/A"}</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Goalies Section */}
-        {teamGoalies.length > 0 && (
+        {/* Season Leaders - compact version */}
+        {allSkaters.length > 0 && (
           <section className="nova-section">
-            <h2 className="text-2xl font-bold text-white mb-4">Team goalies</h2>
-            <div className="space-y-3">
-              {teamGoalies.map((goalie) => (
-                <div key={goalie.name} className="card">
-                  <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
-                    <div className="flex-1">
-                      <div className="flex items-center gap-3 mb-2">
-                        <h3 className="text-lg font-bold text-white">{goalie.name}</h3>
-                        <span className={`chip-soft chip-soft--mini ${
-                          goalie.trend === 'surging' ? 'text-emerald-400' :
-                          goalie.trend === 'steady' ? 'text-blue-400' :
-                          'text-white/70'
-                        }`}>
-                          {goalie.trend}
-                        </span>
-                      </div>
-                      <p className="text-sm text-white/70 mb-3">{goalie.note}</p>
-                      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                        <div>
-                          <p className="text-xs text-white/50 mb-1">Season GSAx</p>
-                          <p className="text-white font-semibold">{goalie.seasonGsa.toFixed(1)}</p>
-                        </div>
-                        <div>
-                          <p className="text-xs text-white/50 mb-1">Rolling GSAx</p>
-                          <p className="text-white font-semibold">{goalie.rollingGsa.toFixed(1)}</p>
-                        </div>
-                        <div>
-                          <p className="text-xs text-white/50 mb-1">Rest days</p>
-                          <p className="text-white font-semibold">{goalie.restDays}</p>
-                        </div>
-                        <div>
-                          <p className="text-xs text-white/50 mb-1">Start likelihood</p>
-                          <p className="text-white font-semibold">{(goalie.startLikelihood * 100).toFixed(0)}%</p>
-                        </div>
-                      </div>
+            <h2 className="text-xl font-bold text-white mb-3">Season Leaders</h2>
+            <div className="grid gap-3 sm:grid-cols-3">
+              {/* Points Leader */}
+              {allSkaters[0] && (
+                <Link href={`/players/${allSkaters[0].bio.playerId}`} className="card" style={{ padding: '1rem', textDecoration: 'none' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={`https://assets.nhle.com/mugs/nhl/20252026/${teamData.abbrev}/${allSkaters[0].bio.playerId}.png`}
+                      alt={allSkaters[0].bio.fullName}
+                      width={48}
+                      height={48}
+                      style={{ width: '48px', height: '48px', borderRadius: '50%', objectFit: 'cover' }}
+                    />
+                    <div style={{ flex: 1 }}>
+                      <p style={{ fontSize: '0.65rem', color: 'var(--text-tertiary)', textTransform: 'uppercase' }}>Points Leader</p>
+                      <p style={{ fontSize: '0.95rem', fontWeight: 600, color: 'white' }}>{allSkaters[0].bio.fullName}</p>
+                      <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>{allSkaters[0].stats.goals}G • {allSkaters[0].stats.assists}A</p>
                     </div>
-                    <div className="flex sm:flex-col gap-2">
-                      {goalie.strengths.length > 0 && (
-                        <div className="flex-1">
-                          <p className="text-xs text-emerald-400 mb-1">Strengths</p>
-                          {goalie.strengths.map((s, idx) => (
-                            <p key={idx} className="text-xs text-white/70">• {s}</p>
-                          ))}
-                        </div>
-                      )}
-                      {goalie.watchouts.length > 0 && (
-                        <div className="flex-1">
-                          <p className="text-xs text-amber-400 mb-1">Watch</p>
-                          {goalie.watchouts.map((w, idx) => (
-                            <p key={idx} className="text-xs text-white/70">• {w}</p>
-                          ))}
-                        </div>
-                      )}
-                    </div>
+                    <span style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--aqua)' }}>{allSkaters[0].stats.points}</span>
                   </div>
-                </div>
-              ))}
+                </Link>
+              )}
+
+              {/* Goals Leader */}
+              {(() => {
+                const goalsLeader = [...allSkaters].sort((a, b) => b.stats.goals - a.stats.goals)[0];
+                return goalsLeader && (
+                  <Link href={`/players/${goalsLeader.bio.playerId}`} className="card" style={{ padding: '1rem', textDecoration: 'none' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={`https://assets.nhle.com/mugs/nhl/20252026/${teamData.abbrev}/${goalsLeader.bio.playerId}.png`}
+                        alt={goalsLeader.bio.fullName}
+                        width={48}
+                        height={48}
+                        style={{ width: '48px', height: '48px', borderRadius: '50%', objectFit: 'cover' }}
+                      />
+                      <div style={{ flex: 1 }}>
+                        <p style={{ fontSize: '0.65rem', color: 'var(--text-tertiary)', textTransform: 'uppercase' }}>Goals Leader</p>
+                        <p style={{ fontSize: '0.95rem', fontWeight: 600, color: 'white' }}>{goalsLeader.bio.fullName}</p>
+                        <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>{goalsLeader.stats.gamesPlayed} GP</p>
+                      </div>
+                      <span style={{ fontSize: '1.75rem', fontWeight: 800, color: '#10b981' }}>{goalsLeader.stats.goals}</span>
+                    </div>
+                  </Link>
+                );
+              })()}
+
+              {/* Plus/Minus Leader */}
+              {(() => {
+                const pmLeader = [...allSkaters].sort((a, b) => b.stats.plusMinus - a.stats.plusMinus)[0];
+                return pmLeader && (
+                  <Link href={`/players/${pmLeader.bio.playerId}`} className="card" style={{ padding: '1rem', textDecoration: 'none' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={`https://assets.nhle.com/mugs/nhl/20252026/${teamData.abbrev}/${pmLeader.bio.playerId}.png`}
+                        alt={pmLeader.bio.fullName}
+                        width={48}
+                        height={48}
+                        style={{ width: '48px', height: '48px', borderRadius: '50%', objectFit: 'cover' }}
+                      />
+                      <div style={{ flex: 1 }}>
+                        <p style={{ fontSize: '0.65rem', color: 'var(--text-tertiary)', textTransform: 'uppercase' }}>Best +/-</p>
+                        <p style={{ fontSize: '0.95rem', fontWeight: 600, color: 'white' }}>{pmLeader.bio.fullName}</p>
+                        <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>{pmLeader.bio.position}</p>
+                      </div>
+                      <span style={{ fontSize: '1.75rem', fontWeight: 800, color: pmLeader.stats.plusMinus >= 0 ? '#10b981' : '#ef4444' }}>
+                        {pmLeader.stats.plusMinus > 0 ? '+' : ''}{pmLeader.stats.plusMinus}
+                      </span>
+                    </div>
+                  </Link>
+                );
+              })()}
             </div>
           </section>
         )}
+
+        {/* Projected Roster */}
+        <section className="nova-section">
+          <div className="section-head" style={{ marginBottom: '1.5rem' }}>
+            <div>
+              <p className="eyebrow">Active Roster</p>
+              <h2>Projected Roster</h2>
+              <p className="lead-sm">Players ranked by points, +/-, ice time, and performance. OVR score indicates overall value.</p>
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+              <span className="text-xs text-white/40">
+                Updated: {new Date(projectedLineup.lastUpdated).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+              </span>
+              <Link href="/players" className="cta cta-ghost">
+                All Players →
+              </Link>
+            </div>
+          </div>
+          <ProjectedLineupDisplay lineup={projectedLineup} />
+        </section>
+
+        {/* Division Standings */}
+        {teamDivision && (
+          <section className="nova-section">
+            <h2 className="text-xl font-bold text-white mb-3">{teamDivision.name} Division</h2>
+            <div className="card" style={{ padding: 0, overflow: 'hidden' }}>
+              {divisionStandings.map((team, idx) => {
+                const isCurrent = team.abbrev === teamData.abbrev;
+                return (
+                  <div key={team.abbrev} style={{
+                    display: 'flex', alignItems: 'center', padding: '0.75rem 1rem',
+                    background: isCurrent ? 'rgba(59,130,246,0.15)' : idx % 2 ? 'rgba(255,255,255,0.02)' : 'transparent',
+                    borderLeft: isCurrent ? '3px solid #3b82f6' : '3px solid transparent'
+                  }}>
+                    <span style={{ width: '24px', fontSize: '0.85rem', fontWeight: 600, color: 'var(--text-tertiary)' }}>{idx + 1}</span>
+                    <TeamCrest abbrev={team.abbrev} size={28} />
+                    <span style={{ marginLeft: '0.75rem', flex: 1, fontSize: '0.9rem', fontWeight: isCurrent ? 600 : 400, color: isCurrent ? 'white' : 'var(--text-secondary)' }}>{team.team}</span>
+                    <span style={{ fontSize: '0.8rem', color: 'var(--text-tertiary)', marginRight: '1rem' }}>{team.record}</span>
+                    <span style={{ fontSize: '0.75rem', color: getRankColor(team.powerRank), marginRight: '0.75rem' }}>#{team.powerRank}</span>
+                    <span style={{ fontSize: '0.9rem', fontWeight: 600, color: 'white', width: '35px', textAlign: 'right' }}>{team.points}</span>
+                  </div>
+                );
+              })}
+            </div>
+          </section>
+        )}
+
       </div>
     </div>
   );

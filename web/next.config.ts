@@ -6,7 +6,17 @@ const nextConfig: NextConfig = {
       {
         protocol: "https",
         hostname: "assets.nhle.com",
-        pathname: "/logos/nhl/svg/**",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "cms.nhl.bamgrid.com",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "nhl.bamcontent.com",
+        pathname: "/**",
       },
     ],
   },

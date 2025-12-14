@@ -3,12 +3,52 @@
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import insightsData from "@/data/modelInsights.json";
+import startingGoaliesData from "@/data/startingGoalies.json";
 import type { ModelInsights } from "@/types/insights";
 import type { Prediction, PredictionsPayload } from "@/types/prediction";
 import { getPredictionsPayload, selectCurrentSlate } from "@/lib/data";
 import { getPredictionGrade } from "@/lib/prediction";
-import { teamBorderColor, teamGradient } from "@/lib/teamColors";
 import { TeamCrest } from "@/components/TeamCrest";
+
+// Starting goalies types and data
+type StartingGoalieEntry = {
+  team: string;
+  playerId: number | null;
+  goalieName: string | null;
+  confirmedStart: boolean;
+  statusCode: string;
+  statusDescription: string;
+  lastUpdated: string;
+};
+
+type StartingGoaliesPayload = {
+  generatedAt: string;
+  source: string;
+  date: string;
+  teams: Record<string, StartingGoalieEntry>;
+};
+
+const startingGoalies = startingGoaliesData as StartingGoaliesPayload;
+
+function getGoalieStatusColor(statusCode: string): string {
+  switch (statusCode.toLowerCase()) {
+    case 'confirmed': return '#10b981';
+    case 'expected': return '#3b82f6';
+    case 'likely': return '#f59e0b';
+    case 'probable': return '#f97316';
+    default: return 'var(--text-tertiary)';
+  }
+}
+
+function getGoalieStatusBg(statusCode: string): string {
+  switch (statusCode.toLowerCase()) {
+    case 'confirmed': return 'rgba(16, 185, 129, 0.12)';
+    case 'expected': return 'rgba(59, 130, 246, 0.12)';
+    case 'likely': return 'rgba(245, 158, 11, 0.12)';
+    case 'probable': return 'rgba(249, 115, 22, 0.12)';
+    default: return 'rgba(255,255,255,0.04)';
+  }
+}
 
 const payload: PredictionsPayload = getPredictionsPayload();
 const todaysPredictions = selectCurrentSlate(payload.games);
@@ -29,109 +69,154 @@ const pct = (num: number) => `${(num * 100).toFixed(1)}%`;
 
 type SortKey = "edge" | "time";
 
-function EdgeMeter({ value }: { value: number }) {
-  const width = Math.min(Math.abs(value) * 520, 100);
-  const positive = value >= 0;
+function GoalieTag({ goalie }: { goalie: StartingGoalieEntry | undefined }) {
+  if (!goalie?.goalieName) {
+    return (
+      <span className="goalie-tag goalie-tag--tbd">
+        🥅 TBD
+      </span>
+    );
+  }
+
   return (
-    <div className="edge-meter">
-      <div
-        className="edge-meter__fill"
-        style={{ width: `${width}%`, background: positive ? "linear-gradient(90deg, #6ef0c2, #7ee3ff)" : "linear-gradient(90deg, #ff94a8, #f6c177)" }}
-      />
-    </div>
+    <span
+      className="goalie-tag"
+      style={{
+        background: getGoalieStatusBg(goalie.statusCode),
+        borderColor: `${getGoalieStatusColor(goalie.statusCode)}40`,
+      }}
+    >
+      🥅 {goalie.goalieName}
+      <span
+        className="goalie-tag__status"
+        style={{ color: getGoalieStatusColor(goalie.statusCode) }}
+      >
+        {goalie.statusCode}
+      </span>
+    </span>
   );
 }
 
-function getSummary(predictions: Prediction[]) {
-  if (!predictions.length) {
-    return { avgEdge: 0, aGrades: 0, tossUps: 0 };
-  }
-  const edges = predictions.map((g) => Math.abs(g.edge));
-  const avgEdge = edges.reduce((acc, curr) => acc + curr, 0) / predictions.length;
-  const aGrades = predictions.filter((g) => getPredictionGrade(g.edge).label.includes("A")).length;
-  const tossUps = predictions.filter((g) => Math.abs(g.edge) < 0.02).length;
-  return { avgEdge, aGrades, tossUps };
-}
-
-function PredictionRow({ game }: { game: Prediction }) {
+function MatchupCard({ game }: { game: Prediction }) {
   const favorite = game.modelFavorite === "home" ? game.homeTeam : game.awayTeam;
-  const prob = game.modelFavorite === "home" ? game.homeWinProb : game.awayWinProb;
   const grade = getPredictionGrade(game.edge);
   const edgePts = Math.abs(game.edge * 100);
+  const homeGoalie = startingGoalies.teams[game.homeTeam.abbrev];
+  const awayGoalie = startingGoalies.teams[game.awayTeam.abbrev];
+
   return (
-    <div className="prediction-row">
-          <div className="prediction-row__teams">
-            <div className="versus">
-              <TeamCrest abbrev={game.awayTeam.abbrev} />
-              <span className="versus__divider">@</span>
-              <TeamCrest abbrev={game.homeTeam.abbrev} />
+    <Link href={`/matchup/${game.id}`} className="matchup-card-v3">
+      {/* Teams Row - Big Logos */}
+      <div className="matchup-card-v3__teams-row">
+        {/* Away Side */}
+        <div className="matchup-card-v3__side">
+          <div className="matchup-card-v3__team-block">
+            <div className={`matchup-card-v3__logo-wrap${game.modelFavorite === 'away' ? ' matchup-card-v3__logo-wrap--favored' : ''}`}>
+              <TeamCrest abbrev={game.awayTeam.abbrev} size={84} />
             </div>
-            <div className="prediction-row__meta">
-              <span className="tag">{game.startTimeEt ?? "TBD"}</span>
-          <span className="chip-soft">{game.modelFavorite === "home" ? "Home tilt" : "Road lean"}</span>
+            <div className="matchup-card-v3__team-details">
+              <span className="matchup-card-v3__team-name">{game.awayTeam.name}</span>
+              <span
+                className="matchup-card-v3__prob"
+                style={{ color: game.modelFavorite === 'away' ? 'var(--mint)' : 'var(--text-secondary)' }}
+              >
+                {pct(game.awayWinProb)}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        {/* Center */}
+        <div className="matchup-card-v3__center">
+          <span className="matchup-card-v3__time">{game.startTimeEt ?? "TBD"}</span>
+          <span className="matchup-card-v3__vs">VS</span>
+        </div>
+
+        {/* Home Side */}
+        <div className="matchup-card-v3__side matchup-card-v3__side--home">
+          <div className="matchup-card-v3__team-block">
+            <div className="matchup-card-v3__team-details" style={{ textAlign: 'right' }}>
+              <span className="matchup-card-v3__team-name">{game.homeTeam.name}</span>
+              <span
+                className="matchup-card-v3__prob"
+                style={{ color: game.modelFavorite === 'home' ? 'var(--mint)' : 'var(--text-secondary)' }}
+              >
+                {pct(game.homeWinProb)}
+              </span>
+            </div>
+            <div className={`matchup-card-v3__logo-wrap${game.modelFavorite === 'home' ? ' matchup-card-v3__logo-wrap--favored' : ''}`}>
+              <TeamCrest abbrev={game.homeTeam.abbrev} size={84} />
+            </div>
+          </div>
         </div>
       </div>
 
-      <div className="prediction-row__body">
-        <div>
-          <p className="micro-label">Model lean</p>
-          <p className="edge-card__team">{favorite.name}</p>
-          <p className="edge-card__prob-value">{pct(prob)}</p>
+      {/* Probability Bar - High contrast with labels */}
+      <div className="matchup-card-v3__prob-wrap">
+        <span className="matchup-card-v3__prob-label matchup-card-v3__prob-label--away">{pct(game.awayWinProb)}</span>
+        <div className="matchup-card-v3__prob-bar">
+          <div
+            className="matchup-card-v3__prob-segment matchup-card-v3__prob-segment--away"
+            style={{ width: `${game.awayWinProb * 100}%` }}
+          />
+          <div
+            className="matchup-card-v3__prob-segment matchup-card-v3__prob-segment--home"
+            style={{ width: `${game.homeWinProb * 100}%` }}
+          />
         </div>
-        <div className="prediction-row__grade">
-          <span className="edge-card__grade">{grade.label}</span>
-          <span className="chip-soft">{edgePts.toFixed(1)} pts edge</span>
-        </div>
+        <span className="matchup-card-v3__prob-label matchup-card-v3__prob-label--home">{pct(game.homeWinProb)}</span>
       </div>
 
-      <EdgeMeter value={game.edge} />
-
-      <div className="prediction-row__footer">
-        <span className="chip-soft">Confidence {game.confidenceScore.toFixed(2)}</span>
-        <span className="chip-soft">
-          {game.homeTeam.name} @ {game.awayTeam.name}
-        </span>
+      {/* Goalies Row - Below bar */}
+      <div className="matchup-card-v3__goalies-row">
+        <GoalieTag goalie={awayGoalie} />
+        <GoalieTag goalie={homeGoalie} />
       </div>
-    </div>
+
+      {/* Footer: Grade on left, Model Lean + CTA on right */}
+      <div className="matchup-card-v3__footer">
+        <div className={`matchup-card-v3__grade matchup-card-v3__grade--${grade.label.charAt(0).toLowerCase()}`}>
+          <span className="matchup-card-v3__grade-letter">{grade.label}</span>
+          <span className="matchup-card-v3__grade-edge">{edgePts.toFixed(1)} pts</span>
+        </div>
+
+        <div className="matchup-card-v3__footer-right">
+          <div className="matchup-card-v3__lean">
+            <span className="matchup-card-v3__lean-label">Model lean</span>
+            <span className="matchup-card-v3__lean-team">{favorite.name}</span>
+          </div>
+          <span className="matchup-card-v3__cta">View analysis →</span>
+        </div>
+      </div>
+    </Link>
   );
 }
 
 function ConfidenceLadder() {
-  const ladder = [...modelInsights.confidenceBuckets].reverse();
-  const bandLabel = (label: string) => {
-    // Expected bands: 0-5, 5-10, 10-15, 15-20, 20+ pts
-    const key = label.replace(/\s+/g, "").toLowerCase();
-    if (key.startsWith("0-5")) return "C";
-    if (key.startsWith("5-10")) return "B-";
-    if (key.startsWith("10-15")) return "B+";
-    if (key.startsWith("15-20")) return "A-";
-    if (key.startsWith("20")) return "A+";
-    return "";
-  };
+  const ladder = [...modelInsights.confidenceBuckets].sort((a, b) => b.accuracy - a.accuracy);
   return (
-    <div className="bento-card">
-      <p className="micro-label">Confidence ladder</p>
-      <h3>Holdout accuracy by band</h3>
-      <div className="ladder">
+    <div className="confidence-ladder-bottom">
+      <div className="confidence-ladder-bottom__header">
+        <div>
+          <p className="eyebrow">Model Performance</p>
+          <h3>Confidence Ladder</h3>
+        </div>
+        <Link href="/performance" className="cta cta-ghost">
+          Full breakdown →
+        </Link>
+      </div>
+      <div className="confidence-ladder-bottom__grid">
         {ladder.map((bucket) => (
-          <div key={bucket.label} className="ladder__row">
-            <div>
-              <p className="edge-card__team">
-                {bucket.label}{" "}
-                {bandLabel(bucket.label) && (
-                  <span className="chip-soft" style={{ marginLeft: "0.35rem" }}>
-                    {bandLabel(bucket.label)}
-                  </span>
-                )}
-              </p>
-              <p className="micro-label">{bucket.count} games</p>
+          <div key={bucket.label} className="confidence-ladder-bottom__item">
+            <span className="confidence-ladder-bottom__grade">{bucket.grade}</span>
+            <div className="confidence-ladder-bottom__bar-wrap">
+              <div
+                className="confidence-ladder-bottom__bar"
+                style={{ width: `${Math.max(bucket.accuracy * 100, 10)}%` }}
+              />
             </div>
-            <div className="ladder__meter">
-              <div className="edge-meter edge-meter--thick">
-                <div className="edge-meter__fill edge-meter__fill--gradient" style={{ width: `${Math.min(bucket.accuracy * 100, 100)}%` }} />
-              </div>
-              <span className="edge-card__prob-value">{pct(bucket.accuracy)}</span>
-            </div>
+            <span className="confidence-ladder-bottom__pct">{pct(bucket.accuracy)}</span>
+            <span className="confidence-ladder-bottom__count">{bucket.count}</span>
           </div>
         ))}
       </div>
@@ -141,7 +226,6 @@ function ConfidenceLadder() {
 
 export default function PredictionsPage() {
   const [sortBy, setSortBy] = useState<SortKey>("edge");
-  const summary = getSummary(todaysPredictions);
 
   const sortedGames = useMemo(() => {
     const games = [...todaysPredictions];
@@ -151,74 +235,42 @@ export default function PredictionsPage() {
     return games.sort((a, b) => (a.startTimeUtc ?? "").localeCompare(b.startTimeUtc ?? ""));
   }, [sortBy]);
 
-  const upsetRadar = useMemo(
-    () =>
-      todaysPredictions
-        .filter((g) => g.modelFavorite === "away" && g.awayWinProb >= 0.55)
-        .sort((a, b) => b.awayWinProb - a.awayWinProb)
-        .slice(0, 3),
-    []
-  );
+  const aCount = todaysPredictions.filter(g => getPredictionGrade(g.edge).label.includes('A')).length;
+  const bCount = todaysPredictions.filter(g => getPredictionGrade(g.edge).label.includes('B')).length;
+  const cCount = todaysPredictions.length - aCount - bCount;
 
   return (
     <div className="min-h-screen">
       <div className="container">
-        <section className="nova-hero">
-          <div className="nova-hero__grid">
-            <div className="nova-hero__text">
-              <div className="pill-row">
-                <span className="pill">{todaysPredictions.length ? `${todaysPredictions.length} games live` : "Off day"}</span>
-                {updatedDisplay && <span className="pill">Updated {updatedDisplay} ET</span>}
+        {/* Compact Header with Update Badge */}
+        <section className="predictions-header-v2">
+          <div className="predictions-header-v2__top">
+            <div className="predictions-header-v2__title-group">
+              <h1 className="predictions-header-v2__title">Tonight&apos;s Board</h1>
+              <div className="predictions-header-v2__badges">
+                <span className="predictions-header-v2__badge predictions-header-v2__badge--count">
+                  {todaysPredictions.length} games
+                </span>
+                {updatedDisplay && (
+                  <span className="predictions-header-v2__badge predictions-header-v2__badge--live">
+                    <span className="predictions-header-v2__live-dot" />
+                    Updated {updatedDisplay} ET
+                  </span>
+                )}
               </div>
-              <h1 className="display-xl">Tonight&apos;s predictions, rebuilt.</h1>
-              <p className="lead">
-                This is the product: clean, confident, and fast. Every matchup shows the lean, the win probability, the edge bar, and the model&apos;s
-                conviction so you can scan the slate in seconds.
-              </p>
             </div>
 
-            <div className="nova-hero__panel">
-              <div className="stat-grid">
-                <div className="stat-tile">
-                  <p className="stat-tile__label">Holdout accuracy</p>
-                  <p className="stat-tile__value">{pct(modelInsights.overall.accuracy)}</p>
-                  <p className="stat-tile__detail">Baseline {pct(modelInsights.overall.baseline)}</p>
-                </div>
-                <div className="stat-tile">
-                  <p className="stat-tile__label">Average edge</p>
-                  <p className="stat-tile__value">{(summary.avgEdge * 100).toFixed(1)} pts</p>
-                  <p className="stat-tile__detail">Per matchup</p>
-                </div>
-                <div className="stat-tile">
-                  <p className="stat-tile__label">A grades</p>
-                  <p className="stat-tile__value">{summary.aGrades}</p>
-                  <p className="stat-tile__detail">+ B grade: {todaysPredictions.length - summary.aGrades - summary.tossUps}</p>
-                </div>
-                <div className="stat-tile">
-                  <p className="stat-tile__label">Toss ups</p>
-                  <p className="stat-tile__value">{summary.tossUps}</p>
-                  <p className="stat-tile__detail">Less than 2 pts edge</p>
-                </div>
-              </div>
-              <div className="cta-row">
-                <Link href="/performance" className="cta cta-ghost">
-                  View model receipts
-                </Link>
-                <Link href="/leaderboards" className="cta cta-light">
-                  Power index
-                </Link>
-              </div>
+            <div className="predictions-header-v2__grade-summary">
+              {aCount > 0 && <span className="grade-chip grade-chip--a">{aCount} A-tier</span>}
+              {bCount > 0 && <span className="grade-chip grade-chip--b">{bCount} B-tier</span>}
+              {cCount > 0 && <span className="grade-chip grade-chip--c">{cCount} Toss-up</span>}
             </div>
           </div>
-        </section>
 
-        <section className="nova-section">
-          <div className="section-head">
-            <div>
-              <p className="eyebrow">Clean, fast, scannable</p>
-              <h2>Tonight&apos;s board</h2>
-              <p className="lead-sm">Sort by edge, confidence, or puck drop time. Each row is its own mini dashboard.</p>
-            </div>
+          <div className="predictions-header-v2__controls">
+            <p className="predictions-header-v2__subtitle">
+              Win probabilities and edges with confirmed goalie matchups
+            </p>
             <div className="sort-tabs">
               {(["edge", "time"] as SortKey[]).map((key) => (
                 <button
@@ -227,63 +279,30 @@ export default function PredictionsPage() {
                   onClick={() => setSortBy(key)}
                   type="button"
                 >
-                  {key === "edge" ? "Edge first" : "By start time"}
+                  {key === "edge" ? "By edge" : "By time"}
                 </button>
               ))}
             </div>
           </div>
-
-          <div className="prediction-shell">
-            <div className="prediction-main">
-              {sortedGames.length ? (
-                sortedGames.map((game) => <PredictionRow key={game.id} game={game} />)
-              ) : (
-                <div className="empty-tile">
-                  <p>No games tonight. The feed will auto-refresh when the slate posts.</p>
-                </div>
-              )}
-            </div>
-
-            <div className="prediction-rail">
-              <ConfidenceLadder />
-
-              <div className="bento-card">
-                <p className="micro-label">Update cadence</p>
-                <h3>Live ticker</h3>
-                <p className="bento-copy">
-                  Edges and probabilities refresh as goalies confirm and injuries post. Watch drift in real time on the ticker so you can capture the
-                  earliest number.
-                </p>
-                {updatedDisplay && <span className="chip-soft">Last refresh {updatedDisplay} ET</span>}
-                <Link href="/" className="cta cta-ghost" style={{ width: "100%", justifyContent: "center", marginTop: "0.9rem" }}>
-                  Return to overview
-                </Link>
-              </div>
-
-              {upsetRadar.length > 0 && (
-                <div className="bento-card">
-                  <p className="micro-label">Upset radar</p>
-                  <h3>Road favorites to watch</h3>
-                  <div className="upset-grid">
-                    {upsetRadar.map((game) => (
-                      <div key={game.id} className="upset-card">
-                        <div className="versus">
-                          <TeamCrest abbrev={game.awayTeam.abbrev} />
-                          <span className="versus__divider">at</span>
-                          <TeamCrest abbrev={game.homeTeam.abbrev} />
-                        </div>
-                        <div className="upset-card__prob">
-                          <span className="edge-card__prob-value">{pct(game.awayWinProb)}</span>
-                          <span className="tag">Road lean</span>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
         </section>
+
+        {/* Full Width Matchup Cards */}
+        <section className="matchup-grid-v2">
+          {sortedGames.length ? (
+            sortedGames.map((game) => <MatchupCard key={game.id} game={game} />)
+          ) : (
+            <div className="empty-tile" style={{ gridColumn: '1 / -1' }}>
+              <p>No games tonight. The feed will auto-refresh when the slate posts.</p>
+            </div>
+          )}
+        </section>
+
+        {/* Confidence Ladder - Bottom */}
+        {sortedGames.length > 0 && (
+          <section className="nova-section" style={{ paddingTop: '1.5rem' }}>
+            <ConfidenceLadder />
+          </section>
+        )}
       </div>
     </div>
   );

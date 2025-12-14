@@ -66,6 +66,8 @@ def main() -> None:
       "goalsAgainstPerGame": item.get("goalsAgainstPerGame"),
       "shotsForPerGame": item.get("shotsForPerGame"),
       "shotsAgainstPerGame": item.get("shotsAgainstPerGame"),
+      "powerPlayPct": item.get("powerPlayPct"),
+      "penaltyKillPct": item.get("penaltyKillPct"),
       "seasonId": item.get("seasonId"),
     }
     simplified.append(record)

@@ -9,8 +9,9 @@ const links = [
   { href: "/", label: "Overview" },
   { href: "/predictions", label: "Predictions" },
   { href: "/leaderboards", label: "Power Rankings" },
-  { href: "/performance", label: "Performance" },
   { href: "/teams", label: "Teams" },
+  { href: "/players", label: "Players" },
+  { href: "/performance", label: "Performance" },
 ];
 
 export function SiteNav() {
@@ -73,9 +74,12 @@ export function SiteNav() {
               </Link>
             );
           })}
-          <div className="nav-drawer__cta">
+          <div className="nav-drawer__cta" style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
             <Link href="https://x.com/puckcastai" className="nav-cta nav-cta--ghost" target="_blank" rel="noreferrer" onClick={() => setOpen(false)}>
               Follow on X
+            </Link>
+            <Link href="https://instagram.com/puckcast.ai" className="nav-cta nav-cta--ghost" target="_blank" rel="noreferrer" onClick={() => setOpen(false)}>
+              Follow on Instagram
             </Link>
           </div>
         </div>

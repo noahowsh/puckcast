@@ -7,31 +7,37 @@ import type { PlayerInjuriesPayload, Prediction, SpecialTeamsSplit, StartingGoal
 export const dynamic = "force-dynamic";
 
 export async function GET() {
-  const payload = getPredictionsPayload();
-  const goalies = getGoaliePulse();
-  const startingGoalies = getStartingGoalies();
-  const playerInjuries = getPlayerInjuries();
-  const playerHub = getPlayerHubContext();
-  const matchupMap = new Map<string, GoalieMatchup>(goalies.tonight.games.map((game) => [String(game.gameId), game]));
-  const specialTeams = playerHub.specialTeams?.teams ?? {};
-  const enrichedGames = payload.games.map((game) =>
-    enhanceGame(game, matchupMap, specialTeams, startingGoalies, playerInjuries),
-  );
+  try {
+    const payload = getPredictionsPayload();
+    const goalies = getGoaliePulse();
+    const startingGoalies = getStartingGoalies();
+    const playerInjuries = getPlayerInjuries();
+    const playerHub = getPlayerHubContext();
+    const tonightGames = goalies.tonight?.games ?? [];
+    const matchupMap = new Map<string, GoalieMatchup>(tonightGames.map((game) => [String(game.gameId), game]));
+    const specialTeams = playerHub.specialTeams?.teams ?? {};
+    const enrichedGames = payload.games.map((game) =>
+      enhanceGame(game, matchupMap, specialTeams, startingGoalies, playerInjuries),
+    );
 
-  return NextResponse.json(
-    {
-      ...payload,
-      games: enrichedGames,
-      goalieMetadata: { updatedAt: goalies.updatedAt, projectedGames: goalies.tonight.games.length },
-      specialTeams: playerHub.specialTeams ?? null,
-      goalieShots: playerHub.goalieShotProfiles ?? [],
-    },
-    {
-      headers: {
-        "Cache-Control": "public, max-age=60, stale-while-revalidate=300",
+    return NextResponse.json(
+      {
+        ...payload,
+        games: enrichedGames,
+        goalieMetadata: { updatedAt: goalies.updatedAt, projectedGames: tonightGames.length },
+        specialTeams: playerHub.specialTeams ?? null,
+        goalieShots: playerHub.goalieShotProfiles ?? [],
       },
-    },
-  );
+      {
+        headers: {
+          "Cache-Control": "public, max-age=60, stale-while-revalidate=300",
+        },
+      },
+    );
+  } catch (error) {
+    console.error("API /predictions error:", error);
+    return NextResponse.json({ error: "Failed to fetch predictions" }, { status: 500 });
+  }
 }
 
 function formatStarter(starter: GoalieMatchup["home"] | null) {

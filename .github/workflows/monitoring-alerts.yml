@@ -1,8 +1,19 @@
+# =============================================================================
+# Monitoring & Alerts Workflow
+# =============================================================================
+# Monitors workflow health and sends notifications on failures:
+# - Watches "Daily Predictions Update" and "Scheduled Data Refresh" workflows
+# - Runs health checks every 6 hours
+# - Sends alerts to configured channels (Discord/Slack) on failures
+#
+# Configure ALERT_WEBHOOK_URL secret for notifications.
+# =============================================================================
+
 name: Monitoring & Alerts
 
 on:
   workflow_run:
-    workflows: ["Daily Predictions Update"]
+    workflows: ["Daily Predictions Update", "Scheduled Data Refresh (Granular)"]
     types:
       - completed
   schedule:
@@ -29,13 +40,16 @@ jobs:
       - name: Check workflow status
         id: workflow-check
         run: |
-          # Check if daily predictions workflow succeeded
+          WORKFLOW_NAME="${{ github.event.workflow_run.name }}"
+          WORKFLOW_NAME="${WORKFLOW_NAME:-Scheduled check}"
+
+          # Check if workflow succeeded
           if [ "${{ github.event.workflow_run.conclusion }}" = "failure" ]; then
             echo "status=failed" >> $GITHUB_OUTPUT
-            echo "message=Daily predictions workflow failed" >> $GITHUB_OUTPUT
+            echo "message=${WORKFLOW_NAME} failed" >> $GITHUB_OUTPUT
           else
             echo "status=success" >> $GITHUB_OUTPUT
-            echo "message=Daily predictions workflow succeeded" >> $GITHUB_OUTPUT
+            echo "message=${WORKFLOW_NAME} succeeded" >> $GITHUB_OUTPUT
           fi
 
       - name: Check data freshness

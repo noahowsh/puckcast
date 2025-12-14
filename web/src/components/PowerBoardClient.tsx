@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import Link from "next/link";
 import { TeamCrest } from "@/components/TeamCrest";
 import type { NextGameInfo } from "@/lib/nextGames";
 
@@ -19,10 +20,8 @@ export type LeaderboardRow = {
 };
 
 function formatPct(value: number) {
-  return `${(value * 100).toFixed(1)}%`;
+  return `${(value * 100).toFixed(0)}%`;
 }
-
-const nameFallback: Record<string, string> = {};
 
 export function PowerBoardClient({ rows, initialNextGames }: { rows: LeaderboardRow[]; initialNextGames?: Record<string, NextGameInfo> }) {
   const [nextGames, setNextGames] = React.useState<Record<string, NextGameInfo>>(initialNextGames || {});
@@ -48,7 +47,6 @@ export function PowerBoardClient({ rows, initialNextGames }: { rows: Leaderboard
         const res = await fetch(url);
         if (!res.ok) return;
         const data = await res.json();
-        const map: Record<string, NextGameInfo> = {};
         const incoming = data?.nextGames || {};
         if (Object.keys(incoming).length) {
           setNextGames(incoming);
@@ -63,7 +61,6 @@ export function PowerBoardClient({ rows, initialNextGames }: { rows: Leaderboard
   const renderRow = (row: LeaderboardRow) => {
     const movementDisplay = row.movement === 0 ? "Even" : row.movement > 0 ? `+${row.movement}` : row.movement;
     const movementTone = row.movement > 0 ? "movement--positive" : row.movement < 0 ? "movement--negative" : "movement--neutral";
-    const overlayProb = row.overlay && row.overlay.avgProb ? formatPct(row.overlay.avgProb) : "—";
     const next = nextGames[row.abbrev];
     const nextDate = formatDate(next?.date);
     const nextTime = formatTimeEt(next?.startTimeEt);
@@ -72,7 +69,7 @@ export function PowerBoardClient({ rows, initialNextGames }: { rows: Leaderboard
       : "Next game TBA";
 
     return (
-      <div className="power-board__row" key={row.abbrev}>
+      <Link href={`/teams/${row.abbrev.toLowerCase()}`} key={row.abbrev} className="power-board__row" style={{ textDecoration: 'none' }}>
         <div className="rank-chip">#{row.powerRank}</div>
         <div className="power-team">
           <TeamCrest abbrev={row.abbrev} />
@@ -88,9 +85,8 @@ export function PowerBoardClient({ rows, initialNextGames }: { rows: Leaderboard
           {row.goalDifferential >= 0 ? "+" : ""}
           {row.goalDifferential}
         </span>
-        <span className="power-data">{overlayProb}</span>
         <span className="power-data">{nextDisplay}</span>
-      </div>
+      </Link>
     );
   };
 
@@ -103,7 +99,6 @@ export function PowerBoardClient({ rows, initialNextGames }: { rows: Leaderboard
         <span>Record</span>
         <span>Point %</span>
         <span>Goal Diff</span>
-        <span>Model Win%</span>
         <span>Next</span>
       </div>
       {rows.map(renderRow)}

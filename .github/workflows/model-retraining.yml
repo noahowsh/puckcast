@@ -1,3 +1,15 @@
+# =============================================================================
+# Model Retraining Workflow
+# =============================================================================
+# Automated weekly model retraining with performance comparison:
+# - Runs every Monday at 3am ET
+# - Trains new model on recent game data
+# - Compares accuracy against current production model
+# - Auto-deploys if improvement exceeds threshold
+#
+# Manual trigger allows custom training windows and deployment control.
+# =============================================================================
+
 name: Model Retraining
 
 on:
