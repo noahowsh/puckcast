@@ -720,8 +720,8 @@ p { line-height: 1.7; }
   position: fixed;
   inset: 0;
   top: 88px;
-  background: rgba(0, 0, 0, 0.5);
-  backdrop-filter: blur(10px);
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(12px);
   opacity: 0;
   pointer-events: none;
   transition: opacity var(--duration-normal) var(--ease-smooth);
@@ -734,9 +734,10 @@ p { line-height: 1.7; }
 }
 
 .nav-drawer__content {
-  background: linear-gradient(150deg, rgba(7, 10, 18, 0.95), rgba(6, 12, 24, 0.92));
-  border-top: 1px solid var(--border-medium);
-  box-shadow: var(--shadow-strong);
+  background: linear-gradient(150deg, rgba(7, 10, 18, 0.98), rgba(6, 12, 24, 0.96));
+  border-radius: 0 0 20px 20px;
+  margin: 0 1rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
   padding: 1rem 1.25rem 1.5rem;
 }
 
@@ -783,13 +784,25 @@ p { line-height: 1.7; }
 /* When nav-offset is on nova-hero, reduce the combined padding on mobile */
 @media (max-width: 768px) {
   .nova-hero.nav-offset {
-    padding-top: calc(var(--nav-height) + 0.5rem) !important;
+    padding-top: 70px !important;
+    padding-bottom: 1rem !important;
     margin-top: 0 !important;
+  }
+
+  /* Also handle plain nova-hero without nav-offset */
+  .nova-hero:not(.nav-offset) {
+    margin-top: 0.5rem !important;
+    padding: 1rem !important;
   }
 }
 @media (max-width: 480px) {
   .nova-hero.nav-offset {
-    padding-top: calc(var(--nav-height) + 0.25rem) !important;
+    padding-top: 60px !important;
+    padding-bottom: 0.75rem !important;
+  }
+
+  .nova-hero:not(.nav-offset) {
+    padding: 0.75rem !important;
   }
 }
 
