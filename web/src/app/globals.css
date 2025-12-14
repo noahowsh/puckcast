@@ -719,9 +719,8 @@ p { line-height: 1.7; }
 .nav-drawer {
   position: fixed;
   inset: 0;
-  top: 88px;
-  background: rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(12px);
+  top: 78px;
+  background: transparent;
   opacity: 0;
   pointer-events: none;
   transition: opacity var(--duration-normal) var(--ease-smooth);
@@ -734,11 +733,12 @@ p { line-height: 1.7; }
 }
 
 .nav-drawer__content {
-  background: linear-gradient(150deg, rgba(7, 10, 18, 0.98), rgba(6, 12, 24, 0.96));
-  border-radius: 0 0 20px 20px;
-  margin: 0 1rem;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
-  padding: 1rem 1.25rem 1.5rem;
+  background: linear-gradient(180deg, rgba(7, 10, 18, 0.98), rgba(6, 12, 24, 0.96));
+  border-radius: 20px;
+  margin: 0.5rem 1rem 0;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+  padding: 1.25rem 1.25rem 1.5rem;
+  border: 1px solid var(--border-medium);
 }
 
 .nav-drawer__link {
@@ -3923,6 +3923,27 @@ p { line-height: 1.7; }
 
   .nav-offset {
     padding-top: var(--nav-height);
+  }
+
+  /* Homepage hero buttons - full width and stacked nicely */
+  .cta-row {
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .cta-row .cta {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* Homepage stat grid - stack all 3 for symmetry */
+  .stat-grid {
+    grid-template-columns: 1fr !important;
+    gap: 0.75rem;
+  }
+
+  .stat-tile {
+    padding: 0.875rem 1rem;
   }
 
   /* Lineup tables - horizontal scroll - CRITICAL MOBILE FIX */
