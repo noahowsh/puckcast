@@ -1943,7 +1943,7 @@ p { line-height: 1.7; }
   display: grid;
   grid-template-columns: 1fr auto 1fr;
   gap: 0.75rem;
-  align-items: start;
+  align-items: center;
 }
 
 .matchup-card-v3__side {
@@ -2043,12 +2043,12 @@ p { line-height: 1.7; }
 }
 
 .matchup-card-v3__prob-label--away {
-  color: var(--aqua);
+  color: #5eb5ff;
   text-align: left;
 }
 
 .matchup-card-v3__prob-label--home {
-  color: var(--mint);
+  color: #ffb86c;
   text-align: right;
 }
 
@@ -2058,7 +2058,7 @@ p { line-height: 1.7; }
   flex: 1;
   height: 14px;
   border-radius: 7px;
-  background: rgba(0,0,0,0.4);
+  background: rgba(0,0,0,0.5);
   overflow: hidden;
   border: 2px solid rgba(255,255,255,0.15);
   box-shadow: inset 0 2px 4px rgba(0,0,0,0.3);
@@ -2069,13 +2069,13 @@ p { line-height: 1.7; }
 }
 
 .matchup-card-v3__prob-segment--away {
-  background: linear-gradient(180deg, #9eeeff 0%, #5dd3f5 100%);
-  box-shadow: 0 0 8px rgba(126, 227, 255, 0.5);
+  background: linear-gradient(180deg, #7ec8ff 0%, #3a9ff5 100%);
+  box-shadow: 0 0 8px rgba(94, 181, 255, 0.5);
 }
 
 .matchup-card-v3__prob-segment--home {
-  background: linear-gradient(180deg, #8ef8d4 0%, #4ee0a8 100%);
-  box-shadow: 0 0 8px rgba(110, 240, 194, 0.5);
+  background: linear-gradient(180deg, #ffcc8a 0%, #f5a347 100%);
+  box-shadow: 0 0 8px rgba(255, 184, 108, 0.5);
 }
 
 /* Goalies Row - Below bar */
@@ -2088,7 +2088,7 @@ p { line-height: 1.7; }
 /* Footer V3 - Grade left, lean + cta right */
 .matchup-card-v3__footer {
   display: flex;
-  align-items: stretch;
+  align-items: center;
   justify-content: space-between;
   gap: 1rem;
   margin-top: 0.5rem;
@@ -2141,8 +2141,8 @@ p { line-height: 1.7; }
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  justify-content: space-between;
-  gap: 0.4rem;
+  justify-content: center;
+  gap: 0.35rem;
 }
 
 .matchup-card-v3__lean {
@@ -2174,7 +2174,7 @@ p { line-height: 1.7; }
 
 .matchup-card-v3:hover .matchup-card-v3__cta {
   opacity: 1;
-  color: var(--mint);
+  color: white;
 }
 
 /* Matchup Card V2 */
