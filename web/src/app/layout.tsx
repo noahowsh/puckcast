@@ -75,7 +75,7 @@ export default function RootLayout({
           `}
         </Script>
         <Analytics />
-        <div className="relative min-h-screen overflow-hidden text-white">
+        <div className="relative min-h-screen overflow-x-auto overflow-y-hidden text-white">
           <div
             className="pointer-events-none fixed inset-0"
             aria-hidden
