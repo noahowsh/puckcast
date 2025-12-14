@@ -3453,28 +3453,44 @@ p { line-height: 1.7; }
 
 /* Responsive */
 @media (max-width: 768px) {
-  /* Matchup header - teams on top, prob bar below */
+  /* Matchup header - teams side by side, prob bar below */
   .matchup-header {
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto;
     gap: var(--space-sm);
     padding: var(--space-sm) 0;
     margin-bottom: var(--space-sm);
   }
 
-  /* Teams row - side by side */
+  /* Away team - first column */
   .matchup-header__team {
-    flex: 1;
-    gap: var(--space-sm);
+    grid-column: 1;
+    grid-row: 1;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: var(--space-xs);
   }
 
+  /* Home team - second column */
   .matchup-header__team--right {
-    flex-direction: row-reverse;
+    grid-column: 2;
+    grid-row: 1;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
   }
 
-  /* Center section (prob bar) goes full width below */
+  .matchup-header__info,
+  .matchup-header__info--right {
+    text-align: center;
+  }
+
+  /* Center section (prob bar) - full width below teams */
   .matchup-header__center {
-    order: 1;
+    grid-column: 1 / -1;
+    grid-row: 2;
     width: 100%;
     min-width: unset;
   }
@@ -3498,13 +3514,13 @@ p { line-height: 1.7; }
   }
 
   .matchup-header__crest {
-    width: 44px;
-    height: 44px;
+    width: 52px;
+    height: 52px;
   }
 
   .matchup-header__crest .crest {
-    width: 36px !important;
-    height: 36px !important;
+    width: 44px !important;
+    height: 44px !important;
   }
 
   .matchup-header__prob {
@@ -3513,11 +3529,11 @@ p { line-height: 1.7; }
   }
 
   .matchup-header__vs {
-    font-size: 0.65rem;
-    margin: 0 0.5rem;
+    font-size: 0.7rem;
+    margin: 0 0.75rem;
   }
 
-  /* Model pick banner - cleaner layout */
+  /* Model pick banner */
   .matchup-pick-banner {
     padding: 1rem;
   }
@@ -3732,14 +3748,32 @@ p { line-height: 1.7; }
    ===================================================== */
 
 @media (max-width: 768px) {
-  /* Remove hero top padding completely */
+  /* Hero needs some top padding for navbar clearance */
   .nova-hero {
-    padding-top: 0;
+    padding-top: calc(var(--nav-height) + 1rem);
     padding-bottom: var(--space-sm);
   }
 
   .nav-offset {
     padding-top: var(--nav-height);
+  }
+
+  /* Lineup tables - horizontal scroll */
+  .lineup-table-wrap {
+    overflow-x: auto !important;
+    overflow-y: visible !important;
+    -webkit-overflow-scrolling: touch;
+    border-radius: 12px;
+  }
+
+  .lineup-table-wrap > div,
+  .lineup-table-wrap > a {
+    min-width: 550px;
+  }
+
+  .player-row-hover,
+  a.player-row-hover {
+    min-width: 550px;
   }
 
   /* Stack hero grid on tablet */
@@ -3827,9 +3861,9 @@ p { line-height: 1.7; }
 }
 
 @media (max-width: 480px) {
-  /* Zero hero padding on small screens */
+  /* Hero still needs navbar clearance */
   .nova-hero {
-    padding-top: 0;
+    padding-top: calc(var(--nav-height) + 0.5rem);
     padding-bottom: 0.5rem;
   }
 
@@ -3949,24 +3983,7 @@ p { line-height: 1.7; }
     padding: 1rem;
   }
 
-  /* Lineup tables - horizontal scroll on mobile */
-  .lineup-table-wrap {
-    overflow-x: auto !important;
-    overflow-y: visible !important;
-    -webkit-overflow-scrolling: touch;
-    border-radius: 12px;
-  }
-
-  .lineup-table-wrap > div,
-  .lineup-table-wrap > a {
-    min-width: 480px;
-  }
-
-  /* Player/goalie rows need min-width */
-  .player-row-hover,
-  a.player-row-hover {
-    min-width: 480px;
-  }
+  /* Lineup tables - already handled in 768px query */
 
   /* OVR legend mobile - stack layout */
   .lg\\:grid-cols-\\[1fr_2fr\\] {
