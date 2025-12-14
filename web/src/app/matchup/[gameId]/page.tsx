@@ -243,45 +243,50 @@ export default function MatchupPage({ params }: PageProps) {
           </div>
         </div>
 
-        {/* Main matchup header - clean side by side */}
+        {/* Main matchup header - teams row + full-width prob bar */}
         <section className="matchup-header">
-          <div className="matchup-header__team">
-            <div className="matchup-header__crest" style={{ borderColor: awayColor }}>
-              <TeamCrest abbrev={game.awayTeam.abbrev} size={88} />
+          <div className="matchup-header__teams-row">
+            <div className="matchup-header__team">
+              <div className="matchup-header__crest" style={{ borderColor: awayColor }}>
+                <TeamCrest abbrev={game.awayTeam.abbrev} size={88} />
+              </div>
+              <div className="matchup-header__info">
+                <h1 className="matchup-header__name">{game.awayTeam.name}</h1>
+                {awayStanding && (
+                  <p className="matchup-header__record">
+                    {formatRecord(awayStanding)} <span className="matchup-header__rank">#{awayStanding.rank}</span>
+                  </p>
+                )}
+              </div>
             </div>
-            <div className="matchup-header__info">
-              <h1 className="matchup-header__name">{game.awayTeam.name}</h1>
-              {awayStanding && (
-                <p className="matchup-header__record">
-                  {formatRecord(awayStanding)} <span className="matchup-header__rank">#{awayStanding.rank}</span>
-                </p>
-              )}
+
+            <div className="matchup-header__vs-block">
+              <span className="matchup-header__vs">vs</span>
+            </div>
+
+            <div className="matchup-header__team matchup-header__team--right">
+              <div className="matchup-header__info matchup-header__info--right">
+                <h1 className="matchup-header__name">{game.homeTeam.name}</h1>
+                {homeStanding && (
+                  <p className="matchup-header__record">
+                    {formatRecord(homeStanding)} <span className="matchup-header__rank">#{homeStanding.rank}</span>
+                  </p>
+                )}
+              </div>
+              <div className="matchup-header__crest" style={{ borderColor: homeColor }}>
+                <TeamCrest abbrev={game.homeTeam.abbrev} size={88} />
+              </div>
             </div>
           </div>
 
-          <div className="matchup-header__center">
+          <div className="matchup-header__prob-section">
             <div className="matchup-header__probs">
               <span className="matchup-header__prob" style={{ color: awayColor }}>{pct(game.awayWinProb)}</span>
-              <span className="matchup-header__vs">vs</span>
               <span className="matchup-header__prob" style={{ color: homeColor }}>{pct(game.homeWinProb)}</span>
             </div>
             <div className="matchup-header__bar">
               <div className="matchup-header__bar-fill" style={{ width: `${game.awayWinProb * 100}%`, background: awayColor }} />
               <div className="matchup-header__bar-fill" style={{ width: `${game.homeWinProb * 100}%`, background: homeColor }} />
-            </div>
-          </div>
-
-          <div className="matchup-header__team matchup-header__team--right">
-            <div className="matchup-header__info matchup-header__info--right">
-              <h1 className="matchup-header__name">{game.homeTeam.name}</h1>
-              {homeStanding && (
-                <p className="matchup-header__record">
-                  {formatRecord(homeStanding)} <span className="matchup-header__rank">#{homeStanding.rank}</span>
-                </p>
-              )}
-            </div>
-            <div className="matchup-header__crest" style={{ borderColor: homeColor }}>
-              <TeamCrest abbrev={game.homeTeam.abbrev} size={88} />
             </div>
           </div>
         </section>
