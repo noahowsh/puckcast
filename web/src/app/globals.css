@@ -2198,6 +2198,71 @@ p { line-height: 1.7; }
   color: white;
 }
 
+/* Matchup Card V3 - Mobile */
+@media (max-width: 480px) {
+  .matchup-card-v3 {
+    padding: 1rem;
+    gap: 0.75rem;
+  }
+
+  .matchup-card-v3__teams-row {
+    gap: 0.5rem;
+  }
+
+  .matchup-card-v3__team-block {
+    gap: 0.5rem;
+  }
+
+  .matchup-card-v3__logo-wrap .crest {
+    width: 56px !important;
+    height: 56px !important;
+  }
+
+  .matchup-card-v3__team-name {
+    font-size: 0.8rem;
+  }
+
+  .matchup-card-v3__prob {
+    font-size: 0.75rem;
+  }
+
+  .matchup-card-v3__prob-wrap {
+    gap: 0.5rem;
+  }
+
+  .matchup-card-v3__prob-label {
+    font-size: 0.7rem;
+    min-width: 40px;
+  }
+
+  .matchup-card-v3__goalies-row {
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+
+  .goalie-tag {
+    font-size: 0.6rem;
+    padding: 0.25rem 0.5rem;
+  }
+
+  .matchup-card-v3__footer {
+    gap: 0.75rem;
+  }
+
+  .matchup-card-v3__grade {
+    padding: 0.5rem 0.75rem;
+    min-width: 60px;
+  }
+
+  .matchup-card-v3__grade-letter {
+    font-size: 1.25rem;
+  }
+
+  .matchup-card-v3__lean-team {
+    font-size: 0.8rem;
+  }
+}
+
 /* Matchup Card V2 */
 .matchup-card-v2 {
   display: flex;
