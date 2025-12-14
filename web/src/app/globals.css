@@ -3889,8 +3889,10 @@ p { line-height: 1.7; }
 @media (max-width: 768px) {
   /* Hero needs some top padding for navbar clearance */
   .nova-hero {
-    padding-top: calc(var(--nav-height) + 1rem);
+    padding-top: calc(var(--nav-height) + 0.5rem);
     padding-bottom: var(--space-sm);
+    padding-left: 1rem;
+    padding-right: 1rem;
   }
 
   .nav-offset {
@@ -4092,15 +4094,15 @@ p { line-height: 1.7; }
     min-width: 0;
   }
 
-  /* Table header columns match */
+  /* Table header columns match - push to far right */
   .table-header__cols {
     gap: 0.15rem !important;
+    margin-left: auto;
   }
 
   .table-header__cols .stat-col {
     min-width: 28px;
     width: 28px !important;
-    font-size: 0.55rem !important;
   }
 
   .table-header__cols .stat-col--pm {
@@ -4184,8 +4186,10 @@ p { line-height: 1.7; }
 @media (max-width: 480px) {
   /* Hero still needs navbar clearance */
   .nova-hero {
-    padding-top: calc(var(--nav-height) + 0.5rem);
+    padding-top: calc(var(--nav-height) + 0.25rem);
     padding-bottom: 0.5rem;
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
   }
 
   .nav-offset {
