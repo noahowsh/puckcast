@@ -3760,22 +3760,22 @@ p { line-height: 1.7; }
 
   /* Prediction card logos - moderate size on tablet/mobile */
   .matchup-card-v3__logo-wrap {
-    width: 52px !important;
-    height: 52px !important;
+    width: 56px !important;
+    height: 56px !important;
     border-radius: 10px;
   }
 
   .matchup-card-v3__logo-wrap .crest {
-    width: 48px !important;
-    height: 48px !important;
+    width: 56px !important;
+    height: 56px !important;
   }
 
   .matchup-card-v3__logo-wrap .crest img,
   .matchup-card-v3__logo-wrap .crest .crest__img {
-    width: 38px !important;
-    height: 38px !important;
-    max-width: 38px !important;
-    max-height: 38px !important;
+    width: 48px !important;
+    height: 48px !important;
+    max-width: 48px !important;
+    max-height: 48px !important;
   }
 
   .matchup-card-v3__team-name {
@@ -4065,12 +4065,25 @@ p { line-height: 1.7; }
 
   /* Make stat columns smaller on mobile */
   .stat-col {
-    width: auto !important;
+    width: 28px !important;
     min-width: 28px;
   }
 
+  .stat-col--pm {
+    width: 32px !important;
+    min-width: 32px;
+  }
+
   .stat-col--ovr {
+    width: 36px !important;
     min-width: 36px;
+  }
+
+  /* Goalie stat columns */
+  .stat-col--w,
+  .stat-col--svpct {
+    width: 32px !important;
+    min-width: 32px;
   }
 
   /* Reduce player name/info section */
@@ -4085,8 +4098,26 @@ p { line-height: 1.7; }
   }
 
   .table-header__cols .stat-col {
-    width: auto !important;
     min-width: 28px;
+    width: 28px !important;
+    font-size: 0.55rem !important;
+  }
+
+  .table-header__cols .stat-col--pm {
+    width: 32px !important;
+    min-width: 32px;
+  }
+
+  .table-header__cols .stat-col--ovr {
+    width: 36px !important;
+    min-width: 36px;
+  }
+
+  /* Goalie header columns */
+  .table-header__cols .stat-col--w,
+  .table-header__cols .stat-col--svpct {
+    width: 32px !important;
+    min-width: 32px;
   }
 
   /* Performance page hero grid - stack on mobile */
