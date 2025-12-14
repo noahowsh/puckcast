@@ -1962,6 +1962,25 @@ p { line-height: 1.7; }
   gap: 0.75rem;
 }
 
+.matchup-card-v3__logo-wrap {
+  position: relative;
+  border-radius: 12px;
+  transition: box-shadow var(--duration-normal) var(--ease-smooth);
+}
+
+.matchup-card-v3__logo-wrap--favored {
+  box-shadow: 0 4px 20px rgba(110, 240, 194, 0.25), 0 0 30px rgba(110, 240, 194, 0.15);
+}
+
+.matchup-card-v3__logo-wrap--favored::after {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, rgba(110, 240, 194, 0.2), rgba(126, 227, 255, 0.1));
+  z-index: -1;
+}
+
 .matchup-card-v3__team-details {
   display: flex;
   flex-direction: column;
@@ -2147,7 +2166,7 @@ p { line-height: 1.7; }
 
 .matchup-card-v3__lean {
   display: flex;
-  align-items: center;
+  align-items: baseline;
   gap: 0.5rem;
 }
 
@@ -2156,12 +2175,14 @@ p { line-height: 1.7; }
   color: var(--text-tertiary);
   text-transform: uppercase;
   letter-spacing: 0.03em;
+  line-height: 1;
 }
 
 .matchup-card-v3__lean-team {
   font-size: 0.9rem;
   font-weight: 700;
   color: var(--mint);
+  line-height: 1;
 }
 
 .matchup-card-v3__cta {

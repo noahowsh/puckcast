@@ -111,7 +111,9 @@ function MatchupCard({ game }: { game: Prediction }) {
         {/* Away Side */}
         <div className="matchup-card-v3__side">
           <div className="matchup-card-v3__team-block">
-            <TeamCrest abbrev={game.awayTeam.abbrev} size={84} />
+            <div className={`matchup-card-v3__logo-wrap${game.modelFavorite === 'away' ? ' matchup-card-v3__logo-wrap--favored' : ''}`}>
+              <TeamCrest abbrev={game.awayTeam.abbrev} size={84} />
+            </div>
             <div className="matchup-card-v3__team-details">
               <span className="matchup-card-v3__team-name">{game.awayTeam.name}</span>
               <span
@@ -142,7 +144,9 @@ function MatchupCard({ game }: { game: Prediction }) {
                 {pct(game.homeWinProb)}
               </span>
             </div>
-            <TeamCrest abbrev={game.homeTeam.abbrev} size={84} />
+            <div className={`matchup-card-v3__logo-wrap${game.modelFavorite === 'home' ? ' matchup-card-v3__logo-wrap--favored' : ''}`}>
+              <TeamCrest abbrev={game.homeTeam.abbrev} size={84} />
+            </div>
           </div>
         </div>
       </div>
