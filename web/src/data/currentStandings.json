@@ -1,23 +1,21 @@
 {
-  "generatedAt": "2025-12-14T22:08:09.999436+00:00",
+  "generatedAt": "2025-12-14T05:10:39.037168+00:00",
   "seasonId": "20252026",
   "teams": [
     {
       "team": "Colorado Avalanche",
       "abbrev": "COL",
-      "wins": 23,
+      "wins": 22,
       "losses": 2,
       "ot": 7,
-      "points": 53,
-      "gamesPlayed": 32,
-      "pointPctg": 0.82812,
-      "goalDifferential": 58,
+      "points": 51,
+      "gamesPlayed": 31,
+      "pointPctg": 0.82258,
+      "goalDifferential": 56,
       "goalsForPerGame": 4.0,
-      "goalsAgainstPerGame": 2.1875,
-      "shotsForPerGame": 34.71875,
-      "shotsAgainstPerGame": 26.84375,
-      "powerPlayPct": 0.153153,
-      "penaltyKillPct": 0.857143,
+      "goalsAgainstPerGame": 2.19354,
+      "shotsForPerGame": 34.51612,
+      "shotsAgainstPerGame": 26.77419,
       "seasonId": 20252026
     },
     {
@@ -34,8 +32,6 @@
       "goalsAgainstPerGame": 2.63636,
       "shotsForPerGame": 25.0909,
       "shotsAgainstPerGame": 27.78787,
-      "powerPlayPct": 0.320388,
-      "penaltyKillPct": 0.828572,
       "seasonId": 20252026
     },
     {
@@ -52,8 +48,6 @@
       "goalsAgainstPerGame": 2.80645,
       "shotsForPerGame": 33.06451,
       "shotsAgainstPerGame": 24.12903,
-      "powerPlayPct": 0.150537,
-      "penaltyKillPct": 0.788236,
       "seasonId": 20252026
     },
     {
@@ -70,8 +64,6 @@
       "goalsAgainstPerGame": 2.72727,
       "shotsForPerGame": 28.87878,
       "shotsAgainstPerGame": 28.36363,
-      "powerPlayPct": 0.166666,
-      "penaltyKillPct": 0.840426,
       "seasonId": 20252026
     },
     {
@@ -88,8 +80,6 @@
       "goalsAgainstPerGame": 2.625,
       "shotsForPerGame": 27.96875,
       "shotsAgainstPerGame": 29.875,
-      "powerPlayPct": 0.218181,
-      "penaltyKillPct": 0.779221,
       "seasonId": 20252026
     },
     {
@@ -106,8 +96,6 @@
       "goalsAgainstPerGame": 2.80645,
       "shotsForPerGame": 29.45161,
       "shotsAgainstPerGame": 24.93548,
-      "powerPlayPct": 0.247422,
-      "penaltyKillPct": 0.825,
       "seasonId": 20252026
     },
     {
@@ -124,8 +112,6 @@
       "goalsAgainstPerGame": 2.46875,
       "shotsForPerGame": 29.3125,
       "shotsAgainstPerGame": 27.21875,
-      "powerPlayPct": 0.159574,
-      "penaltyKillPct": 0.755103,
       "seasonId": 20252026
     },
     {
@@ -142,8 +128,6 @@
       "goalsAgainstPerGame": 3.34375,
       "shotsForPerGame": 31.09375,
       "shotsAgainstPerGame": 29.34375,
-      "powerPlayPct": 0.179245,
-      "penaltyKillPct": 0.75,
       "seasonId": 20252026
     },
     {
@@ -160,8 +144,6 @@
       "goalsAgainstPerGame": 2.5625,
       "shotsForPerGame": 27.84375,
       "shotsAgainstPerGame": 27.125,
-      "powerPlayPct": 0.181818,
-      "penaltyKillPct": 0.854369,
       "seasonId": 20252026
     },
     {
@@ -178,8 +160,6 @@
       "goalsAgainstPerGame": 3.24242,
       "shotsForPerGame": 29.69696,
       "shotsAgainstPerGame": 27.66666,
-      "powerPlayPct": 0.2233,
-      "penaltyKillPct": 0.797753,
       "seasonId": 20252026
     },
     {
@@ -196,26 +176,22 @@
       "goalsAgainstPerGame": 3.09375,
       "shotsForPerGame": 26.96875,
       "shotsAgainstPerGame": 30.6875,
-      "powerPlayPct": 0.260869,
-      "penaltyKillPct": 0.822034,
       "seasonId": 20252026
     },
     {
       "team": "New Jersey Devils",
       "abbrev": "NJD",
       "wins": 18,
-      "losses": 14,
+      "losses": 13,
       "ot": 1,
       "points": 37,
-      "gamesPlayed": 33,
-      "pointPctg": 0.5606,
-      "goalDifferential": -8,
-      "goalsForPerGame": 2.87878,
-      "goalsAgainstPerGame": 3.12121,
-      "shotsForPerGame": 29.33333,
-      "shotsAgainstPerGame": 28.33333,
-      "powerPlayPct": 0.214285,
-      "penaltyKillPct": 0.758242,
+      "gamesPlayed": 32,
+      "pointPctg": 0.57812,
+      "goalDifferential": -7,
+      "goalsForPerGame": 2.9375,
+      "goalsAgainstPerGame": 3.15625,
+      "shotsForPerGame": 29.4375,
+      "shotsAgainstPerGame": 28.75,
       "seasonId": 20252026
     },
     {
@@ -232,26 +208,6 @@
       "goalsAgainstPerGame": 2.8,
       "shotsForPerGame": 24.93333,
       "shotsAgainstPerGame": 25.66666,
-      "powerPlayPct": 0.172839,
-      "penaltyKillPct": 0.815218,
-      "seasonId": 20252026
-    },
-    {
-      "team": "Los Angeles Kings",
-      "abbrev": "LAK",
-      "wins": 14,
-      "losses": 8,
-      "ot": 9,
-      "points": 37,
-      "gamesPlayed": 31,
-      "pointPctg": 0.59677,
-      "goalDifferential": 5,
-      "goalsForPerGame": 2.64516,
-      "goalsAgainstPerGame": 2.48387,
-      "shotsForPerGame": 28.25806,
-      "shotsAgainstPerGame": 26.67741,
-      "powerPlayPct": 0.136842,
-      "penaltyKillPct": 0.796117,
       "seasonId": 20252026
     },
     {
@@ -268,8 +224,6 @@
       "goalsAgainstPerGame": 2.66666,
       "shotsForPerGame": 26.30303,
       "shotsAgainstPerGame": 28.39393,
-      "powerPlayPct": 0.202702,
-      "penaltyKillPct": 0.811112,
       "seasonId": 20252026
     },
     {
@@ -286,8 +240,6 @@
       "goalsAgainstPerGame": 3.54838,
       "shotsForPerGame": 25.19354,
       "shotsAgainstPerGame": 27.6129,
-      "powerPlayPct": 0.252873,
-      "penaltyKillPct": 0.76,
       "seasonId": 20252026
     },
     {
@@ -304,8 +256,6 @@
       "goalsAgainstPerGame": 3.375,
       "shotsForPerGame": 28.78125,
       "shotsAgainstPerGame": 26.625,
-      "powerPlayPct": 0.3125,
-      "penaltyKillPct": 0.804598,
       "seasonId": 20252026
     },
     {
@@ -322,8 +272,22 @@
       "goalsAgainstPerGame": 2.86666,
       "shotsForPerGame": 28.8,
       "shotsAgainstPerGame": 28.66666,
-      "powerPlayPct": 0.329268,
-      "penaltyKillPct": 0.842697,
+      "seasonId": 20252026
+    },
+    {
+      "team": "Los Angeles Kings",
+      "abbrev": "LAK",
+      "wins": 14,
+      "losses": 8,
+      "ot": 8,
+      "points": 36,
+      "gamesPlayed": 30,
+      "pointPctg": 0.6,
+      "goalDifferential": 6,
+      "goalsForPerGame": 2.7,
+      "goalsAgainstPerGame": 2.5,
+      "shotsForPerGame": 28.5,
+      "shotsAgainstPerGame": 26.3,
       "seasonId": 20252026
     },
     {
@@ -340,8 +304,6 @@
       "goalsAgainstPerGame": 3.30303,
       "shotsForPerGame": 24.36363,
       "shotsAgainstPerGame": 31.63636,
-      "powerPlayPct": 0.18644,
-      "penaltyKillPct": 0.781819,
       "seasonId": 20252026
     },
     {
@@ -358,8 +320,6 @@
       "goalsAgainstPerGame": 3.16129,
       "shotsForPerGame": 29.32258,
       "shotsAgainstPerGame": 26.54838,
-      "powerPlayPct": 0.186915,
-      "penaltyKillPct": 0.821783,
       "seasonId": 20252026
     },
     {
@@ -376,8 +336,6 @@
       "goalsAgainstPerGame": 2.93939,
       "shotsForPerGame": 28.54545,
       "shotsAgainstPerGame": 25.36363,
-      "powerPlayPct": 0.153846,
-      "penaltyKillPct": 0.835165,
       "seasonId": 20252026
     },
     {
@@ -394,8 +352,6 @@
       "goalsAgainstPerGame": 3.25806,
       "shotsForPerGame": 27.12903,
       "shotsAgainstPerGame": 31.51612,
-      "powerPlayPct": 0.142857,
-      "penaltyKillPct": 0.825582,
       "seasonId": 20252026
     },
     {
@@ -412,8 +368,6 @@
       "goalsAgainstPerGame": 3.29032,
       "shotsForPerGame": 27.48387,
       "shotsAgainstPerGame": 25.6129,
-      "powerPlayPct": 0.262626,
-      "penaltyKillPct": 0.697675,
       "seasonId": 20252026
     },
     {
@@ -430,8 +384,6 @@
       "goalsAgainstPerGame": 3.0,
       "shotsForPerGame": 25.5625,
       "shotsAgainstPerGame": 30.28125,
-      "powerPlayPct": 0.215053,
-      "penaltyKillPct": 0.844037,
       "seasonId": 20252026
     },
     {
@@ -448,8 +400,6 @@
       "goalsAgainstPerGame": 3.46875,
       "shotsForPerGame": 30.34375,
       "shotsAgainstPerGame": 31.25,
-      "powerPlayPct": 0.189873,
-      "penaltyKillPct": 0.71591,
       "seasonId": 20252026
     },
     {
@@ -466,8 +416,6 @@
       "goalsAgainstPerGame": 3.06451,
       "shotsForPerGame": 26.8387,
       "shotsAgainstPerGame": 28.77419,
-      "powerPlayPct": 0.208791,
-      "penaltyKillPct": 0.784314,
       "seasonId": 20252026
     },
     {
@@ -484,26 +432,6 @@
       "goalsAgainstPerGame": 3.51515,
       "shotsForPerGame": 25.36363,
       "shotsAgainstPerGame": 28.0,
-      "powerPlayPct": 0.188235,
-      "penaltyKillPct": 0.777778,
-      "seasonId": 20252026
-    },
-    {
-      "team": "Calgary Flames",
-      "abbrev": "CGY",
-      "wins": 13,
-      "losses": 16,
-      "ot": 4,
-      "points": 30,
-      "gamesPlayed": 33,
-      "pointPctg": 0.45454,
-      "goalDifferential": -13,
-      "goalsForPerGame": 2.48484,
-      "goalsAgainstPerGame": 2.87878,
-      "shotsForPerGame": 29.51515,
-      "shotsAgainstPerGame": 28.21212,
-      "powerPlayPct": 0.140186,
-      "penaltyKillPct": 0.833334,
       "seasonId": 20252026
     },
     {
@@ -520,8 +448,6 @@
       "goalsAgainstPerGame": 3.48387,
       "shotsForPerGame": 28.51612,
       "shotsAgainstPerGame": 30.0,
-      "powerPlayPct": 0.206185,
-      "penaltyKillPct": 0.855556,
       "seasonId": 20252026
     },
     {
@@ -538,44 +464,54 @@
       "goalsAgainstPerGame": 3.0,
       "shotsForPerGame": 25.41379,
       "shotsAgainstPerGame": 27.65517,
-      "powerPlayPct": 0.186813,
-      "penaltyKillPct": 0.666667,
+      "seasonId": 20252026
+    },
+    {
+      "team": "Calgary Flames",
+      "abbrev": "CGY",
+      "wins": 12,
+      "losses": 16,
+      "ot": 4,
+      "points": 28,
+      "gamesPlayed": 32,
+      "pointPctg": 0.4375,
+      "goalDifferential": -14,
+      "goalsForPerGame": 2.5,
+      "goalsAgainstPerGame": 2.9375,
+      "shotsForPerGame": 29.25,
+      "shotsAgainstPerGame": 28.4375,
       "seasonId": 20252026
     },
     {
       "team": "Nashville Predators",
       "abbrev": "NSH",
       "wins": 12,
-      "losses": 15,
+      "losses": 14,
       "ot": 4,
       "points": 28,
-      "gamesPlayed": 31,
-      "pointPctg": 0.45161,
-      "goalDifferential": -24,
-      "goalsForPerGame": 2.74193,
-      "goalsAgainstPerGame": 3.51612,
-      "shotsForPerGame": 27.93548,
-      "shotsAgainstPerGame": 28.80645,
-      "powerPlayPct": 0.173469,
-      "penaltyKillPct": 0.821783,
+      "gamesPlayed": 30,
+      "pointPctg": 0.46666,
+      "goalDifferential": -22,
+      "goalsForPerGame": 2.76666,
+      "goalsAgainstPerGame": 3.5,
+      "shotsForPerGame": 27.9,
+      "shotsAgainstPerGame": 28.4,
       "seasonId": 20252026
     },
     {
       "team": "Vancouver Canucks",
       "abbrev": "VAN",
-      "wins": 12,
+      "wins": 11,
       "losses": 17,
       "ot": 3,
-      "points": 27,
-      "gamesPlayed": 32,
-      "pointPctg": 0.42187,
-      "goalDifferential": -25,
-      "goalsForPerGame": 2.71875,
-      "goalsAgainstPerGame": 3.5,
-      "shotsForPerGame": 26.75,
-      "shotsAgainstPerGame": 28.9375,
-      "powerPlayPct": 0.205607,
-      "penaltyKillPct": 0.72381,
+      "points": 25,
+      "gamesPlayed": 31,
+      "pointPctg": 0.40322,
+      "goalDifferential": -26,
+      "goalsForPerGame": 2.74193,
+      "goalsAgainstPerGame": 3.58064,
+      "shotsForPerGame": 27.12903,
+      "shotsAgainstPerGame": 29.03225,
       "seasonId": 20252026
     }
   ]
