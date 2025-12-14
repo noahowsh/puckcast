@@ -1969,15 +1969,15 @@ p { line-height: 1.7; }
 }
 
 .matchup-card-v3__logo-wrap--favored {
-  box-shadow: 0 4px 20px rgba(110, 240, 194, 0.25), 0 0 30px rgba(110, 240, 194, 0.15);
+  box-shadow: 0 2px 12px rgba(110, 240, 194, 0.15), 0 0 20px rgba(110, 240, 194, 0.08);
 }
 
 .matchup-card-v3__logo-wrap--favored::after {
   content: '';
   position: absolute;
-  inset: -3px;
+  inset: -2px;
   border-radius: 14px;
-  background: linear-gradient(135deg, rgba(110, 240, 194, 0.2), rgba(126, 227, 255, 0.1));
+  background: linear-gradient(135deg, rgba(110, 240, 194, 0.08), rgba(126, 227, 255, 0.04));
   z-index: -1;
 }
 
