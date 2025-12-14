@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2025-12-13T23:12:16.575976+00:00",
+  "updatedAt": "2025-12-14T13:20:16.236765+00:00",
   "notes": "Goalie performance metrics calculated from NHL Stats API data. GSAx estimates based on save percentage above league average.",
   "goalies": [
     {
@@ -18,7 +18,7 @@
       "watchouts": [
         "Limited recent data"
       ],
-      "nextOpponent": "OTT"
+      "nextOpponent": "BOS"
     },
     {
       "name": "Jonathan Quick",
@@ -36,25 +36,7 @@
       "watchouts": [
         "Limited recent data"
       ],
-      "nextOpponent": "MTL"
-    },
-    {
-      "name": "Dennis Hildeby",
-      "team": "TOR",
-      "rollingGsa": 2.4,
-      "seasonGsa": 8.1,
-      "restDays": 2,
-      "startLikelihood": 0.95,
-      "trend": "surging",
-      "note": "Dennis Hildeby is playing at an elite level with a 0.933 save percentage, providing TOR with a strong defensive anchor.",
-      "strengths": [
-        "Elite save percentage",
-        "Exceptional goals against average"
-      ],
-      "watchouts": [
-        "Limited recent data"
-      ],
-      "nextOpponent": "EDM"
+      "nextOpponent": "ANA"
     },
     {
       "name": "Joseph Woll",
@@ -72,17 +54,35 @@
       "watchouts": [
         "Limited recent data"
       ],
-      "nextOpponent": "EDM"
+      "nextOpponent": "CHI"
+    },
+    {
+      "name": "Dennis Hildeby",
+      "team": "TOR",
+      "rollingGsa": 1.7,
+      "seasonGsa": 6.3,
+      "restDays": 2,
+      "startLikelihood": 0.85,
+      "trend": "steady",
+      "note": "Consistent performance from Dennis Hildeby with a 2.72 GAA \u2014 reliable starter for TOR.",
+      "strengths": [
+        "Elite save percentage",
+        "Strong rebound control"
+      ],
+      "watchouts": [
+        "Limited recent data"
+      ],
+      "nextOpponent": "CHI"
     },
     {
       "name": "Logan Thompson",
       "team": "WSH",
-      "rollingGsa": 2.0,
-      "seasonGsa": 14.5,
+      "rollingGsa": 1.7,
+      "seasonGsa": 12.9,
       "restDays": 1,
       "startLikelihood": 0.95,
       "trend": "surging",
-      "note": "Logan Thompson is playing at an elite level with a 0.926 save percentage, providing WSH with a strong defensive anchor.",
+      "note": "Logan Thompson is playing at an elite level with a 0.922 save percentage, providing WSH with a strong defensive anchor.",
       "strengths": [
         "Elite save percentage",
         "Exceptional goals against average"
@@ -90,7 +90,7 @@
       "watchouts": [
         "Inconsistent results"
       ],
-      "nextOpponent": "WPG"
+      "nextOpponent": "MIN"
     },
     {
       "name": "Matt Murray",
@@ -126,7 +126,25 @@
       "watchouts": [
         "Limited recent data"
       ],
-      "nextOpponent": "NSH"
+      "nextOpponent": "SEA"
+    },
+    {
+      "name": "Scott Wedgewood",
+      "team": "COL",
+      "rollingGsa": 1.5,
+      "seasonGsa": 10.5,
+      "restDays": 1,
+      "startLikelihood": 0.95,
+      "trend": "surging",
+      "note": "Scott Wedgewood is playing at an elite level with a 0.920 save percentage, providing COL with a strong defensive anchor.",
+      "strengths": [
+        "Elite save percentage",
+        "Exceptional goals against average"
+      ],
+      "watchouts": [
+        "Limited recent data"
+      ],
+      "nextOpponent": "SEA"
     },
     {
       "name": "Casey DeSmith",
@@ -144,25 +162,7 @@
       "watchouts": [
         "Limited recent data"
       ],
-      "nextOpponent": "FLA"
-    },
-    {
-      "name": "Scott Wedgewood",
-      "team": "COL",
-      "rollingGsa": 1.5,
-      "seasonGsa": 9.7,
-      "restDays": 1,
-      "startLikelihood": 0.9,
-      "trend": "steady",
-      "note": "Consistent performance from Scott Wedgewood with a 2.11 GAA \u2014 reliable starter for COL.",
-      "strengths": [
-        "Exceptional goals against average",
-        "Proven winner"
-      ],
-      "watchouts": [
-        "Limited recent data"
-      ],
-      "nextOpponent": "NSH"
+      "nextOpponent": "LAK"
     },
     {
       "name": "Andrei Vasilevskiy",
@@ -180,7 +180,42 @@
       "watchouts": [
         "Inconsistent results"
       ],
-      "nextOpponent": "NYI"
+      "nextOpponent": "FLA"
+    },
+    {
+      "name": "Connor Hellebuyck",
+      "team": "WPG",
+      "rollingGsa": 1.2,
+      "seasonGsa": 6.0,
+      "restDays": 2,
+      "startLikelihood": 0.9,
+      "trend": "steady",
+      "note": "Consistent performance from Connor Hellebuyck with a 2.41 GAA \u2014 reliable starter for WPG.",
+      "strengths": [
+        "Strong rebound control"
+      ],
+      "watchouts": [
+        "Inconsistent results"
+      ],
+      "nextOpponent": "OTT"
+    },
+    {
+      "name": "Darcy Kuemper",
+      "team": "LAK",
+      "rollingGsa": 1.2,
+      "seasonGsa": 8.8,
+      "restDays": 1,
+      "startLikelihood": 0.9,
+      "trend": "steady",
+      "note": "Consistent performance from Darcy Kuemper with a 2.21 GAA \u2014 reliable starter for LAK.",
+      "strengths": [
+        "Exceptional goals against average",
+        "Proven winner"
+      ],
+      "watchouts": [
+        "Inconsistent results"
+      ],
+      "nextOpponent": "DAL"
     },
     {
       "name": "Spencer Knight",
@@ -198,24 +233,7 @@
       "watchouts": [
         "Inconsistent results"
       ],
-      "nextOpponent": "DET"
-    },
-    {
-      "name": "Pyotr Kochetkov",
-      "team": "CAR",
-      "rollingGsa": 1.1,
-      "seasonGsa": 2.2,
-      "restDays": 3,
-      "startLikelihood": 0.7,
-      "trend": "steady",
-      "note": "Consistent performance from Pyotr Kochetkov with a 1.96 GAA \u2014 reliable starter for CAR.",
-      "strengths": [
-        "Exceptional goals against average"
-      ],
-      "watchouts": [
-        "Limited recent data"
-      ],
-      "nextOpponent": "PHI"
+      "nextOpponent": "TOR"
     },
     {
       "name": "Devin Cooley",
@@ -232,42 +250,7 @@
       "watchouts": [
         "Limited recent data"
       ],
-      "nextOpponent": "LAK"
-    },
-    {
-      "name": "Darcy Kuemper",
-      "team": "LAK",
-      "rollingGsa": 1.0,
-      "seasonGsa": 7.2,
-      "restDays": 1,
-      "startLikelihood": 0.9,
-      "trend": "steady",
-      "note": "Consistent performance from Darcy Kuemper with a 2.23 GAA \u2014 reliable starter for LAK.",
-      "strengths": [
-        "Exceptional goals against average",
-        "Proven winner"
-      ],
-      "watchouts": [
-        "Inconsistent results"
-      ],
-      "nextOpponent": "CGY"
-    },
-    {
-      "name": "Connor Hellebuyck",
-      "team": "WPG",
-      "rollingGsa": 1.0,
-      "seasonGsa": 4.7,
-      "restDays": 2,
-      "startLikelihood": 0.8,
-      "trend": "steady",
-      "note": "Consistent performance from Connor Hellebuyck with a 2.51 GAA \u2014 reliable starter for WPG.",
-      "strengths": [
-        "Solid fundamentals"
-      ],
-      "watchouts": [
-        "Inconsistent results"
-      ],
-      "nextOpponent": "WSH"
+      "nextOpponent": "SJS"
     },
     {
       "name": "Jeremy Swayman",
@@ -301,24 +284,24 @@
       "watchouts": [
         "Limited recent data"
       ],
-      "nextOpponent": "SJS"
+      "nextOpponent": "UTA"
     },
     {
-      "name": "Igor Shesterkin",
-      "team": "NYR",
+      "name": "Ilya Sorokin",
+      "team": "NYI",
       "rollingGsa": 0.9,
-      "seasonGsa": 7.6,
+      "seasonGsa": 6.6,
       "restDays": 1,
       "startLikelihood": 0.9,
       "trend": "steady",
-      "note": "Consistent performance from Igor Shesterkin with a 2.48 GAA \u2014 reliable starter for NYR.",
+      "note": "Consistent performance from Ilya Sorokin with a 2.50 GAA \u2014 reliable starter for NYI.",
       "strengths": [
         "Proven winner"
       ],
       "watchouts": [
         "Inconsistent results"
       ],
-      "nextOpponent": "MTL"
+      "nextOpponent": "DET"
     },
     {
       "name": "Nikita Tolopilo",
@@ -336,23 +319,6 @@
         "Limited recent data"
       ],
       "nextOpponent": "NJD"
-    },
-    {
-      "name": "Ilya Sorokin",
-      "team": "NYI",
-      "rollingGsa": 0.8,
-      "seasonGsa": 5.4,
-      "restDays": 1,
-      "startLikelihood": 0.9,
-      "trend": "steady",
-      "note": "Consistent performance from Ilya Sorokin with a 2.53 GAA \u2014 reliable starter for NYI.",
-      "strengths": [
-        "Proven winner"
-      ],
-      "watchouts": [
-        "Inconsistent results"
-      ],
-      "nextOpponent": "TBL"
     },
     {
       "name": "Brandon Bussi",
@@ -373,38 +339,38 @@
       "nextOpponent": "PHI"
     },
     {
-      "name": "Tristan Jarry",
-      "team": "PIT",
+      "name": "Igor Shesterkin",
+      "team": "NYR",
       "rollingGsa": 0.7,
-      "seasonGsa": 3.2,
-      "restDays": 2,
-      "startLikelihood": 0.7,
-      "trend": "stable",
-      "note": "Tristan Jarry showing promise with limited sample size \u2014 monitor progression closely.",
-      "strengths": [
-        "Solid fundamentals"
-      ],
-      "watchouts": [
-        "Limited recent data"
-      ],
-      "nextOpponent": "SJS"
-    },
-    {
-      "name": "Jake Oettinger",
-      "team": "DAL",
-      "rollingGsa": 0.6,
-      "seasonGsa": 4.4,
+      "seasonGsa": 5.7,
       "restDays": 1,
       "startLikelihood": 0.8,
       "trend": "stable",
-      "note": "Jake Oettinger showing promise with limited sample size \u2014 monitor progression closely.",
+      "note": "Igor Shesterkin showing promise with limited sample size \u2014 monitor progression closely.",
       "strengths": [
         "Proven winner"
       ],
       "watchouts": [
         "Inconsistent results"
       ],
-      "nextOpponent": "FLA"
+      "nextOpponent": "ANA"
+    },
+    {
+      "name": "Tristan Jarry",
+      "team": "PIT,EDM",
+      "rollingGsa": 0.6,
+      "seasonGsa": 3.0,
+      "restDays": 2,
+      "startLikelihood": 0.8,
+      "trend": "stable",
+      "note": "Tristan Jarry showing promise with limited sample size \u2014 monitor progression closely.",
+      "strengths": [
+        "Proven winner"
+      ],
+      "watchouts": [
+        "Limited recent data"
+      ],
+      "nextOpponent": null
     },
     {
       "name": "Jake Allen",
@@ -421,7 +387,7 @@
       "watchouts": [
         "Inconsistent results"
       ],
-      "nextOpponent": "ANA"
+      "nextOpponent": "VAN"
     },
     {
       "name": "Filip Gustavsson",
@@ -438,24 +404,24 @@
       "watchouts": [
         "Inconsistent results"
       ],
-      "nextOpponent": "OTT"
+      "nextOpponent": "BOS"
     },
     {
-      "name": "Jet Greaves",
-      "team": "CBJ",
+      "name": "Jake Oettinger",
+      "team": "DAL",
       "rollingGsa": 0.5,
-      "seasonGsa": 3.2,
-      "restDays": 2,
+      "seasonGsa": 3.7,
+      "restDays": 1,
       "startLikelihood": 0.8,
       "trend": "stable",
-      "note": "Jet Greaves showing promise with limited sample size \u2014 monitor progression closely.",
+      "note": "Jake Oettinger showing promise with limited sample size \u2014 monitor progression closely.",
       "strengths": [
-        "Solid fundamentals"
+        "Proven winner"
       ],
       "watchouts": [
         "Inconsistent results"
       ],
-      "nextOpponent": "VGK"
+      "nextOpponent": "LAK"
     },
     {
       "name": "Dan Vladar",
@@ -475,21 +441,21 @@
       "nextOpponent": "CAR"
     },
     {
-      "name": "Jonas Johansson",
-      "team": "TBL",
+      "name": "Jet Greaves",
+      "team": "CBJ",
       "rollingGsa": 0.4,
-      "seasonGsa": 1.6,
-      "restDays": 2,
-      "startLikelihood": 0.7,
+      "seasonGsa": 2.7,
+      "restDays": 1,
+      "startLikelihood": 0.8,
       "trend": "stable",
-      "note": "Jonas Johansson showing promise with limited sample size \u2014 monitor progression closely.",
+      "note": "Jet Greaves showing promise with limited sample size \u2014 monitor progression closely.",
       "strengths": [
         "Solid fundamentals"
       ],
       "watchouts": [
         "Inconsistent results"
       ],
-      "nextOpponent": "NYI"
+      "nextOpponent": "ANA"
     },
     {
       "name": "David Rittich",
@@ -506,7 +472,41 @@
       "watchouts": [
         "Limited recent data"
       ],
-      "nextOpponent": "TBL"
+      "nextOpponent": "DET"
+    },
+    {
+      "name": "Jonas Johansson",
+      "team": "TBL",
+      "rollingGsa": 0.3,
+      "seasonGsa": 1.4,
+      "restDays": 2,
+      "startLikelihood": 0.7,
+      "trend": "stable",
+      "note": "Jonas Johansson showing promise with limited sample size \u2014 monitor progression closely.",
+      "strengths": [
+        "Solid fundamentals"
+      ],
+      "watchouts": [
+        "Inconsistent results"
+      ],
+      "nextOpponent": "FLA"
+    },
+    {
+      "name": "Pyotr Kochetkov",
+      "team": "CAR",
+      "rollingGsa": 0.3,
+      "seasonGsa": 0.6,
+      "restDays": 3,
+      "startLikelihood": 0.6,
+      "trend": "stable",
+      "note": "Pyotr Kochetkov showing promise with limited sample size \u2014 monitor progression closely.",
+      "strengths": [
+        "Exceptional goals against average"
+      ],
+      "watchouts": [
+        "Limited recent data"
+      ],
+      "nextOpponent": "PHI"
     },
     {
       "name": "Daniil Tarasov",
@@ -523,7 +523,7 @@
       "watchouts": [
         "Inconsistent results"
       ],
-      "nextOpponent": "DAL"
+      "nextOpponent": "TBL"
     }
   ]
 }
