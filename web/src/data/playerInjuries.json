@@ -1,48 +1,76 @@
 {
-  "generatedAt": "2025-12-15T16:26:21.294617+00:00",
+  "generatedAt": "2025-12-15T17:23:36.523434+00:00",
   "date": "2025-12-15",
   "teams": {
-    "MIN": {
+    "TBL": {
       "injuries": []
     },
-    "BOS": {
+    "FLA": {
       "injuries": []
     },
-    "MTL": {
+    "NYR": {
       "injuries": []
     },
-    "EDM": {
+    "ANA": {
       "injuries": []
     },
-    "SEA": {
+    "WPG": {
       "injuries": []
     },
-    "BUF": {
+    "OTT": {
+      "injuries": []
+    },
+    "STL": {
+      "injuries": []
+    },
+    "NSH": {
+      "injuries": []
+    },
+    "DAL": {
+      "injuries": []
+    },
+    "LAK": {
       "injuries": []
     }
   },
   "games": [
     {
-      "gameId": "2025020511",
-      "date": "2025-12-14",
-      "home": "MIN",
-      "away": "BOS",
+      "gameId": "2025020514",
+      "date": "2025-12-15",
+      "home": "TBL",
+      "away": "FLA",
       "homeInjuries": [],
       "awayInjuries": []
     },
     {
-      "gameId": "2025020512",
-      "date": "2025-12-14",
-      "home": "MTL",
-      "away": "EDM",
+      "gameId": "2025020515",
+      "date": "2025-12-15",
+      "home": "NYR",
+      "away": "ANA",
       "homeInjuries": [],
       "awayInjuries": []
     },
     {
-      "gameId": "2025020513",
-      "date": "2025-12-14",
-      "home": "SEA",
-      "away": "BUF",
+      "gameId": "2025020516",
+      "date": "2025-12-15",
+      "home": "WPG",
+      "away": "OTT",
+      "homeInjuries": [],
+      "awayInjuries": []
+    },
+    {
+      "gameId": "2025020517",
+      "date": "2025-12-15",
+      "home": "STL",
+      "away": "NSH",
+      "homeInjuries": [],
+      "awayInjuries": []
+    },
+    {
+      "gameId": "2025020518",
+      "date": "2025-12-15",
+      "home": "DAL",
+      "away": "LAK",
       "homeInjuries": [],
       "awayInjuries": []
     }
