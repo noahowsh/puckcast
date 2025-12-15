@@ -77,10 +77,14 @@ jobs:
             echo '{"message":"No backtesting data yet","generatedAt":"'$(date -u +%Y-%m-%dT%H:%M:%SZ)'"}' > web/src/data/backtestingReport.json
           fi
           git fetch origin main
-          git rebase origin/main
+          if ! git rebase origin/main; then
+            echo "::error::Rebase failed - possible merge conflict"
+            git rebase --abort 2>/dev/null || true
+            exit 1
+          fi
           git add data/archive/ web/src/data/backtestingReport.json
           git commit -m "chore: update game results and backtesting report ($(date -u +%Y-%m-%dT%H:%M:%SZ))"
-          git push https://${ACTIONS_TOKEN}@github.com/${{ github.repository }} HEAD:main
+          git push origin HEAD:main
 
       - name: Summary
         run: |

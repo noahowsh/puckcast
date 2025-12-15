@@ -201,67 +201,112 @@ jobs:
           python scripts/validate_predictions.py web/src/data/todaysPredictions.json
 
       - name: Refresh standings
+        id: standings
         if: needs.determine-refresh.outputs.refresh_standings == 'true'
         run: |
           echo "📊 Refreshing standings..."
-          python scripts/fetch_current_standings.py
-        continue-on-error: true
+          if python scripts/fetch_current_standings.py; then
+            echo "result=success" >> $GITHUB_OUTPUT
+          else
+            echo "::warning::Standings refresh failed"
+            echo "result=failed" >> $GITHUB_OUTPUT
+          fi
 
       - name: Refresh goalie pulse
+        id: goalie_pulse
         if: needs.determine-refresh.outputs.refresh_goalie_pulse == 'true'
         run: |
           echo "🥅 Refreshing goalie pulse..."
-          python scripts/generate_goalie_pulse.py --date $(date +%Y-%m-%d)
-        continue-on-error: true
+          if python scripts/generate_goalie_pulse.py --date $(date +%Y-%m-%d); then
+            echo "result=success" >> $GITHUB_OUTPUT
+          else
+            echo "::warning::Goalie pulse refresh failed"
+            echo "result=failed" >> $GITHUB_OUTPUT
+          fi
 
       - name: Refresh injuries
+        id: injuries
         if: needs.determine-refresh.outputs.refresh_injuries == 'true'
         run: |
           echo "🏥 Refreshing injury data..."
-          python scripts/fetch_injuries.py
-        continue-on-error: true
+          if python scripts/fetch_injuries.py; then
+            echo "result=success" >> $GITHUB_OUTPUT
+          else
+            echo "::warning::Injuries refresh failed"
+            echo "result=failed" >> $GITHUB_OUTPUT
+          fi
 
       - name: Generate player injuries for games
+        id: player_injuries
         if: needs.determine-refresh.outputs.refresh_injuries == 'true'
         run: |
           echo "🏥 Generating player injuries for today's games..."
-          python scripts/generate_player_injuries.py
-        continue-on-error: true
+          if python scripts/generate_player_injuries.py; then
+            echo "result=success" >> $GITHUB_OUTPUT
+          else
+            echo "::warning::Player injuries generation failed"
+            echo "result=failed" >> $GITHUB_OUTPUT
+          fi
 
       - name: Refresh starting goalies
+        id: starting_goalies
         if: needs.determine-refresh.outputs.refresh_starting_goalies == 'true'
         run: |
           echo "🥅 Refreshing starting goalies..."
-          python scripts/fetch_starting_goalies.py
-        continue-on-error: true
+          if python scripts/fetch_starting_goalies.py; then
+            echo "result=success" >> $GITHUB_OUTPUT
+          else
+            echo "::warning::Starting goalies refresh failed"
+            echo "result=failed" >> $GITHUB_OUTPUT
+          fi
 
       - name: Refresh model insights
+        id: model_insights
         if: needs.determine-refresh.outputs.refresh_model_insights == 'true'
         run: |
           echo "📈 Refreshing model insights..."
-          python scripts/generate_site_metrics.py
-        continue-on-error: true
+          if python scripts/generate_site_metrics.py; then
+            echo "result=success" >> $GITHUB_OUTPUT
+          else
+            echo "::warning::Model insights refresh failed"
+            echo "result=failed" >> $GITHUB_OUTPUT
+          fi
 
       - name: Refresh social metrics
+        id: social_metrics
         if: needs.determine-refresh.outputs.refresh_social_metrics == 'true'
         run: |
           echo "📱 Refreshing social metrics (PDO, luck scores, leaderboards)..."
-          python scripts/generate_social_metrics.py
-        continue-on-error: true
+          if python scripts/generate_social_metrics.py; then
+            echo "result=success" >> $GITHUB_OUTPUT
+          else
+            echo "::warning::Social metrics refresh failed"
+            echo "result=failed" >> $GITHUB_OUTPUT
+          fi
 
       - name: Refresh power index
+        id: power_index
         if: needs.determine-refresh.outputs.refresh_power_index == 'true'
         run: |
           echo "💪 Refreshing power index rankings..."
-          python scripts/generate_power_index.py
-        continue-on-error: true
+          if python scripts/generate_power_index.py; then
+            echo "result=success" >> $GITHUB_OUTPUT
+          else
+            echo "::warning::Power index refresh failed"
+            echo "result=failed" >> $GITHUB_OUTPUT
+          fi
 
       - name: Refresh prediction results
+        id: prediction_results
         if: needs.determine-refresh.outputs.refresh_prediction_results == 'true'
         run: |
           echo "📋 Refreshing prediction results (model receipts)..."
-          python scripts/generate_prediction_results.py --days 7
-        continue-on-error: true
+          if python scripts/generate_prediction_results.py --days 7; then
+            echo "result=success" >> $GITHUB_OUTPUT
+          else
+            echo "::warning::Prediction results refresh failed"
+            echo "result=failed" >> $GITHUB_OUTPUT
+          fi
 
       - name: Check for changes
         id: git-check
@@ -272,27 +317,64 @@ jobs:
         if: steps.git-check.outputs.changes == 'true'
         run: |
           git fetch origin main
-          git pull --rebase --autostash origin main
+          if ! git pull --rebase --autostash origin main; then
+            echo "::error::Rebase failed - possible merge conflict"
+            git rebase --abort 2>/dev/null || true
+            exit 1
+          fi
 
       - name: Commit and push changes
         if: steps.git-check.outputs.changes == 'true'
+        env:
+          GH_TOKEN: ${{ env.ACTIONS_TOKEN }}
         run: |
           git config user.name "GitHub Actions Bot"
           git config user.email "actions@github.com"
           git add web/src/data/*.json
           git commit -m "chore: granular data refresh ($(date -u +%Y-%m-%dT%H:%M:%SZ))"
-          git push https://${ACTIONS_TOKEN}@github.com/${{ github.repository }} HEAD:main
+          git push origin HEAD:main
+
+      - name: Check for failures
+        id: failure-check
+        run: |
+          FAILURES=""
+          if [ "${{ steps.standings.outputs.result }}" = "failed" ]; then FAILURES="$FAILURES standings"; fi
+          if [ "${{ steps.goalie_pulse.outputs.result }}" = "failed" ]; then FAILURES="$FAILURES goalie_pulse"; fi
+          if [ "${{ steps.injuries.outputs.result }}" = "failed" ]; then FAILURES="$FAILURES injuries"; fi
+          if [ "${{ steps.player_injuries.outputs.result }}" = "failed" ]; then FAILURES="$FAILURES player_injuries"; fi
+          if [ "${{ steps.starting_goalies.outputs.result }}" = "failed" ]; then FAILURES="$FAILURES starting_goalies"; fi
+          if [ "${{ steps.model_insights.outputs.result }}" = "failed" ]; then FAILURES="$FAILURES model_insights"; fi
+          if [ "${{ steps.social_metrics.outputs.result }}" = "failed" ]; then FAILURES="$FAILURES social_metrics"; fi
+          if [ "${{ steps.power_index.outputs.result }}" = "failed" ]; then FAILURES="$FAILURES power_index"; fi
+          if [ "${{ steps.prediction_results.outputs.result }}" = "failed" ]; then FAILURES="$FAILURES prediction_results"; fi
+
+          if [ -n "$FAILURES" ]; then
+            echo "::error::The following refresh tasks failed:$FAILURES"
+            echo "has_failures=true" >> $GITHUB_OUTPUT
+            echo "failed_tasks=$FAILURES" >> $GITHUB_OUTPUT
+          else
+            echo "has_failures=false" >> $GITHUB_OUTPUT
+          fi
 
       - name: Summary
         run: |
-          echo "✅ Granular refresh complete!"
-          echo "📊 Refreshed components:"
-          echo "  - Predictions: ${{ needs.determine-refresh.outputs.refresh_predictions }}"
-          echo "  - Standings: ${{ needs.determine-refresh.outputs.refresh_standings }}"
-          echo "  - Goalie Pulse: ${{ needs.determine-refresh.outputs.refresh_goalie_pulse }}"
-          echo "  - Injuries: ${{ needs.determine-refresh.outputs.refresh_injuries }}"
-          echo "  - Starting Goalies: ${{ needs.determine-refresh.outputs.refresh_starting_goalies }}"
-          echo "  - Model Insights: ${{ needs.determine-refresh.outputs.refresh_model_insights }}"
-          echo "  - Social Metrics: ${{ needs.determine-refresh.outputs.refresh_social_metrics }}"
-          echo "  - Power Index: ${{ needs.determine-refresh.outputs.refresh_power_index }}"
-          echo "  - Prediction Results: ${{ needs.determine-refresh.outputs.refresh_prediction_results }}"
+          echo "📊 Granular refresh complete!"
+          echo ""
+          echo "## Scheduled Refresh Status"
+          echo "| Component | Scheduled | Result |"
+          echo "|-----------|-----------|--------|"
+          echo "| Predictions | ${{ needs.determine-refresh.outputs.refresh_predictions }} | ${{ steps.predictions.outputs.result || 'skipped' }} |"
+          echo "| Standings | ${{ needs.determine-refresh.outputs.refresh_standings }} | ${{ steps.standings.outputs.result || 'skipped' }} |"
+          echo "| Goalie Pulse | ${{ needs.determine-refresh.outputs.refresh_goalie_pulse }} | ${{ steps.goalie_pulse.outputs.result || 'skipped' }} |"
+          echo "| Injuries | ${{ needs.determine-refresh.outputs.refresh_injuries }} | ${{ steps.injuries.outputs.result || 'skipped' }} |"
+          echo "| Player Injuries | ${{ needs.determine-refresh.outputs.refresh_injuries }} | ${{ steps.player_injuries.outputs.result || 'skipped' }} |"
+          echo "| Starting Goalies | ${{ needs.determine-refresh.outputs.refresh_starting_goalies }} | ${{ steps.starting_goalies.outputs.result || 'skipped' }} |"
+          echo "| Model Insights | ${{ needs.determine-refresh.outputs.refresh_model_insights }} | ${{ steps.model_insights.outputs.result || 'skipped' }} |"
+          echo "| Social Metrics | ${{ needs.determine-refresh.outputs.refresh_social_metrics }} | ${{ steps.social_metrics.outputs.result || 'skipped' }} |"
+          echo "| Power Index | ${{ needs.determine-refresh.outputs.refresh_power_index }} | ${{ steps.power_index.outputs.result || 'skipped' }} |"
+          echo "| Prediction Results | ${{ needs.determine-refresh.outputs.refresh_prediction_results }} | ${{ steps.prediction_results.outputs.result || 'skipped' }} |"
+
+          if [ "${{ steps.failure-check.outputs.has_failures }}" = "true" ]; then
+            echo ""
+            echo "::warning::Some refresh tasks failed: ${{ steps.failure-check.outputs.failed_tasks }}"
+          fi
