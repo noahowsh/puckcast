@@ -2,7 +2,7 @@
   "lastUpdated": "2025-12-15",
   "nextUpdate": "2025-12-22",
   "weekOf": "Dec 15, 2025",
-  "generatedAt": "2025-12-15T11:16:30.367601+00:00",
+  "generatedAt": "2025-12-15T16:26:12.047799+00:00",
   "previousRankings": {
     "COL": {
       "rank": 1,
@@ -201,32 +201,32 @@
     "COL": "Holding steady in top 3",
     "DAL": "Holding steady in top 3",
     "CAR": "Holding steady in top 3",
-    "MIN": "Climbing the standings, building momentum",
-    "NYI": "Slight regression, looking to stabilize",
+    "MIN": "Playoff pace at 0.652 point percentage",
+    "NYI": "Playoff pace at 0.621 point percentage",
     "VGK": "Playoff pace at 0.661 point percentage",
     "WSH": "Solid goal differential (+27) driving results",
     "ANA": "Playoff pace at 0.609 point percentage",
     "TBL": "Solid goal differential (+22) driving results",
     "DET": "Hovering around .500, looking for consistency",
     "BOS": "Hovering around .500, looking for consistency",
-    "MTL": "Surging up 4 spots with excellent form",
+    "MTL": "Hovering around .500, looking for consistency",
     "PHI": "Playoff pace at 0.613 point percentage",
-    "NJD": "Slight regression, looking to stabilize",
-    "PIT": "Surging up 3 spots with excellent form",
-    "LAK": "Slight regression, looking to stabilize",
-    "NYR": "Slight regression, looking to stabilize",
-    "EDM": "Slight regression, looking to stabilize",
-    "UTA": "Climbing the standings, building momentum",
-    "SJS": "Slight regression, looking to stabilize",
-    "FLA": "Slight regression, looking to stabilize",
+    "NJD": "Hovering around .500, looking for consistency",
+    "PIT": "Hovering around .500, looking for consistency",
+    "LAK": "Hovering around .500, looking for consistency",
+    "NYR": "Hovering around .500, looking for consistency",
+    "EDM": "Hovering around .500, looking for consistency",
+    "UTA": "Hovering around .500, looking for consistency",
+    "SJS": "Goal differential (-14) limiting ceiling",
+    "FLA": "Hovering around .500, looking for consistency",
     "TOR": "Hovering around .500, looking for consistency",
     "OTT": "Hovering around .500, looking for consistency",
-    "BUF": "Surging up 5 spots with excellent form",
-    "CHI": "Slight regression, looking to stabilize",
-    "CBJ": "Slight regression, looking to stabilize",
-    "WPG": "Slight regression, looking to stabilize",
-    "STL": "Slight regression, looking to stabilize",
-    "CGY": "Slight regression, looking to stabilize",
+    "BUF": "Goal differential (-13) limiting ceiling",
+    "CHI": "Hovering around .500, looking for consistency",
+    "CBJ": "Goal differential (-19) limiting ceiling",
+    "WPG": "Hovering around .500, looking for consistency",
+    "STL": "Goal differential (-32) limiting ceiling",
+    "CGY": "Goal differential (-13) limiting ceiling",
     "SEA": "Goal differential (-16) limiting ceiling",
     "NSH": "Goal differential (-24) limiting ceiling",
     "VAN": "Goal differential (-25) limiting ceiling"
@@ -274,7 +274,7 @@
       "pointPct": 0.688,
       "previousRank": 3,
       "rankDelta": 0,
-      "pointsDelta": 2,
+      "pointsDelta": 0,
       "goalDiffDelta": 0,
       "tier": "elite",
       "trend": "steady",
@@ -288,13 +288,13 @@
       "record": "19-9-5",
       "goalDiff": 10,
       "pointPct": 0.652,
-      "previousRank": 5,
-      "rankDelta": 1,
-      "pointsDelta": 2,
-      "goalDiffDelta": 4,
+      "previousRank": 4,
+      "rankDelta": 0,
+      "pointsDelta": 0,
+      "goalDiffDelta": 0,
       "tier": "elite",
-      "trend": "up",
-      "reason": "Climbing the standings, building momentum"
+      "trend": "steady",
+      "reason": "Playoff pace at 0.652 point percentage"
     },
     {
       "rank": 5,
@@ -304,13 +304,13 @@
       "record": "19-11-3",
       "goalDiff": 7,
       "pointPct": 0.621,
-      "previousRank": 4,
-      "rankDelta": -1,
+      "previousRank": 5,
+      "rankDelta": 0,
       "pointsDelta": 0,
       "goalDiffDelta": 0,
       "tier": "elite",
-      "trend": "down",
-      "reason": "Slight regression, looking to stabilize"
+      "trend": "steady",
+      "reason": "Playoff pace at 0.621 point percentage"
     },
     {
       "rank": 6,
@@ -403,7 +403,7 @@
       "previousRank": 11,
       "rankDelta": 0,
       "pointsDelta": 0,
-      "goalDiffDelta": -4,
+      "goalDiffDelta": 0,
       "tier": "playoff",
       "trend": "steady",
       "reason": "Hovering around .500, looking for consistency"
@@ -416,13 +416,13 @@
       "record": "17-11-4",
       "goalDiff": -8,
       "pointPct": 0.594,
-      "previousRank": 16,
-      "rankDelta": 4,
-      "pointsDelta": 2,
-      "goalDiffDelta": 3,
+      "previousRank": 12,
+      "rankDelta": 0,
+      "pointsDelta": 0,
+      "goalDiffDelta": 0,
       "tier": "playoff",
-      "trend": "up",
-      "reason": "Surging up 4 spots with excellent form"
+      "trend": "steady",
+      "reason": "Hovering around .500, looking for consistency"
     },
     {
       "rank": 13,
@@ -434,7 +434,7 @@
       "pointPct": 0.613,
       "previousRank": 13,
       "rankDelta": 0,
-      "pointsDelta": 1,
+      "pointsDelta": 0,
       "goalDiffDelta": 0,
       "tier": "playoff",
       "trend": "steady",
@@ -448,13 +448,13 @@
       "record": "18-14-1",
       "goalDiff": -8,
       "pointPct": 0.561,
-      "previousRank": 12,
-      "rankDelta": -2,
+      "previousRank": 14,
+      "rankDelta": 0,
       "pointsDelta": 0,
       "goalDiffDelta": 0,
       "tier": "playoff",
-      "trend": "down",
-      "reason": "Slight regression, looking to stabilize"
+      "trend": "steady",
+      "reason": "Hovering around .500, looking for consistency"
     },
     {
       "rank": 15,
@@ -464,13 +464,13 @@
       "record": "14-8-9",
       "goalDiff": 8,
       "pointPct": 0.597,
-      "previousRank": 18,
-      "rankDelta": 3,
-      "pointsDelta": 1,
-      "goalDiffDelta": -1,
+      "previousRank": 15,
+      "rankDelta": 0,
+      "pointsDelta": 0,
+      "goalDiffDelta": 0,
       "tier": "playoff",
-      "trend": "up",
-      "reason": "Surging up 3 spots with excellent form"
+      "trend": "steady",
+      "reason": "Hovering around .500, looking for consistency"
     },
     {
       "rank": 16,
@@ -480,13 +480,13 @@
       "record": "14-8-9",
       "goalDiff": 5,
       "pointPct": 0.597,
-      "previousRank": 14,
-      "rankDelta": -2,
+      "previousRank": 16,
+      "rankDelta": 0,
       "pointsDelta": 0,
       "goalDiffDelta": 0,
       "tier": "playoff",
-      "trend": "down",
-      "reason": "Slight regression, looking to stabilize"
+      "trend": "steady",
+      "reason": "Hovering around .500, looking for consistency"
     },
     {
       "rank": 17,
@@ -496,13 +496,13 @@
       "record": "16-13-4",
       "goalDiff": -1,
       "pointPct": 0.545,
-      "previousRank": 15,
-      "rankDelta": -2,
+      "previousRank": 17,
+      "rankDelta": 0,
       "pointsDelta": 0,
       "goalDiffDelta": 0,
       "tier": "bubble",
-      "trend": "down",
-      "reason": "Slight regression, looking to stabilize"
+      "trend": "steady",
+      "reason": "Hovering around .500, looking for consistency"
     },
     {
       "rank": 18,
@@ -512,13 +512,13 @@
       "record": "15-12-6",
       "goalDiff": -2,
       "pointPct": 0.545,
-      "previousRank": 17,
-      "rankDelta": -1,
+      "previousRank": 18,
+      "rankDelta": 0,
       "pointsDelta": 0,
-      "goalDiffDelta": -3,
+      "goalDiffDelta": 0,
       "tier": "bubble",
-      "trend": "down",
-      "reason": "Slight regression, looking to stabilize"
+      "trend": "steady",
+      "reason": "Hovering around .500, looking for consistency"
     },
     {
       "rank": 19,
@@ -528,13 +528,13 @@
       "record": "16-15-3",
       "goalDiff": 5,
       "pointPct": 0.515,
-      "previousRank": 21,
-      "rankDelta": 2,
-      "pointsDelta": 2,
-      "goalDiffDelta": 1,
+      "previousRank": 19,
+      "rankDelta": 0,
+      "pointsDelta": 0,
+      "goalDiffDelta": 0,
       "tier": "bubble",
-      "trend": "up",
-      "reason": "Climbing the standings, building momentum"
+      "trend": "steady",
+      "reason": "Hovering around .500, looking for consistency"
     },
     {
       "rank": 20,
@@ -544,13 +544,13 @@
       "record": "16-14-3",
       "goalDiff": -14,
       "pointPct": 0.53,
-      "previousRank": 19,
-      "rankDelta": -1,
+      "previousRank": 20,
+      "rankDelta": 0,
       "pointsDelta": 0,
       "goalDiffDelta": 0,
       "tier": "bubble",
-      "trend": "down",
-      "reason": "Slight regression, looking to stabilize"
+      "trend": "steady",
+      "reason": "Goal differential (-14) limiting ceiling"
     },
     {
       "rank": 21,
@@ -560,13 +560,13 @@
       "record": "16-13-2",
       "goalDiff": -1,
       "pointPct": 0.548,
-      "previousRank": 20,
-      "rankDelta": -1,
+      "previousRank": 21,
+      "rankDelta": 0,
       "pointsDelta": 0,
       "goalDiffDelta": 0,
       "tier": "bubble",
-      "trend": "down",
-      "reason": "Slight regression, looking to stabilize"
+      "trend": "steady",
+      "reason": "Hovering around .500, looking for consistency"
     },
     {
       "rank": 22,
@@ -608,13 +608,13 @@
       "record": "14-14-4",
       "goalDiff": -13,
       "pointPct": 0.5,
-      "previousRank": 29,
-      "rankDelta": 5,
-      "pointsDelta": 2,
-      "goalDiffDelta": 2,
+      "previousRank": 24,
+      "rankDelta": 0,
+      "pointsDelta": 0,
+      "goalDiffDelta": 0,
       "tier": "bubble",
-      "trend": "up",
-      "reason": "Surging up 5 spots with excellent form"
+      "trend": "steady",
+      "reason": "Goal differential (-13) limiting ceiling"
     },
     {
       "rank": 25,
@@ -624,13 +624,13 @@
       "record": "13-13-6",
       "goalDiff": -5,
       "pointPct": 0.5,
-      "previousRank": 24,
-      "rankDelta": -1,
+      "previousRank": 25,
+      "rankDelta": 0,
       "pointsDelta": 0,
       "goalDiffDelta": 0,
       "tier": "lottery",
-      "trend": "down",
-      "reason": "Slight regression, looking to stabilize"
+      "trend": "steady",
+      "reason": "Hovering around .500, looking for consistency"
     },
     {
       "rank": 26,
@@ -640,13 +640,13 @@
       "record": "13-13-6",
       "goalDiff": -19,
       "pointPct": 0.5,
-      "previousRank": 25,
-      "rankDelta": -1,
+      "previousRank": 26,
+      "rankDelta": 0,
       "pointsDelta": 0,
       "goalDiffDelta": 0,
       "tier": "lottery",
-      "trend": "down",
-      "reason": "Slight regression, looking to stabilize"
+      "trend": "steady",
+      "reason": "Goal differential (-19) limiting ceiling"
     },
     {
       "rank": 27,
@@ -656,13 +656,13 @@
       "record": "15-15-1",
       "goalDiff": 0,
       "pointPct": 0.5,
-      "previousRank": 26,
-      "rankDelta": -1,
+      "previousRank": 27,
+      "rankDelta": 0,
       "pointsDelta": 0,
       "goalDiffDelta": 0,
       "tier": "lottery",
-      "trend": "down",
-      "reason": "Slight regression, looking to stabilize"
+      "trend": "steady",
+      "reason": "Hovering around .500, looking for consistency"
     },
     {
       "rank": 28,
@@ -672,13 +672,13 @@
       "record": "12-14-7",
       "goalDiff": -32,
       "pointPct": 0.47,
-      "previousRank": 27,
-      "rankDelta": -1,
+      "previousRank": 28,
+      "rankDelta": 0,
       "pointsDelta": 0,
       "goalDiffDelta": 0,
       "tier": "lottery",
-      "trend": "down",
-      "reason": "Slight regression, looking to stabilize"
+      "trend": "steady",
+      "reason": "Goal differential (-32) limiting ceiling"
     },
     {
       "rank": 29,
@@ -688,13 +688,13 @@
       "record": "13-16-4",
       "goalDiff": -13,
       "pointPct": 0.455,
-      "previousRank": 28,
-      "rankDelta": -1,
+      "previousRank": 29,
+      "rankDelta": 0,
       "pointsDelta": 0,
       "goalDiffDelta": 0,
       "tier": "lottery",
-      "trend": "down",
-      "reason": "Slight regression, looking to stabilize"
+      "trend": "steady",
+      "reason": "Goal differential (-13) limiting ceiling"
     },
     {
       "rank": 30,
@@ -707,7 +707,7 @@
       "previousRank": 30,
       "rankDelta": 0,
       "pointsDelta": 0,
-      "goalDiffDelta": -2,
+      "goalDiffDelta": 0,
       "tier": "lottery",
       "trend": "steady",
       "reason": "Goal differential (-16) limiting ceiling"
@@ -745,70 +745,8 @@
       "reason": "Goal differential (-25) limiting ceiling"
     }
   ],
-  "topRisers": [
-    {
-      "rank": 24,
-      "abbrev": "BUF",
-      "delta": 5,
-      "reason": "Surging up 5 spots with excellent form"
-    },
-    {
-      "rank": 12,
-      "abbrev": "MTL",
-      "delta": 4,
-      "reason": "Surging up 4 spots with excellent form"
-    },
-    {
-      "rank": 15,
-      "abbrev": "PIT",
-      "delta": 3,
-      "reason": "Surging up 3 spots with excellent form"
-    },
-    {
-      "rank": 19,
-      "abbrev": "UTA",
-      "delta": 2,
-      "reason": "Climbing the standings, building momentum"
-    },
-    {
-      "rank": 4,
-      "abbrev": "MIN",
-      "delta": 1,
-      "reason": "Climbing the standings, building momentum"
-    }
-  ],
-  "topFallers": [
-    {
-      "rank": 14,
-      "abbrev": "NJD",
-      "delta": -2,
-      "reason": "Slight regression, looking to stabilize"
-    },
-    {
-      "rank": 16,
-      "abbrev": "LAK",
-      "delta": -2,
-      "reason": "Slight regression, looking to stabilize"
-    },
-    {
-      "rank": 17,
-      "abbrev": "NYR",
-      "delta": -2,
-      "reason": "Slight regression, looking to stabilize"
-    },
-    {
-      "rank": 5,
-      "abbrev": "NYI",
-      "delta": -1,
-      "reason": "Slight regression, looking to stabilize"
-    },
-    {
-      "rank": 18,
-      "abbrev": "EDM",
-      "delta": -1,
-      "reason": "Slight regression, looking to stabilize"
-    }
-  ],
+  "topRisers": [],
+  "topFallers": [],
   "tiers": {
     "elite": [
       "COL",
