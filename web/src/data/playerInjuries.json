@@ -1,119 +1,154 @@
 {
-  "generatedAt": "2025-12-13T14:28:07.117773+00:00",
-  "date": "2025-12-13",
+  "generatedAt": "2025-12-15T14:14:18.981529+00:00",
+  "date": "2025-12-15",
   "teams": {
-    "STL": {
+    "MIN": {
       "injuries": [
         {
-          "team": "STL",
-          "playerId": 2700134941,
-          "name": "Torey Krug",
-          "statusCode": "IR",
-          "statusDescription": "IR",
-          "position": "L"
-        },
-        {
-          "team": "STL",
-          "playerId": 1856689967,
-          "name": "Alexey Toropchenko",
+          "team": "MIN",
+          "playerId": 3615211395,
+          "name": "Jonas Brodin",
           "statusCode": "OUT",
-          "statusDescription": "OUT",
-          "position": "L"
+          "statusDescription": "Upper Body",
+          "position": "D"
         },
         {
-          "team": "STL",
-          "playerId": 18964699,
-          "name": "Jimmy Snuggerud",
-          "statusCode": "OUT",
-          "statusDescription": "OUT",
-          "position": "L"
-        },
-        {
-          "team": "STL",
-          "playerId": 1136531485,
-          "name": "Jordan Kyrou",
+          "team": "MIN",
+          "playerId": 1360294140,
+          "name": "Nico Sturm",
           "statusCode": "DTD",
-          "statusDescription": "DTD",
+          "statusDescription": "Upper Body",
+          "position": "C"
+        },
+        {
+          "team": "MIN",
+          "playerId": 2085611629,
+          "name": "Marcus Foligno",
+          "statusCode": "OUT",
+          "statusDescription": "Lower Body",
           "position": "L"
         },
         {
-          "team": "STL",
-          "playerId": 1059133129,
-          "name": "Nathan Walker",
-          "statusCode": "IR",
-          "statusDescription": "Injured Reserve",
+          "team": "MIN",
+          "playerId": 320456629,
+          "name": "Jacob Middleton",
+          "statusCode": "OUT",
+          "statusDescription": "Upper Body",
+          "position": "D"
+        },
+        {
+          "team": "MIN",
+          "playerId": 4164136815,
+          "name": "Mats Zuccarello",
+          "statusCode": "OUT",
+          "statusDescription": "Upper Body",
           "position": "L"
         },
         {
-          "team": "STL",
-          "playerId": 2390798473,
-          "name": "Zach Dean",
-          "statusCode": "IR",
-          "statusDescription": "Injured Reserve",
+          "team": "MIN",
+          "playerId": 2709079418,
+          "name": "Vinnie Hinostroza",
+          "statusCode": "OUT",
+          "statusDescription": "Lower Body",
           "position": "C"
         }
       ]
     },
-    "CHI": {
+    "BOS": {
       "injuries": [
         {
-          "team": "CHI",
-          "playerId": 188076258,
-          "name": "Laurent Brossoit",
-          "statusCode": "IR",
-          "statusDescription": "IR",
+          "team": "BOS",
+          "playerId": 3102876091,
+          "name": "Michael Callahan",
+          "statusCode": "OUT",
+          "statusDescription": "Lower Body",
+          "position": "D"
+        },
+        {
+          "team": "BOS",
+          "playerId": 3443490568,
+          "name": "Viktor Arvidsson",
+          "statusCode": "OUT",
+          "statusDescription": "Lower Body",
           "position": "L"
         },
         {
-          "team": "CHI",
-          "playerId": 1720128383,
-          "name": "Nick Foligno",
-          "statusCode": "IR",
-          "statusDescription": "IR",
+          "team": "BOS",
+          "playerId": 587897089,
+          "name": "Jonathan Aspirot",
+          "statusCode": "OUT",
+          "statusDescription": "Upper Body",
+          "position": "D"
+        },
+        {
+          "team": "BOS",
+          "playerId": 995723325,
+          "name": "Henri Jokiharju",
+          "statusCode": "OUT",
+          "statusDescription": "Undisclosed",
+          "position": "D"
+        },
+        {
+          "team": "BOS",
+          "playerId": 3791384546,
+          "name": "Matej Blumel",
+          "statusCode": "OUT",
+          "statusDescription": "Lower Body",
           "position": "L"
         },
         {
-          "team": "CHI",
-          "playerId": 614283122,
-          "name": "Shea Weber",
-          "statusCode": "IR",
-          "statusDescription": "Injured Reserve",
+          "team": "BOS",
+          "playerId": 3198100071,
+          "name": "Jordan Harris",
+          "statusCode": "OUT",
+          "statusDescription": "Ankle",
           "position": "D"
         }
       ]
     },
-    "UTA": {
+    "MTL": {
+      "injuries": []
+    },
+    "EDM": {
       "injuries": [
         {
-          "team": "UTA",
-          "playerId": 2518032446,
-          "name": "Alex Kerfoot",
-          "statusCode": "IR",
-          "statusDescription": "IR",
-          "position": "L"
-        },
-        {
-          "team": "UTA",
-          "playerId": 1077313262,
-          "name": "Juuso Valimaki",
-          "statusCode": "IR",
-          "statusDescription": "IR",
-          "position": "L"
-        },
-        {
-          "team": "UTA",
-          "playerId": 4182456072,
-          "name": "Olli Maatta",
-          "statusCode": "IR",
-          "statusDescription": "IR",
-          "position": "L"
-        },
-        {
-          "team": "UTA",
-          "playerId": 2268747638,
-          "name": "Logan Cooley",
+          "team": "EDM",
+          "playerId": 950942614,
+          "name": "Connor Clattenburg",
           "statusCode": "OUT",
-          "statusDescription": "OUT",
+          "statusDescription": "Eye",
+          "position": "C"
+        },
+        {
+          "team": "EDM",
+          "playerId": 4171854023,
+          "name": "Jake Walman",
+          "statusCode": "OUT",
+          "statusDescription": "Lower Body",
+          "position": "D"
+        },
+        {
+          "team": "EDM",
+          "playerId": 168170966,
+          "name": "Jack Roslovic",
+          "statusCode": "OUT",
+          "statusDescription": "Undisclosed",
+          "position": "C"
+        },
+        {
+          "team": "EDM",
+          "playerId": 3761705009,
+          "name": "Noah Philp",
+          "statusCode": "OUT",
+          "statusDescription": "Upper Body",
+          "position": "C"
+        },
+        {
+          "team": "EDM",
+          "playerId": 3784692117,
+          "name": "Kasperi Kapanen",
+          "statusCode": "OUT",
+          "statusDescription": "Lower Body",
           "position": "L"
         }
       ]
@@ -122,193 +157,350 @@
       "injuries": [
         {
           "team": "SEA",
-          "playerId": 2323427375,
-          "name": "Jaden Schwartz",
-          "statusCode": "IR",
-          "statusDescription": "IR",
-          "position": "L"
-        },
-        {
-          "team": "SEA",
-          "playerId": 902174211,
-          "name": "Matt Murray",
-          "statusCode": "IR",
-          "statusDescription": "IR",
-          "position": "L"
+          "playerId": 3374048629,
+          "name": "Jared McCann",
+          "statusCode": "OUT",
+          "statusDescription": "Lower Body",
+          "position": "C"
         },
         {
           "team": "SEA",
           "playerId": 4156261947,
           "name": "Berkly Catton",
           "statusCode": "OUT",
-          "statusDescription": "OUT",
+          "statusDescription": "Upper Body",
+          "position": "C"
+        },
+        {
+          "team": "SEA",
+          "playerId": 2323427375,
+          "name": "Jaden Schwartz",
+          "statusCode": "OUT",
+          "statusDescription": "Lower Body",
           "position": "L"
         },
         {
           "team": "SEA",
-          "playerId": 876475927,
-          "name": "Max McCormick",
+          "playerId": 902174211,
+          "name": "Matt Murray",
           "statusCode": "OUT",
-          "statusDescription": "Out",
+          "statusDescription": "Lower Body",
+          "position": "G"
+        }
+      ]
+    },
+    "BUF": {
+      "injuries": [
+        {
+          "team": "BUF",
+          "playerId": 3193451394,
+          "name": "Josh Norris",
+          "statusCode": "DTD",
+          "statusDescription": "Illness",
+          "position": "C"
+        },
+        {
+          "team": "BUF",
+          "playerId": 3399450091,
+          "name": "Alex Tuch",
+          "statusCode": "DTD",
+          "statusDescription": "Illness",
           "position": "L"
+        },
+        {
+          "team": "BUF",
+          "playerId": 3704508807,
+          "name": "Colten Ellis",
+          "statusCode": "OUT",
+          "statusDescription": "Concussion",
+          "position": "G"
+        },
+        {
+          "team": "BUF",
+          "playerId": 1479001694,
+          "name": "Jason Zucker",
+          "statusCode": "OUT",
+          "statusDescription": "Lower Body",
+          "position": "L"
+        },
+        {
+          "team": "BUF",
+          "playerId": 98649385,
+          "name": "Michael Kesselring",
+          "statusCode": "OUT",
+          "statusDescription": "Lower Body",
+          "position": "D"
+        },
+        {
+          "team": "BUF",
+          "playerId": 3235631160,
+          "name": "Justin Danforth",
+          "statusCode": "OUT",
+          "statusDescription": "Lower Body",
+          "position": "L"
+        },
+        {
+          "team": "BUF",
+          "playerId": 433605597,
+          "name": "Jiri Kulich",
+          "statusCode": "OUT",
+          "statusDescription": "Ear",
+          "position": "C"
         }
       ]
     }
   },
   "games": [
     {
-      "gameId": "2025020493",
-      "date": "2025-12-12",
-      "home": "STL",
-      "away": "CHI",
+      "gameId": "2025020511",
+      "date": "2025-12-14",
+      "home": "MIN",
+      "away": "BOS",
       "homeInjuries": [
         {
-          "team": "STL",
-          "playerId": 2700134941,
-          "name": "Torey Krug",
-          "statusCode": "IR",
-          "statusDescription": "IR",
-          "position": "L"
-        },
-        {
-          "team": "STL",
-          "playerId": 1856689967,
-          "name": "Alexey Toropchenko",
+          "team": "MIN",
+          "playerId": 3615211395,
+          "name": "Jonas Brodin",
           "statusCode": "OUT",
-          "statusDescription": "OUT",
-          "position": "L"
+          "statusDescription": "Upper Body",
+          "position": "D"
         },
         {
-          "team": "STL",
-          "playerId": 18964699,
-          "name": "Jimmy Snuggerud",
-          "statusCode": "OUT",
-          "statusDescription": "OUT",
-          "position": "L"
-        },
-        {
-          "team": "STL",
-          "playerId": 1136531485,
-          "name": "Jordan Kyrou",
+          "team": "MIN",
+          "playerId": 1360294140,
+          "name": "Nico Sturm",
           "statusCode": "DTD",
-          "statusDescription": "DTD",
+          "statusDescription": "Upper Body",
+          "position": "C"
+        },
+        {
+          "team": "MIN",
+          "playerId": 2085611629,
+          "name": "Marcus Foligno",
+          "statusCode": "OUT",
+          "statusDescription": "Lower Body",
           "position": "L"
         },
         {
-          "team": "STL",
-          "playerId": 1059133129,
-          "name": "Nathan Walker",
-          "statusCode": "IR",
-          "statusDescription": "Injured Reserve",
+          "team": "MIN",
+          "playerId": 320456629,
+          "name": "Jacob Middleton",
+          "statusCode": "OUT",
+          "statusDescription": "Upper Body",
+          "position": "D"
+        },
+        {
+          "team": "MIN",
+          "playerId": 4164136815,
+          "name": "Mats Zuccarello",
+          "statusCode": "OUT",
+          "statusDescription": "Upper Body",
           "position": "L"
         },
         {
-          "team": "STL",
-          "playerId": 2390798473,
-          "name": "Zach Dean",
-          "statusCode": "IR",
-          "statusDescription": "Injured Reserve",
+          "team": "MIN",
+          "playerId": 2709079418,
+          "name": "Vinnie Hinostroza",
+          "statusCode": "OUT",
+          "statusDescription": "Lower Body",
           "position": "C"
         }
       ],
       "awayInjuries": [
         {
-          "team": "CHI",
-          "playerId": 188076258,
-          "name": "Laurent Brossoit",
-          "statusCode": "IR",
-          "statusDescription": "IR",
+          "team": "BOS",
+          "playerId": 3102876091,
+          "name": "Michael Callahan",
+          "statusCode": "OUT",
+          "statusDescription": "Lower Body",
+          "position": "D"
+        },
+        {
+          "team": "BOS",
+          "playerId": 3443490568,
+          "name": "Viktor Arvidsson",
+          "statusCode": "OUT",
+          "statusDescription": "Lower Body",
           "position": "L"
         },
         {
-          "team": "CHI",
-          "playerId": 1720128383,
-          "name": "Nick Foligno",
-          "statusCode": "IR",
-          "statusDescription": "IR",
+          "team": "BOS",
+          "playerId": 587897089,
+          "name": "Jonathan Aspirot",
+          "statusCode": "OUT",
+          "statusDescription": "Upper Body",
+          "position": "D"
+        },
+        {
+          "team": "BOS",
+          "playerId": 995723325,
+          "name": "Henri Jokiharju",
+          "statusCode": "OUT",
+          "statusDescription": "Undisclosed",
+          "position": "D"
+        },
+        {
+          "team": "BOS",
+          "playerId": 3791384546,
+          "name": "Matej Blumel",
+          "statusCode": "OUT",
+          "statusDescription": "Lower Body",
           "position": "L"
         },
         {
-          "team": "CHI",
-          "playerId": 614283122,
-          "name": "Shea Weber",
-          "statusCode": "IR",
-          "statusDescription": "Injured Reserve",
+          "team": "BOS",
+          "playerId": 3198100071,
+          "name": "Jordan Harris",
+          "statusCode": "OUT",
+          "statusDescription": "Ankle",
           "position": "D"
         }
       ]
     },
     {
-      "gameId": "2025020494",
-      "date": "2025-12-12",
-      "home": "UTA",
-      "away": "SEA",
-      "homeInjuries": [
-        {
-          "team": "UTA",
-          "playerId": 2518032446,
-          "name": "Alex Kerfoot",
-          "statusCode": "IR",
-          "statusDescription": "IR",
-          "position": "L"
-        },
-        {
-          "team": "UTA",
-          "playerId": 1077313262,
-          "name": "Juuso Valimaki",
-          "statusCode": "IR",
-          "statusDescription": "IR",
-          "position": "L"
-        },
-        {
-          "team": "UTA",
-          "playerId": 4182456072,
-          "name": "Olli Maatta",
-          "statusCode": "IR",
-          "statusDescription": "IR",
-          "position": "L"
-        },
-        {
-          "team": "UTA",
-          "playerId": 2268747638,
-          "name": "Logan Cooley",
-          "statusCode": "OUT",
-          "statusDescription": "OUT",
-          "position": "L"
-        }
-      ],
+      "gameId": "2025020512",
+      "date": "2025-12-14",
+      "home": "MTL",
+      "away": "EDM",
+      "homeInjuries": [],
       "awayInjuries": [
         {
-          "team": "SEA",
-          "playerId": 2323427375,
-          "name": "Jaden Schwartz",
-          "statusCode": "IR",
-          "statusDescription": "IR",
-          "position": "L"
+          "team": "EDM",
+          "playerId": 950942614,
+          "name": "Connor Clattenburg",
+          "statusCode": "OUT",
+          "statusDescription": "Eye",
+          "position": "C"
         },
         {
-          "team": "SEA",
-          "playerId": 902174211,
-          "name": "Matt Murray",
-          "statusCode": "IR",
-          "statusDescription": "IR",
+          "team": "EDM",
+          "playerId": 4171854023,
+          "name": "Jake Walman",
+          "statusCode": "OUT",
+          "statusDescription": "Lower Body",
+          "position": "D"
+        },
+        {
+          "team": "EDM",
+          "playerId": 168170966,
+          "name": "Jack Roslovic",
+          "statusCode": "OUT",
+          "statusDescription": "Undisclosed",
+          "position": "C"
+        },
+        {
+          "team": "EDM",
+          "playerId": 3761705009,
+          "name": "Noah Philp",
+          "statusCode": "OUT",
+          "statusDescription": "Upper Body",
+          "position": "C"
+        },
+        {
+          "team": "EDM",
+          "playerId": 3784692117,
+          "name": "Kasperi Kapanen",
+          "statusCode": "OUT",
+          "statusDescription": "Lower Body",
           "position": "L"
+        }
+      ]
+    },
+    {
+      "gameId": "2025020513",
+      "date": "2025-12-14",
+      "home": "SEA",
+      "away": "BUF",
+      "homeInjuries": [
+        {
+          "team": "SEA",
+          "playerId": 3374048629,
+          "name": "Jared McCann",
+          "statusCode": "OUT",
+          "statusDescription": "Lower Body",
+          "position": "C"
         },
         {
           "team": "SEA",
           "playerId": 4156261947,
           "name": "Berkly Catton",
           "statusCode": "OUT",
-          "statusDescription": "OUT",
+          "statusDescription": "Upper Body",
+          "position": "C"
+        },
+        {
+          "team": "SEA",
+          "playerId": 2323427375,
+          "name": "Jaden Schwartz",
+          "statusCode": "OUT",
+          "statusDescription": "Lower Body",
           "position": "L"
         },
         {
           "team": "SEA",
-          "playerId": 876475927,
-          "name": "Max McCormick",
+          "playerId": 902174211,
+          "name": "Matt Murray",
           "statusCode": "OUT",
-          "statusDescription": "Out",
+          "statusDescription": "Lower Body",
+          "position": "G"
+        }
+      ],
+      "awayInjuries": [
+        {
+          "team": "BUF",
+          "playerId": 3193451394,
+          "name": "Josh Norris",
+          "statusCode": "DTD",
+          "statusDescription": "Illness",
+          "position": "C"
+        },
+        {
+          "team": "BUF",
+          "playerId": 3399450091,
+          "name": "Alex Tuch",
+          "statusCode": "DTD",
+          "statusDescription": "Illness",
           "position": "L"
+        },
+        {
+          "team": "BUF",
+          "playerId": 3704508807,
+          "name": "Colten Ellis",
+          "statusCode": "OUT",
+          "statusDescription": "Concussion",
+          "position": "G"
+        },
+        {
+          "team": "BUF",
+          "playerId": 1479001694,
+          "name": "Jason Zucker",
+          "statusCode": "OUT",
+          "statusDescription": "Lower Body",
+          "position": "L"
+        },
+        {
+          "team": "BUF",
+          "playerId": 98649385,
+          "name": "Michael Kesselring",
+          "statusCode": "OUT",
+          "statusDescription": "Lower Body",
+          "position": "D"
+        },
+        {
+          "team": "BUF",
+          "playerId": 3235631160,
+          "name": "Justin Danforth",
+          "statusCode": "OUT",
+          "statusDescription": "Lower Body",
+          "position": "L"
+        },
+        {
+          "team": "BUF",
+          "playerId": 433605597,
+          "name": "Jiri Kulich",
+          "statusCode": "OUT",
+          "statusDescription": "Ear",
+          "position": "C"
         }
       ]
     }
