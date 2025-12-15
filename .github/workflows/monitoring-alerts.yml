@@ -58,32 +58,58 @@ jobs:
           python << 'EOF'
           import json
           import os
-          from datetime import datetime, timedelta, timezone
+          from datetime import datetime, timezone
           from pathlib import Path
 
           data_dir = Path("web/src/data")
-          max_age_hours = 26  # Alert if predictions older than 26 hours
+
+          # Define freshness thresholds for each data type (in hours)
+          data_files = {
+              "todaysPredictions.json": {"max_age": 14, "name": "Predictions"},  # Refreshes 2x daily
+              "currentStandings.json": {"max_age": 26, "name": "Standings"},     # Refreshes 1x daily
+              "goaliePulse.json": {"max_age": 14, "name": "Goalie Pulse"},       # Refreshes 2x daily
+              "injuries.json": {"max_age": 10, "name": "Injuries"},              # Refreshes 3x daily
+              "starting_goalies.json": {"max_age": 10, "name": "Starting Goalies"},  # Refreshes 3x daily
+              "powerIndex.json": {"max_age": 26, "name": "Power Index"},         # Refreshes 1x daily
+              "socialMetrics.json": {"max_age": 26, "name": "Social Metrics"},   # Refreshes 1x daily
+          }
 
           alerts = []
+          fresh_count = 0
 
-          predictions_file = data_dir / "todaysPredictions.json"
-          if predictions_file.exists():
-              with open(predictions_file) as f:
-                  data = json.load(f)
+          for filename, config in data_files.items():
+              file_path = data_dir / filename
+              if not file_path.exists():
+                  alerts.append(f"❌ {config['name']}: file not found")
+                  continue
 
-              timestamp_str = data.get("generatedAt")
-              if timestamp_str:
+              try:
+                  with open(file_path) as f:
+                      data = json.load(f)
+
+                  # Look for timestamp in common field names
+                  timestamp_str = data.get("generatedAt") or data.get("lastUpdated") or data.get("timestamp")
+                  if not timestamp_str:
+                      alerts.append(f"⚠️ {config['name']}: missing timestamp")
+                      continue
+
                   timestamp = datetime.fromisoformat(timestamp_str.replace("Z", "+00:00"))
+                  if timestamp.tzinfo is None:
+                      timestamp = timestamp.replace(tzinfo=timezone.utc)
+
                   age_hours = (datetime.now(timezone.utc) - timestamp).total_seconds() / 3600
 
-                  if age_hours > max_age_hours:
-                      alerts.append(f"⚠️ Predictions are {age_hours:.1f} hours old (stale)")
+                  if age_hours > config["max_age"]:
+                      alerts.append(f"⚠️ {config['name']}: {age_hours:.1f}h old (threshold: {config['max_age']}h)")
                   else:
-                      print(f"✅ Predictions are fresh ({age_hours:.1f} hours old)")
-              else:
-                  alerts.append("⚠️ Predictions missing timestamp")
-          else:
-              alerts.append("❌ Predictions file not found")
+                      print(f"✅ {config['name']}: fresh ({age_hours:.1f}h old)")
+                      fresh_count += 1
+              except json.JSONDecodeError:
+                  alerts.append(f"❌ {config['name']}: invalid JSON")
+              except Exception as e:
+                  alerts.append(f"❌ {config['name']}: error - {e}")
+
+          print(f"\nChecked {len(data_files)} data files: {fresh_count} fresh, {len(alerts)} issues")
 
           if alerts:
               print("\n".join(alerts))

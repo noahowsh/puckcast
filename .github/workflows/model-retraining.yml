@@ -96,9 +96,15 @@ jobs:
         run: |
           git config user.name "GitHub Actions Bot"
           git config user.email "actions@github.com"
+          git fetch origin main
+          if ! git rebase origin/main; then
+            echo "::error::Rebase failed - possible merge conflict"
+            git rebase --abort 2>/dev/null || true
+            exit 1
+          fi
           git add models/ reports/ data/archive/retraining_log.json web/src/data/modelInsights.json
           git commit -m "chore: automated model retraining ($(date -u +%Y-%m-%dT%H:%M:%SZ))"
-          git push https://${ACTIONS_TOKEN}@github.com/${{ github.repository }} HEAD:main
+          git push origin HEAD:main
 
       - name: Create deployment summary
         if: steps.git-check.outputs.changes == 'true'
