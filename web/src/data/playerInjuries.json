@@ -1,146 +1,76 @@
 {
-  "generatedAt": "2025-12-16T19:19:55.866077+00:00",
-  "date": "2025-12-16",
+  "generatedAt": "2025-12-17T14:30:18.252610+00:00",
+  "date": "2025-12-17",
   "teams": {
-    "BOS": {
+    "FLA": {
       "injuries": []
     },
-    "UTA": {
-      "injuries": []
-    },
-    "TOR": {
-      "injuries": []
-    },
-    "CHI": {
-      "injuries": []
-    },
-    "MTL": {
-      "injuries": []
-    },
-    "PHI": {
+    "LAK": {
       "injuries": []
     },
     "DET": {
       "injuries": []
     },
-    "NYI": {
+    "UTA": {
       "injuries": []
     },
-    "NYR": {
+    "STL": {
       "injuries": []
     },
-    "VAN": {
+    "WPG": {
       "injuries": []
     },
-    "CBJ": {
+    "NSH": {
       "injuries": []
     },
-    "ANA": {
+    "CAR": {
       "injuries": []
     },
-    "PIT": {
+    "VGK": {
       "injuries": []
     },
-    "EDM": {
-      "injuries": []
-    },
-    "MIN": {
-      "injuries": []
-    },
-    "WSH": {
-      "injuries": []
-    },
-    "SJS": {
-      "injuries": []
-    },
-    "CGY": {
-      "injuries": []
-    },
-    "SEA": {
-      "injuries": []
-    },
-    "COL": {
+    "NJD": {
       "injuries": []
     }
   },
   "games": [
     {
-      "gameId": "2025020519",
-      "date": "2025-12-16",
-      "home": "BOS",
+      "gameId": "2025020529",
+      "date": "2025-12-17",
+      "home": "FLA",
+      "away": "LAK",
+      "homeInjuries": [],
+      "awayInjuries": []
+    },
+    {
+      "gameId": "2025020530",
+      "date": "2025-12-17",
+      "home": "DET",
       "away": "UTA",
       "homeInjuries": [],
       "awayInjuries": []
     },
     {
-      "gameId": "2025020520",
-      "date": "2025-12-16",
-      "home": "TOR",
-      "away": "CHI",
+      "gameId": "2025020531",
+      "date": "2025-12-17",
+      "home": "STL",
+      "away": "WPG",
       "homeInjuries": [],
       "awayInjuries": []
     },
     {
-      "gameId": "2025020521",
-      "date": "2025-12-16",
-      "home": "MTL",
-      "away": "PHI",
+      "gameId": "2025020532",
+      "date": "2025-12-17",
+      "home": "NSH",
+      "away": "CAR",
       "homeInjuries": [],
       "awayInjuries": []
     },
     {
-      "gameId": "2025020522",
-      "date": "2025-12-16",
-      "home": "DET",
-      "away": "NYI",
-      "homeInjuries": [],
-      "awayInjuries": []
-    },
-    {
-      "gameId": "2025020523",
-      "date": "2025-12-16",
-      "home": "NYR",
-      "away": "VAN",
-      "homeInjuries": [],
-      "awayInjuries": []
-    },
-    {
-      "gameId": "2025020525",
-      "date": "2025-12-16",
-      "home": "CBJ",
-      "away": "ANA",
-      "homeInjuries": [],
-      "awayInjuries": []
-    },
-    {
-      "gameId": "2025020524",
-      "date": "2025-12-16",
-      "home": "PIT",
-      "away": "EDM",
-      "homeInjuries": [],
-      "awayInjuries": []
-    },
-    {
-      "gameId": "2025020526",
-      "date": "2025-12-16",
-      "home": "MIN",
-      "away": "WSH",
-      "homeInjuries": [],
-      "awayInjuries": []
-    },
-    {
-      "gameId": "2025020527",
-      "date": "2025-12-16",
-      "home": "SJS",
-      "away": "CGY",
-      "homeInjuries": [],
-      "awayInjuries": []
-    },
-    {
-      "gameId": "2025020528",
-      "date": "2025-12-16",
-      "home": "SEA",
-      "away": "COL",
+      "gameId": "2025020533",
+      "date": "2025-12-17",
+      "home": "VGK",
+      "away": "NJD",
       "homeInjuries": [],
       "awayInjuries": []
     }
