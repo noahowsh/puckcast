@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2025-12-17T13:26:57.229333+00:00",
+  "updatedAt": "2025-12-17T23:12:37.181822+00:00",
   "notes": "Goalie performance metrics calculated from NHL Stats API data. GSAX = Expected Goals Against - Actual Goals Against (positive = outperforming expectations).",
   "goalies": [
     {
@@ -245,14 +245,14 @@
       "savePct": 0.92,
       "shutouts": 2,
       "goalsAgainst": 26,
-      "shotsAgainst": 326,
-      "saves": 300,
-      "shotsAgainstPerGame": 25.1,
-      "savesPerGame": 23.1,
-      "expectedGoalsAgainst": 29.3,
-      "gsax": 3.3,
+      "shotsAgainst": 327,
+      "saves": 301,
+      "shotsAgainstPerGame": 25.2,
+      "savesPerGame": 23.2,
+      "expectedGoalsAgainst": 29.4,
+      "gsax": 3.4,
       "rollingGsa": 0.8,
-      "seasonGsa": 3.3,
+      "seasonGsa": 3.4,
       "restDays": 2,
       "startLikelihood": 0.95,
       "trend": "surging",
@@ -1023,7 +1023,7 @@
         "rank": 8,
         "name": "Mackenzie Blackwood",
         "team": "COL",
-        "gsax": 3.3
+        "gsax": 3.4
       },
       {
         "rank": 9,
