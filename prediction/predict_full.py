@@ -152,6 +152,139 @@ def calculate_adaptive_weights(games: pd.DataFrame, target: pd.Series) -> np.nda
 
 ET_ZONE = ZoneInfo("America/New_York")
 
+
+def build_matchup_features(
+    home_team_id: int,
+    away_team_id: int,
+    season_id: str,
+    eligible_games: pd.DataFrame,
+    feature_columns: list,
+) -> pd.Series | None:
+    """Construct proper matchup features for a new game.
+
+    The correct approach is:
+    1. Find each team's most recent game (regardless of home/away position)
+    2. Extract that team's individual stats from that game
+    3. Compute proper differentials: home_team_stat - away_team_stat
+
+    This fixes the bug where we were averaging differential features from
+    different games, which produced garbage (TeamA - Opponent1 + Opponent2 - TeamB) / 2.
+    """
+    # Find home team's most recent game (where they played as either home or away)
+    home_as_home = eligible_games[
+        (eligible_games['teamId_home'] == home_team_id) &
+        (eligible_games['seasonId_str'] == season_id)
+    ]
+    home_as_away = eligible_games[
+        (eligible_games['teamId_away'] == home_team_id) &
+        (eligible_games['seasonId_str'] == season_id)
+    ]
+    home_games = pd.concat([home_as_home, home_as_away]).sort_values('gameDate')
+
+    # Find away team's most recent game (where they played as either home or away)
+    away_as_home = eligible_games[
+        (eligible_games['teamId_home'] == away_team_id) &
+        (eligible_games['seasonId_str'] == season_id)
+    ]
+    away_as_away = eligible_games[
+        (eligible_games['teamId_away'] == away_team_id) &
+        (eligible_games['seasonId_str'] == season_id)
+    ]
+    away_games = pd.concat([away_as_home, away_as_away]).sort_values('gameDate')
+
+    if len(home_games) == 0 or len(away_games) == 0:
+        return None
+
+    # Get the most recent game for each team
+    home_recent = home_games.iloc[-1]
+    away_recent = away_games.iloc[-1]
+
+    # Determine if each team was home or away in their most recent game
+    home_team_was_home = home_recent['teamId_home'] == home_team_id
+    away_team_was_home = away_recent['teamId_home'] == away_team_id
+
+    # Build matchup features
+    matchup = {}
+
+    for col in feature_columns:
+        if col.endswith('_diff'):
+            # This is a differential feature - need to reconstruct from individual stats
+            base = col[:-5]  # Remove '_diff' suffix
+            home_col = f"{base}_home"
+            away_col = f"{base}_away"
+
+            # Get home team's stat from their most recent game
+            if home_col in home_recent.index and away_col in home_recent.index:
+                if home_team_was_home:
+                    home_team_stat = home_recent[home_col]
+                else:
+                    home_team_stat = home_recent[away_col]
+
+                # Get away team's stat from their most recent game
+                if away_team_was_home:
+                    away_team_stat = away_recent[home_col]
+                else:
+                    away_team_stat = away_recent[away_col]
+
+                # Compute proper differential
+                matchup[col] = home_team_stat - away_team_stat
+            else:
+                matchup[col] = 0.0
+
+        elif col in ['elo_diff_pre', 'elo_expectation_home']:
+            # Elo features - use the most recent values from home team's game
+            # (Elo is tracked consistently, so this is a reasonable approximation)
+            if col in home_recent.index:
+                matchup[col] = home_recent[col]
+            else:
+                matchup[col] = 0.0
+
+        elif col == 'league_hw_100':
+            # League-wide feature - use most recent value
+            if col in home_recent.index:
+                matchup[col] = home_recent[col]
+            else:
+                matchup[col] = HISTORICAL_HOME_WIN_RATE
+
+        elif col.endswith('_home'):
+            # Home-specific feature (like is_b2b_home, games_last_6d_home)
+            # Use the home team's recent stats
+            if col in home_recent.index:
+                if home_team_was_home:
+                    matchup[col] = home_recent[col]
+                else:
+                    # If home team was away, look for the corresponding away column
+                    away_version = col.replace('_home', '_away')
+                    if away_version in home_recent.index:
+                        matchup[col] = home_recent[away_version]
+                    else:
+                        matchup[col] = 0.0
+            else:
+                matchup[col] = 0.0
+
+        elif col.endswith('_away'):
+            # Away-specific feature
+            if col in away_recent.index:
+                if away_team_was_home:
+                    # If away team was home, look for the corresponding home column
+                    home_version = col.replace('_away', '_home')
+                    if home_version in away_recent.index:
+                        matchup[col] = away_recent[home_version]
+                    else:
+                        matchup[col] = 0.0
+                else:
+                    matchup[col] = away_recent[col]
+            else:
+                matchup[col] = 0.0
+        else:
+            # Other features - try to get from home team's recent game
+            if col in home_recent.index:
+                matchup[col] = home_recent[col]
+            else:
+                matchup[col] = 0.0
+
+    return pd.Series(matchup).reindex(feature_columns, fill_value=0.0)
+
 # V7.0 Curated Features (39 features + adaptive weights)
 # Production model with 60.9% accuracy on 4-season holdout (5,002 games)
 # Key features: 1) Adaptive Elo home advantage, 2) Dynamic threshold, 3) League home win rate
@@ -626,33 +759,21 @@ def predict_games(date=None, num_games=20):
         home_abbrev = game['homeTeamAbbrev']
         away_abbrev = game['awayTeamAbbrev']
         season_id = str(game.get("season") or train_seasons[-1])
-        
-        # Find most recent games for each team
-        home_recent = eligible_games[
-            (eligible_games['teamId_home'] == home_id) & 
-            (eligible_games['seasonId_str'] == season_id)
-        ].tail(1)
-        
-        away_recent = eligible_games[
-            (eligible_games['teamId_away'] == away_id) & 
-            (eligible_games['seasonId_str'] == season_id)
-        ].tail(1)
-        
-        if len(home_recent) == 0 or len(away_recent) == 0:
+
+        # Build proper matchup features by extracting each team's individual stats
+        # and computing correct differentials (home_team_stat - away_team_stat)
+        matchup_features = build_matchup_features(
+            home_team_id=home_id,
+            away_team_id=away_id,
+            season_id=season_id,
+            eligible_games=eligible_games,
+            feature_columns=list(feature_columns),
+        )
+
+        if matchup_features is None:
             print(f"\n{i}. {away_abbrev} @ {home_abbrev}")
             print(f"   ⚠️  Insufficient data (team hasn't played this season)")
             continue
-        
-        # Get feature vectors
-        home_idx = home_recent.index[0]
-        away_idx = away_recent.index[0]
-
-        home_features = features_full.loc[home_idx]
-        away_features = features_full.loc[away_idx]
-        
-        # Create matchup features (average of recent performance)
-        matchup_features = (home_features + away_features) / 2
-        matchup_features = matchup_features.reindex(feature_columns, fill_value=0.0)
         
         # Predict with calibrated model
         prob_home_raw = model.predict_proba(matchup_features.values.reshape(1, -1))[0][1]
