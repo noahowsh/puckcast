@@ -1,7 +1,7 @@
 # 🏒 Puckcast.ai - Live Site Documentation
 
-> **Last Updated**: December 7, 2025
-> **Model Version**: V7.0 (60.9% accuracy - 4-season holdout)
+> **Last Updated**: December 20, 2024
+> **Model Version**: V7.1 (60.9% accuracy - 4-season holdout)
 > **Deployment**: https://puckcast.ai
 > **Status**: ✅ Production Ready
 
@@ -65,7 +65,7 @@
 **Components**:
 - Fixed navigation bar (64px height)
 - Main content area with padding
-- Footer with V7.0 version indicator
+- Footer with V7.1 version indicator
 - Background gradient effects (cyan/emerald radials)
 
 **Meta Tags**:
