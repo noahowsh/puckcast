@@ -662,13 +662,12 @@ def predict_games(date=None, num_games=20):
         prob_away_calibrated = 1 - prob_home_calibrated
 
         start_time_utc_iso, start_time_et = format_start_times(game.get('startTimeUTC', ''))
-        # Use dynamic threshold for decision making
-        # Edge is still calculated from 0.5 for display purposes, but winner uses dynamic threshold
+        # Edge is calculated from 0.5 for display purposes
         edge = prob_home_display - 0.5
         confidence_score = abs(edge) * 2  # 0-1 scale
         confidence_grade = grade_from_edge(edge)
-        # Use dynamic threshold instead of 0.5 for prediction decision
-        model_favorite = 'home' if prob_home_display >= dynamic_threshold else 'away'
+        # Favorite is simply the team with higher probability (>50%)
+        model_favorite = 'home' if prob_home_display > 0.5 else 'away'
         summary = build_summary(
             game.get('homeTeamName', home_abbrev),
             game.get('awayTeamName', away_abbrev),
@@ -698,7 +697,7 @@ def predict_games(date=None, num_games=20):
             'home_win_prob_calibrated': prob_home_calibrated,
             'away_win_prob_calibrated': prob_away_calibrated,
             'edge': edge,
-            'predicted_winner': home_abbrev if prob_home_display >= dynamic_threshold else away_abbrev,
+            'predicted_winner': home_abbrev if prob_home_display > 0.5 else away_abbrev,
             'model_favorite': model_favorite,
             'confidence': confidence_score,
             'confidence_grade': confidence_grade,
@@ -709,17 +708,17 @@ def predict_games(date=None, num_games=20):
         print(f"\n{i}. {away_abbrev} @ {home_abbrev}")
         print(f"   Home Win (raw): {prob_home_display:.1%}  |  Away Win (raw): {prob_away_raw:.1%}")
         
-        # Classify prediction strength (uses dynamic threshold for favorites)
+        # Classify prediction strength
         confidence_pct = confidence_score * 100
 
         if prob_home_display > 0.70:
             print(f"   ✅ Prediction: {home_abbrev} STRONG FAVORITE")
         elif prob_home_display < 0.30:
             print(f"   ✅ Prediction: {away_abbrev} STRONG FAVORITE")
-        elif abs(prob_home_display - dynamic_threshold) < 0.05:
+        elif abs(prob_home_display - 0.5) < 0.05:
             print(f"   ⚖️  Prediction: TOSS-UP (too close to call)")
         else:
-            favorite = home_abbrev if prob_home_display >= dynamic_threshold else away_abbrev
+            favorite = home_abbrev if prob_home_display > 0.5 else away_abbrev
             print(f"   📊 Prediction: {favorite} ({confidence_pct:.0f}% confidence)")
     
     # Summary
