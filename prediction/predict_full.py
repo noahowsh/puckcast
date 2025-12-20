@@ -667,8 +667,8 @@ def predict_games(date=None, num_games=20):
         edge = prob_home_display - 0.5
         confidence_score = abs(edge) * 2  # 0-1 scale
         confidence_grade = grade_from_edge(edge)
-        # Use dynamic threshold instead of 0.5 for prediction decision
-        model_favorite = 'home' if prob_home_display >= dynamic_threshold else 'away'
+        # Use 0.5 threshold - team with >50% probability is the favorite
+        model_favorite = 'home' if prob_home_display >= 0.5 else 'away'
         summary = build_summary(
             game.get('homeTeamName', home_abbrev),
             game.get('awayTeamName', away_abbrev),
