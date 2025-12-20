@@ -272,8 +272,10 @@ def main():
 
     old_correct = 0
     new_correct = 0
+    pipeline_correct = 0
     old_total = 0
     new_total = 0
+    pipeline_total = 0
     both_correct = 0
     old_only_correct = 0
     new_only_correct = 0
@@ -328,8 +330,8 @@ def main():
 
             # Initialize season tracking
             if season_id not in season_results:
-                season_results[season_id] = {'old_correct': 0, 'new_correct': 0,
-                                              'old_total': 0, 'new_total': 0}
+                season_results[season_id] = {'old_correct': 0, 'new_correct': 0, 'pipeline_correct': 0,
+                                              'old_total': 0, 'new_total': 0, 'pipeline_total': 0}
 
         # Build features using OLD method
         games_before_copy = games_before.copy()
@@ -349,6 +351,17 @@ def main():
 
         old_correct_pred = None
         new_correct_pred = None
+        pipeline_correct_pred = None
+
+        # PIPELINE BASELINE: Use actual pipeline features for this game
+        pipeline_features = features_v70.loc[idx]
+        pipeline_prob = current_model.predict_proba(pipeline_features.values.reshape(1, -1))[0][1]
+        pipeline_pred_home_win = pipeline_prob >= 0.5
+        pipeline_correct_pred = (pipeline_pred_home_win == actual_home_win)
+        pipeline_correct += int(pipeline_correct_pred)
+        pipeline_total += 1
+        season_results[season_id]['pipeline_correct'] += int(pipeline_correct_pred)
+        season_results[season_id]['pipeline_total'] += 1
 
         if old_features is not None:
             old_prob = current_model.predict_proba(old_features.values.reshape(1, -1))[0][1]
@@ -390,6 +403,10 @@ def main():
 
     old_acc = old_correct / old_total * 100 if old_total > 0 else 0
     new_acc = new_correct / new_total * 100 if new_total > 0 else 0
+    pipeline_acc = pipeline_correct / pipeline_total * 100 if pipeline_total > 0 else 0
+
+    print(f"\n📊 PIPELINE BASELINE (actual features - expected ~60%):")
+    print(f"   Accuracy: {pipeline_acc:.2f}% ({pipeline_correct}/{pipeline_total} games)")
 
     print(f"\n📊 OLD METHOD (buggy averaging):")
     print(f"   Accuracy: {old_acc:.2f}% ({old_correct}/{old_total} games)")
@@ -407,10 +424,11 @@ def main():
     print(f"\n📅 PER-SEASON BREAKDOWN:")
     for season in sorted(season_results.keys()):
         sr = season_results[season]
+        pipeline_s_acc = sr['pipeline_correct'] / sr['pipeline_total'] * 100 if sr['pipeline_total'] > 0 else 0
         old_s_acc = sr['old_correct'] / sr['old_total'] * 100 if sr['old_total'] > 0 else 0
         new_s_acc = sr['new_correct'] / sr['new_total'] * 100 if sr['new_total'] > 0 else 0
         diff = new_s_acc - old_s_acc
-        print(f"   {season}: OLD {old_s_acc:.1f}% vs NEW {new_s_acc:.1f}% ({diff:+.1f}pp) [{sr['new_total']} games]")
+        print(f"   {season}: PIPELINE {pipeline_s_acc:.1f}% | OLD {old_s_acc:.1f}% | NEW {new_s_acc:.1f}% ({diff:+.1f}pp) [{sr['pipeline_total']} games]")
 
     if new_acc > old_acc:
         print(f"\n✅ NEW METHOD IS BETTER by {new_acc - old_acc:.2f}pp")
