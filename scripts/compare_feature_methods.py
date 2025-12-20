@@ -229,8 +229,9 @@ V70_FEATURES = [
 
 def main():
     print("=" * 80)
-    print("FEATURE CONSTRUCTION METHOD COMPARISON")
-    print("Comparing OLD (buggy) vs NEW (fixed) approaches on historical games")
+    print("FEATURE CONSTRUCTION METHOD COMPARISON (FULL 5000+ GAME TEST)")
+    print("Comparing OLD (buggy) vs NEW (fixed) approaches on ALL historical games")
+    print("Using walk-forward methodology with rolling model retraining")
     print("=" * 80)
 
     # Load dataset
@@ -256,113 +257,135 @@ def main():
     available_v70 = [f for f in V70_FEATURES if f in features_full.columns]
     features_v70 = features_full[available_v70]
 
-    print(f"   ✅ Loaded {len(games)} games with {len(available_v70)} features")
-
-    # Train model on first 3 seasons, test on last season
-    print("\n2️⃣  Setting up train/test split...")
     games['seasonId_str'] = games['seasonId'].astype(str)
+    games_sorted = games.sort_values('gameDate').copy()
 
-    # Debug: check what seasonIds we have
-    print(f"   Available seasons: {games['seasonId'].unique()}")
+    print(f"   ✅ Loaded {len(games)} games with {len(available_v70)} features")
+    print(f"   Available seasons: {sorted(games['seasonId'].unique())}")
 
-    train_seasons = ['20212022', '20222023', '20232024']
-    test_seasons = ['20242025']
+    # Walk-forward testing: for each game, use only prior games for training and prediction
+    print("\n2️⃣  Running walk-forward simulation on ALL games...")
+    print("   (Retraining model at start of each season)")
 
-    train_mask = games['seasonId_str'].isin(train_seasons)
-    test_mask = games['seasonId_str'].isin(test_seasons)
-
-    train_games = games.loc[train_mask].copy()
-    train_features = features_v70.loc[train_mask].copy()
-    train_target = dataset.target.loc[train_mask].copy()
-
-    test_games = games.loc[test_mask].copy()
-    test_target = dataset.target.loc[test_mask].copy()
-
-    print(f"   Training: {len(train_games)} games (2021-24)")
-    print(f"   Testing: {len(test_games)} games (2024-25)")
-
-    # Train model
-    print("\n3️⃣  Training model...")
-    candidate_cs = [0.005, 0.01, 0.02, 0.05, 0.1]
-    best_c = tune_logreg_c(candidate_cs, train_features, train_target, train_games,
-                           sorted(train_games['seasonId'].unique().tolist()))
-
-    model = create_baseline_model(C=best_c)
-    training_mask = pd.Series(True, index=train_features.index)
-    model = fit_model(model, train_features, train_target, training_mask)
-
-    print(f"   ✅ Model trained with C={best_c}")
-
-    # Simulate predictions on test set
-    print("\n4️⃣  Simulating predictions on test set...")
-
-    # We need to build eligible_games for each test game (games before that date)
-    test_games_sorted = test_games.sort_values('gameDate')
+    # Minimum games needed before we can start predicting
+    MIN_TRAINING_GAMES = 200
 
     old_correct = 0
     new_correct = 0
     old_total = 0
     new_total = 0
-    both_same = 0
+    both_correct = 0
     old_only_correct = 0
     new_only_correct = 0
+    both_wrong = 0
+
+    # Track per-season results
+    season_results = {}
 
     feature_columns = list(available_v70)
+    current_model = None
+    current_model_season = None
 
-    for idx, game in test_games_sorted.iterrows():
+    total_games = len(games_sorted)
+
+    for i, (idx, game) in enumerate(games_sorted.iterrows()):
         game_date = game['gameDate']
         home_id = game['teamId_home']
         away_id = game['teamId_away']
         season_id = str(game['seasonId'])
-        actual_home_win = test_target.loc[idx]
+        actual_home_win = dataset.target.loc[idx]
 
-        # Get games before this date for feature lookup
-        all_games_before = games[pd.to_datetime(games['gameDate']) < pd.to_datetime(game_date)].copy()
-        all_games_before['seasonId_str'] = all_games_before['seasonId'].astype(str)
-        features_before = features_v70.loc[all_games_before.index]
+        # Get all games before this one
+        games_before = games_sorted[pd.to_datetime(games_sorted['gameDate']) < pd.to_datetime(game_date)]
+
+        # Skip if not enough training data
+        if len(games_before) < MIN_TRAINING_GAMES:
+            continue
+
+        # Retrain model at start of each new season (or if no model yet)
+        if current_model is None or season_id != current_model_season:
+            # Train on all games before this season starts
+            train_features = features_v70.loc[games_before.index]
+            train_target = dataset.target.loc[games_before.index]
+
+            # Find best C using cross-validation on training data
+            train_games_df = games_before.copy()
+            train_seasons = sorted(train_games_df['seasonId'].unique().tolist())
+
+            if len(train_seasons) >= 2:
+                candidate_cs = [0.005, 0.01, 0.02, 0.05, 0.1]
+                best_c = tune_logreg_c(candidate_cs, train_features, train_target,
+                                       train_games_df, train_seasons)
+            else:
+                best_c = 0.01  # Default if not enough seasons for CV
+
+            current_model = create_baseline_model(C=best_c)
+            training_mask = pd.Series(True, index=train_features.index)
+            current_model = fit_model(current_model, train_features, train_target, training_mask)
+            current_model_season = season_id
+
+            print(f"\n   📅 Season {season_id}: Trained model on {len(games_before)} games (C={best_c:.3f})")
+
+            # Initialize season tracking
+            if season_id not in season_results:
+                season_results[season_id] = {'old_correct': 0, 'new_correct': 0,
+                                              'old_total': 0, 'new_total': 0}
 
         # Build features using OLD method
+        games_before_copy = games_before.copy()
+        games_before_copy['seasonId_str'] = games_before_copy['seasonId'].astype(str)
+        features_before = features_v70.loc[games_before.index]
+
         old_features = build_features_old_method(
             home_id, away_id, season_id,
-            all_games_before, features_before, feature_columns
+            games_before_copy, features_before, feature_columns
         )
 
         # Build features using NEW method
         new_features = build_features_new_method(
             home_id, away_id, season_id,
-            all_games_before, feature_columns, game_date
+            games_before_copy, feature_columns, game_date
         )
 
+        old_correct_pred = None
+        new_correct_pred = None
+
         if old_features is not None:
-            old_prob = model.predict_proba(old_features.values.reshape(1, -1))[0][1]
+            old_prob = current_model.predict_proba(old_features.values.reshape(1, -1))[0][1]
             old_pred_home_win = old_prob >= 0.5
             old_correct_pred = (old_pred_home_win == actual_home_win)
             old_correct += int(old_correct_pred)
             old_total += 1
-        else:
-            old_correct_pred = None
+            season_results[season_id]['old_correct'] += int(old_correct_pred)
+            season_results[season_id]['old_total'] += 1
 
         if new_features is not None:
-            new_prob = model.predict_proba(new_features.values.reshape(1, -1))[0][1]
+            new_prob = current_model.predict_proba(new_features.values.reshape(1, -1))[0][1]
             new_pred_home_win = new_prob >= 0.5
             new_correct_pred = (new_pred_home_win == actual_home_win)
             new_correct += int(new_correct_pred)
             new_total += 1
-        else:
-            new_correct_pred = None
+            season_results[season_id]['new_correct'] += int(new_correct_pred)
+            season_results[season_id]['new_total'] += 1
 
-        # Track disagreements
+        # Track agreement/disagreement
         if old_correct_pred is not None and new_correct_pred is not None:
             if old_correct_pred and new_correct_pred:
-                both_same += 1
+                both_correct += 1
             elif old_correct_pred and not new_correct_pred:
                 old_only_correct += 1
             elif new_correct_pred and not old_correct_pred:
                 new_only_correct += 1
+            else:
+                both_wrong += 1
+
+        # Progress update every 500 games
+        if (i + 1) % 500 == 0:
+            print(f"   Processed {i + 1}/{total_games} games...")
 
     # Results
     print("\n" + "=" * 80)
-    print("RESULTS")
+    print("RESULTS (FULL WALK-FORWARD TEST)")
     print("=" * 80)
 
     old_acc = old_correct / old_total * 100 if old_total > 0 else 0
@@ -374,11 +397,20 @@ def main():
     print(f"\n📊 NEW METHOD (proper differentials + schedule):")
     print(f"   Accuracy: {new_acc:.2f}% ({new_correct}/{new_total} games)")
 
-    print(f"\n📈 COMPARISON:")
+    print(f"\n📈 OVERALL COMPARISON:")
     print(f"   Difference: {new_acc - old_acc:+.2f} percentage points")
-    print(f"   Both correct: {both_same}")
+    print(f"   Both correct: {both_correct}")
     print(f"   Only OLD correct: {old_only_correct}")
     print(f"   Only NEW correct: {new_only_correct}")
+    print(f"   Both wrong: {both_wrong}")
+
+    print(f"\n📅 PER-SEASON BREAKDOWN:")
+    for season in sorted(season_results.keys()):
+        sr = season_results[season]
+        old_s_acc = sr['old_correct'] / sr['old_total'] * 100 if sr['old_total'] > 0 else 0
+        new_s_acc = sr['new_correct'] / sr['new_total'] * 100 if sr['new_total'] > 0 else 0
+        diff = new_s_acc - old_s_acc
+        print(f"   {season}: OLD {old_s_acc:.1f}% vs NEW {new_s_acc:.1f}% ({diff:+.1f}pp) [{sr['new_total']} games]")
 
     if new_acc > old_acc:
         print(f"\n✅ NEW METHOD IS BETTER by {new_acc - old_acc:.2f}pp")
