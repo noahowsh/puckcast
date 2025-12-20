@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2025-12-20T19:13:58.541388+00:00",
+  "updatedAt": "2025-12-20T23:11:11.434395+00:00",
   "notes": "Goalie performance metrics calculated from NHL Stats API data. GSAX = Expected Goals Against - Actual Goals Against (positive = outperforming expectations).",
   "goalies": [
     {
@@ -104,27 +104,27 @@
     {
       "name": "Logan Thompson",
       "team": "WSH",
-      "gamesPlayed": 24,
-      "record": "14-7-3",
+      "gamesPlayed": 25,
+      "record": "14-8-3",
       "wins": 14,
-      "losses": 7,
+      "losses": 8,
       "otLosses": 3,
-      "gaa": 2.0,
-      "savePct": 0.925,
+      "gaa": 2.09,
+      "savePct": 0.924,
       "shutouts": 2,
-      "goalsAgainst": 47,
-      "shotsAgainst": 628,
-      "saves": 581,
-      "shotsAgainstPerGame": 26.2,
-      "savesPerGame": 24.2,
-      "expectedGoalsAgainst": 56.5,
-      "gsax": 9.5,
-      "rollingGsa": 1.2,
-      "seasonGsa": 9.5,
+      "goalsAgainst": 51,
+      "shotsAgainst": 668,
+      "saves": 617,
+      "shotsAgainstPerGame": 26.7,
+      "savesPerGame": 24.7,
+      "expectedGoalsAgainst": 60.1,
+      "gsax": 9.1,
+      "rollingGsa": 1.1,
+      "seasonGsa": 9.1,
       "restDays": 1,
       "startLikelihood": 0.95,
       "trend": "surging",
-      "note": "Logan Thompson is playing at an elite level with a 0.925 save percentage, providing WSH with a strong defensive anchor.",
+      "note": "Logan Thompson is playing at an elite level with a 0.924 save percentage, providing WSH with a strong defensive anchor.",
       "strengths": [
         "Elite save percentage",
         "Exceptional goals against average"
@@ -687,38 +687,6 @@
       "nextOpponent": "BOS"
     },
     {
-      "name": "Igor Shesterkin",
-      "team": "NYR",
-      "gamesPlayed": 28,
-      "record": "14-11-3",
-      "wins": 14,
-      "losses": 11,
-      "otLosses": 3,
-      "gaa": 2.49,
-      "savePct": 0.91,
-      "shutouts": 1,
-      "goalsAgainst": 70,
-      "shotsAgainst": 775,
-      "saves": 705,
-      "shotsAgainstPerGame": 27.7,
-      "savesPerGame": 25.2,
-      "expectedGoalsAgainst": 69.8,
-      "gsax": -0.2,
-      "rollingGsa": -0.0,
-      "seasonGsa": -0.2,
-      "restDays": 1,
-      "startLikelihood": 0.8,
-      "trend": "stable",
-      "note": "Igor Shesterkin showing promise with limited sample size \u2014 monitor progression closely.",
-      "strengths": [
-        "Proven winner"
-      ],
-      "watchouts": [
-        "Inconsistent results"
-      ],
-      "nextOpponent": "PHI"
-    },
-    {
       "name": "Ilya Sorokin",
       "team": "NYI",
       "gamesPlayed": 24,
@@ -781,6 +749,38 @@
         "Inconsistent results"
       ],
       "nextOpponent": "NYR"
+    },
+    {
+      "name": "Igor Shesterkin",
+      "team": "NYR",
+      "gamesPlayed": 29,
+      "record": "15-11-3",
+      "wins": 15,
+      "losses": 11,
+      "otLosses": 3,
+      "gaa": 2.54,
+      "savePct": 0.908,
+      "shutouts": 1,
+      "goalsAgainst": 74,
+      "shotsAgainst": 807,
+      "saves": 733,
+      "shotsAgainstPerGame": 27.8,
+      "savesPerGame": 25.3,
+      "expectedGoalsAgainst": 72.6,
+      "gsax": -1.4,
+      "rollingGsa": -0.1,
+      "seasonGsa": -1.4,
+      "restDays": 1,
+      "startLikelihood": 0.8,
+      "trend": "stable",
+      "note": "Igor Shesterkin showing promise with limited sample size \u2014 monitor progression closely.",
+      "strengths": [
+        "Proven winner"
+      ],
+      "watchouts": [
+        "Inconsistent results"
+      ],
+      "nextOpponent": "PHI"
     },
     {
       "name": "Jeremy Swayman",
@@ -987,7 +987,7 @@
         "rank": 2,
         "name": "Logan Thompson",
         "team": "WSH",
-        "gsax": 9.5
+        "gsax": 9.1
       },
       {
         "rank": 3,
@@ -1061,7 +1061,7 @@
         "rank": 4,
         "name": "Logan Thompson",
         "team": "WSH",
-        "savePct": 0.925
+        "savePct": 0.924
       },
       {
         "rank": 5,
@@ -1123,7 +1123,7 @@
         "rank": 4,
         "name": "Logan Thompson",
         "team": "WSH",
-        "gaa": 2.0
+        "gaa": 2.09
       },
       {
         "rank": 5,
@@ -1171,20 +1171,20 @@
       },
       {
         "rank": 2,
+        "name": "Igor Shesterkin",
+        "team": "NYR",
+        "wins": 15
+      },
+      {
+        "rank": 3,
         "name": "Jake Oettinger",
         "team": "DAL",
         "wins": 15
       },
       {
-        "rank": 3,
+        "rank": 4,
         "name": "Logan Thompson",
         "team": "WSH",
-        "wins": 14
-      },
-      {
-        "rank": 4,
-        "name": "Igor Shesterkin",
-        "team": "NYR",
         "wins": 14
       },
       {
