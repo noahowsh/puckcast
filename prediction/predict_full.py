@@ -153,6 +153,117 @@ def calculate_adaptive_weights(games: pd.DataFrame, target: pd.Series) -> np.nda
 ET_ZONE = ZoneInfo("America/New_York")
 
 
+def compute_team_rolling_stats(
+    team_id: int,
+    team_games: pd.DataFrame,
+    windows: list[int] = [3, 5, 10],
+) -> dict:
+    """Compute fresh rolling statistics for a team from their recent games.
+
+    Args:
+        team_id: The team's ID
+        team_games: DataFrame of the team's games (sorted by date, most recent last)
+        windows: Rolling window sizes to compute
+
+    Returns:
+        Dictionary of rolling stats for each window size
+    """
+    stats = {}
+
+    if len(team_games) == 0:
+        return stats
+
+    # For each game, determine if this team was home or away
+    # and extract their stats accordingly
+    team_stats = []
+    for _, game in team_games.iterrows():
+        was_home = game['teamId_home'] == team_id
+
+        if was_home:
+            team_stats.append({
+                'win': 1 if game.get('home_win', 0) == 1 else 0,
+                'goals_for': game.get('goalsFor_home', game.get('home_score', 0)),
+                'goals_against': game.get('goalsAgainst_home', game.get('away_score', 0)),
+                'xg_for': game.get('xGoalsFor_home', 0),
+                'xg_against': game.get('xGoalsAgainst_home', 0),
+                'corsi_pct': game.get('corsiPercentage_home', 50),
+                'fenwick_pct': game.get('fenwickPercentage_home', 50),
+                'high_danger_shots': game.get('highDangerShotsFor_home', 0),
+                'shots_for': game.get('shotsForPerGame_home', 30),  # Use per-game shots
+                'faceoff_pct': game.get('faceoffWinPct_home', 50),
+                'save_pct': game.get('savePct_home', 0.900),
+            })
+        else:
+            team_stats.append({
+                'win': 0 if game.get('home_win', 0) == 1 else 1,
+                'goals_for': game.get('goalsFor_away', game.get('away_score', 0)),
+                'goals_against': game.get('goalsAgainst_away', game.get('home_score', 0)),
+                'xg_for': game.get('xGoalsFor_away', 0),
+                'xg_against': game.get('xGoalsAgainst_away', 0),
+                'corsi_pct': game.get('corsiPercentage_away', 50),
+                'fenwick_pct': game.get('fenwickPercentage_away', 50),
+                'high_danger_shots': game.get('highDangerShotsFor_away', 0),
+                'shots_for': game.get('shotsForPerGame_away', 30),  # Use per-game shots
+                'faceoff_pct': game.get('faceoffWinPct_away', 50),
+                'save_pct': game.get('savePct_away', 0.900),
+            })
+
+    if len(team_stats) == 0:
+        return stats
+
+    team_df = pd.DataFrame(team_stats)
+
+    # Compute derived stats
+    team_df['goal_diff'] = team_df['goals_for'] - team_df['goals_against']
+    team_df['xg_diff'] = team_df['xg_for'] - team_df['xg_against']
+
+    # Compute rolling stats for each window
+    # Note: Pipeline stores corsi/fenwick as fractions (0.5 = 50%), so divide by 100
+    for w in windows:
+        if len(team_df) >= w:
+            recent = team_df.tail(w)
+            stats[f'win_pct_{w}'] = recent['win'].mean()
+            stats[f'goal_diff_{w}'] = recent['goal_diff'].mean()
+            stats[f'xg_diff_{w}'] = recent['xg_diff'].mean()
+            stats[f'corsi_{w}'] = recent['corsi_pct'].mean() / 100.0  # Convert to fraction
+            stats[f'fenwick_{w}'] = recent['fenwick_pct'].mean() / 100.0  # Convert to fraction
+            stats[f'high_danger_shots_{w}'] = recent['high_danger_shots'].mean()
+            stats[f'shots_for_{w}'] = recent['shots_for'].mean()
+            stats[f'faceoff_{w}'] = recent['faceoff_pct'].mean() / 100.0  # Convert to fraction
+            stats[f'save_pct_{w}'] = recent['save_pct'].mean()
+        else:
+            # Use all available games if fewer than window
+            stats[f'win_pct_{w}'] = team_df['win'].mean()
+            stats[f'goal_diff_{w}'] = team_df['goal_diff'].mean()
+            stats[f'xg_diff_{w}'] = team_df['xg_diff'].mean()
+            stats[f'corsi_{w}'] = team_df['corsi_pct'].mean() / 100.0  # Convert to fraction
+            stats[f'fenwick_{w}'] = team_df['fenwick_pct'].mean() / 100.0  # Convert to fraction
+            stats[f'high_danger_shots_{w}'] = team_df['high_danger_shots'].mean()
+            stats[f'shots_for_{w}'] = team_df['shots_for'].mean()
+            stats[f'faceoff_{w}'] = team_df['faceoff_pct'].mean() / 100.0  # Convert to fraction
+            stats[f'save_pct_{w}'] = team_df['save_pct'].mean()
+
+    # Momentum features (exponentially weighted)
+    if len(team_df) >= 3:
+        weights = np.array([0.5, 0.3, 0.2])  # Most recent gets highest weight
+        recent_3 = team_df.tail(3)
+        stats['momentum_win_pct'] = np.average(recent_3['win'].values, weights=weights)
+        stats['momentum_goal_diff'] = np.average(recent_3['goal_diff'].values, weights=weights)
+        stats['momentum_xg'] = np.average(recent_3['xg_diff'].values, weights=weights)
+    else:
+        stats['momentum_win_pct'] = team_df['win'].mean()
+        stats['momentum_goal_diff'] = team_df['goal_diff'].mean()
+        stats['momentum_xg'] = team_df['xg_diff'].mean()
+
+    # Season aggregates
+    stats['season_win_pct'] = team_df['win'].mean()
+    stats['season_goal_diff_avg'] = team_df['goal_diff'].mean()
+    stats['season_xg_diff_avg'] = team_df['xg_diff'].mean()
+    stats['season_shot_margin'] = team_df['shots_for'].mean() - 30  # Relative to average
+
+    return stats
+
+
 def build_matchup_features(
     home_team_id: int,
     away_team_id: int,
@@ -238,6 +349,43 @@ def build_matchup_features(
         except (ValueError, TypeError):
             pass  # Fall back to extracted features if date parsing fails
 
+    # Compute FRESH rolling stats for both teams (fixes 1-game staleness issue)
+    # This ensures rolling features reflect ALL completed games, including the most recent
+    home_rolling = compute_team_rolling_stats(home_team_id, home_games, windows=[3, 5, 10])
+    away_rolling = compute_team_rolling_stats(away_team_id, away_games, windows=[3, 5, 10])
+
+    # Mapping from feature names to fresh rolling stat keys
+    rolling_feature_map = {
+        'rolling_win_pct_3_diff': ('win_pct_3', 'win_pct_3'),
+        'rolling_win_pct_5_diff': ('win_pct_5', 'win_pct_5'),
+        'rolling_win_pct_10_diff': ('win_pct_10', 'win_pct_10'),
+        'rolling_goal_diff_3_diff': ('goal_diff_3', 'goal_diff_3'),
+        'rolling_goal_diff_5_diff': ('goal_diff_5', 'goal_diff_5'),
+        'rolling_goal_diff_10_diff': ('goal_diff_10', 'goal_diff_10'),
+        'rolling_xg_diff_3_diff': ('xg_diff_3', 'xg_diff_3'),
+        'rolling_xg_diff_5_diff': ('xg_diff_5', 'xg_diff_5'),
+        'rolling_xg_diff_10_diff': ('xg_diff_10', 'xg_diff_10'),
+        'rolling_corsi_3_diff': ('corsi_3', 'corsi_3'),
+        'rolling_corsi_5_diff': ('corsi_5', 'corsi_5'),
+        'rolling_corsi_10_diff': ('corsi_10', 'corsi_10'),
+        'rolling_fenwick_5_diff': ('fenwick_5', 'fenwick_5'),
+        'rolling_fenwick_10_diff': ('fenwick_10', 'fenwick_10'),
+        'rolling_high_danger_shots_5_diff': ('high_danger_shots_5', 'high_danger_shots_5'),
+        'rolling_high_danger_shots_10_diff': ('high_danger_shots_10', 'high_danger_shots_10'),
+        'rolling_save_pct_3_diff': ('save_pct_3', 'save_pct_3'),
+        'rolling_save_pct_5_diff': ('save_pct_5', 'save_pct_5'),
+        'rolling_save_pct_10_diff': ('save_pct_10', 'save_pct_10'),
+        'rolling_faceoff_5_diff': ('faceoff_5', 'faceoff_5'),
+        'shotsFor_roll_10_diff': ('shots_for_10', 'shots_for_10'),
+        'momentum_win_pct_diff': ('momentum_win_pct', 'momentum_win_pct'),
+        'momentum_goal_diff_diff': ('momentum_goal_diff', 'momentum_goal_diff'),
+        'momentum_xg_diff': ('momentum_xg', 'momentum_xg'),
+        'season_win_pct_diff': ('season_win_pct', 'season_win_pct'),
+        'season_goal_diff_avg_diff': ('season_goal_diff_avg', 'season_goal_diff_avg'),
+        'season_xg_diff_avg_diff': ('season_xg_diff_avg', 'season_xg_diff_avg'),
+        'season_shot_margin_diff': ('season_shot_margin', 'season_shot_margin'),
+    }
+
     # Build matchup features
     matchup = {}
 
@@ -253,6 +401,12 @@ def build_matchup_features(
             matchup[col] = home_games_last_3d
         elif col == 'games_last_6d_home' and game_date:
             matchup[col] = home_games_last_6d
+        elif col in rolling_feature_map:
+            # Use FRESH rolling stats computed from all completed games
+            home_key, away_key = rolling_feature_map[col]
+            home_val = home_rolling.get(home_key, 0.0)
+            away_val = away_rolling.get(away_key, 0.0)
+            matchup[col] = home_val - away_val
         elif col.endswith('_diff'):
             # This is a differential feature - need to reconstruct from individual stats
             base = col[:-5]  # Remove '_diff' suffix

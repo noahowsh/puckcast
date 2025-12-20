@@ -18,6 +18,7 @@ from datetime import datetime
 from nhl_prediction.pipeline import build_dataset
 from nhl_prediction.model import create_baseline_model, fit_model, tune_logreg_c
 from nhl_prediction.situational_features import add_situational_features
+from predict_full import compute_team_rolling_stats
 
 
 def add_league_hw_feature(games: pd.DataFrame) -> pd.DataFrame:
@@ -127,6 +128,42 @@ def build_features_new_method(
         except:
             pass
 
+    # Compute FRESH rolling stats for both teams
+    home_rolling = compute_team_rolling_stats(home_team_id, home_games, windows=[3, 5, 10])
+    away_rolling = compute_team_rolling_stats(away_team_id, away_games, windows=[3, 5, 10])
+
+    # Mapping from feature names to fresh rolling stat keys
+    rolling_feature_map = {
+        'rolling_win_pct_3_diff': ('win_pct_3', 'win_pct_3'),
+        'rolling_win_pct_5_diff': ('win_pct_5', 'win_pct_5'),
+        'rolling_win_pct_10_diff': ('win_pct_10', 'win_pct_10'),
+        'rolling_goal_diff_3_diff': ('goal_diff_3', 'goal_diff_3'),
+        'rolling_goal_diff_5_diff': ('goal_diff_5', 'goal_diff_5'),
+        'rolling_goal_diff_10_diff': ('goal_diff_10', 'goal_diff_10'),
+        'rolling_xg_diff_3_diff': ('xg_diff_3', 'xg_diff_3'),
+        'rolling_xg_diff_5_diff': ('xg_diff_5', 'xg_diff_5'),
+        'rolling_xg_diff_10_diff': ('xg_diff_10', 'xg_diff_10'),
+        'rolling_corsi_3_diff': ('corsi_3', 'corsi_3'),
+        'rolling_corsi_5_diff': ('corsi_5', 'corsi_5'),
+        'rolling_corsi_10_diff': ('corsi_10', 'corsi_10'),
+        'rolling_fenwick_5_diff': ('fenwick_5', 'fenwick_5'),
+        'rolling_fenwick_10_diff': ('fenwick_10', 'fenwick_10'),
+        'rolling_high_danger_shots_5_diff': ('high_danger_shots_5', 'high_danger_shots_5'),
+        'rolling_high_danger_shots_10_diff': ('high_danger_shots_10', 'high_danger_shots_10'),
+        'rolling_save_pct_3_diff': ('save_pct_3', 'save_pct_3'),
+        'rolling_save_pct_5_diff': ('save_pct_5', 'save_pct_5'),
+        'rolling_save_pct_10_diff': ('save_pct_10', 'save_pct_10'),
+        'rolling_faceoff_5_diff': ('faceoff_5', 'faceoff_5'),
+        'shotsFor_roll_10_diff': ('shots_for_10', 'shots_for_10'),
+        'momentum_win_pct_diff': ('momentum_win_pct', 'momentum_win_pct'),
+        'momentum_goal_diff_diff': ('momentum_goal_diff', 'momentum_goal_diff'),
+        'momentum_xg_diff': ('momentum_xg', 'momentum_xg'),
+        'season_win_pct_diff': ('season_win_pct', 'season_win_pct'),
+        'season_goal_diff_avg_diff': ('season_goal_diff_avg', 'season_goal_diff_avg'),
+        'season_xg_diff_avg_diff': ('season_xg_diff_avg', 'season_xg_diff_avg'),
+        'season_shot_margin_diff': ('season_shot_margin', 'season_shot_margin'),
+    }
+
     matchup = {}
     for col in feature_columns:
         # Handle schedule features with computed values
@@ -140,6 +177,12 @@ def build_features_new_method(
             matchup[col] = home_games_last_3d
         elif col == 'games_last_6d_home' and game_date:
             matchup[col] = home_games_last_6d
+        elif col in rolling_feature_map:
+            # Use FRESH rolling stats
+            home_key, away_key = rolling_feature_map[col]
+            home_val = home_rolling.get(home_key, 0.0)
+            away_val = away_rolling.get(away_key, 0.0)
+            matchup[col] = home_val - away_val
         elif col.endswith('_diff'):
             base = col[:-5]
             home_col = f"{base}_home"
