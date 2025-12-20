@@ -2,19 +2,19 @@
   "lastUpdated": "2025-12-20",
   "nextUpdate": "2025-12-22",
   "weekOf": "Dec 20, 2025",
-  "generatedAt": "2025-12-20T11:13:45.706764+00:00",
+  "generatedAt": "2025-12-20T19:14:02.224412+00:00",
   "previousRankings": {
     "COL": {
       "rank": 1,
-      "points": 55,
-      "goalDiff": 60,
-      "pointPct": 0.833
+      "points": 57,
+      "goalDiff": 61,
+      "pointPct": 0.838
     },
     "DAL": {
       "rank": 2,
-      "points": 51,
-      "goalDiff": 26,
-      "pointPct": 0.729
+      "points": 53,
+      "goalDiff": 31,
+      "pointPct": 0.736
     },
     "CAR": {
       "rank": 3,
@@ -31,8 +31,8 @@
     "ANA": {
       "rank": 5,
       "points": 42,
-      "goalDiff": 5,
-      "pointPct": 0.618
+      "goalDiff": 0,
+      "pointPct": 0.6
     },
     "WSH": {
       "rank": 6,
@@ -46,53 +46,53 @@
       "goalDiff": 8,
       "pointPct": 0.656
     },
-    "NYI": {
+    "NJD": {
       "rank": 8,
+      "points": 41,
+      "goalDiff": -7,
+      "pointPct": 0.586
+    },
+    "NYI": {
+      "rank": 9,
       "points": 41,
       "goalDiff": 3,
       "pointPct": 0.586
     },
     "DET": {
-      "rank": 9,
+      "rank": 10,
       "points": 41,
       "goalDiff": -7,
       "pointPct": 0.586
     },
     "BOS": {
-      "rank": 10,
+      "rank": 11,
       "points": 40,
       "goalDiff": 3,
       "pointPct": 0.571
     },
     "FLA": {
-      "rank": 11,
+      "rank": 12,
       "points": 40,
       "goalDiff": 3,
       "pointPct": 0.588
     },
     "MTL": {
-      "rank": 12,
+      "rank": 13,
       "points": 40,
       "goalDiff": -8,
       "pointPct": 0.588
     },
     "PHI": {
-      "rank": 13,
+      "rank": 14,
       "points": 40,
       "goalDiff": 2,
       "pointPct": 0.606
     },
     "EDM": {
-      "rank": 14,
+      "rank": 15,
       "points": 40,
       "goalDiff": 2,
       "pointPct": 0.571
-    },
-    "NJD": {
-      "rank": 15,
-      "points": 39,
-      "goalDiff": -8,
-      "pointPct": 0.574
     },
     "TBL": {
       "rank": 16,
@@ -115,8 +115,8 @@
     "UTA": {
       "rank": 19,
       "points": 37,
-      "goalDiff": 5,
-      "pointPct": 0.514
+      "goalDiff": 4,
+      "pointPct": 0.5
     },
     "SJS": {
       "rank": 20,
@@ -163,8 +163,8 @@
     "WPG": {
       "rank": 27,
       "points": 32,
-      "goalDiff": -2,
-      "pointPct": 0.485
+      "goalDiff": -3,
+      "pointPct": 0.471
     },
     "CGY": {
       "rank": 28,
@@ -200,21 +200,21 @@
   "movementReasons": {
     "COL": "Holding steady in top 3",
     "DAL": "Holding steady in top 3",
-    "CAR": "Rising into elite tier with strong recent play",
-    "MIN": "Slight regression, looking to stabilize",
-    "ANA": "Playoff pace at 0.618 point percentage",
+    "CAR": "Holding steady in top 3",
+    "MIN": "Solid goal differential (+18) driving results",
+    "ANA": "Playoff pace at 0.600 point percentage",
     "WSH": "Solid goal differential (+26) driving results",
     "VGK": "Playoff pace at 0.656 point percentage",
-    "NYI": "Hovering around .500, looking for consistency",
-    "DET": "Hovering around .500, looking for consistency",
-    "BOS": "Hovering around .500, looking for consistency",
-    "FLA": "Surging up 6 spots with excellent form",
+    "NJD": "Surging up 7 spots with excellent form",
+    "NYI": "Slight regression, looking to stabilize",
+    "DET": "Slight regression, looking to stabilize",
+    "BOS": "Slight regression, looking to stabilize",
+    "FLA": "Slight regression, looking to stabilize",
     "MTL": "Slight regression, looking to stabilize",
     "PHI": "Slight regression, looking to stabilize",
     "EDM": "Slight regression, looking to stabilize",
-    "NJD": "Slight regression, looking to stabilize",
-    "TBL": "Slight regression, looking to stabilize",
-    "LAK": "Slight regression, looking to stabilize",
+    "TBL": "Solid goal differential (+18) driving results",
+    "LAK": "Hovering around .500, looking for consistency",
     "NYR": "Hovering around .500, looking for consistency",
     "UTA": "Hovering around .500, looking for consistency",
     "SJS": "Goal differential (-13) limiting ceiling",
@@ -227,23 +227,23 @@
     "WPG": "Below playoff pace, need to turn things around",
     "CGY": "Goal differential (-14) limiting ceiling",
     "CHI": "Below playoff pace, need to turn things around",
-    "VAN": "Climbing the standings, building momentum",
-    "NSH": "Slight regression, looking to stabilize",
-    "SEA": "Slight regression, looking to stabilize"
+    "VAN": "Goal differential (-19) limiting ceiling",
+    "NSH": "Goal differential (-24) limiting ceiling",
+    "SEA": "Goal differential (-20) limiting ceiling"
   },
   "rankings": [
     {
       "rank": 1,
       "abbrev": "COL",
       "team": "Colorado Avalanche",
-      "points": 55,
-      "record": "24-2-7",
-      "goalDiff": 60,
-      "pointPct": 0.833,
+      "points": 57,
+      "record": "25-2-7",
+      "goalDiff": 61,
+      "pointPct": 0.838,
       "previousRank": 1,
       "rankDelta": 0,
-      "pointsDelta": 0,
-      "goalDiffDelta": 0,
+      "pointsDelta": 2,
+      "goalDiffDelta": 1,
       "tier": "elite",
       "trend": "steady",
       "reason": "Holding steady in top 3"
@@ -252,14 +252,14 @@
       "rank": 2,
       "abbrev": "DAL",
       "team": "Dallas Stars",
-      "points": 51,
-      "record": "23-7-5",
-      "goalDiff": 26,
-      "pointPct": 0.729,
+      "points": 53,
+      "record": "24-7-5",
+      "goalDiff": 31,
+      "pointPct": 0.736,
       "previousRank": 2,
       "rankDelta": 0,
       "pointsDelta": 2,
-      "goalDiffDelta": 2,
+      "goalDiffDelta": 5,
       "tier": "elite",
       "trend": "steady",
       "reason": "Holding steady in top 3"
@@ -272,13 +272,13 @@
       "record": "22-9-3",
       "goalDiff": 18,
       "pointPct": 0.691,
-      "previousRank": 4,
-      "rankDelta": 1,
-      "pointsDelta": 1,
+      "previousRank": 3,
+      "rankDelta": 0,
+      "pointsDelta": 0,
       "goalDiffDelta": 0,
       "tier": "elite",
-      "trend": "up",
-      "reason": "Rising into elite tier with strong recent play"
+      "trend": "steady",
+      "reason": "Holding steady in top 3"
     },
     {
       "rank": 4,
@@ -288,29 +288,29 @@
       "record": "21-9-5",
       "goalDiff": 18,
       "pointPct": 0.671,
-      "previousRank": 3,
-      "rankDelta": -1,
+      "previousRank": 4,
+      "rankDelta": 0,
       "pointsDelta": 0,
       "goalDiffDelta": 0,
       "tier": "elite",
-      "trend": "down",
-      "reason": "Slight regression, looking to stabilize"
+      "trend": "steady",
+      "reason": "Solid goal differential (+18) driving results"
     },
     {
       "rank": 5,
       "abbrev": "ANA",
       "team": "Anaheim Ducks",
       "points": 42,
-      "record": "20-12-2",
-      "goalDiff": 5,
-      "pointPct": 0.618,
+      "record": "20-13-2",
+      "goalDiff": 0,
+      "pointPct": 0.6,
       "previousRank": 5,
       "rankDelta": 0,
       "pointsDelta": 0,
-      "goalDiffDelta": 0,
+      "goalDiffDelta": -5,
       "tier": "elite",
       "trend": "steady",
-      "reason": "Playoff pace at 0.618 point percentage"
+      "reason": "Playoff pace at 0.600 point percentage"
     },
     {
       "rank": 6,
@@ -346,6 +346,22 @@
     },
     {
       "rank": 8,
+      "abbrev": "NJD",
+      "team": "New Jersey Devils",
+      "points": 41,
+      "record": "20-14-1",
+      "goalDiff": -7,
+      "pointPct": 0.586,
+      "previousRank": 15,
+      "rankDelta": 7,
+      "pointsDelta": 2,
+      "goalDiffDelta": 1,
+      "tier": "contender",
+      "trend": "up",
+      "reason": "Surging up 7 spots with excellent form"
+    },
+    {
+      "rank": 9,
       "abbrev": "NYI",
       "team": "New York Islanders",
       "points": 41,
@@ -353,15 +369,15 @@
       "goalDiff": 3,
       "pointPct": 0.586,
       "previousRank": 8,
-      "rankDelta": 0,
+      "rankDelta": -1,
       "pointsDelta": 0,
-      "goalDiffDelta": -3,
+      "goalDiffDelta": 0,
       "tier": "contender",
-      "trend": "steady",
-      "reason": "Hovering around .500, looking for consistency"
+      "trend": "down",
+      "reason": "Slight regression, looking to stabilize"
     },
     {
-      "rank": 9,
+      "rank": 10,
       "abbrev": "DET",
       "team": "Detroit Red Wings",
       "points": 41,
@@ -369,15 +385,15 @@
       "goalDiff": -7,
       "pointPct": 0.586,
       "previousRank": 9,
-      "rankDelta": 0,
+      "rankDelta": -1,
       "pointsDelta": 0,
       "goalDiffDelta": 0,
       "tier": "contender",
-      "trend": "steady",
-      "reason": "Hovering around .500, looking for consistency"
+      "trend": "down",
+      "reason": "Slight regression, looking to stabilize"
     },
     {
-      "rank": 10,
+      "rank": 11,
       "abbrev": "BOS",
       "team": "Boston Bruins",
       "points": 40,
@@ -385,36 +401,20 @@
       "goalDiff": 3,
       "pointPct": 0.571,
       "previousRank": 10,
-      "rankDelta": 0,
+      "rankDelta": -1,
       "pointsDelta": 0,
       "goalDiffDelta": 0,
-      "tier": "contender",
-      "trend": "steady",
-      "reason": "Hovering around .500, looking for consistency"
+      "tier": "playoff",
+      "trend": "down",
+      "reason": "Slight regression, looking to stabilize"
     },
     {
-      "rank": 11,
+      "rank": 12,
       "abbrev": "FLA",
       "team": "Florida Panthers",
       "points": 40,
       "record": "19-13-2",
       "goalDiff": 3,
-      "pointPct": 0.588,
-      "previousRank": 17,
-      "rankDelta": 6,
-      "pointsDelta": 2,
-      "goalDiffDelta": 0,
-      "tier": "playoff",
-      "trend": "up",
-      "reason": "Surging up 6 spots with excellent form"
-    },
-    {
-      "rank": 12,
-      "abbrev": "MTL",
-      "team": "Montr\u00e9al Canadiens",
-      "points": 40,
-      "record": "18-12-4",
-      "goalDiff": -8,
       "pointPct": 0.588,
       "previousRank": 11,
       "rankDelta": -1,
@@ -426,12 +426,12 @@
     },
     {
       "rank": 13,
-      "abbrev": "PHI",
-      "team": "Philadelphia Flyers",
+      "abbrev": "MTL",
+      "team": "Montr\u00e9al Canadiens",
       "points": 40,
-      "record": "17-10-6",
-      "goalDiff": 2,
-      "pointPct": 0.606,
+      "record": "18-12-4",
+      "goalDiff": -8,
+      "pointPct": 0.588,
       "previousRank": 12,
       "rankDelta": -1,
       "pointsDelta": 0,
@@ -442,12 +442,12 @@
     },
     {
       "rank": 14,
-      "abbrev": "EDM",
-      "team": "Edmonton Oilers",
+      "abbrev": "PHI",
+      "team": "Philadelphia Flyers",
       "points": 40,
-      "record": "17-12-6",
+      "record": "17-10-6",
       "goalDiff": 2,
-      "pointPct": 0.571,
+      "pointPct": 0.606,
       "previousRank": 13,
       "rankDelta": -1,
       "pointsDelta": 0,
@@ -458,12 +458,12 @@
     },
     {
       "rank": 15,
-      "abbrev": "NJD",
-      "team": "New Jersey Devils",
-      "points": 39,
-      "record": "19-14-1",
-      "goalDiff": -8,
-      "pointPct": 0.574,
+      "abbrev": "EDM",
+      "team": "Edmonton Oilers",
+      "points": 40,
+      "record": "17-12-6",
+      "goalDiff": 2,
+      "pointPct": 0.571,
       "previousRank": 14,
       "rankDelta": -1,
       "pointsDelta": 0,
@@ -480,13 +480,13 @@
       "record": "18-13-3",
       "goalDiff": 18,
       "pointPct": 0.574,
-      "previousRank": 15,
-      "rankDelta": -1,
+      "previousRank": 16,
+      "rankDelta": 0,
       "pointsDelta": 0,
       "goalDiffDelta": 0,
       "tier": "playoff",
-      "trend": "down",
-      "reason": "Slight regression, looking to stabilize"
+      "trend": "steady",
+      "reason": "Solid goal differential (+18) driving results"
     },
     {
       "rank": 17,
@@ -496,13 +496,13 @@
       "record": "15-10-9",
       "goalDiff": 2,
       "pointPct": 0.574,
-      "previousRank": 16,
-      "rankDelta": -1,
+      "previousRank": 17,
+      "rankDelta": 0,
       "pointsDelta": 0,
       "goalDiffDelta": 0,
       "tier": "bubble",
-      "trend": "down",
-      "reason": "Slight regression, looking to stabilize"
+      "trend": "steady",
+      "reason": "Hovering around .500, looking for consistency"
     },
     {
       "rank": 18,
@@ -525,13 +525,13 @@
       "abbrev": "UTA",
       "team": "Utah Mammoth",
       "points": 37,
-      "record": "17-16-3",
-      "goalDiff": 5,
-      "pointPct": 0.514,
+      "record": "17-17-3",
+      "goalDiff": 4,
+      "pointPct": 0.5,
       "previousRank": 19,
       "rankDelta": 0,
       "pointsDelta": 0,
-      "goalDiffDelta": 0,
+      "goalDiffDelta": -1,
       "tier": "bubble",
       "trend": "steady",
       "reason": "Hovering around .500, looking for consistency"
@@ -547,7 +547,7 @@
       "previousRank": 20,
       "rankDelta": 0,
       "pointsDelta": 0,
-      "goalDiffDelta": -2,
+      "goalDiffDelta": 0,
       "tier": "bubble",
       "trend": "steady",
       "reason": "Goal differential (-13) limiting ceiling"
@@ -653,13 +653,13 @@
       "abbrev": "WPG",
       "team": "Winnipeg Jets",
       "points": 32,
-      "record": "15-16-2",
-      "goalDiff": -2,
-      "pointPct": 0.485,
+      "record": "15-17-2",
+      "goalDiff": -3,
+      "pointPct": 0.471,
       "previousRank": 27,
       "rankDelta": 0,
       "pointsDelta": 0,
-      "goalDiffDelta": 0,
+      "goalDiffDelta": -1,
       "tier": "lottery",
       "trend": "steady",
       "reason": "Below playoff pace, need to turn things around"
@@ -704,13 +704,13 @@
       "record": "14-17-3",
       "goalDiff": -19,
       "pointPct": 0.456,
-      "previousRank": 32,
-      "rankDelta": 2,
-      "pointsDelta": 2,
-      "goalDiffDelta": 3,
+      "previousRank": 30,
+      "rankDelta": 0,
+      "pointsDelta": 0,
+      "goalDiffDelta": 0,
       "tier": "lottery",
-      "trend": "up",
-      "reason": "Climbing the standings, building momentum"
+      "trend": "steady",
+      "reason": "Goal differential (-19) limiting ceiling"
     },
     {
       "rank": 31,
@@ -720,13 +720,13 @@
       "record": "13-16-4",
       "goalDiff": -24,
       "pointPct": 0.455,
-      "previousRank": 30,
-      "rankDelta": -1,
+      "previousRank": 31,
+      "rankDelta": 0,
       "pointsDelta": 0,
       "goalDiffDelta": 0,
       "tier": "lottery",
-      "trend": "down",
-      "reason": "Slight regression, looking to stabilize"
+      "trend": "steady",
+      "reason": "Goal differential (-24) limiting ceiling"
     },
     {
       "rank": 32,
@@ -736,63 +736,51 @@
       "record": "12-14-6",
       "goalDiff": -20,
       "pointPct": 0.469,
-      "previousRank": 31,
-      "rankDelta": -1,
+      "previousRank": 32,
+      "rankDelta": 0,
       "pointsDelta": 0,
       "goalDiffDelta": 0,
       "tier": "lottery",
-      "trend": "down",
-      "reason": "Slight regression, looking to stabilize"
+      "trend": "steady",
+      "reason": "Goal differential (-20) limiting ceiling"
     }
   ],
   "topRisers": [
     {
-      "rank": 11,
-      "abbrev": "FLA",
-      "delta": 6,
-      "reason": "Surging up 6 spots with excellent form"
-    },
-    {
-      "rank": 30,
-      "abbrev": "VAN",
-      "delta": 2,
-      "reason": "Climbing the standings, building momentum"
-    },
-    {
-      "rank": 3,
-      "abbrev": "CAR",
-      "delta": 1,
-      "reason": "Rising into elite tier with strong recent play"
+      "rank": 8,
+      "abbrev": "NJD",
+      "delta": 7,
+      "reason": "Surging up 7 spots with excellent form"
     }
   ],
   "topFallers": [
     {
-      "rank": 4,
-      "abbrev": "MIN",
+      "rank": 9,
+      "abbrev": "NYI",
+      "delta": -1,
+      "reason": "Slight regression, looking to stabilize"
+    },
+    {
+      "rank": 10,
+      "abbrev": "DET",
+      "delta": -1,
+      "reason": "Slight regression, looking to stabilize"
+    },
+    {
+      "rank": 11,
+      "abbrev": "BOS",
       "delta": -1,
       "reason": "Slight regression, looking to stabilize"
     },
     {
       "rank": 12,
-      "abbrev": "MTL",
+      "abbrev": "FLA",
       "delta": -1,
       "reason": "Slight regression, looking to stabilize"
     },
     {
       "rank": 13,
-      "abbrev": "PHI",
-      "delta": -1,
-      "reason": "Slight regression, looking to stabilize"
-    },
-    {
-      "rank": 14,
-      "abbrev": "EDM",
-      "delta": -1,
-      "reason": "Slight regression, looking to stabilize"
-    },
-    {
-      "rank": 15,
-      "abbrev": "NJD",
+      "abbrev": "MTL",
       "delta": -1,
       "reason": "Slight regression, looking to stabilize"
     }
@@ -808,16 +796,16 @@
     "contender": [
       "WSH",
       "VGK",
+      "NJD",
       "NYI",
-      "DET",
-      "BOS"
+      "DET"
     ],
     "playoff": [
+      "BOS",
       "FLA",
       "MTL",
       "PHI",
       "EDM",
-      "NJD",
       "TBL"
     ],
     "bubble": [

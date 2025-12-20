@@ -1,19 +1,7 @@
 {
-  "generatedAt": "2025-12-20T14:23:46.281599+00:00",
+  "generatedAt": "2025-12-20T19:13:58.781185+00:00",
   "date": "2025-12-20",
   "teams": {
-    "NYR": {
-      "injuries": []
-    },
-    "PHI": {
-      "injuries": []
-    },
-    "WSH": {
-      "injuries": []
-    },
-    "DET": {
-      "injuries": []
-    },
     "OTT": {
       "injuries": []
     },
@@ -82,22 +70,6 @@
     }
   },
   "games": [
-    {
-      "gameId": "2025020549",
-      "date": "2025-12-20",
-      "home": "NYR",
-      "away": "PHI",
-      "homeInjuries": [],
-      "awayInjuries": []
-    },
-    {
-      "gameId": "2025020550",
-      "date": "2025-12-20",
-      "home": "WSH",
-      "away": "DET",
-      "homeInjuries": [],
-      "awayInjuries": []
-    },
     {
       "gameId": "2025020551",
       "date": "2025-12-20",
