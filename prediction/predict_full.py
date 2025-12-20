@@ -189,9 +189,12 @@ def compute_team_rolling_stats(
                 'corsi_pct': game.get('corsiPercentage_home', 50),
                 'fenwick_pct': game.get('fenwickPercentage_home', 50),
                 'high_danger_shots': game.get('highDangerShotsFor_home', 0),
-                'shots_for': game.get('shotsForPerGame_home', 30),  # Use per-game shots
+                'shots_for': game.get('shotsForPerGame_home', 30),
+                'shots_against': game.get('shotsAgainstPerGame_home', 30),
                 'faceoff_pct': game.get('faceoffWinPct_home', 50),
-                'save_pct': game.get('savePct_home', 0.900),
+                # Team-level goaltending (pipeline uses team_save_pct, team_gsax_per_60)
+                'team_save_pct': game.get('team_save_pct_home', 0.900),
+                'team_gsax': game.get('team_gsax_per_60_home', 0),
             })
         else:
             team_stats.append({
@@ -203,9 +206,12 @@ def compute_team_rolling_stats(
                 'corsi_pct': game.get('corsiPercentage_away', 50),
                 'fenwick_pct': game.get('fenwickPercentage_away', 50),
                 'high_danger_shots': game.get('highDangerShotsFor_away', 0),
-                'shots_for': game.get('shotsForPerGame_away', 30),  # Use per-game shots
+                'shots_for': game.get('shotsForPerGame_away', 30),
+                'shots_against': game.get('shotsAgainstPerGame_away', 30),
                 'faceoff_pct': game.get('faceoffWinPct_away', 50),
-                'save_pct': game.get('savePct_away', 0.900),
+                # Team-level goaltending (pipeline uses team_save_pct, team_gsax_per_60)
+                'team_save_pct': game.get('team_save_pct_away', 0.900),
+                'team_gsax': game.get('team_gsax_per_60_away', 0),
             })
 
     if len(team_stats) == 0:
@@ -230,7 +236,9 @@ def compute_team_rolling_stats(
             stats[f'high_danger_shots_{w}'] = recent['high_danger_shots'].mean()
             stats[f'shots_for_{w}'] = recent['shots_for'].mean()
             stats[f'faceoff_{w}'] = recent['faceoff_pct'].mean() / 100.0  # Convert to fraction
-            stats[f'save_pct_{w}'] = recent['save_pct'].mean()
+            # Team goaltending (pipeline uses team_save_pct not savePct)
+            stats[f'save_pct_{w}'] = recent['team_save_pct'].mean()
+            stats[f'gsax_{w}'] = recent['team_gsax'].mean()
         else:
             # Use all available games if fewer than window
             stats[f'win_pct_{w}'] = team_df['win'].mean()
@@ -241,25 +249,38 @@ def compute_team_rolling_stats(
             stats[f'high_danger_shots_{w}'] = team_df['high_danger_shots'].mean()
             stats[f'shots_for_{w}'] = team_df['shots_for'].mean()
             stats[f'faceoff_{w}'] = team_df['faceoff_pct'].mean() / 100.0  # Convert to fraction
-            stats[f'save_pct_{w}'] = team_df['save_pct'].mean()
+            # Team goaltending
+            stats[f'save_pct_{w}'] = team_df['team_save_pct'].mean()
+            stats[f'gsax_{w}'] = team_df['team_gsax'].mean()
 
-    # Momentum features (exponentially weighted)
-    if len(team_df) >= 3:
-        weights = np.array([0.5, 0.3, 0.2])  # Most recent gets highest weight
-        recent_3 = team_df.tail(3)
-        stats['momentum_win_pct'] = np.average(recent_3['win'].values, weights=weights)
-        stats['momentum_goal_diff'] = np.average(recent_3['goal_diff'].values, weights=weights)
-        stats['momentum_xg'] = np.average(recent_3['xg_diff'].values, weights=weights)
-    else:
-        stats['momentum_win_pct'] = team_df['win'].mean()
-        stats['momentum_goal_diff'] = team_df['goal_diff'].mean()
-        stats['momentum_xg'] = team_df['xg_diff'].mean()
-
-    # Season aggregates
+    # Season aggregates (computed first because momentum depends on them)
     stats['season_win_pct'] = team_df['win'].mean()
     stats['season_goal_diff_avg'] = team_df['goal_diff'].mean()
     stats['season_xg_diff_avg'] = team_df['xg_diff'].mean()
-    stats['season_shot_margin'] = team_df['shots_for'].mean() - 30  # Relative to average
+
+    # Season shot margin: pipeline uses shotsForPerGame - shotsAgainstPerGame
+    if 'shots_against' in team_df.columns:
+        team_df['shot_margin'] = team_df['shots_for'] - team_df['shots_against']
+        stats['season_shot_margin'] = team_df['shot_margin'].mean()
+    else:
+        stats['season_shot_margin'] = 0.0
+
+    # Momentum features: rolling_5 - season_avg (matches pipeline exactly)
+    # See features.py lines 637-643
+    if 'win_pct_5' in stats and 'season_win_pct' in stats:
+        stats['momentum_win_pct'] = stats['win_pct_5'] - stats['season_win_pct']
+    else:
+        stats['momentum_win_pct'] = 0.0
+
+    if 'goal_diff_5' in stats and 'season_goal_diff_avg' in stats:
+        stats['momentum_goal_diff'] = stats['goal_diff_5'] - stats['season_goal_diff_avg']
+    else:
+        stats['momentum_goal_diff'] = 0.0
+
+    if 'xg_diff_5' in stats and 'season_xg_diff_avg' in stats:
+        stats['momentum_xg'] = stats['xg_diff_5'] - stats['season_xg_diff_avg']
+    else:
+        stats['momentum_xg'] = 0.0
 
     return stats
 
@@ -375,6 +396,8 @@ def build_matchup_features(
         'rolling_save_pct_3_diff': ('save_pct_3', 'save_pct_3'),
         'rolling_save_pct_5_diff': ('save_pct_5', 'save_pct_5'),
         'rolling_save_pct_10_diff': ('save_pct_10', 'save_pct_10'),
+        'rolling_gsax_5_diff': ('gsax_5', 'gsax_5'),
+        'rolling_gsax_10_diff': ('gsax_10', 'gsax_10'),
         'rolling_faceoff_5_diff': ('faceoff_5', 'faceoff_5'),
         'shotsFor_roll_10_diff': ('shots_for_10', 'shots_for_10'),
         'momentum_win_pct_diff': ('momentum_win_pct', 'momentum_win_pct'),
