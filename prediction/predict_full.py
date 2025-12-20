@@ -698,7 +698,7 @@ def predict_games(date=None, num_games=20):
             'home_win_prob_calibrated': prob_home_calibrated,
             'away_win_prob_calibrated': prob_away_calibrated,
             'edge': edge,
-            'predicted_winner': home_abbrev if prob_home_display >= dynamic_threshold else away_abbrev,
+            'predicted_winner': home_abbrev if prob_home_display >= 0.5 else away_abbrev,
             'model_favorite': model_favorite,
             'confidence': confidence_score,
             'confidence_grade': confidence_grade,
@@ -709,17 +709,17 @@ def predict_games(date=None, num_games=20):
         print(f"\n{i}. {away_abbrev} @ {home_abbrev}")
         print(f"   Home Win (raw): {prob_home_display:.1%}  |  Away Win (raw): {prob_away_raw:.1%}")
         
-        # Classify prediction strength (uses dynamic threshold for favorites)
+        # Classify prediction strength
         confidence_pct = confidence_score * 100
 
         if prob_home_display > 0.70:
             print(f"   ✅ Prediction: {home_abbrev} STRONG FAVORITE")
         elif prob_home_display < 0.30:
             print(f"   ✅ Prediction: {away_abbrev} STRONG FAVORITE")
-        elif abs(prob_home_display - dynamic_threshold) < 0.05:
+        elif abs(prob_home_display - 0.5) < 0.05:
             print(f"   ⚖️  Prediction: TOSS-UP (too close to call)")
         else:
-            favorite = home_abbrev if prob_home_display >= dynamic_threshold else away_abbrev
+            favorite = home_abbrev if prob_home_display >= 0.5 else away_abbrev
             print(f"   📊 Prediction: {favorite} ({confidence_pct:.0f}% confidence)")
     
     # Summary
