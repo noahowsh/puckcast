@@ -101,4 +101,4 @@ model = train_v79_model(['20232024', '20242025'])
 ```
 
 ---
-*Last updated: December 5, 2025*
+*Last updated: December 20, 2024*

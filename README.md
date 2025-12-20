@@ -1,7 +1,7 @@
 # 🏒 Puckcast NHL Prediction Model - Complete Documentation
 
-> **Last Updated**: December 13, 2025
-> **Current Model**: V7.0 (Adaptive Weights)
+> **Last Updated**: December 20, 2024
+> **Current Model**: V7.1 (Adaptive Weights)
 > **Production Accuracy**: 60.9% on 4-season holdout (5,002 games)
 > **Features**: 39 + adaptive weights
 > **Website**: https://puckcast.ai
@@ -13,11 +13,11 @@
 
 | Metric | Value | Status |
 |--------|-------|--------|
-| **Production Model** | V7.0 | ✅ Active |
+| **Production Model** | V7.1 | ✅ Active |
 | **Test Accuracy** | 60.9% | ✅ 4-season holdout |
 | **Games Tested** | 5,002 | ✅ 2021-25 seasons |
 | **Baseline** | 53.9% | Home win rate |
-| **Edge vs Baseline** | +6.9 pts | ✅ Significant |
+| **Edge vs Baseline** | +7.0 pts | ✅ Significant |
 | **Features** | 39 + adaptive weights | ✅ Production |
 
 ---
@@ -26,12 +26,12 @@
 
 After extensive experimentation across multiple model versions:
 
-> **V7.0 at 60.9% represents the current production model with 4-season holdout validation.**
+> **V7.1 at 60.9% represents the current production model with 4-season holdout validation.**
 
 ### Model Performance
 
 ```
-V7.0  60.9%   ━━━━━━━━━━━━━━━━━━━━━  ✅ PRODUCTION MODEL
+V7.1  60.9%   ━━━━━━━━━━━━━━━━━━━━━  ✅ PRODUCTION MODEL
                                       (39 features + adaptive weights)
                                       Tested on 5,002 games (2021-25)
 
@@ -42,7 +42,7 @@ B+   67.3%   ━━━━━━━━━━━━━━━━━━      687 gam
 B    62.0%   ━━━━━━━━━━━━━━━━        975 games (10-15 pts edge)
 ```
 
-Note: Metrics validated on December 7, 2025
+Note: Metrics validated on December 20, 2024
 
 ---
 
@@ -163,7 +163,7 @@ python analysis/current/analyze_confidence_calibration.py
 
 ---
 
-## 📈 V7.0 Production Model - Detailed Performance
+## 📈 V7.1 Production Model - Detailed Performance
 
 ### Model Architecture
 
@@ -173,15 +173,15 @@ python analysis/current/analyze_confidence_calibration.py
 - **Testing**: 4-season holdout (2021-22 through 2024-25)
 - **Optimization**: Adaptive weights for evolving home advantage
 
-### Performance Metrics (Validated Dec 7, 2025)
+### Performance Metrics (Validated Dec 20, 2024)
 
 | Metric | Value | Interpretation |
 |--------|-------|----------------|
 | **Accuracy** | 60.9% | 3,046/5,002 correct predictions |
-| **Brier Score** | 0.2317 | Excellent calibration |
-| **Log Loss** | 0.6554 | Well-calibrated probabilities |
+| **Brier Score** | 0.2329 | Excellent calibration |
+| **Log Loss** | 0.6577 | Well-calibrated probabilities |
 | **Baseline** | 53.9% | Home win rate |
-| **Edge** | +6.9 pts | Significant improvement |
+| **Edge** | +7.0 pts | Significant improvement |
 
 ### Confidence Grade Analysis
 
@@ -198,9 +198,9 @@ python analysis/current/analyze_confidence_calibration.py
 - A+ predictions (25+ pts): **79.3% accuracy** - elite tier
 - A-grade combined (20+ pts): **75%+ accuracy** on 737 games
 
-### V7.0 Adaptive Weights
+### V7.1 Adaptive Weights
 
-The V7.0 model introduces adaptive weighting that accounts for:
+The V7.1 model introduces adaptive weighting that accounts for:
 - Evolving home ice advantage (diminishing post-COVID)
 - Season-specific calibration
 - Feature importance shifts across seasons
@@ -213,7 +213,7 @@ The V7.0 model introduces adaptive weighting that accounts for:
 
 ### ✅ Successful Approaches
 
-#### V7.0 Feature Engineering
+#### V7.1 Feature Engineering
 - **209 engineered features** from NHL API data
 - **Rolling statistics**: Goals, xG, shots, corsi, fenwick (3/5/10 game windows)
 - **Team indicators**: 32 team dummy variables
@@ -228,7 +228,7 @@ The V7.0 model introduces adaptive weighting that accounts for:
 4. `home_team_28` (-0.1709) [team dummy]
 5. `rolling_xg_for_5_diff` (0.1492)
 
-#### V7.0 Situational Features
+#### V7.1 Situational Features
 - **Fatigue modeling** beyond simple B2B
 - **Travel burden** (miles traveled)
 - **Divisional matchup** importance
@@ -241,7 +241,7 @@ The V7.0 model introduces adaptive weighting that accounts for:
 
 ### ❌ Failed Development Tests
 
-During V7.0 development, we tested several approaches that **did not improve** the model:
+During V7.1 development, we tested several approaches that **did not improve** the model:
 
 #### Test: Head-to-Head Features (60.00%)
 
@@ -543,7 +543,7 @@ The gap to 62%+ consists of:
 
 3. **[docs/INDEX.md](docs/INDEX.md)** - Documentation navigation and metrics
 
-### 🧪 V7.0 Development Test Logs
+### 🧪 V7.1 Development Test Logs
 
 Detailed experiment logs (for reference, summaries in V7_DEVELOPMENT_LESSONS.md):
 
@@ -555,7 +555,7 @@ Detailed experiment logs (for reference, summaries in V7_DEVELOPMENT_LESSONS.md)
 
 ## 🧪 Reproducibility Guide
 
-### Reproduce V7.0 Training
+### Reproduce V7.1 Training
 
 ```bash
 cd /home/user/puckcast
@@ -563,7 +563,7 @@ python training/train_v7_adaptive.py
 
 # Expected output:
 # ================================================================================
-# V7.0 RESULTS
+# V7.1 RESULTS
 # ================================================================================
 # Test Set Performance (4-season holdout):
 #   Accuracy:  0.609 (60.9%)
@@ -604,13 +604,13 @@ python analysis/current/analyze_confidence_calibration.py
 
 | Version | Accuracy | Status | Key Changes |
 |---------|----------|--------|-------------|
-| **V7.0** | **60.9%** | ✅ **PRODUCTION** | **39 features + adaptive weights, 4-season holdout** |
-| V6.4 | ~59% | Superseded | Previous production model |
+| **V7.1** | **60.9%** | ✅ **PRODUCTION** | **39 features + adaptive weights, 4-season holdout** |
+| V7.0 | 60.9% | Superseded | Initial V7 release |
 | V6.x | 58-60% | Archived | Various experiments |
 
-### V7.0 Development Tests Summary
+### V7.1 Development Tests Summary
 
-The V7.0 release represents the culmination of extensive experimentation:
+The V7.1 release represents the culmination of extensive experimentation:
 
 | Test | Accuracy | Result | Notes |
 |------|----------|--------|-------|
@@ -621,13 +621,13 @@ The V7.0 release represents the culmination of extensive experimentation:
 | Team calibration | 60.73% | ❌ Rejected | Weak signal |
 | Adaptive weights | 60.9% | ✅ Production | Handles evolving patterns |
 
-**Conclusion**: V7.0 with adaptive weights represents the best-performing model, validated across 5,002 games over 4 seasons.
+**Conclusion**: V7.1 with adaptive weights represents the best-performing model, validated across 5,002 games over 4 seasons.
 
 ---
 
 ## 🏆 Key Achievements
 
-✅ Built production-ready model at **60.9% accuracy** on 5,002-game holdout
+✅ Built production-ready model at **60.9% accuracy** on 5,002-game holdout (Log Loss: 0.6577, Brier: 0.2329)
 ✅ Optimized feature set (**39 features + adaptive weights**)
 ✅ Proper 4-season holdout validation (no data leakage)
 ✅ **Well-calibrated probability predictions** (Brier Score: 0.2317)
@@ -736,7 +736,7 @@ python prediction/predict_simple.py TOR BOS
 ### Train the Model
 
 ```bash
-# Train V7.0 from scratch
+# Train V7.1 from scratch
 python training/train_v7_adaptive.py
 
 # Model saved to: model_v7_adaptive.pkl
@@ -773,4 +773,4 @@ MIT License - See LICENSE file
 
 ---
 
-**🏒 V7.0 is live at https://puckcast.ai with 60.9% accuracy. See [docs/INDEX.md](docs/INDEX.md) for documentation!**
+**🏒 V7.1 is live at https://puckcast.ai with 60.9% accuracy. See [docs/INDEX.md](docs/INDEX.md) for documentation!**

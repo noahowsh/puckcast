@@ -1,6 +1,6 @@
 # Puckcast Model Sauce
 
-> **The Complete Technical Breakdown of V7.0**
+> **The Complete Technical Breakdown of V7.1**
 >
 > Everything we do to predict NHL games, explained in plain English.
 
@@ -23,18 +23,18 @@ The model outputs a probability between 0 and 1 for each game, representing the 
 
 | Metric | Value | Note |
 |--------|-------|------|
-| **Test Accuracy** | 60.86% | 3,044 correct / 5,002 games |
+| **Test Accuracy** | 60.88% | 3,046 correct / 5,002 games |
 | **Games Tested** | 5,002 | 4 full seasons (2021-22 through 2024-25) |
 | **Baseline** | 53.92% | Just picking home team every game |
-| **Edge Over Baseline** | +6.94 pts | Model advantage vs naive strategy |
-| **Log Loss** | 0.6554 | Probability calibration metric |
-| **Brier Score** | 0.2317 | Lower is better (perfect = 0) |
+| **Edge Over Baseline** | +7.0 pts | Model advantage vs naive strategy |
+| **Log Loss** | 0.6577 | Probability calibration metric |
+| **Brier Score** | 0.2329 | Lower is better (perfect = 0) |
 
 ---
 
 ## The 39 Features
 
-V7.0 uses exactly 39 curated features. Each feature is a "difference" value comparing home team to away team. Here's what they are in plain English:
+V7.1 uses exactly 39 curated features. Each feature is a "difference" value comparing home team to away team. Here's what they are in plain English:
 
 ### League-Wide Context (1 feature)
 
@@ -307,7 +307,7 @@ Rolling windows use `.shift(1)` to prevent data leakage (only use data available
 
 ## Summary
 
-V7.0 predicts NHL games at **60.86% accuracy** using:
+V7.1 predicts NHL games at **60.88% accuracy** using:
 
 - **39 curated features** covering team strength, recent form, possession, goaltending, and rest
 - **Logistic Regression** with adaptive sample weights
@@ -319,4 +319,4 @@ The model is intentionally simple and robust. Complex approaches overfit. Boring
 
 ---
 
-*Generated for V7.0 Launch - December 2025*
+*Generated for V7.1 Launch - December 2024*

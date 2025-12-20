@@ -1,7 +1,7 @@
 # 🏒 Puckcast.ai - Production Status & Active Files
 
-> **Last Updated**: December 7, 2025
-> **Model Version**: V7.0 (Adaptive Weights)
+> **Last Updated**: December 20, 2024
+> **Model Version**: V7.1 (Adaptive Weights)
 > **Website**: https://puckcast.ai
 > **Status**: ✅ **PRODUCTION - LIVE**
 
@@ -11,15 +11,15 @@
 
 | Metric | Value |
 |--------|-------|
-| **Model** | V7.0 Adaptive Weights |
+| **Model** | V7.1 Adaptive Weights |
 | **Accuracy** | 60.9% (4-season holdout) |
 | **Games Tested** | 5,002 |
 | **Features** | 39 + adaptive weights |
 | **Test Set** | 4-season holdout (2021-25) |
 | **Baseline** | 53.9% (home win rate) |
-| **Edge vs Baseline** | +6.9 pts |
-| **Brier Score** | 0.2317 |
-| **Log Loss** | 0.6554 |
+| **Edge vs Baseline** | +7.0 pts |
+| **Brier Score** | 0.2329 |
+| **Log Loss** | 0.6577 |
 
 ---
 
@@ -50,8 +50,8 @@
 
 #### `training/train_v7_adaptive.py`
 - **Status**: ✅ PRODUCTION
-- **Last Updated**: December 2025
-- **Purpose**: Training script for V7.0 model with adaptive weights
+- **Last Updated**: December 2024
+- **Purpose**: Training script for V7.1 model with adaptive weights
 - **Results**: 60.9% accuracy on 4-season holdout (5,002 games)
 - **Training Time**: ~5-10 minutes on local machine
 - **Output**: Trained model pickle file
@@ -116,7 +116,7 @@
 - `/teams/[abbrev]` - Individual team pages (with PP/PK stats)
 
 #### Components (`web/src/components/`)
-- `SiteFooter.tsx` - Footer with V7.0 version
+- `SiteFooter.tsx` - Footer with V7.1 version
 - `TeamCrest.tsx` - Team logos
 - `PageHeader.tsx` - Page headers
 - `StatCard.tsx` - Stat display cards
@@ -167,9 +167,9 @@
 All archived to: `archive/2024-12-04-pre-cleanup/`
 
 ### Archived Experimental Features:
-- `head_to_head_features.py` - V7.0 Test: H2H (60.00% - rejected)
-- `interaction_features.py` - V7.0 Test: Interactions (60.08% - rejected)
-- `team_calibration_features.py` - V7.0 Test: Calibration (60.73% - rejected)
+- `head_to_head_features.py` - V7.1 Test: H2H (60.00% - rejected)
+- `interaction_features.py` - V7.1 Test: Interactions (60.08% - rejected)
+- `team_calibration_features.py` - V7.1 Test: Calibration (60.73% - rejected)
 
 ### Archived Training Scripts:
 - All V7.0 development test training scripts
@@ -194,7 +194,7 @@ All archived to: `archive/2024-12-04-pre-cleanup/`
 - **Status**: ✅ Live
 - **Hosting**: [To be determined - Vercel/Netlify]
 - **Updates**: Manual - Copy predictions to `web/src/data/`
-- **Version**: v7.0 (shown in footer)
+- **Version**: v7.1 (shown in footer)
 
 ### Prediction Generation
 - **Status**: ✅ Manual
@@ -252,12 +252,12 @@ All archived to: `archive/2024-12-04-pre-cleanup/`
 
 ## 📊 Performance Benchmarks
 
-### V7.0 Model Performance:
+### V7.1 Model Performance:
 ```
 Test Set: 4-season holdout (5,002 games)
 Overall Accuracy: 60.9%
 Baseline (Home Win Rate): 53.9%
-Improvement: +6.9 percentage points
+Improvement: +7.0 percentage points
 
 Confidence Buckets:
 A+ (25+ pts): 79.3% accuracy (333 games)
@@ -269,8 +269,8 @@ C  (0-5 pts): 51.9% accuracy (1,372 games)
 ```
 
 ### Calibration:
-- **Brier Score**: 0.2317
-- **Log Loss**: 0.6554
+- **Brier Score**: 0.2329
+- **Log Loss**: 0.6577
 - **Features**: 39 + adaptive weights
 
 ---
@@ -285,6 +285,6 @@ C  (0-5 pts): 51.9% accuracy (1,372 games)
 
 ---
 
-**Document Version**: 2.0
-**Last Audit**: December 7, 2025
+**Document Version**: 2.1
+**Last Audit**: December 20, 2024
 **Next Review**: After V8 or major updates

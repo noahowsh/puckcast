@@ -152,6 +152,431 @@ def calculate_adaptive_weights(games: pd.DataFrame, target: pd.Series) -> np.nda
 
 ET_ZONE = ZoneInfo("America/New_York")
 
+
+def compute_team_rolling_stats(
+    team_id: int,
+    team_games: pd.DataFrame,
+    windows: list[int] = [3, 5, 10],
+) -> dict:
+    """Compute fresh rolling statistics for a team from their recent games.
+
+    Args:
+        team_id: The team's ID
+        team_games: DataFrame of the team's games (sorted by date, most recent last)
+        windows: Rolling window sizes to compute
+
+    Returns:
+        Dictionary of rolling stats for each window size
+    """
+    stats = {}
+
+    if len(team_games) == 0:
+        return stats
+
+    # For each game, determine if this team was home or away
+    # and extract their stats accordingly
+    team_stats = []
+    for _, game in team_games.iterrows():
+        was_home = game['teamId_home'] == team_id
+
+        if was_home:
+            team_stats.append({
+                'win': 1 if game.get('home_win', 0) == 1 else 0,
+                'goals_for': game.get('goalsFor_home', game.get('home_score', 0)),
+                'goals_against': game.get('goalsAgainst_home', game.get('away_score', 0)),
+                'xg_for': game.get('xGoalsFor_home', 0),
+                'xg_against': game.get('xGoalsAgainst_home', 0),
+                'corsi_pct': game.get('corsiPercentage_home', 50),
+                'fenwick_pct': game.get('fenwickPercentage_home', 50),
+                'high_danger_shots': game.get('highDangerShotsFor_home', 0),
+                'shots_for': game.get('shotsForPerGame_home', 30),
+                'shots_against': game.get('shotsAgainstPerGame_home', 30),
+                'faceoff_pct': game.get('faceoffWinPct_home', 50),
+                # Team-level goaltending (pipeline uses team_save_pct, team_gsax_per_60)
+                'team_save_pct': game.get('team_save_pct_home', 0.900),
+                'team_gsax': game.get('team_gsax_per_60_home', 0),
+            })
+        else:
+            team_stats.append({
+                'win': 0 if game.get('home_win', 0) == 1 else 1,
+                'goals_for': game.get('goalsFor_away', game.get('away_score', 0)),
+                'goals_against': game.get('goalsAgainst_away', game.get('home_score', 0)),
+                'xg_for': game.get('xGoalsFor_away', 0),
+                'xg_against': game.get('xGoalsAgainst_away', 0),
+                'corsi_pct': game.get('corsiPercentage_away', 50),
+                'fenwick_pct': game.get('fenwickPercentage_away', 50),
+                'high_danger_shots': game.get('highDangerShotsFor_away', 0),
+                'shots_for': game.get('shotsForPerGame_away', 30),
+                'shots_against': game.get('shotsAgainstPerGame_away', 30),
+                'faceoff_pct': game.get('faceoffWinPct_away', 50),
+                # Team-level goaltending (pipeline uses team_save_pct, team_gsax_per_60)
+                'team_save_pct': game.get('team_save_pct_away', 0.900),
+                'team_gsax': game.get('team_gsax_per_60_away', 0),
+            })
+
+    if len(team_stats) == 0:
+        return stats
+
+    team_df = pd.DataFrame(team_stats)
+
+    # Compute derived stats
+    team_df['goal_diff'] = team_df['goals_for'] - team_df['goals_against']
+    team_df['xg_diff'] = team_df['xg_for'] - team_df['xg_against']
+
+    # Compute rolling stats for each window
+    # Note: Pipeline stores corsi/fenwick as fractions (0.5 = 50%), so divide by 100
+    for w in windows:
+        if len(team_df) >= w:
+            recent = team_df.tail(w)
+            stats[f'win_pct_{w}'] = recent['win'].mean()
+            stats[f'goal_diff_{w}'] = recent['goal_diff'].mean()
+            stats[f'xg_diff_{w}'] = recent['xg_diff'].mean()
+            stats[f'corsi_{w}'] = recent['corsi_pct'].mean() / 100.0  # Convert to fraction
+            stats[f'fenwick_{w}'] = recent['fenwick_pct'].mean() / 100.0  # Convert to fraction
+            stats[f'high_danger_shots_{w}'] = recent['high_danger_shots'].mean()
+            stats[f'shots_for_{w}'] = recent['shots_for'].mean()
+            stats[f'faceoff_{w}'] = recent['faceoff_pct'].mean() / 100.0  # Convert to fraction
+            # Team goaltending (pipeline uses team_save_pct not savePct)
+            stats[f'save_pct_{w}'] = recent['team_save_pct'].mean()
+            stats[f'gsax_{w}'] = recent['team_gsax'].mean()
+        else:
+            # Use all available games if fewer than window
+            stats[f'win_pct_{w}'] = team_df['win'].mean()
+            stats[f'goal_diff_{w}'] = team_df['goal_diff'].mean()
+            stats[f'xg_diff_{w}'] = team_df['xg_diff'].mean()
+            stats[f'corsi_{w}'] = team_df['corsi_pct'].mean() / 100.0  # Convert to fraction
+            stats[f'fenwick_{w}'] = team_df['fenwick_pct'].mean() / 100.0  # Convert to fraction
+            stats[f'high_danger_shots_{w}'] = team_df['high_danger_shots'].mean()
+            stats[f'shots_for_{w}'] = team_df['shots_for'].mean()
+            stats[f'faceoff_{w}'] = team_df['faceoff_pct'].mean() / 100.0  # Convert to fraction
+            # Team goaltending
+            stats[f'save_pct_{w}'] = team_df['team_save_pct'].mean()
+            stats[f'gsax_{w}'] = team_df['team_gsax'].mean()
+
+    # Season aggregates (computed first because momentum depends on them)
+    stats['season_win_pct'] = team_df['win'].mean()
+    stats['season_goal_diff_avg'] = team_df['goal_diff'].mean()
+    stats['season_xg_diff_avg'] = team_df['xg_diff'].mean()
+
+    # Season shot margin: pipeline uses shotsForPerGame - shotsAgainstPerGame
+    if 'shots_against' in team_df.columns:
+        team_df['shot_margin'] = team_df['shots_for'] - team_df['shots_against']
+        stats['season_shot_margin'] = team_df['shot_margin'].mean()
+    else:
+        stats['season_shot_margin'] = 0.0
+
+    # Momentum features: rolling_5 - season_avg (matches pipeline exactly)
+    # See features.py lines 637-643
+    if 'win_pct_5' in stats and 'season_win_pct' in stats:
+        stats['momentum_win_pct'] = stats['win_pct_5'] - stats['season_win_pct']
+    else:
+        stats['momentum_win_pct'] = 0.0
+
+    if 'goal_diff_5' in stats and 'season_goal_diff_avg' in stats:
+        stats['momentum_goal_diff'] = stats['goal_diff_5'] - stats['season_goal_diff_avg']
+    else:
+        stats['momentum_goal_diff'] = 0.0
+
+    if 'xg_diff_5' in stats and 'season_xg_diff_avg' in stats:
+        stats['momentum_xg'] = stats['xg_diff_5'] - stats['season_xg_diff_avg']
+    else:
+        stats['momentum_xg'] = 0.0
+
+    return stats
+
+
+def build_matchup_features(
+    home_team_id: int,
+    away_team_id: int,
+    season_id: str,
+    eligible_games: pd.DataFrame,
+    feature_columns: list,
+    game_date: str | None = None,
+) -> pd.Series | None:
+    """Construct proper matchup features for a new game.
+
+    The correct approach is:
+    1. Find each team's most recent game (regardless of home/away position)
+    2. Extract that team's individual stats from that game
+    3. Compute proper differentials: home_team_stat - away_team_stat
+    4. Compute schedule features (rest_diff, is_b2b) from actual game dates
+
+    This fixes the bug where we were averaging differential features from
+    different games, which produced garbage (TeamA - Opponent1 + Opponent2 - TeamB) / 2.
+    """
+    # Find home team's most recent game (where they played as either home or away)
+    home_as_home = eligible_games[
+        (eligible_games['teamId_home'] == home_team_id) &
+        (eligible_games['seasonId_str'] == season_id)
+    ]
+    home_as_away = eligible_games[
+        (eligible_games['teamId_away'] == home_team_id) &
+        (eligible_games['seasonId_str'] == season_id)
+    ]
+    home_games = pd.concat([home_as_home, home_as_away]).sort_values('gameDate')
+
+    # Find away team's most recent game (where they played as either home or away)
+    away_as_home = eligible_games[
+        (eligible_games['teamId_home'] == away_team_id) &
+        (eligible_games['seasonId_str'] == season_id)
+    ]
+    away_as_away = eligible_games[
+        (eligible_games['teamId_away'] == away_team_id) &
+        (eligible_games['seasonId_str'] == season_id)
+    ]
+    away_games = pd.concat([away_as_home, away_as_away]).sort_values('gameDate')
+
+    if len(home_games) == 0 or len(away_games) == 0:
+        return None
+
+    # Get the most recent game for each team
+    home_recent = home_games.iloc[-1]
+    away_recent = away_games.iloc[-1]
+
+    # Determine if each team was home or away in their most recent game
+    home_team_was_home = home_recent['teamId_home'] == home_team_id
+    away_team_was_home = away_recent['teamId_home'] == away_team_id
+
+    # Compute actual schedule features from game dates
+    # This fixes the bug where we were using stale schedule data from past games
+    home_rest_days = None
+    away_rest_days = None
+    home_games_last_3d = 0
+    home_games_last_6d = 0
+    away_games_last_3d = 0
+    away_games_last_6d = 0
+
+    if game_date:
+        try:
+            new_game_dt = pd.to_datetime(game_date)
+            home_last_game_dt = pd.to_datetime(home_recent['gameDate'])
+            away_last_game_dt = pd.to_datetime(away_recent['gameDate'])
+
+            # Compute rest days (days since last game)
+            home_rest_days = (new_game_dt - home_last_game_dt).days
+            away_rest_days = (new_game_dt - away_last_game_dt).days
+
+            # Count games in last 3/6 days for schedule density
+            cutoff_3d = new_game_dt - pd.Timedelta(days=3)
+            cutoff_6d = new_game_dt - pd.Timedelta(days=6)
+
+            home_dates = pd.to_datetime(home_games['gameDate'])
+            away_dates = pd.to_datetime(away_games['gameDate'])
+
+            home_games_last_3d = int((home_dates >= cutoff_3d).sum())
+            home_games_last_6d = int((home_dates >= cutoff_6d).sum())
+            away_games_last_3d = int((away_dates >= cutoff_3d).sum())
+            away_games_last_6d = int((away_dates >= cutoff_6d).sum())
+        except (ValueError, TypeError):
+            pass  # Fall back to extracted features if date parsing fails
+
+    # Compute FRESH rolling stats for both teams (fixes 1-game staleness issue)
+    # This ensures rolling features reflect ALL completed games, including the most recent
+    home_rolling = compute_team_rolling_stats(home_team_id, home_games, windows=[3, 5, 10])
+    away_rolling = compute_team_rolling_stats(away_team_id, away_games, windows=[3, 5, 10])
+
+    # Mapping from feature names to fresh rolling stat keys
+    rolling_feature_map = {
+        'rolling_win_pct_3_diff': ('win_pct_3', 'win_pct_3'),
+        'rolling_win_pct_5_diff': ('win_pct_5', 'win_pct_5'),
+        'rolling_win_pct_10_diff': ('win_pct_10', 'win_pct_10'),
+        'rolling_goal_diff_3_diff': ('goal_diff_3', 'goal_diff_3'),
+        'rolling_goal_diff_5_diff': ('goal_diff_5', 'goal_diff_5'),
+        'rolling_goal_diff_10_diff': ('goal_diff_10', 'goal_diff_10'),
+        'rolling_xg_diff_3_diff': ('xg_diff_3', 'xg_diff_3'),
+        'rolling_xg_diff_5_diff': ('xg_diff_5', 'xg_diff_5'),
+        'rolling_xg_diff_10_diff': ('xg_diff_10', 'xg_diff_10'),
+        'rolling_corsi_3_diff': ('corsi_3', 'corsi_3'),
+        'rolling_corsi_5_diff': ('corsi_5', 'corsi_5'),
+        'rolling_corsi_10_diff': ('corsi_10', 'corsi_10'),
+        'rolling_fenwick_5_diff': ('fenwick_5', 'fenwick_5'),
+        'rolling_fenwick_10_diff': ('fenwick_10', 'fenwick_10'),
+        'rolling_high_danger_shots_5_diff': ('high_danger_shots_5', 'high_danger_shots_5'),
+        'rolling_high_danger_shots_10_diff': ('high_danger_shots_10', 'high_danger_shots_10'),
+        'rolling_save_pct_3_diff': ('save_pct_3', 'save_pct_3'),
+        'rolling_save_pct_5_diff': ('save_pct_5', 'save_pct_5'),
+        'rolling_save_pct_10_diff': ('save_pct_10', 'save_pct_10'),
+        'rolling_gsax_5_diff': ('gsax_5', 'gsax_5'),
+        'rolling_gsax_10_diff': ('gsax_10', 'gsax_10'),
+        'rolling_faceoff_5_diff': ('faceoff_5', 'faceoff_5'),
+        'shotsFor_roll_10_diff': ('shots_for_10', 'shots_for_10'),
+        'momentum_win_pct_diff': ('momentum_win_pct', 'momentum_win_pct'),
+        'momentum_goal_diff_diff': ('momentum_goal_diff', 'momentum_goal_diff'),
+        'momentum_xg_diff': ('momentum_xg', 'momentum_xg'),
+        'season_win_pct_diff': ('season_win_pct', 'season_win_pct'),
+        'season_goal_diff_avg_diff': ('season_goal_diff_avg', 'season_goal_diff_avg'),
+        'season_xg_diff_avg_diff': ('season_xg_diff_avg', 'season_xg_diff_avg'),
+        'season_shot_margin_diff': ('season_shot_margin', 'season_shot_margin'),
+    }
+
+    # Build matchup features
+    matchup = {}
+
+    for col in feature_columns:
+        # Handle schedule features with computed values
+        if col == 'rest_diff' and home_rest_days is not None and away_rest_days is not None:
+            matchup[col] = home_rest_days - away_rest_days
+        elif col == 'is_b2b_home' and home_rest_days is not None:
+            matchup[col] = 1 if home_rest_days <= 1 else 0
+        elif col == 'is_b2b_away' and away_rest_days is not None:
+            matchup[col] = 1 if away_rest_days <= 1 else 0
+        elif col == 'games_last_3d_home' and game_date:
+            matchup[col] = home_games_last_3d
+        elif col == 'games_last_6d_home' and game_date:
+            matchup[col] = home_games_last_6d
+        elif col in rolling_feature_map:
+            # Use FRESH rolling stats computed from all completed games
+            home_key, away_key = rolling_feature_map[col]
+            home_val = home_rolling.get(home_key, 0.0)
+            away_val = away_rolling.get(away_key, 0.0)
+            matchup[col] = home_val - away_val
+        elif col.endswith('_diff'):
+            # This is a differential feature - need to reconstruct from individual stats
+            base = col[:-5]  # Remove '_diff' suffix
+            home_col = f"{base}_home"
+            away_col = f"{base}_away"
+
+            # Get home team's stat from their most recent game
+            if home_col in home_recent.index and away_col in home_recent.index:
+                if home_team_was_home:
+                    home_team_stat = home_recent[home_col]
+                else:
+                    home_team_stat = home_recent[away_col]
+
+                # Get away team's stat from their most recent game
+                if away_team_was_home:
+                    away_team_stat = away_recent[home_col]
+                else:
+                    away_team_stat = away_recent[away_col]
+
+                # Compute proper differential
+                matchup[col] = home_team_stat - away_team_stat
+            else:
+                matchup[col] = 0.0
+
+        elif col in ['elo_diff_pre', 'elo_expectation_home']:
+            # Elo features - compute current Elo by applying post-game updates
+            # The stored elo_*_pre values are from BEFORE the most recent game
+            # We need to apply the update to get current Elo
+
+            if col == 'elo_diff_pre':
+                # Get each team's pre-game Elo from their most recent game
+                if home_team_was_home:
+                    home_pre_elo = home_recent.get('elo_home_pre', 1500.0)
+                    home_opp_pre_elo = home_recent.get('elo_away_pre', 1500.0)
+                else:
+                    home_pre_elo = home_recent.get('elo_away_pre', 1500.0)
+                    home_opp_pre_elo = home_recent.get('elo_home_pre', 1500.0)
+
+                if away_team_was_home:
+                    away_pre_elo = away_recent.get('elo_home_pre', 1500.0)
+                    away_opp_pre_elo = away_recent.get('elo_away_pre', 1500.0)
+                else:
+                    away_pre_elo = away_recent.get('elo_away_pre', 1500.0)
+                    away_opp_pre_elo = away_recent.get('elo_home_pre', 1500.0)
+
+                # Compute post-game Elo for home team (from their last game)
+                home_game_home_win = home_recent.get('home_win', 0)
+                home_game_home_score = home_recent.get('home_score', 0)
+                home_game_away_score = home_recent.get('away_score', 0)
+
+                if home_team_was_home:
+                    home_outcome = 1.0 if home_game_home_win == 1 else 0.0
+                    home_expected = home_recent.get('elo_expectation_home', 0.5)
+                    goal_diff = home_game_home_score - home_game_away_score
+                else:
+                    home_outcome = 0.0 if home_game_home_win == 1 else 1.0
+                    home_expected = 1.0 - home_recent.get('elo_expectation_home', 0.5)
+                    goal_diff = home_game_away_score - home_game_home_score
+
+                # Elo update formula (k=10, with margin multiplier)
+                margin = max(abs(goal_diff), 1)
+                rating_diff = abs(home_pre_elo - home_opp_pre_elo)
+                multiplier = np.log(margin + 1) * (2.2 / (rating_diff * 0.001 + 2.2))
+                home_delta = 10.0 * multiplier * (home_outcome - home_expected)
+                home_current_elo = home_pre_elo + home_delta
+
+                # Compute post-game Elo for away team (from their last game)
+                away_game_home_win = away_recent.get('home_win', 0)
+                away_game_home_score = away_recent.get('home_score', 0)
+                away_game_away_score = away_recent.get('away_score', 0)
+
+                if away_team_was_home:
+                    away_outcome = 1.0 if away_game_home_win == 1 else 0.0
+                    away_expected = away_recent.get('elo_expectation_home', 0.5)
+                    goal_diff = away_game_home_score - away_game_away_score
+                else:
+                    away_outcome = 0.0 if away_game_home_win == 1 else 1.0
+                    away_expected = 1.0 - away_recent.get('elo_expectation_home', 0.5)
+                    goal_diff = away_game_away_score - away_game_home_score
+
+                margin = max(abs(goal_diff), 1)
+                rating_diff = abs(away_pre_elo - away_opp_pre_elo)
+                multiplier = np.log(margin + 1) * (2.2 / (rating_diff * 0.001 + 2.2))
+                away_delta = 10.0 * multiplier * (away_outcome - away_expected)
+                away_current_elo = away_pre_elo + away_delta
+
+                matchup[col] = home_current_elo - away_current_elo
+
+            elif col == 'elo_expectation_home':
+                # Compute expected probability using current Elo ratings
+                # This requires the elo_diff_pre to be computed first
+                if 'elo_diff_pre' in matchup:
+                    elo_diff = matchup['elo_diff_pre']
+                    # Standard Elo formula with ~35 point home advantage
+                    home_adv = 35.0
+                    matchup[col] = 1.0 / (1.0 + 10 ** ((-elo_diff - home_adv) / 400))
+                elif col in home_recent.index:
+                    matchup[col] = home_recent[col]
+                else:
+                    matchup[col] = 0.5
+
+        elif col == 'league_hw_100':
+            # League-wide feature - use most recent value
+            if col in home_recent.index:
+                matchup[col] = home_recent[col]
+            else:
+                matchup[col] = HISTORICAL_HOME_WIN_RATE
+
+        elif col.endswith('_home'):
+            # Home-specific feature (like is_b2b_home, games_last_6d_home)
+            # Use the home team's recent stats
+            if col in home_recent.index:
+                if home_team_was_home:
+                    matchup[col] = home_recent[col]
+                else:
+                    # If home team was away, look for the corresponding away column
+                    away_version = col.replace('_home', '_away')
+                    if away_version in home_recent.index:
+                        matchup[col] = home_recent[away_version]
+                    else:
+                        matchup[col] = 0.0
+            else:
+                matchup[col] = 0.0
+
+        elif col.endswith('_away'):
+            # Away-specific feature
+            if col in away_recent.index:
+                if away_team_was_home:
+                    # If away team was home, look for the corresponding home column
+                    home_version = col.replace('_away', '_home')
+                    if home_version in away_recent.index:
+                        matchup[col] = away_recent[home_version]
+                    else:
+                        matchup[col] = 0.0
+                else:
+                    matchup[col] = away_recent[col]
+            else:
+                matchup[col] = 0.0
+        else:
+            # Other features - try to get from home team's recent game
+            if col in home_recent.index:
+                matchup[col] = home_recent[col]
+            else:
+                matchup[col] = 0.0
+
+    return pd.Series(matchup).reindex(feature_columns, fill_value=0.0)
+
 # V7.0 Curated Features (39 features + adaptive weights)
 # Production model with 60.9% accuracy on 4-season holdout (5,002 games)
 # Key features: 1) Adaptive Elo home advantage, 2) Dynamic threshold, 3) League home win rate
@@ -606,12 +1031,6 @@ def predict_games(date=None, num_games=20):
     # Step 4: Predict
     print(f"\n4️⃣  Generating predictions for {min(num_games, len(games_for_model))} games...")
 
-    # Calculate dynamic threshold based on recent league home win rate
-    # Get the most recent rolling home win rate from training data
-    recent_league_hw = eligible_games['league_hw_50'].iloc[-1] if 'league_hw_50' in eligible_games.columns else HISTORICAL_HOME_WIN_RATE
-    dynamic_threshold = calculate_dynamic_threshold(recent_league_hw)
-    print(f"   ✅ Dynamic threshold: {dynamic_threshold:.4f} (league HW: {recent_league_hw:.1%})")
-
     print("\n" + "="*80)
     print("PREDICTIONS")
     print("="*80)
@@ -626,33 +1045,23 @@ def predict_games(date=None, num_games=20):
         home_abbrev = game['homeTeamAbbrev']
         away_abbrev = game['awayTeamAbbrev']
         season_id = str(game.get("season") or train_seasons[-1])
-        
-        # Find most recent games for each team
-        home_recent = eligible_games[
-            (eligible_games['teamId_home'] == home_id) & 
-            (eligible_games['seasonId_str'] == season_id)
-        ].tail(1)
-        
-        away_recent = eligible_games[
-            (eligible_games['teamId_away'] == away_id) & 
-            (eligible_games['seasonId_str'] == season_id)
-        ].tail(1)
-        
-        if len(home_recent) == 0 or len(away_recent) == 0:
+
+        # Build proper matchup features by extracting each team's individual stats
+        # and computing correct differentials (home_team_stat - away_team_stat)
+        game_date_str = game.get('gameDate', date_str)
+        matchup_features = build_matchup_features(
+            home_team_id=home_id,
+            away_team_id=away_id,
+            season_id=season_id,
+            eligible_games=eligible_games,
+            feature_columns=list(feature_columns),
+            game_date=game_date_str,
+        )
+
+        if matchup_features is None:
             print(f"\n{i}. {away_abbrev} @ {home_abbrev}")
             print(f"   ⚠️  Insufficient data (team hasn't played this season)")
             continue
-        
-        # Get feature vectors
-        home_idx = home_recent.index[0]
-        away_idx = away_recent.index[0]
-
-        home_features = features_full.loc[home_idx]
-        away_features = features_full.loc[away_idx]
-        
-        # Create matchup features (average of recent performance)
-        matchup_features = (home_features + away_features) / 2
-        matchup_features = matchup_features.reindex(feature_columns, fill_value=0.0)
         
         # Predict with calibrated model
         prob_home_raw = model.predict_proba(matchup_features.values.reshape(1, -1))[0][1]
@@ -662,13 +1071,12 @@ def predict_games(date=None, num_games=20):
         prob_away_calibrated = 1 - prob_home_calibrated
 
         start_time_utc_iso, start_time_et = format_start_times(game.get('startTimeUTC', ''))
-        # Use dynamic threshold for decision making
-        # Edge is still calculated from 0.5 for display purposes, but winner uses dynamic threshold
+        # Calculate edge from 0.5 baseline
         edge = prob_home_display - 0.5
         confidence_score = abs(edge) * 2  # 0-1 scale
         confidence_grade = grade_from_edge(edge)
-        # Use dynamic threshold instead of 0.5 for prediction decision
-        model_favorite = 'home' if prob_home_display >= dynamic_threshold else 'away'
+        # Use 0.5 threshold - team with >50% probability is the favorite
+        model_favorite = 'home' if prob_home_display >= 0.5 else 'away'
         summary = build_summary(
             game.get('homeTeamName', home_abbrev),
             game.get('awayTeamName', away_abbrev),
@@ -698,7 +1106,7 @@ def predict_games(date=None, num_games=20):
             'home_win_prob_calibrated': prob_home_calibrated,
             'away_win_prob_calibrated': prob_away_calibrated,
             'edge': edge,
-            'predicted_winner': home_abbrev if prob_home_display >= dynamic_threshold else away_abbrev,
+            'predicted_winner': home_abbrev if prob_home_display >= 0.5 else away_abbrev,
             'model_favorite': model_favorite,
             'confidence': confidence_score,
             'confidence_grade': confidence_grade,
@@ -709,17 +1117,17 @@ def predict_games(date=None, num_games=20):
         print(f"\n{i}. {away_abbrev} @ {home_abbrev}")
         print(f"   Home Win (raw): {prob_home_display:.1%}  |  Away Win (raw): {prob_away_raw:.1%}")
         
-        # Classify prediction strength (uses dynamic threshold for favorites)
+        # Classify prediction strength
         confidence_pct = confidence_score * 100
 
         if prob_home_display > 0.70:
             print(f"   ✅ Prediction: {home_abbrev} STRONG FAVORITE")
         elif prob_home_display < 0.30:
             print(f"   ✅ Prediction: {away_abbrev} STRONG FAVORITE")
-        elif abs(prob_home_display - dynamic_threshold) < 0.05:
+        elif abs(prob_home_display - 0.5) < 0.05:
             print(f"   ⚖️  Prediction: TOSS-UP (too close to call)")
         else:
-            favorite = home_abbrev if prob_home_display >= dynamic_threshold else away_abbrev
+            favorite = home_abbrev if prob_home_display >= 0.5 else away_abbrev
             print(f"   📊 Prediction: {favorite} ({confidence_pct:.0f}% confidence)")
     
     # Summary
