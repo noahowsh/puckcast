@@ -343,7 +343,8 @@ def main():
 
     # Load dataset
     print("\n1️⃣  Loading dataset...")
-    seasons = ['20242025', '20232024', '20222023', '20212022']
+    # Include 3 prior seasons before 21-22 so it has proper training data like the others
+    seasons = ['20242025', '20232024', '20222023', '20212022', '20202021', '20192020', '20182019']
     dataset = build_dataset(seasons)
 
     games = add_league_hw_feature(dataset.games)
