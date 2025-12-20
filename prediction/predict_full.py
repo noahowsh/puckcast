@@ -159,6 +159,7 @@ def build_matchup_features(
     season_id: str,
     eligible_games: pd.DataFrame,
     feature_columns: list,
+    game_date: str | None = None,
 ) -> pd.Series | None:
     """Construct proper matchup features for a new game.
 
@@ -166,6 +167,7 @@ def build_matchup_features(
     1. Find each team's most recent game (regardless of home/away position)
     2. Extract that team's individual stats from that game
     3. Compute proper differentials: home_team_stat - away_team_stat
+    4. Compute schedule features (rest_diff, is_b2b) from actual game dates
 
     This fixes the bug where we were averaging differential features from
     different games, which produced garbage (TeamA - Opponent1 + Opponent2 - TeamB) / 2.
@@ -203,11 +205,55 @@ def build_matchup_features(
     home_team_was_home = home_recent['teamId_home'] == home_team_id
     away_team_was_home = away_recent['teamId_home'] == away_team_id
 
+    # Compute actual schedule features from game dates
+    # This fixes the bug where we were using stale schedule data from past games
+    home_rest_days = None
+    away_rest_days = None
+    home_games_last_3d = 0
+    home_games_last_6d = 0
+    away_games_last_3d = 0
+    away_games_last_6d = 0
+
+    if game_date:
+        try:
+            new_game_dt = pd.to_datetime(game_date)
+            home_last_game_dt = pd.to_datetime(home_recent['gameDate'])
+            away_last_game_dt = pd.to_datetime(away_recent['gameDate'])
+
+            # Compute rest days (days since last game)
+            home_rest_days = (new_game_dt - home_last_game_dt).days
+            away_rest_days = (new_game_dt - away_last_game_dt).days
+
+            # Count games in last 3/6 days for schedule density
+            cutoff_3d = new_game_dt - pd.Timedelta(days=3)
+            cutoff_6d = new_game_dt - pd.Timedelta(days=6)
+
+            home_dates = pd.to_datetime(home_games['gameDate'])
+            away_dates = pd.to_datetime(away_games['gameDate'])
+
+            home_games_last_3d = int((home_dates >= cutoff_3d).sum())
+            home_games_last_6d = int((home_dates >= cutoff_6d).sum())
+            away_games_last_3d = int((away_dates >= cutoff_3d).sum())
+            away_games_last_6d = int((away_dates >= cutoff_6d).sum())
+        except (ValueError, TypeError):
+            pass  # Fall back to extracted features if date parsing fails
+
     # Build matchup features
     matchup = {}
 
     for col in feature_columns:
-        if col.endswith('_diff'):
+        # Handle schedule features with computed values
+        if col == 'rest_diff' and home_rest_days is not None and away_rest_days is not None:
+            matchup[col] = home_rest_days - away_rest_days
+        elif col == 'is_b2b_home' and home_rest_days is not None:
+            matchup[col] = 1 if home_rest_days <= 1 else 0
+        elif col == 'is_b2b_away' and away_rest_days is not None:
+            matchup[col] = 1 if away_rest_days <= 1 else 0
+        elif col == 'games_last_3d_home' and game_date:
+            matchup[col] = home_games_last_3d
+        elif col == 'games_last_6d_home' and game_date:
+            matchup[col] = home_games_last_6d
+        elif col.endswith('_diff'):
             # This is a differential feature - need to reconstruct from individual stats
             base = col[:-5]  # Remove '_diff' suffix
             home_col = f"{base}_home"
@@ -739,12 +785,6 @@ def predict_games(date=None, num_games=20):
     # Step 4: Predict
     print(f"\n4️⃣  Generating predictions for {min(num_games, len(games_for_model))} games...")
 
-    # Calculate dynamic threshold based on recent league home win rate
-    # Get the most recent rolling home win rate from training data
-    recent_league_hw = eligible_games['league_hw_50'].iloc[-1] if 'league_hw_50' in eligible_games.columns else HISTORICAL_HOME_WIN_RATE
-    dynamic_threshold = calculate_dynamic_threshold(recent_league_hw)
-    print(f"   ✅ Dynamic threshold: {dynamic_threshold:.4f} (league HW: {recent_league_hw:.1%})")
-
     print("\n" + "="*80)
     print("PREDICTIONS")
     print("="*80)
@@ -762,12 +802,14 @@ def predict_games(date=None, num_games=20):
 
         # Build proper matchup features by extracting each team's individual stats
         # and computing correct differentials (home_team_stat - away_team_stat)
+        game_date_str = game.get('gameDate', date_str)
         matchup_features = build_matchup_features(
             home_team_id=home_id,
             away_team_id=away_id,
             season_id=season_id,
             eligible_games=eligible_games,
             feature_columns=list(feature_columns),
+            game_date=game_date_str,
         )
 
         if matchup_features is None:
@@ -783,8 +825,7 @@ def predict_games(date=None, num_games=20):
         prob_away_calibrated = 1 - prob_home_calibrated
 
         start_time_utc_iso, start_time_et = format_start_times(game.get('startTimeUTC', ''))
-        # Use dynamic threshold for decision making
-        # Edge is still calculated from 0.5 for display purposes, but winner uses dynamic threshold
+        # Calculate edge from 0.5 baseline
         edge = prob_home_display - 0.5
         confidence_score = abs(edge) * 2  # 0-1 scale
         confidence_grade = grade_from_edge(edge)
