@@ -1,14 +1,14 @@
 {
-  "generatedAt": "2025-12-07T12:00:00.000000+00:00",
+  "generatedAt": "2024-12-20T12:00:00.000000+00:00",
   "modelVersion": "V7.0",
   "overall": {
     "games": 5002,
-    "accuracy": 0.6086,
+    "accuracy": 0.6088,
     "baseline": 0.5392,
     "homeWinRate": 0.5392,
-    "brier": 0.2317,
-    "logLoss": 0.6554,
-    "avgEdge": 0.169
+    "brier": 0.2329,
+    "logLoss": 0.6577,
+    "avgEdge": 0.110
   },
   "heroStats": [
     {
@@ -28,7 +28,7 @@
     },
     {
       "label": "Edge vs baseline",
-      "value": "+6.9 pts",
+      "value": "+7.0 pts",
       "detail": "vs 53.9% home win rate"
     }
   ],
@@ -143,16 +143,16 @@
     }
   ],
   "currentSeason": {
-    "hidden": true,
-    "season": "2025-26",
-    "games": 440,
-    "accuracy": 0.543,
-    "logLoss": 0.6925,
-    "baseline": 0.520,
-    "aGradeAccuracy": 0.65,
-    "aGradeGames": 60,
-    "asOf": "Dec 6, 2025",
-    "note": "Early season (Oct-Nov) - model typically improves ~7pp by March/April"
+    "hidden": false,
+    "season": "2024-25",
+    "games": 1312,
+    "accuracy": 0.591,
+    "logLoss": 0.6627,
+    "baseline": 0.562,
+    "aGradeAccuracy": 0.801,
+    "aGradeGames": 171,
+    "asOf": "Dec 20, 2024",
+    "note": "Full season results from holdout validation"
   },
   "seasonBreakdown": [
     {
