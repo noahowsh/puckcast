@@ -161,10 +161,74 @@ def build_features_new_method(
                 matchup[col] = 0.0
 
         elif col in ['elo_diff_pre', 'elo_expectation_home']:
-            if col in home_recent.index:
-                matchup[col] = home_recent[col]
-            else:
-                matchup[col] = 0.0
+            # Elo features - compute current Elo by applying post-game updates
+            if col == 'elo_diff_pre':
+                # Get each team's pre-game Elo from their most recent game
+                if home_team_was_home:
+                    home_pre_elo = home_recent.get('elo_home_pre', 1500.0)
+                    home_opp_pre_elo = home_recent.get('elo_away_pre', 1500.0)
+                else:
+                    home_pre_elo = home_recent.get('elo_away_pre', 1500.0)
+                    home_opp_pre_elo = home_recent.get('elo_home_pre', 1500.0)
+
+                if away_team_was_home:
+                    away_pre_elo = away_recent.get('elo_home_pre', 1500.0)
+                    away_opp_pre_elo = away_recent.get('elo_away_pre', 1500.0)
+                else:
+                    away_pre_elo = away_recent.get('elo_away_pre', 1500.0)
+                    away_opp_pre_elo = away_recent.get('elo_home_pre', 1500.0)
+
+                # Compute post-game Elo for home team
+                home_game_home_win = home_recent.get('home_win', 0)
+                home_game_home_score = home_recent.get('home_score', 0)
+                home_game_away_score = home_recent.get('away_score', 0)
+
+                if home_team_was_home:
+                    home_outcome = 1.0 if home_game_home_win == 1 else 0.0
+                    home_expected = home_recent.get('elo_expectation_home', 0.5)
+                    goal_diff = home_game_home_score - home_game_away_score
+                else:
+                    home_outcome = 0.0 if home_game_home_win == 1 else 1.0
+                    home_expected = 1.0 - home_recent.get('elo_expectation_home', 0.5)
+                    goal_diff = home_game_away_score - home_game_home_score
+
+                margin = max(abs(goal_diff), 1)
+                rating_diff = abs(home_pre_elo - home_opp_pre_elo)
+                multiplier = np.log(margin + 1) * (2.2 / (rating_diff * 0.001 + 2.2))
+                home_delta = 10.0 * multiplier * (home_outcome - home_expected)
+                home_current_elo = home_pre_elo + home_delta
+
+                # Compute post-game Elo for away team
+                away_game_home_win = away_recent.get('home_win', 0)
+                away_game_home_score = away_recent.get('home_score', 0)
+                away_game_away_score = away_recent.get('away_score', 0)
+
+                if away_team_was_home:
+                    away_outcome = 1.0 if away_game_home_win == 1 else 0.0
+                    away_expected = away_recent.get('elo_expectation_home', 0.5)
+                    goal_diff = away_game_home_score - away_game_away_score
+                else:
+                    away_outcome = 0.0 if away_game_home_win == 1 else 1.0
+                    away_expected = 1.0 - away_recent.get('elo_expectation_home', 0.5)
+                    goal_diff = away_game_away_score - away_game_home_score
+
+                margin = max(abs(goal_diff), 1)
+                rating_diff = abs(away_pre_elo - away_opp_pre_elo)
+                multiplier = np.log(margin + 1) * (2.2 / (rating_diff * 0.001 + 2.2))
+                away_delta = 10.0 * multiplier * (away_outcome - away_expected)
+                away_current_elo = away_pre_elo + away_delta
+
+                matchup[col] = home_current_elo - away_current_elo
+
+            elif col == 'elo_expectation_home':
+                if 'elo_diff_pre' in matchup:
+                    elo_diff = matchup['elo_diff_pre']
+                    home_adv = 35.0
+                    matchup[col] = 1.0 / (1.0 + 10 ** ((-elo_diff - home_adv) / 400))
+                elif col in home_recent.index:
+                    matchup[col] = home_recent[col]
+                else:
+                    matchup[col] = 0.5
 
         elif col == 'league_hw_100':
             if col in home_recent.index:
