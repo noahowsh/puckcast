@@ -1,76 +1,188 @@
 {
-  "generatedAt": "2025-12-19T19:16:59.287531+00:00",
-  "date": "2025-12-19",
+  "generatedAt": "2025-12-20T14:23:46.281599+00:00",
+  "date": "2025-12-20",
   "teams": {
-    "FLA": {
+    "NYR": {
       "injuries": []
     },
-    "CAR": {
+    "PHI": {
+      "injuries": []
+    },
+    "WSH": {
+      "injuries": []
+    },
+    "DET": {
+      "injuries": []
+    },
+    "OTT": {
+      "injuries": []
+    },
+    "CHI": {
+      "injuries": []
+    },
+    "MIN": {
+      "injuries": []
+    },
+    "EDM": {
+      "injuries": []
+    },
+    "BUF": {
       "injuries": []
     },
     "NYI": {
       "injuries": []
     },
+    "FLA": {
+      "injuries": []
+    },
+    "STL": {
+      "injuries": []
+    },
+    "BOS": {
+      "injuries": []
+    },
     "VAN": {
       "injuries": []
     },
-    "COL": {
+    "MTL": {
       "injuries": []
     },
-    "WPG": {
+    "PIT": {
       "injuries": []
     },
-    "UTA": {
+    "TBL": {
       "injuries": []
     },
-    "NJD": {
+    "CAR": {
+      "injuries": []
+    },
+    "NSH": {
+      "injuries": []
+    },
+    "TOR": {
+      "injuries": []
+    },
+    "CGY": {
+      "injuries": []
+    },
+    "VGK": {
       "injuries": []
     },
     "ANA": {
       "injuries": []
     },
-    "DAL": {
+    "CBJ": {
+      "injuries": []
+    },
+    "SJS": {
+      "injuries": []
+    },
+    "SEA": {
       "injuries": []
     }
   },
   "games": [
     {
-      "gameId": "2025020544",
-      "date": "2025-12-19",
-      "home": "FLA",
-      "away": "CAR",
+      "gameId": "2025020549",
+      "date": "2025-12-20",
+      "home": "NYR",
+      "away": "PHI",
       "homeInjuries": [],
       "awayInjuries": []
     },
     {
-      "gameId": "2025020545",
-      "date": "2025-12-19",
-      "home": "NYI",
+      "gameId": "2025020550",
+      "date": "2025-12-20",
+      "home": "WSH",
+      "away": "DET",
+      "homeInjuries": [],
+      "awayInjuries": []
+    },
+    {
+      "gameId": "2025020551",
+      "date": "2025-12-20",
+      "home": "OTT",
+      "away": "CHI",
+      "homeInjuries": [],
+      "awayInjuries": []
+    },
+    {
+      "gameId": "2025020552",
+      "date": "2025-12-20",
+      "home": "MIN",
+      "away": "EDM",
+      "homeInjuries": [],
+      "awayInjuries": []
+    },
+    {
+      "gameId": "2025020553",
+      "date": "2025-12-20",
+      "home": "BUF",
+      "away": "NYI",
+      "homeInjuries": [],
+      "awayInjuries": []
+    },
+    {
+      "gameId": "2025020554",
+      "date": "2025-12-20",
+      "home": "FLA",
+      "away": "STL",
+      "homeInjuries": [],
+      "awayInjuries": []
+    },
+    {
+      "gameId": "2025020555",
+      "date": "2025-12-20",
+      "home": "BOS",
       "away": "VAN",
       "homeInjuries": [],
       "awayInjuries": []
     },
     {
-      "gameId": "2025020546",
-      "date": "2025-12-19",
-      "home": "COL",
-      "away": "WPG",
+      "gameId": "2025020556",
+      "date": "2025-12-20",
+      "home": "MTL",
+      "away": "PIT",
       "homeInjuries": [],
       "awayInjuries": []
     },
     {
-      "gameId": "2025020547",
-      "date": "2025-12-19",
-      "home": "UTA",
-      "away": "NJD",
+      "gameId": "2025020557",
+      "date": "2025-12-20",
+      "home": "TBL",
+      "away": "CAR",
       "homeInjuries": [],
       "awayInjuries": []
     },
     {
-      "gameId": "2025020548",
-      "date": "2025-12-19",
+      "gameId": "2025020558",
+      "date": "2025-12-20",
+      "home": "NSH",
+      "away": "TOR",
+      "homeInjuries": [],
+      "awayInjuries": []
+    },
+    {
+      "gameId": "2025020559",
+      "date": "2025-12-20",
+      "home": "CGY",
+      "away": "VGK",
+      "homeInjuries": [],
+      "awayInjuries": []
+    },
+    {
+      "gameId": "2025020560",
+      "date": "2025-12-20",
       "home": "ANA",
-      "away": "DAL",
+      "away": "CBJ",
+      "homeInjuries": [],
+      "awayInjuries": []
+    },
+    {
+      "gameId": "2025020561",
+      "date": "2025-12-20",
+      "home": "SJS",
+      "away": "SEA",
       "homeInjuries": [],
       "awayInjuries": []
     }
