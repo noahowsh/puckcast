@@ -1,6 +1,6 @@
 {
   "generatedAt": "2024-12-20T12:00:00.000000+00:00",
-  "modelVersion": "V7.0",
+  "modelVersion": "V7.1",
   "overall": {
     "games": 5002,
     "accuracy": 0.6088,
@@ -18,7 +18,7 @@
     },
     {
       "label": "Model version",
-      "value": "V7.0",
+      "value": "V7.1",
       "detail": "39 features + adaptive weights"
     },
     {
@@ -42,7 +42,7 @@
       "detail": "72.0% accuracy - strong confidence tier"
     },
     {
-      "title": "V7.0 improvements",
+      "title": "V7.1 improvements",
       "detail": "Adaptive weights for home advantage shifts"
     }
   ],
