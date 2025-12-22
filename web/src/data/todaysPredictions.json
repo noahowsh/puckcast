@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2025-12-22T10:42:07.167190+00:00",
+  "generatedAt": "2025-12-22T22:30:29.972798+00:00",
   "games": [
     {
       "id": "2025020571",
@@ -37,12 +37,12 @@
         "name": "Canucks",
         "abbrev": "VAN"
       },
-      "homeWinProb": 0.5683,
-      "awayWinProb": 0.4317,
-      "confidenceScore": 0.137,
+      "homeWinProb": 0.5689,
+      "awayWinProb": 0.4311,
+      "confidenceScore": 0.138,
       "confidenceGrade": "C+",
-      "edge": 0.068,
-      "summary": "Flyers project at 57% as the home lean \u2014 a C+-tier edge worth 6.8 pts over a coin flip.",
+      "edge": 0.069,
+      "summary": "Flyers project at 57% as the home lean \u2014 a C+-tier edge worth 6.9 pts over a coin flip.",
       "modelFavorite": "home",
       "venue": "Xfinity Mobile Arena",
       "season": "20252026"
