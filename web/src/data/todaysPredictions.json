@@ -1,29 +1,6 @@
 {
-  "generatedAt": "2025-12-23T10:43:04.445801+00:00",
+  "generatedAt": "2025-12-23T22:29:42.749588+00:00",
   "games": [
-    {
-      "id": "2025020575",
-      "gameDate": "2025-12-23",
-      "startTimeEt": "4:00 PM ET",
-      "startTimeUtc": "2025-12-23T21:00:00+00:00",
-      "homeTeam": {
-        "name": "Maple Leafs",
-        "abbrev": "TOR"
-      },
-      "awayTeam": {
-        "name": "Penguins",
-        "abbrev": "PIT"
-      },
-      "homeWinProb": 0.4863,
-      "awayWinProb": 0.5137,
-      "confidenceScore": 0.027,
-      "confidenceGrade": "C",
-      "edge": -0.014,
-      "summary": "Penguins project at 51% as the road lean \u2014 a C-tier edge worth 1.4 pts over a coin flip.",
-      "modelFavorite": "away",
-      "venue": "Scotiabank Arena",
-      "season": "20252026"
-    },
     {
       "id": "2025020579",
       "gameDate": "2025-12-23",
@@ -244,12 +221,12 @@
         "name": "Flames",
         "abbrev": "CGY"
       },
-      "homeWinProb": 0.4757,
-      "awayWinProb": 0.5243,
-      "confidenceScore": 0.049,
+      "homeWinProb": 0.4739,
+      "awayWinProb": 0.5261,
+      "confidenceScore": 0.052,
       "confidenceGrade": "C",
-      "edge": -0.024,
-      "summary": "Flames project at 52% as the road lean \u2014 a C-tier edge worth 2.4 pts over a coin flip.",
+      "edge": -0.026,
+      "summary": "Flames project at 53% as the road lean \u2014 a C-tier edge worth 2.6 pts over a coin flip.",
       "modelFavorite": "away",
       "venue": "Rogers Place",
       "season": "20252026"
@@ -267,12 +244,12 @@
         "name": "Sharks",
         "abbrev": "SJS"
       },
-      "homeWinProb": 0.6028,
-      "awayWinProb": 0.3972,
-      "confidenceScore": 0.206,
+      "homeWinProb": 0.6066,
+      "awayWinProb": 0.3934,
+      "confidenceScore": 0.213,
       "confidenceGrade": "B",
-      "edge": 0.103,
-      "summary": "Golden Knights project at 60% as the home lean \u2014 a B-tier edge worth 10.3 pts over a coin flip.",
+      "edge": 0.107,
+      "summary": "Golden Knights project at 61% as the home lean \u2014 a B-tier edge worth 10.7 pts over a coin flip.",
       "modelFavorite": "home",
       "venue": "T-Mobile Arena",
       "season": "20252026"
