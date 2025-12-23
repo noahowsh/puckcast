@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2025-12-22T23:12:08.983971+00:00",
+  "updatedAt": "2025-12-23T13:29:09.179116+00:00",
   "notes": "Goalie performance metrics calculated from NHL Stats API data. GSAX = Expected Goals Against - Actual Goals Against (positive = outperforming expectations).",
   "goalies": [
     {
@@ -198,7 +198,7 @@
       "watchouts": [
         "Limited recent data"
       ],
-      "nextOpponent": "ANA"
+      "nextOpponent": "LAK"
     },
     {
       "name": "Casey DeSmith",
@@ -297,7 +297,7 @@
       "watchouts": [
         "Inconsistent results"
       ],
-      "nextOpponent": "CBJ"
+      "nextOpponent": "SEA"
     },
     {
       "name": "Jacob Fowler",
@@ -330,6 +330,38 @@
         "Limited recent data"
       ],
       "nextOpponent": "BOS"
+    },
+    {
+      "name": "Andrei Vasilevskiy",
+      "team": "TBL",
+      "gamesPlayed": 22,
+      "record": "13-7-2",
+      "wins": 13,
+      "losses": 7,
+      "otLosses": 2,
+      "gaa": 2.32,
+      "savePct": 0.915,
+      "shutouts": 1,
+      "goalsAgainst": 50,
+      "shotsAgainst": 575,
+      "saves": 526,
+      "shotsAgainstPerGame": 26.1,
+      "savesPerGame": 23.9,
+      "expectedGoalsAgainst": 51.8,
+      "gsax": 1.8,
+      "rollingGsa": 0.2,
+      "seasonGsa": 1.8,
+      "restDays": 1,
+      "startLikelihood": 0.9,
+      "trend": "steady",
+      "note": "Consistent performance from Andrei Vasilevskiy with a 2.32 GAA \u2014 reliable starter for TBL.",
+      "strengths": [
+        "Proven winner"
+      ],
+      "watchouts": [
+        "Inconsistent results"
+      ],
+      "nextOpponent": "FLA"
     },
     {
       "name": "Devin Cooley",
@@ -461,70 +493,6 @@
       "nextOpponent": "FLA"
     },
     {
-      "name": "Thatcher Demko",
-      "team": "VAN",
-      "gamesPlayed": 14,
-      "record": "8-5-0",
-      "wins": 8,
-      "losses": 5,
-      "otLosses": 0,
-      "gaa": 2.34,
-      "savePct": 0.913,
-      "shutouts": 1,
-      "goalsAgainst": 31,
-      "shotsAgainst": 356,
-      "saves": 325,
-      "shotsAgainstPerGame": 25.4,
-      "savesPerGame": 23.2,
-      "expectedGoalsAgainst": 32.0,
-      "gsax": 1.0,
-      "rollingGsa": 0.2,
-      "seasonGsa": 1.0,
-      "restDays": 2,
-      "startLikelihood": 0.8,
-      "trend": "steady",
-      "note": "Consistent performance from Thatcher Demko with a 2.34 GAA \u2014 reliable starter for VAN.",
-      "strengths": [
-        "Solid fundamentals"
-      ],
-      "watchouts": [
-        "Inconsistent results"
-      ],
-      "nextOpponent": "PHI"
-    },
-    {
-      "name": "Andrei Vasilevskiy",
-      "team": "TBL",
-      "gamesPlayed": 21,
-      "record": "12-7-2",
-      "wins": 12,
-      "losses": 7,
-      "otLosses": 2,
-      "gaa": 2.38,
-      "savePct": 0.913,
-      "shutouts": 1,
-      "goalsAgainst": 49,
-      "shotsAgainst": 551,
-      "saves": 503,
-      "shotsAgainstPerGame": 26.2,
-      "savesPerGame": 24.0,
-      "expectedGoalsAgainst": 49.6,
-      "gsax": 0.6,
-      "rollingGsa": 0.1,
-      "seasonGsa": 0.6,
-      "restDays": 1,
-      "startLikelihood": 0.9,
-      "trend": "steady",
-      "note": "Consistent performance from Andrei Vasilevskiy with a 2.38 GAA \u2014 reliable starter for TBL.",
-      "strengths": [
-        "Proven winner"
-      ],
-      "watchouts": [
-        "Inconsistent results"
-      ],
-      "nextOpponent": "STL"
-    },
-    {
       "name": "Jake Allen",
       "team": "NJD",
       "gamesPlayed": 19,
@@ -621,6 +589,38 @@
       "nextOpponent": "PIT"
     },
     {
+      "name": "Thatcher Demko",
+      "team": "VAN",
+      "gamesPlayed": 15,
+      "record": "8-6-0",
+      "wins": 8,
+      "losses": 6,
+      "otLosses": 0,
+      "gaa": 2.46,
+      "savePct": 0.911,
+      "shutouts": 1,
+      "goalsAgainst": 35,
+      "shotsAgainst": 394,
+      "saves": 359,
+      "shotsAgainstPerGame": 26.3,
+      "savesPerGame": 23.9,
+      "expectedGoalsAgainst": 35.5,
+      "gsax": 0.5,
+      "rollingGsa": 0.1,
+      "seasonGsa": 0.5,
+      "restDays": 2,
+      "startLikelihood": 0.9,
+      "trend": "steady",
+      "note": "Consistent performance from Thatcher Demko with a 2.46 GAA \u2014 reliable starter for VAN.",
+      "strengths": [
+        "Solid fundamentals"
+      ],
+      "watchouts": [
+        "Inconsistent results"
+      ],
+      "nextOpponent": "SJS"
+    },
+    {
       "name": "Nikita Tolopilo",
       "team": "VAN",
       "gamesPlayed": 4,
@@ -650,7 +650,71 @@
       "watchouts": [
         "Limited recent data"
       ],
-      "nextOpponent": "PHI"
+      "nextOpponent": "SJS"
+    },
+    {
+      "name": "Philipp Grubauer",
+      "team": "SEA",
+      "gamesPlayed": 11,
+      "record": "5-3-1",
+      "wins": 5,
+      "losses": 3,
+      "otLosses": 1,
+      "gaa": 2.59,
+      "savePct": 0.911,
+      "shutouts": 0,
+      "goalsAgainst": 25,
+      "shotsAgainst": 280,
+      "saves": 255,
+      "shotsAgainstPerGame": 25.5,
+      "savesPerGame": 23.2,
+      "expectedGoalsAgainst": 25.2,
+      "gsax": 0.2,
+      "rollingGsa": 0.1,
+      "seasonGsa": 0.2,
+      "restDays": 2,
+      "startLikelihood": 0.8,
+      "trend": "steady",
+      "note": "Consistent performance from Philipp Grubauer with a 2.59 GAA \u2014 reliable starter for SEA.",
+      "strengths": [
+        "Solid fundamentals"
+      ],
+      "watchouts": [
+        "Limited recent data"
+      ],
+      "nextOpponent": "LAK"
+    },
+    {
+      "name": "Dan Vladar",
+      "team": "PHI",
+      "gamesPlayed": 21,
+      "record": "13-5-3",
+      "wins": 13,
+      "losses": 5,
+      "otLosses": 3,
+      "gaa": 2.39,
+      "savePct": 0.91,
+      "shutouts": 0,
+      "goalsAgainst": 50,
+      "shotsAgainst": 556,
+      "saves": 506,
+      "shotsAgainstPerGame": 26.5,
+      "savesPerGame": 24.1,
+      "expectedGoalsAgainst": 50.0,
+      "gsax": 0.0,
+      "rollingGsa": 0.0,
+      "seasonGsa": 0.0,
+      "restDays": 1,
+      "startLikelihood": 0.9,
+      "trend": "steady",
+      "note": "Consistent performance from Dan Vladar with a 2.39 GAA \u2014 reliable starter for PHI.",
+      "strengths": [
+        "Proven winner"
+      ],
+      "watchouts": [
+        "Inconsistent results"
+      ],
+      "nextOpponent": "CHI"
     },
     {
       "name": "Jake Oettinger",
@@ -715,38 +779,6 @@
         "Inconsistent results"
       ],
       "nextOpponent": "NJD"
-    },
-    {
-      "name": "Dan Vladar",
-      "team": "PHI",
-      "gamesPlayed": 20,
-      "record": "12-5-3",
-      "wins": 12,
-      "losses": 5,
-      "otLosses": 3,
-      "gaa": 2.41,
-      "savePct": 0.91,
-      "shutouts": 0,
-      "goalsAgainst": 48,
-      "shotsAgainst": 531,
-      "saves": 483,
-      "shotsAgainstPerGame": 26.6,
-      "savesPerGame": 24.1,
-      "expectedGoalsAgainst": 47.8,
-      "gsax": -0.2,
-      "rollingGsa": -0.0,
-      "seasonGsa": -0.2,
-      "restDays": 1,
-      "startLikelihood": 0.8,
-      "trend": "stable",
-      "note": "Dan Vladar showing promise with limited sample size \u2014 monitor progression closely.",
-      "strengths": [
-        "Proven winner"
-      ],
-      "watchouts": [
-        "Inconsistent results"
-      ],
-      "nextOpponent": "VAN"
     },
     {
       "name": "Igor Shesterkin",
@@ -845,6 +877,38 @@
       "nextOpponent": "OTT"
     },
     {
+      "name": "Jet Greaves",
+      "team": "CBJ",
+      "gamesPlayed": 23,
+      "record": "9-9-5",
+      "wins": 9,
+      "losses": 9,
+      "otLosses": 5,
+      "gaa": 2.69,
+      "savePct": 0.906,
+      "shutouts": 0,
+      "goalsAgainst": 62,
+      "shotsAgainst": 660,
+      "saves": 598,
+      "shotsAgainstPerGame": 28.7,
+      "savesPerGame": 26.0,
+      "expectedGoalsAgainst": 59.4,
+      "gsax": -2.6,
+      "rollingGsa": -0.3,
+      "seasonGsa": -2.6,
+      "restDays": 1,
+      "startLikelihood": 0.8,
+      "trend": "stable",
+      "note": "Jet Greaves showing promise with limited sample size \u2014 monitor progression closely.",
+      "strengths": [
+        "Solid fundamentals"
+      ],
+      "watchouts": [
+        "Inconsistent results"
+      ],
+      "nextOpponent": "NYI"
+    },
+    {
       "name": "Tristan Jarry",
       "team": "PIT,EDM",
       "gamesPlayed": 17,
@@ -907,70 +971,6 @@
         "Inconsistent results"
       ],
       "nextOpponent": "MTL"
-    },
-    {
-      "name": "Jet Greaves",
-      "team": "CBJ",
-      "gamesPlayed": 22,
-      "record": "8-9-5",
-      "wins": 8,
-      "losses": 9,
-      "otLosses": 5,
-      "gaa": 2.77,
-      "savePct": 0.904,
-      "shutouts": 0,
-      "goalsAgainst": 61,
-      "shotsAgainst": 636,
-      "saves": 575,
-      "shotsAgainstPerGame": 28.9,
-      "savesPerGame": 26.1,
-      "expectedGoalsAgainst": 57.2,
-      "gsax": -3.8,
-      "rollingGsa": -0.5,
-      "seasonGsa": -3.8,
-      "restDays": 1,
-      "startLikelihood": 0.8,
-      "trend": "stable",
-      "note": "Jet Greaves showing promise with limited sample size \u2014 monitor progression closely.",
-      "strengths": [
-        "Solid fundamentals"
-      ],
-      "watchouts": [
-        "Inconsistent results"
-      ],
-      "nextOpponent": "LAK"
-    },
-    {
-      "name": "Carter Hart",
-      "team": "VGK",
-      "gamesPlayed": 6,
-      "record": "3-1-2",
-      "wins": 3,
-      "losses": 1,
-      "otLosses": 2,
-      "gaa": 2.56,
-      "savePct": 0.903,
-      "shutouts": 0,
-      "goalsAgainst": 16,
-      "shotsAgainst": 165,
-      "saves": 149,
-      "shotsAgainstPerGame": 27.5,
-      "savesPerGame": 24.8,
-      "expectedGoalsAgainst": 14.8,
-      "gsax": -1.2,
-      "rollingGsa": -0.6,
-      "seasonGsa": -1.2,
-      "restDays": 3,
-      "startLikelihood": 0.6,
-      "trend": "stable",
-      "note": "Carter Hart showing promise with limited sample size \u2014 monitor progression closely.",
-      "strengths": [
-        "Solid fundamentals"
-      ],
-      "watchouts": [
-        "Limited recent data"
-      ],
-      "nextOpponent": "SJS"
     }
   ],
   "leaderboards": {
@@ -1155,9 +1155,9 @@
       },
       {
         "rank": 10,
-        "name": "Thatcher Demko",
-        "team": "VAN",
-        "gaa": 2.34
+        "name": "Andrei Vasilevskiy",
+        "team": "TBL",
+        "gaa": 2.32
       }
     ],
     "byWins": [
@@ -1193,26 +1193,26 @@
       },
       {
         "rank": 6,
+        "name": "Andrei Vasilevskiy",
+        "team": "TBL",
+        "wins": 13
+      },
+      {
+        "rank": 7,
+        "name": "Dan Vladar",
+        "team": "PHI",
+        "wins": 13
+      },
+      {
+        "rank": 8,
         "name": "Filip Gustavsson",
         "team": "MIN",
         "wins": 12
       },
       {
-        "rank": 7,
-        "name": "Andrei Vasilevskiy",
-        "team": "TBL",
-        "wins": 12
-      },
-      {
-        "rank": 8,
+        "rank": 9,
         "name": "Ilya Sorokin",
         "team": "NYI",
-        "wins": 12
-      },
-      {
-        "rank": 9,
-        "name": "Dan Vladar",
-        "team": "PHI",
         "wins": 12
       },
       {
