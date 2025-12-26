@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2025-12-25T11:15:52.030786+00:00",
+  "generatedAt": "2025-12-26T11:16:02.184061+00:00",
   "seasonId": "20252026",
   "teams": [
     {
@@ -265,7 +265,7 @@
       "luckGoalsFor": 0.65,
       "luckGoalsAgainst": -0.31,
       "totalLuckScore": 0.34,
-      "powerRank": 11,
+      "powerRank": 7,
       "standingsRank": 7
     },
     {
@@ -303,7 +303,7 @@
       "luckGoalsFor": 0.6,
       "luckGoalsAgainst": -0.67,
       "totalLuckScore": -0.07,
-      "powerRank": 7,
+      "powerRank": 8,
       "standingsRank": 8
     },
     {
@@ -341,7 +341,7 @@
       "luckGoalsFor": 0.25,
       "luckGoalsAgainst": -0.0,
       "totalLuckScore": 0.25,
-      "powerRank": 8,
+      "powerRank": 9,
       "standingsRank": 9
     },
     {
@@ -379,7 +379,7 @@
       "luckGoalsFor": 0.85,
       "luckGoalsAgainst": -0.76,
       "totalLuckScore": 0.09,
-      "powerRank": 14,
+      "powerRank": 10,
       "standingsRank": 10
     },
     {
@@ -417,7 +417,7 @@
       "luckGoalsFor": 0.43,
       "luckGoalsAgainst": -0.48,
       "totalLuckScore": -0.05,
-      "powerRank": 15,
+      "powerRank": 11,
       "standingsRank": 11
     },
     {
@@ -455,7 +455,7 @@
       "luckGoalsFor": 0.76,
       "luckGoalsAgainst": -0.08,
       "totalLuckScore": 0.67,
-      "powerRank": 9,
+      "powerRank": 12,
       "standingsRank": 12
     },
     {
@@ -493,7 +493,7 @@
       "luckGoalsFor": 0.53,
       "luckGoalsAgainst": -0.07,
       "totalLuckScore": 0.46,
-      "powerRank": 10,
+      "powerRank": 13,
       "standingsRank": 13
     },
     {
@@ -531,7 +531,7 @@
       "luckGoalsFor": 0.56,
       "luckGoalsAgainst": -0.61,
       "totalLuckScore": -0.05,
-      "powerRank": 12,
+      "powerRank": 14,
       "standingsRank": 14
     },
     {
@@ -569,7 +569,7 @@
       "luckGoalsFor": 0.27,
       "luckGoalsAgainst": -0.01,
       "totalLuckScore": 0.27,
-      "powerRank": 13,
+      "powerRank": 15,
       "standingsRank": 15
     },
     {
@@ -987,7 +987,7 @@
       "luckGoalsFor": 0.22,
       "luckGoalsAgainst": -0.19,
       "totalLuckScore": 0.03,
-      "powerRank": 29,
+      "powerRank": 26,
       "standingsRank": 26
     },
     {
@@ -1025,7 +1025,7 @@
       "luckGoalsFor": 0.18,
       "luckGoalsAgainst": -0.52,
       "totalLuckScore": -0.34,
-      "powerRank": 26,
+      "powerRank": 27,
       "standingsRank": 27
     },
     {
@@ -1063,7 +1063,7 @@
       "luckGoalsFor": 0.21,
       "luckGoalsAgainst": -0.77,
       "totalLuckScore": -0.56,
-      "powerRank": 27,
+      "powerRank": 28,
       "standingsRank": 28
     },
     {
@@ -1101,7 +1101,7 @@
       "luckGoalsFor": -0.07,
       "luckGoalsAgainst": -0.29,
       "totalLuckScore": -0.36,
-      "powerRank": 28,
+      "powerRank": 29,
       "standingsRank": 29
     },
     {
@@ -1606,9 +1606,9 @@
       "currentRank": 1,
       "previousRank": 1,
       "rankDelta": 0,
-      "pointsDelta": 2,
-      "goalDiffDelta": 1,
-      "pointPctDelta": 0.004,
+      "pointsDelta": 0,
+      "goalDiffDelta": 0,
+      "pointPctDelta": 0.0,
       "trendDirection": "steady"
     },
     {
@@ -1670,100 +1670,100 @@
       "abbrev": "PHI",
       "team": "Philadelphia Flyers",
       "currentRank": 7,
-      "previousRank": 11,
-      "rankDelta": 4,
-      "pointsDelta": 2,
-      "goalDiffDelta": 2,
-      "pointPctDelta": 0.011,
-      "trendDirection": "surging"
+      "previousRank": 7,
+      "rankDelta": 0,
+      "pointsDelta": 0,
+      "goalDiffDelta": 0,
+      "pointPctDelta": 0.0,
+      "trendDirection": "steady"
     },
     {
       "abbrev": "ANA",
       "team": "Anaheim Ducks",
       "currentRank": 8,
-      "previousRank": 7,
-      "rankDelta": -1,
+      "previousRank": 8,
+      "rankDelta": 0,
       "pointsDelta": 0,
       "goalDiffDelta": 0,
       "pointPctDelta": 0.0,
-      "trendDirection": "slipping"
+      "trendDirection": "steady"
     },
     {
       "abbrev": "NYI",
       "team": "New York Islanders",
       "currentRank": 9,
-      "previousRank": 8,
-      "rankDelta": -1,
+      "previousRank": 9,
+      "rankDelta": 0,
       "pointsDelta": 0,
       "goalDiffDelta": 0,
       "pointPctDelta": 0.0,
-      "trendDirection": "slipping"
+      "trendDirection": "steady"
     },
     {
       "abbrev": "EDM",
       "team": "Edmonton Oilers",
       "currentRank": 10,
-      "previousRank": 14,
-      "rankDelta": 4,
-      "pointsDelta": 2,
-      "goalDiffDelta": 4,
-      "pointPctDelta": 0.011,
-      "trendDirection": "surging"
+      "previousRank": 10,
+      "rankDelta": 0,
+      "pointsDelta": 0,
+      "goalDiffDelta": 0,
+      "pointPctDelta": 0.0,
+      "trendDirection": "steady"
     },
     {
       "abbrev": "VGK",
       "team": "Vegas Golden Knights",
       "currentRank": 11,
-      "previousRank": 15,
-      "rankDelta": 4,
-      "pointsDelta": 2,
-      "goalDiffDelta": 5,
-      "pointPctDelta": 0.011,
-      "trendDirection": "surging"
+      "previousRank": 11,
+      "rankDelta": 0,
+      "pointsDelta": 0,
+      "goalDiffDelta": 0,
+      "pointPctDelta": 0.0,
+      "trendDirection": "steady"
     },
     {
       "abbrev": "TBL",
       "team": "Tampa Bay Lightning",
       "currentRank": 12,
-      "previousRank": 9,
-      "rankDelta": -3,
+      "previousRank": 12,
+      "rankDelta": 0,
       "pointsDelta": 0,
       "goalDiffDelta": 0,
       "pointPctDelta": 0.0,
-      "trendDirection": "slipping"
+      "trendDirection": "steady"
     },
     {
       "abbrev": "WSH",
       "team": "Washington Capitals",
       "currentRank": 13,
-      "previousRank": 10,
-      "rankDelta": -3,
+      "previousRank": 13,
+      "rankDelta": 0,
       "pointsDelta": 0,
       "goalDiffDelta": 0,
       "pointPctDelta": 0.0,
-      "trendDirection": "slipping"
+      "trendDirection": "steady"
     },
     {
       "abbrev": "FLA",
       "team": "Florida Panthers",
       "currentRank": 14,
-      "previousRank": 12,
-      "rankDelta": -2,
+      "previousRank": 14,
+      "rankDelta": 0,
       "pointsDelta": 0,
       "goalDiffDelta": 0,
       "pointPctDelta": 0.0,
-      "trendDirection": "slipping"
+      "trendDirection": "steady"
     },
     {
       "abbrev": "NYR",
       "team": "New York Rangers",
       "currentRank": 15,
-      "previousRank": 13,
-      "rankDelta": -2,
+      "previousRank": 15,
+      "rankDelta": 0,
       "pointsDelta": 0,
       "goalDiffDelta": 0,
       "pointPctDelta": 0.0,
-      "trendDirection": "slipping"
+      "trendDirection": "steady"
     },
     {
       "abbrev": "BOS",
@@ -1816,8 +1816,8 @@
       "previousRank": 20,
       "rankDelta": 0,
       "pointsDelta": 0,
-      "goalDiffDelta": -1,
-      "pointPctDelta": -0.013,
+      "goalDiffDelta": 0,
+      "pointPctDelta": 0.0,
       "trendDirection": "steady"
     },
     {
@@ -1827,8 +1827,8 @@
       "previousRank": 21,
       "rankDelta": 0,
       "pointsDelta": 0,
-      "goalDiffDelta": -1,
-      "pointPctDelta": -0.015,
+      "goalDiffDelta": 0,
+      "pointPctDelta": 0.0,
       "trendDirection": "steady"
     },
     {
@@ -1849,8 +1849,8 @@
       "previousRank": 23,
       "rankDelta": 0,
       "pointsDelta": 0,
-      "goalDiffDelta": -5,
-      "pointPctDelta": -0.014,
+      "goalDiffDelta": 0,
+      "pointPctDelta": 0.0,
       "trendDirection": "steady"
     },
     {
@@ -1879,45 +1879,45 @@
       "abbrev": "SEA",
       "team": "Seattle Kraken",
       "currentRank": 26,
-      "previousRank": 29,
-      "rankDelta": 3,
-      "pointsDelta": 2,
-      "goalDiffDelta": 1,
-      "pointPctDelta": 0.014,
-      "trendDirection": "rising"
+      "previousRank": 26,
+      "rankDelta": 0,
+      "pointsDelta": 0,
+      "goalDiffDelta": 0,
+      "pointPctDelta": 0.0,
+      "trendDirection": "steady"
     },
     {
       "abbrev": "CBJ",
       "team": "Columbus Blue Jackets",
       "currentRank": 27,
-      "previousRank": 26,
-      "rankDelta": -1,
+      "previousRank": 27,
+      "rankDelta": 0,
       "pointsDelta": 0,
       "goalDiffDelta": 0,
       "pointPctDelta": 0.0,
-      "trendDirection": "slipping"
+      "trendDirection": "steady"
     },
     {
       "abbrev": "STL",
       "team": "St. Louis Blues",
       "currentRank": 28,
-      "previousRank": 27,
-      "rankDelta": -1,
+      "previousRank": 28,
+      "rankDelta": 0,
       "pointsDelta": 0,
       "goalDiffDelta": 0,
       "pointPctDelta": 0.0,
-      "trendDirection": "slipping"
+      "trendDirection": "steady"
     },
     {
       "abbrev": "CGY",
       "team": "Calgary Flames",
       "currentRank": 29,
-      "previousRank": 28,
-      "rankDelta": -1,
+      "previousRank": 29,
+      "rankDelta": 0,
       "pointsDelta": 0,
-      "goalDiffDelta": -4,
-      "pointPctDelta": -0.013,
-      "trendDirection": "slipping"
+      "goalDiffDelta": 0,
+      "pointPctDelta": 0.0,
+      "trendDirection": "steady"
     },
     {
       "abbrev": "WPG",
@@ -1948,114 +1948,13 @@
       "previousRank": 32,
       "rankDelta": 0,
       "pointsDelta": 0,
-      "goalDiffDelta": -2,
-      "pointPctDelta": -0.013,
+      "goalDiffDelta": 0,
+      "pointPctDelta": 0.0,
       "trendDirection": "steady"
     }
   ],
-  "topRisers": [
-    {
-      "abbrev": "PHI",
-      "team": "Philadelphia Flyers",
-      "currentRank": 7,
-      "previousRank": 11,
-      "rankDelta": 4,
-      "pointsDelta": 2,
-      "goalDiffDelta": 2,
-      "pointPctDelta": 0.011,
-      "trendDirection": "surging"
-    },
-    {
-      "abbrev": "EDM",
-      "team": "Edmonton Oilers",
-      "currentRank": 10,
-      "previousRank": 14,
-      "rankDelta": 4,
-      "pointsDelta": 2,
-      "goalDiffDelta": 4,
-      "pointPctDelta": 0.011,
-      "trendDirection": "surging"
-    },
-    {
-      "abbrev": "VGK",
-      "team": "Vegas Golden Knights",
-      "currentRank": 11,
-      "previousRank": 15,
-      "rankDelta": 4,
-      "pointsDelta": 2,
-      "goalDiffDelta": 5,
-      "pointPctDelta": 0.011,
-      "trendDirection": "surging"
-    },
-    {
-      "abbrev": "SEA",
-      "team": "Seattle Kraken",
-      "currentRank": 26,
-      "previousRank": 29,
-      "rankDelta": 3,
-      "pointsDelta": 2,
-      "goalDiffDelta": 1,
-      "pointPctDelta": 0.014,
-      "trendDirection": "rising"
-    }
-  ],
-  "topFallers": [
-    {
-      "abbrev": "WSH",
-      "team": "Washington Capitals",
-      "currentRank": 13,
-      "previousRank": 10,
-      "rankDelta": -3,
-      "pointsDelta": 0,
-      "goalDiffDelta": 0,
-      "pointPctDelta": 0.0,
-      "trendDirection": "slipping"
-    },
-    {
-      "abbrev": "TBL",
-      "team": "Tampa Bay Lightning",
-      "currentRank": 12,
-      "previousRank": 9,
-      "rankDelta": -3,
-      "pointsDelta": 0,
-      "goalDiffDelta": 0,
-      "pointPctDelta": 0.0,
-      "trendDirection": "slipping"
-    },
-    {
-      "abbrev": "NYR",
-      "team": "New York Rangers",
-      "currentRank": 15,
-      "previousRank": 13,
-      "rankDelta": -2,
-      "pointsDelta": 0,
-      "goalDiffDelta": 0,
-      "pointPctDelta": 0.0,
-      "trendDirection": "slipping"
-    },
-    {
-      "abbrev": "FLA",
-      "team": "Florida Panthers",
-      "currentRank": 14,
-      "previousRank": 12,
-      "rankDelta": -2,
-      "pointsDelta": 0,
-      "goalDiffDelta": 0,
-      "pointPctDelta": 0.0,
-      "trendDirection": "slipping"
-    },
-    {
-      "abbrev": "CGY",
-      "team": "Calgary Flames",
-      "currentRank": 29,
-      "previousRank": 28,
-      "rankDelta": -1,
-      "pointsDelta": 0,
-      "goalDiffDelta": -4,
-      "pointPctDelta": -0.013,
-      "trendDirection": "slipping"
-    }
-  ],
+  "topRisers": [],
+  "topFallers": [],
   "luckReport": {
     "luckiest": [
       {
