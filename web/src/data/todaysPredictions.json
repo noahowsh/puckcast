@@ -1,52 +1,6 @@
 {
-  "generatedAt": "2025-12-28T10:40:14.323299+00:00",
+  "generatedAt": "2025-12-28T22:30:11.446595+00:00",
   "games": [
-    {
-      "id": "2025020602",
-      "gameDate": "2025-12-28",
-      "startTimeEt": "5:00 PM ET",
-      "startTimeUtc": "2025-12-28T22:00:00+00:00",
-      "homeTeam": {
-        "name": "Lightning",
-        "abbrev": "TBL"
-      },
-      "awayTeam": {
-        "name": "Canadiens",
-        "abbrev": "MTL"
-      },
-      "homeWinProb": 0.5487,
-      "awayWinProb": 0.4513,
-      "confidenceScore": 0.097,
-      "confidenceGrade": "C",
-      "edge": 0.049,
-      "summary": "Lightning project at 55% as the home lean \u2014 a C-tier edge worth 4.9 pts over a coin flip.",
-      "modelFavorite": "home",
-      "venue": "Benchmark International Arena",
-      "season": "20252026"
-    },
-    {
-      "id": "2025020603",
-      "gameDate": "2025-12-28",
-      "startTimeEt": "5:00 PM ET",
-      "startTimeUtc": "2025-12-28T22:00:00+00:00",
-      "homeTeam": {
-        "name": "Blue Jackets",
-        "abbrev": "CBJ"
-      },
-      "awayTeam": {
-        "name": "Islanders",
-        "abbrev": "NYI"
-      },
-      "homeWinProb": 0.6449,
-      "awayWinProb": 0.3551,
-      "confidenceScore": 0.29,
-      "confidenceGrade": "B",
-      "edge": 0.145,
-      "summary": "Blue Jackets project at 64% as the home lean \u2014 a B-tier edge worth 14.5 pts over a coin flip.",
-      "modelFavorite": "home",
-      "venue": "Nationwide Arena",
-      "season": "20252026"
-    },
     {
       "id": "2025020601",
       "gameDate": "2025-12-28",
