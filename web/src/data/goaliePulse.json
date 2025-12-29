@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2025-12-29T13:30:32.452416+00:00",
+  "updatedAt": "2025-12-29T23:12:23.939675+00:00",
   "notes": "Goalie performance metrics calculated from NHL Stats API data. GSAX = Expected Goals Against - Actual Goals Against (positive = outperforming expectations).",
   "goalies": [
     {
@@ -245,14 +245,14 @@
       "savePct": 0.917,
       "shutouts": 0,
       "goalsAgainst": 26,
-      "shotsAgainst": 312,
-      "saves": 286,
-      "shotsAgainstPerGame": 26.0,
-      "savesPerGame": 23.8,
-      "expectedGoalsAgainst": 28.1,
-      "gsax": 2.1,
+      "shotsAgainst": 313,
+      "saves": 287,
+      "shotsAgainstPerGame": 26.1,
+      "savesPerGame": 23.9,
+      "expectedGoalsAgainst": 28.2,
+      "gsax": 2.2,
       "rollingGsa": 0.5,
-      "seasonGsa": 2.1,
+      "seasonGsa": 2.2,
       "restDays": 2,
       "startLikelihood": 0.8,
       "trend": "steady",
@@ -1021,7 +1021,7 @@
         "rank": 8,
         "name": "Philipp Grubauer",
         "team": "SEA",
-        "gsax": 2.1
+        "gsax": 2.2
       },
       {
         "rank": 9,
