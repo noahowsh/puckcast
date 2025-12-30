@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2025-12-30T10:43:49.914457+00:00",
+  "generatedAt": "2025-12-30T22:30:44.727543+00:00",
   "games": [
     {
       "id": "2025020617",
@@ -37,12 +37,12 @@
         "name": "Canadiens",
         "abbrev": "MTL"
       },
-      "homeWinProb": 0.4771,
-      "awayWinProb": 0.5229,
-      "confidenceScore": 0.046,
+      "homeWinProb": 0.4753,
+      "awayWinProb": 0.5247,
+      "confidenceScore": 0.049,
       "confidenceGrade": "C",
-      "edge": -0.023,
-      "summary": "Canadiens project at 52% as the road lean \u2014 a C-tier edge worth 2.3 pts over a coin flip.",
+      "edge": -0.025,
+      "summary": "Canadiens project at 52% as the road lean \u2014 a C-tier edge worth 2.5 pts over a coin flip.",
       "modelFavorite": "away",
       "venue": "Amerant Bank Arena",
       "season": "20252026"
@@ -60,12 +60,12 @@
         "name": "Hurricanes",
         "abbrev": "CAR"
       },
-      "homeWinProb": 0.459,
-      "awayWinProb": 0.541,
-      "confidenceScore": 0.082,
+      "homeWinProb": 0.4579,
+      "awayWinProb": 0.5421,
+      "confidenceScore": 0.084,
       "confidenceGrade": "C",
-      "edge": -0.041,
-      "summary": "Hurricanes project at 54% as the road lean \u2014 a C-tier edge worth 4.1 pts over a coin flip.",
+      "edge": -0.042,
+      "summary": "Hurricanes project at 54% as the road lean \u2014 a C-tier edge worth 4.2 pts over a coin flip.",
       "modelFavorite": "away",
       "venue": "PPG Paints Arena",
       "season": "20252026"
