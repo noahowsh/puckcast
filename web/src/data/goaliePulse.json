@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2025-12-30T13:29:08.856104+00:00",
+  "updatedAt": "2025-12-30T23:12:01.441666+00:00",
   "notes": "Goalie performance metrics calculated from NHL Stats API data. GSAX = Expected Goals Against - Actual Goals Against (positive = outperforming expectations).",
   "goalies": [
     {
@@ -492,6 +492,39 @@
       "nextOpponent": "NJD"
     },
     {
+      "name": "Brandon Bussi",
+      "team": "CAR",
+      "gamesPlayed": 15,
+      "record": "13-1-1",
+      "wins": 13,
+      "losses": 1,
+      "otLosses": 1,
+      "gaa": 2.08,
+      "savePct": 0.912,
+      "shutouts": 1,
+      "goalsAgainst": 32,
+      "shotsAgainst": 362,
+      "saves": 330,
+      "shotsAgainstPerGame": 24.1,
+      "savesPerGame": 22.0,
+      "expectedGoalsAgainst": 32.6,
+      "gsax": 0.6,
+      "rollingGsa": 0.1,
+      "seasonGsa": 0.6,
+      "restDays": 2,
+      "startLikelihood": 0.9,
+      "trend": "steady",
+      "note": "Consistent performance from Brandon Bussi with a 2.08 GAA \u2014 reliable starter for CAR.",
+      "strengths": [
+        "Exceptional goals against average",
+        "Proven winner"
+      ],
+      "watchouts": [
+        "Limited recent data"
+      ],
+      "nextOpponent": "PIT"
+    },
+    {
       "name": "Filip Gustavsson",
       "team": "MIN",
       "gamesPlayed": 25,
@@ -522,39 +555,6 @@
         "Inconsistent results"
       ],
       "nextOpponent": "SJS"
-    },
-    {
-      "name": "Brandon Bussi",
-      "team": "CAR",
-      "gamesPlayed": 15,
-      "record": "13-1-1",
-      "wins": 13,
-      "losses": 1,
-      "otLosses": 1,
-      "gaa": 2.08,
-      "savePct": 0.911,
-      "shutouts": 1,
-      "goalsAgainst": 32,
-      "shotsAgainst": 361,
-      "saves": 329,
-      "shotsAgainstPerGame": 24.1,
-      "savesPerGame": 21.9,
-      "expectedGoalsAgainst": 32.5,
-      "gsax": 0.5,
-      "rollingGsa": 0.1,
-      "seasonGsa": 0.5,
-      "restDays": 2,
-      "startLikelihood": 0.9,
-      "trend": "steady",
-      "note": "Consistent performance from Brandon Bussi with a 2.08 GAA \u2014 reliable starter for CAR.",
-      "strengths": [
-        "Exceptional goals against average",
-        "Proven winner"
-      ],
-      "watchouts": [
-        "Limited recent data"
-      ],
-      "nextOpponent": "PIT"
     },
     {
       "name": "Nikita Tolopilo",
@@ -664,14 +664,14 @@
       "savePct": 0.91,
       "shutouts": 1,
       "goalsAgainst": 81,
-      "shotsAgainst": 898,
-      "saves": 817,
+      "shotsAgainst": 899,
+      "saves": 818,
       "shotsAgainstPerGame": 28.1,
-      "savesPerGame": 25.5,
-      "expectedGoalsAgainst": 80.8,
-      "gsax": -0.2,
+      "savesPerGame": 25.6,
+      "expectedGoalsAgainst": 80.9,
+      "gsax": -0.1,
       "rollingGsa": -0.0,
-      "seasonGsa": -0.2,
+      "seasonGsa": -0.1,
       "restDays": 1,
       "startLikelihood": 0.8,
       "trend": "stable",
@@ -1193,14 +1193,14 @@
       },
       {
         "rank": 6,
-        "name": "Filip Gustavsson",
-        "team": "MIN",
+        "name": "Brandon Bussi",
+        "team": "CAR",
         "wins": 13
       },
       {
         "rank": 7,
-        "name": "Brandon Bussi",
-        "team": "CAR",
+        "name": "Filip Gustavsson",
+        "team": "MIN",
         "wins": 13
       },
       {
