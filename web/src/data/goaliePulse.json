@@ -1,40 +1,7 @@
 {
-  "updatedAt": "2025-12-31T13:26:07.740183+00:00",
+  "updatedAt": "2025-12-31T23:12:31.309911+00:00",
   "notes": "Goalie performance metrics calculated from NHL Stats API data. GSAX = Expected Goals Against - Actual Goals Against (positive = outperforming expectations).",
   "goalies": [
-    {
-      "name": "Jonathan Quick",
-      "team": "NYR",
-      "gamesPlayed": 9,
-      "record": "3-5-1",
-      "wins": 3,
-      "losses": 5,
-      "otLosses": 1,
-      "gaa": 1.79,
-      "savePct": 0.936,
-      "shutouts": 1,
-      "goalsAgainst": 16,
-      "shotsAgainst": 252,
-      "saves": 236,
-      "shotsAgainstPerGame": 28.0,
-      "savesPerGame": 26.2,
-      "expectedGoalsAgainst": 22.7,
-      "gsax": 6.7,
-      "rollingGsa": 2.2,
-      "seasonGsa": 6.7,
-      "restDays": 3,
-      "startLikelihood": 0.85,
-      "trend": "surging",
-      "note": "Jonathan Quick is playing at an elite level with a 0.936 save percentage, providing NYR with a strong defensive anchor.",
-      "strengths": [
-        "Elite save percentage",
-        "Exceptional goals against average"
-      ],
-      "watchouts": [
-        "Inconsistent results"
-      ],
-      "nextOpponent": "WSH"
-    },
     {
       "name": "Jesper Wallstedt",
       "team": "MIN",
@@ -67,6 +34,39 @@
         "Limited recent data"
       ],
       "nextOpponent": "SJS"
+    },
+    {
+      "name": "Jonathan Quick",
+      "team": "NYR",
+      "gamesPlayed": 10,
+      "record": "3-6-1",
+      "wins": 3,
+      "losses": 6,
+      "otLosses": 1,
+      "gaa": 2.11,
+      "savePct": 0.924,
+      "shutouts": 1,
+      "goalsAgainst": 21,
+      "shotsAgainst": 278,
+      "saves": 257,
+      "shotsAgainstPerGame": 27.8,
+      "savesPerGame": 25.7,
+      "expectedGoalsAgainst": 25.0,
+      "gsax": 4.0,
+      "rollingGsa": 1.2,
+      "seasonGsa": 4.0,
+      "restDays": 2,
+      "startLikelihood": 0.95,
+      "trend": "surging",
+      "note": "Jonathan Quick is playing at an elite level with a 0.924 save percentage, providing NYR with a strong defensive anchor.",
+      "strengths": [
+        "Elite save percentage",
+        "Exceptional goals against average"
+      ],
+      "watchouts": [
+        "Inconsistent results"
+      ],
+      "nextOpponent": "WSH"
     },
     {
       "name": "Mackenzie Blackwood",
@@ -984,21 +984,21 @@
       },
       {
         "rank": 2,
-        "name": "Jonathan Quick",
-        "team": "NYR",
-        "gsax": 6.7
-      },
-      {
-        "rank": 3,
         "name": "Scott Wedgewood",
         "team": "COL",
         "gsax": 5.4
       },
       {
-        "rank": 4,
+        "rank": 3,
         "name": "Mackenzie Blackwood",
         "team": "COL",
         "gsax": 5.3
+      },
+      {
+        "rank": 4,
+        "name": "Jonathan Quick",
+        "team": "NYR",
+        "gsax": 4.0
       },
       {
         "rank": 5,
@@ -1040,15 +1040,15 @@
     "bySavePct": [
       {
         "rank": 1,
-        "name": "Jonathan Quick",
-        "team": "NYR",
-        "savePct": 0.936
-      },
-      {
-        "rank": 2,
         "name": "Jesper Wallstedt",
         "team": "MIN",
         "savePct": 0.931
+      },
+      {
+        "rank": 2,
+        "name": "Jonathan Quick",
+        "team": "NYR",
+        "savePct": 0.924
       },
       {
         "rank": 3,
@@ -1102,15 +1102,15 @@
     "byGaa": [
       {
         "rank": 1,
-        "name": "Jonathan Quick",
-        "team": "NYR",
-        "gaa": 1.79
-      },
-      {
-        "rank": 2,
         "name": "Brandon Bussi",
         "team": "CAR",
         "gaa": 2.08
+      },
+      {
+        "rank": 2,
+        "name": "Jonathan Quick",
+        "team": "NYR",
+        "gaa": 2.11
       },
       {
         "rank": 3,
