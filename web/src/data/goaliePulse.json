@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-01-01T13:26:52.371351+00:00",
+  "updatedAt": "2026-01-01T23:12:31.742619+00:00",
   "notes": "Goalie performance metrics calculated from NHL Stats API data. GSAX = Expected Goals Against - Actual Goals Against (positive = outperforming expectations).",
   "goalies": [
     {
@@ -201,39 +201,6 @@
       "nextOpponent": "CAR"
     },
     {
-      "name": "David Rittich",
-      "team": "NYI",
-      "gamesPlayed": 16,
-      "record": "10-4-2",
-      "wins": 10,
-      "losses": 4,
-      "otLosses": 2,
-      "gaa": 2.27,
-      "savePct": 0.918,
-      "shutouts": 2,
-      "goalsAgainst": 37,
-      "shotsAgainst": 449,
-      "saves": 412,
-      "shotsAgainstPerGame": 28.1,
-      "savesPerGame": 25.8,
-      "expectedGoalsAgainst": 40.4,
-      "gsax": 3.4,
-      "rollingGsa": 0.6,
-      "seasonGsa": 3.4,
-      "restDays": 2,
-      "startLikelihood": 0.9,
-      "trend": "steady",
-      "note": "Consistent performance from David Rittich with a 2.27 GAA \u2014 reliable starter for NYI.",
-      "strengths": [
-        "Exceptional goals against average",
-        "Proven winner"
-      ],
-      "watchouts": [
-        "Limited recent data"
-      ],
-      "nextOpponent": "UTA"
-    },
-    {
       "name": "Philipp Grubauer",
       "team": "SEA",
       "gamesPlayed": 12,
@@ -299,39 +266,6 @@
       "nextOpponent": "TBL"
     },
     {
-      "name": "Logan Thompson",
-      "team": "WSH",
-      "gamesPlayed": 28,
-      "record": "15-10-3",
-      "wins": 15,
-      "losses": 10,
-      "otLosses": 3,
-      "gaa": 2.33,
-      "savePct": 0.915,
-      "shutouts": 2,
-      "goalsAgainst": 64,
-      "shotsAgainst": 754,
-      "saves": 690,
-      "shotsAgainstPerGame": 26.9,
-      "savesPerGame": 24.6,
-      "expectedGoalsAgainst": 67.9,
-      "gsax": 3.9,
-      "rollingGsa": 0.4,
-      "seasonGsa": 3.9,
-      "restDays": 1,
-      "startLikelihood": 0.9,
-      "trend": "steady",
-      "note": "Consistent performance from Logan Thompson with a 2.33 GAA \u2014 reliable starter for WSH.",
-      "strengths": [
-        "Proven winner",
-        "Strong rebound control"
-      ],
-      "watchouts": [
-        "Inconsistent results"
-      ],
-      "nextOpponent": "OTT"
-    },
-    {
       "name": "Devin Cooley",
       "team": "CGY",
       "gamesPlayed": 13,
@@ -394,6 +328,38 @@
         "Inconsistent results"
       ],
       "nextOpponent": "LAK"
+    },
+    {
+      "name": "Logan Thompson",
+      "team": "WSH",
+      "gamesPlayed": 29,
+      "record": "15-11-3",
+      "wins": 15,
+      "losses": 11,
+      "otLosses": 3,
+      "gaa": 2.39,
+      "savePct": 0.913,
+      "shutouts": 2,
+      "goalsAgainst": 68,
+      "shotsAgainst": 786,
+      "saves": 718,
+      "shotsAgainstPerGame": 27.1,
+      "savesPerGame": 24.8,
+      "expectedGoalsAgainst": 70.7,
+      "gsax": 2.7,
+      "rollingGsa": 0.3,
+      "seasonGsa": 2.7,
+      "restDays": 1,
+      "startLikelihood": 0.9,
+      "trend": "steady",
+      "note": "Consistent performance from Logan Thompson with a 2.39 GAA \u2014 reliable starter for WSH.",
+      "strengths": [
+        "Proven winner"
+      ],
+      "watchouts": [
+        "Inconsistent results"
+      ],
+      "nextOpponent": "OTT"
     },
     {
       "name": "Jake Allen",
@@ -749,6 +715,38 @@
       "nextOpponent": "EDM"
     },
     {
+      "name": "David Rittich",
+      "team": "NYI",
+      "gamesPlayed": 17,
+      "record": "10-5-2",
+      "wins": 10,
+      "losses": 5,
+      "otLosses": 2,
+      "gaa": 2.46,
+      "savePct": 0.909,
+      "shutouts": 2,
+      "goalsAgainst": 42,
+      "shotsAgainst": 463,
+      "saves": 421,
+      "shotsAgainstPerGame": 27.2,
+      "savesPerGame": 24.8,
+      "expectedGoalsAgainst": 41.7,
+      "gsax": -0.3,
+      "rollingGsa": -0.1,
+      "seasonGsa": -0.3,
+      "restDays": 2,
+      "startLikelihood": 0.8,
+      "trend": "stable",
+      "note": "David Rittich showing promise with limited sample size \u2014 monitor progression closely.",
+      "strengths": [
+        "Proven winner"
+      ],
+      "watchouts": [
+        "Inconsistent results"
+      ],
+      "nextOpponent": "UTA"
+    },
+    {
       "name": "Jet Greaves",
       "team": "CBJ",
       "gamesPlayed": 26,
@@ -1015,25 +1013,25 @@
         "rank": 7,
         "name": "Logan Thompson",
         "team": "WSH",
-        "gsax": 3.9
+        "gsax": 2.7
       },
       {
         "rank": 8,
-        "name": "David Rittich",
-        "team": "NYI",
-        "gsax": 3.4
-      },
-      {
-        "rank": 9,
         "name": "Philipp Grubauer",
         "team": "SEA",
         "gsax": 2.2
       },
       {
-        "rank": 10,
+        "rank": 9,
         "name": "Andrei Vasilevskiy",
         "team": "TBL",
         "gsax": 1.6
+      },
+      {
+        "rank": 10,
+        "name": "Devin Cooley",
+        "team": "CGY",
+        "gsax": 1.4
       }
     ],
     "bySavePct": [
@@ -1075,27 +1073,27 @@
       },
       {
         "rank": 7,
-        "name": "David Rittich",
-        "team": "NYI",
-        "savePct": 0.918
-      },
-      {
-        "rank": 8,
         "name": "Philipp Grubauer",
         "team": "SEA",
         "savePct": 0.917
       },
       {
-        "rank": 9,
+        "rank": 8,
         "name": "Darcy Kuemper",
         "team": "LAK",
         "savePct": 0.917
       },
       {
+        "rank": 9,
+        "name": "Devin Cooley",
+        "team": "CGY",
+        "savePct": 0.914
+      },
+      {
         "rank": 10,
-        "name": "Logan Thompson",
-        "team": "WSH",
-        "savePct": 0.915
+        "name": "Andrei Vasilevskiy",
+        "team": "TBL",
+        "savePct": 0.914
       }
     ],
     "byGaa": [
@@ -1143,21 +1141,21 @@
       },
       {
         "rank": 8,
-        "name": "David Rittich",
-        "team": "NYI",
-        "gaa": 2.27
+        "name": "Andrei Vasilevskiy",
+        "team": "TBL",
+        "gaa": 2.33
       },
       {
         "rank": 9,
         "name": "Logan Thompson",
         "team": "WSH",
-        "gaa": 2.33
+        "gaa": 2.39
       },
       {
         "rank": 10,
-        "name": "Andrei Vasilevskiy",
-        "team": "TBL",
-        "gaa": 2.33
+        "name": "Devin Cooley",
+        "team": "CGY",
+        "gaa": 2.4
       }
     ],
     "byWins": [
@@ -1181,14 +1179,14 @@
       },
       {
         "rank": 4,
-        "name": "Logan Thompson",
-        "team": "WSH",
+        "name": "Andrei Vasilevskiy",
+        "team": "TBL",
         "wins": 15
       },
       {
         "rank": 5,
-        "name": "Andrei Vasilevskiy",
-        "team": "TBL",
+        "name": "Logan Thompson",
+        "team": "WSH",
         "wins": 15
       },
       {
