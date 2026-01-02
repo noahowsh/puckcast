@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-01-01T23:12:31.742619+00:00",
+  "updatedAt": "2026-01-02T13:26:09.463016+00:00",
   "notes": "Goalie performance metrics calculated from NHL Stats API data. GSAX = Expected Goals Against - Actual Goals Against (positive = outperforming expectations).",
   "goalies": [
     {
@@ -102,39 +102,6 @@
       "nextOpponent": "CAR"
     },
     {
-      "name": "Joseph Woll",
-      "team": "TOR",
-      "gamesPlayed": 13,
-      "record": "8-4-1",
-      "wins": 8,
-      "losses": 4,
-      "otLosses": 1,
-      "gaa": 2.51,
-      "savePct": 0.923,
-      "shutouts": 1,
-      "goalsAgainst": 31,
-      "shotsAgainst": 388,
-      "saves": 358,
-      "shotsAgainstPerGame": 29.8,
-      "savesPerGame": 27.5,
-      "expectedGoalsAgainst": 34.9,
-      "gsax": 3.9,
-      "rollingGsa": 0.9,
-      "seasonGsa": 3.9,
-      "restDays": 2,
-      "startLikelihood": 0.85,
-      "trend": "steady",
-      "note": "Consistent performance from Joseph Woll with a 2.51 GAA \u2014 reliable starter for TOR.",
-      "strengths": [
-        "Elite save percentage",
-        "Strong rebound control"
-      ],
-      "watchouts": [
-        "Limited recent data"
-      ],
-      "nextOpponent": "WPG"
-    },
-    {
       "name": "Matt Murray",
       "team": "SEA",
       "gamesPlayed": 5,
@@ -165,7 +132,40 @@
       "watchouts": [
         "Limited recent data"
       ],
-      "nextOpponent": "NSH"
+      "nextOpponent": "VAN"
+    },
+    {
+      "name": "Philipp Grubauer",
+      "team": "SEA",
+      "gamesPlayed": 13,
+      "record": "7-3-1",
+      "wins": 7,
+      "losses": 3,
+      "otLosses": 1,
+      "gaa": 2.32,
+      "savePct": 0.92,
+      "shutouts": 0,
+      "goalsAgainst": 27,
+      "shotsAgainst": 338,
+      "saves": 311,
+      "shotsAgainstPerGame": 26.0,
+      "savesPerGame": 23.9,
+      "expectedGoalsAgainst": 30.4,
+      "gsax": 3.4,
+      "rollingGsa": 0.8,
+      "seasonGsa": 3.4,
+      "restDays": 2,
+      "startLikelihood": 0.95,
+      "trend": "surging",
+      "note": "Philipp Grubauer is playing at an elite level with a 0.920 save percentage, providing SEA with a strong defensive anchor.",
+      "strengths": [
+        "Elite save percentage",
+        "Strong rebound control"
+      ],
+      "watchouts": [
+        "Limited recent data"
+      ],
+      "nextOpponent": "VAN"
     },
     {
       "name": "Scott Wedgewood",
@@ -201,69 +201,36 @@
       "nextOpponent": "CAR"
     },
     {
-      "name": "Philipp Grubauer",
-      "team": "SEA",
-      "gamesPlayed": 12,
-      "record": "6-3-1",
-      "wins": 6,
-      "losses": 3,
+      "name": "Joseph Woll",
+      "team": "TOR",
+      "gamesPlayed": 14,
+      "record": "8-4-1",
+      "wins": 8,
+      "losses": 4,
       "otLosses": 1,
-      "gaa": 2.44,
-      "savePct": 0.917,
-      "shutouts": 0,
-      "goalsAgainst": 26,
-      "shotsAgainst": 313,
-      "saves": 287,
-      "shotsAgainstPerGame": 26.1,
-      "savesPerGame": 23.9,
-      "expectedGoalsAgainst": 28.2,
-      "gsax": 2.2,
-      "rollingGsa": 0.5,
-      "seasonGsa": 2.2,
+      "gaa": 2.74,
+      "savePct": 0.916,
+      "shutouts": 1,
+      "goalsAgainst": 35,
+      "shotsAgainst": 405,
+      "saves": 371,
+      "shotsAgainstPerGame": 28.9,
+      "savesPerGame": 26.5,
+      "expectedGoalsAgainst": 36.4,
+      "gsax": 1.4,
+      "rollingGsa": 0.3,
+      "seasonGsa": 1.4,
       "restDays": 2,
       "startLikelihood": 0.8,
       "trend": "steady",
-      "note": "Consistent performance from Philipp Grubauer with a 2.44 GAA \u2014 reliable starter for SEA.",
+      "note": "Consistent performance from Joseph Woll with a 2.74 GAA \u2014 reliable starter for TOR.",
       "strengths": [
         "Strong rebound control"
       ],
       "watchouts": [
         "Limited recent data"
       ],
-      "nextOpponent": "NSH"
-    },
-    {
-      "name": "Darcy Kuemper",
-      "team": "LAK",
-      "gamesPlayed": 23,
-      "record": "10-6-6",
-      "wins": 10,
-      "losses": 6,
-      "otLosses": 6,
-      "gaa": 2.19,
-      "savePct": 0.917,
-      "shutouts": 2,
-      "goalsAgainst": 49,
-      "shotsAgainst": 588,
-      "saves": 539,
-      "shotsAgainstPerGame": 25.6,
-      "savesPerGame": 23.4,
-      "expectedGoalsAgainst": 52.9,
-      "gsax": 3.9,
-      "rollingGsa": 0.5,
-      "seasonGsa": 3.9,
-      "restDays": 1,
-      "startLikelihood": 0.9,
-      "trend": "steady",
-      "note": "Consistent performance from Darcy Kuemper with a 2.19 GAA \u2014 reliable starter for LAK.",
-      "strengths": [
-        "Exceptional goals against average",
-        "Proven winner"
-      ],
-      "watchouts": [
-        "Inconsistent results"
-      ],
-      "nextOpponent": "TBL"
+      "nextOpponent": "NYI"
     },
     {
       "name": "Devin Cooley",
@@ -298,6 +265,38 @@
       "nextOpponent": "NSH"
     },
     {
+      "name": "Dennis Hildeby",
+      "team": "TOR",
+      "gamesPlayed": 15,
+      "record": "3-5-4",
+      "wins": 3,
+      "losses": 5,
+      "otLosses": 4,
+      "gaa": 2.9,
+      "savePct": 0.914,
+      "shutouts": 1,
+      "goalsAgainst": 36,
+      "shotsAgainst": 408,
+      "saves": 373,
+      "shotsAgainstPerGame": 27.2,
+      "savesPerGame": 24.9,
+      "expectedGoalsAgainst": 36.7,
+      "gsax": 0.7,
+      "rollingGsa": 0.1,
+      "seasonGsa": 0.7,
+      "restDays": 2,
+      "startLikelihood": 0.9,
+      "trend": "stable",
+      "note": "Dennis Hildeby showing promise with limited sample size \u2014 monitor progression closely.",
+      "strengths": [
+        "Solid fundamentals"
+      ],
+      "watchouts": [
+        "Inconsistent results"
+      ],
+      "nextOpponent": "NYI"
+    },
+    {
       "name": "Andrei Vasilevskiy",
       "team": "TBL",
       "gamesPlayed": 24,
@@ -327,7 +326,7 @@
       "watchouts": [
         "Inconsistent results"
       ],
-      "nextOpponent": "LAK"
+      "nextOpponent": "SJS"
     },
     {
       "name": "Logan Thompson",
@@ -359,7 +358,40 @@
       "watchouts": [
         "Inconsistent results"
       ],
-      "nextOpponent": "OTT"
+      "nextOpponent": "CHI"
+    },
+    {
+      "name": "Darcy Kuemper",
+      "team": "LAK",
+      "gamesPlayed": 24,
+      "record": "10-7-6",
+      "wins": 10,
+      "losses": 7,
+      "otLosses": 6,
+      "gaa": 2.27,
+      "savePct": 0.913,
+      "shutouts": 2,
+      "goalsAgainst": 53,
+      "shotsAgainst": 611,
+      "saves": 558,
+      "shotsAgainstPerGame": 25.5,
+      "savesPerGame": 23.2,
+      "expectedGoalsAgainst": 55.0,
+      "gsax": 2.0,
+      "rollingGsa": 0.2,
+      "seasonGsa": 2.0,
+      "restDays": 1,
+      "startLikelihood": 0.9,
+      "trend": "steady",
+      "note": "Consistent performance from Darcy Kuemper with a 2.27 GAA \u2014 reliable starter for LAK.",
+      "strengths": [
+        "Exceptional goals against average",
+        "Proven winner"
+      ],
+      "watchouts": [
+        "Inconsistent results"
+      ],
+      "nextOpponent": "MIN"
     },
     {
       "name": "Jake Allen",
@@ -419,71 +451,6 @@
       "note": "Consistent performance from Casey DeSmith with a 2.44 GAA \u2014 reliable starter for DAL.",
       "strengths": [
         "Solid fundamentals"
-      ],
-      "watchouts": [
-        "Limited recent data"
-      ],
-      "nextOpponent": "CHI"
-    },
-    {
-      "name": "Dennis Hildeby",
-      "team": "TOR",
-      "gamesPlayed": 14,
-      "record": "2-5-4",
-      "wins": 2,
-      "losses": 5,
-      "otLosses": 4,
-      "gaa": 2.95,
-      "savePct": 0.912,
-      "shutouts": 1,
-      "goalsAgainst": 35,
-      "shotsAgainst": 385,
-      "saves": 351,
-      "shotsAgainstPerGame": 27.5,
-      "savesPerGame": 25.1,
-      "expectedGoalsAgainst": 34.6,
-      "gsax": -0.4,
-      "rollingGsa": -0.1,
-      "seasonGsa": -0.4,
-      "restDays": 2,
-      "startLikelihood": 0.8,
-      "trend": "stable",
-      "note": "Dennis Hildeby showing promise with limited sample size \u2014 monitor progression closely.",
-      "strengths": [
-        "Solid fundamentals"
-      ],
-      "watchouts": [
-        "Inconsistent results"
-      ],
-      "nextOpponent": "WPG"
-    },
-    {
-      "name": "Brandon Bussi",
-      "team": "CAR",
-      "gamesPlayed": 15,
-      "record": "13-1-1",
-      "wins": 13,
-      "losses": 1,
-      "otLosses": 1,
-      "gaa": 2.08,
-      "savePct": 0.912,
-      "shutouts": 1,
-      "goalsAgainst": 32,
-      "shotsAgainst": 362,
-      "saves": 330,
-      "shotsAgainstPerGame": 24.1,
-      "savesPerGame": 22.0,
-      "expectedGoalsAgainst": 32.6,
-      "gsax": 0.6,
-      "rollingGsa": 0.1,
-      "seasonGsa": 0.6,
-      "restDays": 2,
-      "startLikelihood": 0.9,
-      "trend": "steady",
-      "note": "Consistent performance from Brandon Bussi with a 2.08 GAA \u2014 reliable starter for CAR.",
-      "strengths": [
-        "Exceptional goals against average",
-        "Proven winner"
       ],
       "watchouts": [
         "Limited recent data"
@@ -587,38 +554,6 @@
       "nextOpponent": "FLA"
     },
     {
-      "name": "Spencer Knight",
-      "team": "CHI",
-      "gamesPlayed": 27,
-      "record": "10-11-6",
-      "wins": 10,
-      "losses": 11,
-      "otLosses": 6,
-      "gaa": 2.62,
-      "savePct": 0.91,
-      "shutouts": 2,
-      "goalsAgainst": 70,
-      "shotsAgainst": 776,
-      "saves": 706,
-      "shotsAgainstPerGame": 28.7,
-      "savesPerGame": 26.1,
-      "expectedGoalsAgainst": 69.8,
-      "gsax": -0.2,
-      "rollingGsa": -0.0,
-      "seasonGsa": -0.2,
-      "restDays": 1,
-      "startLikelihood": 0.8,
-      "trend": "stable",
-      "note": "Spencer Knight showing promise with limited sample size \u2014 monitor progression closely.",
-      "strengths": [
-        "Proven winner"
-      ],
-      "watchouts": [
-        "Inconsistent results"
-      ],
-      "nextOpponent": "DAL"
-    },
-    {
       "name": "Ilya Sorokin",
       "team": "NYI",
       "gamesPlayed": 24,
@@ -648,39 +583,7 @@
       "watchouts": [
         "Inconsistent results"
       ],
-      "nextOpponent": "UTA"
-    },
-    {
-      "name": "Jake Oettinger",
-      "team": "DAL",
-      "gamesPlayed": 25,
-      "record": "16-6-3",
-      "wins": 16,
-      "losses": 6,
-      "otLosses": 3,
-      "gaa": 2.51,
-      "savePct": 0.91,
-      "shutouts": 2,
-      "goalsAgainst": 63,
-      "shotsAgainst": 698,
-      "saves": 635,
-      "shotsAgainstPerGame": 27.9,
-      "savesPerGame": 25.4,
-      "expectedGoalsAgainst": 62.8,
-      "gsax": -0.2,
-      "rollingGsa": -0.0,
-      "seasonGsa": -0.2,
-      "restDays": 1,
-      "startLikelihood": 0.8,
-      "trend": "stable",
-      "note": "Jake Oettinger showing promise with limited sample size \u2014 monitor progression closely.",
-      "strengths": [
-        "Proven winner"
-      ],
-      "watchouts": [
-        "Inconsistent results"
-      ],
-      "nextOpponent": "CHI"
+      "nextOpponent": "TOR"
     },
     {
       "name": "Dan Vladar",
@@ -744,7 +647,7 @@
       "watchouts": [
         "Inconsistent results"
       ],
-      "nextOpponent": "UTA"
+      "nextOpponent": "TOR"
     },
     {
       "name": "Jet Greaves",
@@ -779,6 +682,38 @@
       "nextOpponent": "BUF"
     },
     {
+      "name": "Spencer Knight",
+      "team": "CHI",
+      "gamesPlayed": 28,
+      "record": "11-11-6",
+      "wins": 11,
+      "losses": 11,
+      "otLosses": 6,
+      "gaa": 2.63,
+      "savePct": 0.909,
+      "shutouts": 2,
+      "goalsAgainst": 73,
+      "shotsAgainst": 801,
+      "saves": 728,
+      "shotsAgainstPerGame": 28.6,
+      "savesPerGame": 26.0,
+      "expectedGoalsAgainst": 72.1,
+      "gsax": -0.9,
+      "rollingGsa": -0.1,
+      "seasonGsa": -0.9,
+      "restDays": 1,
+      "startLikelihood": 0.8,
+      "trend": "stable",
+      "note": "Spencer Knight showing promise with limited sample size \u2014 monitor progression closely.",
+      "strengths": [
+        "Proven winner"
+      ],
+      "watchouts": [
+        "Inconsistent results"
+      ],
+      "nextOpponent": "WSH"
+    },
+    {
       "name": "Connor Hellebuyck",
       "team": "WPG",
       "gamesPlayed": 22,
@@ -808,7 +743,39 @@
       "watchouts": [
         "Inconsistent results"
       ],
-      "nextOpponent": "TOR"
+      "nextOpponent": "OTT"
+    },
+    {
+      "name": "Jake Oettinger",
+      "team": "DAL",
+      "gamesPlayed": 26,
+      "record": "16-7-3",
+      "wins": 16,
+      "losses": 7,
+      "otLosses": 3,
+      "gaa": 2.57,
+      "savePct": 0.907,
+      "shutouts": 2,
+      "goalsAgainst": 67,
+      "shotsAgainst": 719,
+      "saves": 652,
+      "shotsAgainstPerGame": 27.7,
+      "savesPerGame": 25.1,
+      "expectedGoalsAgainst": 64.7,
+      "gsax": -2.3,
+      "rollingGsa": -0.3,
+      "seasonGsa": -2.3,
+      "restDays": 1,
+      "startLikelihood": 0.8,
+      "trend": "stable",
+      "note": "Jake Oettinger showing promise with limited sample size \u2014 monitor progression closely.",
+      "strengths": [
+        "Proven winner"
+      ],
+      "watchouts": [
+        "Inconsistent results"
+      ],
+      "nextOpponent": "MTL"
     },
     {
       "name": "Thatcher Demko",
@@ -968,7 +935,39 @@
       "watchouts": [
         "Inconsistent results"
       ],
-      "nextOpponent": "NSH"
+      "nextOpponent": "VAN"
+    },
+    {
+      "name": "Jacob Fowler",
+      "team": "MTL",
+      "gamesPlayed": 6,
+      "record": "3-1-2",
+      "wins": 3,
+      "losses": 1,
+      "otLosses": 2,
+      "gaa": 2.64,
+      "savePct": 0.904,
+      "shutouts": 1,
+      "goalsAgainst": 16,
+      "shotsAgainst": 167,
+      "saves": 151,
+      "shotsAgainstPerGame": 27.8,
+      "savesPerGame": 25.2,
+      "expectedGoalsAgainst": 15.0,
+      "gsax": -1.0,
+      "rollingGsa": -0.5,
+      "seasonGsa": -1.0,
+      "restDays": 3,
+      "startLikelihood": 0.6,
+      "trend": "stable",
+      "note": "Jacob Fowler showing promise with limited sample size \u2014 monitor progression closely.",
+      "strengths": [
+        "Solid fundamentals"
+      ],
+      "watchouts": [
+        "Limited recent data"
+      ],
+      "nextOpponent": "STL"
     }
   ],
   "leaderboards": {
@@ -999,33 +998,33 @@
       },
       {
         "rank": 5,
-        "name": "Joseph Woll",
-        "team": "TOR",
-        "gsax": 3.9
+        "name": "Philipp Grubauer",
+        "team": "SEA",
+        "gsax": 3.4
       },
       {
         "rank": 6,
-        "name": "Darcy Kuemper",
-        "team": "LAK",
-        "gsax": 3.9
-      },
-      {
-        "rank": 7,
         "name": "Logan Thompson",
         "team": "WSH",
         "gsax": 2.7
       },
       {
-        "rank": 8,
-        "name": "Philipp Grubauer",
-        "team": "SEA",
-        "gsax": 2.2
+        "rank": 7,
+        "name": "Darcy Kuemper",
+        "team": "LAK",
+        "gsax": 2.0
       },
       {
-        "rank": 9,
+        "rank": 8,
         "name": "Andrei Vasilevskiy",
         "team": "TBL",
         "gsax": 1.6
+      },
+      {
+        "rank": 9,
+        "name": "Joseph Woll",
+        "team": "TOR",
+        "gsax": 1.4
       },
       {
         "rank": 10,
@@ -1055,15 +1054,15 @@
       },
       {
         "rank": 4,
-        "name": "Joseph Woll",
-        "team": "TOR",
-        "savePct": 0.923
-      },
-      {
-        "rank": 5,
         "name": "Matt Murray",
         "team": "SEA",
         "savePct": 0.922
+      },
+      {
+        "rank": 5,
+        "name": "Philipp Grubauer",
+        "team": "SEA",
+        "savePct": 0.92
       },
       {
         "rank": 6,
@@ -1073,20 +1072,20 @@
       },
       {
         "rank": 7,
-        "name": "Philipp Grubauer",
-        "team": "SEA",
-        "savePct": 0.917
+        "name": "Joseph Woll",
+        "team": "TOR",
+        "savePct": 0.916
       },
       {
         "rank": 8,
-        "name": "Darcy Kuemper",
-        "team": "LAK",
-        "savePct": 0.917
+        "name": "Devin Cooley",
+        "team": "CGY",
+        "savePct": 0.914
       },
       {
         "rank": 9,
-        "name": "Devin Cooley",
-        "team": "CGY",
+        "name": "Dennis Hildeby",
+        "team": "TOR",
         "savePct": 0.914
       },
       {
@@ -1105,39 +1104,39 @@
       },
       {
         "rank": 2,
-        "name": "Brandon Bussi",
-        "team": "CAR",
-        "gaa": 2.08
-      },
-      {
-        "rank": 3,
         "name": "Jonathan Quick",
         "team": "NYR",
         "gaa": 2.11
       },
       {
-        "rank": 4,
+        "rank": 3,
         "name": "Scott Wedgewood",
         "team": "COL",
         "gaa": 2.13
       },
       {
-        "rank": 5,
-        "name": "Darcy Kuemper",
-        "team": "LAK",
-        "gaa": 2.19
-      },
-      {
-        "rank": 6,
+        "rank": 4,
         "name": "Jesper Wallstedt",
         "team": "MIN",
         "gaa": 2.21
       },
       {
-        "rank": 7,
+        "rank": 5,
         "name": "Matt Murray",
         "team": "SEA",
         "gaa": 2.21
+      },
+      {
+        "rank": 6,
+        "name": "Darcy Kuemper",
+        "team": "LAK",
+        "gaa": 2.27
+      },
+      {
+        "rank": 7,
+        "name": "Philipp Grubauer",
+        "team": "SEA",
+        "gaa": 2.32
       },
       {
         "rank": 8,
@@ -1209,15 +1208,15 @@
       },
       {
         "rank": 9,
-        "name": "Brandon Bussi",
-        "team": "CAR",
+        "name": "Filip Gustavsson",
+        "team": "MIN",
         "wins": 13
       },
       {
         "rank": 10,
-        "name": "Filip Gustavsson",
-        "team": "MIN",
-        "wins": 13
+        "name": "Ilya Sorokin",
+        "team": "NYI",
+        "wins": 12
       }
     ]
   }
