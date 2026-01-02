@@ -1,29 +1,6 @@
 {
-  "generatedAt": "2026-01-02T10:42:24.748465+00:00",
+  "generatedAt": "2026-01-02T22:31:12.783033+00:00",
   "games": [
-    {
-      "id": "2025020640",
-      "gameDate": "2026-01-02",
-      "startTimeEt": "3:00 PM ET",
-      "startTimeUtc": "2026-01-02T20:00:00+00:00",
-      "homeTeam": {
-        "name": "Blues",
-        "abbrev": "STL"
-      },
-      "awayTeam": {
-        "name": "Golden Knights",
-        "abbrev": "VGK"
-      },
-      "homeWinProb": 0.3366,
-      "awayWinProb": 0.6634,
-      "confidenceScore": 0.327,
-      "confidenceGrade": "B+",
-      "edge": -0.163,
-      "summary": "Golden Knights project at 66% as the road lean \u2014 a B+-tier edge worth 16.3 pts over a coin flip.",
-      "modelFavorite": "away",
-      "venue": "Enterprise Center",
-      "season": "20252026"
-    },
     {
       "id": "2025020641",
       "gameDate": "2026-01-02",
