@@ -1,62 +1,188 @@
 {
-  "generatedAt": "2026-01-02T19:14:22.023146+00:00",
-  "date": "2026-01-02",
+  "generatedAt": "2026-01-03T14:25:26.884781+00:00",
+  "date": "2026-01-03",
   "teams": {
+    "DET": {
+      "injuries": []
+    },
+    "PIT": {
+      "injuries": []
+    },
+    "NJD": {
+      "injuries": []
+    },
+    "UTA": {
+      "injuries": []
+    },
+    "CBJ": {
+      "injuries": []
+    },
+    "BUF": {
+      "injuries": []
+    },
+    "EDM": {
+      "injuries": []
+    },
+    "PHI": {
+      "injuries": []
+    },
     "STL": {
       "injuries": []
     },
-    "VGK": {
+    "MTL": {
       "injuries": []
     },
-    "FLA": {
+    "SJS": {
       "injuries": []
     },
-    "NYR": {
+    "TBL": {
+      "injuries": []
+    },
+    "OTT": {
+      "injuries": []
+    },
+    "WPG": {
+      "injuries": []
+    },
+    "NYI": {
+      "injuries": []
+    },
+    "TOR": {
+      "injuries": []
+    },
+    "WSH": {
+      "injuries": []
+    },
+    "CHI": {
+      "injuries": []
+    },
+    "CAR": {
+      "injuries": []
+    },
+    "COL": {
+      "injuries": []
+    },
+    "CGY": {
+      "injuries": []
+    },
+    "NSH": {
+      "injuries": []
+    },
+    "LAK": {
+      "injuries": []
+    },
+    "MIN": {
       "injuries": []
     },
     "VAN": {
       "injuries": []
     },
-    "SEA": {
-      "injuries": []
-    },
-    "ANA": {
-      "injuries": []
-    },
-    "MIN": {
+    "BOS": {
       "injuries": []
     }
   },
   "games": [
     {
-      "gameId": "2025020640",
-      "date": "2026-01-02",
+      "gameId": "2025020644",
+      "date": "2026-01-03",
+      "home": "DET",
+      "away": "PIT",
+      "homeInjuries": [],
+      "awayInjuries": []
+    },
+    {
+      "gameId": "2025020645",
+      "date": "2026-01-03",
+      "home": "NJD",
+      "away": "UTA",
+      "homeInjuries": [],
+      "awayInjuries": []
+    },
+    {
+      "gameId": "2025020646",
+      "date": "2026-01-03",
+      "home": "CBJ",
+      "away": "BUF",
+      "homeInjuries": [],
+      "awayInjuries": []
+    },
+    {
+      "gameId": "2025020647",
+      "date": "2026-01-03",
+      "home": "EDM",
+      "away": "PHI",
+      "homeInjuries": [],
+      "awayInjuries": []
+    },
+    {
+      "gameId": "2025020648",
+      "date": "2026-01-03",
       "home": "STL",
-      "away": "VGK",
+      "away": "MTL",
       "homeInjuries": [],
       "awayInjuries": []
     },
     {
-      "gameId": "2025020641",
-      "date": "2026-01-02",
-      "home": "FLA",
-      "away": "NYR",
+      "gameId": "2025020649",
+      "date": "2026-01-03",
+      "home": "SJS",
+      "away": "TBL",
       "homeInjuries": [],
       "awayInjuries": []
     },
     {
-      "gameId": "2025020642",
-      "date": "2026-01-02",
-      "home": "VAN",
-      "away": "SEA",
+      "gameId": "2025020650",
+      "date": "2026-01-03",
+      "home": "OTT",
+      "away": "WPG",
       "homeInjuries": [],
       "awayInjuries": []
     },
     {
-      "gameId": "2025020643",
-      "date": "2026-01-02",
-      "home": "ANA",
+      "gameId": "2025020651",
+      "date": "2026-01-03",
+      "home": "NYI",
+      "away": "TOR",
+      "homeInjuries": [],
+      "awayInjuries": []
+    },
+    {
+      "gameId": "2025020652",
+      "date": "2026-01-03",
+      "home": "WSH",
+      "away": "CHI",
+      "homeInjuries": [],
+      "awayInjuries": []
+    },
+    {
+      "gameId": "2025020653",
+      "date": "2026-01-03",
+      "home": "CAR",
+      "away": "COL",
+      "homeInjuries": [],
+      "awayInjuries": []
+    },
+    {
+      "gameId": "2025020654",
+      "date": "2026-01-03",
+      "home": "CGY",
+      "away": "NSH",
+      "homeInjuries": [],
+      "awayInjuries": []
+    },
+    {
+      "gameId": "2025020655",
+      "date": "2026-01-03",
+      "home": "LAK",
       "away": "MIN",
+      "homeInjuries": [],
+      "awayInjuries": []
+    },
+    {
+      "gameId": "2025020656",
+      "date": "2026-01-03",
+      "home": "VAN",
+      "away": "BOS",
       "homeInjuries": [],
       "awayInjuries": []
     }
