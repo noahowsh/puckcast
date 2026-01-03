@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-01-02T23:11:59.031685+00:00",
+  "updatedAt": "2026-01-03T13:22:16.435068+00:00",
   "notes": "Goalie performance metrics calculated from NHL Stats API data. GSAX = Expected Goals Against - Actual Goals Against (positive = outperforming expectations).",
   "goalies": [
     {
@@ -33,7 +33,7 @@
       "watchouts": [
         "Limited recent data"
       ],
-      "nextOpponent": "ANA"
+      "nextOpponent": "LAK"
     },
     {
       "name": "Jonathan Quick",
@@ -66,7 +66,7 @@
       "watchouts": [
         "Inconsistent results"
       ],
-      "nextOpponent": "FLA"
+      "nextOpponent": "UTA"
     },
     {
       "name": "Mackenzie Blackwood",
@@ -132,7 +132,7 @@
       "watchouts": [
         "Limited recent data"
       ],
-      "nextOpponent": "VAN"
+      "nextOpponent": "CGY"
     },
     {
       "name": "Philipp Grubauer",
@@ -165,7 +165,7 @@
       "watchouts": [
         "Limited recent data"
       ],
-      "nextOpponent": "VAN"
+      "nextOpponent": "CGY"
     },
     {
       "name": "Scott Wedgewood",
@@ -394,6 +394,70 @@
       "nextOpponent": "MIN"
     },
     {
+      "name": "Igor Shesterkin",
+      "team": "NYR",
+      "gamesPlayed": 33,
+      "record": "17-12-4",
+      "wins": 17,
+      "losses": 12,
+      "otLosses": 4,
+      "gaa": 2.47,
+      "savePct": 0.912,
+      "shutouts": 1,
+      "goalsAgainst": 82,
+      "shotsAgainst": 936,
+      "saves": 854,
+      "shotsAgainstPerGame": 28.4,
+      "savesPerGame": 25.9,
+      "expectedGoalsAgainst": 84.2,
+      "gsax": 2.2,
+      "rollingGsa": 0.2,
+      "seasonGsa": 2.2,
+      "restDays": 1,
+      "startLikelihood": 0.9,
+      "trend": "steady",
+      "note": "Consistent performance from Igor Shesterkin with a 2.47 GAA \u2014 reliable starter for NYR.",
+      "strengths": [
+        "Proven winner"
+      ],
+      "watchouts": [
+        "Inconsistent results"
+      ],
+      "nextOpponent": "UTA"
+    },
+    {
+      "name": "Filip Gustavsson",
+      "team": "MIN",
+      "gamesPlayed": 26,
+      "record": "14-8-4",
+      "wins": 14,
+      "losses": 8,
+      "otLosses": 4,
+      "gaa": 2.45,
+      "savePct": 0.912,
+      "shutouts": 3,
+      "goalsAgainst": 64,
+      "shotsAgainst": 729,
+      "saves": 665,
+      "shotsAgainstPerGame": 28.0,
+      "savesPerGame": 25.6,
+      "expectedGoalsAgainst": 65.6,
+      "gsax": 1.6,
+      "rollingGsa": 0.2,
+      "seasonGsa": 1.6,
+      "restDays": 1,
+      "startLikelihood": 0.9,
+      "trend": "steady",
+      "note": "Consistent performance from Filip Gustavsson with a 2.45 GAA \u2014 reliable starter for MIN.",
+      "strengths": [
+        "Proven winner"
+      ],
+      "watchouts": [
+        "Inconsistent results"
+      ],
+      "nextOpponent": "LAK"
+    },
+    {
       "name": "Jake Allen",
       "team": "NJD",
       "gamesPlayed": 21,
@@ -458,38 +522,6 @@
       "nextOpponent": "MTL"
     },
     {
-      "name": "Filip Gustavsson",
-      "team": "MIN",
-      "gamesPlayed": 25,
-      "record": "13-8-4",
-      "wins": 13,
-      "losses": 8,
-      "otLosses": 4,
-      "gaa": 2.47,
-      "savePct": 0.912,
-      "shutouts": 3,
-      "goalsAgainst": 62,
-      "shotsAgainst": 701,
-      "saves": 639,
-      "shotsAgainstPerGame": 28.0,
-      "savesPerGame": 25.6,
-      "expectedGoalsAgainst": 63.1,
-      "gsax": 1.1,
-      "rollingGsa": 0.1,
-      "seasonGsa": 1.1,
-      "restDays": 1,
-      "startLikelihood": 0.9,
-      "trend": "steady",
-      "note": "Consistent performance from Filip Gustavsson with a 2.47 GAA \u2014 reliable starter for MIN.",
-      "strengths": [
-        "Proven winner"
-      ],
-      "watchouts": [
-        "Inconsistent results"
-      ],
-      "nextOpponent": "ANA"
-    },
-    {
       "name": "Nikita Tolopilo",
       "team": "VAN",
       "gamesPlayed": 4,
@@ -519,39 +551,7 @@
       "watchouts": [
         "Limited recent data"
       ],
-      "nextOpponent": "SEA"
-    },
-    {
-      "name": "Igor Shesterkin",
-      "team": "NYR",
-      "gamesPlayed": 32,
-      "record": "16-12-4",
-      "wins": 16,
-      "losses": 12,
-      "otLosses": 4,
-      "gaa": 2.51,
-      "savePct": 0.91,
-      "shutouts": 1,
-      "goalsAgainst": 81,
-      "shotsAgainst": 899,
-      "saves": 818,
-      "shotsAgainstPerGame": 28.1,
-      "savesPerGame": 25.6,
-      "expectedGoalsAgainst": 80.9,
-      "gsax": -0.1,
-      "rollingGsa": -0.0,
-      "seasonGsa": -0.1,
-      "restDays": 1,
-      "startLikelihood": 0.8,
-      "trend": "stable",
-      "note": "Igor Shesterkin showing promise with limited sample size \u2014 monitor progression closely.",
-      "strengths": [
-        "Proven winner"
-      ],
-      "watchouts": [
-        "Inconsistent results"
-      ],
-      "nextOpponent": "FLA"
+      "nextOpponent": "BOS"
     },
     {
       "name": "Ilya Sorokin",
@@ -778,38 +778,6 @@
       "nextOpponent": "MTL"
     },
     {
-      "name": "Thatcher Demko",
-      "team": "VAN",
-      "gamesPlayed": 17,
-      "record": "8-8-0",
-      "wins": 8,
-      "losses": 8,
-      "otLosses": 0,
-      "gaa": 2.72,
-      "savePct": 0.907,
-      "shutouts": 1,
-      "goalsAgainst": 44,
-      "shotsAgainst": 461,
-      "saves": 418,
-      "shotsAgainstPerGame": 27.1,
-      "savesPerGame": 24.6,
-      "expectedGoalsAgainst": 41.5,
-      "gsax": -2.5,
-      "rollingGsa": -0.4,
-      "seasonGsa": -2.5,
-      "restDays": 2,
-      "startLikelihood": 0.8,
-      "trend": "stable",
-      "note": "Thatcher Demko showing promise with limited sample size \u2014 monitor progression closely.",
-      "strengths": [
-        "Solid fundamentals"
-      ],
-      "watchouts": [
-        "Inconsistent results"
-      ],
-      "nextOpponent": "SEA"
-    },
-    {
       "name": "Alex Lyon",
       "team": "BUF",
       "gamesPlayed": 21,
@@ -840,6 +808,38 @@
         "Inconsistent results"
       ],
       "nextOpponent": "CBJ"
+    },
+    {
+      "name": "Thatcher Demko",
+      "team": "VAN",
+      "gamesPlayed": 18,
+      "record": "8-8-1",
+      "wins": 8,
+      "losses": 8,
+      "otLosses": 1,
+      "gaa": 2.72,
+      "savePct": 0.906,
+      "shutouts": 1,
+      "goalsAgainst": 47,
+      "shotsAgainst": 489,
+      "saves": 443,
+      "shotsAgainstPerGame": 27.2,
+      "savesPerGame": 24.6,
+      "expectedGoalsAgainst": 44.0,
+      "gsax": -3.0,
+      "rollingGsa": -0.5,
+      "seasonGsa": -3.0,
+      "restDays": 2,
+      "startLikelihood": 0.8,
+      "trend": "stable",
+      "note": "Thatcher Demko showing promise with limited sample size \u2014 monitor progression closely.",
+      "strengths": [
+        "Solid fundamentals"
+      ],
+      "watchouts": [
+        "Inconsistent results"
+      ],
+      "nextOpponent": "BOS"
     },
     {
       "name": "Tristan Jarry",
@@ -906,38 +906,6 @@
       "nextOpponent": "VAN"
     },
     {
-      "name": "Joey Daccord",
-      "team": "SEA",
-      "gamesPlayed": 24,
-      "record": "10-9-5",
-      "wins": 10,
-      "losses": 9,
-      "otLosses": 5,
-      "gaa": 2.77,
-      "savePct": 0.904,
-      "shutouts": 2,
-      "goalsAgainst": 64,
-      "shotsAgainst": 658,
-      "saves": 595,
-      "shotsAgainstPerGame": 27.4,
-      "savesPerGame": 24.8,
-      "expectedGoalsAgainst": 59.2,
-      "gsax": -4.8,
-      "rollingGsa": -0.6,
-      "seasonGsa": -4.8,
-      "restDays": 1,
-      "startLikelihood": 0.8,
-      "trend": "stable",
-      "note": "Joey Daccord showing promise with limited sample size \u2014 monitor progression closely.",
-      "strengths": [
-        "Proven winner"
-      ],
-      "watchouts": [
-        "Inconsistent results"
-      ],
-      "nextOpponent": "VAN"
-    },
-    {
       "name": "Jacob Fowler",
       "team": "MTL",
       "gamesPlayed": 6,
@@ -968,6 +936,38 @@
         "Limited recent data"
       ],
       "nextOpponent": "STL"
+    },
+    {
+      "name": "Ukko-Pekka Luukkonen",
+      "team": "BUF",
+      "gamesPlayed": 13,
+      "record": "7-5-1",
+      "wins": 7,
+      "losses": 5,
+      "otLosses": 1,
+      "gaa": 2.46,
+      "savePct": 0.903,
+      "shutouts": 0,
+      "goalsAgainst": 31,
+      "shotsAgainst": 321,
+      "saves": 290,
+      "shotsAgainstPerGame": 24.7,
+      "savesPerGame": 22.3,
+      "expectedGoalsAgainst": 28.9,
+      "gsax": -2.1,
+      "rollingGsa": -0.5,
+      "seasonGsa": -2.1,
+      "restDays": 2,
+      "startLikelihood": 0.7,
+      "trend": "stable",
+      "note": "Ukko-Pekka Luukkonen showing promise with limited sample size \u2014 monitor progression closely.",
+      "strengths": [
+        "Solid fundamentals"
+      ],
+      "watchouts": [
+        "Inconsistent results"
+      ],
+      "nextOpponent": "CBJ"
     }
   ],
   "leaderboards": {
@@ -1010,27 +1010,27 @@
       },
       {
         "rank": 7,
+        "name": "Igor Shesterkin",
+        "team": "NYR",
+        "gsax": 2.2
+      },
+      {
+        "rank": 8,
         "name": "Darcy Kuemper",
         "team": "LAK",
         "gsax": 2.0
       },
       {
-        "rank": 8,
+        "rank": 9,
         "name": "Andrei Vasilevskiy",
         "team": "TBL",
         "gsax": 1.6
       },
       {
-        "rank": 9,
-        "name": "Joseph Woll",
-        "team": "TOR",
-        "gsax": 1.4
-      },
-      {
         "rank": 10,
-        "name": "Devin Cooley",
-        "team": "CGY",
-        "gsax": 1.4
+        "name": "Filip Gustavsson",
+        "team": "MIN",
+        "gsax": 1.6
       }
     ],
     "bySavePct": [
@@ -1168,7 +1168,7 @@
         "rank": 2,
         "name": "Igor Shesterkin",
         "team": "NYR",
-        "wins": 16
+        "wins": 17
       },
       {
         "rank": 3,
@@ -1196,20 +1196,20 @@
       },
       {
         "rank": 7,
+        "name": "Filip Gustavsson",
+        "team": "MIN",
+        "wins": 14
+      },
+      {
+        "rank": 8,
         "name": "Dan Vladar",
         "team": "PHI",
         "wins": 14
       },
       {
-        "rank": 8,
+        "rank": 9,
         "name": "Mackenzie Blackwood",
         "team": "COL",
-        "wins": 13
-      },
-      {
-        "rank": 9,
-        "name": "Filip Gustavsson",
-        "team": "MIN",
         "wins": 13
       },
       {
