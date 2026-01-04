@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-01-04T13:23:12.890909+00:00",
+  "updatedAt": "2026-01-04T23:11:46.479349+00:00",
   "notes": "Goalie performance metrics calculated from NHL Stats API data. GSAX = Expected Goals Against - Actual Goals Against (positive = outperforming expectations).",
   "goalies": [
     {
@@ -713,38 +713,6 @@
       "nextOpponent": "NJD"
     },
     {
-      "name": "Jake Oettinger",
-      "team": "DAL",
-      "gamesPlayed": 26,
-      "record": "16-7-3",
-      "wins": 16,
-      "losses": 7,
-      "otLosses": 3,
-      "gaa": 2.57,
-      "savePct": 0.907,
-      "shutouts": 2,
-      "goalsAgainst": 67,
-      "shotsAgainst": 719,
-      "saves": 652,
-      "shotsAgainstPerGame": 27.7,
-      "savesPerGame": 25.1,
-      "expectedGoalsAgainst": 64.7,
-      "gsax": -2.3,
-      "rollingGsa": -0.3,
-      "seasonGsa": -2.3,
-      "restDays": 1,
-      "startLikelihood": 0.8,
-      "trend": "stable",
-      "note": "Jake Oettinger showing promise with limited sample size \u2014 monitor progression closely.",
-      "strengths": [
-        "Proven winner"
-      ],
-      "watchouts": [
-        "Inconsistent results"
-      ],
-      "nextOpponent": "MTL"
-    },
-    {
       "name": "Alex Lyon",
       "team": "BUF",
       "gamesPlayed": 21,
@@ -871,6 +839,38 @@
         "Limited recent data"
       ],
       "nextOpponent": null
+    },
+    {
+      "name": "Jake Oettinger",
+      "team": "DAL",
+      "gamesPlayed": 27,
+      "record": "16-7-4",
+      "wins": 16,
+      "losses": 7,
+      "otLosses": 4,
+      "gaa": 2.62,
+      "savePct": 0.905,
+      "shutouts": 2,
+      "goalsAgainst": 71,
+      "shotsAgainst": 748,
+      "saves": 677,
+      "shotsAgainstPerGame": 27.7,
+      "savesPerGame": 25.1,
+      "expectedGoalsAgainst": 67.3,
+      "gsax": -3.7,
+      "rollingGsa": -0.4,
+      "seasonGsa": -3.7,
+      "restDays": 1,
+      "startLikelihood": 0.8,
+      "trend": "stable",
+      "note": "Jake Oettinger showing promise with limited sample size \u2014 monitor progression closely.",
+      "strengths": [
+        "Proven winner"
+      ],
+      "watchouts": [
+        "Inconsistent results"
+      ],
+      "nextOpponent": "MTL"
     },
     {
       "name": "Connor Hellebuyck",
@@ -1177,14 +1177,14 @@
       },
       {
         "rank": 4,
-        "name": "Jake Oettinger",
-        "team": "DAL",
+        "name": "Jeremy Swayman",
+        "team": "BOS",
         "wins": 16
       },
       {
         "rank": 5,
-        "name": "Jeremy Swayman",
-        "team": "BOS",
+        "name": "Jake Oettinger",
+        "team": "DAL",
         "wins": 16
       },
       {
