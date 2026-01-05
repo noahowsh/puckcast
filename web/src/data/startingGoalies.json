@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-01-05T14:31:54.712045Z",
+  "generatedAt": "2026-01-05T19:20:42.091583Z",
   "source": "RotoWire",
   "date": "2026-01-05",
   "teams": {
@@ -7,37 +7,37 @@
       "team": "NYR",
       "playerId": 5050,
       "goalieName": "Igor Shesterkin",
-      "confirmedStart": false,
-      "statusCode": "expected",
-      "statusDescription": "From RotoWire: Expected",
-      "lastUpdated": "2026-01-05T14:31:55.183732Z"
+      "confirmedStart": true,
+      "statusCode": "confirmed",
+      "statusDescription": "From RotoWire: Confirmed",
+      "lastUpdated": "2026-01-05T19:20:42.534606Z"
     },
     "UTA": {
       "team": "UTA",
       "playerId": 6428,
       "goalieName": "Karel Vejmelka",
-      "confirmedStart": false,
-      "statusCode": "expected",
-      "statusDescription": "From RotoWire: Expected",
-      "lastUpdated": "2026-01-05T14:31:55.183744Z"
+      "confirmedStart": true,
+      "statusCode": "confirmed",
+      "statusDescription": "From RotoWire: Confirmed",
+      "lastUpdated": "2026-01-05T19:20:42.534615Z"
     },
     "WSH": {
       "team": "WSH",
-      "playerId": 6355,
-      "goalieName": "Logan Thompson",
-      "confirmedStart": false,
-      "statusCode": "expected",
-      "statusDescription": "From RotoWire: Expected",
-      "lastUpdated": "2026-01-05T14:31:55.183751Z"
+      "playerId": 5079,
+      "goalieName": "Charlie Lindgren",
+      "confirmedStart": true,
+      "statusCode": "confirmed",
+      "statusDescription": "From RotoWire: Confirmed",
+      "lastUpdated": "2026-01-05T19:20:42.534621Z"
     },
     "ANA": {
       "team": "ANA",
-      "playerId": 5792,
-      "goalieName": "Lukas Dostal",
-      "confirmedStart": false,
-      "statusCode": "expected",
-      "statusDescription": "From RotoWire: Expected",
-      "lastUpdated": "2026-01-05T14:31:55.183753Z"
+      "playerId": 3896,
+      "goalieName": "Petr Mrazek",
+      "confirmedStart": true,
+      "statusCode": "confirmed",
+      "statusDescription": "From RotoWire: Confirmed",
+      "lastUpdated": "2026-01-05T19:20:42.534623Z"
     },
     "OTT": {
       "team": "OTT",
@@ -46,25 +46,25 @@
       "confirmedStart": false,
       "statusCode": "expected",
       "statusDescription": "From RotoWire: Expected",
-      "lastUpdated": "2026-01-05T14:31:55.183758Z"
+      "lastUpdated": "2026-01-05T19:20:42.534627Z"
     },
     "DET": {
       "team": "DET",
       "playerId": 3768,
       "goalieName": "John Gibson",
-      "confirmedStart": false,
-      "statusCode": "expected",
-      "statusDescription": "From RotoWire: Expected",
-      "lastUpdated": "2026-01-05T14:31:55.183760Z"
+      "confirmedStart": true,
+      "statusCode": "confirmed",
+      "statusDescription": "From RotoWire: Confirmed",
+      "lastUpdated": "2026-01-05T19:20:42.534629Z"
     },
     "CGY": {
       "team": "CGY",
       "playerId": 6054,
       "goalieName": "Dustin Wolf",
-      "confirmedStart": false,
-      "statusCode": "expected",
-      "statusDescription": "From RotoWire: Expected",
-      "lastUpdated": "2026-01-05T14:31:55.183764Z"
+      "confirmedStart": true,
+      "statusCode": "confirmed",
+      "statusDescription": "From RotoWire: Confirmed",
+      "lastUpdated": "2026-01-05T19:20:42.534633Z"
     },
     "SEA": {
       "team": "SEA",
@@ -73,25 +73,25 @@
       "confirmedStart": false,
       "statusCode": "expected",
       "statusDescription": "From RotoWire: Expected",
-      "lastUpdated": "2026-01-05T14:31:55.183767Z"
+      "lastUpdated": "2026-01-05T19:20:42.534636Z"
     },
     "LAK": {
       "team": "LAK",
       "playerId": 3739,
       "goalieName": "Darcy Kuemper",
-      "confirmedStart": false,
-      "statusCode": "expected",
-      "statusDescription": "From RotoWire: Expected",
-      "lastUpdated": "2026-01-05T14:31:55.183771Z"
+      "confirmedStart": true,
+      "statusCode": "confirmed",
+      "statusDescription": "From RotoWire: Confirmed",
+      "lastUpdated": "2026-01-05T19:20:42.534640Z"
     },
     "MIN": {
       "team": "MIN",
       "playerId": 5165,
       "goalieName": "Filip Gustavsson",
-      "confirmedStart": false,
-      "statusCode": "expected",
-      "statusDescription": "From RotoWire: Expected",
-      "lastUpdated": "2026-01-05T14:31:55.183773Z"
+      "confirmedStart": true,
+      "statusCode": "confirmed",
+      "statusDescription": "From RotoWire: Confirmed",
+      "lastUpdated": "2026-01-05T19:20:42.534642Z"
     },
     "BUF": {
       "team": "BUF",
@@ -100,7 +100,7 @@
       "confirmedStart": false,
       "statusCode": "TBD",
       "statusDescription": "From NHL API: TBD",
-      "lastUpdated": "2026-01-05T14:31:55.183780Z"
+      "lastUpdated": "2026-01-05T19:20:42.534649Z"
     },
     "VAN": {
       "team": "VAN",
@@ -109,7 +109,7 @@
       "confirmedStart": false,
       "statusCode": "TBD",
       "statusDescription": "From NHL API: TBD",
-      "lastUpdated": "2026-01-05T14:31:55.183782Z"
+      "lastUpdated": "2026-01-05T19:20:42.534651Z"
     },
     "TBL": {
       "team": "TBL",
@@ -118,7 +118,7 @@
       "confirmedStart": false,
       "statusCode": "TBD",
       "statusDescription": "From NHL API: TBD",
-      "lastUpdated": "2026-01-05T14:31:55.183785Z"
+      "lastUpdated": "2026-01-05T19:20:42.534654Z"
     },
     "COL": {
       "team": "COL",
@@ -127,7 +127,7 @@
       "confirmedStart": false,
       "statusCode": "TBD",
       "statusDescription": "From NHL API: TBD",
-      "lastUpdated": "2026-01-05T14:31:55.183787Z"
+      "lastUpdated": "2026-01-05T19:20:42.534656Z"
     },
     "PHI": {
       "team": "PHI",
@@ -136,7 +136,7 @@
       "confirmedStart": false,
       "statusCode": "TBD",
       "statusDescription": "From NHL API: TBD",
-      "lastUpdated": "2026-01-05T14:31:55.183789Z"
+      "lastUpdated": "2026-01-05T19:20:42.534658Z"
     },
     "CAR": {
       "team": "CAR",
@@ -145,7 +145,7 @@
       "confirmedStart": false,
       "statusCode": "TBD",
       "statusDescription": "From NHL API: TBD",
-      "lastUpdated": "2026-01-05T14:31:55.183792Z"
+      "lastUpdated": "2026-01-05T19:20:42.534661Z"
     },
     "DAL": {
       "team": "DAL",
@@ -154,7 +154,7 @@
       "confirmedStart": false,
       "statusCode": "TBD",
       "statusDescription": "From NHL API: TBD",
-      "lastUpdated": "2026-01-05T14:31:55.183794Z"
+      "lastUpdated": "2026-01-05T19:20:42.534663Z"
     },
     "NYI": {
       "team": "NYI",
@@ -163,7 +163,7 @@
       "confirmedStart": false,
       "statusCode": "TBD",
       "statusDescription": "From NHL API: TBD",
-      "lastUpdated": "2026-01-05T14:31:55.183796Z"
+      "lastUpdated": "2026-01-05T19:20:42.534665Z"
     },
     "NJD": {
       "team": "NJD",
@@ -172,7 +172,7 @@
       "confirmedStart": false,
       "statusCode": "TBD",
       "statusDescription": "From NHL API: TBD",
-      "lastUpdated": "2026-01-05T14:31:55.183797Z"
+      "lastUpdated": "2026-01-05T19:20:42.534666Z"
     },
     "TOR": {
       "team": "TOR",
@@ -181,7 +181,7 @@
       "confirmedStart": false,
       "statusCode": "TBD",
       "statusDescription": "From NHL API: TBD",
-      "lastUpdated": "2026-01-05T14:31:55.183799Z"
+      "lastUpdated": "2026-01-05T19:20:42.534668Z"
     },
     "FLA": {
       "team": "FLA",
@@ -190,7 +190,7 @@
       "confirmedStart": false,
       "statusCode": "TBD",
       "statusDescription": "From NHL API: TBD",
-      "lastUpdated": "2026-01-05T14:31:55.183801Z"
+      "lastUpdated": "2026-01-05T19:20:42.534670Z"
     },
     "WPG": {
       "team": "WPG",
@@ -199,7 +199,7 @@
       "confirmedStart": false,
       "statusCode": "TBD",
       "statusDescription": "From NHL API: TBD",
-      "lastUpdated": "2026-01-05T14:31:55.183803Z"
+      "lastUpdated": "2026-01-05T19:20:42.534672Z"
     },
     "VGK": {
       "team": "VGK",
@@ -208,7 +208,7 @@
       "confirmedStart": false,
       "statusCode": "TBD",
       "statusDescription": "From NHL API: TBD",
-      "lastUpdated": "2026-01-05T14:31:55.183804Z"
+      "lastUpdated": "2026-01-05T19:20:42.534673Z"
     },
     "EDM": {
       "team": "EDM",
@@ -217,7 +217,7 @@
       "confirmedStart": false,
       "statusCode": "TBD",
       "statusDescription": "From NHL API: TBD",
-      "lastUpdated": "2026-01-05T14:31:55.183807Z"
+      "lastUpdated": "2026-01-05T19:20:42.534675Z"
     },
     "NSH": {
       "team": "NSH",
@@ -226,7 +226,7 @@
       "confirmedStart": false,
       "statusCode": "TBD",
       "statusDescription": "From NHL API: TBD",
-      "lastUpdated": "2026-01-05T14:31:55.183808Z"
+      "lastUpdated": "2026-01-05T19:20:42.534677Z"
     },
     "SJS": {
       "team": "SJS",
@@ -235,7 +235,7 @@
       "confirmedStart": false,
       "statusCode": "TBD",
       "statusDescription": "From NHL API: TBD",
-      "lastUpdated": "2026-01-05T14:31:55.183810Z"
+      "lastUpdated": "2026-01-05T19:20:42.534679Z"
     },
     "CBJ": {
       "team": "CBJ",
@@ -244,7 +244,7 @@
       "confirmedStart": false,
       "statusCode": "TBD",
       "statusDescription": "From NHL API: TBD",
-      "lastUpdated": "2026-01-05T14:31:55.183811Z"
+      "lastUpdated": "2026-01-05T19:20:42.534680Z"
     },
     "BOS": {
       "team": "BOS",
@@ -253,7 +253,7 @@
       "confirmedStart": false,
       "statusCode": "TBD",
       "statusDescription": "From NHL API: TBD",
-      "lastUpdated": "2026-01-05T14:31:55.183814Z"
+      "lastUpdated": "2026-01-05T19:20:42.534683Z"
     },
     "MTL": {
       "team": "MTL",
@@ -262,7 +262,7 @@
       "confirmedStart": false,
       "statusCode": "TBD",
       "statusDescription": "From NHL API: TBD",
-      "lastUpdated": "2026-01-05T14:31:55.183819Z"
+      "lastUpdated": "2026-01-05T19:20:42.534689Z"
     },
     "CHI": {
       "team": "CHI",
@@ -271,7 +271,7 @@
       "confirmedStart": false,
       "statusCode": "TBD",
       "statusDescription": "From NHL API: TBD",
-      "lastUpdated": "2026-01-05T14:31:55.183823Z"
+      "lastUpdated": "2026-01-05T19:20:42.534692Z"
     },
     "STL": {
       "team": "STL",
@@ -280,7 +280,7 @@
       "confirmedStart": false,
       "statusCode": "TBD",
       "statusDescription": "From NHL API: TBD",
-      "lastUpdated": "2026-01-05T14:31:55.183824Z"
+      "lastUpdated": "2026-01-05T19:20:42.534693Z"
     },
     "PIT": {
       "team": "PIT",
@@ -289,7 +289,7 @@
       "confirmedStart": false,
       "statusCode": "TBD",
       "statusDescription": "From NHL API: TBD",
-      "lastUpdated": "2026-01-05T14:31:55.183852Z"
+      "lastUpdated": "2026-01-05T19:20:42.534721Z"
     }
   },
   "games": [
@@ -304,19 +304,19 @@
         "team": "NYR",
         "playerId": 5050,
         "goalieName": "Igor Shesterkin",
-        "confirmedStart": false,
-        "statusCode": "expected",
-        "statusDescription": "From RotoWire: Expected",
-        "lastUpdated": "2026-01-05T14:31:55.183732Z"
+        "confirmedStart": true,
+        "statusCode": "confirmed",
+        "statusDescription": "From RotoWire: Confirmed",
+        "lastUpdated": "2026-01-05T19:20:42.534606Z"
       },
       "awayGoalie": {
         "team": "UTA",
         "playerId": 6428,
         "goalieName": "Karel Vejmelka",
-        "confirmedStart": false,
-        "statusCode": "expected",
-        "statusDescription": "From RotoWire: Expected",
-        "lastUpdated": "2026-01-05T14:31:55.183744Z"
+        "confirmedStart": true,
+        "statusCode": "confirmed",
+        "statusDescription": "From RotoWire: Confirmed",
+        "lastUpdated": "2026-01-05T19:20:42.534615Z"
       }
     },
     {
@@ -328,21 +328,21 @@
       "awayTeam": "ANA",
       "homeGoalie": {
         "team": "WSH",
-        "playerId": 6355,
-        "goalieName": "Logan Thompson",
-        "confirmedStart": false,
-        "statusCode": "expected",
-        "statusDescription": "From RotoWire: Expected",
-        "lastUpdated": "2026-01-05T14:31:55.183751Z"
+        "playerId": 5079,
+        "goalieName": "Charlie Lindgren",
+        "confirmedStart": true,
+        "statusCode": "confirmed",
+        "statusDescription": "From RotoWire: Confirmed",
+        "lastUpdated": "2026-01-05T19:20:42.534621Z"
       },
       "awayGoalie": {
         "team": "ANA",
-        "playerId": 5792,
-        "goalieName": "Lukas Dostal",
-        "confirmedStart": false,
-        "statusCode": "expected",
-        "statusDescription": "From RotoWire: Expected",
-        "lastUpdated": "2026-01-05T14:31:55.183753Z"
+        "playerId": 3896,
+        "goalieName": "Petr Mrazek",
+        "confirmedStart": true,
+        "statusCode": "confirmed",
+        "statusDescription": "From RotoWire: Confirmed",
+        "lastUpdated": "2026-01-05T19:20:42.534623Z"
       }
     },
     {
@@ -359,16 +359,16 @@
         "confirmedStart": false,
         "statusCode": "expected",
         "statusDescription": "From RotoWire: Expected",
-        "lastUpdated": "2026-01-05T14:31:55.183758Z"
+        "lastUpdated": "2026-01-05T19:20:42.534627Z"
       },
       "awayGoalie": {
         "team": "DET",
         "playerId": 3768,
         "goalieName": "John Gibson",
-        "confirmedStart": false,
-        "statusCode": "expected",
-        "statusDescription": "From RotoWire: Expected",
-        "lastUpdated": "2026-01-05T14:31:55.183760Z"
+        "confirmedStart": true,
+        "statusCode": "confirmed",
+        "statusDescription": "From RotoWire: Confirmed",
+        "lastUpdated": "2026-01-05T19:20:42.534629Z"
       }
     },
     {
@@ -382,10 +382,10 @@
         "team": "CGY",
         "playerId": 6054,
         "goalieName": "Dustin Wolf",
-        "confirmedStart": false,
-        "statusCode": "expected",
-        "statusDescription": "From RotoWire: Expected",
-        "lastUpdated": "2026-01-05T14:31:55.183764Z"
+        "confirmedStart": true,
+        "statusCode": "confirmed",
+        "statusDescription": "From RotoWire: Confirmed",
+        "lastUpdated": "2026-01-05T19:20:42.534633Z"
       },
       "awayGoalie": {
         "team": "SEA",
@@ -394,7 +394,7 @@
         "confirmedStart": false,
         "statusCode": "expected",
         "statusDescription": "From RotoWire: Expected",
-        "lastUpdated": "2026-01-05T14:31:55.183767Z"
+        "lastUpdated": "2026-01-05T19:20:42.534636Z"
       }
     },
     {
@@ -408,19 +408,19 @@
         "team": "LAK",
         "playerId": 3739,
         "goalieName": "Darcy Kuemper",
-        "confirmedStart": false,
-        "statusCode": "expected",
-        "statusDescription": "From RotoWire: Expected",
-        "lastUpdated": "2026-01-05T14:31:55.183771Z"
+        "confirmedStart": true,
+        "statusCode": "confirmed",
+        "statusDescription": "From RotoWire: Confirmed",
+        "lastUpdated": "2026-01-05T19:20:42.534640Z"
       },
       "awayGoalie": {
         "team": "MIN",
         "playerId": 5165,
         "goalieName": "Filip Gustavsson",
-        "confirmedStart": false,
-        "statusCode": "expected",
-        "statusDescription": "From RotoWire: Expected",
-        "lastUpdated": "2026-01-05T14:31:55.183773Z"
+        "confirmedStart": true,
+        "statusCode": "confirmed",
+        "statusDescription": "From RotoWire: Confirmed",
+        "lastUpdated": "2026-01-05T19:20:42.534642Z"
       }
     },
     {
@@ -436,7 +436,7 @@
         "confirmedStart": false,
         "statusCode": "TBD",
         "statusDescription": "From NHL API: TBD",
-        "lastUpdated": "2026-01-05T14:31:55.183780Z"
+        "lastUpdated": "2026-01-05T19:20:42.534649Z"
       },
       "awayGoalie": {
         "team": "VAN",
@@ -445,7 +445,7 @@
         "confirmedStart": false,
         "statusCode": "TBD",
         "statusDescription": "From NHL API: TBD",
-        "lastUpdated": "2026-01-05T14:31:55.183782Z"
+        "lastUpdated": "2026-01-05T19:20:42.534651Z"
       }
     },
     {
@@ -461,7 +461,7 @@
         "confirmedStart": false,
         "statusCode": "TBD",
         "statusDescription": "From NHL API: TBD",
-        "lastUpdated": "2026-01-05T14:31:55.183785Z"
+        "lastUpdated": "2026-01-05T19:20:42.534654Z"
       },
       "awayGoalie": {
         "team": "COL",
@@ -470,7 +470,7 @@
         "confirmedStart": false,
         "statusCode": "TBD",
         "statusDescription": "From NHL API: TBD",
-        "lastUpdated": "2026-01-05T14:31:55.183787Z"
+        "lastUpdated": "2026-01-05T19:20:42.534656Z"
       }
     },
     {
@@ -486,7 +486,7 @@
         "confirmedStart": false,
         "statusCode": "TBD",
         "statusDescription": "From NHL API: TBD",
-        "lastUpdated": "2026-01-05T14:31:55.183789Z"
+        "lastUpdated": "2026-01-05T19:20:42.534658Z"
       },
       "awayGoalie": {
         "team": "ANA",
@@ -495,7 +495,7 @@
         "confirmedStart": false,
         "statusCode": "TBD",
         "statusDescription": "From NHL API: TBD",
-        "lastUpdated": "2026-01-05T14:31:55.183790Z"
+        "lastUpdated": "2026-01-05T19:20:42.534659Z"
       }
     },
     {
@@ -511,7 +511,7 @@
         "confirmedStart": false,
         "statusCode": "TBD",
         "statusDescription": "From NHL API: TBD",
-        "lastUpdated": "2026-01-05T14:31:55.183792Z"
+        "lastUpdated": "2026-01-05T19:20:42.534661Z"
       },
       "awayGoalie": {
         "team": "DAL",
@@ -520,7 +520,7 @@
         "confirmedStart": false,
         "statusCode": "TBD",
         "statusDescription": "From NHL API: TBD",
-        "lastUpdated": "2026-01-05T14:31:55.183794Z"
+        "lastUpdated": "2026-01-05T19:20:42.534663Z"
       }
     },
     {
@@ -536,7 +536,7 @@
         "confirmedStart": false,
         "statusCode": "TBD",
         "statusDescription": "From NHL API: TBD",
-        "lastUpdated": "2026-01-05T14:31:55.183796Z"
+        "lastUpdated": "2026-01-05T19:20:42.534665Z"
       },
       "awayGoalie": {
         "team": "NJD",
@@ -545,7 +545,7 @@
         "confirmedStart": false,
         "statusCode": "TBD",
         "statusDescription": "From NHL API: TBD",
-        "lastUpdated": "2026-01-05T14:31:55.183797Z"
+        "lastUpdated": "2026-01-05T19:20:42.534666Z"
       }
     },
     {
@@ -561,7 +561,7 @@
         "confirmedStart": false,
         "statusCode": "TBD",
         "statusDescription": "From NHL API: TBD",
-        "lastUpdated": "2026-01-05T14:31:55.183799Z"
+        "lastUpdated": "2026-01-05T19:20:42.534668Z"
       },
       "awayGoalie": {
         "team": "FLA",
@@ -570,7 +570,7 @@
         "confirmedStart": false,
         "statusCode": "TBD",
         "statusDescription": "From NHL API: TBD",
-        "lastUpdated": "2026-01-05T14:31:55.183801Z"
+        "lastUpdated": "2026-01-05T19:20:42.534670Z"
       }
     },
     {
@@ -586,7 +586,7 @@
         "confirmedStart": false,
         "statusCode": "TBD",
         "statusDescription": "From NHL API: TBD",
-        "lastUpdated": "2026-01-05T14:31:55.183803Z"
+        "lastUpdated": "2026-01-05T19:20:42.534672Z"
       },
       "awayGoalie": {
         "team": "VGK",
@@ -595,7 +595,7 @@
         "confirmedStart": false,
         "statusCode": "TBD",
         "statusDescription": "From NHL API: TBD",
-        "lastUpdated": "2026-01-05T14:31:55.183804Z"
+        "lastUpdated": "2026-01-05T19:20:42.534673Z"
       }
     },
     {
@@ -611,7 +611,7 @@
         "confirmedStart": false,
         "statusCode": "TBD",
         "statusDescription": "From NHL API: TBD",
-        "lastUpdated": "2026-01-05T14:31:55.183807Z"
+        "lastUpdated": "2026-01-05T19:20:42.534675Z"
       },
       "awayGoalie": {
         "team": "NSH",
@@ -620,7 +620,7 @@
         "confirmedStart": false,
         "statusCode": "TBD",
         "statusDescription": "From NHL API: TBD",
-        "lastUpdated": "2026-01-05T14:31:55.183808Z"
+        "lastUpdated": "2026-01-05T19:20:42.534677Z"
       }
     },
     {
@@ -636,7 +636,7 @@
         "confirmedStart": false,
         "statusCode": "TBD",
         "statusDescription": "From NHL API: TBD",
-        "lastUpdated": "2026-01-05T14:31:55.183810Z"
+        "lastUpdated": "2026-01-05T19:20:42.534679Z"
       },
       "awayGoalie": {
         "team": "CBJ",
@@ -645,7 +645,7 @@
         "confirmedStart": false,
         "statusCode": "TBD",
         "statusDescription": "From NHL API: TBD",
-        "lastUpdated": "2026-01-05T14:31:55.183811Z"
+        "lastUpdated": "2026-01-05T19:20:42.534680Z"
       }
     },
     {
@@ -661,7 +661,7 @@
         "confirmedStart": false,
         "statusCode": "TBD",
         "statusDescription": "From NHL API: TBD",
-        "lastUpdated": "2026-01-05T14:31:55.183813Z"
+        "lastUpdated": "2026-01-05T19:20:42.534682Z"
       },
       "awayGoalie": {
         "team": "BOS",
@@ -670,7 +670,7 @@
         "confirmedStart": false,
         "statusCode": "TBD",
         "statusDescription": "From NHL API: TBD",
-        "lastUpdated": "2026-01-05T14:31:55.183814Z"
+        "lastUpdated": "2026-01-05T19:20:42.534683Z"
       }
     },
     {
@@ -686,7 +686,7 @@
         "confirmedStart": false,
         "statusCode": "TBD",
         "statusDescription": "From NHL API: TBD",
-        "lastUpdated": "2026-01-05T14:31:55.183816Z"
+        "lastUpdated": "2026-01-05T19:20:42.534685Z"
       },
       "awayGoalie": {
         "team": "DAL",
@@ -695,7 +695,7 @@
         "confirmedStart": false,
         "statusCode": "TBD",
         "statusDescription": "From NHL API: TBD",
-        "lastUpdated": "2026-01-05T14:31:55.183817Z"
+        "lastUpdated": "2026-01-05T19:20:42.534687Z"
       }
     },
     {
@@ -711,7 +711,7 @@
         "confirmedStart": false,
         "statusCode": "TBD",
         "statusDescription": "From NHL API: TBD",
-        "lastUpdated": "2026-01-05T14:31:55.183819Z"
+        "lastUpdated": "2026-01-05T19:20:42.534689Z"
       },
       "awayGoalie": {
         "team": "CGY",
@@ -720,7 +720,7 @@
         "confirmedStart": false,
         "statusCode": "TBD",
         "statusDescription": "From NHL API: TBD",
-        "lastUpdated": "2026-01-05T14:31:55.183821Z"
+        "lastUpdated": "2026-01-05T19:20:42.534690Z"
       }
     },
     {
@@ -736,7 +736,7 @@
         "confirmedStart": false,
         "statusCode": "TBD",
         "statusDescription": "From NHL API: TBD",
-        "lastUpdated": "2026-01-05T14:31:55.183823Z"
+        "lastUpdated": "2026-01-05T19:20:42.534692Z"
       },
       "awayGoalie": {
         "team": "STL",
@@ -745,7 +745,7 @@
         "confirmedStart": false,
         "statusCode": "TBD",
         "statusDescription": "From NHL API: TBD",
-        "lastUpdated": "2026-01-05T14:31:55.183824Z"
+        "lastUpdated": "2026-01-05T19:20:42.534693Z"
       }
     },
     {
@@ -761,7 +761,7 @@
         "confirmedStart": false,
         "statusCode": "TBD",
         "statusDescription": "From NHL API: TBD",
-        "lastUpdated": "2026-01-05T14:31:55.183826Z"
+        "lastUpdated": "2026-01-05T19:20:42.534695Z"
       },
       "awayGoalie": {
         "team": "OTT",
@@ -770,7 +770,7 @@
         "confirmedStart": false,
         "statusCode": "TBD",
         "statusDescription": "From NHL API: TBD",
-        "lastUpdated": "2026-01-05T14:31:55.183827Z"
+        "lastUpdated": "2026-01-05T19:20:42.534697Z"
       }
     },
     {
@@ -786,7 +786,7 @@
         "confirmedStart": false,
         "statusCode": "TBD",
         "statusDescription": "From NHL API: TBD",
-        "lastUpdated": "2026-01-05T14:31:55.183829Z"
+        "lastUpdated": "2026-01-05T19:20:42.534698Z"
       },
       "awayGoalie": {
         "team": "SJS",
@@ -795,7 +795,7 @@
         "confirmedStart": false,
         "statusCode": "TBD",
         "statusDescription": "From NHL API: TBD",
-        "lastUpdated": "2026-01-05T14:31:55.183830Z"
+        "lastUpdated": "2026-01-05T19:20:42.534700Z"
       }
     },
     {
@@ -811,7 +811,7 @@
         "confirmedStart": false,
         "statusCode": "TBD",
         "statusDescription": "From NHL API: TBD",
-        "lastUpdated": "2026-01-05T14:31:55.183832Z"
+        "lastUpdated": "2026-01-05T19:20:42.534701Z"
       },
       "awayGoalie": {
         "team": "CGY",
@@ -820,7 +820,7 @@
         "confirmedStart": false,
         "statusCode": "TBD",
         "statusDescription": "From NHL API: TBD",
-        "lastUpdated": "2026-01-05T14:31:55.183833Z"
+        "lastUpdated": "2026-01-05T19:20:42.534703Z"
       }
     },
     {
@@ -836,7 +836,7 @@
         "confirmedStart": false,
         "statusCode": "TBD",
         "statusDescription": "From NHL API: TBD",
-        "lastUpdated": "2026-01-05T14:31:55.183835Z"
+        "lastUpdated": "2026-01-05T19:20:42.534705Z"
       },
       "awayGoalie": {
         "team": "FLA",
@@ -845,7 +845,7 @@
         "confirmedStart": false,
         "statusCode": "TBD",
         "statusDescription": "From NHL API: TBD",
-        "lastUpdated": "2026-01-05T14:31:55.183837Z"
+        "lastUpdated": "2026-01-05T19:20:42.534706Z"
       }
     },
     {
@@ -861,7 +861,7 @@
         "confirmedStart": false,
         "statusCode": "TBD",
         "statusDescription": "From NHL API: TBD",
-        "lastUpdated": "2026-01-05T14:31:55.183838Z"
+        "lastUpdated": "2026-01-05T19:20:42.534708Z"
       },
       "awayGoalie": {
         "team": "VAN",
@@ -870,7 +870,7 @@
         "confirmedStart": false,
         "statusCode": "TBD",
         "statusDescription": "From NHL API: TBD",
-        "lastUpdated": "2026-01-05T14:31:55.183840Z"
+        "lastUpdated": "2026-01-05T19:20:42.534709Z"
       }
     },
     {
@@ -886,7 +886,7 @@
         "confirmedStart": false,
         "statusCode": "TBD",
         "statusDescription": "From NHL API: TBD",
-        "lastUpdated": "2026-01-05T14:31:55.183842Z"
+        "lastUpdated": "2026-01-05T19:20:42.534711Z"
       },
       "awayGoalie": {
         "team": "BUF",
@@ -895,7 +895,7 @@
         "confirmedStart": false,
         "statusCode": "TBD",
         "statusDescription": "From NHL API: TBD",
-        "lastUpdated": "2026-01-05T14:31:55.183846Z"
+        "lastUpdated": "2026-01-05T19:20:42.534716Z"
       }
     },
     {
@@ -911,7 +911,7 @@
         "confirmedStart": false,
         "statusCode": "TBD",
         "statusDescription": "From NHL API: TBD",
-        "lastUpdated": "2026-01-05T14:31:55.183848Z"
+        "lastUpdated": "2026-01-05T19:20:42.534718Z"
       },
       "awayGoalie": {
         "team": "TOR",
@@ -920,7 +920,7 @@
         "confirmedStart": false,
         "statusCode": "TBD",
         "statusDescription": "From NHL API: TBD",
-        "lastUpdated": "2026-01-05T14:31:55.183850Z"
+        "lastUpdated": "2026-01-05T19:20:42.534719Z"
       }
     },
     {
@@ -936,7 +936,7 @@
         "confirmedStart": false,
         "statusCode": "TBD",
         "statusDescription": "From NHL API: TBD",
-        "lastUpdated": "2026-01-05T14:31:55.183852Z"
+        "lastUpdated": "2026-01-05T19:20:42.534721Z"
       },
       "awayGoalie": {
         "team": "NJD",
@@ -945,7 +945,7 @@
         "confirmedStart": false,
         "statusCode": "TBD",
         "statusDescription": "From NHL API: TBD",
-        "lastUpdated": "2026-01-05T14:31:55.183853Z"
+        "lastUpdated": "2026-01-05T19:20:42.534722Z"
       }
     },
     {
@@ -961,7 +961,7 @@
         "confirmedStart": false,
         "statusCode": "TBD",
         "statusDescription": "From NHL API: TBD",
-        "lastUpdated": "2026-01-05T14:31:55.183855Z"
+        "lastUpdated": "2026-01-05T19:20:42.534724Z"
       },
       "awayGoalie": {
         "team": "ANA",
@@ -970,7 +970,7 @@
         "confirmedStart": false,
         "statusCode": "TBD",
         "statusDescription": "From NHL API: TBD",
-        "lastUpdated": "2026-01-05T14:31:55.183856Z"
+        "lastUpdated": "2026-01-05T19:20:42.534725Z"
       }
     },
     {
@@ -986,7 +986,7 @@
         "confirmedStart": false,
         "statusCode": "TBD",
         "statusDescription": "From NHL API: TBD",
-        "lastUpdated": "2026-01-05T14:31:55.183858Z"
+        "lastUpdated": "2026-01-05T19:20:42.534727Z"
       },
       "awayGoalie": {
         "team": "NYI",
@@ -995,7 +995,7 @@
         "confirmedStart": false,
         "statusCode": "TBD",
         "statusDescription": "From NHL API: TBD",
-        "lastUpdated": "2026-01-05T14:31:55.183860Z"
+        "lastUpdated": "2026-01-05T19:20:42.534729Z"
       }
     },
     {
@@ -1011,7 +1011,7 @@
         "confirmedStart": false,
         "statusCode": "TBD",
         "statusDescription": "From NHL API: TBD",
-        "lastUpdated": "2026-01-05T14:31:55.183875Z"
+        "lastUpdated": "2026-01-05T19:20:42.534730Z"
       },
       "awayGoalie": {
         "team": "EDM",
@@ -1020,7 +1020,7 @@
         "confirmedStart": false,
         "statusCode": "TBD",
         "statusDescription": "From NHL API: TBD",
-        "lastUpdated": "2026-01-05T14:31:55.183877Z"
+        "lastUpdated": "2026-01-05T19:20:42.534732Z"
       }
     },
     {
@@ -1036,7 +1036,7 @@
         "confirmedStart": false,
         "statusCode": "TBD",
         "statusDescription": "From NHL API: TBD",
-        "lastUpdated": "2026-01-05T14:31:55.183879Z"
+        "lastUpdated": "2026-01-05T19:20:42.534734Z"
       },
       "awayGoalie": {
         "team": "OTT",
@@ -1045,7 +1045,7 @@
         "confirmedStart": false,
         "statusCode": "TBD",
         "statusDescription": "From NHL API: TBD",
-        "lastUpdated": "2026-01-05T14:31:55.183880Z"
+        "lastUpdated": "2026-01-05T19:20:42.534735Z"
       }
     },
     {
@@ -1061,7 +1061,7 @@
         "confirmedStart": false,
         "statusCode": "TBD",
         "statusDescription": "From NHL API: TBD",
-        "lastUpdated": "2026-01-05T14:31:55.183882Z"
+        "lastUpdated": "2026-01-05T19:20:42.534737Z"
       },
       "awayGoalie": {
         "team": "CBJ",
@@ -1070,7 +1070,7 @@
         "confirmedStart": false,
         "statusCode": "TBD",
         "statusDescription": "From NHL API: TBD",
-        "lastUpdated": "2026-01-05T14:31:55.183884Z"
+        "lastUpdated": "2026-01-05T19:20:42.534738Z"
       }
     },
     {
@@ -1086,7 +1086,7 @@
         "confirmedStart": false,
         "statusCode": "TBD",
         "statusDescription": "From NHL API: TBD",
-        "lastUpdated": "2026-01-05T14:31:55.183886Z"
+        "lastUpdated": "2026-01-05T19:20:42.534740Z"
       },
       "awayGoalie": {
         "team": "MIN",
@@ -1095,7 +1095,7 @@
         "confirmedStart": false,
         "statusCode": "TBD",
         "statusDescription": "From NHL API: TBD",
-        "lastUpdated": "2026-01-05T14:31:55.183887Z"
+        "lastUpdated": "2026-01-05T19:20:42.534741Z"
       }
     },
     {
@@ -1111,7 +1111,7 @@
         "confirmedStart": false,
         "statusCode": "TBD",
         "statusDescription": "From NHL API: TBD",
-        "lastUpdated": "2026-01-05T14:31:55.183889Z"
+        "lastUpdated": "2026-01-05T19:20:42.534743Z"
       },
       "awayGoalie": {
         "team": "WSH",
@@ -1120,7 +1120,7 @@
         "confirmedStart": false,
         "statusCode": "TBD",
         "statusDescription": "From NHL API: TBD",
-        "lastUpdated": "2026-01-05T14:31:55.183890Z"
+        "lastUpdated": "2026-01-05T19:20:42.534744Z"
       }
     },
     {
@@ -1136,7 +1136,7 @@
         "confirmedStart": false,
         "statusCode": "TBD",
         "statusDescription": "From NHL API: TBD",
-        "lastUpdated": "2026-01-05T14:31:55.183892Z"
+        "lastUpdated": "2026-01-05T19:20:42.534746Z"
       },
       "awayGoalie": {
         "team": "LAK",
@@ -1145,7 +1145,7 @@
         "confirmedStart": false,
         "statusCode": "TBD",
         "statusDescription": "From NHL API: TBD",
-        "lastUpdated": "2026-01-05T14:31:55.183894Z"
+        "lastUpdated": "2026-01-05T19:20:42.534748Z"
       }
     },
     {
@@ -1161,7 +1161,7 @@
         "confirmedStart": false,
         "statusCode": "TBD",
         "statusDescription": "From NHL API: TBD",
-        "lastUpdated": "2026-01-05T14:31:55.183896Z"
+        "lastUpdated": "2026-01-05T19:20:42.534750Z"
       },
       "awayGoalie": {
         "team": "STL",
@@ -1170,7 +1170,7 @@
         "confirmedStart": false,
         "statusCode": "TBD",
         "statusDescription": "From NHL API: TBD",
-        "lastUpdated": "2026-01-05T14:31:55.183897Z"
+        "lastUpdated": "2026-01-05T19:20:42.534751Z"
       }
     },
     {
@@ -1186,7 +1186,7 @@
         "confirmedStart": false,
         "statusCode": "TBD",
         "statusDescription": "From NHL API: TBD",
-        "lastUpdated": "2026-01-05T14:31:55.183899Z"
+        "lastUpdated": "2026-01-05T19:20:42.534753Z"
       },
       "awayGoalie": {
         "team": "NYR",
@@ -1195,7 +1195,7 @@
         "confirmedStart": false,
         "statusCode": "TBD",
         "statusDescription": "From NHL API: TBD",
-        "lastUpdated": "2026-01-05T14:31:55.183900Z"
+        "lastUpdated": "2026-01-05T19:20:42.534754Z"
       }
     },
     {
@@ -1211,7 +1211,7 @@
         "confirmedStart": false,
         "statusCode": "TBD",
         "statusDescription": "From NHL API: TBD",
-        "lastUpdated": "2026-01-05T14:31:55.183902Z"
+        "lastUpdated": "2026-01-05T19:20:42.534758Z"
       },
       "awayGoalie": {
         "team": "CGY",
@@ -1220,7 +1220,7 @@
         "confirmedStart": false,
         "statusCode": "TBD",
         "statusDescription": "From NHL API: TBD",
-        "lastUpdated": "2026-01-05T14:31:55.183906Z"
+        "lastUpdated": "2026-01-05T19:20:42.534759Z"
       }
     },
     {
@@ -1236,7 +1236,7 @@
         "confirmedStart": false,
         "statusCode": "TBD",
         "statusDescription": "From NHL API: TBD",
-        "lastUpdated": "2026-01-05T14:31:55.183908Z"
+        "lastUpdated": "2026-01-05T19:20:42.534761Z"
       },
       "awayGoalie": {
         "team": "CBJ",
@@ -1245,7 +1245,7 @@
         "confirmedStart": false,
         "statusCode": "TBD",
         "statusDescription": "From NHL API: TBD",
-        "lastUpdated": "2026-01-05T14:31:55.183909Z"
+        "lastUpdated": "2026-01-05T19:20:42.534762Z"
       }
     },
     {
@@ -1261,7 +1261,7 @@
         "confirmedStart": false,
         "statusCode": "TBD",
         "statusDescription": "From NHL API: TBD",
-        "lastUpdated": "2026-01-05T14:31:55.183911Z"
+        "lastUpdated": "2026-01-05T19:20:42.534764Z"
       },
       "awayGoalie": {
         "team": "DAL",
@@ -1270,7 +1270,7 @@
         "confirmedStart": false,
         "statusCode": "TBD",
         "statusDescription": "From NHL API: TBD",
-        "lastUpdated": "2026-01-05T14:31:55.183912Z"
+        "lastUpdated": "2026-01-05T19:20:42.534765Z"
       }
     },
     {
@@ -1286,7 +1286,7 @@
         "confirmedStart": false,
         "statusCode": "TBD",
         "statusDescription": "From NHL API: TBD",
-        "lastUpdated": "2026-01-05T14:31:55.183914Z"
+        "lastUpdated": "2026-01-05T19:20:42.534767Z"
       },
       "awayGoalie": {
         "team": "ANA",
@@ -1295,7 +1295,7 @@
         "confirmedStart": false,
         "statusCode": "TBD",
         "statusDescription": "From NHL API: TBD",
-        "lastUpdated": "2026-01-05T14:31:55.183915Z"
+        "lastUpdated": "2026-01-05T19:20:42.534768Z"
       }
     },
     {
@@ -1311,7 +1311,7 @@
         "confirmedStart": false,
         "statusCode": "TBD",
         "statusDescription": "From NHL API: TBD",
-        "lastUpdated": "2026-01-05T14:31:55.183917Z"
+        "lastUpdated": "2026-01-05T19:20:42.534794Z"
       },
       "awayGoalie": {
         "team": "VAN",
@@ -1320,7 +1320,7 @@
         "confirmedStart": false,
         "statusCode": "TBD",
         "statusDescription": "From NHL API: TBD",
-        "lastUpdated": "2026-01-05T14:31:55.183918Z"
+        "lastUpdated": "2026-01-05T19:20:42.534798Z"
       }
     },
     {
@@ -1336,7 +1336,7 @@
         "confirmedStart": false,
         "statusCode": "TBD",
         "statusDescription": "From NHL API: TBD",
-        "lastUpdated": "2026-01-05T14:31:55.183920Z"
+        "lastUpdated": "2026-01-05T19:20:42.534802Z"
       },
       "awayGoalie": {
         "team": "DET",
@@ -1345,7 +1345,7 @@
         "confirmedStart": false,
         "statusCode": "TBD",
         "statusDescription": "From NHL API: TBD",
-        "lastUpdated": "2026-01-05T14:31:55.183922Z"
+        "lastUpdated": "2026-01-05T19:20:42.534805Z"
       }
     },
     {
@@ -1361,7 +1361,7 @@
         "confirmedStart": false,
         "statusCode": "TBD",
         "statusDescription": "From NHL API: TBD",
-        "lastUpdated": "2026-01-05T14:31:55.183923Z"
+        "lastUpdated": "2026-01-05T19:20:42.534808Z"
       },
       "awayGoalie": {
         "team": "FLA",
@@ -1370,7 +1370,7 @@
         "confirmedStart": false,
         "statusCode": "TBD",
         "statusDescription": "From NHL API: TBD",
-        "lastUpdated": "2026-01-05T14:31:55.183925Z"
+        "lastUpdated": "2026-01-05T19:20:42.534812Z"
       }
     },
     {
@@ -1386,7 +1386,7 @@
         "confirmedStart": false,
         "statusCode": "TBD",
         "statusDescription": "From NHL API: TBD",
-        "lastUpdated": "2026-01-05T14:31:55.183927Z"
+        "lastUpdated": "2026-01-05T19:20:42.534816Z"
       },
       "awayGoalie": {
         "team": "TBL",
@@ -1395,7 +1395,7 @@
         "confirmedStart": false,
         "statusCode": "TBD",
         "statusDescription": "From NHL API: TBD",
-        "lastUpdated": "2026-01-05T14:31:55.183928Z"
+        "lastUpdated": "2026-01-05T19:20:42.534818Z"
       }
     },
     {
@@ -1411,7 +1411,7 @@
         "confirmedStart": false,
         "statusCode": "TBD",
         "statusDescription": "From NHL API: TBD",
-        "lastUpdated": "2026-01-05T14:31:55.183930Z"
+        "lastUpdated": "2026-01-05T19:20:42.534820Z"
       },
       "awayGoalie": {
         "team": "SEA",
@@ -1420,7 +1420,7 @@
         "confirmedStart": false,
         "statusCode": "TBD",
         "statusDescription": "From NHL API: TBD",
-        "lastUpdated": "2026-01-05T14:31:55.183931Z"
+        "lastUpdated": "2026-01-05T19:20:42.534821Z"
       }
     },
     {
@@ -1436,7 +1436,7 @@
         "confirmedStart": false,
         "statusCode": "TBD",
         "statusDescription": "From NHL API: TBD",
-        "lastUpdated": "2026-01-05T14:31:55.183934Z"
+        "lastUpdated": "2026-01-05T19:20:42.534826Z"
       },
       "awayGoalie": {
         "team": "CHI",
@@ -1445,7 +1445,7 @@
         "confirmedStart": false,
         "statusCode": "TBD",
         "statusDescription": "From NHL API: TBD",
-        "lastUpdated": "2026-01-05T14:31:55.183936Z"
+        "lastUpdated": "2026-01-05T19:20:42.534827Z"
       }
     },
     {
@@ -1461,7 +1461,7 @@
         "confirmedStart": false,
         "statusCode": "TBD",
         "statusDescription": "From NHL API: TBD",
-        "lastUpdated": "2026-01-05T14:31:55.183938Z"
+        "lastUpdated": "2026-01-05T19:20:42.534829Z"
       },
       "awayGoalie": {
         "team": "NYI",
@@ -1470,7 +1470,7 @@
         "confirmedStart": false,
         "statusCode": "TBD",
         "statusDescription": "From NHL API: TBD",
-        "lastUpdated": "2026-01-05T14:31:55.183939Z"
+        "lastUpdated": "2026-01-05T19:20:42.534830Z"
       }
     },
     {
@@ -1486,7 +1486,7 @@
         "confirmedStart": false,
         "statusCode": "TBD",
         "statusDescription": "From NHL API: TBD",
-        "lastUpdated": "2026-01-05T14:31:55.183941Z"
+        "lastUpdated": "2026-01-05T19:20:42.534832Z"
       },
       "awayGoalie": {
         "team": "LAK",
@@ -1495,7 +1495,7 @@
         "confirmedStart": false,
         "statusCode": "TBD",
         "statusDescription": "From NHL API: TBD",
-        "lastUpdated": "2026-01-05T14:31:55.183942Z"
+        "lastUpdated": "2026-01-05T19:20:42.534833Z"
       }
     },
     {
@@ -1511,7 +1511,7 @@
         "confirmedStart": false,
         "statusCode": "TBD",
         "statusDescription": "From NHL API: TBD",
-        "lastUpdated": "2026-01-05T14:31:55.183944Z"
+        "lastUpdated": "2026-01-05T19:20:42.534835Z"
       },
       "awayGoalie": {
         "team": "STL",
@@ -1520,7 +1520,7 @@
         "confirmedStart": false,
         "statusCode": "TBD",
         "statusDescription": "From NHL API: TBD",
-        "lastUpdated": "2026-01-05T14:31:55.183945Z"
+        "lastUpdated": "2026-01-05T19:20:42.534836Z"
       }
     },
     {
@@ -1536,7 +1536,7 @@
         "confirmedStart": false,
         "statusCode": "TBD",
         "statusDescription": "From NHL API: TBD",
-        "lastUpdated": "2026-01-05T14:31:55.183947Z"
+        "lastUpdated": "2026-01-05T19:20:42.534838Z"
       },
       "awayGoalie": {
         "team": "NJD",
@@ -1545,7 +1545,7 @@
         "confirmedStart": false,
         "statusCode": "TBD",
         "statusDescription": "From NHL API: TBD",
-        "lastUpdated": "2026-01-05T14:31:55.183948Z"
+        "lastUpdated": "2026-01-05T19:20:42.534840Z"
       }
     },
     {
@@ -1561,7 +1561,7 @@
         "confirmedStart": false,
         "statusCode": "TBD",
         "statusDescription": "From NHL API: TBD",
-        "lastUpdated": "2026-01-05T14:31:55.183950Z"
+        "lastUpdated": "2026-01-05T19:20:42.534842Z"
       },
       "awayGoalie": {
         "team": "PIT",
@@ -1570,7 +1570,7 @@
         "confirmedStart": false,
         "statusCode": "TBD",
         "statusDescription": "From NHL API: TBD",
-        "lastUpdated": "2026-01-05T14:31:55.183952Z"
+        "lastUpdated": "2026-01-05T19:20:42.534843Z"
       }
     },
     {
@@ -1586,7 +1586,7 @@
         "confirmedStart": false,
         "statusCode": "TBD",
         "statusDescription": "From NHL API: TBD",
-        "lastUpdated": "2026-01-05T14:31:55.183953Z"
+        "lastUpdated": "2026-01-05T19:20:42.534845Z"
       },
       "awayGoalie": {
         "team": "WSH",
@@ -1595,7 +1595,7 @@
         "confirmedStart": false,
         "statusCode": "TBD",
         "statusDescription": "From NHL API: TBD",
-        "lastUpdated": "2026-01-05T14:31:55.183955Z"
+        "lastUpdated": "2026-01-05T19:20:42.534846Z"
       }
     },
     {
@@ -1611,7 +1611,7 @@
         "confirmedStart": false,
         "statusCode": "TBD",
         "statusDescription": "From NHL API: TBD",
-        "lastUpdated": "2026-01-05T14:31:55.183957Z"
+        "lastUpdated": "2026-01-05T19:20:42.534848Z"
       },
       "awayGoalie": {
         "team": "CBJ",
@@ -1620,7 +1620,7 @@
         "confirmedStart": false,
         "statusCode": "TBD",
         "statusDescription": "From NHL API: TBD",
-        "lastUpdated": "2026-01-05T14:31:55.183958Z"
+        "lastUpdated": "2026-01-05T19:20:42.534849Z"
       }
     },
     {
@@ -1636,7 +1636,7 @@
         "confirmedStart": false,
         "statusCode": "TBD",
         "statusDescription": "From NHL API: TBD",
-        "lastUpdated": "2026-01-05T14:31:55.183960Z"
+        "lastUpdated": "2026-01-05T19:20:42.534851Z"
       },
       "awayGoalie": {
         "team": "VGK",
@@ -1645,7 +1645,7 @@
         "confirmedStart": false,
         "statusCode": "TBD",
         "statusDescription": "From NHL API: TBD",
-        "lastUpdated": "2026-01-05T14:31:55.183961Z"
+        "lastUpdated": "2026-01-05T19:20:42.534853Z"
       }
     }
   ]
