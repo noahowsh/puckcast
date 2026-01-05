@@ -1,76 +1,76 @@
 {
-  "generatedAt": "2026-01-04T19:16:26.924363+00:00",
-  "date": "2026-01-04",
+  "generatedAt": "2026-01-05T14:13:58.472429+00:00",
+  "date": "2026-01-05",
   "teams": {
-    "DAL": {
+    "NYR": {
       "injuries": []
     },
-    "MTL": {
+    "UTA": {
       "injuries": []
     },
-    "CBJ": {
+    "WSH": {
       "injuries": []
     },
-    "PIT": {
+    "ANA": {
       "injuries": []
     },
-    "FLA": {
+    "OTT": {
       "injuries": []
     },
-    "COL": {
+    "DET": {
       "injuries": []
     },
-    "NJD": {
+    "CGY": {
       "injuries": []
     },
-    "CAR": {
+    "SEA": {
       "injuries": []
     },
-    "CHI": {
+    "LAK": {
       "injuries": []
     },
-    "VGK": {
+    "MIN": {
       "injuries": []
     }
   },
   "games": [
     {
-      "gameId": "2025020657",
-      "date": "2026-01-04",
-      "home": "DAL",
-      "away": "MTL",
+      "gameId": "2025020662",
+      "date": "2026-01-05",
+      "home": "NYR",
+      "away": "UTA",
       "homeInjuries": [],
       "awayInjuries": []
     },
     {
-      "gameId": "2025020658",
-      "date": "2026-01-04",
-      "home": "CBJ",
-      "away": "PIT",
+      "gameId": "2025020663",
+      "date": "2026-01-05",
+      "home": "WSH",
+      "away": "ANA",
       "homeInjuries": [],
       "awayInjuries": []
     },
     {
-      "gameId": "2025020659",
-      "date": "2026-01-04",
-      "home": "FLA",
-      "away": "COL",
+      "gameId": "2025020664",
+      "date": "2026-01-05",
+      "home": "OTT",
+      "away": "DET",
       "homeInjuries": [],
       "awayInjuries": []
     },
     {
-      "gameId": "2025020660",
-      "date": "2026-01-04",
-      "home": "NJD",
-      "away": "CAR",
+      "gameId": "2025020665",
+      "date": "2026-01-05",
+      "home": "CGY",
+      "away": "SEA",
       "homeInjuries": [],
       "awayInjuries": []
     },
     {
-      "gameId": "2025020661",
-      "date": "2026-01-04",
-      "home": "CHI",
-      "away": "VGK",
+      "gameId": "2025020666",
+      "date": "2026-01-05",
+      "home": "LAK",
+      "away": "MIN",
       "homeInjuries": [],
       "awayInjuries": []
     }
