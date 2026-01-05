@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-01-05T13:33:45.054469+00:00",
+  "updatedAt": "2026-01-05T23:12:27.307970+00:00",
   "notes": "Goalie performance metrics calculated from NHL Stats API data. GSAX = Expected Goals Against - Actual Goals Against (positive = outperforming expectations).",
   "goalies": [
     {
@@ -585,6 +585,38 @@
       "nextOpponent": "STL"
     },
     {
+      "name": "Dan Vladar",
+      "team": "PHI",
+      "gamesPlayed": 24,
+      "record": "15-6-3",
+      "wins": 15,
+      "losses": 6,
+      "otLosses": 3,
+      "gaa": 2.39,
+      "savePct": 0.91,
+      "shutouts": 0,
+      "goalsAgainst": 57,
+      "shotsAgainst": 634,
+      "saves": 577,
+      "shotsAgainstPerGame": 26.4,
+      "savesPerGame": 24.0,
+      "expectedGoalsAgainst": 57.1,
+      "gsax": 0.1,
+      "rollingGsa": 0.0,
+      "seasonGsa": 0.1,
+      "restDays": 1,
+      "startLikelihood": 0.9,
+      "trend": "steady",
+      "note": "Consistent performance from Dan Vladar with a 2.39 GAA \u2014 reliable starter for PHI.",
+      "strengths": [
+        "Proven winner"
+      ],
+      "watchouts": [
+        "Inconsistent results"
+      ],
+      "nextOpponent": "ANA"
+    },
+    {
       "name": "Jet Greaves",
       "team": "CBJ",
       "gamesPlayed": 28,
@@ -615,38 +647,6 @@
         "Inconsistent results"
       ],
       "nextOpponent": "SJS"
-    },
-    {
-      "name": "Dan Vladar",
-      "team": "PHI",
-      "gamesPlayed": 24,
-      "record": "15-6-3",
-      "wins": 15,
-      "losses": 6,
-      "otLosses": 3,
-      "gaa": 2.39,
-      "savePct": 0.91,
-      "shutouts": 0,
-      "goalsAgainst": 57,
-      "shotsAgainst": 633,
-      "saves": 576,
-      "shotsAgainstPerGame": 26.4,
-      "savesPerGame": 24.0,
-      "expectedGoalsAgainst": 57.0,
-      "gsax": -0.0,
-      "rollingGsa": -0.0,
-      "seasonGsa": -0.0,
-      "restDays": 1,
-      "startLikelihood": 0.8,
-      "trend": "stable",
-      "note": "Dan Vladar showing promise with limited sample size \u2014 monitor progression closely.",
-      "strengths": [
-        "Proven winner"
-      ],
-      "watchouts": [
-        "Inconsistent results"
-      ],
-      "nextOpponent": "ANA"
     },
     {
       "name": "Ilya Sorokin",
@@ -745,6 +745,38 @@
       "nextOpponent": "VAN"
     },
     {
+      "name": "Jeremy Swayman",
+      "team": "BOS",
+      "gamesPlayed": 29,
+      "record": "16-10-2",
+      "wins": 16,
+      "losses": 10,
+      "otLosses": 2,
+      "gaa": 2.8,
+      "savePct": 0.906,
+      "shutouts": 0,
+      "goalsAgainst": 80,
+      "shotsAgainst": 840,
+      "saves": 761,
+      "shotsAgainstPerGame": 29.0,
+      "savesPerGame": 26.2,
+      "expectedGoalsAgainst": 75.6,
+      "gsax": -4.4,
+      "rollingGsa": -0.5,
+      "seasonGsa": -4.4,
+      "restDays": 1,
+      "startLikelihood": 0.8,
+      "trend": "stable",
+      "note": "Jeremy Swayman showing promise with limited sample size \u2014 monitor progression closely.",
+      "strengths": [
+        "Proven winner"
+      ],
+      "watchouts": [
+        "Inconsistent results"
+      ],
+      "nextOpponent": "SEA"
+    },
+    {
       "name": "Thatcher Demko",
       "team": "VAN",
       "gamesPlayed": 18,
@@ -775,38 +807,6 @@
         "Inconsistent results"
       ],
       "nextOpponent": "BUF"
-    },
-    {
-      "name": "Jeremy Swayman",
-      "team": "BOS",
-      "gamesPlayed": 29,
-      "record": "16-10-2",
-      "wins": 16,
-      "losses": 10,
-      "otLosses": 2,
-      "gaa": 2.8,
-      "savePct": 0.906,
-      "shutouts": 0,
-      "goalsAgainst": 80,
-      "shotsAgainst": 839,
-      "saves": 760,
-      "shotsAgainstPerGame": 28.9,
-      "savesPerGame": 26.2,
-      "expectedGoalsAgainst": 75.5,
-      "gsax": -4.5,
-      "rollingGsa": -0.5,
-      "seasonGsa": -4.5,
-      "restDays": 1,
-      "startLikelihood": 0.8,
-      "trend": "stable",
-      "note": "Jeremy Swayman showing promise with limited sample size \u2014 monitor progression closely.",
-      "strengths": [
-        "Proven winner"
-      ],
-      "watchouts": [
-        "Inconsistent results"
-      ],
-      "nextOpponent": "SEA"
     },
     {
       "name": "Tristan Jarry",
@@ -885,14 +885,14 @@
       "savePct": 0.905,
       "shutouts": 2,
       "goalsAgainst": 71,
-      "shotsAgainst": 748,
-      "saves": 677,
+      "shotsAgainst": 747,
+      "saves": 676,
       "shotsAgainstPerGame": 27.7,
-      "savesPerGame": 25.1,
-      "expectedGoalsAgainst": 67.3,
-      "gsax": -3.7,
+      "savesPerGame": 25.0,
+      "expectedGoalsAgainst": 67.2,
+      "gsax": -3.8,
       "rollingGsa": -0.4,
-      "seasonGsa": -3.7,
+      "seasonGsa": -3.8,
       "restDays": 1,
       "startLikelihood": 0.8,
       "trend": "stable",
