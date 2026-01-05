@@ -1,50 +1,119 @@
 {
-  "generatedAt": "2026-01-04T22:31:01.441055+00:00",
+  "generatedAt": "2026-01-05T10:46:20.047951+00:00",
   "games": [
     {
-      "id": "2025020660",
-      "gameDate": "2026-01-04",
+      "id": "2025020662",
+      "gameDate": "2026-01-05",
       "startTimeEt": "7:00 PM ET",
-      "startTimeUtc": "2026-01-05T00:00:00+00:00",
+      "startTimeUtc": "2026-01-06T00:00:00+00:00",
       "homeTeam": {
-        "name": "Devils",
-        "abbrev": "NJD"
+        "name": "Rangers",
+        "abbrev": "NYR"
       },
       "awayTeam": {
-        "name": "Hurricanes",
-        "abbrev": "CAR"
+        "name": "Mammoth",
+        "abbrev": "UTA"
       },
-      "homeWinProb": 0.4056,
-      "awayWinProb": 0.5944,
-      "confidenceScore": 0.189,
+      "homeWinProb": 0.4404,
+      "awayWinProb": 0.5596,
+      "confidenceScore": 0.119,
       "confidenceGrade": "C+",
-      "edge": -0.094,
-      "summary": "Hurricanes project at 59% as the road lean \u2014 a C+-tier edge worth 9.4 pts over a coin flip.",
+      "edge": -0.06,
+      "summary": "Mammoth project at 56% as the road lean \u2014 a C+-tier edge worth 6.0 pts over a coin flip.",
       "modelFavorite": "away",
-      "venue": "Prudential Center",
+      "venue": "Madison Square Garden",
       "season": "20252026"
     },
     {
-      "id": "2025020661",
-      "gameDate": "2026-01-04",
+      "id": "2025020663",
+      "gameDate": "2026-01-05",
       "startTimeEt": "7:00 PM ET",
-      "startTimeUtc": "2026-01-05T00:00:00+00:00",
+      "startTimeUtc": "2026-01-06T00:00:00+00:00",
       "homeTeam": {
-        "name": "Blackhawks",
-        "abbrev": "CHI"
+        "name": "Capitals",
+        "abbrev": "WSH"
       },
       "awayTeam": {
-        "name": "Golden Knights",
-        "abbrev": "VGK"
+        "name": "Ducks",
+        "abbrev": "ANA"
       },
-      "homeWinProb": 0.319,
-      "awayWinProb": 0.681,
-      "confidenceScore": 0.362,
-      "confidenceGrade": "B+",
-      "edge": -0.181,
-      "summary": "Golden Knights project at 68% as the road lean \u2014 a B+-tier edge worth 18.1 pts over a coin flip.",
+      "homeWinProb": 0.5268,
+      "awayWinProb": 0.4732,
+      "confidenceScore": 0.054,
+      "confidenceGrade": "C",
+      "edge": 0.027,
+      "summary": "Capitals project at 53% as the home lean \u2014 a C-tier edge worth 2.7 pts over a coin flip.",
+      "modelFavorite": "home",
+      "venue": "Capital One Arena",
+      "season": "20252026"
+    },
+    {
+      "id": "2025020664",
+      "gameDate": "2026-01-05",
+      "startTimeEt": "7:30 PM ET",
+      "startTimeUtc": "2026-01-06T00:30:00+00:00",
+      "homeTeam": {
+        "name": "Senators",
+        "abbrev": "OTT"
+      },
+      "awayTeam": {
+        "name": "Red Wings",
+        "abbrev": "DET"
+      },
+      "homeWinProb": 0.5824,
+      "awayWinProb": 0.4176,
+      "confidenceScore": 0.165,
+      "confidenceGrade": "C+",
+      "edge": 0.082,
+      "summary": "Senators project at 58% as the home lean \u2014 a C+-tier edge worth 8.2 pts over a coin flip.",
+      "modelFavorite": "home",
+      "venue": "Canadian Tire Centre",
+      "season": "20252026"
+    },
+    {
+      "id": "2025020665",
+      "gameDate": "2026-01-05",
+      "startTimeEt": "9:30 PM ET",
+      "startTimeUtc": "2026-01-06T02:30:00+00:00",
+      "homeTeam": {
+        "name": "Flames",
+        "abbrev": "CGY"
+      },
+      "awayTeam": {
+        "name": "Kraken",
+        "abbrev": "SEA"
+      },
+      "homeWinProb": 0.527,
+      "awayWinProb": 0.473,
+      "confidenceScore": 0.054,
+      "confidenceGrade": "C",
+      "edge": 0.027,
+      "summary": "Flames project at 53% as the home lean \u2014 a C-tier edge worth 2.7 pts over a coin flip.",
+      "modelFavorite": "home",
+      "venue": "Scotiabank Saddledome",
+      "season": "20252026"
+    },
+    {
+      "id": "2025020666",
+      "gameDate": "2026-01-05",
+      "startTimeEt": "10:30 PM ET",
+      "startTimeUtc": "2026-01-06T03:30:00+00:00",
+      "homeTeam": {
+        "name": "Kings",
+        "abbrev": "LAK"
+      },
+      "awayTeam": {
+        "name": "Wild",
+        "abbrev": "MIN"
+      },
+      "homeWinProb": 0.4949,
+      "awayWinProb": 0.5051,
+      "confidenceScore": 0.01,
+      "confidenceGrade": "C",
+      "edge": -0.005,
+      "summary": "Wild project at 51% as the road lean \u2014 a C-tier edge worth 0.5 pts over a coin flip.",
       "modelFavorite": "away",
-      "venue": "United Center",
+      "venue": "Crypto.com Arena",
       "season": "20252026"
     }
   ]
