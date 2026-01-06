@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-01-05T23:12:27.307970+00:00",
+  "updatedAt": "2026-01-06T13:30:09.789639+00:00",
   "notes": "Goalie performance metrics calculated from NHL Stats API data. GSAX = Expected Goals Against - Actual Goals Against (positive = outperforming expectations).",
   "goalies": [
     {
@@ -33,40 +33,40 @@
       "watchouts": [
         "Limited recent data"
       ],
-      "nextOpponent": "LAK"
+      "nextOpponent": "SEA"
     },
     {
-      "name": "Jonathan Quick",
-      "team": "NYR",
-      "gamesPlayed": 10,
-      "record": "3-6-1",
-      "wins": 3,
-      "losses": 6,
+      "name": "Philipp Grubauer",
+      "team": "SEA",
+      "gamesPlayed": 14,
+      "record": "8-3-1",
+      "wins": 8,
+      "losses": 3,
       "otLosses": 1,
-      "gaa": 2.11,
-      "savePct": 0.924,
-      "shutouts": 1,
-      "goalsAgainst": 21,
-      "shotsAgainst": 278,
-      "saves": 257,
-      "shotsAgainstPerGame": 27.8,
-      "savesPerGame": 25.7,
-      "expectedGoalsAgainst": 25.0,
-      "gsax": 4.0,
-      "rollingGsa": 1.2,
-      "seasonGsa": 4.0,
+      "gaa": 2.21,
+      "savePct": 0.926,
+      "shutouts": 0,
+      "goalsAgainst": 28,
+      "shotsAgainst": 380,
+      "saves": 352,
+      "shotsAgainstPerGame": 27.1,
+      "savesPerGame": 25.1,
+      "expectedGoalsAgainst": 34.2,
+      "gsax": 6.2,
+      "rollingGsa": 1.3,
+      "seasonGsa": 6.2,
       "restDays": 2,
       "startLikelihood": 0.95,
       "trend": "surging",
-      "note": "Jonathan Quick is playing at an elite level with a 0.924 save percentage, providing NYR with a strong defensive anchor.",
+      "note": "Philipp Grubauer is playing at an elite level with a 0.926 save percentage, providing SEA with a strong defensive anchor.",
       "strengths": [
         "Elite save percentage",
         "Exceptional goals against average"
       ],
       "watchouts": [
-        "Inconsistent results"
+        "Limited recent data"
       ],
-      "nextOpponent": "UTA"
+      "nextOpponent": "BOS"
     },
     {
       "name": "Mackenzie Blackwood",
@@ -132,40 +132,40 @@
       "watchouts": [
         "Limited recent data"
       ],
-      "nextOpponent": "CGY"
+      "nextOpponent": "BOS"
     },
     {
-      "name": "Philipp Grubauer",
-      "team": "SEA",
-      "gamesPlayed": 13,
-      "record": "7-3-1",
-      "wins": 7,
-      "losses": 3,
-      "otLosses": 1,
-      "gaa": 2.32,
-      "savePct": 0.92,
-      "shutouts": 0,
-      "goalsAgainst": 27,
-      "shotsAgainst": 338,
-      "saves": 311,
-      "shotsAgainstPerGame": 26.0,
-      "savesPerGame": 23.9,
-      "expectedGoalsAgainst": 30.4,
-      "gsax": 3.4,
-      "rollingGsa": 0.8,
-      "seasonGsa": 3.4,
+      "name": "Jonathan Quick",
+      "team": "NYR",
+      "gamesPlayed": 11,
+      "record": "3-6-2",
+      "wins": 3,
+      "losses": 6,
+      "otLosses": 2,
+      "gaa": 2.23,
+      "savePct": 0.919,
+      "shutouts": 1,
+      "goalsAgainst": 24,
+      "shotsAgainst": 295,
+      "saves": 271,
+      "shotsAgainstPerGame": 26.8,
+      "savesPerGame": 24.6,
+      "expectedGoalsAgainst": 26.6,
+      "gsax": 2.6,
+      "rollingGsa": 0.7,
+      "seasonGsa": 2.6,
       "restDays": 2,
-      "startLikelihood": 0.95,
-      "trend": "surging",
-      "note": "Philipp Grubauer is playing at an elite level with a 0.920 save percentage, providing SEA with a strong defensive anchor.",
+      "startLikelihood": 0.8,
+      "trend": "steady",
+      "note": "Consistent performance from Jonathan Quick with a 2.23 GAA \u2014 reliable starter for NYR.",
       "strengths": [
-        "Elite save percentage",
+        "Exceptional goals against average",
         "Strong rebound control"
       ],
       "watchouts": [
-        "Limited recent data"
+        "Inconsistent results"
       ],
-      "nextOpponent": "CGY"
+      "nextOpponent": "BUF"
     },
     {
       "name": "Scott Wedgewood",
@@ -230,7 +230,7 @@
       "watchouts": [
         "Inconsistent results"
       ],
-      "nextOpponent": "ANA"
+      "nextOpponent": "DAL"
     },
     {
       "name": "Devin Cooley",
@@ -262,7 +262,7 @@
       "watchouts": [
         "Limited recent data"
       ],
-      "nextOpponent": "SEA"
+      "nextOpponent": "MTL"
     },
     {
       "name": "Dennis Hildeby",
@@ -297,6 +297,38 @@
       "nextOpponent": "FLA"
     },
     {
+      "name": "Igor Shesterkin",
+      "team": "NYR",
+      "gamesPlayed": 34,
+      "record": "17-12-4",
+      "wins": 17,
+      "losses": 12,
+      "otLosses": 4,
+      "gaa": 2.45,
+      "savePct": 0.913,
+      "shutouts": 1,
+      "goalsAgainst": 82,
+      "shotsAgainst": 945,
+      "saves": 863,
+      "shotsAgainstPerGame": 27.8,
+      "savesPerGame": 25.4,
+      "expectedGoalsAgainst": 85.0,
+      "gsax": 3.0,
+      "rollingGsa": 0.3,
+      "seasonGsa": 3.0,
+      "restDays": 1,
+      "startLikelihood": 0.9,
+      "trend": "steady",
+      "note": "Consistent performance from Igor Shesterkin with a 2.45 GAA \u2014 reliable starter for NYR.",
+      "strengths": [
+        "Proven winner"
+      ],
+      "watchouts": [
+        "Inconsistent results"
+      ],
+      "nextOpponent": "BUF"
+    },
+    {
       "name": "Jake Allen",
       "team": "NJD",
       "gamesPlayed": 22,
@@ -327,6 +359,38 @@
         "Inconsistent results"
       ],
       "nextOpponent": "NYI"
+    },
+    {
+      "name": "Darcy Kuemper",
+      "team": "LAK",
+      "gamesPlayed": 26,
+      "record": "12-7-6",
+      "wins": 12,
+      "losses": 7,
+      "otLosses": 6,
+      "gaa": 2.32,
+      "savePct": 0.912,
+      "shutouts": 2,
+      "goalsAgainst": 59,
+      "shotsAgainst": 674,
+      "saves": 615,
+      "shotsAgainstPerGame": 25.9,
+      "savesPerGame": 23.7,
+      "expectedGoalsAgainst": 60.7,
+      "gsax": 1.7,
+      "rollingGsa": 0.2,
+      "seasonGsa": 1.7,
+      "restDays": 1,
+      "startLikelihood": 0.9,
+      "trend": "steady",
+      "note": "Consistent performance from Darcy Kuemper with a 2.32 GAA \u2014 reliable starter for LAK.",
+      "strengths": [
+        "Proven winner"
+      ],
+      "watchouts": [
+        "Inconsistent results"
+      ],
+      "nextOpponent": "SJS"
     },
     {
       "name": "Andrei Vasilevskiy",
@@ -361,68 +425,36 @@
       "nextOpponent": "COL"
     },
     {
-      "name": "Igor Shesterkin",
-      "team": "NYR",
-      "gamesPlayed": 33,
-      "record": "17-12-4",
-      "wins": 17,
-      "losses": 12,
-      "otLosses": 4,
-      "gaa": 2.47,
-      "savePct": 0.912,
-      "shutouts": 1,
-      "goalsAgainst": 82,
-      "shotsAgainst": 936,
-      "saves": 854,
-      "shotsAgainstPerGame": 28.4,
-      "savesPerGame": 25.9,
-      "expectedGoalsAgainst": 84.2,
-      "gsax": 2.2,
-      "rollingGsa": 0.2,
-      "seasonGsa": 2.2,
-      "restDays": 1,
-      "startLikelihood": 0.9,
-      "trend": "steady",
-      "note": "Consistent performance from Igor Shesterkin with a 2.47 GAA \u2014 reliable starter for NYR.",
-      "strengths": [
-        "Proven winner"
-      ],
-      "watchouts": [
-        "Inconsistent results"
-      ],
-      "nextOpponent": "UTA"
-    },
-    {
       "name": "Filip Gustavsson",
       "team": "MIN",
-      "gamesPlayed": 26,
-      "record": "14-8-4",
+      "gamesPlayed": 27,
+      "record": "14-9-4",
       "wins": 14,
-      "losses": 8,
+      "losses": 9,
       "otLosses": 4,
-      "gaa": 2.45,
+      "gaa": 2.48,
       "savePct": 0.912,
       "shutouts": 3,
-      "goalsAgainst": 64,
-      "shotsAgainst": 729,
-      "saves": 665,
-      "shotsAgainstPerGame": 28.0,
-      "savesPerGame": 25.6,
-      "expectedGoalsAgainst": 65.6,
-      "gsax": 1.6,
+      "goalsAgainst": 67,
+      "shotsAgainst": 761,
+      "saves": 694,
+      "shotsAgainstPerGame": 28.2,
+      "savesPerGame": 25.7,
+      "expectedGoalsAgainst": 68.5,
+      "gsax": 1.5,
       "rollingGsa": 0.2,
-      "seasonGsa": 1.6,
+      "seasonGsa": 1.5,
       "restDays": 1,
       "startLikelihood": 0.9,
       "trend": "steady",
-      "note": "Consistent performance from Filip Gustavsson with a 2.45 GAA \u2014 reliable starter for MIN.",
+      "note": "Consistent performance from Filip Gustavsson with a 2.48 GAA \u2014 reliable starter for MIN.",
       "strengths": [
         "Proven winner"
       ],
       "watchouts": [
         "Inconsistent results"
       ],
-      "nextOpponent": "LAK"
+      "nextOpponent": "SEA"
     },
     {
       "name": "Casey DeSmith",
@@ -519,38 +551,6 @@
         "Limited recent data"
       ],
       "nextOpponent": "BUF"
-    },
-    {
-      "name": "Darcy Kuemper",
-      "team": "LAK",
-      "gamesPlayed": 25,
-      "record": "11-7-6",
-      "wins": 11,
-      "losses": 7,
-      "otLosses": 6,
-      "gaa": 2.33,
-      "savePct": 0.911,
-      "shutouts": 2,
-      "goalsAgainst": 57,
-      "shotsAgainst": 639,
-      "saves": 582,
-      "shotsAgainstPerGame": 25.6,
-      "savesPerGame": 23.3,
-      "expectedGoalsAgainst": 57.5,
-      "gsax": 0.5,
-      "rollingGsa": 0.1,
-      "seasonGsa": 0.5,
-      "restDays": 1,
-      "startLikelihood": 0.9,
-      "trend": "steady",
-      "note": "Consistent performance from Darcy Kuemper with a 2.33 GAA \u2014 reliable starter for LAK.",
-      "strengths": [
-        "Proven winner"
-      ],
-      "watchouts": [
-        "Inconsistent results"
-      ],
-      "nextOpponent": "MIN"
     },
     {
       "name": "Spencer Knight",
@@ -980,21 +980,21 @@
       },
       {
         "rank": 2,
+        "name": "Philipp Grubauer",
+        "team": "SEA",
+        "gsax": 6.2
+      },
+      {
+        "rank": 3,
         "name": "Mackenzie Blackwood",
         "team": "COL",
         "gsax": 5.5
       },
       {
-        "rank": 3,
+        "rank": 4,
         "name": "Scott Wedgewood",
         "team": "COL",
         "gsax": 5.1
-      },
-      {
-        "rank": 4,
-        "name": "Jonathan Quick",
-        "team": "NYR",
-        "gsax": 4.0
       },
       {
         "rank": 5,
@@ -1004,33 +1004,33 @@
       },
       {
         "rank": 6,
-        "name": "Philipp Grubauer",
-        "team": "SEA",
-        "gsax": 3.4
+        "name": "Igor Shesterkin",
+        "team": "NYR",
+        "gsax": 3.0
       },
       {
         "rank": 7,
-        "name": "Igor Shesterkin",
+        "name": "Jonathan Quick",
         "team": "NYR",
-        "gsax": 2.2
+        "gsax": 2.6
       },
       {
         "rank": 8,
-        "name": "Filip Gustavsson",
-        "team": "MIN",
-        "gsax": 1.6
+        "name": "Darcy Kuemper",
+        "team": "LAK",
+        "gsax": 1.7
       },
       {
         "rank": 9,
-        "name": "Devin Cooley",
-        "team": "CGY",
-        "gsax": 1.4
+        "name": "Filip Gustavsson",
+        "team": "MIN",
+        "gsax": 1.5
       },
       {
         "rank": 10,
-        "name": "Matt Murray",
-        "team": "SEA",
-        "gsax": 1.2
+        "name": "Devin Cooley",
+        "team": "CGY",
+        "gsax": 1.4
       }
     ],
     "bySavePct": [
@@ -1042,9 +1042,9 @@
       },
       {
         "rank": 2,
-        "name": "Jonathan Quick",
-        "team": "NYR",
-        "savePct": 0.924
+        "name": "Philipp Grubauer",
+        "team": "SEA",
+        "savePct": 0.926
       },
       {
         "rank": 3,
@@ -1060,9 +1060,9 @@
       },
       {
         "rank": 5,
-        "name": "Philipp Grubauer",
-        "team": "SEA",
-        "savePct": 0.92
+        "name": "Jonathan Quick",
+        "team": "NYR",
+        "savePct": 0.919
       },
       {
         "rank": 6,
@@ -1090,8 +1090,8 @@
       },
       {
         "rank": 10,
-        "name": "Jake Allen",
-        "team": "NJD",
+        "name": "Igor Shesterkin",
+        "team": "NYR",
         "savePct": 0.913
       }
     ],
@@ -1104,15 +1104,15 @@
       },
       {
         "rank": 2,
-        "name": "Jonathan Quick",
-        "team": "NYR",
-        "gaa": 2.11
-      },
-      {
-        "rank": 3,
         "name": "Scott Wedgewood",
         "team": "COL",
         "gaa": 2.17
+      },
+      {
+        "rank": 3,
+        "name": "Philipp Grubauer",
+        "team": "SEA",
+        "gaa": 2.21
       },
       {
         "rank": 4,
@@ -1122,27 +1122,27 @@
       },
       {
         "rank": 5,
+        "name": "Jonathan Quick",
+        "team": "NYR",
+        "gaa": 2.23
+      },
+      {
+        "rank": 6,
         "name": "Brandon Bussi",
         "team": "CAR",
         "gaa": 2.25
       },
       {
-        "rank": 6,
+        "rank": 7,
         "name": "Jesper Wallstedt",
         "team": "MIN",
         "gaa": 2.3
       },
       {
-        "rank": 7,
-        "name": "Philipp Grubauer",
-        "team": "SEA",
-        "gaa": 2.32
-      },
-      {
         "rank": 8,
         "name": "Darcy Kuemper",
         "team": "LAK",
-        "gaa": 2.33
+        "gaa": 2.32
       },
       {
         "rank": 9,
