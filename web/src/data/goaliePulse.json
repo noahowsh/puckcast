@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-01-07T13:31:58.458227+00:00",
+  "updatedAt": "2026-01-07T23:12:56.288203+00:00",
   "notes": "Goalie performance metrics calculated from NHL Stats API data. GSAX = Expected Goals Against - Actual Goals Against (positive = outperforming expectations).",
   "goalies": [
     {
@@ -405,14 +405,14 @@
       "savePct": 0.913,
       "shutouts": 1,
       "goalsAgainst": 82,
-      "shotsAgainst": 945,
-      "saves": 863,
+      "shotsAgainst": 946,
+      "saves": 864,
       "shotsAgainstPerGame": 27.8,
       "savesPerGame": 25.4,
-      "expectedGoalsAgainst": 85.0,
-      "gsax": 3.0,
+      "expectedGoalsAgainst": 85.1,
+      "gsax": 3.1,
       "rollingGsa": 0.3,
-      "seasonGsa": 3.0,
+      "seasonGsa": 3.1,
       "restDays": 1,
       "startLikelihood": 0.9,
       "trend": "steady",
@@ -424,6 +424,38 @@
         "Inconsistent results"
       ],
       "nextOpponent": "BUF"
+    },
+    {
+      "name": "Casey DeSmith",
+      "team": "DAL",
+      "gamesPlayed": 16,
+      "record": "9-2-4",
+      "wins": 9,
+      "losses": 2,
+      "otLosses": 4,
+      "gaa": 2.41,
+      "savePct": 0.913,
+      "shutouts": 1,
+      "goalsAgainst": 38,
+      "shotsAgainst": 438,
+      "saves": 400,
+      "shotsAgainstPerGame": 27.4,
+      "savesPerGame": 25.0,
+      "expectedGoalsAgainst": 39.4,
+      "gsax": 1.4,
+      "rollingGsa": 0.3,
+      "seasonGsa": 1.4,
+      "restDays": 2,
+      "startLikelihood": 0.9,
+      "trend": "steady",
+      "note": "Consistent performance from Casey DeSmith with a 2.41 GAA \u2014 reliable starter for DAL.",
+      "strengths": [
+        "Solid fundamentals"
+      ],
+      "watchouts": [
+        "Limited recent data"
+      ],
+      "nextOpponent": "WSH"
     },
     {
       "name": "Jake Allen",
@@ -456,38 +488,6 @@
         "Inconsistent results"
       ],
       "nextOpponent": "PIT"
-    },
-    {
-      "name": "Casey DeSmith",
-      "team": "DAL",
-      "gamesPlayed": 16,
-      "record": "9-2-4",
-      "wins": 9,
-      "losses": 2,
-      "otLosses": 4,
-      "gaa": 2.41,
-      "savePct": 0.913,
-      "shutouts": 1,
-      "goalsAgainst": 38,
-      "shotsAgainst": 437,
-      "saves": 399,
-      "shotsAgainstPerGame": 27.3,
-      "savesPerGame": 24.9,
-      "expectedGoalsAgainst": 39.3,
-      "gsax": 1.3,
-      "rollingGsa": 0.2,
-      "seasonGsa": 1.3,
-      "restDays": 2,
-      "startLikelihood": 0.9,
-      "trend": "steady",
-      "note": "Consistent performance from Casey DeSmith with a 2.41 GAA \u2014 reliable starter for DAL.",
-      "strengths": [
-        "Solid fundamentals"
-      ],
-      "watchouts": [
-        "Limited recent data"
-      ],
-      "nextOpponent": "WSH"
     },
     {
       "name": "Darcy Kuemper",
@@ -746,6 +746,39 @@
       "nextOpponent": "NYR"
     },
     {
+      "name": "Brandon Bussi",
+      "team": "CAR",
+      "gamesPlayed": 18,
+      "record": "15-2-1",
+      "wins": 15,
+      "losses": 2,
+      "otLosses": 1,
+      "gaa": 2.29,
+      "savePct": 0.906,
+      "shutouts": 1,
+      "goalsAgainst": 42,
+      "shotsAgainst": 436,
+      "saves": 395,
+      "shotsAgainstPerGame": 24.2,
+      "savesPerGame": 21.9,
+      "expectedGoalsAgainst": 39.2,
+      "gsax": -2.8,
+      "rollingGsa": -0.5,
+      "seasonGsa": -2.8,
+      "restDays": 2,
+      "startLikelihood": 0.8,
+      "trend": "stable",
+      "note": "Brandon Bussi showing promise with limited sample size \u2014 monitor progression closely.",
+      "strengths": [
+        "Exceptional goals against average",
+        "Proven winner"
+      ],
+      "watchouts": [
+        "Limited recent data"
+      ],
+      "nextOpponent": "ANA"
+    },
+    {
       "name": "Tristan Jarry",
       "team": "PIT,EDM",
       "gamesPlayed": 17,
@@ -776,39 +809,6 @@
         "Limited recent data"
       ],
       "nextOpponent": null
-    },
-    {
-      "name": "Brandon Bussi",
-      "team": "CAR",
-      "gamesPlayed": 18,
-      "record": "15-2-1",
-      "wins": 15,
-      "losses": 2,
-      "otLosses": 1,
-      "gaa": 2.29,
-      "savePct": 0.906,
-      "shutouts": 1,
-      "goalsAgainst": 42,
-      "shotsAgainst": 435,
-      "saves": 394,
-      "shotsAgainstPerGame": 24.2,
-      "savesPerGame": 21.9,
-      "expectedGoalsAgainst": 39.1,
-      "gsax": -2.9,
-      "rollingGsa": -0.5,
-      "seasonGsa": -2.9,
-      "restDays": 2,
-      "startLikelihood": 0.8,
-      "trend": "stable",
-      "note": "Brandon Bussi showing promise with limited sample size \u2014 monitor progression closely.",
-      "strengths": [
-        "Exceptional goals against average",
-        "Proven winner"
-      ],
-      "watchouts": [
-        "Limited recent data"
-      ],
-      "nextOpponent": "ANA"
     },
     {
       "name": "Daniil Tarasov",
@@ -918,14 +918,14 @@
       "savePct": 0.903,
       "shutouts": 0,
       "goalsAgainst": 38,
-      "shotsAgainst": 390,
-      "saves": 352,
-      "shotsAgainstPerGame": 26.0,
-      "savesPerGame": 23.5,
-      "expectedGoalsAgainst": 35.1,
-      "gsax": -2.9,
-      "rollingGsa": -0.6,
-      "seasonGsa": -2.9,
+      "shotsAgainst": 392,
+      "saves": 354,
+      "shotsAgainstPerGame": 26.1,
+      "savesPerGame": 23.6,
+      "expectedGoalsAgainst": 35.3,
+      "gsax": -2.7,
+      "rollingGsa": -0.5,
+      "seasonGsa": -2.7,
       "restDays": 2,
       "startLikelihood": 0.8,
       "trend": "stable",
@@ -1013,7 +1013,7 @@
         "rank": 7,
         "name": "Igor Shesterkin",
         "team": "NYR",
-        "gsax": 3.0
+        "gsax": 3.1
       },
       {
         "rank": 8,
