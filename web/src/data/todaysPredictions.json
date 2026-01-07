@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-01-07T10:45:48.338787+00:00",
+  "generatedAt": "2026-01-07T22:32:11.265509+00:00",
   "games": [
     {
       "id": "2025020677",
@@ -14,12 +14,12 @@
         "name": "Stars",
         "abbrev": "DAL"
       },
-      "homeWinProb": 0.583,
-      "awayWinProb": 0.417,
-      "confidenceScore": 0.166,
+      "homeWinProb": 0.582,
+      "awayWinProb": 0.418,
+      "confidenceScore": 0.164,
       "confidenceGrade": "C+",
-      "edge": 0.083,
-      "summary": "Capitals project at 58% as the home lean \u2014 a C+-tier edge worth 8.3 pts over a coin flip.",
+      "edge": 0.082,
+      "summary": "Capitals project at 58% as the home lean \u2014 a C+-tier edge worth 8.2 pts over a coin flip.",
       "modelFavorite": "home",
       "venue": "Capital One Arena",
       "season": "20252026"
@@ -37,9 +37,9 @@
         "name": "Flames",
         "abbrev": "CGY"
       },
-      "homeWinProb": 0.5497,
-      "awayWinProb": 0.4503,
-      "confidenceScore": 0.099,
+      "homeWinProb": 0.5499,
+      "awayWinProb": 0.4501,
+      "confidenceScore": 0.1,
       "confidenceGrade": "C",
       "edge": 0.05,
       "summary": "Canadiens project at 55% as the home lean \u2014 a C-tier edge worth 5.0 pts over a coin flip.",
@@ -60,8 +60,8 @@
         "name": "Blues",
         "abbrev": "STL"
       },
-      "homeWinProb": 0.5601,
-      "awayWinProb": 0.4399,
+      "homeWinProb": 0.5602,
+      "awayWinProb": 0.4398,
       "confidenceScore": 0.12,
       "confidenceGrade": "C+",
       "edge": 0.06,
@@ -106,9 +106,9 @@
         "name": "Sharks",
         "abbrev": "SJS"
       },
-      "homeWinProb": 0.7113,
-      "awayWinProb": 0.2887,
-      "confidenceScore": 0.423,
+      "homeWinProb": 0.711,
+      "awayWinProb": 0.289,
+      "confidenceScore": 0.422,
       "confidenceGrade": "A",
       "edge": 0.211,
       "summary": "Kings project at 71% as the home lean \u2014 an A-tier edge worth 21.1 pts over a coin flip.",
