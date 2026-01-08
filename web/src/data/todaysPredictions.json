@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-01-08T10:46:02.500879+00:00",
+  "generatedAt": "2026-01-08T22:32:47.443932+00:00",
   "games": [
     {
       "id": "2025020682",
@@ -14,9 +14,9 @@
         "name": "Flames",
         "abbrev": "CGY"
       },
-      "homeWinProb": 0.5787,
-      "awayWinProb": 0.4213,
-      "confidenceScore": 0.157,
+      "homeWinProb": 0.5793,
+      "awayWinProb": 0.4207,
+      "confidenceScore": 0.159,
       "confidenceGrade": "C+",
       "edge": 0.079,
       "summary": "Bruins project at 58% as the home lean \u2014 a C+-tier edge worth 7.9 pts over a coin flip.",
@@ -37,9 +37,9 @@
         "name": "Panthers",
         "abbrev": "FLA"
       },
-      "homeWinProb": 0.4432,
-      "awayWinProb": 0.5568,
-      "confidenceScore": 0.114,
+      "homeWinProb": 0.4434,
+      "awayWinProb": 0.5566,
+      "confidenceScore": 0.113,
       "confidenceGrade": "C+",
       "edge": -0.057,
       "summary": "Panthers project at 56% as the road lean \u2014 a C+-tier edge worth 5.7 pts over a coin flip.",
@@ -106,8 +106,8 @@
         "name": "Maple Leafs",
         "abbrev": "TOR"
       },
-      "homeWinProb": 0.5668,
-      "awayWinProb": 0.4332,
+      "homeWinProb": 0.5671,
+      "awayWinProb": 0.4329,
       "confidenceScore": 0.134,
       "confidenceGrade": "C+",
       "edge": 0.067,
