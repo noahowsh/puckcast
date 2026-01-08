@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-01-07T23:12:56.288203+00:00",
+  "updatedAt": "2026-01-08T13:33:04.693906+00:00",
   "notes": "Goalie performance metrics calculated from NHL Stats API data. GSAX = Expected Goals Against - Actual Goals Against (positive = outperforming expectations).",
   "goalies": [
     {
@@ -233,6 +233,39 @@
       "nextOpponent": "PHI"
     },
     {
+      "name": "Casey DeSmith",
+      "team": "DAL",
+      "gamesPlayed": 17,
+      "record": "10-2-4",
+      "wins": 10,
+      "losses": 2,
+      "otLosses": 4,
+      "gaa": 2.33,
+      "savePct": 0.916,
+      "shutouts": 1,
+      "goalsAgainst": 39,
+      "shotsAgainst": 462,
+      "saves": 423,
+      "shotsAgainstPerGame": 27.2,
+      "savesPerGame": 24.9,
+      "expectedGoalsAgainst": 41.6,
+      "gsax": 2.6,
+      "rollingGsa": 0.5,
+      "seasonGsa": 2.6,
+      "restDays": 2,
+      "startLikelihood": 0.9,
+      "trend": "steady",
+      "note": "Consistent performance from Casey DeSmith with a 2.33 GAA \u2014 reliable starter for DAL.",
+      "strengths": [
+        "Proven winner",
+        "Strong rebound control"
+      ],
+      "watchouts": [
+        "Limited recent data"
+      ],
+      "nextOpponent": "SJS"
+    },
+    {
       "name": "Ilya Sorokin",
       "team": "NYI",
       "gamesPlayed": 25,
@@ -268,34 +301,34 @@
     {
       "name": "Logan Thompson",
       "team": "WSH",
-      "gamesPlayed": 30,
-      "record": "15-11-4",
+      "gamesPlayed": 31,
+      "record": "15-12-4",
       "wins": 15,
-      "losses": 11,
+      "losses": 12,
       "otLosses": 4,
-      "gaa": 2.37,
+      "gaa": 2.4,
       "savePct": 0.915,
       "shutouts": 2,
-      "goalsAgainst": 70,
-      "shotsAgainst": 819,
-      "saves": 749,
-      "shotsAgainstPerGame": 27.3,
-      "savesPerGame": 25.0,
-      "expectedGoalsAgainst": 73.7,
-      "gsax": 3.7,
+      "goalsAgainst": 73,
+      "shotsAgainst": 854,
+      "saves": 781,
+      "shotsAgainstPerGame": 27.5,
+      "savesPerGame": 25.2,
+      "expectedGoalsAgainst": 76.9,
+      "gsax": 3.9,
       "rollingGsa": 0.4,
-      "seasonGsa": 3.7,
+      "seasonGsa": 3.9,
       "restDays": 1,
       "startLikelihood": 0.9,
       "trend": "steady",
-      "note": "Consistent performance from Logan Thompson with a 2.37 GAA \u2014 reliable starter for WSH.",
+      "note": "Consistent performance from Logan Thompson with a 2.40 GAA \u2014 reliable starter for WSH.",
       "strengths": [
         "Proven winner"
       ],
       "watchouts": [
         "Inconsistent results"
       ],
-      "nextOpponent": "DAL"
+      "nextOpponent": "CHI"
     },
     {
       "name": "Devin Cooley",
@@ -327,7 +360,7 @@
       "watchouts": [
         "Limited recent data"
       ],
-      "nextOpponent": "MTL"
+      "nextOpponent": "BOS"
     },
     {
       "name": "Dennis Hildeby",
@@ -426,38 +459,6 @@
       "nextOpponent": "BUF"
     },
     {
-      "name": "Casey DeSmith",
-      "team": "DAL",
-      "gamesPlayed": 16,
-      "record": "9-2-4",
-      "wins": 9,
-      "losses": 2,
-      "otLosses": 4,
-      "gaa": 2.41,
-      "savePct": 0.913,
-      "shutouts": 1,
-      "goalsAgainst": 38,
-      "shotsAgainst": 438,
-      "saves": 400,
-      "shotsAgainstPerGame": 27.4,
-      "savesPerGame": 25.0,
-      "expectedGoalsAgainst": 39.4,
-      "gsax": 1.4,
-      "rollingGsa": 0.3,
-      "seasonGsa": 1.4,
-      "restDays": 2,
-      "startLikelihood": 0.9,
-      "trend": "steady",
-      "note": "Consistent performance from Casey DeSmith with a 2.41 GAA \u2014 reliable starter for DAL.",
-      "strengths": [
-        "Solid fundamentals"
-      ],
-      "watchouts": [
-        "Limited recent data"
-      ],
-      "nextOpponent": "WSH"
-    },
-    {
       "name": "Jake Allen",
       "team": "NJD",
       "gamesPlayed": 22,
@@ -488,38 +489,6 @@
         "Inconsistent results"
       ],
       "nextOpponent": "PIT"
-    },
-    {
-      "name": "Darcy Kuemper",
-      "team": "LAK",
-      "gamesPlayed": 26,
-      "record": "12-7-6",
-      "wins": 12,
-      "losses": 7,
-      "otLosses": 6,
-      "gaa": 2.32,
-      "savePct": 0.912,
-      "shutouts": 2,
-      "goalsAgainst": 59,
-      "shotsAgainst": 674,
-      "saves": 615,
-      "shotsAgainstPerGame": 25.9,
-      "savesPerGame": 23.7,
-      "expectedGoalsAgainst": 60.7,
-      "gsax": 1.7,
-      "rollingGsa": 0.2,
-      "seasonGsa": 1.7,
-      "restDays": 1,
-      "startLikelihood": 0.9,
-      "trend": "steady",
-      "note": "Consistent performance from Darcy Kuemper with a 2.32 GAA \u2014 reliable starter for LAK.",
-      "strengths": [
-        "Proven winner"
-      ],
-      "watchouts": [
-        "Inconsistent results"
-      ],
-      "nextOpponent": "SJS"
     },
     {
       "name": "Filip Gustavsson",
@@ -554,6 +523,38 @@
       "nextOpponent": "SEA"
     },
     {
+      "name": "Jacob Fowler",
+      "team": "MTL",
+      "gamesPlayed": 8,
+      "record": "4-2-2",
+      "wins": 4,
+      "losses": 2,
+      "otLosses": 2,
+      "gaa": 2.37,
+      "savePct": 0.912,
+      "shutouts": 1,
+      "goalsAgainst": 19,
+      "shotsAgainst": 215,
+      "saves": 196,
+      "shotsAgainstPerGame": 26.9,
+      "savesPerGame": 24.5,
+      "expectedGoalsAgainst": 19.3,
+      "gsax": 0.3,
+      "rollingGsa": 0.1,
+      "seasonGsa": 0.3,
+      "restDays": 3,
+      "startLikelihood": 0.7,
+      "trend": "steady",
+      "note": "Consistent performance from Jacob Fowler with a 2.37 GAA \u2014 reliable starter for MTL.",
+      "strengths": [
+        "Solid fundamentals"
+      ],
+      "watchouts": [
+        "Limited recent data"
+      ],
+      "nextOpponent": "FLA"
+    },
+    {
       "name": "Nikita Tolopilo",
       "team": "VAN",
       "gamesPlayed": 4,
@@ -586,36 +587,36 @@
       "nextOpponent": "DET"
     },
     {
-      "name": "Spencer Knight",
-      "team": "CHI",
-      "gamesPlayed": 29,
-      "record": "12-11-6",
+      "name": "Darcy Kuemper",
+      "team": "LAK",
+      "gamesPlayed": 27,
+      "record": "12-7-7",
       "wins": 12,
-      "losses": 11,
-      "otLosses": 6,
-      "gaa": 2.6,
+      "losses": 7,
+      "otLosses": 7,
+      "gaa": 2.38,
       "savePct": 0.91,
       "shutouts": 2,
-      "goalsAgainst": 75,
-      "shotsAgainst": 835,
-      "saves": 760,
-      "shotsAgainstPerGame": 28.8,
-      "savesPerGame": 26.2,
-      "expectedGoalsAgainst": 75.1,
-      "gsax": 0.1,
+      "goalsAgainst": 63,
+      "shotsAgainst": 702,
+      "saves": 639,
+      "shotsAgainstPerGame": 26.0,
+      "savesPerGame": 23.7,
+      "expectedGoalsAgainst": 63.2,
+      "gsax": 0.2,
       "rollingGsa": 0.0,
-      "seasonGsa": 0.1,
+      "seasonGsa": 0.2,
       "restDays": 1,
       "startLikelihood": 0.9,
       "trend": "steady",
-      "note": "Consistent performance from Spencer Knight with a 2.60 GAA \u2014 reliable starter for CHI.",
+      "note": "Consistent performance from Darcy Kuemper with a 2.38 GAA \u2014 reliable starter for LAK.",
       "strengths": [
         "Proven winner"
       ],
       "watchouts": [
         "Inconsistent results"
       ],
-      "nextOpponent": "STL"
+      "nextOpponent": "WPG"
     },
     {
       "name": "Jet Greaves",
@@ -648,6 +649,38 @@
         "Inconsistent results"
       ],
       "nextOpponent": "VGK"
+    },
+    {
+      "name": "Spencer Knight",
+      "team": "CHI",
+      "gamesPlayed": 30,
+      "record": "13-11-6",
+      "wins": 13,
+      "losses": 11,
+      "otLosses": 6,
+      "gaa": 2.62,
+      "savePct": 0.91,
+      "shutouts": 2,
+      "goalsAgainst": 78,
+      "shotsAgainst": 865,
+      "saves": 787,
+      "shotsAgainstPerGame": 28.8,
+      "savesPerGame": 26.2,
+      "expectedGoalsAgainst": 77.8,
+      "gsax": -0.2,
+      "rollingGsa": -0.0,
+      "seasonGsa": -0.2,
+      "restDays": 1,
+      "startLikelihood": 0.8,
+      "trend": "stable",
+      "note": "Spencer Knight showing promise with limited sample size \u2014 monitor progression closely.",
+      "strengths": [
+        "Proven winner"
+      ],
+      "watchouts": [
+        "Inconsistent results"
+      ],
+      "nextOpponent": "WSH"
     },
     {
       "name": "Dan Vladar",
@@ -843,38 +876,6 @@
       "nextOpponent": "MTL"
     },
     {
-      "name": "Jacob Fowler",
-      "team": "MTL",
-      "gamesPlayed": 7,
-      "record": "3-2-2",
-      "wins": 3,
-      "losses": 2,
-      "otLosses": 2,
-      "gaa": 2.57,
-      "savePct": 0.903,
-      "shutouts": 1,
-      "goalsAgainst": 18,
-      "shotsAgainst": 186,
-      "saves": 168,
-      "shotsAgainstPerGame": 26.6,
-      "savesPerGame": 24.0,
-      "expectedGoalsAgainst": 16.7,
-      "gsax": -1.3,
-      "rollingGsa": -0.5,
-      "seasonGsa": -1.3,
-      "restDays": 3,
-      "startLikelihood": 0.6,
-      "trend": "stable",
-      "note": "Jacob Fowler showing promise with limited sample size \u2014 monitor progression closely.",
-      "strengths": [
-        "Solid fundamentals"
-      ],
-      "watchouts": [
-        "Limited recent data"
-      ],
-      "nextOpponent": "CGY"
-    },
-    {
       "name": "Connor Hellebuyck",
       "team": "WPG",
       "gamesPlayed": 24,
@@ -999,15 +1000,15 @@
       },
       {
         "rank": 5,
-        "name": "Ilya Sorokin",
-        "team": "NYI",
-        "gsax": 3.8
+        "name": "Logan Thompson",
+        "team": "WSH",
+        "gsax": 3.9
       },
       {
         "rank": 6,
-        "name": "Logan Thompson",
-        "team": "WSH",
-        "gsax": 3.7
+        "name": "Ilya Sorokin",
+        "team": "NYI",
+        "gsax": 3.8
       },
       {
         "rank": 7,
@@ -1023,9 +1024,9 @@
       },
       {
         "rank": 9,
-        "name": "Darcy Kuemper",
-        "team": "LAK",
-        "gsax": 1.7
+        "name": "Casey DeSmith",
+        "team": "DAL",
+        "gsax": 2.6
       },
       {
         "rank": 10,
@@ -1079,21 +1080,21 @@
       },
       {
         "rank": 8,
+        "name": "Casey DeSmith",
+        "team": "DAL",
+        "savePct": 0.916
+      },
+      {
+        "rank": 9,
         "name": "Ilya Sorokin",
         "team": "NYI",
         "savePct": 0.915
       },
       {
-        "rank": 9,
+        "rank": 10,
         "name": "Logan Thompson",
         "team": "WSH",
         "savePct": 0.915
-      },
-      {
-        "rank": 10,
-        "name": "Devin Cooley",
-        "team": "CGY",
-        "savePct": 0.914
       }
     ],
     "byGaa": [
@@ -1141,9 +1142,9 @@
       },
       {
         "rank": 8,
-        "name": "Darcy Kuemper",
-        "team": "LAK",
-        "gaa": 2.32
+        "name": "Casey DeSmith",
+        "team": "DAL",
+        "gaa": 2.33
       },
       {
         "rank": 9,
@@ -1153,8 +1154,8 @@
       },
       {
         "rank": 10,
-        "name": "Logan Thompson",
-        "team": "WSH",
+        "name": "Jacob Fowler",
+        "team": "MTL",
         "gaa": 2.37
       }
     ],
@@ -1215,9 +1216,9 @@
       },
       {
         "rank": 10,
-        "name": "Darcy Kuemper",
-        "team": "LAK",
-        "wins": 12
+        "name": "Spencer Knight",
+        "team": "CHI",
+        "wins": 13
       }
     ]
   }
