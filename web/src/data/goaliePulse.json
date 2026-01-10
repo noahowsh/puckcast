@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-01-09T23:12:34.323920+00:00",
+  "updatedAt": "2026-01-10T13:22:29.525229+00:00",
   "notes": "Goalie performance metrics calculated from NHL Stats API data. GSAX = Expected Goals Against - Actual Goals Against (positive = outperforming expectations).",
   "goalies": [
     {
@@ -200,6 +200,39 @@
       "nextOpponent": "VAN"
     },
     {
+      "name": "Logan Thompson",
+      "team": "WSH",
+      "gamesPlayed": 32,
+      "record": "16-12-4",
+      "wins": 16,
+      "losses": 12,
+      "otLosses": 4,
+      "gaa": 2.35,
+      "savePct": 0.916,
+      "shutouts": 2,
+      "goalsAgainst": 74,
+      "shotsAgainst": 878,
+      "saves": 804,
+      "shotsAgainstPerGame": 27.4,
+      "savesPerGame": 25.1,
+      "expectedGoalsAgainst": 79.0,
+      "gsax": 5.0,
+      "rollingGsa": 0.5,
+      "seasonGsa": 5.0,
+      "restDays": 1,
+      "startLikelihood": 0.9,
+      "trend": "steady",
+      "note": "Consistent performance from Logan Thompson with a 2.35 GAA \u2014 reliable starter for WSH.",
+      "strengths": [
+        "Proven winner",
+        "Strong rebound control"
+      ],
+      "watchouts": [
+        "Inconsistent results"
+      ],
+      "nextOpponent": "NSH"
+    },
+    {
       "name": "Joseph Woll",
       "team": "TOR",
       "gamesPlayed": 16,
@@ -296,38 +329,6 @@
         "Inconsistent results"
       ],
       "nextOpponent": "MIN"
-    },
-    {
-      "name": "Logan Thompson",
-      "team": "WSH",
-      "gamesPlayed": 31,
-      "record": "15-12-4",
-      "wins": 15,
-      "losses": 12,
-      "otLosses": 4,
-      "gaa": 2.4,
-      "savePct": 0.915,
-      "shutouts": 2,
-      "goalsAgainst": 73,
-      "shotsAgainst": 854,
-      "saves": 781,
-      "shotsAgainstPerGame": 27.5,
-      "savesPerGame": 25.2,
-      "expectedGoalsAgainst": 76.9,
-      "gsax": 3.9,
-      "rollingGsa": 0.4,
-      "seasonGsa": 3.9,
-      "restDays": 1,
-      "startLikelihood": 0.9,
-      "trend": "steady",
-      "note": "Consistent performance from Logan Thompson with a 2.40 GAA \u2014 reliable starter for WSH.",
-      "strengths": [
-        "Proven winner"
-      ],
-      "watchouts": [
-        "Inconsistent results"
-      ],
-      "nextOpponent": "CHI"
     },
     {
       "name": "Devin Cooley",
@@ -586,38 +587,6 @@
       "nextOpponent": "WPG"
     },
     {
-      "name": "Darcy Kuemper",
-      "team": "LAK",
-      "gamesPlayed": 27,
-      "record": "12-7-7",
-      "wins": 12,
-      "losses": 7,
-      "otLosses": 7,
-      "gaa": 2.38,
-      "savePct": 0.91,
-      "shutouts": 2,
-      "goalsAgainst": 63,
-      "shotsAgainst": 702,
-      "saves": 639,
-      "shotsAgainstPerGame": 26.0,
-      "savesPerGame": 23.7,
-      "expectedGoalsAgainst": 63.2,
-      "gsax": 0.2,
-      "rollingGsa": 0.0,
-      "seasonGsa": 0.2,
-      "restDays": 1,
-      "startLikelihood": 0.9,
-      "trend": "steady",
-      "note": "Consistent performance from Darcy Kuemper with a 2.38 GAA \u2014 reliable starter for LAK.",
-      "strengths": [
-        "Proven winner"
-      ],
-      "watchouts": [
-        "Inconsistent results"
-      ],
-      "nextOpponent": "WPG"
-    },
-    {
       "name": "David Rittich",
       "team": "NYI",
       "gamesPlayed": 19,
@@ -679,7 +648,7 @@
       "watchouts": [
         "Inconsistent results"
       ],
-      "nextOpponent": "WSH"
+      "nextOpponent": "NSH"
     },
     {
       "name": "Dan Vladar",
@@ -843,6 +812,38 @@
       "nextOpponent": null
     },
     {
+      "name": "Darcy Kuemper",
+      "team": "LAK",
+      "gamesPlayed": 28,
+      "record": "12-8-7",
+      "wins": 12,
+      "losses": 8,
+      "otLosses": 7,
+      "gaa": 2.5,
+      "savePct": 0.905,
+      "shutouts": 2,
+      "goalsAgainst": 68,
+      "shotsAgainst": 718,
+      "saves": 650,
+      "shotsAgainstPerGame": 25.6,
+      "savesPerGame": 23.2,
+      "expectedGoalsAgainst": 64.6,
+      "gsax": -3.4,
+      "rollingGsa": -0.4,
+      "seasonGsa": -3.4,
+      "restDays": 1,
+      "startLikelihood": 0.8,
+      "trend": "stable",
+      "note": "Darcy Kuemper showing promise with limited sample size \u2014 monitor progression closely.",
+      "strengths": [
+        "Proven winner"
+      ],
+      "watchouts": [
+        "Inconsistent results"
+      ],
+      "nextOpponent": "EDM"
+    },
+    {
       "name": "Daniil Tarasov",
       "team": "FLA",
       "gamesPlayed": 14,
@@ -1001,7 +1002,7 @@
         "rank": 5,
         "name": "Logan Thompson",
         "team": "WSH",
-        "gsax": 3.9
+        "gsax": 5.0
       },
       {
         "rank": 6,
@@ -1073,26 +1074,26 @@
       },
       {
         "rank": 7,
+        "name": "Logan Thompson",
+        "team": "WSH",
+        "savePct": 0.916
+      },
+      {
+        "rank": 8,
         "name": "Joseph Woll",
         "team": "TOR",
         "savePct": 0.916
       },
       {
-        "rank": 8,
+        "rank": 9,
         "name": "Casey DeSmith",
         "team": "DAL",
         "savePct": 0.916
       },
       {
-        "rank": 9,
+        "rank": 10,
         "name": "Ilya Sorokin",
         "team": "NYI",
-        "savePct": 0.915
-      },
-      {
-        "rank": 10,
-        "name": "Logan Thompson",
-        "team": "WSH",
         "savePct": 0.915
       }
     ],
@@ -1147,15 +1148,15 @@
       },
       {
         "rank": 9,
-        "name": "Dan Vladar",
-        "team": "PHI",
+        "name": "Logan Thompson",
+        "team": "WSH",
         "gaa": 2.35
       },
       {
         "rank": 10,
-        "name": "Jacob Fowler",
-        "team": "MTL",
-        "gaa": 2.37
+        "name": "Dan Vladar",
+        "team": "PHI",
+        "gaa": 2.35
       }
     ],
     "byWins": [
@@ -1179,21 +1180,21 @@
       },
       {
         "rank": 4,
+        "name": "Logan Thompson",
+        "team": "WSH",
+        "wins": 16
+      },
+      {
+        "rank": 5,
         "name": "Dan Vladar",
         "team": "PHI",
         "wins": 16
       },
       {
-        "rank": 5,
+        "rank": 6,
         "name": "Jeremy Swayman",
         "team": "BOS",
         "wins": 16
-      },
-      {
-        "rank": 6,
-        "name": "Logan Thompson",
-        "team": "WSH",
-        "wins": 15
       },
       {
         "rank": 7,
