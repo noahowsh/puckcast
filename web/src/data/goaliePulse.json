@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-01-10T13:22:29.525229+00:00",
+  "updatedAt": "2026-01-10T23:11:57.484658+00:00",
   "notes": "Goalie performance metrics calculated from NHL Stats API data. GSAX = Expected Goals Against - Actual Goals Against (positive = outperforming expectations).",
   "goalies": [
     {
@@ -491,38 +491,6 @@
       "nextOpponent": "DET"
     },
     {
-      "name": "Jonathan Quick",
-      "team": "NYR",
-      "gamesPlayed": 12,
-      "record": "3-7-2",
-      "wins": 3,
-      "losses": 7,
-      "otLosses": 2,
-      "gaa": 2.39,
-      "savePct": 0.911,
-      "shutouts": 1,
-      "goalsAgainst": 28,
-      "shotsAgainst": 316,
-      "saves": 288,
-      "shotsAgainstPerGame": 26.3,
-      "savesPerGame": 24.0,
-      "expectedGoalsAgainst": 28.4,
-      "gsax": 0.4,
-      "rollingGsa": 0.1,
-      "seasonGsa": 0.4,
-      "restDays": 2,
-      "startLikelihood": 0.8,
-      "trend": "steady",
-      "note": "Consistent performance from Jonathan Quick with a 2.39 GAA \u2014 reliable starter for NYR.",
-      "strengths": [
-        "Solid fundamentals"
-      ],
-      "watchouts": [
-        "Inconsistent results"
-      ],
-      "nextOpponent": "BOS"
-    },
-    {
       "name": "Nikita Tolopilo",
       "team": "VAN",
       "gamesPlayed": 4,
@@ -908,6 +876,38 @@
       "nextOpponent": "ANA"
     },
     {
+      "name": "Jeremy Swayman",
+      "team": "BOS",
+      "gamesPlayed": 31,
+      "record": "17-11-2",
+      "wins": 17,
+      "losses": 11,
+      "otLosses": 2,
+      "gaa": 2.88,
+      "savePct": 0.903,
+      "shutouts": 0,
+      "goalsAgainst": 88,
+      "shotsAgainst": 895,
+      "saves": 808,
+      "shotsAgainstPerGame": 28.9,
+      "savesPerGame": 26.1,
+      "expectedGoalsAgainst": 80.5,
+      "gsax": -7.5,
+      "rollingGsa": -0.7,
+      "seasonGsa": -7.5,
+      "restDays": 1,
+      "startLikelihood": 0.8,
+      "trend": "stable",
+      "note": "Jeremy Swayman showing promise with limited sample size \u2014 monitor progression closely.",
+      "strengths": [
+        "Proven winner"
+      ],
+      "watchouts": [
+        "Inconsistent results"
+      ],
+      "nextOpponent": "NYR"
+    },
+    {
       "name": "Joey Daccord",
       "team": "SEA",
       "gamesPlayed": 26,
@@ -940,36 +940,36 @@
       "nextOpponent": "CAR"
     },
     {
-      "name": "Jeremy Swayman",
-      "team": "BOS",
-      "gamesPlayed": 30,
-      "record": "16-11-2",
-      "wins": 16,
-      "losses": 11,
-      "otLosses": 2,
-      "gaa": 2.91,
+      "name": "Thatcher Demko",
+      "team": "VAN",
+      "gamesPlayed": 19,
+      "record": "8-9-1",
+      "wins": 8,
+      "losses": 9,
+      "otLosses": 1,
+      "gaa": 2.79,
       "savePct": 0.902,
-      "shutouts": 0,
-      "goalsAgainst": 86,
-      "shotsAgainst": 866,
-      "saves": 781,
-      "shotsAgainstPerGame": 28.9,
-      "savesPerGame": 26.0,
-      "expectedGoalsAgainst": 77.9,
-      "gsax": -8.1,
+      "shutouts": 1,
+      "goalsAgainst": 51,
+      "shotsAgainst": 508,
+      "saves": 458,
+      "shotsAgainstPerGame": 26.7,
+      "savesPerGame": 24.1,
+      "expectedGoalsAgainst": 45.7,
+      "gsax": -5.3,
       "rollingGsa": -0.8,
-      "seasonGsa": -8.1,
-      "restDays": 1,
+      "seasonGsa": -5.3,
+      "restDays": 2,
       "startLikelihood": 0.8,
       "trend": "stable",
-      "note": "Jeremy Swayman showing promise with limited sample size \u2014 monitor progression closely.",
+      "note": "Thatcher Demko showing promise with limited sample size \u2014 monitor progression closely.",
       "strengths": [
-        "Proven winner"
+        "Solid fundamentals"
       ],
       "watchouts": [
         "Inconsistent results"
       ],
-      "nextOpponent": "NYR"
+      "nextOpponent": "TOR"
     }
   ],
   "leaderboards": {
@@ -1180,20 +1180,20 @@
       },
       {
         "rank": 4,
+        "name": "Jeremy Swayman",
+        "team": "BOS",
+        "wins": 17
+      },
+      {
+        "rank": 5,
         "name": "Logan Thompson",
         "team": "WSH",
         "wins": 16
       },
       {
-        "rank": 5,
+        "rank": 6,
         "name": "Dan Vladar",
         "team": "PHI",
-        "wins": 16
-      },
-      {
-        "rank": 6,
-        "name": "Jeremy Swayman",
-        "team": "BOS",
         "wins": 16
       },
       {
