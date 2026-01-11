@@ -1,52 +1,6 @@
 {
-  "generatedAt": "2026-01-11T10:42:39.647987+00:00",
+  "generatedAt": "2026-01-11T22:31:52.953907+00:00",
   "games": [
-    {
-      "id": "2025020711",
-      "gameDate": "2026-01-11",
-      "startTimeEt": "2:00 PM ET",
-      "startTimeUtc": "2026-01-11T19:00:00+00:00",
-      "homeTeam": {
-        "name": "Jets",
-        "abbrev": "WPG"
-      },
-      "awayTeam": {
-        "name": "Devils",
-        "abbrev": "NJD"
-      },
-      "homeWinProb": 0.4092,
-      "awayWinProb": 0.5908,
-      "confidenceScore": 0.182,
-      "confidenceGrade": "C+",
-      "edge": -0.091,
-      "summary": "Devils project at 59% as the road lean \u2014 a C+-tier edge worth 9.1 pts over a coin flip.",
-      "modelFavorite": "away",
-      "venue": "Canada Life Centre",
-      "season": "20252026"
-    },
-    {
-      "id": "2025020712",
-      "gameDate": "2026-01-11",
-      "startTimeEt": "5:00 PM ET",
-      "startTimeUtc": "2026-01-11T22:00:00+00:00",
-      "homeTeam": {
-        "name": "Bruins",
-        "abbrev": "BOS"
-      },
-      "awayTeam": {
-        "name": "Penguins",
-        "abbrev": "PIT"
-      },
-      "homeWinProb": 0.4815,
-      "awayWinProb": 0.5185,
-      "confidenceScore": 0.037,
-      "confidenceGrade": "C",
-      "edge": -0.018,
-      "summary": "Penguins project at 52% as the road lean \u2014 a C-tier edge worth 1.8 pts over a coin flip.",
-      "modelFavorite": "away",
-      "venue": "TD Garden",
-      "season": "20252026"
-    },
     {
       "id": "2025020713",
       "gameDate": "2026-01-11",
@@ -60,12 +14,12 @@
         "name": "Capitals",
         "abbrev": "WSH"
       },
-      "homeWinProb": 0.3965,
-      "awayWinProb": 0.6035,
-      "confidenceScore": 0.207,
+      "homeWinProb": 0.398,
+      "awayWinProb": 0.602,
+      "confidenceScore": 0.204,
       "confidenceGrade": "B",
-      "edge": -0.104,
-      "summary": "Capitals project at 60% as the road lean \u2014 a B-tier edge worth 10.4 pts over a coin flip.",
+      "edge": -0.102,
+      "summary": "Capitals project at 60% as the road lean \u2014 a B-tier edge worth 10.2 pts over a coin flip.",
       "modelFavorite": "away",
       "venue": "Bridgestone Arena",
       "season": "20252026"
@@ -83,12 +37,12 @@
         "name": "Blue Jackets",
         "abbrev": "CBJ"
       },
-      "homeWinProb": 0.6346,
-      "awayWinProb": 0.3654,
-      "confidenceScore": 0.269,
+      "homeWinProb": 0.6366,
+      "awayWinProb": 0.3634,
+      "confidenceScore": 0.273,
       "confidenceGrade": "B",
-      "edge": 0.135,
-      "summary": "Mammoth project at 63% as the home lean \u2014 a B-tier edge worth 13.5 pts over a coin flip.",
+      "edge": 0.137,
+      "summary": "Mammoth project at 64% as the home lean \u2014 a B-tier edge worth 13.7 pts over a coin flip.",
       "modelFavorite": "home",
       "venue": "Delta Center",
       "season": "20252026"
@@ -106,12 +60,12 @@
         "name": "Golden Knights",
         "abbrev": "VGK"
       },
-      "homeWinProb": 0.4365,
-      "awayWinProb": 0.5635,
-      "confidenceScore": 0.127,
+      "homeWinProb": 0.4333,
+      "awayWinProb": 0.5667,
+      "confidenceScore": 0.133,
       "confidenceGrade": "C+",
-      "edge": -0.064,
-      "summary": "Golden Knights project at 56% as the road lean \u2014 a C+-tier edge worth 6.4 pts over a coin flip.",
+      "edge": -0.067,
+      "summary": "Golden Knights project at 57% as the road lean \u2014 a C+-tier edge worth 6.7 pts over a coin flip.",
       "modelFavorite": "away",
       "venue": "SAP Center at San Jose",
       "season": "20252026"
