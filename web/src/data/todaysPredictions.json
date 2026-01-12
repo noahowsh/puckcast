@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-01-12T10:47:59.963902+00:00",
+  "generatedAt": "2026-01-12T22:31:21.412321+00:00",
   "games": [
     {
       "id": "2025020716",
@@ -14,9 +14,9 @@
         "name": "Panthers",
         "abbrev": "FLA"
       },
-      "homeWinProb": 0.4223,
-      "awayWinProb": 0.5777,
-      "confidenceScore": 0.155,
+      "homeWinProb": 0.4219,
+      "awayWinProb": 0.5781,
+      "confidenceScore": 0.156,
       "confidenceGrade": "C+",
       "edge": -0.078,
       "summary": "Panthers project at 58% as the road lean \u2014 a C+-tier edge worth 7.8 pts over a coin flip.",
@@ -37,9 +37,9 @@
         "name": "Hurricanes",
         "abbrev": "CAR"
       },
-      "homeWinProb": 0.339,
-      "awayWinProb": 0.661,
-      "confidenceScore": 0.322,
+      "homeWinProb": 0.3387,
+      "awayWinProb": 0.6613,
+      "confidenceScore": 0.323,
       "confidenceGrade": "B+",
       "edge": -0.161,
       "summary": "Hurricanes project at 66% as the road lean \u2014 a B+-tier edge worth 16.1 pts over a coin flip.",
@@ -60,12 +60,12 @@
         "name": "Kraken",
         "abbrev": "SEA"
       },
-      "homeWinProb": 0.5746,
-      "awayWinProb": 0.4254,
-      "confidenceScore": 0.149,
+      "homeWinProb": 0.5753,
+      "awayWinProb": 0.4247,
+      "confidenceScore": 0.151,
       "confidenceGrade": "C+",
       "edge": 0.075,
-      "summary": "Rangers project at 57% as the home lean \u2014 a C+-tier edge worth 7.5 pts over a coin flip.",
+      "summary": "Rangers project at 58% as the home lean \u2014 a C+-tier edge worth 7.5 pts over a coin flip.",
       "modelFavorite": "home",
       "venue": "Madison Square Garden",
       "season": "20252026"
@@ -129,9 +129,9 @@
         "name": "Devils",
         "abbrev": "NJD"
       },
-      "homeWinProb": 0.6212,
-      "awayWinProb": 0.3788,
-      "confidenceScore": 0.242,
+      "homeWinProb": 0.6207,
+      "awayWinProb": 0.3793,
+      "confidenceScore": 0.241,
       "confidenceGrade": "B",
       "edge": 0.121,
       "summary": "Wild project at 62% as the home lean \u2014 a B-tier edge worth 12.1 pts over a coin flip.",
@@ -152,9 +152,9 @@
         "name": "Oilers",
         "abbrev": "EDM"
       },
-      "homeWinProb": 0.3463,
-      "awayWinProb": 0.6537,
-      "confidenceScore": 0.307,
+      "homeWinProb": 0.3458,
+      "awayWinProb": 0.6542,
+      "confidenceScore": 0.308,
       "confidenceGrade": "B+",
       "edge": -0.154,
       "summary": "Oilers project at 65% as the road lean \u2014 a B+-tier edge worth 15.4 pts over a coin flip.",
@@ -198,12 +198,12 @@
         "name": "Stars",
         "abbrev": "DAL"
       },
-      "homeWinProb": 0.4979,
-      "awayWinProb": 0.5021,
-      "confidenceScore": 0.004,
+      "homeWinProb": 0.4969,
+      "awayWinProb": 0.5031,
+      "confidenceScore": 0.006,
       "confidenceGrade": "C",
-      "edge": -0.002,
-      "summary": "Stars project at 50% as the road lean \u2014 a C-tier edge worth 0.2 pts over a coin flip.",
+      "edge": -0.003,
+      "summary": "Stars project at 50% as the road lean \u2014 a C-tier edge worth 0.3 pts over a coin flip.",
       "modelFavorite": "away",
       "venue": "Crypto.com Arena",
       "season": "20252026"
