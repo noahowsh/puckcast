@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-01-12T13:34:47.591114+00:00",
+  "updatedAt": "2026-01-12T23:11:16.056972+00:00",
   "notes": "Goalie performance metrics calculated from NHL Stats API data. GSAX = Expected Goals Against - Actual Goals Against (positive = outperforming expectations).",
   "goalies": [
     {
@@ -813,6 +813,38 @@
       "nextOpponent": "DAL"
     },
     {
+      "name": "Ukko-Pekka Luukkonen",
+      "team": "BUF",
+      "gamesPlayed": 16,
+      "record": "9-6-1",
+      "wins": 9,
+      "losses": 6,
+      "otLosses": 1,
+      "gaa": 2.63,
+      "savePct": 0.904,
+      "shutouts": 0,
+      "goalsAgainst": 41,
+      "shotsAgainst": 428,
+      "saves": 387,
+      "shotsAgainstPerGame": 26.8,
+      "savesPerGame": 24.2,
+      "expectedGoalsAgainst": 38.5,
+      "gsax": -2.5,
+      "rollingGsa": -0.5,
+      "seasonGsa": -2.5,
+      "restDays": 2,
+      "startLikelihood": 0.8,
+      "trend": "stable",
+      "note": "Ukko-Pekka Luukkonen showing promise with limited sample size \u2014 monitor progression closely.",
+      "strengths": [
+        "Solid fundamentals"
+      ],
+      "watchouts": [
+        "Inconsistent results"
+      ],
+      "nextOpponent": "FLA"
+    },
+    {
       "name": "Daniil Tarasov",
       "team": "FLA",
       "gamesPlayed": 14,
@@ -878,38 +910,6 @@
       "nextOpponent": "DET"
     },
     {
-      "name": "Ukko-Pekka Luukkonen",
-      "team": "BUF",
-      "gamesPlayed": 16,
-      "record": "9-6-1",
-      "wins": 9,
-      "losses": 6,
-      "otLosses": 1,
-      "gaa": 2.63,
-      "savePct": 0.904,
-      "shutouts": 0,
-      "goalsAgainst": 41,
-      "shotsAgainst": 426,
-      "saves": 385,
-      "shotsAgainstPerGame": 26.6,
-      "savesPerGame": 24.1,
-      "expectedGoalsAgainst": 38.3,
-      "gsax": -2.7,
-      "rollingGsa": -0.5,
-      "seasonGsa": -2.7,
-      "restDays": 2,
-      "startLikelihood": 0.8,
-      "trend": "stable",
-      "note": "Ukko-Pekka Luukkonen showing promise with limited sample size \u2014 monitor progression closely.",
-      "strengths": [
-        "Solid fundamentals"
-      ],
-      "watchouts": [
-        "Inconsistent results"
-      ],
-      "nextOpponent": "FLA"
-    },
-    {
       "name": "Joey Daccord",
       "team": "SEA",
       "gamesPlayed": 27,
@@ -921,14 +921,14 @@
       "savePct": 0.903,
       "shutouts": 2,
       "goalsAgainst": 74,
-      "shotsAgainst": 752,
-      "saves": 679,
+      "shotsAgainst": 754,
+      "saves": 681,
       "shotsAgainstPerGame": 27.9,
-      "savesPerGame": 25.1,
-      "expectedGoalsAgainst": 67.7,
-      "gsax": -6.3,
+      "savesPerGame": 25.2,
+      "expectedGoalsAgainst": 67.9,
+      "gsax": -6.1,
       "rollingGsa": -0.7,
-      "seasonGsa": -6.3,
+      "seasonGsa": -6.1,
       "restDays": 1,
       "startLikelihood": 0.8,
       "trend": "stable",
