@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-01-11T23:11:57.542158+00:00",
+  "updatedAt": "2026-01-12T13:34:47.591114+00:00",
   "notes": "Goalie performance metrics calculated from NHL Stats API data. GSAX = Expected Goals Against - Actual Goals Against (positive = outperforming expectations).",
   "goalies": [
     {
@@ -329,7 +329,7 @@
       "watchouts": [
         "Inconsistent results"
       ],
-      "nextOpponent": "NSH"
+      "nextOpponent": "MTL"
     },
     {
       "name": "Ilya Sorokin",
@@ -650,7 +650,39 @@
       "watchouts": [
         "Inconsistent results"
       ],
-      "nextOpponent": "WPG"
+      "nextOpponent": "MIN"
+    },
+    {
+      "name": "Jet Greaves",
+      "team": "CBJ",
+      "gamesPlayed": 31,
+      "record": "13-12-6",
+      "wins": 13,
+      "losses": 12,
+      "otLosses": 6,
+      "gaa": 2.71,
+      "savePct": 0.908,
+      "shutouts": 0,
+      "goalsAgainst": 84,
+      "shotsAgainst": 910,
+      "saves": 826,
+      "shotsAgainstPerGame": 29.4,
+      "savesPerGame": 26.6,
+      "expectedGoalsAgainst": 81.9,
+      "gsax": -2.1,
+      "rollingGsa": -0.2,
+      "seasonGsa": -2.1,
+      "restDays": 1,
+      "startLikelihood": 0.8,
+      "trend": "stable",
+      "note": "Jet Greaves showing promise with limited sample size \u2014 monitor progression closely.",
+      "strengths": [
+        "Proven winner"
+      ],
+      "watchouts": [
+        "Inconsistent results"
+      ],
+      "nextOpponent": "CGY"
     },
     {
       "name": "Jacob Fowler",
@@ -683,38 +715,6 @@
         "Limited recent data"
       ],
       "nextOpponent": "VAN"
-    },
-    {
-      "name": "Jet Greaves",
-      "team": "CBJ",
-      "gamesPlayed": 30,
-      "record": "12-12-6",
-      "wins": 12,
-      "losses": 12,
-      "otLosses": 6,
-      "gaa": 2.74,
-      "savePct": 0.907,
-      "shutouts": 0,
-      "goalsAgainst": 82,
-      "shotsAgainst": 883,
-      "saves": 801,
-      "shotsAgainstPerGame": 29.4,
-      "savesPerGame": 26.7,
-      "expectedGoalsAgainst": 79.5,
-      "gsax": -2.5,
-      "rollingGsa": -0.3,
-      "seasonGsa": -2.5,
-      "restDays": 1,
-      "startLikelihood": 0.8,
-      "trend": "stable",
-      "note": "Jet Greaves showing promise with limited sample size \u2014 monitor progression closely.",
-      "strengths": [
-        "Proven winner"
-      ],
-      "watchouts": [
-        "Inconsistent results"
-      ],
-      "nextOpponent": "UTA"
     },
     {
       "name": "Alex Lyon",
@@ -971,7 +971,7 @@
       "watchouts": [
         "Inconsistent results"
       ],
-      "nextOpponent": "PIT"
+      "nextOpponent": "DET"
     }
   ],
   "leaderboards": {
