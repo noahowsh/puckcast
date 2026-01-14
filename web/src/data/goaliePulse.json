@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-01-14T13:33:27.959805+00:00",
+  "updatedAt": "2026-01-14T23:11:46.111262+00:00",
   "notes": "Goalie performance metrics calculated from NHL Stats API data. GSAX = Expected Goals Against - Actual Goals Against (positive = outperforming expectations).",
   "goalies": [
     {
@@ -278,14 +278,14 @@
       "savePct": 0.916,
       "shutouts": 2,
       "goalsAgainst": 76,
-      "shotsAgainst": 904,
-      "saves": 828,
+      "shotsAgainst": 903,
+      "saves": 827,
       "shotsAgainstPerGame": 27.4,
       "savesPerGame": 25.1,
-      "expectedGoalsAgainst": 81.4,
-      "gsax": 5.4,
+      "expectedGoalsAgainst": 81.3,
+      "gsax": 5.3,
       "rollingGsa": 0.5,
-      "seasonGsa": 5.4,
+      "seasonGsa": 5.3,
       "restDays": 1,
       "startLikelihood": 0.9,
       "trend": "steady",
@@ -472,14 +472,14 @@
       "savePct": 0.911,
       "shutouts": 1,
       "goalsAgainst": 43,
-      "shotsAgainst": 471,
-      "saves": 429,
-      "shotsAgainstPerGame": 27.7,
-      "savesPerGame": 25.2,
-      "expectedGoalsAgainst": 42.4,
-      "gsax": -0.6,
+      "shotsAgainst": 472,
+      "saves": 430,
+      "shotsAgainstPerGame": 27.8,
+      "savesPerGame": 25.3,
+      "expectedGoalsAgainst": 42.5,
+      "gsax": -0.5,
       "rollingGsa": -0.1,
-      "seasonGsa": -0.6,
+      "seasonGsa": -0.5,
       "restDays": 2,
       "startLikelihood": 0.9,
       "trend": "stable",
@@ -995,14 +995,14 @@
       },
       {
         "rank": 4,
-        "name": "Logan Thompson",
-        "team": "WSH",
-        "gsax": 5.4
+        "name": "Scott Wedgewood",
+        "team": "COL",
+        "gsax": 5.3
       },
       {
         "rank": 5,
-        "name": "Scott Wedgewood",
-        "team": "COL",
+        "name": "Logan Thompson",
+        "team": "WSH",
         "gsax": 5.3
       },
       {
