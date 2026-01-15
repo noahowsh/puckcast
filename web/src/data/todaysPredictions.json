@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-01-15T10:47:09.344027+00:00",
+  "generatedAt": "2026-01-15T22:34:35.641852+00:00",
   "games": [
     {
       "id": "2025020740",
@@ -221,8 +221,8 @@
         "name": "Maple Leafs",
         "abbrev": "TOR"
       },
-      "homeWinProb": 0.5838,
-      "awayWinProb": 0.4162,
+      "homeWinProb": 0.584,
+      "awayWinProb": 0.416,
       "confidenceScore": 0.168,
       "confidenceGrade": "C+",
       "edge": 0.084,
