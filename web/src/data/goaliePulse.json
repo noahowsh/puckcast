@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-01-14T23:11:46.111262+00:00",
+  "updatedAt": "2026-01-15T13:32:32.399955+00:00",
   "notes": "Goalie performance metrics calculated from NHL Stats API data. GSAX = Expected Goals Against - Actual Goals Against (positive = outperforming expectations).",
   "goalies": [
     {
@@ -34,39 +34,6 @@
         "Limited recent data"
       ],
       "nextOpponent": "NSH"
-    },
-    {
-      "name": "Philipp Grubauer",
-      "team": "SEA",
-      "gamesPlayed": 16,
-      "record": "9-3-2",
-      "wins": 9,
-      "losses": 3,
-      "otLosses": 2,
-      "gaa": 2.25,
-      "savePct": 0.924,
-      "shutouts": 0,
-      "goalsAgainst": 33,
-      "shotsAgainst": 436,
-      "saves": 403,
-      "shotsAgainstPerGame": 27.2,
-      "savesPerGame": 25.2,
-      "expectedGoalsAgainst": 39.2,
-      "gsax": 6.2,
-      "rollingGsa": 1.2,
-      "seasonGsa": 6.2,
-      "restDays": 2,
-      "startLikelihood": 0.95,
-      "trend": "surging",
-      "note": "Philipp Grubauer is playing at an elite level with a 0.924 save percentage, providing SEA with a strong defensive anchor.",
-      "strengths": [
-        "Elite save percentage",
-        "Exceptional goals against average"
-      ],
-      "watchouts": [
-        "Limited recent data"
-      ],
-      "nextOpponent": "NJD"
     },
     {
       "name": "Mackenzie Blackwood",
@@ -135,6 +102,39 @@
       "nextOpponent": "WPG"
     },
     {
+      "name": "Philipp Grubauer",
+      "team": "SEA",
+      "gamesPlayed": 17,
+      "record": "9-3-3",
+      "wins": 9,
+      "losses": 3,
+      "otLosses": 3,
+      "gaa": 2.29,
+      "savePct": 0.922,
+      "shutouts": 0,
+      "goalsAgainst": 36,
+      "shotsAgainst": 462,
+      "saves": 426,
+      "shotsAgainstPerGame": 27.2,
+      "savesPerGame": 25.1,
+      "expectedGoalsAgainst": 41.6,
+      "gsax": 5.6,
+      "rollingGsa": 1.0,
+      "seasonGsa": 5.6,
+      "restDays": 2,
+      "startLikelihood": 0.95,
+      "trend": "surging",
+      "note": "Philipp Grubauer is playing at an elite level with a 0.922 save percentage, providing SEA with a strong defensive anchor.",
+      "strengths": [
+        "Elite save percentage",
+        "Exceptional goals against average"
+      ],
+      "watchouts": [
+        "Limited recent data"
+      ],
+      "nextOpponent": "BOS"
+    },
+    {
       "name": "Matt Murray",
       "team": "SEA",
       "gamesPlayed": 5,
@@ -165,7 +165,7 @@
       "watchouts": [
         "Limited recent data"
       ],
-      "nextOpponent": "NJD"
+      "nextOpponent": "BOS"
     },
     {
       "name": "Joseph Woll",
@@ -362,7 +362,7 @@
       "watchouts": [
         "Inconsistent results"
       ],
-      "nextOpponent": "OTT"
+      "nextOpponent": "PHI"
     },
     {
       "name": "Ilya Sorokin",
@@ -586,7 +586,7 @@
       "watchouts": [
         "Inconsistent results"
       ],
-      "nextOpponent": "SEA"
+      "nextOpponent": "CAR"
     },
     {
       "name": "Jet Greaves",
@@ -653,38 +653,6 @@
       "nextOpponent": "BUF"
     },
     {
-      "name": "Dan Vladar",
-      "team": "PHI",
-      "gamesPlayed": 27,
-      "record": "16-7-4",
-      "wins": 16,
-      "losses": 7,
-      "otLosses": 4,
-      "gaa": 2.42,
-      "savePct": 0.907,
-      "shutouts": 0,
-      "goalsAgainst": 65,
-      "shotsAgainst": 700,
-      "saves": 635,
-      "shotsAgainstPerGame": 25.9,
-      "savesPerGame": 23.5,
-      "expectedGoalsAgainst": 63.0,
-      "gsax": -2.0,
-      "rollingGsa": -0.2,
-      "seasonGsa": -2.0,
-      "restDays": 1,
-      "startLikelihood": 0.8,
-      "trend": "stable",
-      "note": "Dan Vladar showing promise with limited sample size \u2014 monitor progression closely.",
-      "strengths": [
-        "Proven winner"
-      ],
-      "watchouts": [
-        "Inconsistent results"
-      ],
-      "nextOpponent": "BUF"
-    },
-    {
       "name": "Alex Lyon",
       "team": "BUF",
       "gamesPlayed": 21,
@@ -714,7 +682,7 @@
       "watchouts": [
         "Inconsistent results"
       ],
-      "nextOpponent": "PHI"
+      "nextOpponent": "MTL"
     },
     {
       "name": "Jeremy Swayman",
@@ -749,25 +717,89 @@
       "nextOpponent": "SEA"
     },
     {
+      "name": "Dan Vladar",
+      "team": "PHI",
+      "gamesPlayed": 28,
+      "record": "16-7-4",
+      "wins": 16,
+      "losses": 7,
+      "otLosses": 4,
+      "gaa": 2.46,
+      "savePct": 0.905,
+      "shutouts": 0,
+      "goalsAgainst": 67,
+      "shotsAgainst": 705,
+      "saves": 638,
+      "shotsAgainstPerGame": 25.2,
+      "savesPerGame": 22.8,
+      "expectedGoalsAgainst": 63.4,
+      "gsax": -3.6,
+      "rollingGsa": -0.4,
+      "seasonGsa": -3.6,
+      "restDays": 1,
+      "startLikelihood": 0.8,
+      "trend": "stable",
+      "note": "Dan Vladar showing promise with limited sample size \u2014 monitor progression closely.",
+      "strengths": [
+        "Proven winner"
+      ],
+      "watchouts": [
+        "Inconsistent results"
+      ],
+      "nextOpponent": "PIT"
+    },
+    {
+      "name": "Ukko-Pekka Luukkonen",
+      "team": "BUF",
+      "gamesPlayed": 17,
+      "record": "10-6-1",
+      "wins": 10,
+      "losses": 6,
+      "otLosses": 1,
+      "gaa": 2.59,
+      "savePct": 0.904,
+      "shutouts": 0,
+      "goalsAgainst": 43,
+      "shotsAgainst": 450,
+      "saves": 407,
+      "shotsAgainstPerGame": 26.5,
+      "savesPerGame": 23.9,
+      "expectedGoalsAgainst": 40.5,
+      "gsax": -2.5,
+      "rollingGsa": -0.4,
+      "seasonGsa": -2.5,
+      "restDays": 2,
+      "startLikelihood": 0.8,
+      "trend": "stable",
+      "note": "Ukko-Pekka Luukkonen showing promise with limited sample size \u2014 monitor progression closely.",
+      "strengths": [
+        "Proven winner"
+      ],
+      "watchouts": [
+        "Inconsistent results"
+      ],
+      "nextOpponent": "MTL"
+    },
+    {
       "name": "Darcy Kuemper",
       "team": "LAK",
-      "gamesPlayed": 29,
-      "record": "12-9-7",
+      "gamesPlayed": 30,
+      "record": "12-9-8",
       "wins": 12,
       "losses": 9,
-      "otLosses": 7,
-      "gaa": 2.49,
-      "savePct": 0.905,
+      "otLosses": 8,
+      "gaa": 2.5,
+      "savePct": 0.904,
       "shutouts": 2,
-      "goalsAgainst": 70,
-      "shotsAgainst": 735,
-      "saves": 665,
-      "shotsAgainstPerGame": 25.3,
-      "savesPerGame": 22.9,
-      "expectedGoalsAgainst": 66.1,
-      "gsax": -3.9,
+      "goalsAgainst": 73,
+      "shotsAgainst": 762,
+      "saves": 689,
+      "shotsAgainstPerGame": 25.4,
+      "savesPerGame": 23.0,
+      "expectedGoalsAgainst": 68.6,
+      "gsax": -4.4,
       "rollingGsa": -0.4,
-      "seasonGsa": -3.9,
+      "seasonGsa": -4.4,
       "restDays": 1,
       "startLikelihood": 0.8,
       "trend": "stable",
@@ -778,39 +810,7 @@
       "watchouts": [
         "Inconsistent results"
       ],
-      "nextOpponent": "VGK"
-    },
-    {
-      "name": "Ukko-Pekka Luukkonen",
-      "team": "BUF",
-      "gamesPlayed": 16,
-      "record": "9-6-1",
-      "wins": 9,
-      "losses": 6,
-      "otLosses": 1,
-      "gaa": 2.63,
-      "savePct": 0.904,
-      "shutouts": 0,
-      "goalsAgainst": 41,
-      "shotsAgainst": 428,
-      "saves": 387,
-      "shotsAgainstPerGame": 26.8,
-      "savesPerGame": 24.2,
-      "expectedGoalsAgainst": 38.5,
-      "gsax": -2.5,
-      "rollingGsa": -0.5,
-      "seasonGsa": -2.5,
-      "restDays": 2,
-      "startLikelihood": 0.8,
-      "trend": "stable",
-      "note": "Ukko-Pekka Luukkonen showing promise with limited sample size \u2014 monitor progression closely.",
-      "strengths": [
-        "Solid fundamentals"
-      ],
-      "watchouts": [
-        "Inconsistent results"
-      ],
-      "nextOpponent": "PHI"
+      "nextOpponent": "ANA"
     },
     {
       "name": "Daniil Tarasov",
@@ -938,7 +938,7 @@
       "watchouts": [
         "Inconsistent results"
       ],
-      "nextOpponent": "NJD"
+      "nextOpponent": "BOS"
     },
     {
       "name": "Tristan Jarry",
@@ -985,7 +985,7 @@
         "rank": 2,
         "name": "Philipp Grubauer",
         "team": "SEA",
-        "gsax": 6.2
+        "gsax": 5.6
       },
       {
         "rank": 3,
@@ -1045,21 +1045,21 @@
       },
       {
         "rank": 2,
-        "name": "Philipp Grubauer",
-        "team": "SEA",
-        "savePct": 0.924
-      },
-      {
-        "rank": 3,
         "name": "Mackenzie Blackwood",
         "team": "COL",
         "savePct": 0.924
       },
       {
-        "rank": 4,
+        "rank": 3,
         "name": "Jesper Wallstedt",
         "team": "MIN",
         "savePct": 0.923
+      },
+      {
+        "rank": 4,
+        "name": "Philipp Grubauer",
+        "team": "SEA",
+        "savePct": 0.922
       },
       {
         "rank": 5,
@@ -1125,15 +1125,15 @@
       },
       {
         "rank": 5,
-        "name": "Philipp Grubauer",
-        "team": "SEA",
-        "gaa": 2.25
-      },
-      {
-        "rank": 6,
         "name": "Andrei Vasilevskiy",
         "team": "TBL",
         "gaa": 2.27
+      },
+      {
+        "rank": 6,
+        "name": "Philipp Grubauer",
+        "team": "SEA",
+        "gaa": 2.29
       },
       {
         "rank": 7,
