@@ -1,62 +1,146 @@
 {
-  "generatedAt": "2026-01-14T19:19:31.949463+00:00",
-  "date": "2026-01-14",
+  "generatedAt": "2026-01-15T14:31:47.262943+00:00",
+  "date": "2026-01-15",
   "teams": {
-    "NJD": {
-      "injuries": []
-    },
-    "SEA": {
-      "injuries": []
-    },
     "BUF": {
+      "injuries": []
+    },
+    "MTL": {
+      "injuries": []
+    },
+    "PIT": {
       "injuries": []
     },
     "PHI": {
       "injuries": []
     },
-    "NYR": {
+    "WSH": {
       "injuries": []
     },
-    "OTT": {
+    "SJS": {
       "injuries": []
     },
-    "LAK": {
+    "CBJ": {
+      "injuries": []
+    },
+    "VAN": {
+      "injuries": []
+    },
+    "BOS": {
+      "injuries": []
+    },
+    "SEA": {
+      "injuries": []
+    },
+    "MIN": {
+      "injuries": []
+    },
+    "WPG": {
+      "injuries": []
+    },
+    "CHI": {
+      "injuries": []
+    },
+    "CGY": {
+      "injuries": []
+    },
+    "UTA": {
+      "injuries": []
+    },
+    "DAL": {
+      "injuries": []
+    },
+    "EDM": {
+      "injuries": []
+    },
+    "NYI": {
       "injuries": []
     },
     "VGK": {
+      "injuries": []
+    },
+    "TOR": {
       "injuries": []
     }
   },
   "games": [
     {
-      "gameId": "2025020735",
-      "date": "2026-01-14",
-      "home": "NJD",
-      "away": "SEA",
+      "gameId": "2025020740",
+      "date": "2026-01-15",
+      "home": "BUF",
+      "away": "MTL",
       "homeInjuries": [],
       "awayInjuries": []
     },
     {
-      "gameId": "2025020736",
-      "date": "2026-01-14",
-      "home": "BUF",
+      "gameId": "2025020741",
+      "date": "2026-01-15",
+      "home": "PIT",
       "away": "PHI",
       "homeInjuries": [],
       "awayInjuries": []
     },
     {
-      "gameId": "2025020737",
-      "date": "2026-01-14",
-      "home": "NYR",
-      "away": "OTT",
+      "gameId": "2025020742",
+      "date": "2026-01-15",
+      "home": "WSH",
+      "away": "SJS",
       "homeInjuries": [],
       "awayInjuries": []
     },
     {
-      "gameId": "2025020738",
-      "date": "2026-01-14",
-      "home": "LAK",
-      "away": "VGK",
+      "gameId": "2025020743",
+      "date": "2026-01-15",
+      "home": "CBJ",
+      "away": "VAN",
+      "homeInjuries": [],
+      "awayInjuries": []
+    },
+    {
+      "gameId": "2025020739",
+      "date": "2026-01-15",
+      "home": "BOS",
+      "away": "SEA",
+      "homeInjuries": [],
+      "awayInjuries": []
+    },
+    {
+      "gameId": "2025020744",
+      "date": "2026-01-15",
+      "home": "MIN",
+      "away": "WPG",
+      "homeInjuries": [],
+      "awayInjuries": []
+    },
+    {
+      "gameId": "2025020745",
+      "date": "2026-01-15",
+      "home": "CHI",
+      "away": "CGY",
+      "homeInjuries": [],
+      "awayInjuries": []
+    },
+    {
+      "gameId": "2025020746",
+      "date": "2026-01-15",
+      "home": "UTA",
+      "away": "DAL",
+      "homeInjuries": [],
+      "awayInjuries": []
+    },
+    {
+      "gameId": "2025020747",
+      "date": "2026-01-15",
+      "home": "EDM",
+      "away": "NYI",
+      "homeInjuries": [],
+      "awayInjuries": []
+    },
+    {
+      "gameId": "2025020748",
+      "date": "2026-01-15",
+      "home": "VGK",
+      "away": "TOR",
       "homeInjuries": [],
       "awayInjuries": []
     }
