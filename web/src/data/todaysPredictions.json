@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-01-16T10:47:28.050413+00:00",
+  "generatedAt": "2026-01-16T22:33:52.613902+00:00",
   "games": [
     {
       "id": "2025020749",
@@ -14,12 +14,12 @@
         "name": "Sharks",
         "abbrev": "SJS"
       },
-      "homeWinProb": 0.6206,
-      "awayWinProb": 0.3794,
-      "confidenceScore": 0.241,
+      "homeWinProb": 0.6224,
+      "awayWinProb": 0.3776,
+      "confidenceScore": 0.245,
       "confidenceGrade": "B",
-      "edge": 0.121,
-      "summary": "Red Wings project at 62% as the home lean \u2014 a B-tier edge worth 12.1 pts over a coin flip.",
+      "edge": 0.122,
+      "summary": "Red Wings project at 62% as the home lean \u2014 a B-tier edge worth 12.2 pts over a coin flip.",
       "modelFavorite": "home",
       "venue": "Little Caesars Arena",
       "season": "20252026"
@@ -37,12 +37,12 @@
         "name": "Panthers",
         "abbrev": "FLA"
       },
-      "homeWinProb": 0.5918,
-      "awayWinProb": 0.4082,
-      "confidenceScore": 0.184,
+      "homeWinProb": 0.5908,
+      "awayWinProb": 0.4092,
+      "confidenceScore": 0.182,
       "confidenceGrade": "C+",
-      "edge": 0.092,
-      "summary": "Hurricanes project at 59% as the home lean \u2014 a C+-tier edge worth 9.2 pts over a coin flip.",
+      "edge": 0.091,
+      "summary": "Hurricanes project at 59% as the home lean \u2014 a C+-tier edge worth 9.1 pts over a coin flip.",
       "modelFavorite": "home",
       "venue": "Lenovo Center",
       "season": "20252026"
@@ -60,12 +60,12 @@
         "name": "Lightning",
         "abbrev": "TBL"
       },
-      "homeWinProb": 0.3297,
-      "awayWinProb": 0.6703,
-      "confidenceScore": 0.341,
+      "homeWinProb": 0.3279,
+      "awayWinProb": 0.6721,
+      "confidenceScore": 0.344,
       "confidenceGrade": "B+",
-      "edge": -0.17,
-      "summary": "Lightning project at 67% as the road lean \u2014 a B+-tier edge worth 17.0 pts over a coin flip.",
+      "edge": -0.172,
+      "summary": "Lightning project at 67% as the road lean \u2014 a B+-tier edge worth 17.2 pts over a coin flip.",
       "modelFavorite": "away",
       "venue": "Enterprise Center",
       "season": "20252026"
@@ -83,12 +83,12 @@
         "name": "Predators",
         "abbrev": "NSH"
       },
-      "homeWinProb": 0.7328,
-      "awayWinProb": 0.2672,
-      "confidenceScore": 0.466,
+      "homeWinProb": 0.7149,
+      "awayWinProb": 0.2851,
+      "confidenceScore": 0.43,
       "confidenceGrade": "A",
-      "edge": 0.233,
-      "summary": "Avalanche project at 73% as the home lean \u2014 an A-tier edge worth 23.3 pts over a coin flip.",
+      "edge": 0.215,
+      "summary": "Avalanche project at 71% as the home lean \u2014 an A-tier edge worth 21.5 pts over a coin flip.",
       "modelFavorite": "home",
       "venue": "Ball Arena",
       "season": "20252026"
@@ -106,9 +106,9 @@
         "name": "Ducks",
         "abbrev": "ANA"
       },
-      "homeWinProb": 0.5441,
-      "awayWinProb": 0.4559,
-      "confidenceScore": 0.088,
+      "homeWinProb": 0.5435,
+      "awayWinProb": 0.4565,
+      "confidenceScore": 0.087,
       "confidenceGrade": "C",
       "edge": 0.044,
       "summary": "Kings project at 54% as the home lean \u2014 a C-tier edge worth 4.4 pts over a coin flip.",
