@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-01-16T13:30:52.083772+00:00",
+  "updatedAt": "2026-01-16T23:12:27.318288+00:00",
   "notes": "Goalie performance metrics calculated from NHL Stats API data. GSAX = Expected Goals Against - Actual Goals Against (positive = outperforming expectations).",
   "goalies": [
     {
@@ -727,14 +727,14 @@
       "savePct": 0.905,
       "shutouts": 0,
       "goalsAgainst": 67,
-      "shotsAgainst": 705,
-      "saves": 638,
+      "shotsAgainst": 706,
+      "saves": 639,
       "shotsAgainstPerGame": 25.2,
       "savesPerGame": 22.8,
-      "expectedGoalsAgainst": 63.4,
-      "gsax": -3.6,
+      "expectedGoalsAgainst": 63.5,
+      "gsax": -3.5,
       "rollingGsa": -0.4,
-      "seasonGsa": -3.6,
+      "seasonGsa": -3.5,
       "restDays": 1,
       "startLikelihood": 0.8,
       "trend": "stable",
