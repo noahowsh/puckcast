@@ -1,8 +1,8 @@
 {
-  "lastUpdated": "2026-01-16",
+  "lastUpdated": "2026-01-17",
   "nextUpdate": "2026-01-19",
-  "weekOf": "Jan 16, 2026",
-  "generatedAt": "2026-01-16T11:17:00.445474+00:00",
+  "weekOf": "Jan 17, 2026",
+  "generatedAt": "2026-01-17T11:14:23.979510+00:00",
   "previousRankings": {
     "COL": {
       "rank": 1,
@@ -13,32 +13,32 @@
     "DAL": {
       "rank": 2,
       "points": 63,
-      "goalDiff": 28,
-      "pointPct": 0.67
+      "goalDiff": 27,
+      "pointPct": 0.656
     },
     "TBL": {
       "rank": 3,
-      "points": 61,
+      "points": 62,
       "goalDiff": 43,
-      "pointPct": 0.678
+      "pointPct": 0.674
+    },
+    "CAR": {
+      "rank": 4,
+      "points": 62,
+      "goalDiff": 22,
+      "pointPct": 0.646
+    },
+    "DET": {
+      "rank": 5,
+      "points": 62,
+      "goalDiff": 3,
+      "pointPct": 0.633
     },
     "MIN": {
-      "rank": 4,
+      "rank": 6,
       "points": 61,
       "goalDiff": 14,
       "pointPct": 0.635
-    },
-    "CAR": {
-      "rank": 5,
-      "points": 60,
-      "goalDiff": 14,
-      "pointPct": 0.638
-    },
-    "DET": {
-      "rank": 6,
-      "points": 60,
-      "goalDiff": 1,
-      "pointPct": 0.625
     },
     "MTL": {
       "rank": 7,
@@ -46,29 +46,29 @@
       "goalDiff": 5,
       "pointPct": 0.615
     },
-    "BOS": {
+    "VGK": {
       "rank": 8,
+      "points": 58,
+      "goalDiff": 14,
+      "pointPct": 0.63
+    },
+    "NYI": {
+      "rank": 9,
+      "points": 57,
+      "goalDiff": 10,
+      "pointPct": 0.606
+    },
+    "BOS": {
+      "rank": 10,
       "points": 56,
       "goalDiff": 10,
       "pointPct": 0.583
     },
     "BUF": {
-      "rank": 9,
+      "rank": 11,
       "points": 56,
       "goalDiff": 7,
       "pointPct": 0.609
-    },
-    "VGK": {
-      "rank": 10,
-      "points": 56,
-      "goalDiff": 13,
-      "pointPct": 0.622
-    },
-    "NYI": {
-      "rank": 11,
-      "points": 55,
-      "goalDiff": 9,
-      "pointPct": 0.598
     },
     "WSH": {
       "rank": 12,
@@ -79,55 +79,55 @@
     "EDM": {
       "rank": 13,
       "points": 54,
-      "goalDiff": 5,
+      "goalDiff": 4,
+      "pointPct": 0.562
+    },
+    "TOR": {
+      "rank": 14,
+      "points": 54,
+      "goalDiff": 4,
       "pointPct": 0.574
     },
     "PIT": {
-      "rank": 14,
+      "rank": 15,
       "points": 54,
       "goalDiff": 12,
       "pointPct": 0.587
     },
-    "TOR": {
-      "rank": 15,
-      "points": 53,
-      "goalDiff": 5,
-      "pointPct": 0.576
+    "UTA": {
+      "rank": 16,
+      "points": 52,
+      "goalDiff": 15,
+      "pointPct": 0.542
     },
     "PHI": {
-      "rank": 16,
+      "rank": 17,
       "points": 52,
       "goalDiff": -7,
       "pointPct": 0.565
     },
     "FLA": {
-      "rank": 17,
-      "points": 51,
-      "goalDiff": -7,
-      "pointPct": 0.567
-    },
-    "SJS": {
       "rank": 18,
       "points": 51,
-      "goalDiff": -19,
+      "goalDiff": -15,
       "pointPct": 0.554
     },
-    "SEA": {
+    "SJS": {
       "rank": 19,
+      "points": 51,
+      "goalDiff": -21,
+      "pointPct": 0.543
+    },
+    "SEA": {
+      "rank": 20,
       "points": 51,
       "goalDiff": -5,
       "pointPct": 0.554
     },
     "NJD": {
-      "rank": 20,
-      "points": 50,
-      "goalDiff": -22,
-      "pointPct": 0.532
-    },
-    "UTA": {
       "rank": 21,
       "points": 50,
-      "goalDiff": 14,
+      "goalDiff": -22,
       "pointPct": 0.532
     },
     "OTT": {
@@ -166,22 +166,22 @@
       "goalDiff": -23,
       "pointPct": 0.479
     },
-    "CHI": {
+    "STL": {
       "rank": 28,
+      "points": 46,
+      "goalDiff": -42,
+      "pointPct": 0.479
+    },
+    "CHI": {
+      "rank": 29,
       "points": 45,
       "goalDiff": -17,
       "pointPct": 0.479
     },
     "CGY": {
-      "rank": 29,
-      "points": 44,
-      "goalDiff": -19,
-      "pointPct": 0.468
-    },
-    "STL": {
       "rank": 30,
       "points": 44,
-      "goalDiff": -42,
+      "goalDiff": -19,
       "pointPct": 0.468
     },
     "WPG": {
@@ -201,33 +201,33 @@
     "COL": "Holding steady in top 3",
     "DAL": "Holding steady in top 3",
     "TBL": "Holding steady in top 3",
-    "MIN": "Solid goal differential (+14) driving results",
-    "CAR": "Solid goal differential (+14) driving results",
-    "DET": "Playoff pace at 0.625 point percentage",
+    "CAR": "Climbing the standings, building momentum",
+    "DET": "Climbing the standings, building momentum",
+    "MIN": "Slight regression, looking to stabilize",
     "MTL": "Playoff pace at 0.615 point percentage",
-    "BOS": "Climbing the standings, building momentum",
-    "BUF": "Climbing the standings, building momentum",
-    "VGK": "Surging up 3 spots with excellent form",
-    "NYI": "Struggling, dropped 3 spots this week",
-    "WSH": "Slight regression, looking to stabilize",
-    "EDM": "Slight regression, looking to stabilize",
-    "PIT": "Climbing the standings, building momentum",
-    "TOR": "Slight regression, looking to stabilize",
+    "VGK": "Climbing the standings, building momentum",
+    "NYI": "Climbing the standings, building momentum",
+    "BOS": "Slight regression, looking to stabilize",
+    "BUF": "Slight regression, looking to stabilize",
+    "WSH": "Solid goal differential (+22) driving results",
+    "EDM": "Hovering around .500, looking for consistency",
+    "TOR": "Climbing the standings, building momentum",
+    "PIT": "Slight regression, looking to stabilize",
+    "UTA": "Surging up 5 spots with excellent form",
     "PHI": "Slight regression, looking to stabilize",
-    "FLA": "Hovering around .500, looking for consistency",
-    "SJS": "Surging up 3 spots with excellent form",
+    "FLA": "Slight regression, looking to stabilize",
+    "SJS": "Slight regression, looking to stabilize",
     "SEA": "Slight regression, looking to stabilize",
     "NJD": "Slight regression, looking to stabilize",
-    "UTA": "Slight regression, looking to stabilize",
     "OTT": "Hovering around .500, looking for consistency",
-    "CBJ": "Surging up 3 spots with excellent form",
+    "CBJ": "Goal differential (-16) limiting ceiling",
     "LAK": "Hovering around .500, looking for consistency",
-    "NSH": "Slight regression, looking to stabilize",
-    "ANA": "Slight regression, looking to stabilize",
+    "NSH": "Goal differential (-25) limiting ceiling",
+    "ANA": "Goal differential (-20) limiting ceiling",
     "NYR": "Goal differential (-23) limiting ceiling",
-    "CHI": "Goal differential (-17) limiting ceiling",
-    "CGY": "Climbing the standings, building momentum",
-    "STL": "Slight regression, looking to stabilize",
+    "STL": "Climbing the standings, building momentum",
+    "CHI": "Slight regression, looking to stabilize",
+    "CGY": "Slight regression, looking to stabilize",
     "WPG": "Below playoff pace, need to turn things around",
     "VAN": "Goal differential (-47) limiting ceiling"
   },
@@ -253,13 +253,13 @@
       "abbrev": "DAL",
       "team": "Dallas Stars",
       "points": 63,
-      "record": "27-11-9",
-      "goalDiff": 28,
-      "pointPct": 0.67,
+      "record": "27-12-9",
+      "goalDiff": 27,
+      "pointPct": 0.656,
       "previousRank": 2,
       "rankDelta": 0,
       "pointsDelta": 0,
-      "goalDiffDelta": 0,
+      "goalDiffDelta": -1,
       "tier": "elite",
       "trend": "steady",
       "reason": "Holding steady in top 3"
@@ -268,13 +268,13 @@
       "rank": 3,
       "abbrev": "TBL",
       "team": "Tampa Bay Lightning",
-      "points": 61,
-      "record": "29-13-3",
+      "points": 62,
+      "record": "29-13-4",
       "goalDiff": 43,
-      "pointPct": 0.678,
+      "pointPct": 0.674,
       "previousRank": 3,
       "rankDelta": 0,
-      "pointsDelta": 0,
+      "pointsDelta": 1,
       "goalDiffDelta": 0,
       "tier": "elite",
       "trend": "steady",
@@ -282,6 +282,38 @@
     },
     {
       "rank": 4,
+      "abbrev": "CAR",
+      "team": "Carolina Hurricanes",
+      "points": 62,
+      "record": "29-15-4",
+      "goalDiff": 22,
+      "pointPct": 0.646,
+      "previousRank": 5,
+      "rankDelta": 1,
+      "pointsDelta": 2,
+      "goalDiffDelta": 8,
+      "tier": "elite",
+      "trend": "up",
+      "reason": "Climbing the standings, building momentum"
+    },
+    {
+      "rank": 5,
+      "abbrev": "DET",
+      "team": "Detroit Red Wings",
+      "points": 62,
+      "record": "29-16-4",
+      "goalDiff": 3,
+      "pointPct": 0.633,
+      "previousRank": 6,
+      "rankDelta": 1,
+      "pointsDelta": 2,
+      "goalDiffDelta": 2,
+      "tier": "elite",
+      "trend": "up",
+      "reason": "Climbing the standings, building momentum"
+    },
+    {
+      "rank": 6,
       "abbrev": "MIN",
       "team": "Minnesota Wild",
       "points": 61,
@@ -289,44 +321,12 @@
       "goalDiff": 14,
       "pointPct": 0.635,
       "previousRank": 4,
-      "rankDelta": 0,
-      "pointsDelta": 0,
-      "goalDiffDelta": -4,
-      "tier": "elite",
-      "trend": "steady",
-      "reason": "Solid goal differential (+14) driving results"
-    },
-    {
-      "rank": 5,
-      "abbrev": "CAR",
-      "team": "Carolina Hurricanes",
-      "points": 60,
-      "record": "28-15-4",
-      "goalDiff": 14,
-      "pointPct": 0.638,
-      "previousRank": 5,
-      "rankDelta": 0,
-      "pointsDelta": 0,
-      "goalDiffDelta": 0,
-      "tier": "elite",
-      "trend": "steady",
-      "reason": "Solid goal differential (+14) driving results"
-    },
-    {
-      "rank": 6,
-      "abbrev": "DET",
-      "team": "Detroit Red Wings",
-      "points": 60,
-      "record": "28-16-4",
-      "goalDiff": 1,
-      "pointPct": 0.625,
-      "previousRank": 6,
-      "rankDelta": 0,
+      "rankDelta": -2,
       "pointsDelta": 0,
       "goalDiffDelta": 0,
       "tier": "contender",
-      "trend": "steady",
-      "reason": "Playoff pace at 0.625 point percentage"
+      "trend": "down",
+      "reason": "Slight regression, looking to stabilize"
     },
     {
       "rank": 7,
@@ -339,74 +339,74 @@
       "previousRank": 7,
       "rankDelta": 0,
       "pointsDelta": 0,
-      "goalDiffDelta": -2,
+      "goalDiffDelta": 0,
       "tier": "contender",
       "trend": "steady",
       "reason": "Playoff pace at 0.615 point percentage"
     },
     {
       "rank": 8,
-      "abbrev": "BOS",
-      "team": "Boston Bruins",
-      "points": 56,
-      "record": "27-19-2",
-      "goalDiff": 10,
-      "pointPct": 0.583,
-      "previousRank": 9,
-      "rankDelta": 1,
+      "abbrev": "VGK",
+      "team": "Vegas Golden Knights",
+      "points": 58,
+      "record": "23-11-12",
+      "goalDiff": 14,
+      "pointPct": 0.63,
+      "previousRank": 10,
+      "rankDelta": 2,
       "pointsDelta": 2,
-      "goalDiffDelta": 2,
+      "goalDiffDelta": 1,
       "tier": "contender",
       "trend": "up",
       "reason": "Climbing the standings, building momentum"
     },
     {
       "rank": 9,
-      "abbrev": "BUF",
-      "team": "Buffalo Sabres",
-      "points": 56,
-      "record": "26-16-4",
-      "goalDiff": 7,
-      "pointPct": 0.609,
-      "previousRank": 10,
-      "rankDelta": 1,
+      "abbrev": "NYI",
+      "team": "New York Islanders",
+      "points": 57,
+      "record": "26-16-5",
+      "goalDiff": 10,
+      "pointPct": 0.606,
+      "previousRank": 11,
+      "rankDelta": 2,
       "pointsDelta": 2,
-      "goalDiffDelta": 2,
+      "goalDiffDelta": 1,
       "tier": "contender",
       "trend": "up",
       "reason": "Climbing the standings, building momentum"
     },
     {
       "rank": 10,
-      "abbrev": "VGK",
-      "team": "Vegas Golden Knights",
+      "abbrev": "BOS",
+      "team": "Boston Bruins",
       "points": 56,
-      "record": "22-11-12",
-      "goalDiff": 13,
-      "pointPct": 0.622,
-      "previousRank": 13,
-      "rankDelta": 3,
-      "pointsDelta": 2,
-      "goalDiffDelta": 1,
+      "record": "27-19-2",
+      "goalDiff": 10,
+      "pointPct": 0.583,
+      "previousRank": 8,
+      "rankDelta": -2,
+      "pointsDelta": 0,
+      "goalDiffDelta": 0,
       "tier": "contender",
-      "trend": "up",
-      "reason": "Surging up 3 spots with excellent form"
+      "trend": "down",
+      "reason": "Slight regression, looking to stabilize"
     },
     {
       "rank": 11,
-      "abbrev": "NYI",
-      "team": "New York Islanders",
-      "points": 55,
-      "record": "25-16-5",
-      "goalDiff": 9,
-      "pointPct": 0.598,
-      "previousRank": 8,
-      "rankDelta": -3,
+      "abbrev": "BUF",
+      "team": "Buffalo Sabres",
+      "points": 56,
+      "record": "26-16-4",
+      "goalDiff": 7,
+      "pointPct": 0.609,
+      "previousRank": 9,
+      "rankDelta": -2,
       "pointsDelta": 0,
       "goalDiffDelta": 0,
       "tier": "playoff",
       "trend": "down",
-      "reason": "Struggling, dropped 3 spots this week"
+      "reason": "Slight regression, looking to stabilize"
     },
     {
       "rank": 12,
@@ -416,54 +416,54 @@
       "record": "24-18-6",
       "goalDiff": 22,
       "pointPct": 0.562,
-      "previousRank": 11,
-      "rankDelta": -1,
+      "previousRank": 12,
+      "rankDelta": 0,
       "pointsDelta": 0,
-      "goalDiffDelta": -1,
+      "goalDiffDelta": 0,
       "tier": "playoff",
-      "trend": "down",
-      "reason": "Slight regression, looking to stabilize"
+      "trend": "steady",
+      "reason": "Solid goal differential (+22) driving results"
     },
     {
       "rank": 13,
       "abbrev": "EDM",
       "team": "Edmonton Oilers",
       "points": 54,
-      "record": "23-16-8",
-      "goalDiff": 5,
-      "pointPct": 0.574,
-      "previousRank": 12,
-      "rankDelta": -1,
+      "record": "23-17-8",
+      "goalDiff": 4,
+      "pointPct": 0.562,
+      "previousRank": 13,
+      "rankDelta": 0,
       "pointsDelta": 0,
-      "goalDiffDelta": 0,
+      "goalDiffDelta": -1,
       "tier": "playoff",
-      "trend": "down",
-      "reason": "Slight regression, looking to stabilize"
+      "trend": "steady",
+      "reason": "Hovering around .500, looking for consistency"
     },
     {
       "rank": 14,
-      "abbrev": "PIT",
-      "team": "Pittsburgh Penguins",
+      "abbrev": "TOR",
+      "team": "Toronto Maple Leafs",
       "points": 54,
-      "record": "22-14-10",
-      "goalDiff": 12,
-      "pointPct": 0.587,
-      "previousRank": 16,
-      "rankDelta": 2,
-      "pointsDelta": 2,
-      "goalDiffDelta": 3,
+      "record": "23-16-8",
+      "goalDiff": 4,
+      "pointPct": 0.574,
+      "previousRank": 15,
+      "rankDelta": 1,
+      "pointsDelta": 1,
+      "goalDiffDelta": -1,
       "tier": "playoff",
       "trend": "up",
       "reason": "Climbing the standings, building momentum"
     },
     {
       "rank": 15,
-      "abbrev": "TOR",
-      "team": "Toronto Maple Leafs",
-      "points": 53,
-      "record": "23-16-7",
-      "goalDiff": 5,
-      "pointPct": 0.576,
+      "abbrev": "PIT",
+      "team": "Pittsburgh Penguins",
+      "points": 54,
+      "record": "22-14-10",
+      "goalDiff": 12,
+      "pointPct": 0.587,
       "previousRank": 14,
       "rankDelta": -1,
       "pointsDelta": 0,
@@ -474,60 +474,60 @@
     },
     {
       "rank": 16,
+      "abbrev": "UTA",
+      "team": "Utah Mammoth",
+      "points": 52,
+      "record": "24-20-4",
+      "goalDiff": 15,
+      "pointPct": 0.542,
+      "previousRank": 21,
+      "rankDelta": 5,
+      "pointsDelta": 2,
+      "goalDiffDelta": 1,
+      "tier": "playoff",
+      "trend": "up",
+      "reason": "Surging up 5 spots with excellent form"
+    },
+    {
+      "rank": 17,
       "abbrev": "PHI",
       "team": "Philadelphia Flyers",
       "points": 52,
       "record": "22-16-8",
       "goalDiff": -7,
       "pointPct": 0.565,
-      "previousRank": 15,
+      "previousRank": 16,
       "rankDelta": -1,
       "pointsDelta": 0,
-      "goalDiffDelta": -3,
-      "tier": "playoff",
+      "goalDiffDelta": 0,
+      "tier": "bubble",
       "trend": "down",
       "reason": "Slight regression, looking to stabilize"
     },
     {
-      "rank": 17,
+      "rank": 18,
       "abbrev": "FLA",
       "team": "Florida Panthers",
       "points": 51,
-      "record": "24-18-3",
-      "goalDiff": -7,
-      "pointPct": 0.567,
-      "previousRank": 17,
-      "rankDelta": 0,
-      "pointsDelta": 0,
-      "goalDiffDelta": 0,
-      "tier": "bubble",
-      "trend": "steady",
-      "reason": "Hovering around .500, looking for consistency"
-    },
-    {
-      "rank": 18,
-      "abbrev": "SJS",
-      "team": "San Jose Sharks",
-      "points": 51,
       "record": "24-19-3",
-      "goalDiff": -19,
+      "goalDiff": -15,
       "pointPct": 0.554,
-      "previousRank": 21,
-      "rankDelta": 3,
-      "pointsDelta": 2,
-      "goalDiffDelta": 1,
+      "previousRank": 17,
+      "rankDelta": -1,
+      "pointsDelta": 0,
+      "goalDiffDelta": -8,
       "tier": "bubble",
-      "trend": "up",
-      "reason": "Surging up 3 spots with excellent form"
+      "trend": "down",
+      "reason": "Slight regression, looking to stabilize"
     },
     {
       "rank": 19,
-      "abbrev": "SEA",
-      "team": "Seattle Kraken",
+      "abbrev": "SJS",
+      "team": "San Jose Sharks",
       "points": 51,
-      "record": "21-16-9",
-      "goalDiff": -5,
-      "pointPct": 0.554,
+      "record": "24-20-3",
+      "goalDiff": -21,
+      "pointPct": 0.543,
       "previousRank": 18,
       "rankDelta": -1,
       "pointsDelta": 0,
@@ -538,12 +538,12 @@
     },
     {
       "rank": 20,
-      "abbrev": "NJD",
-      "team": "New Jersey Devils",
-      "points": 50,
-      "record": "24-21-2",
-      "goalDiff": -22,
-      "pointPct": 0.532,
+      "abbrev": "SEA",
+      "team": "Seattle Kraken",
+      "points": 51,
+      "record": "21-16-9",
+      "goalDiff": -5,
+      "pointPct": 0.554,
       "previousRank": 19,
       "rankDelta": -1,
       "pointsDelta": 0,
@@ -554,11 +554,11 @@
     },
     {
       "rank": 21,
-      "abbrev": "UTA",
-      "team": "Utah Mammoth",
+      "abbrev": "NJD",
+      "team": "New Jersey Devils",
       "points": 50,
-      "record": "23-20-4",
-      "goalDiff": 14,
+      "record": "24-21-2",
+      "goalDiff": -22,
       "pointPct": 0.532,
       "previousRank": 20,
       "rankDelta": -1,
@@ -592,13 +592,13 @@
       "record": "21-19-7",
       "goalDiff": -16,
       "pointPct": 0.521,
-      "previousRank": 26,
-      "rankDelta": 3,
-      "pointsDelta": 2,
-      "goalDiffDelta": 3,
+      "previousRank": 23,
+      "rankDelta": 0,
+      "pointsDelta": 0,
+      "goalDiffDelta": 0,
       "tier": "bubble",
-      "trend": "up",
-      "reason": "Surging up 3 spots with excellent form"
+      "trend": "steady",
+      "reason": "Goal differential (-16) limiting ceiling"
     },
     {
       "rank": 24,
@@ -610,8 +610,8 @@
       "pointPct": 0.533,
       "previousRank": 24,
       "rankDelta": 0,
-      "pointsDelta": 1,
-      "goalDiffDelta": -1,
+      "pointsDelta": 0,
+      "goalDiffDelta": 0,
       "tier": "bubble",
       "trend": "steady",
       "reason": "Hovering around .500, looking for consistency"
@@ -624,13 +624,13 @@
       "record": "22-20-4",
       "goalDiff": -25,
       "pointPct": 0.522,
-      "previousRank": 23,
-      "rankDelta": -2,
+      "previousRank": 25,
+      "rankDelta": 0,
       "pointsDelta": 0,
       "goalDiffDelta": 0,
       "tier": "lottery",
-      "trend": "down",
-      "reason": "Slight regression, looking to stabilize"
+      "trend": "steady",
+      "reason": "Goal differential (-25) limiting ceiling"
     },
     {
       "rank": 26,
@@ -640,13 +640,13 @@
       "record": "22-21-3",
       "goalDiff": -20,
       "pointPct": 0.511,
-      "previousRank": 25,
-      "rankDelta": -1,
+      "previousRank": 26,
+      "rankDelta": 0,
       "pointsDelta": 0,
       "goalDiffDelta": 0,
       "tier": "lottery",
-      "trend": "down",
-      "reason": "Slight regression, looking to stabilize"
+      "trend": "steady",
+      "reason": "Goal differential (-20) limiting ceiling"
     },
     {
       "rank": 27,
@@ -666,6 +666,22 @@
     },
     {
       "rank": 28,
+      "abbrev": "STL",
+      "team": "St. Louis Blues",
+      "points": 46,
+      "record": "19-21-8",
+      "goalDiff": -42,
+      "pointPct": 0.479,
+      "previousRank": 30,
+      "rankDelta": 2,
+      "pointsDelta": 2,
+      "goalDiffDelta": 0,
+      "tier": "lottery",
+      "trend": "up",
+      "reason": "Climbing the standings, building momentum"
+    },
+    {
+      "rank": 29,
       "abbrev": "CHI",
       "team": "Chicago Blackhawks",
       "points": 45,
@@ -673,36 +689,20 @@
       "goalDiff": -17,
       "pointPct": 0.479,
       "previousRank": 28,
-      "rankDelta": 0,
+      "rankDelta": -1,
       "pointsDelta": 0,
-      "goalDiffDelta": -2,
+      "goalDiffDelta": 0,
       "tier": "lottery",
-      "trend": "steady",
-      "reason": "Goal differential (-17) limiting ceiling"
+      "trend": "down",
+      "reason": "Slight regression, looking to stabilize"
     },
     {
-      "rank": 29,
+      "rank": 30,
       "abbrev": "CGY",
       "team": "Calgary Flames",
       "points": 44,
       "record": "20-23-4",
       "goalDiff": -19,
-      "pointPct": 0.468,
-      "previousRank": 30,
-      "rankDelta": 1,
-      "pointsDelta": 2,
-      "goalDiffDelta": 2,
-      "tier": "lottery",
-      "trend": "up",
-      "reason": "Climbing the standings, building momentum"
-    },
-    {
-      "rank": 30,
-      "abbrev": "STL",
-      "team": "St. Louis Blues",
-      "points": 44,
-      "record": "18-21-8",
-      "goalDiff": -42,
       "pointPct": 0.468,
       "previousRank": 29,
       "rankDelta": -1,
@@ -722,8 +722,8 @@
       "pointPct": 0.467,
       "previousRank": 31,
       "rankDelta": 0,
-      "pointsDelta": 2,
-      "goalDiffDelta": 4,
+      "pointsDelta": 0,
+      "goalDiffDelta": 0,
       "tier": "lottery",
       "trend": "steady",
       "reason": "Below playoff pace, need to turn things around"
@@ -739,7 +739,7 @@
       "previousRank": 32,
       "rankDelta": 0,
       "pointsDelta": 0,
-      "goalDiffDelta": -3,
+      "goalDiffDelta": 0,
       "tier": "lottery",
       "trend": "steady",
       "reason": "Goal differential (-47) limiting ceiling"
@@ -747,64 +747,64 @@
   ],
   "topRisers": [
     {
-      "rank": 10,
+      "rank": 16,
+      "abbrev": "UTA",
+      "delta": 5,
+      "reason": "Surging up 5 spots with excellent form"
+    },
+    {
+      "rank": 8,
       "abbrev": "VGK",
-      "delta": 3,
-      "reason": "Surging up 3 spots with excellent form"
-    },
-    {
-      "rank": 18,
-      "abbrev": "SJS",
-      "delta": 3,
-      "reason": "Surging up 3 spots with excellent form"
-    },
-    {
-      "rank": 23,
-      "abbrev": "CBJ",
-      "delta": 3,
-      "reason": "Surging up 3 spots with excellent form"
-    },
-    {
-      "rank": 14,
-      "abbrev": "PIT",
       "delta": 2,
       "reason": "Climbing the standings, building momentum"
     },
     {
-      "rank": 8,
-      "abbrev": "BOS",
+      "rank": 9,
+      "abbrev": "NYI",
+      "delta": 2,
+      "reason": "Climbing the standings, building momentum"
+    },
+    {
+      "rank": 28,
+      "abbrev": "STL",
+      "delta": 2,
+      "reason": "Climbing the standings, building momentum"
+    },
+    {
+      "rank": 4,
+      "abbrev": "CAR",
       "delta": 1,
       "reason": "Climbing the standings, building momentum"
     }
   ],
   "topFallers": [
     {
-      "rank": 11,
-      "abbrev": "NYI",
-      "delta": -3,
-      "reason": "Struggling, dropped 3 spots this week"
-    },
-    {
-      "rank": 25,
-      "abbrev": "NSH",
+      "rank": 6,
+      "abbrev": "MIN",
       "delta": -2,
       "reason": "Slight regression, looking to stabilize"
     },
     {
-      "rank": 12,
-      "abbrev": "WSH",
-      "delta": -1,
+      "rank": 10,
+      "abbrev": "BOS",
+      "delta": -2,
       "reason": "Slight regression, looking to stabilize"
     },
     {
-      "rank": 13,
-      "abbrev": "EDM",
-      "delta": -1,
+      "rank": 11,
+      "abbrev": "BUF",
+      "delta": -2,
       "reason": "Slight regression, looking to stabilize"
     },
     {
       "rank": 15,
-      "abbrev": "TOR",
+      "abbrev": "PIT",
+      "delta": -1,
+      "reason": "Slight regression, looking to stabilize"
+    },
+    {
+      "rank": 17,
+      "abbrev": "PHI",
       "delta": -1,
       "reason": "Slight regression, looking to stabilize"
     }
@@ -814,30 +814,30 @@
       "COL",
       "DAL",
       "TBL",
-      "MIN",
-      "CAR"
+      "CAR",
+      "DET"
     ],
     "contender": [
-      "DET",
+      "MIN",
       "MTL",
-      "BOS",
-      "BUF",
-      "VGK"
+      "VGK",
+      "NYI",
+      "BOS"
     ],
     "playoff": [
-      "NYI",
+      "BUF",
       "WSH",
       "EDM",
-      "PIT",
       "TOR",
-      "PHI"
+      "PIT",
+      "UTA"
     ],
     "bubble": [
+      "PHI",
       "FLA",
       "SJS",
       "SEA",
       "NJD",
-      "UTA",
       "OTT",
       "CBJ",
       "LAK"
@@ -846,9 +846,9 @@
       "NSH",
       "ANA",
       "NYR",
+      "STL",
       "CHI",
       "CGY",
-      "STL",
       "WPG",
       "VAN"
     ]
